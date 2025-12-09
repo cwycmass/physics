@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聲音頻譜分析儀</title>
+    <style>
+        /* General styling for the page - Dark, modern theme */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a2e; /* Deep dark blue/purple background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: #e0e0e0; /* Light gray text color */
+        }
+
+        /* Container mimicking the scientific chart frame */
+        .analyzer-container {
+            background-color: #2c394b; /* Slightly lighter dark container */
+            padding: 20px;
+            border-radius: 12px;
+            /* Neon glow shadow */
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.2), 0 0 15px rgba(0, 240, 255, 0.1); 
+            border: 1px solid #00f0ff; /* Thin neon blue border */
+            width: 95%;
+            max-width: 1000px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Title style - Neon accent color */
+        h2 {
+            text-align: center;
+            margin: 0 0 15px 0;
+            font-size: 1.5rem;
+            color: #00f0ff; /* Bright neon blue title */
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+        }
+
+        /* Canvas style - the main graph area */
+        canvas {
+            background-color: #1f2a3a; /* Dark grid background (Matches JS clear color) */
+            /* Border removed, only the container has the border/glow */
+            border: none; 
+            display: block;
+            width: 100%;
+            height: 400px;
+            border-radius: 4px;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7); /* Inner shadow for depth */
+        }
+
+        /* Overlay for the "Click to Start" button (critical for Web Audio API) */
+        #overlay {
+            position: absolute;
+            /* Adjusted top/bottom to cover the whole graph area */
+            top: 20px; left: 20px; right: 20px; bottom: 20px; 
+            background: rgba(4, 15, 30, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00f0ff; /* Neon blue text */
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 10;
+            border-radius: 8px;
+            transition: background 0.3s;
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+        }
+        #overlay:hover {
+            background: rgba(14, 25, 45, 0.95);
+        }
+
+        /* School Label Style - New addition */
+        #school-label {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            color: #444466; /* Slightly muted color, close to the grid lines */
+            text-align: center;
+            font-weight: 500;
+            width: 95%;
+            max-width: 1000px;
+            padding: 5px;
+        }
+
+        /* Message for status and errors */
+        #status-message {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #3b000a; /* Dark red background for error */
+            color: #ff4d4d; /* Bright red text */
+            border: 1px solid #7c001f;
+            border-radius: 4px;
+            display: none; /* Hidden by default */
+            font-size: 0.9rem;
+            width: 95%;
+            max-width: 1000px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="analyzer-container">
+    <h2>聲音頻譜分析儀</h2>
+    
+    <div id="overlay">點擊以開啟麥克風存取權</div>
+    <canvas id="spectrum"></canvas>
+</div>
+
+<div id="school-label">廠商會中學 • 物理科</div>
+
+<div id="status-message"></div>
+
+<script>
+    // --- CANVAS SETUP ---
+    const canvas = document.getElementById('spectrum');
+    const ctx = canvas.getContext('2d');
+    const overlay = document.getElementById('overlay');
+    const statusMessage = document.getElementById('status-message');
+    
+    // Ensure canvas size is set responsively, and then set the context size
+    let WIDTH = canvas.offsetWidth;
+    let HEIGHT = 400; // Fixed height for visual consistency
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+    
+    // --- ANALYZER CONFIGURATION ---
+    const MIN_DB = -80;
+    const MAX_DB = 0; // Display up to 0 dBFS
+    const MAX_FREQ = 10000; // 10,000 Hz limit
+    
+    // Maximum FFT size for best frequency resolution (~1.46 Hz).
+    const FFT_SIZE = 32768; 
+
+    // --- PLOT MARGINS ---
+    const MARGIN_LEFT = 65; 
+    const MARGIN_RIGHT = 20; 
+    const MARGIN_TOP = 15;
+    const MARGIN_BOTTOM = 40; 
+    
+    // Calculated plotting dimensions
+    let PLOT_WIDTH = WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
+    let PLOT_HEIGHT = HEIGHT - MARGIN_TOP - MARGIN_BOTTOM;
+    const PLOT_X_START = MARGIN_LEFT;
+    const PLOT_Y_START = MARGIN_TOP;
+
+    // --- PEAK TRAIL CONFIGURATION ---
+    let activePeaks = [];
+    const FADE_DURATION = 3000; // 3 seconds in milliseconds
+    const PEAK_TOLERANCE = 50; // Max frequency difference (Hz) to consider it the same peak
+
+    let audioCtx;
+    let analyser;
+    let dataArray;
+    let bufferLength;
+
+    // --- UTILITY FUNCTION ---
+    // Maps a value from one range to another
+    function map(value, inMin, inMax, outMin, outMax) {
+        return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+    }
+
+    // --- AUDIO INITIALIZATION ---
+    async function startAudio() {
+        try {
+            // 1. Initialize AudioContext (must be done after a user gesture)
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // 2. Request microphone access
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            
+            // 3. Create AnalyserNode
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = FFT_SIZE;
+            analyser.minDecibels = MIN_DB;
+            analyser.maxDecibels = MAX_DB;
+            analyser.smoothingTimeConstant = 0.85; 
+            
+            // 4. Connect nodes: Source -> Analyser
+            const source = audioCtx.createMediaStreamSource(stream);
+            source.connect(analyser); // Direct connection
+
+            // 5. Setup data array
+            bufferLength = analyser.frequencyBinCount;
+            dataArray = new Float32Array(bufferLength); 
+
+            // Hide overlay and start drawing loop
+            overlay.style.display = 'none';
+            statusMessage.style.display = 'none';
+            draw();
+
+        } catch (err) {
+            console.error("Error accessing microphone:", err);
+            overlay.style.display = 'flex';
+            overlay.innerHTML = `<span style="color: #ff4d4d;">麥克風存取被拒。</span><br>請啟用麥克風並重新整理。`;
+            statusMessage.style.display = 'block';
+            statusMessage.textContent = `錯誤: ${err.name} - ${err.message}`;
+        }
+    }
+
+    // --- CANVAS DRAWING FUNCTIONS ---
+
+    function drawGrid() {
+        ctx.strokeStyle = '#444466'; // Dark blue/gray grid lines
+        ctx.lineWidth = 1;
+        ctx.fillStyle = '#cccccc'; // Light gray text color
+        ctx.font = '12px Inter, Arial';
+        
+        // 1. Vertical Grid Lines (Frequency in Hz)
+        // Draw major lines every 2000 Hz (2kHz)
+        for (let f = 0; f <= MAX_FREQ; f += 2000) {
+            const x = PLOT_X_START + (f / MAX_FREQ) * PLOT_WIDTH;
+            
+            // Draw grid line within the plot area
+            ctx.beginPath();
+            ctx.moveTo(x, PLOT_Y_START);
+            ctx.lineTo(x, PLOT_Y_START + PLOT_HEIGHT);
+            ctx.stroke();
+            
+            // Labels below the grid, outside the plot area
+            if (f === 0) {
+                ctx.textAlign = 'left'; // Align 0 to the left of the line
+            } else if (f === MAX_FREQ) {
+                ctx.textAlign = 'right'; // Align 10000 to the right of the line
+            } else {
+                ctx.textAlign = 'center'; // Center middle labels
+            }
+
+            ctx.fillText(f.toFixed(0), x, PLOT_Y_START + PLOT_HEIGHT + 15);
+        }
+        
+        // X-Axis Title Label
+        ctx.textAlign = 'center'; // Reset alignment for the title
+        ctx.fillText("頻率 (赫茲 Hz)", PLOT_X_START + PLOT_WIDTH / 2, PLOT_Y_START + PLOT_HEIGHT + 35); 
+
+
+        // 2. Horizontal Grid Lines (Audio Level in dB)
+        ctx.textAlign = 'right'; // Set alignment for Y-axis labels
+        // Draw lines every 10dB (-80, -70, ..., 0)
+        for (let db = MIN_DB; db <= MAX_DB; db += 10) {
+            // Y is mapped within PLOT_HEIGHT, then shifted by PLOT_Y_START
+            const y = map(db, MIN_DB, MAX_DB, PLOT_Y_START + PLOT_HEIGHT, PLOT_Y_START); 
+            
+            // Draw grid line within the plot area
+            ctx.beginPath();
+            ctx.moveTo(PLOT_X_START, y);
+            ctx.lineTo(PLOT_X_START + PLOT_WIDTH, y);
+            ctx.stroke();
+
+            // Labels to the left of the grid, outside the plot area
+            ctx.fillText(db, PLOT_X_START - 5, y + 4);
+        }
+        
+        // Y-Axis Title Label (Rotated)
+        ctx.save();
+        ctx.translate(15, PLOT_Y_START + PLOT_HEIGHT / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = 'center';
+        ctx.fillText("音量 (滿量程分貝 dBFS)", 0, 0);
+        ctx.restore();
+
+        // 3. Draw the main rectangular border around the plot area
+        ctx.strokeStyle = '#00f0ff'; /* Neon blue accent border for the grid */
+        ctx.lineWidth = 1;
+        ctx.strokeRect(PLOT_X_START, PLOT_Y_START, PLOT_WIDTH, PLOT_HEIGHT);
+    }
+
+    function findAndDrawPeaks(data) {
+        if (!audioCtx) return;
+        
+        const peaks = [];
+        const peakThreshold = -65; 
+        const peakSpan = 3; 
+        
+        // Calculate the maximum index based on frequency limits
+        const maxIndex = Math.floor(MAX_FREQ * FFT_SIZE / audioCtx.sampleRate);
+
+        // Loop starts from the index 3 (to allow checking three points before it)
+        for (let i = peakSpan; i < maxIndex - peakSpan; i++) {
+            const val = data[i];
+            
+            const freq = i * audioCtx.sampleRate / FFT_SIZE;
+
+            // Check if this point is a local maximum
+            let isPeak = true;
+            for (let j = 1; j <= peakSpan; j++) {
+                if (val < data[i-j] || val < data[i+j]) {
+                    isPeak = false;
+                    break;
+                }
+            }
+
+            if (isPeak && val > peakThreshold) {
+                peaks.push({ i, val, freq });
+            }
+        }
+
+        // Sort by volume and take the top N loudest peaks (max 3 for clear display)
+        peaks.sort((a, b) => b.val - a.val);
+        const topPeaks = peaks.slice(0, 3); 
+
+        // --- NEW LOGIC: Update activePeaks list ---
+        const now = performance.now();
+        
+        topPeaks.forEach(newPeak => {
+            // Calculate drawing coordinates (using 0 Hz as the start)
+            const x = PLOT_X_START + (newPeak.freq / MAX_FREQ) * PLOT_WIDTH;
+            const y = map(newPeak.val, MIN_DB, MAX_DB, PLOT_Y_START + PLOT_HEIGHT, PLOT_Y_START);
+
+            // Check if this new peak matches an existing active peak (within PEAK_TOLERANCE Hz)
+            let found = false;
+            for (let i = 0; i < activePeaks.length; i++) {
+                const activePeak = activePeaks[i];
+                if (Math.abs(activePeak.freq - newPeak.freq) < PEAK_TOLERANCE) {
+                    // Update the existing peak with the latest, loudest data
+                    activePeak.val = newPeak.val;
+                    activePeak.y = y;
+                    activePeak.timestamp = now;
+                    activePeak.opacity = 1.0;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                // Add as a new active peak
+                activePeaks.push({
+                    freq: newPeak.freq,
+                    val: newPeak.val,
+                    x: x,
+                    y: y,
+                    timestamp: now,
+                    opacity: 1.0
+                });
+            }
+        });
+        // We no longer draw anything here; drawing is handled in drawPeakTrails
+    }
+    
+    function drawPeakTrails() {
+        const now = performance.now();
+        const nextActivePeaks = [];
+        
+        ctx.textAlign = 'center';
+
+        // --- UPDATED FONT SIZE RANGE ---
+        const MIN_FONT_SIZE = 10; // Minimum font size for quietest peaks (Set to 10)
+        const MAX_FONT_SIZE = 80; // Maximum font size for loudest peaks (Set to 80)
+
+        for (let i = 0; i < activePeaks.length; i++) {
+            const peak = activePeaks[i];
+            const elapsed = now - peak.timestamp;
+            
+            if (elapsed < FADE_DURATION) {
+                // Calculate opacity: 1.0 when detected, fades to 0.0 after FADE_DURATION
+                peak.opacity = 1.0 - (elapsed / FADE_DURATION);
+                
+                // Draw peak marker (vertical line)
+                ctx.strokeStyle = `rgba(255, 0, 204, ${peak.opacity * 0.7})`; // Fading neon magenta line
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(peak.x, peak.y);
+                ctx.lineTo(peak.x, PLOT_Y_START + PLOT_HEIGHT); // Line goes down to the bottom axis
+                ctx.stroke();
+
+                // --- DYNAMIC FONT CALCULATION ---
+                // Clamp peak volume (db) between MIN_DB (-80) and MAX_DB (0)
+                const clampedDb = Math.min(Math.max(peak.val, MIN_DB), MAX_DB); 
+
+                // Map the volume to the font size range (10px to 80px)
+                const dynamicFontSize = map(clampedDb, MIN_DB, MAX_DB, MIN_FONT_SIZE, MAX_FONT_SIZE);
+                
+                // Set the dynamic font size for this peak's label
+                ctx.font = `${dynamicFontSize.toFixed(1)}px Inter, Arial`;
+
+                // Draw frequency label
+                ctx.fillStyle = `rgba(200, 200, 200, ${peak.opacity})`; // Fading light gray text
+                
+                // Adjust Y offset based on the calculated font size
+                // We shift the text up slightly to keep it above the peak's position.
+                const yOffset = 5 + (dynamicFontSize - MIN_FONT_SIZE) * 0.5;
+
+                // Round to the nearest integer
+                ctx.fillText(Math.round(peak.freq), peak.x, peak.y - yOffset); 
+                
+                // Keep this peak for the next frame
+                nextActivePeaks.push(peak);
+            }
+            // Else, the peak has fully faded and is dropped
+        }
+        
+        // Replace the old list with the peaks that are still visible
+        activePeaks = nextActivePeaks;
+    }
+
+
+    function draw() {
+        if (!analyser) return;
+
+        requestAnimationFrame(draw);
+
+        // Get the frequency data in decibels
+        analyser.getFloatFrequencyData(dataArray);
+
+        // 1. Clear Canvas (includes margins)
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        // Fill with dark blue color to fit the theme
+        ctx.fillStyle = '#1f2a3a'; 
+        ctx.fillRect(0, 0, WIDTH, HEIGHT); // Fill the whole canvas with dark color
+
+        // 2. Draw Grid & Labels (now includes the main border)
+        drawGrid();
+
+        // 3. Draw Spectrum Line (Bright neon color)
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#00f0ff'; /* Bright neon blue */
+        ctx.shadowColor = '#00f0ff';
+        ctx.shadowBlur = 10; /* Glow effect */
+
+        let started = false;
+        
+        // Calculate the number of data points corresponding to 10kHz
+        const maxIndex = Math.floor(MAX_FREQ * FFT_SIZE / audioCtx.sampleRate);
+        const effectiveBufferLength = Math.min(bufferLength, maxIndex);
+        
+        // Loop starts from 0 Hz
+        for (let i = 0; i < effectiveBufferLength; i++) {
+            const freq = i * audioCtx.sampleRate / FFT_SIZE;
+            
+            // Map X relative to plot width
+            const x = PLOT_X_START + (freq / MAX_FREQ) * PLOT_WIDTH;
+            
+            let db = dataArray[i] > MIN_DB ? dataArray[i] : MIN_DB;
+            
+            // Map the clamped dB value to Y position within the plot area
+            let y = map(db, MIN_DB, MAX_DB, PLOT_Y_START + PLOT_HEIGHT, PLOT_Y_START);
+
+            if (!started) {
+                ctx.moveTo(x, y);
+                started = true;
+            } else {
+                ctx.lineTo(x, y);
+            }
+        }
+        ctx.stroke();
+        
+        // Reset shadow for subsequent elements
+        ctx.shadowBlur = 0; 
+        
+        // 4. Update and Draw Peak Trails
+        findAndDrawPeaks(dataArray);
+        drawPeakTrails();
+    }
+    
+    // --- EVENT LISTENERS ---
+    
+    // Start the audio context and drawing loop on user click
+    overlay.addEventListener('click', startAudio);
+
+    // Handle resizing the canvas on window resize
+    window.addEventListener('resize', () => {
+        // Recalculate dimensions on resize
+        WIDTH = canvas.offsetWidth;
+        canvas.width = WIDTH;
+        PLOT_WIDTH = WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
+        
+        // If the analyser is running, force a redraw
+        if (analyser) {
+            draw();
+        }
+    });
+    
+    // Initial calculation of plot width (in case resize event hasn't fired yet)
+    PLOT_WIDTH = canvas.offsetWidth - MARGIN_LEFT - MARGIN_RIGHT;
+
+</script>
+
+</body>
+</html>
