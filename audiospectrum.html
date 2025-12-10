@@ -45,8 +45,7 @@
 
         /* Canvas style - the main graph area */
         canvas {
-            background-color: #1f2a3a; /* Dark grid background (Matches JS clear color) */
-            /* Border removed, only the container has the border/glow */
+            background-color: #1f2a3a; /* Dark grid background */
             border: none; 
             display: block;
             width: 100%;
@@ -341,7 +340,6 @@
                 });
             }
         });
-        // We no longer draw anything here; drawing is handled in drawPeakTrails
     }
     
     function drawPeakTrails() {
@@ -350,53 +348,78 @@
         
         ctx.textAlign = 'center';
 
-        // --- UPDATED FONT SIZE RANGE ---
-        const MIN_FONT_SIZE = 10; // Minimum font size for quietest peaks (Set to 10)
-        const MAX_FONT_SIZE = 80; // Maximum font size for loudest peaks (Set to 80)
+        const MIN_FONT_SIZE = 10; 
+        const MAX_FONT_SIZE = 80; 
 
+        // 1. Find the currently loudest active peak
+        // We iterate through peaks that haven't fully faded yet
+        let loudestPeak = null;
+        let maxVolume = MIN_DB;
+
+        for (const peak of activePeaks) {
+            const elapsed = now - peak.timestamp;
+            if (elapsed < FADE_DURATION && peak.val > maxVolume) {
+                maxVolume = peak.val;
+                loudestPeak = peak;
+            }
+        }
+        
+        // 2. Loop through all active peaks for drawing
         for (let i = 0; i < activePeaks.length; i++) {
             const peak = activePeaks[i];
             const elapsed = now - peak.timestamp;
             
             if (elapsed < FADE_DURATION) {
-                // Calculate opacity: 1.0 when detected, fades to 0.0 after FADE_DURATION
                 peak.opacity = 1.0 - (elapsed / FADE_DURATION);
                 
+                // --- SPECIAL STYLING CHECK: Check if this is the loudest peak ---
+                const isLoudest = (loudestPeak === peak);
+                
+                let strokeColor = `rgba(255, 0, 204, ${peak.opacity * 0.7})`; // Default magenta
+                let fillColor = `rgba(200, 200, 200, ${peak.opacity})`; // Default gray text
+                let dynamicFontSize;
+                let shadowColor = isLoudest ? '#ffcc00' : '#00f0ff'; // Neon Yellow shadow for loudest
+                let shadowBlur = isLoudest ? 25 : 0; // Stronger glow for loudest
+                let lineWidth = isLoudest ? 2 : 1; // Thicker line for loudest
+
+                if (isLoudest) {
+                    // Top Peak Special Style (Requested 100px and special color)
+                    dynamicFontSize = 100; // Fixed 100px font size
+                    fillColor = `rgba(255, 204, 0, ${peak.opacity})`; // Neon Yellow text
+                    strokeColor = `rgba(255, 204, 0, ${peak.opacity * 0.9})`; // Neon Yellow line
+                } else {
+                    // Regular Dynamic Style (Volume dependent 10px to 80px)
+                    const clampedDb = Math.min(Math.max(peak.val, MIN_DB), MAX_DB); 
+                    dynamicFontSize = map(clampedDb, MIN_DB, MAX_DB, MIN_FONT_SIZE, MAX_FONT_SIZE);
+                }
+
                 // Draw peak marker (vertical line)
-                ctx.strokeStyle = `rgba(255, 0, 204, ${peak.opacity * 0.7})`; // Fading neon magenta line
-                ctx.lineWidth = 1;
+                ctx.strokeStyle = strokeColor; 
+                ctx.lineWidth = lineWidth;
+                ctx.shadowColor = shadowColor;
+                ctx.shadowBlur = shadowBlur;
+
                 ctx.beginPath();
                 ctx.moveTo(peak.x, peak.y);
-                ctx.lineTo(peak.x, PLOT_Y_START + PLOT_HEIGHT); // Line goes down to the bottom axis
+                ctx.lineTo(peak.x, PLOT_Y_START + PLOT_HEIGHT); 
                 ctx.stroke();
 
-                // --- DYNAMIC FONT CALCULATION ---
-                // Clamp peak volume (db) between MIN_DB (-80) and MAX_DB (0)
-                const clampedDb = Math.min(Math.max(peak.val, MIN_DB), MAX_DB); 
-
-                // Map the volume to the font size range (10px to 80px)
-                const dynamicFontSize = map(clampedDb, MIN_DB, MAX_DB, MIN_FONT_SIZE, MAX_FONT_SIZE);
-                
-                // Set the dynamic font size for this peak's label
-                ctx.font = `${dynamicFontSize.toFixed(1)}px Inter, Arial`;
+                ctx.shadowBlur = 0; // Reset shadow for text
 
                 // Draw frequency label
-                ctx.fillStyle = `rgba(200, 200, 200, ${peak.opacity})`; // Fading light gray text
+                ctx.font = `${dynamicFontSize.toFixed(1)}px Inter, Arial`;
+                ctx.fillStyle = fillColor;
                 
                 // Adjust Y offset based on the calculated font size
-                // We shift the text up slightly to keep it above the peak's position.
                 const yOffset = 5 + (dynamicFontSize - MIN_FONT_SIZE) * 0.5;
 
                 // Round to the nearest integer
                 ctx.fillText(Math.round(peak.freq), peak.x, peak.y - yOffset); 
                 
-                // Keep this peak for the next frame
                 nextActivePeaks.push(peak);
             }
-            // Else, the peak has fully faded and is dropped
         }
         
-        // Replace the old list with the peaks that are still visible
         activePeaks = nextActivePeaks;
     }
 
