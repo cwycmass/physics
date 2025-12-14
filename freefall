@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>垂直自由落體運動分析</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f4f8;
+        }
+
+        h1 {
+            color: #1e3a8a;
+            border-bottom: 2px solid #bfdbfe;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .video-tracking-area {
+            position: relative;
+            width: 640px;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        #tracking-canvas {
+            border: 3px solid #1e3a8a;
+            cursor: crosshair;
+            display: block;
+            background-color: #000;
+        }
+
+        .controls-container {
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: #3b82f6;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 15px 0;
+        }
+
+        button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: 600;
+        }
+
+        button.nav-btn {
+            width: 48%; /* Adjust width for side-by-side buttons */
+        }
+        
+        button:hover {
+            background-color: #2563eb;
+        }
+        
+        button:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* Red/Warning Button Style */
+        button.btn-danger {
+            background-color: #ef4444;
+        }
+        button.btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        /* Green/Success Button Style */
+        button.btn-success {
+            background-color: #10b981;
+        }
+        button.btn-success:hover {
+            background-color: #059669;
+        }
+
+        input[type="file"], input[type="number"], select { 
+            padding: 8px;
+            margin-right: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+        }
+        
+        label {
+            margin-right: 8px;
+            margin-bottom: 10px;
+            display: inline-block; 
+        }
+
+        .status-message {
+            font-style: italic;
+            color: #4b5563;
+            margin-top: 10px;
+            padding: 5px 0;
+        }
+
+        .results-container {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        #analysis-output {
+            background-color: #f9fafb;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            font-family: monospace;
+            border: 1px dashed #e5e7eb;
+        }
+        
+        #graph-area, #velocity-graph-area, #acceleration-graph-area {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px; 
+            width: 100%;
+        }
+
+        .graph-controls {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #video-player { 
+            display: none !important; 
+        }
+
+        .controls-container > div {
+            margin-bottom: 10px;
+        }
+        .controls-container label, .controls-container input, .controls-container select {
+            vertical-align: middle;
+        }
+
+        .app-footer {
+            margin-top: 40px;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 0.875rem; 
+            color: #6b7280; 
+            border-top: 1px solid #e5e7eb; 
+        }
+        
+        .keyboard-hint {
+            font-size: 0.8em;
+            color: #6b7280;
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>垂直自由落體運動分析</h1>
+    <p>上傳物體下落的影片片段，校準比例尺，並逐幀標記物體位置以產生運動圖表。</p>
+
+    <div class="controls-container">
+        <!-- Video Loading -->
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end;">
+            <div>
+                <label for="video-file-input" style="font-weight: bold; display:block;">步驟 0: 選擇影片片段:</label>
+                <input type="file" id="video-file-input" accept="video/*">
+            </div>
+            <div>
+                <label for="fps-input" style="font-weight: bold; display:block;">影片幀率 (FPS):</label>
+                <div style="display: flex; align-items: center;">
+                    <input type="number" id="fps-input" value="30" min="1" max="240" style="width: 80px; margin-bottom: 0;">
+                    <span id="fps-status" style="margin-left: 10px; font-size: 0.9em; color: #6b7280;">(預設 30)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="video-tracking-area">
+        <video id="video-player" width="640" height="480" controls></video>
+        <canvas id="tracking-canvas" width="640" height="480"></canvas>
+    </div>
+
+    <div class="controls-container">
+        <!-- Calibration Controls -->
+        <h2>1. 校準 (比例尺)</h2>
+        <label for="known-length-input">已知長度:</label>
+        <input type="number" id="known-length-input" value="1.0" min="0.01">
+        <select id="unit-select">
+            <option value="m">米 (m)</option>
+        </select>
+        <button id="calibrate-btn">開始校準</button>
+        <p id="calibration-status" class="status-message">比例尺: 請載入影片並進行校準。</p>
+        
+        <hr>
+
+        <!-- Tracking Controls -->
+        <h2>2. 追蹤</h2>
+        <div style="display: flex; gap: 4%; margin-bottom: 10px;">
+            <button id="prev-frame-btn" class="nav-btn" disabled>← 上一幀 (左箭頭)</button>
+            <button id="next-frame-btn" class="nav-btn" disabled>下一幀 (右箭頭) →</button>
+        </div>
+        <span class="keyboard-hint">提示：您可以使用鍵盤的 ← 左箭頭 和 → 右箭頭 鍵來切換幀。</span>
+
+        <p style="margin-top: 10px;">點擊畫面中的物體以標記其中心。每幀只允許一個點。</p>
+        
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <button id="undo-btn" disabled>移除當前幀標記</button>
+            <!-- Feature 4: Clear Data Button -->
+            <button id="clear-data-btn" class="btn-danger" disabled>清除所有數據</button>
+        </div>
+        
+        <p id="tracking-status" class="status-message">追蹤點數: 0 | 當前時間: <i>t</i> = 0.000 s</p>
+
+        <hr>
+
+        <!-- Analysis Controls -->
+        <h2>3. 分析</h2>
+        <div style="display: flex; gap: 10px;">
+            <button id="analyze-btn" disabled>產生分析</button>
+            <!-- Feature 1: Export CSV Button -->
+            <button id="export-btn" class="btn-success" disabled>匯出 CSV</button>
+        </div>
+    </div>
+
+    <!-- Results Area -->
+    <div class="results-container">
+        <h3>原始數據輸出</h3>
+        <pre id="analysis-output">載入影片、校準、追蹤點數，然後點擊「產生分析」以在此處查看結果。</pre>
+
+        <!-- Position-Time Graph Area -->
+        <div id="graph-area">
+            <h3>位置-時間圖表</h3>
+            <div class="graph-controls">
+                <!-- Checkbox checked by default -->
+                <input type="checkbox" id="regression-checkbox" checked>
+                <label for="regression-checkbox">顯示二次迴歸 (y = At² + Bt + C)</label>
+                <span id="r-squared-display" style="font-weight: bold; color: #059669;"></span>
+            </div>
+            <div class="chart-container">
+                <canvas id="position-time-chart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Velocity-Time Graph Area -->
+        <div id="velocity-graph-area">
+            <h3>速度-時間圖表</h3>
+            <div class="chart-container">
+                <canvas id="velocity-time-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Acceleration-Time Graph Area -->
+        <div id="acceleration-graph-area">
+            <h3>加速度-時間圖表</h3>
+            <div class="chart-container">
+                <canvas id="acceleration-time-chart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="app-footer">
+        廠商會中學 · 物理科
+    </footer>
+
+    <script>
+        // --- Global Variables and Setup ---
+        let videoPlayer = document.getElementById('video-player');
+        let trackingCanvas = document.getElementById('tracking-canvas');
+        let trackingCtx = trackingCanvas.getContext('2d');
+        
+        const prevFrameBtn = document.getElementById('prev-frame-btn');
+        const nextFrameBtn = document.getElementById('next-frame-btn');
+        const undoBtn = document.getElementById('undo-btn');
+        const clearDataBtn = document.getElementById('clear-data-btn');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const exportBtn = document.getElementById('export-btn');
+        const regressionCheckbox = document.getElementById('regression-checkbox');
+        const rSquaredDisplay = document.getElementById('r-squared-display');
+        const fpsInput = document.getElementById('fps-input');
+
+        let isCalibrating = false;
+        let calibrationPoints = [];
+        let trackedData = []; 
+        let scaleFactor = 0; 
+        
+        let positionTimeChart = null; 
+        let velocityTimeChart = null; 
+        let accelerationTimeChart = null; 
+        let regressionCoeffs = [0, 0, 0]; 
+
+        // Hardcoded frame rate (As per previous successful version)
+        const FRAME_STEP = 1 / 30; 
+        
+        const DEFAULT_OPACITY = 0.05; 
+        const TRACKING_DOT_COLOR = 'rgba(239, 68, 68, 0.6)'; 
+        const CALIBRATION_COLOR_BASE = 'rgba(74, 222, 128, 0.6)'; 
+
+        function showMessage(message) {
+            console.warn("User Message Box: " + message);
+            const outputElement = document.getElementById('analysis-output');
+            const tempMessage = document.createElement('div');
+            tempMessage.textContent = `[注意]: ${message}`;
+            tempMessage.style.color = '#dc2626'; 
+            tempMessage.style.fontWeight = 'bold';
+            tempMessage.style.padding = '10px 0';
+            outputElement.insertAdjacentElement('beforebegin', tempMessage);
+            setTimeout(() => tempMessage.remove(), 5000); 
+        }
+
+        // --- Utility Functions ---
+
+        const drawCurrentFrame = () => {
+            if (videoPlayer.readyState < 2) return; 
+
+            const currentTime = videoPlayer.currentTime.toFixed(3);
+            
+            trackingCtx.clearRect(0, 0, trackingCanvas.width, trackingCanvas.height);
+            trackingCtx.drawImage(videoPlayer, 0, 0, trackingCanvas.width, trackingCanvas.height);
+
+            if (scaleFactor > 0 && calibrationPoints.length === 2) {
+                const p1 = calibrationPoints[0];
+                const p2 = calibrationPoints[1];
+                
+                trackingCtx.save();
+                trackingCtx.strokeStyle = CALIBRATION_COLOR_BASE; 
+                trackingCtx.lineWidth = 3;
+                trackingCtx.beginPath();
+                trackingCtx.moveTo(p1.x, p1.y);
+                trackingCtx.lineTo(p2.x, p2.y);
+                trackingCtx.stroke();
+                trackingCtx.restore();
+
+                drawMarker(p1.x, p1.y, CALIBRATION_COLOR_BASE, '校準點1', DEFAULT_OPACITY);
+                drawMarker(p2.x, p2.y, CALIBRATION_COLOR_BASE, '校準點2', DEFAULT_OPACITY);
+            }
+
+            if (isCalibrating && calibrationPoints.length === 1) {
+                drawMarker(calibrationPoints[0].x, calibrationPoints[0].y, 'rgba(255, 204, 0, 1.0)', '第一個校準點', 1.0);
+            } 
+            
+            trackedData.forEach(p => {
+                const opacity = (p.time.toFixed(3) === currentTime) ? 1.0 : DEFAULT_OPACITY;
+                drawMarker(p.x_px, p.y_px, TRACKING_DOT_COLOR, `t = ${p.time.toFixed(3)} s`, opacity);
+            });
+            
+            const formattedTime = videoPlayer.currentTime.toFixed(3);
+            document.getElementById('tracking-status').innerHTML = 
+                `追蹤點數: ${trackedData.length} | 當前時間: <i>t</i> = ${formattedTime} s`;
+            
+            prevFrameBtn.disabled = videoPlayer.currentTime <= 0.01;
+            
+            // Enable analysis buttons if we have enough data
+            const hasData = trackedData.length > 0;
+            clearDataBtn.disabled = !hasData;
+            exportBtn.disabled = !hasData;
+        };
+
+        const drawMarker = (x, y, color, label, opacity = 1.0) => {
+            trackingCtx.save();
+            trackingCtx.globalAlpha = opacity;
+
+            trackingCtx.beginPath();
+            trackingCtx.arc(x, y, 7, 0, Math.PI * 2);
+            trackingCtx.fillStyle = color; 
+            trackingCtx.fill();
+            trackingCtx.lineWidth = 2;
+            trackingCtx.strokeStyle = 'white';
+            trackingCtx.stroke();
+            
+            trackingCtx.globalAlpha = 1.0; 
+            trackingCtx.strokeStyle = 'white';
+            trackingCtx.lineWidth = 1;
+            const crossSize = 3; 
+            
+            trackingCtx.beginPath();
+            trackingCtx.moveTo(x - crossSize, y);
+            trackingCtx.lineTo(x + crossSize, y);
+            trackingCtx.moveTo(x, y - crossSize);
+            trackingCtx.lineTo(x, y + crossSize);
+            trackingCtx.stroke();
+
+            if (label) {
+                trackingCtx.globalAlpha = 1.0;
+                trackingCtx.font = '12px Inter';
+                trackingCtx.fillStyle = 'white';
+                trackingCtx.fillText(label, x + 8, y + 5);
+            }
+            trackingCtx.restore();
+        };
+
+
+        // --- 1. Video Loading and Controls ---
+
+        document.getElementById('video-file-input').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                trackedData = [];
+                scaleFactor = 0;
+                regressionCoeffs = [0, 0, 0];
+                document.getElementById('tracking-status').innerHTML = '追蹤點數: 0 | 當前時間: <i>t</i> = 0.000 s';
+                document.getElementById('calibration-status').textContent = '影片已載入。準備校準。';
+                nextFrameBtn.disabled = true;
+                prevFrameBtn.disabled = true;
+                undoBtn.disabled = true;
+                analyzeBtn.disabled = true;
+                clearDataBtn.disabled = true;
+                exportBtn.disabled = true;
+                
+                if (positionTimeChart) positionTimeChart.destroy();
+                if (velocityTimeChart) velocityTimeChart.destroy();
+                if (accelerationTimeChart) accelerationTimeChart.destroy();
+
+                document.getElementById('analysis-output').textContent = '影片已載入。請校準並追蹤點數。';
+                rSquaredDisplay.textContent = '';
+                
+                videoPlayer.src = URL.createObjectURL(file);
+                videoPlayer.load();
+
+                videoPlayer.onloadedmetadata = () => {
+                    const aspect = videoPlayer.videoHeight / videoPlayer.videoWidth;
+                    const width = 640;
+                    const height = width * aspect;
+
+                    trackingCanvas.width = width;
+                    trackingCanvas.height = height;
+                    videoPlayer.width = width;
+                    videoPlayer.height = height;
+                    
+                    document.querySelector('.video-tracking-area').style.width = `${width}px`;
+
+                    videoPlayer.currentTime = 0; 
+                    videoPlayer.addEventListener('seeked', drawCurrentFrame, { once: true });
+                    nextFrameBtn.disabled = false;
+                    prevFrameBtn.disabled = true;
+                };
+            }
+        });
+        
+        const advanceFrame = (step) => {
+            if (videoPlayer.src) {
+                videoPlayer.pause();
+                const newTime = Math.max(0, videoPlayer.currentTime + step);
+                // Use fixed FRAME_STEP
+                videoPlayer.currentTime = parseFloat((Math.round(newTime / FRAME_STEP) * FRAME_STEP).toFixed(3));
+                videoPlayer.addEventListener('seeked', drawCurrentFrame, { once: true });
+            }
+        };
+
+        nextFrameBtn.addEventListener('click', () => advanceFrame(FRAME_STEP));
+        prevFrameBtn.addEventListener('click', () => advanceFrame(-FRAME_STEP));
+
+        // Feature 2: Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Only react if video is loaded
+            if (!videoPlayer.src) return;
+            
+            if (e.key === "ArrowRight") {
+                e.preventDefault(); // Prevent scroll
+                advanceFrame(FRAME_STEP);
+            } else if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                advanceFrame(-FRAME_STEP);
+            }
+        });
+
+
+        // --- 2. Spatial Calibration ---
+
+        document.getElementById('calibrate-btn').addEventListener('click', () => {
+            if (!videoPlayer.src) {
+                showMessage("請先載入影片。");
+                return;
+            }
+            isCalibrating = true;
+            calibrationPoints = [];
+            document.getElementById('calibration-status').textContent = '校準模式: 請點擊已知物體的兩端。';
+            drawCurrentFrame(); 
+        });
+
+        const finalizeCalibration = () => {
+            if (calibrationPoints.length < 2) return;
+
+            const p1 = calibrationPoints[0];
+            const p2 = calibrationPoints[1];
+            
+            const pixelDistance = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+            const knownLength = parseFloat(document.getElementById('known-length-input').value);
+            const unit = document.getElementById('unit-select').value;
+            
+            if (pixelDistance > 0 && knownLength > 0) {
+                scaleFactor = knownLength / pixelDistance;
+                document.getElementById('calibration-status').textContent = 
+                    `已校準: 1 像素 = ${scaleFactor.toFixed(4)} ${unit}。準備追蹤。`;
+                analyzeBtn.disabled = false;
+            } else {
+                document.getElementById('calibration-status').textContent = '校準失敗。距離或長度無效。';
+                scaleFactor = 0;
+            }
+
+            isCalibrating = false;
+            drawCurrentFrame(); 
+        };
+
+        // --- 3. Position Tracking & Canvas Interaction ---
+
+        const trackPosition = (x, y) => {
+            if (scaleFactor === 0) {
+                showMessage("請在追蹤點數前先校準影片。");
+                return;
+            }
+            
+            const currentTime = videoPlayer.currentTime.toFixed(3);
+            const existingIndex = trackedData.findIndex(p => p.time.toFixed(3) === currentTime);
+            const y_real = (trackingCanvas.height - y) * scaleFactor;
+
+            const newPoint = {
+                time: videoPlayer.currentTime,
+                x_px: x,
+                y_px: y,
+                y_real: y_real,
+                v_real: null, 
+                a_real: null
+            };
+
+            if (existingIndex !== -1) {
+                trackedData[existingIndex] = newPoint;
+            } else {
+                trackedData.push(newPoint);
+                trackedData.sort((a, b) => a.time - b.time); 
+            }
+
+            drawCurrentFrame(); 
+            undoBtn.disabled = trackedData.length === 0;
+        };
+
+        trackingCanvas.addEventListener('click', (event) => {
+            const rect = trackingCanvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            if (!videoPlayer.src) return;
+
+            if (isCalibrating) {
+                calibrationPoints.push({ x: x, y: y });
+                drawMarker(x, y, (calibrationPoints.length === 1) ? 'rgba(255, 204, 0, 1.0)' : CALIBRATION_COLOR_BASE, `校準點${calibrationPoints.length}`);
+                
+                if (calibrationPoints.length === 2) {
+                    finalizeCalibration();
+                }
+            } else {
+                trackPosition(x, y);
+            }
+        });
+
+        // Feature 4: Clear Data Function (FIXED: Reset charts to null)
+        clearDataBtn.addEventListener('click', () => {
+                trackedData = [];
+                // Clear charts and set to null to avoid reference issues
+                if (positionTimeChart) { positionTimeChart.destroy(); positionTimeChart = null; }
+                if (velocityTimeChart) { velocityTimeChart.destroy(); velocityTimeChart = null; }
+                if (accelerationTimeChart) { accelerationTimeChart.destroy(); accelerationTimeChart = null; }
+                
+                document.getElementById('analysis-output').textContent = '數據已清除。請重新開始追蹤。';
+                rSquaredDisplay.textContent = '';
+                
+                regressionCoeffs = [0, 0, 0];
+
+                drawCurrentFrame();
+                undoBtn.disabled = true;
+        });
+
+        undoBtn.addEventListener('click', () => {
+            if (trackedData.length > 0) {
+                const currentTime = videoPlayer.currentTime.toFixed(3);
+                const indexToRemove = trackedData.findIndex(p => p.time.toFixed(3) === currentTime);
+
+                if (indexToRemove !== -1) {
+                    trackedData.splice(indexToRemove, 1);
+                    calculateDerivedData(trackedData); 
+                    renderAllCharts(); 
+                } else {
+                    showMessage("當前畫面未找到可撤銷的追蹤點。");
+                }
+
+                drawCurrentFrame();
+                if (trackedData.length === 0) {
+                    undoBtn.disabled = true;
+                }
+            }
+        });
+
+        // Feature 1: Export to CSV (Updated to match display)
+        exportBtn.addEventListener('click', () => {
+            if (trackedData.length === 0) return;
+
+            // Ensure derived data is up to date
+            calculateDerivedData(trackedData);
+            
+            const unit = document.getElementById('unit-select').value;
+            // CSV Header with BOM for Excel UTF-8 compatibility
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "\uFEFF"; 
+            csvContent += `時間 / s,垂直位置 / m\n`;
+
+            // CSV Rows
+            trackedData.forEach(p => {
+                csvContent += `${p.time.toFixed(3)},${p.y_real.toFixed(4)}\n`;
+            });
+
+            // Create download link
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "motion_analysis_data.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+
+        // --- 4. Analysis Functions ---
+
+        function calculateDerivedData(data) {
+            data.forEach(p => { p.v_real = null; p.a_real = null; });
+            if (data.length < 3) return;
+
+            for (let i = 1; i < data.length - 1; i++) {
+                const y_prev = data[i - 1].y_real;
+                const y_next = data[i + 1].y_real;
+                const t_prev = data[i - 1].time;
+                const t_next = data[i + 1].time;
+
+                if (t_next > t_prev) {
+                    data[i].v_real = (y_next - y_prev) / (t_next - t_prev);
+                }
+            }
+
+            if (data.length < 5) return;
+            
+            for (let i = 2; i < data.length - 2; i++) {
+                 const v_prev = data[i - 1].v_real;
+                 const v_next = data[i + 1].v_real;
+                 const t_prev = data[i - 1].time;
+                 const t_next = data[i + 1].time;
+                 
+                 if (v_prev !== null && v_next !== null && t_next > t_prev) {
+                     data[i].a_real = (v_next - v_prev) / (t_next - t_prev);
+                 }
+            }
+        }
+
+        function quadraticRegression(data) {
+            if (data.length < 3) return [0, 0, 0];
+            let n = data.length;
+            let sum_t = 0, sum_y = 0, sum_t2 = 0, sum_t3 = 0, sum_t4 = 0, sum_yt = 0, sum_yt2 = 0;
+
+            for (let i = 0; i < n; i++) {
+                let t = data[i].time;
+                let y = data[i].y_real;
+                let t2 = t * t;
+                let t3 = t2 * t;
+                let t4 = t3 * t;
+                sum_t += t; sum_y += y; sum_t2 += t2; sum_t3 += t3; sum_t4 += t4; sum_yt += y * t; sum_yt2 += y * t2;
+            }
+
+            const a = [[sum_t4, sum_t3, sum_t2], [sum_t3, sum_t2, sum_t], [sum_t2, sum_t, n]];
+            const b = [sum_yt2, sum_yt, sum_y];
+            
+            const D = a[0][0]*(a[1][1]*a[2][2] - a[1][2]*a[2][1]) - a[0][1]*(a[1][0]*a[2][2] - a[1][2]*a[2][0]) + a[0][2]*(a[1][0]*a[2][1] - a[1][1]*a[2][0]);
+            if (D === 0) return [0, 0, 0];
+
+            const Da = b[0]*(a[1][1]*a[2][2] - a[1][2]*a[2][1]) - a[0][1]*(b[1]*a[2][2] - a[1][2]*b[2]) + a[0][2]*(b[1]*a[2][1] - a[1][1]*b[2]);
+            const Db = a[0][0]*(b[1]*a[2][2] - a[1][2]*b[2]) - b[0]*(a[1][0]*a[2][2] - a[1][2]*a[2][0]) + a[0][2]*(a[1][0]*b[2] - b[1]*a[2][0]);
+            const Dc = a[0][0]*(a[1][1]*b[2] - b[1]*a[2][1]) - a[0][1]*(a[1][0]*b[2] - b[1]*a[2][0]) + b[0]*(a[1][0]*a[2][1] - a[1][1]*a[2][0]);
+            
+            return [Da / D, Db / D, Dc / D];
+        }
+
+        function calculateRSquared(data, coeffs) {
+            const [A, B, C] = coeffs;
+            let sum_y = 0;
+            for (let i = 0; i < data.length; i++) sum_y += data[i].y_real;
+            const mean_y = sum_y / data.length;
+            let ss_tot = 0, ss_res = 0;
+            for (let i = 0; i < data.length; i++) {
+                const t = data[i].time;
+                const y_actual = data[i].y_real;
+                const y_predicted = A * t * t + B * t + C;
+                ss_tot += Math.pow(y_actual - mean_y, 2);
+                ss_res += Math.pow(y_actual - y_predicted, 2);
+            }
+            if (ss_tot === 0) return 1;
+            return 1 - (ss_res / ss_tot);
+        }
+
+        const generateRegressionData = (data, coeffs) => {
+            if (!coeffs || data.length === 0) return [];
+            const [A, B, C] = coeffs;
+            const startTime = data[0].time;
+            const endTime = data[data.length - 1].time;
+            const step = (endTime - startTime) / 100; 
+            const regressionPoints = [];
+            for (let t = startTime; t <= endTime; t += step) {
+                const y = A * t * t + B * t + C;
+                regressionPoints.push({ x: t, y: y });
+            }
+            if (regressionPoints.length > 0 && regressionPoints[regressionPoints.length - 1].x.toFixed(3) !== endTime.toFixed(3)) {
+                 const y = A * endTime * endTime + B * endTime + C;
+                 regressionPoints.push({ x: endTime, y: y });
+            }
+            return regressionPoints;
+        }
+
+        const renderPositionChart = (minTime, maxTime) => {
+            if (trackedData.length < 2) {
+                 if (positionTimeChart) positionTimeChart.destroy();
+                 rSquaredDisplay.textContent = '';
+                 regressionCoeffs = [0, 0, 0];
+                 return;
+            }
+
+            const unit = document.getElementById('unit-select').value;
+            const ctx = document.getElementById('position-time-chart').getContext('2d');
+            const showRegression = regressionCheckbox.checked;
+
+            const positionData = trackedData.map(p => ({ x: p.time, y: p.y_real }));
+            let datasets = [{
+                label: '追蹤位置數據',
+                data: positionData,
+                backgroundColor: 'rgba(59, 130, 246, 1.0)',
+                pointRadius: 6,
+                type: 'scatter'
+            }];
+            
+            rSquaredDisplay.textContent = '';
+            
+            if (showRegression && trackedData.length >= 3) {
+                regressionCoeffs = quadraticRegression(trackedData);
+                const [A, B, C] = regressionCoeffs;
+                const rSquared = calculateRSquared(trackedData, regressionCoeffs);
+                const regressionPoints = generateRegressionData(trackedData, regressionCoeffs);
+                
+                const formulaLabel = `二次迴歸 (y = ${A.toFixed(3)}t² + ${B.toFixed(3)}t + ${C.toFixed(3)})`;
+
+                datasets.push({
+                    label: formulaLabel,
+                    data: regressionPoints,
+                    borderColor: '#ef4444',
+                    borderWidth: 2,
+                    fill: false,
+                    pointRadius: 0,
+                    type: 'line',
+                    tension: 0
+                });
+                rSquaredDisplay.textContent = `R²: ${rSquared.toFixed(4)}`;
+            } else {
+                 regressionCoeffs = [0, 0, 0];
+            }
+
+            if (positionTimeChart) positionTimeChart.destroy();
+
+            positionTimeChart = new Chart(ctx, {
+                data: { datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, 
+                    scales: {
+                        x: { type: 'linear', position: 'bottom', title: { display: true, text: '時間 (s)', font: { size: 14 } }, min: minTime, max: maxTime },
+                        y: { title: { display: true, text: `位置 (${unit})`, font: { size: 14 } } }
+                    },
+                    plugins: { legend: { display: true }, tooltip: { callbacks: { label: function(context) { return `${context.dataset.label}: (t=${context.parsed.x.toFixed(3)} s, y=${context.parsed.y.toFixed(4)} ${unit})`; } } } }
+                }
+            });
+        };
+        
+        const renderVelocityChart = (minTime, maxTime) => {
+             if (!regressionCheckbox.checked || trackedData.length < 3) {
+                if (velocityTimeChart) velocityTimeChart.destroy();
+                return;
+            }
+
+            const unit = document.getElementById('unit-select').value;
+            const ctx = document.getElementById('velocity-time-chart').getContext('2d');
+            const [A, B] = regressionCoeffs; 
+
+            const startTime = trackedData[0].time;
+            const endTime = trackedData[trackedData.length - 1].time;
+            const step = (endTime - startTime) / 100;
+
+            const velocityRegressionPoints = [];
+            for (let t = startTime; t <= endTime; t += step) {
+                const v = 2 * A * t + B;
+                velocityRegressionPoints.push({ x: t, y: v });
+            }
+             if (velocityRegressionPoints.length > 0 && velocityRegressionPoints[velocityRegressionPoints.length - 1].x.toFixed(3) !== endTime.toFixed(3)) {
+                 const v = 2 * A * endTime + B;
+                 velocityRegressionPoints.push({ x: endTime, y: v });
+            }
+            
+            if (velocityTimeChart) velocityTimeChart.destroy();
+
+            velocityTimeChart = new Chart(ctx, {
+                data: {
+                    datasets: [{
+                        label: `速度 (v = ${ (2 * A).toFixed(3) }t + ${ B.toFixed(3) })`,
+                        data: velocityRegressionPoints,
+                        borderColor: '#22c55e',
+                        borderWidth: 2,
+                        fill: false,
+                        pointRadius: 0,
+                        type: 'line',
+                        tension: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, 
+                    scales: {
+                        x: { type: 'linear', position: 'bottom', title: { display: true, text: '時間 (s)', font: { size: 14 } }, min: minTime, max: maxTime },
+                        y: { title: { display: true, text: `速度 (${unit}/s)`, font: { size: 14 } } }
+                    },
+                    plugins: { legend: { display: true } }
+                }
+            });
+        };
+        
+        const renderAccelerationChart = (minTime, maxTime) => {
+             if (!regressionCheckbox.checked || trackedData.length < 3) {
+                if (accelerationTimeChart) accelerationTimeChart.destroy();
+                return;
+            }
+
+            const unit = document.getElementById('unit-select').value;
+            const ctx = document.getElementById('acceleration-time-chart').getContext('2d');
+            const [A] = regressionCoeffs;
+            const accelerationValue = 2 * A;
+            const startTime = trackedData[0].time;
+            const endTime = trackedData[trackedData.length - 1].time;
+
+            const accelerationRegressionPoints = [
+                { x: startTime, y: accelerationValue },
+                { x: endTime, y: accelerationValue }
+            ];
+
+            if (accelerationTimeChart) accelerationTimeChart.destroy();
+
+            accelerationTimeChart = new Chart(ctx, {
+                data: {
+                    datasets: [{
+                        label: `加速度 (a = ${ accelerationValue.toFixed(3) })`,
+                        data: accelerationRegressionPoints,
+                        borderColor: '#f97316',
+                        borderWidth: 2,
+                        fill: false,
+                        pointRadius: 0,
+                        type: 'line',
+                        tension: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, 
+                    scales: {
+                        x: { type: 'linear', position: 'bottom', title: { display: true, text: '時間 (s)', font: { size: 14 } }, min: minTime, max: maxTime },
+                        y: { title: { display: true, text: `加速度 (${unit}/s²)`, font: { size: 14 } } }
+                    },
+                    plugins: { legend: { display: true } }
+                }
+            });
+        };
+        
+        const renderAllCharts = () => {
+            if (trackedData.length === 0) {
+                 if (positionTimeChart) positionTimeChart.destroy();
+                 if (velocityTimeChart) velocityTimeChart.destroy();
+                 if (accelerationTimeChart) accelerationTimeChart.destroy();
+                 return;
+            }
+            const minTime = trackedData[0].time;
+            const maxTime = trackedData[trackedData.length - 1].time;
+            renderPositionChart(minTime, maxTime); 
+            renderVelocityChart(minTime, maxTime);
+            renderAccelerationChart(minTime, maxTime);
+        }
+        
+        regressionCheckbox.addEventListener('change', renderAllCharts);
+
+        analyzeBtn.addEventListener('click', () => {
+            if (trackedData.length < 1) {
+                showMessage("請追蹤至少 1 個點以生成數據。建議使用 3 個以上點來進行二次迴歸分析。");
+                return;
+            }
+            trackedData.sort((a, b) => a.time - b.time); 
+            calculateDerivedData(trackedData);
+            const unit = document.getElementById('unit-select').value;
+            
+            // Updated output format as requested: 
+            // 1. Remove Velocity and Acceleration columns
+            // 2. Rename headers to "時間 / s" and "垂直位置 / m"
+            let output = `時間 / s\t垂直位置 / m\n`;
+            output += "--------------------------------\n";
+            
+            for (let i = 0; i < trackedData.length; i++) {
+                const p = trackedData[i];
+                // Only output Time and Position
+                output += `${p.time.toFixed(3)}\t${p.y_real.toFixed(4)}\n`; 
+            }
+            document.getElementById('analysis-output').textContent = output;
+            renderAllCharts();
+        });
+    </script>
+</body>
+</html>
