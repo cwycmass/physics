@@ -21,11 +21,10 @@
             margin-bottom: 20px;
         }
 
-        /* UPDATED: Reduced width to allow easier scrolling on mobile */
         .video-tracking-area {
             position: relative;
-            width: 95%; /* Leaves space on sides for scrolling */
-            max-width: 600px; /* Slightly reduced max width */
+            width: 95%; 
+            max-width: 600px; 
             margin: 20px auto;
             border-radius: 8px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
@@ -40,9 +39,7 @@
             cursor: crosshair;
             display: block;
             background-color: #000;
-            /* Direct tracking interaction, scrolling is handled outside canvas */
             touch-action: none;
-            
             display: block;
             width: auto;        
             height: auto;       
@@ -88,7 +85,7 @@
         }
 
         button.nav-btn {
-            width: 48%; /* Adjust width for side-by-side buttons */
+            width: 48%; 
         }
         
         button:hover {
@@ -100,7 +97,6 @@
             cursor: not-allowed;
         }
 
-        /* Red/Warning Button Style */
         button.btn-danger {
             background-color: #ef4444;
         }
@@ -108,7 +104,6 @@
             background-color: #dc2626;
         }
 
-        /* Pink/Pre-warning Button Style */
         button.btn-pink {
             background-color: #ec4899; 
         }
@@ -116,7 +111,6 @@
             background-color: #db2777; 
         }
 
-        /* Green/Success Button Style */
         button.btn-success {
             background-color: #10b981;
         }
@@ -130,13 +124,6 @@
             margin-bottom: 10px;
             border: 1px solid #d1d5db;
             border-radius: 4px;
-        }
-        
-        /* Disabled input style */
-        input:disabled {
-            background-color: #e5e7eb;
-            color: #9ca3af;
-            cursor: not-allowed;
         }
         
         label {
@@ -205,16 +192,13 @@
             border-top: 1px solid #e5e7eb; 
         }
         
-        /* Mobile Helper */
-        .mobile-tip {
-            display: none;
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            font-size: 0.9em;
+        .keyboard-hint {
+            font-size: 0.8em;
+            color: #6b7280;
+            display: block;
+            margin-top: 5px;
         }
+        
         @media (max-width: 768px) {
             .mobile-tip { display: block; }
         }
@@ -224,23 +208,11 @@
     <h1>垂直自由落體運動分析</h1>
     <p>上傳物體下落的影片片段，校準比例尺，並逐幀標記物體位置以產生運動圖表。</p>
 
-    <div class="mobile-tip">
-        📱 <strong>手機用戶提示：</strong> 影片區域支援直接觸控拖曳標記點。如需捲動頁面，請在影片區域外滑動。
-    </div>
-
     <div class="controls-container">
-        <!-- Video Loading -->
         <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end;">
             <div>
                 <label for="video-file-input" style="font-weight: bold; display:block;">步驟 0: 選擇影片片段:</label>
                 <input type="file" id="video-file-input" accept="video/*">
-            </div>
-            <div>
-                <label for="fps-input" style="font-weight: bold; display:block;">影片幀率 (FPS):</label>
-                <div style="display: flex; align-items: center;">
-                    <input type="number" id="fps-input" value="30" min="1" max="240" style="width: 80px; margin-bottom: 0;" inputmode="decimal">
-                    <span id="fps-status" style="margin-left: 10px; font-size: 0.9em; color: #6b7280;">(預設 30)</span>
-                </div>
             </div>
         </div>
     </div>
@@ -251,7 +223,6 @@
     </div>
 
     <div class="controls-container">
-        <!-- Calibration Controls -->
         <h2>1. 校準 (比例尺)</h2>
         <label for="known-length-input">已知長度:</label>
         <input type="number" id="known-length-input" value="1.0" min="0.01" inputmode="decimal">
@@ -263,19 +234,16 @@
         
         <hr>
 
-        <!-- Tracking Controls -->
         <h2>2. 追蹤</h2>
         <div style="display: flex; gap: 4%; margin-bottom: 10px;">
             <button id="prev-frame-btn" class="nav-btn" disabled>← 上一幀 (左箭頭)</button>
             <button id="next-frame-btn" class="nav-btn" disabled>下一幀 (右箭頭) →</button>
         </div>
-        <!-- Removed text hint here as requested -->
-
-        <!-- Removed text hint here as requested -->
+        
+        <p style="margin-top: 10px;">點擊畫面中的物體以標記其中心。每幀只允許一個點。</p>
         
         <div style="display: flex; gap: 10px; margin-top: 10px;">
             <button id="undo-btn" disabled>移除當前幀標記</button>
-            <!-- Feature 4: Clear Data Button -->
             <button id="clear-data-btn" class="btn-pink" disabled>清除所有數據</button>
         </div>
         
@@ -283,25 +251,20 @@
 
         <hr>
 
-        <!-- Analysis Controls -->
         <h2>3. 分析</h2>
         <div style="display: flex; gap: 10px;">
             <button id="analyze-btn" disabled>產生分析</button>
-            <!-- Feature 1: Export CSV Button -->
             <button id="export-btn" class="btn-success" disabled>匯出 CSV</button>
         </div>
     </div>
 
-    <!-- Results Area -->
     <div class="results-container">
         <h3>原始數據輸出</h3>
         <pre id="analysis-output">載入影片、校準、追蹤點數，然後點擊「產生分析」以在此處查看結果。</pre>
 
-        <!-- Position-Time Graph Area -->
         <div id="graph-area">
             <h3>位置-時間圖表</h3>
             <div class="graph-controls">
-                <!-- Checkbox checked by default -->
                 <input type="checkbox" id="regression-checkbox" checked>
                 <label for="regression-checkbox">顯示二次迴歸 (y = At² + Bt + C)</label>
                 <span id="r-squared-display" style="font-weight: bold; color: #059669;"></span>
@@ -311,7 +274,6 @@
             </div>
         </div>
         
-        <!-- Velocity-Time Graph Area -->
         <div id="velocity-graph-area">
             <h3>速度-時間圖表</h3>
             <div class="chart-container">
@@ -319,7 +281,6 @@
             </div>
         </div>
 
-        <!-- Acceleration-Time Graph Area -->
         <div id="acceleration-graph-area">
             <h3>加速度-時間圖表</h3>
             <div class="chart-container">
@@ -333,7 +294,6 @@
     </footer>
 
     <script>
-        // --- Global Variables and Setup ---
         let videoPlayer = document.getElementById('video-player');
         let trackingCanvas = document.getElementById('tracking-canvas');
         let trackingCtx = trackingCanvas.getContext('2d');
@@ -346,8 +306,8 @@
         const exportBtn = document.getElementById('export-btn');
         const regressionCheckbox = document.getElementById('regression-checkbox');
         const rSquaredDisplay = document.getElementById('r-squared-display');
-        const fpsInput = document.getElementById('fps-input');
         const calibrateBtn = document.getElementById('calibrate-btn');
+        // No manual FPS input anymore
 
         let isCalibrating = false;
         let calibrationPoints = [];
@@ -359,28 +319,21 @@
         let accelerationTimeChart = null; 
         let regressionCoeffs = [0, 0, 0]; 
 
-        // Initial Frame Rate
-        let frameRate = 30;
-        let frameStep = 1 / 30; 
+        const FRAME_STEP = 1 / 30; 
         
         const DEFAULT_OPACITY = 0.6; 
         const TRACKING_DOT_COLOR = 'rgba(239, 68, 68, 0.6)'; 
         const CALIBRATION_COLOR_BASE = 'rgba(74, 222, 128, 0.6)'; 
         
-        // Touch/Drag Interaction Variables
-        const TOUCH_OFFSET_Y = 70; // Pixels above finger
+        const TOUCH_OFFSET_Y = 70; 
         let isDragging = false;
-        let dragTarget = null; // {x, y} for crosshair (tracking)
-        
-        // Hover position for magnifier
+        let dragTarget = null; 
         let hoverPos = null;
 
-        // Calibration Dragging Variables
-        let draggingCalibIndex = -1; // -1 means none
-        const HIT_RADIUS = 30; // Increased Hit Radius for easier grabbing
+        let draggingCalibIndex = -1; 
+        const HIT_RADIUS = 30; 
         
-        // Magnifier Constants
-        const MAGNIFIER_RADIUS = 50; // Slightly larger for better visibility
+        const MAGNIFIER_RADIUS = 50; 
         const MAGNIFIER_ZOOM = 2;
 
         function showMessage(message) {
@@ -395,15 +348,14 @@
             setTimeout(() => tempMessage.remove(), 5000); 
         }
 
-        // --- Utility Functions ---
-
-        // Helper to lock/unlock FPS input
-        const updateFPSLock = () => {
-            if (trackedData.length > 0) {
-                fpsInput.disabled = true;
-            } else {
-                fpsInput.disabled = false;
-            }
+        // --- Recalculate Real World Coords (Improvement 1) ---
+        // Updates all tracked points based on the current scaleFactor
+        const recalculateAllPoints = () => {
+            if (scaleFactor <= 0) return;
+            trackedData.forEach(p => {
+                // p.y_px is the source of truth
+                p.y_real = (trackingCanvas.height - p.y_px) * scaleFactor;
+            });
         };
 
         const drawCurrentFrame = () => {
@@ -445,7 +397,7 @@
             if (dragTarget) {
                 drawMagnifier(dragTarget.x, dragTarget.y);
             } 
-            // Draw Hover Magnifier (Mouse Hover)
+            // Draw Hover Magnifier
             else if (hoverPos) {
                  drawMagnifier(hoverPos.x, hoverPos.y);
             }
@@ -456,17 +408,9 @@
             
             prevFrameBtn.disabled = videoPlayer.currentTime <= 0.01;
             
-            // Enable analysis buttons if we have enough data
             const hasData = trackedData.length > 0;
-            // Only allow clear data if there is data
             clearDataBtn.disabled = !hasData;
-            // Always allow undo/remove if we can go back OR remove something?
-            // Actually, if trackingData > 0, we can remove. 
-            // But we also want to allow "back" function even if no data on CURRENT frame.
-            // So disable undoBtn only if trackedData is empty AND we are at start? 
-            // Simplest: Enable undoBtn if trackedData > 0 OR video time > 0.
             undoBtn.disabled = (trackedData.length === 0 && videoPlayer.currentTime <= 0.01);
-            
             exportBtn.disabled = !hasData;
         };
 
@@ -503,35 +447,37 @@
             trackingCtx.restore();
         };
         
-        // Magnifier drawing function (Centered)
+        // Improvement 2: Magnifier boundary clamping
         const drawMagnifier = (x, y) => {
             trackingCtx.save();
             
-            // Draw magnification
-            // Clip region for the magnifier circle
             trackingCtx.beginPath();
             trackingCtx.arc(x, y, MAGNIFIER_RADIUS, 0, Math.PI * 2);
             trackingCtx.closePath();
             
-            // Save state for clipping
             trackingCtx.save();
             trackingCtx.clip();
             
-            // Draw the zoomed image
             const srcR = MAGNIFIER_RADIUS / MAGNIFIER_ZOOM;
             const srcD = srcR * 2;
             const destD = MAGNIFIER_RADIUS * 2;
             
-            // Fill background black first
+            // Calculate source coordinates
+            let sx = x - srcR;
+            let sy = y - srcR;
+
+            // Optional: Clamp source to video boundaries to prevent drawing empty pixels
+            // However, drawImage generally handles out-of-bounds gracefully (draws nothing/transparent)
+            // But filling black background handles the visual aspect.
+            
             trackingCtx.fillStyle = 'black';
             trackingCtx.fill();
             
             try {
-                // Draw Video Frame (Scaled up)
                 trackingCtx.drawImage(
                     videoPlayer, 
-                    x - srcR, y - srcR, srcD, srcD, // Source rect
-                    x - MAGNIFIER_RADIUS, y - MAGNIFIER_RADIUS, destD, destD // Dest rect
+                    sx, sy, srcD, srcD, 
+                    x - MAGNIFIER_RADIUS, y - MAGNIFIER_RADIUS, destD, destD 
                 );
             } catch (e) {
                 // Ignore errors
@@ -539,7 +485,6 @@
             
             trackingCtx.restore();
 
-            // Draw Magnifier Border
             trackingCtx.globalAlpha = 1.0;
             trackingCtx.strokeStyle = '#fff';
             trackingCtx.lineWidth = 3;
@@ -548,8 +493,7 @@
             trackingCtx.lineWidth = 1;
             trackingCtx.stroke();
 
-            // Draw Crosshair INSIDE the magnifier
-            trackingCtx.strokeStyle = '#3b82f6'; // Blue
+            trackingCtx.strokeStyle = '#3b82f6'; 
             trackingCtx.lineWidth = 1;
             const size = 10;
 
@@ -575,6 +519,10 @@
                 scaleFactor = knownLength / pixelDistance;
                 document.getElementById('calibration-status').textContent = 
                     `已校準: 1 像素 = ${scaleFactor.toFixed(4)} ${unit}。準備追蹤。`;
+                
+                // Improvement 1: Recalculate existing points if scale changes
+                recalculateAllPoints();
+
             } else {
                 document.getElementById('calibration-status').textContent = '校準數值無效。';
                 scaleFactor = 0;
@@ -599,18 +547,6 @@
             }
             drawCurrentFrame(); 
         };
-
-
-        // --- 1. Video Loading and Controls ---
-
-        // Update frameStep when input changes
-        fpsInput.addEventListener('change', () => {
-            const val = parseFloat(fpsInput.value);
-            if (val > 0) {
-                frameRate = val;
-                frameStep = 1 / frameRate;
-            }
-        });
 
         document.getElementById('video-file-input').addEventListener('change', (event) => {
             const file = event.target.files[0];
@@ -638,26 +574,13 @@
                 videoPlayer.load();
 
                 videoPlayer.onloadedmetadata = () => {
-                    const aspect = videoPlayer.videoHeight / videoPlayer.videoWidth;
-                    
                     trackingCanvas.width = videoPlayer.videoWidth;
                     trackingCanvas.height = videoPlayer.videoHeight;
                     
-                    // Reset to default FPS on new video load? 
-                    // No, keep user preference or default 30.
-                    const val = parseFloat(fpsInput.value);
-                    if(val > 0) {
-                        frameRate = val;
-                        frameStep = 1 / frameRate;
-                    }
-
                     videoPlayer.currentTime = 0; 
                     videoPlayer.addEventListener('seeked', drawCurrentFrame, { once: true });
                     nextFrameBtn.disabled = false;
                     prevFrameBtn.disabled = true;
-                    
-                    // Unlock FPS input on new load
-                    updateFPSLock();
                 };
             }
         });
@@ -670,28 +593,24 @@
             if (videoPlayer.src) {
                 videoPlayer.pause();
                 const newTime = Math.max(0, videoPlayer.currentTime + step);
-                // Use dynamic frameStep
-                videoPlayer.currentTime = parseFloat((Math.round(newTime / frameStep) * frameStep).toFixed(3));
+                videoPlayer.currentTime = parseFloat((Math.round(newTime / FRAME_STEP) * FRAME_STEP).toFixed(3));
                 videoPlayer.addEventListener('seeked', drawCurrentFrame, { once: true });
             }
         };
 
-        nextFrameBtn.addEventListener('click', () => advanceFrame(frameStep));
-        prevFrameBtn.addEventListener('click', () => advanceFrame(-frameStep));
+        nextFrameBtn.addEventListener('click', () => advanceFrame(FRAME_STEP));
+        prevFrameBtn.addEventListener('click', () => advanceFrame(-FRAME_STEP));
 
         document.addEventListener('keydown', (e) => {
             if (!videoPlayer.src) return;
             if (e.key === "ArrowRight") {
                 e.preventDefault(); 
-                advanceFrame(frameStep);
+                advanceFrame(FRAME_STEP);
             } else if (e.key === "ArrowLeft") {
                 e.preventDefault();
-                advanceFrame(-frameStep);
+                advanceFrame(-FRAME_STEP);
             }
         });
-
-
-        // --- 2. Spatial Calibration (Draggable Logic) ---
 
         calibrateBtn.addEventListener('click', () => {
             if (!videoPlayer.src) {
@@ -700,7 +619,6 @@
             }
 
             if (!isCalibrating) {
-                // START Calibration Mode
                 isCalibrating = true;
                 calibrationPoints = [];
                 scaleFactor = 0;
@@ -710,7 +628,6 @@
                 analyzeBtn.disabled = true;
                 drawCurrentFrame();
             } else {
-                // FINISH Calibration Mode
                 if (calibrationPoints.length === 2) {
                     calculateScale(); 
                     isCalibrating = false;
@@ -723,39 +640,31 @@
             }
         });
 
-        // --- 3. Position Tracking & Interaction Logic ---
-
         const processPointSelection = (x, y) => {
             if (!videoPlayer.src) return;
             
-            // Check boundaries
             if (x < 0 || x > trackingCanvas.width || y < 0 || y > trackingCanvas.height) {
                 return;
             }
 
             if (isCalibrating) {
                 if (draggingCalibIndex !== -1) {
-                    // Just finished dragging an existing point
                     calibrationPoints[draggingCalibIndex] = { x, y };
-                    draggingCalibIndex = -1; // Reset drag index
+                    draggingCalibIndex = -1; 
                 } else {
-                    // Creating new calibration point
                     if (calibrationPoints.length < 2) {
                          calibrationPoints.push({ x, y });
                     }
                 }
             } else {
-                // Tracking Mode
                 trackPosition(x, y);
-                // Auto-advance logic
-                setTimeout(() => advanceFrame(frameStep), 150);
+                setTimeout(() => advanceFrame(FRAME_STEP), 150);
             }
             drawCurrentFrame();
         };
 
         const getEventPos = (e) => {
             const rect = trackingCanvas.getBoundingClientRect();
-            // Calculate scale factors
             const scaleX = trackingCanvas.width / rect.width;
             const scaleY = trackingCanvas.height / rect.height;
 
@@ -768,19 +677,16 @@
             };
         };
 
-        // Pointer Down (Start)
         const handleStart = (e) => {
             if (!videoPlayer.src) return;
-            e.preventDefault(); // Prevent scrolling on touch
+            e.preventDefault(); 
 
             const pos = getEventPos(e);
             
             if (isCalibrating) {
-                // Check if hitting an existing point to drag
                 draggingCalibIndex = -1;
                 for (let i = calibrationPoints.length - 1; i >= 0; i--) {
                     const p = calibrationPoints[i];
-                    // Adjust hit radius for scale
                     const rect = trackingCanvas.getBoundingClientRect();
                     const scaleX = trackingCanvas.width / rect.width;
                     const scaledHitRadius = HIT_RADIUS * scaleX; 
@@ -794,18 +700,14 @@
                     }
                 }
                 
-                // If not hitting existing, and we have space, start new point
                 if (draggingCalibIndex === -1 && calibrationPoints.length < 2) {
                     isDragging = true;
                 }
             } else {
-                // Tracking Mode
                 isDragging = true;
             }
             
             if (isDragging) {
-                 // Initial Crosshair Position
-                 // We always apply offset (Mouse or Touch) to keep logic unified and visibility good
                  const rect = trackingCanvas.getBoundingClientRect();
                  const scaleY = trackingCanvas.height / rect.height;
                  const offsetY = (e.type === 'touchstart') ? (TOUCH_OFFSET_Y * scaleY) : 0;
@@ -815,9 +717,7 @@
             }
         };
 
-        // Pointer Move
         const handleMove = (e) => {
-             // Handle Mouse Hover
              if (e.type === 'mousemove' && !isDragging) {
                  hoverPos = getEventPos(e);
                  drawCurrentFrame();
@@ -829,14 +729,12 @@
 
             const pos = getEventPos(e);
             
-            // Update Drag Target (Crosshair position)
             const rect = trackingCanvas.getBoundingClientRect();
             const scaleY = trackingCanvas.height / rect.height;
             const offsetY = (e.type === 'touchmove' || e.type === 'touchstart') ? (TOUCH_OFFSET_Y * scaleY) : 0;
                 
             dragTarget = { x: pos.x, y: pos.y - offsetY };
             
-            // If Calibrating and Dragging existing, update it live
             if (isCalibrating && draggingCalibIndex !== -1) {
                 calibrationPoints[draggingCalibIndex] = { x: dragTarget.x, y: dragTarget.y };
             }
@@ -844,18 +742,15 @@
             drawCurrentFrame();
         };
         
-        // Mouse out to clear hover
         trackingCanvas.addEventListener('mouseout', () => {
             hoverPos = null;
             drawCurrentFrame();
         });
 
-        // Pointer Up
         const handleEnd = (e) => {
             if (e.type === 'touchend') e.preventDefault();
             
             if (isDragging && dragTarget) {
-                // Commit the action at dragTarget
                 processPointSelection(dragTarget.x, dragTarget.y);
             }
             
@@ -864,7 +759,6 @@
             drawCurrentFrame();
         };
 
-        // Attach Events
         trackingCanvas.addEventListener('mousedown', handleStart);
         trackingCanvas.addEventListener('mousemove', handleMove);
         window.addEventListener('mouseup', () => { if(isDragging) handleEnd({ preventDefault: ()=>{} }); }); 
@@ -873,7 +767,6 @@
         trackingCanvas.addEventListener('touchmove', handleMove, { passive: false });
         trackingCanvas.addEventListener('touchend', handleEnd);
 
-        // Tracking Logic called by handleEnd
         const trackPosition = (x, y) => {
             if (scaleFactor === 0) {
                 showMessage("請在追蹤點數前先校準影片。");
@@ -899,43 +792,50 @@
                 trackedData.push(newPoint);
                 trackedData.sort((a, b) => a.time - b.time); 
             }
-            // Update FPS lock status
-            updateFPSLock();
+            undoBtn.disabled = trackedData.length === 0;
         };
 
 
-        // Feature 4: Clear Data Function
+        // Feature 4: Clear Data Function (Optimized with Timeout)
         let clearConfirmState = false;
+        let clearResetTimer = null; // Improvement 3: Timer
+
         const resetClearButton = () => {
             clearConfirmState = false;
             clearDataBtn.textContent = '清除所有數據';
             clearDataBtn.classList.remove('btn-danger');
             clearDataBtn.classList.add('btn-pink');
+            if (clearResetTimer) clearTimeout(clearResetTimer);
         };
 
         clearDataBtn.addEventListener('click', (e) => {
             e.stopPropagation();
+
             if (!clearConfirmState) {
                 clearConfirmState = true;
                 clearDataBtn.textContent = '確定清除?';
                 clearDataBtn.classList.remove('btn-pink');
                 clearDataBtn.classList.add('btn-danger');
+                
+                // Improvement 3: Auto-reset after 3 seconds
+                clearResetTimer = setTimeout(resetClearButton, 3000);
+                
             } else {
                 trackedData = [];
                 if (positionTimeChart) { positionTimeChart.destroy(); positionTimeChart = null; }
                 if (velocityTimeChart) { velocityTimeChart.destroy(); velocityTimeChart = null; }
                 if (accelerationTimeChart) { accelerationTimeChart.destroy(); accelerationTimeChart = null; }
+                
                 document.getElementById('analysis-output').textContent = '數據已清除。請重新開始追蹤。';
                 rSquaredDisplay.textContent = '';
                 regressionCoeffs = [0, 0, 0];
+
                 drawCurrentFrame();
                 undoBtn.disabled = true;
+                
                 resetClearButton();
                 clearDataBtn.disabled = true;
                 exportBtn.disabled = true;
-                
-                // Unlock FPS input
-                updateFPSLock();
             }
         });
 
@@ -950,28 +850,18 @@
             const indexToRemove = trackedData.findIndex(p => p.time.toFixed(3) === currentTime);
 
             if (indexToRemove !== -1) {
-                // Case 1: Point exists in current frame -> Delete it
                 trackedData.splice(indexToRemove, 1);
                 calculateDerivedData(trackedData); 
                 renderAllCharts(); 
                 
-                // Also automatically go back 1 frame after deletion (as per requirement from previous turns)
-                // This creates a flow: Delete -> Go Back -> Ready to delete previous
-                advanceFrame(-frameStep);
+                advanceFrame(-FRAME_STEP);
             } else {
-                // Case 2: No point in current frame -> Go back 1 frame (do not delete anything)
-                advanceFrame(-frameStep);
+                advanceFrame(-FRAME_STEP);
             }
             
-            // Check if we emptied the data
             if (trackedData.length === 0) {
                 undoBtn.disabled = true;
-                // If we went back to 0.000s and data is empty, undo is disabled.
-                // But logic is handled in drawCurrentFrame which is called by advanceFrame async
             }
-            
-            // Update FPS lock status
-            updateFPSLock();
         });
 
         exportBtn.addEventListener('click', () => {
@@ -999,21 +889,26 @@
         function calculateDerivedData(data) {
             data.forEach(p => { p.v_real = null; p.a_real = null; });
             if (data.length < 3) return;
+
             for (let i = 1; i < data.length - 1; i++) {
                 const y_prev = data[i - 1].y_real;
                 const y_next = data[i + 1].y_real;
                 const t_prev = data[i - 1].time;
                 const t_next = data[i + 1].time;
+
                 if (t_next > t_prev) {
                     data[i].v_real = (y_next - y_prev) / (t_next - t_prev);
                 }
             }
+
             if (data.length < 5) return;
+            
             for (let i = 2; i < data.length - 2; i++) {
                  const v_prev = data[i - 1].v_real;
                  const v_next = data[i + 1].v_real;
                  const t_prev = data[i - 1].time;
                  const t_next = data[i + 1].time;
+                 
                  if (v_prev !== null && v_next !== null && t_next > t_prev) {
                      data[i].a_real = (v_next - v_prev) / (t_next - t_prev);
                  }
@@ -1024,6 +919,7 @@
             if (data.length < 3) return [0, 0, 0];
             let n = data.length;
             let sum_t = 0, sum_y = 0, sum_t2 = 0, sum_t3 = 0, sum_t4 = 0, sum_yt = 0, sum_yt2 = 0;
+
             for (let i = 0; i < n; i++) {
                 let t = data[i].time;
                 let y = data[i].y_real;
@@ -1032,13 +928,17 @@
                 let t4 = t3 * t;
                 sum_t += t; sum_y += y; sum_t2 += t2; sum_t3 += t3; sum_t4 += t4; sum_yt += y * t; sum_yt2 += y * t2;
             }
+
             const a = [[sum_t4, sum_t3, sum_t2], [sum_t3, sum_t2, sum_t], [sum_t2, sum_t, n]];
             const b = [sum_yt2, sum_yt, sum_y];
+            
             const D = a[0][0]*(a[1][1]*a[2][2] - a[1][2]*a[2][1]) - a[0][1]*(a[1][0]*a[2][2] - a[1][2]*a[2][0]) + a[0][2]*(a[1][0]*a[2][1] - a[1][1]*a[2][0]);
             if (D === 0) return [0, 0, 0];
+
             const Da = b[0]*(a[1][1]*a[2][2] - a[1][2]*a[2][1]) - a[0][1]*(b[1]*a[2][2] - a[1][2]*b[2]) + a[0][2]*(b[1]*a[2][1] - a[1][1]*b[2]);
             const Db = a[0][0]*(b[1]*a[2][2] - a[1][2]*b[2]) - b[0]*(a[1][0]*a[2][2] - a[1][2]*a[2][0]) + a[0][2]*(a[1][0]*b[2] - b[1]*a[2][0]);
             const Dc = a[0][0]*(a[1][1]*b[2] - b[1]*a[2][1]) - a[0][1]*(a[1][0]*b[2] - b[1]*a[2][0]) + b[0]*(a[1][0]*a[2][1] - a[1][1]*a[2][0]);
+            
             return [Da / D, Db / D, Dc / D];
         }
 
@@ -1084,9 +984,11 @@
                  regressionCoeffs = [0, 0, 0];
                  return;
             }
+
             const unit = document.getElementById('unit-select').value;
             const ctx = document.getElementById('position-time-chart').getContext('2d');
             const showRegression = regressionCheckbox.checked;
+
             const positionData = trackedData.map(p => ({ x: p.time, y: p.y_real }));
             let datasets = [{
                 label: '追蹤位置數據',
@@ -1095,13 +997,17 @@
                 pointRadius: 6,
                 type: 'scatter'
             }];
+            
             rSquaredDisplay.textContent = '';
+            
             if (showRegression && trackedData.length >= 3) {
                 regressionCoeffs = quadraticRegression(trackedData);
                 const [A, B, C] = regressionCoeffs;
                 const rSquared = calculateRSquared(trackedData, regressionCoeffs);
                 const regressionPoints = generateRegressionData(trackedData, regressionCoeffs);
+                
                 const formulaLabel = `二次迴歸 (y = ${A.toFixed(3)}t² + ${B.toFixed(3)}t + ${C.toFixed(3)})`;
+
                 datasets.push({
                     label: formulaLabel,
                     data: regressionPoints,
@@ -1116,7 +1022,9 @@
             } else {
                  regressionCoeffs = [0, 0, 0];
             }
+
             if (positionTimeChart) positionTimeChart.destroy();
+
             positionTimeChart = new Chart(ctx, {
                 data: { datasets: datasets },
                 options: {
@@ -1136,12 +1044,15 @@
                 if (velocityTimeChart) velocityTimeChart.destroy();
                 return;
             }
+
             const unit = document.getElementById('unit-select').value;
             const ctx = document.getElementById('velocity-time-chart').getContext('2d');
             const [A, B] = regressionCoeffs; 
+
             const startTime = trackedData[0].time;
             const endTime = trackedData[trackedData.length - 1].time;
             const step = (endTime - startTime) / 100;
+
             const velocityRegressionPoints = [];
             for (let t = startTime; t <= endTime; t += step) {
                 const v = 2 * A * t + B;
@@ -1151,7 +1062,9 @@
                  const v = 2 * A * endTime + B;
                  velocityRegressionPoints.push({ x: endTime, y: v });
             }
+            
             if (velocityTimeChart) velocityTimeChart.destroy();
+
             velocityTimeChart = new Chart(ctx, {
                 data: {
                     datasets: [{
@@ -1182,17 +1095,21 @@
                 if (accelerationTimeChart) accelerationTimeChart.destroy();
                 return;
             }
+
             const unit = document.getElementById('unit-select').value;
             const ctx = document.getElementById('acceleration-time-chart').getContext('2d');
             const [A] = regressionCoeffs;
             const accelerationValue = 2 * A;
             const startTime = trackedData[0].time;
             const endTime = trackedData[trackedData.length - 1].time;
+
             const accelerationRegressionPoints = [
                 { x: startTime, y: accelerationValue },
                 { x: endTime, y: accelerationValue }
             ];
+
             if (accelerationTimeChart) accelerationTimeChart.destroy();
+
             accelerationTimeChart = new Chart(ctx, {
                 data: {
                     datasets: [{
