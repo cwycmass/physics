@@ -323,7 +323,7 @@
         if (isVPan) { isVPan = false; updateCursor(); }
     }
 
-    // Mouse Panning
+    // Panning
     vWrapper.addEventListener('mousedown', e => {
         if (!state.videoLoaded) return;
         if ((e.button === 0 && (activeTool === 'pan' || isSpaceDown)) || e.button === 1 || e.button === 2) {
@@ -336,34 +336,23 @@
     window.addEventListener('mouseup', endPan);
     vWrapper.addEventListener('contextmenu', e => e.preventDefault());
 
-    // BUG FIX LOGIC: mathematically reversed coordinate transform 
-    // to prevent canvas.getBoundingClientRect bugs when zoomed/panned.
-    function getAdjustedCoordinates(clientX, clientY) {
-        const wrapperRect = vWrapper.getBoundingClientRect();
-        
-        const unscaledLeft = wrapperRect.left + (wrapperRect.width - canvas.clientWidth) / 2;
-        const unscaledTop = wrapperRect.top + (wrapperRect.height - canvas.clientHeight) / 2;
-        
-        const centerX = unscaledLeft + canvas.clientWidth / 2;
-        const centerY = unscaledTop + canvas.clientHeight / 2;
-        
-        const translatedCenterX = centerX + vPanX;
-        const translatedCenterY = centerY + vPanY;
-        
-        const internalX = (clientX - translatedCenterX) / vZoom + canvas.clientWidth / 2;
-        const internalY = (clientY - translatedCenterY) / vZoom + canvas.clientHeight / 2;
-        
-        return { 
-            x: internalX * (canvas.width / canvas.clientWidth), 
-            y: internalY * (canvas.height / canvas.clientHeight) 
+    // Cleaned-up & robust coordinate mapping relying on browser's native getBoundingClientRect
+    // This perfectly accounts for all CSS transforms (scale & translate) on the container.
+    function getCanvasCoords(clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: (clientX - rect.left) / rect.width * canvas.width,
+            y: (clientY - rect.top) / rect.height * canvas.height
         };
     }
 
     function updateTouchTarget(touch) {
-        const coords = getAdjustedCoordinates(touch.clientX, touch.clientY);
-        // Store the actual canvas point coordinates for accuracy. 
-        // We will calculate the visual offset dynamically in the redraw pass.
-        touchTarget = { x: coords.x, y: coords.y };
+        const coords = getCanvasCoords(touch.clientX, touch.clientY);
+        touchTarget = { 
+            x: coords.x, 
+            y: coords.y,
+            clientY: touch.clientY // Keep track of screen Y for smart offset flipping
+        };
         redrawCanvas();
     }
 
@@ -409,12 +398,13 @@
         endPan();
         if (touchTargetActive) {
             if (e.cancelable) e.preventDefault();
-            processPoint(touchTarget.x, touchTarget.y); // Passes the actual tracked touch coordinate
+            // Point is accurately dropped at the exact location tracked under crosshair
+            processPoint(touchTarget.x, touchTarget.y); 
             touchTargetActive = false;
             touchTarget = null;
             state.handledTouch = true;
             redrawCanvas();
-            setTimeout(() => { state.handledTouch = false; }, 300); // Clear flag after emulated click passes
+            setTimeout(() => { state.handledTouch = false; }, 300);
         }
     });
 
@@ -422,7 +412,7 @@
         vContainer.style.transform = `translate(${vPanX}px, ${vPanY}px) scale(${vZoom})`;
     }
 
-    // Keyboard controls (Spacebar to pan, Arrows to step frames)
+    // Keyboard controls
     document.addEventListener('keydown', e => {
         if (!state.videoLoaded || ['INPUT'].includes(document.activeElement.tagName)) return;
         if (e.code === 'Space') {
@@ -442,9 +432,9 @@
     
     function startHold(action) {
         if (!state.videoLoaded) return;
-        action(); // 立即執行一次
+        action();
         frameHoldTimer = setTimeout(() => {
-            frameHoldInterval = setInterval(action, 60); // 按住 300ms 後開始快轉，每 60ms 前進/後退一格
+            frameHoldInterval = setInterval(action, 60);
         }, 300);
     }
 
@@ -525,12 +515,11 @@
             return;
         }
         if (!state.videoLoaded || activeTool === 'pan' || hasPanned || isSpaceDown) {
-            hasPanned = false; // consume pan state so it doesn't drop a marker
+            hasPanned = false; 
             return;
         }
         
-        // Use the mathematically reversed coordinates instead of getBoundingClientRect
-        const coords = getAdjustedCoordinates(e.clientX, e.clientY);
+        const coords = getCanvasCoords(e.clientX, e.clientY);
         processPoint(coords.x, coords.y);
     }
 
@@ -545,8 +534,8 @@
         document.getElementById('analysis-tab').classList.toggle('disabled', !ok);
     }
 
-    function redrawCanvas() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Separated drawing logic so we can reuse it inside the magnifier!
+    function drawAllMarkers(ctx) {
         if (state.calibPt1) {
             ctx.beginPath(); ctx.arc(state.calibPt1.x, state.calibPt1.y, 2, 0, 2*Math.PI);
             ctx.fillStyle = '#ffc107'; ctx.fill();
@@ -566,55 +555,74 @@
                 ctx.strokeStyle = 'rgba(220,53,69,0.4)'; ctx.lineWidth = 1; ctx.stroke();
             }
         });
+    }
 
-        // 觸控放大鏡 (Touch Magnifier)
+    function redrawCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw normal markers
+        drawAllMarkers(ctx);
+
+        // --- Rewritten Touch Magnifier ---
+        // Uses context transformation instead of manual mapping to guarantee 
+        // 100% pixel-perfect accuracy under all zoom/pan conditions.
         if (touchTargetActive && touchTarget) {
-            const r = 45 / vZoom; 
+            const MAG_FACTOR = 2; // Fixed internal 2x magnification inside the loupe
+            const r = 50 / vZoom; // Radius adjusts so visual size remains fixed regardless of CSS zoom
             const actualX = touchTarget.x;
             const actualY = touchTarget.y;
-            // The display location for the magnifier (offset 60px upwards visually)
+            
+            // Default offset above the finger
+            let visualOffset = 90; 
+            
+            // Smart feature: if touching very close to the top of the screen,
+            // flip the magnifier to show BELOW the finger so it's not cut off!
+            if (touchTarget.clientY < 110) {
+                visualOffset = -90; // flip down
+            }
+            
             const magX = actualX;
-            const magY = actualY - (60 / vZoom);
-            const zoomFactor = 2; 
+            const magY = actualY - (visualOffset / vZoom);
             
             ctx.save();
+            
+            // 1. Draw outline and define circular clipping mask
             ctx.beginPath();
             ctx.arc(magX, magY, r, 0, 2*Math.PI);
-            ctx.lineWidth = 2 / vZoom;
+            ctx.lineWidth = 3 / vZoom;
             ctx.strokeStyle = '#ffffff';
+            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+            ctx.shadowBlur = 10 / vZoom;
             ctx.stroke();
             ctx.clip();
             
+            // Black background fallback
             ctx.fillStyle = '#000';
             ctx.fill();
             
-            if (video.videoWidth && video.videoHeight) {
-                const scaleX = video.videoWidth / canvas.width;
-                const scaleY = video.videoHeight / canvas.height;
-                
-                // Sample from actual touch location (actualX, actualY)
-                const sx = actualX * scaleX - (r / zoomFactor) * scaleX;
-                const sy = actualY * scaleY - (r / zoomFactor) * scaleY;
-                const sw = (r * 2 / zoomFactor) * scaleX;
-                const sh = (r * 2 / zoomFactor) * scaleY;
-                
-                // Draw at the display magnifier's offset location (magX, magY)
-                const dx = magX - r;
-                const dy = magY - r;
-                const dw = r * 2;
-                const dh = r * 2;
-                
-                ctx.drawImage(video, sx, sy, sw, sh, dx, dy, dw, dh);
-            }
+            // 2. Transform the coordinate system for perfect magnification
+            // Shift context to center of magnifier, scale up, shift back to touched spot
+            ctx.translate(magX, magY);
+            ctx.scale(MAG_FACTOR, MAG_FACTOR);
+            ctx.translate(-actualX, -actualY);
             
-            // Draw crosshair at the center of the magnifier
+            // 3. Draw the video (now perfectly aligned and scaled!)
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // 4. Draw markers inside the magnifier so the user can see existing points!
+            drawAllMarkers(ctx);
+            
+            ctx.restore(); // Undo transforms and clipping mask
+            
+            // 5. Draw the precision crosshair perfectly centered in the magnifier
+            ctx.save();
             ctx.beginPath();
-            ctx.moveTo(magX - 8/vZoom, magY); ctx.lineTo(magX + 8/vZoom, magY);
-            ctx.moveTo(magX, magY - 8/vZoom); ctx.lineTo(magX, magY + 8/vZoom);
+            const chSize = 8 / vZoom;
+            ctx.moveTo(magX - chSize, magY); ctx.lineTo(magX + chSize, magY);
+            ctx.moveTo(magX, magY - chSize); ctx.lineTo(magX, magY + chSize);
             ctx.strokeStyle = '#00ff00';
             ctx.lineWidth = 1.5 / vZoom;
             ctx.stroke();
-            
             ctx.restore();
         }
     }
