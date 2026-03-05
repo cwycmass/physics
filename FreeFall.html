@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>自由落體分析</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body, button, input, canvas, .nav-link { touch-action: manipulation; }
+        body, html { height: 100%; margin: 0; overflow: hidden; background-color: #121212; }
+
+        /* Left Sidebar - Compact Styling */
+        .sidebar {
+            width: 320px;
+            min-width: 320px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            z-index: 10;
+            font-size: 0.85rem; /* Reduced base font size */
+        }
+        
+        .sidebar .card-body { padding: 0.6rem !important; }
+        .sidebar .card-title { font-size: 0.9rem; margin-bottom: 0.4rem; }
+        .sidebar .form-control-sm, .sidebar .btn-sm, .sidebar .input-group-text { font-size: 0.8rem; }
+        .control-card { box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 0.5rem; }
+
+        /* Right Workspace */
+        .workspace { flex-grow: 1; height: 100%; position: relative; display: flex; flex-direction: column; background-color: #000; }
+        .video-container { position: relative; display: inline-block; max-width: 100%; max-height: 100%; }
+        
+        #video-element { max-width: 100%; max-height: calc(100vh - 50px); display: block; }
+        #tracking-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: crosshair; z-index: 10; }
+
+        .keyboard-key { background-color: #333; color: white; border-radius: 3px; padding: 1px 5px; font-family: monospace; font-size: 0.8em; }
+
+        #analysis-workspace { background-color: #f1f3f5; overflow-y: auto; }
+        .chart-box { background: white; border-radius: 6px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); height: 280px; margin-bottom: 1rem; }
+        
+        .table-compact th, .table-compact td { padding: 0.2rem !important; font-size: 0.75rem; }
+
+        .disabled-section { opacity: 0.4; pointer-events: none; filter: grayscale(100%); transition: all 0.3s ease; }
+    </style>
+</head>
+<body>
+
+<div class="d-flex w-100 h-100">
+
+    <!-- ========================================== -->
+    <!-- LEFT SIDEBAR (Compact UI)                  -->
+    <!-- ========================================== -->
+    <div class="sidebar p-2 shadow-sm">
+        
+        <header class="mb-2 text-center">
+            <h5 class="fw-bold text-primary m-0">自由落體分析</h5>
+        </header>
+
+        <ul class="nav nav-pills nav-fill mb-2" id="appTabs" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active border fw-bold py-1" id="tracking-tab" data-bs-toggle="pill" data-bs-target="#tracking-controls" type="button">1. 追蹤</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link border fw-bold disabled py-1" id="analysis-tab" data-bs-toggle="pill" data-bs-target="#analysis-controls" type="button">2. 分析</button>
+            </li>
+        </ul>
+
+        <div class="tab-content flex-grow-1 overflow-hidden">
+            <!-- TRACKING -->
+            <div class="tab-pane fade show active h-100" id="tracking-controls">
+                
+                <div class="card control-card">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold"><span class="badge bg-secondary">1</span> 載入影片</h6>
+                        <input class="form-control form-control-sm mb-1" type="file" id="video-upload" accept="video/*">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">FPS</span>
+                            <input type="number" class="form-control" id="fps-input" value="30">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card control-card border-warning disabled-section" id="step2-card">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold text-warning-emphasis"><span class="badge bg-warning text-dark">2</span> 比例尺</h6>
+                        <div class="d-flex gap-1 mb-1">
+                            <button class="btn btn-warning btn-sm flex-grow-1 fw-bold py-1" id="btn-calibrate" onclick="startCalibration()">設定比例尺</button>
+                            <button class="btn btn-outline-secondary btn-sm d-none py-1" id="btn-cancel-calib" onclick="cancelCalibration()">取消</button>
+                        </div>
+                        <div id="calib-instructions" class="text-muted small mb-1">點擊上方按鈕，在影片選取長度。</div>
+                        
+                        <div id="calib-input-ui" class="bg-light border rounded p-1 mb-1 d-none">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white">實際長度</span>
+                                <input type="number" class="form-control text-center" id="calib-length-input" value="1.0" step="0.01">
+                                <span class="input-group-text bg-white">m</span>
+                                <button class="btn btn-primary px-2" onclick="confirmCalibration()">確認</button>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between small">
+                            <span class="text-secondary">比例:</span>
+                            <span id="scale-display" class="fw-bold text-success">未設定</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card control-card border-primary disabled-section" id="step3-card">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold text-primary"><span class="badge bg-primary">3</span> 標記</h6>
+                        <div class="d-flex justify-content-between align-items-center mb-2 bg-light rounded border p-1">
+                            <span class="small fw-bold">已標記: <span id="point-count" class="text-primary ms-1">0</span> 點</span>
+                            <button class="btn btn-sm btn-outline-danger py-0 px-2" onclick="clearTrackingData()">清除</button>
+                        </div>
+                        <button class="btn btn-success btn-sm w-100 fw-bold shadow-sm py-1" id="btn-analyze" onclick="goToAnalysis()" disabled>
+                            分析數據 ➔
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANALYSIS -->
+            <div class="tab-pane fade h-100 d-flex flex-column" id="analysis-controls">
+                
+                <div class="p-2 bg-white rounded shadow-sm border mb-2 text-center mt-2">
+                    <div class="p-1 bg-light rounded border small" id="regression-equation" style="font-size: 0.85rem;">
+                        等待數據...
+                    </div>
+                </div>
+
+                <div class="table-responsive bg-white rounded shadow-sm border flex-grow-1 mb-2" style="max-height: 40vh;">
+                    <table class="table table-striped table-compact m-0 text-center" id="data-table">
+                        <thead class="table-dark sticky-top">
+                            <tr><th><i>t</i> / s</th><th><i>y</i> / m</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <button class="btn btn-sm btn-dark w-100 mb-2 py-1 shadow-sm" onclick="exportCSV()">下載 CSV</button>
+            </div>
+        </div>
+        
+        <!-- School & Subject Footer -->
+        <div class="mt-auto pt-2 text-center border-top text-muted" style="font-size: 0.75rem;">
+            廠商會中學．物理科
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- RIGHT WORKSPACE                            -->
+    <!-- ========================================== -->
+    <div class="workspace">
+        <!-- VIDEO -->
+        <div id="video-workspace" class="w-100 h-100 d-flex flex-column">
+            <div id="video-wrapper" class="flex-grow-1 d-flex justify-content-center align-items-center overflow-hidden position-relative">
+                <div id="video-placeholder" class="text-secondary text-center position-absolute z-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-film mb-2 opacity-50" viewBox="0 0 16 16"><path d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm4 0v6h8V1H4zm8 8H4v6h8V9zM1 1v2h2V1H1zm2 3H1v2h2V4zM1 7v2h2V7H1zm2 3H1v2h2v-2zm-2 3v2h2v-2H1zM15 1h-2v2h2V1zm-2 3v2h2V4h-2zm2 3h-2v2h2V7zm-2 3v2h2v-2h-2zm2 3h-2v2h2v-2z"/></svg>
+                    <p class="small m-0">尚未載入影片</p>
+                </div>
+                <div class="video-container" id="video-container">
+                    <video id="video-element" playsinline muted></video>
+                    <canvas id="tracking-canvas"></canvas>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="bg-dark text-white p-1 d-flex justify-content-center align-items-center position-relative" style="height: 50px;">
+                <div class="position-absolute start-0 ms-2 d-flex gap-1 z-2">
+                    <button id="tool-track" class="btn btn-sm btn-primary py-0 px-2" onclick="setTool('track')" title="標記模式">🎯 標記</button>
+                    <button id="tool-pan" class="btn btn-sm btn-outline-light py-0 px-2" onclick="setTool('pan')" title="平移模式">🖐️ 平移</button>
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-sm btn-secondary py-0" 
+                            onpointerdown="startHold(prevFrame)" onpointerup="stopHold()" onpointerleave="stopHold()" onpointercancel="stopHold()">
+                        <span class="keyboard-key">←</span>
+                    </button>
+                    <div class="fw-bold fs-6 font-monospace text-warning" style="width: 70px; text-align: center;">
+                        <span id="time-display">0.000</span>s
+                    </div>
+                    <button class="btn btn-sm btn-secondary py-0" 
+                            onpointerdown="startHold(nextFrame)" onpointerup="stopHold()" onpointerleave="stopHold()" onpointercancel="stopHold()">
+                        <span class="keyboard-key">→</span>
+                    </button>
+                </div>
+
+                <span class="text-white-50 small position-absolute end-0 me-2 d-none d-md-inline">💡 滾輪/雙指縮放</span>
+            </div>
+        </div>
+
+        <!-- CHARTS -->
+        <div id="analysis-workspace" class="w-100 h-100 p-3 d-none">
+            <h5 class="mb-3 fw-bold">運動圖表</h5>
+            <div class="row g-2">
+                <div class="col-12 col-xl-4"><div class="chart-box"><canvas id="posChart"></canvas></div></div>
+                <div class="col-12 col-xl-4"><div class="chart-box"><canvas id="velChart"></canvas></div></div>
+                <div class="col-12 col-xl-4"><div class="chart-box"><canvas id="accChart"></canvas></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const state = {
+        videoLoaded: false, fps: 30, pixelsPerMeter: null, originY: null,
+        trackedPoints: [], physicsData: [],
+        calibMode: 0, calibPt1: null, calibPt2: null, tempPxDistance: 0,
+        handledTouch: false
+    };
+
+    const video = document.getElementById('video-element');
+    const canvas = document.getElementById('tracking-canvas');
+    const ctx = canvas.getContext('2d');
+    const vPlace = document.getElementById('video-placeholder');
+    
+    let posChartInst, velChartInst, accChartInst;
+    let vZoom = 1, vPanX = 0, vPanY = 0, isVPan = false;
+
+    function updateSectionStates() {
+        document.getElementById('step2-card').classList.toggle('disabled-section', !state.videoLoaded);
+        document.getElementById('step3-card').classList.toggle('disabled-section', !(state.videoLoaded && state.pixelsPerMeter));
+    }
+
+    document.getElementById('video-upload').addEventListener('change', e => {
+        if(!e.target.files[0]) return;
+        video.src = URL.createObjectURL(e.target.files[0]);
+        video.currentTime = 0;
+        state.pixelsPerMeter = null;
+        document.getElementById('scale-display').innerText = `未設定`;
+        document.getElementById('calib-instructions').innerText = "點擊上方按鈕，在影片選取長度。";
+        clearTrackingData();
+        cancelCalibration();
+        vZoom = 1; vPanX = 0; vPanY = 0;
+        updateVideoTransform();
+        updateSectionStates();
+    });
+
+    document.getElementById('fps-input').addEventListener('change', e => state.fps = parseFloat(e.target.value) || 30);
+    
+    window.addEventListener('resize', syncCanvasSize);
+    video.addEventListener('loadedmetadata', () => {
+        state.videoLoaded = true; vPlace.style.display = 'none'; syncCanvasSize();
+        updateSectionStates();
+    });
+
+    document.getElementById('tracking-tab').addEventListener('show.bs.tab', () => {
+        document.getElementById('video-workspace').classList.remove('d-none');
+        document.getElementById('analysis-workspace').classList.add('d-none');
+        setTimeout(syncCanvasSize, 50);
+    });
+    
+    document.getElementById('analysis-tab').addEventListener('show.bs.tab', () => {
+        document.getElementById('video-workspace').classList.add('d-none');
+        document.getElementById('analysis-workspace').classList.remove('d-none');
+    });
+
+    canvas.addEventListener('click', handleCanvasClick);
+
+    function syncCanvasSize() {
+        if (!state.videoLoaded) return;
+        canvas.width = video.clientWidth; canvas.height = video.clientHeight;
+        redrawCanvas();
+    }
+
+    // --- Tools, Video Zoom & Pan ---
+    const vWrapper = document.getElementById('video-wrapper');
+    const vContainer = document.getElementById('video-container');
+    
+    let activeTool = 'track'; // 'track' | 'pan'
+    let isSpaceDown = false, hasPanned = false;
+    let lastClientX = 0, lastClientY = 0;
+    let initialPinchDist = 0, initialPinchZoom = 1;
+
+    let touchTargetActive = false;
+    let touchTarget = null;
+
+    function setTool(tool) {
+        activeTool = tool;
+        document.getElementById('tool-track').className = `btn btn-sm py-0 px-2 ${tool === 'track' ? 'btn-primary' : 'btn-outline-light'}`;
+        document.getElementById('tool-pan').className = `btn btn-sm py-0 px-2 ${tool === 'pan' ? 'btn-primary' : 'btn-outline-light'}`;
+        updateCursor();
+    }
+
+    function updateCursor() {
+        const cursor = (activeTool === 'pan' || isSpaceDown) ? (isVPan ? 'grabbing' : 'grab') : 'default';
+        const canvasCursor = (activeTool === 'pan' || isSpaceDown) ? (isVPan ? 'grabbing' : 'grab') : 'crosshair';
+        vWrapper.style.cursor = cursor;
+        canvas.style.cursor = canvasCursor;
+    }
+
+    vWrapper.addEventListener('wheel', e => {
+        if (!state.videoLoaded) return;
+        e.preventDefault();
+        vZoom += e.deltaY * -0.001;
+        vZoom = Math.max(1, Math.min(vZoom, 10)); // Restrict zoom to 1x - 10x
+        if (vZoom === 1) { vPanX = 0; vPanY = 0; } // Reset pan if zoomed out fully
+        updateVideoTransform();
+    });
+
+    function startPan(cx, cy) {
+        isVPan = true; hasPanned = false;
+        lastClientX = cx; lastClientY = cy;
+        updateCursor();
+    }
+
+    function doPan(cx, cy) {
+        const dx = cx - lastClientX;
+        const dy = cy - lastClientY;
+        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) hasPanned = true;
+        vPanX += dx; vPanY += dy;
+        lastClientX = cx; lastClientY = cy;
+        updateVideoTransform();
+    }
+
+    function endPan() {
+        if (isVPan) { isVPan = false; updateCursor(); }
+    }
+
+    // Mouse Panning
+    vWrapper.addEventListener('mousedown', e => {
+        if (!state.videoLoaded) return;
+        if ((e.button === 0 && (activeTool === 'pan' || isSpaceDown)) || e.button === 1 || e.button === 2) {
+            e.preventDefault();
+            startPan(e.clientX, e.clientY);
+        }
+    });
+
+    window.addEventListener('mousemove', e => { if (isVPan) doPan(e.clientX, e.clientY); });
+    window.addEventListener('mouseup', endPan);
+    vWrapper.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Touch Panning & Pinch-to-Zoom & Magnifier
+    function updateTouchTarget(touch) {
+        const rect = canvas.getBoundingClientRect();
+        const rawX = (touch.clientX - rect.left) * (canvas.width / rect.width);
+        const rawY = (touch.clientY - rect.top) * (canvas.height / rect.height);
+        // Offset by 60px upwards, divided by current zoom to keep visual distance consistent
+        touchTarget = { x: rawX, y: rawY - (60 / vZoom) };
+        redrawCanvas();
+    }
+
+    vWrapper.addEventListener('touchstart', e => {
+        if (!state.videoLoaded) return;
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            initialPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            initialPinchZoom = vZoom;
+            isVPan = false;
+            if (touchTargetActive) { touchTargetActive = false; touchTarget = null; redrawCanvas(); }
+        } else if (e.touches.length === 1 && (activeTool === 'pan' || isSpaceDown)) {
+            e.preventDefault();
+            startPan(e.touches[0].clientX, e.touches[0].clientY);
+        } else if (e.touches.length === 1 && activeTool === 'track' && !isSpaceDown && e.target === canvas) {
+            e.preventDefault();
+            touchTargetActive = true;
+            updateTouchTarget(e.touches[0]);
+        }
+    }, { passive: false });
+
+    window.addEventListener('touchmove', e => {
+        if (!state.videoLoaded) return;
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            if (initialPinchDist > 0) {
+                const scale = dist / initialPinchDist;
+                vZoom = Math.max(1, Math.min(initialPinchZoom * scale, 10));
+                if (vZoom === 1) { vPanX = 0; vPanY = 0; }
+                updateVideoTransform();
+            }
+        } else if (isVPan && e.touches.length === 1) {
+            e.preventDefault();
+            doPan(e.touches[0].clientX, e.touches[0].clientY);
+        } else if (touchTargetActive && e.touches.length === 1) {
+            e.preventDefault();
+            updateTouchTarget(e.touches[0]);
+        }
+    }, { passive: false });
+
+    window.addEventListener('touchend', e => {
+        endPan();
+        if (touchTargetActive) {
+            if (e.cancelable) e.preventDefault();
+            processPoint(touchTarget.x, touchTarget.y);
+            touchTargetActive = false;
+            touchTarget = null;
+            state.handledTouch = true;
+            redrawCanvas();
+            setTimeout(() => { state.handledTouch = false; }, 300); // Clear flag after emulated click passes
+        }
+    });
+
+    function updateVideoTransform() {
+        vContainer.style.transform = `translate(${vPanX}px, ${vPanY}px) scale(${vZoom})`;
+    }
+
+    // Keyboard controls (Spacebar to pan, Arrows to step frames)
+    document.addEventListener('keydown', e => {
+        if (!state.videoLoaded || ['INPUT'].includes(document.activeElement.tagName)) return;
+        if (e.code === 'Space') {
+            e.preventDefault();
+            if (!isSpaceDown) { isSpaceDown = true; updateCursor(); }
+        }
+        if (e.key === 'ArrowRight') nextFrame();
+        if (e.key === 'ArrowLeft') prevFrame();
+    });
+
+    document.addEventListener('keyup', e => {
+        if (e.code === 'Space') { isSpaceDown = false; updateCursor(); }
+    });
+    // ------------------------
+
+    let frameHoldTimer = null, frameHoldInterval = null;
+    
+    function startHold(action) {
+        if (!state.videoLoaded) return;
+        action(); // 立即執行一次
+        frameHoldTimer = setTimeout(() => {
+            frameHoldInterval = setInterval(action, 60); // 按住 300ms 後開始快轉，每 60ms 前進/後退一格
+        }, 300);
+    }
+
+    function stopHold() {
+        clearTimeout(frameHoldTimer);
+        clearInterval(frameHoldInterval);
+    }
+
+    function nextFrame() { if(state.videoLoaded) { video.currentTime = Math.min(video.duration, video.currentTime + 1/state.fps); setTimeout(updateTime, 30); } }
+    function prevFrame() { if(state.videoLoaded) { video.currentTime = Math.max(0, video.currentTime - 1/state.fps); setTimeout(updateTime, 30); } }
+    function updateTime() { document.getElementById('time-display').innerText = video.currentTime.toFixed(3); redrawCanvas(); }
+    video.addEventListener('seeked', updateTime);
+
+    function startCalibration() {
+        if (!state.videoLoaded) return alert("請先載入影片！");
+        state.calibMode = 1; state.calibPt1 = state.calibPt2 = null;
+        toggleCalibUI(true);
+        document.getElementById('calib-instructions').innerHTML = "<span class='text-danger fw-bold'>👉 1. 點擊起點</span>";
+        canvas.style.cursor = 'crosshair'; redrawCanvas();
+    }
+
+    function cancelCalibration() {
+        state.calibMode = 0; state.calibPt1 = state.calibPt2 = null;
+        toggleCalibUI(false);
+        document.getElementById('calib-instructions').innerText = "點擊上方按鈕設定長度。";
+        redrawCanvas();
+    }
+
+    function toggleCalibUI(isCalibrating) {
+        document.getElementById('btn-calibrate').classList.toggle('d-none', isCalibrating);
+        document.getElementById('btn-cancel-calib').classList.toggle('d-none', !isCalibrating);
+        document.getElementById('calib-input-ui').classList.add('d-none');
+    }
+
+    function confirmCalibration() {
+        const d = parseFloat(document.getElementById('calib-length-input').value);
+        if (d > 0) {
+            state.pixelsPerMeter = state.tempPxDistance / d;
+            document.getElementById('scale-display').innerText = `1m = ${state.pixelsPerMeter.toFixed(0)}px`;
+            state.calibMode = 0; toggleCalibUI(false);
+            document.getElementById('calib-instructions').innerHTML = "<span class='text-success fw-bold'>✓ 已設定</span>";
+            redrawCanvas();
+            updateSectionStates();
+        }
+    }
+
+    function processPoint(cx, cy) {
+        if (state.calibMode === 1) {
+            state.calibPt1 = { x: cx, y: cy }; state.calibMode = 2;
+            document.getElementById('calib-instructions').innerHTML = "<span class='text-danger fw-bold'>👉 2. 點擊終點</span>";
+            redrawCanvas(); return;
+        } 
+        if (state.calibMode === 2) {
+            state.calibPt2 = { x: cx, y: cy }; state.calibMode = 3;
+            state.tempPxDistance = Math.hypot(state.calibPt2.x - state.calibPt1.x, state.calibPt2.y - state.calibPt1.y);
+            document.getElementById('calib-instructions').innerText = "👉 3. 輸入長度";
+            document.getElementById('calib-input-ui').classList.remove('d-none');
+            redrawCanvas(); return;
+        }
+        if (state.calibMode === 3) return;
+
+        if (!state.pixelsPerMeter) return alert("請先校準比例尺！");
+
+        const t = video.currentTime;
+        if (state.trackedPoints.length === 0) state.originY = cy; 
+        const idx = state.trackedPoints.findIndex(p => Math.abs(p.time - t) < 0.001);
+        
+        if (idx >= 0) state.trackedPoints[idx] = { time: t, px: cx, py: cy };
+        else state.trackedPoints.push({ time: t, px: cx, py: cy });
+        
+        state.trackedPoints.sort((a, b) => a.time - b.time);
+        updateUI(); redrawCanvas(); nextFrame();
+    }
+
+    function handleCanvasClick(e) {
+        if (state.handledTouch) {
+            state.handledTouch = false;
+            return;
+        }
+        if (!state.videoLoaded || activeTool === 'pan' || hasPanned || isSpaceDown) {
+            hasPanned = false; // consume pan state so it doesn't drop a marker
+            return;
+        }
+        
+        const rect = canvas.getBoundingClientRect();
+        const cx = (e.clientX - rect.left) * (canvas.width / rect.width);
+        const cy = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+        processPoint(cx, cy);
+    }
+
+    function clearTrackingData() {
+        state.trackedPoints = []; state.originY = null; updateUI(); redrawCanvas();
+    }
+
+    function updateUI() {
+        document.getElementById('point-count').innerText = state.trackedPoints.length;
+        const ok = state.trackedPoints.length >= 3;
+        document.getElementById('btn-analyze').disabled = !ok;
+        document.getElementById('analysis-tab').classList.toggle('disabled', !ok);
+    }
+
+    function redrawCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (state.calibPt1) {
+            ctx.beginPath(); ctx.arc(state.calibPt1.x, state.calibPt1.y, 2, 0, 2*Math.PI);
+            ctx.fillStyle = '#ffc107'; ctx.fill();
+        }
+        if (state.calibPt1 && state.calibPt2) {
+            ctx.beginPath(); ctx.arc(state.calibPt2.x, state.calibPt2.y, 2, 0, 2*Math.PI); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(state.calibPt1.x, state.calibPt1.y); ctx.lineTo(state.calibPt2.x, state.calibPt2.y);
+            ctx.strokeStyle = '#ffc107'; ctx.lineWidth = 1; ctx.stroke();
+        }
+
+        state.trackedPoints.forEach((pt, i) => {
+            const cur = Math.abs(pt.time - video.currentTime) < 0.001;
+            ctx.beginPath(); ctx.arc(pt.px, pt.py, cur ? 3 : 2, 0, 2*Math.PI);
+            ctx.fillStyle = cur ? '#0d6efd' : '#dc3545'; ctx.fill();
+            if (i > 0) {
+                ctx.beginPath(); ctx.moveTo(state.trackedPoints[i-1].px, state.trackedPoints[i-1].py); ctx.lineTo(pt.px, pt.py);
+                ctx.strokeStyle = 'rgba(220,53,69,0.4)'; ctx.lineWidth = 1; ctx.stroke();
+            }
+        });
+
+        // 觸控放大鏡 (Touch Magnifier)
+        if (touchTargetActive && touchTarget) {
+            const r = 45 / vZoom; 
+            const magX = touchTarget.x;
+            const magY = touchTarget.y;
+            const zoomFactor = 2; 
+            
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(magX, magY, r, 0, 2*Math.PI);
+            ctx.lineWidth = 2 / vZoom;
+            ctx.strokeStyle = '#ffffff';
+            ctx.stroke();
+            ctx.clip();
+            
+            ctx.fillStyle = '#000';
+            ctx.fill();
+            
+            if (video.videoWidth && video.videoHeight) {
+                const scaleX = video.videoWidth / canvas.width;
+                const scaleY = video.videoHeight / canvas.height;
+                
+                const sx = magX * scaleX - (r / zoomFactor) * scaleX;
+                const sy = magY * scaleY - (r / zoomFactor) * scaleY;
+                const sw = (r * 2 / zoomFactor) * scaleX;
+                const sh = (r * 2 / zoomFactor) * scaleY;
+                
+                const dx = magX - r;
+                const dy = magY - r;
+                const dw = r * 2;
+                const dh = r * 2;
+                
+                ctx.drawImage(video, sx, sy, sw, sh, dx, dy, dw, dh);
+            }
+            
+            ctx.beginPath();
+            ctx.moveTo(magX - 8/vZoom, magY); ctx.lineTo(magX + 8/vZoom, magY);
+            ctx.moveTo(magX, magY - 8/vZoom); ctx.lineTo(magX, magY + 8/vZoom);
+            ctx.strokeStyle = '#00ff00';
+            ctx.lineWidth = 1.5 / vZoom;
+            ctx.stroke();
+            
+            ctx.restore();
+        }
+    }
+
+    function goToAnalysis() {
+        if (state.trackedPoints.length < 3) return;
+        calcPhysics(); drawCharts(); fillTable();
+        bootstrap.Tab.getOrCreateInstance(document.querySelector('#analysis-tab')).show();
+    }
+
+    function calcPhysics() {
+        const p = state.trackedPoints, s = state.pixelsPerMeter; state.physicsData = [];
+        for (let i = 0; i < p.length; i++) {
+            state.physicsData.push({ t: p[i].time, y: (p[i].py - state.originY)/s });
+        }
+    }
+
+    function getReg(d) {
+        let st=0, st2=0, st3=0, st4=0, sy=0, sty=0, st2y=0, n=d.length;
+        d.forEach(r => { let t=r.t, y=r.y; st+=t; st2+=t*t; st3+=t*t*t; st4+=t*t*t*t; sy+=y; sty+=t*y; st2y+=t*t*y; });
+        const det = m => m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1]) - m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0]) + m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
+        const D = det([[st4,st3,st2],[st3,st2,st],[st2,st,n]]);
+        if(Math.abs(D)<1e-10) return {A:0,B:0,C:0};
+        return { A: det([[st2y,st3,st2],[sty,st2,st],[sy,st,n]])/D, B: det([[st4,st2y,st2],[st3,sty,st],[st2,sy,n]])/D, C: det([[st4,st3,st2y],[st3,st2,sty],[st2,st,sy]])/D };
+    }
+
+    function drawCharts() {
+        const t = state.physicsData.map(d=>d.t), y = state.physicsData.map(d=>d.y);
+        const reg = getReg(state.physicsData), yr = t.map(x => reg.A*x*x + reg.B*x + reg.C);
+        const vr = t.map(x => 2*reg.A*x + reg.B);
+        const ar = t.map(x => 2*reg.A);
+        
+        // Calculate R-squared for position
+        const yMean = y.reduce((acc, val) => acc + val, 0) / y.length;
+        const ssTot = y.reduce((acc, val) => acc + Math.pow(val - yMean, 2), 0);
+        const ssRes = y.reduce((acc, val, i) => acc + Math.pow(val - yr[i], 2), 0);
+        const r2 = ssTot === 0 ? 1 : 1 - (ssRes / ssTot);
+
+        const htmlEqY = `<i>y</i> = ${reg.A.toFixed(3)}<i>t</i>² ${reg.B>=0?'+':''}${reg.B.toFixed(3)}<i>t</i> ${reg.C>=0?'+':''}${reg.C.toFixed(3)}`;
+        const textEqY = `𝑦 = ${reg.A.toFixed(3)}𝑡² ${reg.B>=0?'+':''}${reg.B.toFixed(3)}𝑡 ${reg.C>=0?'+':''}${reg.C.toFixed(3)}`;
+        const textEqV = `𝑣 = ${(reg.A*2).toFixed(3)}𝑡 ${reg.B>=0?'+':''}${reg.B.toFixed(3)}`;
+        const textEqA = `𝑎 = ${(reg.A*2).toFixed(3)}`;
+
+        document.getElementById('regression-equation').innerHTML = 
+            `${htmlEqY}<br><strong class="text-danger fs-6 d-block mt-1"><i>g</i> ≈ ${(reg.A*2).toFixed(2)} m s⁻²</strong>`;
+
+        if(posChartInst) posChartInst.destroy(); if(velChartInst) velChartInst.destroy(); if(accChartInst) accChartInst.destroy();
+        
+        const tMin = Math.min(...t), tMax = Math.max(...t);
+        const getOpt = (titleText, yTitle) => ({ 
+            responsive: true, maintainAspectRatio: false, animation: false,
+            plugins: { title: { display: true, text: titleText, color: '#333', font: {size: 13} }, legend: { display: false } },
+            scales: { 
+                x: { type: 'linear', min: tMin, max: tMax, title: { display: true, text: '𝑡 / s' } },
+                y: { title: { display: true, text: yTitle } }
+            }
+        });
+
+        posChartInst = new Chart(document.getElementById('posChart'), { type: 'scatter', data: { datasets: [{ type: 'scatter', label: '𝑦 / m', data: state.physicsData.map(d=>({x:d.t,y:d.y})), backgroundColor: '#0d6efd' }, { type: 'line', label: '𝑦 迴歸', data: t.map((x,i)=>({x,y:yr[i]})), borderColor: '#0d6efd', pointRadius: 0 }] }, options: getOpt(`${textEqY} (R² = ${r2.toFixed(4)})`, '𝑦 / m') });
+        velChartInst = new Chart(document.getElementById('velChart'), { type: 'line', data: { datasets: [{ label: '𝑣 迴歸', data: t.map((x,i)=>({x,y:vr[i]})), borderColor: '#198754', pointRadius: 0 }] }, options: getOpt(textEqV, '𝑣 / m s⁻¹') });
+        accChartInst = new Chart(document.getElementById('accChart'), { type: 'line', data: { datasets: [{ label: '𝑎 迴歸', data: t.map((x,i)=>({x,y:ar[i]})), borderColor: '#dc3545', pointRadius: 0 }] }, options: getOpt(textEqA, '𝑎 / m s⁻²') });
+    }
+
+    function fillTable() {
+        const tbody = document.querySelector('#data-table tbody'); tbody.innerHTML = '';
+        state.physicsData.forEach(d => {
+            tbody.innerHTML += `<tr><td>${d.t.toFixed(3)}</td><td>${d.y.toFixed(3)}</td></tr>`;
+        });
+    }
+
+    function exportCSV() {
+        if(!state.physicsData.length) return;
+        let c = "data:text/csv;charset=utf-8,\uFEFFt(s),y(m)\n";
+        state.physicsData.forEach(d => c += `${d.t.toFixed(4)},${d.y.toFixed(4)}\n`);
+        const a = document.createElement("a"); a.href = encodeURI(c); a.download = "data.csv"; a.click();
+    }
+</script>
+</body>
+</html>
