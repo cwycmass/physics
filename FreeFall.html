@@ -361,8 +361,9 @@
 
     function updateTouchTarget(touch) {
         const coords = getAdjustedCoordinates(touch.clientX, touch.clientY);
-        // Offset by 60px upwards, divided by current zoom to keep visual distance consistent
-        touchTarget = { x: coords.x, y: coords.y - (60 / vZoom) };
+        // Store the actual canvas point coordinates for accuracy. 
+        // We will calculate the visual offset dynamically in the redraw pass.
+        touchTarget = { x: coords.x, y: coords.y };
         redrawCanvas();
     }
 
@@ -408,7 +409,7 @@
         endPan();
         if (touchTargetActive) {
             if (e.cancelable) e.preventDefault();
-            processPoint(touchTarget.x, touchTarget.y);
+            processPoint(touchTarget.x, touchTarget.y); // Passes the actual tracked touch coordinate
             touchTargetActive = false;
             touchTarget = null;
             state.handledTouch = true;
@@ -569,8 +570,11 @@
         // 觸控放大鏡 (Touch Magnifier)
         if (touchTargetActive && touchTarget) {
             const r = 45 / vZoom; 
-            const magX = touchTarget.x;
-            const magY = touchTarget.y;
+            const actualX = touchTarget.x;
+            const actualY = touchTarget.y;
+            // The display location for the magnifier (offset 60px upwards visually)
+            const magX = actualX;
+            const magY = actualY - (60 / vZoom);
             const zoomFactor = 2; 
             
             ctx.save();
@@ -588,11 +592,13 @@
                 const scaleX = video.videoWidth / canvas.width;
                 const scaleY = video.videoHeight / canvas.height;
                 
-                const sx = magX * scaleX - (r / zoomFactor) * scaleX;
-                const sy = magY * scaleY - (r / zoomFactor) * scaleY;
+                // Sample from actual touch location (actualX, actualY)
+                const sx = actualX * scaleX - (r / zoomFactor) * scaleX;
+                const sy = actualY * scaleY - (r / zoomFactor) * scaleY;
                 const sw = (r * 2 / zoomFactor) * scaleX;
                 const sh = (r * 2 / zoomFactor) * scaleY;
                 
+                // Draw at the display magnifier's offset location (magX, magY)
                 const dx = magX - r;
                 const dy = magY - r;
                 const dw = r * 2;
@@ -601,6 +607,7 @@
                 ctx.drawImage(video, sx, sy, sw, sh, dx, dy, dw, dh);
             }
             
+            // Draw crosshair at the center of the magnifier
             ctx.beginPath();
             ctx.moveTo(magX - 8/vZoom, magY); ctx.lineTo(magX + 8/vZoom, magY);
             ctx.moveTo(magX, magY - 8/vZoom); ctx.lineTo(magX, magY + 8/vZoom);
