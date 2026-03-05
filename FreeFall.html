@@ -336,13 +336,33 @@
     window.addEventListener('mouseup', endPan);
     vWrapper.addEventListener('contextmenu', e => e.preventDefault());
 
-    // Touch Panning & Pinch-to-Zoom & Magnifier
+    // BUG FIX LOGIC: mathematically reversed coordinate transform 
+    // to prevent canvas.getBoundingClientRect bugs when zoomed/panned.
+    function getAdjustedCoordinates(clientX, clientY) {
+        const wrapperRect = vWrapper.getBoundingClientRect();
+        
+        const unscaledLeft = wrapperRect.left + (wrapperRect.width - canvas.clientWidth) / 2;
+        const unscaledTop = wrapperRect.top + (wrapperRect.height - canvas.clientHeight) / 2;
+        
+        const centerX = unscaledLeft + canvas.clientWidth / 2;
+        const centerY = unscaledTop + canvas.clientHeight / 2;
+        
+        const translatedCenterX = centerX + vPanX;
+        const translatedCenterY = centerY + vPanY;
+        
+        const internalX = (clientX - translatedCenterX) / vZoom + canvas.clientWidth / 2;
+        const internalY = (clientY - translatedCenterY) / vZoom + canvas.clientHeight / 2;
+        
+        return { 
+            x: internalX * (canvas.width / canvas.clientWidth), 
+            y: internalY * (canvas.height / canvas.clientHeight) 
+        };
+    }
+
     function updateTouchTarget(touch) {
-        const rect = canvas.getBoundingClientRect();
-        const rawX = (touch.clientX - rect.left) * (canvas.width / rect.width);
-        const rawY = (touch.clientY - rect.top) * (canvas.height / rect.height);
+        const coords = getAdjustedCoordinates(touch.clientX, touch.clientY);
         // Offset by 60px upwards, divided by current zoom to keep visual distance consistent
-        touchTarget = { x: rawX, y: rawY - (60 / vZoom) };
+        touchTarget = { x: coords.x, y: coords.y - (60 / vZoom) };
         redrawCanvas();
     }
 
@@ -508,11 +528,9 @@
             return;
         }
         
-        const rect = canvas.getBoundingClientRect();
-        const cx = (e.clientX - rect.left) * (canvas.width / rect.width);
-        const cy = (e.clientY - rect.top) * (canvas.height / rect.height);
-
-        processPoint(cx, cy);
+        // Use the mathematically reversed coordinates instead of getBoundingClientRect
+        const coords = getAdjustedCoordinates(e.clientX, e.clientY);
+        processPoint(coords.x, coords.y);
     }
 
     function clearTrackingData() {
