@@ -22,7 +22,7 @@
             flex-direction: column;
             height: 100%;
             z-index: 10;
-            font-size: 0.85rem; /* Reduced base font size */
+            font-size: 0.85rem;
         }
         
         .sidebar .card-body { padding: 0.6rem !important; }
@@ -32,10 +32,12 @@
 
         /* Right Workspace */
         .workspace { flex-grow: 1; height: 100%; position: relative; display: flex; flex-direction: column; background-color: #000; }
-        .video-container { position: relative; display: inline-block; max-width: 100%; max-height: 100%; }
         
-        #video-element { max-width: 100%; max-height: calc(100vh - 50px); display: block; }
-        #tracking-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: crosshair; z-index: 10; }
+        /* Video wrapper maintains space, Container matches exact aspect ratio */
+        #video-wrapper { flex-grow: 1; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+        .video-container { position: relative; } 
+        #video-element { width: 100%; height: 100%; display: block; }
+        #tracking-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; }
 
         .keyboard-key { background-color: #333; color: white; border-radius: 3px; padding: 1px 5px; font-family: monospace; font-size: 0.8em; }
 
@@ -145,7 +147,6 @@
             </div>
         </div>
         
-        <!-- School & Subject Footer -->
         <div class="mt-auto pt-2 text-center border-top text-muted" style="font-size: 0.75rem;">
             廠商會中學．物理科
         </div>
@@ -157,7 +158,7 @@
     <div class="workspace">
         <!-- VIDEO -->
         <div id="video-workspace" class="w-100 h-100 d-flex flex-column">
-            <div id="video-wrapper" class="flex-grow-1 d-flex justify-content-center align-items-center overflow-hidden position-relative">
+            <div id="video-wrapper">
                 <div id="video-placeholder" class="text-secondary text-center position-absolute z-0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-film mb-2 opacity-50" viewBox="0 0 16 16"><path d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm4 0v6h8V1H4zm8 8H4v6h8V9zM1 1v2h2V1H1zm2 3H1v2h2V4zM1 7v2h2V7H1zm2 3H1v2h2v-2zm-2 3v2h2v-2H1zM15 1h-2v2h2V1zm-2 3v2h2V4h-2zm2 3h-2v2h2V7zm-2 3v2h2v-2h-2zm2 3h-2v2h2v-2z"/></svg>
                     <p class="small m-0">尚未載入影片</p>
@@ -173,6 +174,7 @@
                 <div class="position-absolute start-0 ms-2 d-flex gap-1 z-2">
                     <button id="tool-track" class="btn btn-sm btn-primary py-0 px-2" onclick="setTool('track')" title="標記模式">🎯 標記</button>
                     <button id="tool-pan" class="btn btn-sm btn-outline-light py-0 px-2" onclick="setTool('pan')" title="平移模式">🖐️ 平移</button>
+                    <button id="tool-loupe" class="btn btn-sm btn-info text-dark fw-bold py-0 px-2" onclick="toggleLoupe()" title="放大鏡">🔍 放大</button>
                 </div>
 
                 <div class="d-flex align-items-center gap-3">
@@ -212,7 +214,7 @@
         videoLoaded: false, fps: 30, pixelsPerMeter: null, originY: null,
         trackedPoints: [], physicsData: [],
         calibMode: 0, calibPt1: null, calibPt2: null, tempPxDistance: 0,
-        handledTouch: false
+        handledTouch: false, loupeEnabled: true // Loupe mode enabled by default
     };
 
     const video = document.getElementById('video-element');
@@ -263,16 +265,44 @@
 
     canvas.addEventListener('click', handleCanvasClick);
 
+    const vWrapper = document.getElementById('video-wrapper');
+    const vContainer = document.getElementById('video-container');
+
+    // Mathematically perfectly fit the container to the aspect ratio to prevent ANY letterboxing
+    // This makes the canvas mapping flawless.
     function syncCanvasSize() {
         if (!state.videoLoaded) return;
-        canvas.width = video.clientWidth; canvas.height = video.clientHeight;
+        
+        const vWidth = video.videoWidth;
+        const vHeight = video.videoHeight;
+        if (!vWidth || !vHeight) return;
+
+        const wrapperWidth = vWrapper.clientWidth;
+        const wrapperHeight = vWrapper.clientHeight;
+        
+        const vRatio = vWidth / vHeight;
+        const wRatio = wrapperWidth / wrapperHeight;
+        
+        let finalWidth, finalHeight;
+        if (vRatio > wRatio) {
+            finalWidth = wrapperWidth;
+            finalHeight = wrapperWidth / vRatio;
+        } else {
+            finalHeight = wrapperHeight;
+            finalWidth = wrapperHeight * vRatio;
+        }
+        
+        vContainer.style.width = finalWidth + 'px';
+        vContainer.style.height = finalHeight + 'px';
+        
+        // Canvas coordinate space maps perfectly 1:1 to the native video resolution
+        canvas.width = vWidth;
+        canvas.height = vHeight;
+        
         redrawCanvas();
     }
 
     // --- Tools, Video Zoom & Pan ---
-    const vWrapper = document.getElementById('video-wrapper');
-    const vContainer = document.getElementById('video-container');
-    
     let activeTool = 'track'; // 'track' | 'pan'
     let isSpaceDown = false, hasPanned = false;
     let lastClientX = 0, lastClientY = 0;
@@ -288,6 +318,15 @@
         updateCursor();
     }
 
+    function toggleLoupe() {
+        state.loupeEnabled = !state.loupeEnabled;
+        document.getElementById('tool-loupe').className = `btn btn-sm py-0 px-2 ${state.loupeEnabled ? 'btn-info text-dark fw-bold' : 'btn-outline-light'}`;
+        if (!state.loupeEnabled) {
+            touchTargetActive = false;
+            redrawCanvas();
+        }
+    }
+
     function updateCursor() {
         const cursor = (activeTool === 'pan' || isSpaceDown) ? (isVPan ? 'grabbing' : 'grab') : 'default';
         const canvasCursor = (activeTool === 'pan' || isSpaceDown) ? (isVPan ? 'grabbing' : 'grab') : 'crosshair';
@@ -299,8 +338,8 @@
         if (!state.videoLoaded) return;
         e.preventDefault();
         vZoom += e.deltaY * -0.001;
-        vZoom = Math.max(1, Math.min(vZoom, 10)); // Restrict zoom to 1x - 10x
-        if (vZoom === 1) { vPanX = 0; vPanY = 0; } // Reset pan if zoomed out fully
+        vZoom = Math.max(1, Math.min(vZoom, 10)); // Restrict zoom 1x - 10x
+        if (vZoom === 1) { vPanX = 0; vPanY = 0; }
         updateVideoTransform();
     });
 
@@ -323,21 +362,7 @@
         if (isVPan) { isVPan = false; updateCursor(); }
     }
 
-    // Panning
-    vWrapper.addEventListener('mousedown', e => {
-        if (!state.videoLoaded) return;
-        if ((e.button === 0 && (activeTool === 'pan' || isSpaceDown)) || e.button === 1 || e.button === 2) {
-            e.preventDefault();
-            startPan(e.clientX, e.clientY);
-        }
-    });
-
-    window.addEventListener('mousemove', e => { if (isVPan) doPan(e.clientX, e.clientY); });
-    window.addEventListener('mouseup', endPan);
-    vWrapper.addEventListener('contextmenu', e => e.preventDefault());
-
-    // Cleaned-up & robust coordinate mapping relying on browser's native getBoundingClientRect
-    // This perfectly accounts for all CSS transforms (scale & translate) on the container.
+    // Perfectly robust mapping accounting for CSS transforms (scale/translate)
     function getCanvasCoords(clientX, clientY) {
         const rect = canvas.getBoundingClientRect();
         return {
@@ -346,31 +371,66 @@
         };
     }
 
-    function updateTouchTarget(touch) {
-        const coords = getCanvasCoords(touch.clientX, touch.clientY);
+    function updateTouchTarget(e, isTouch) {
+        const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+        const clientY = isTouch ? e.touches[0].clientY : e.clientY;
+        const coords = getCanvasCoords(clientX, clientY);
         touchTarget = { 
             x: coords.x, 
             y: coords.y,
-            clientY: touch.clientY // Keep track of screen Y for smart offset flipping
+            clientY: clientY, 
+            isTouch: isTouch
         };
         redrawCanvas();
     }
 
+    // --- Unified Mouse & Touch Interactions ---
+
+    // PC/Mouse Drag/Hover Events
+    vWrapper.addEventListener('mousedown', e => {
+        if (!state.videoLoaded) return;
+        if ((e.button === 0 && (activeTool === 'pan' || isSpaceDown)) || e.button === 1 || e.button === 2) {
+            e.preventDefault();
+            startPan(e.clientX, e.clientY);
+        }
+    });
+
+    vWrapper.addEventListener('mousemove', e => { 
+        if (!state.videoLoaded) return;
+        if (isVPan) {
+            doPan(e.clientX, e.clientY);
+        } else if (state.loupeEnabled && activeTool === 'track' && !isSpaceDown && e.target === canvas) {
+            // Hover magnifier for PC/Tablet users
+            touchTargetActive = true;
+            updateTouchTarget(e, false);
+        } else if (touchTargetActive && e.target !== canvas) {
+            touchTargetActive = false;
+            redrawCanvas();
+        }
+    });
+
+    window.addEventListener('mouseup', endPan);
+    vWrapper.addEventListener('contextmenu', e => e.preventDefault());
+    
+    vWrapper.addEventListener('mouseleave', () => {
+        if (touchTargetActive) { touchTargetActive = false; redrawCanvas(); }
+    });
+
+    // Touch/Mobile Events
     vWrapper.addEventListener('touchstart', e => {
         if (!state.videoLoaded) return;
         if (e.touches.length === 2) {
             e.preventDefault();
             initialPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
             initialPinchZoom = vZoom;
-            isVPan = false;
-            if (touchTargetActive) { touchTargetActive = false; touchTarget = null; redrawCanvas(); }
+            isVPan = false; touchTargetActive = false; touchTarget = null; redrawCanvas();
         } else if (e.touches.length === 1 && (activeTool === 'pan' || isSpaceDown)) {
             e.preventDefault();
             startPan(e.touches[0].clientX, e.touches[0].clientY);
         } else if (e.touches.length === 1 && activeTool === 'track' && !isSpaceDown && e.target === canvas) {
             e.preventDefault();
-            touchTargetActive = true;
-            updateTouchTarget(e.touches[0]);
+            if (state.loupeEnabled) touchTargetActive = true;
+            updateTouchTarget(e, true);
         }
     }, { passive: false });
 
@@ -388,17 +448,18 @@
         } else if (isVPan && e.touches.length === 1) {
             e.preventDefault();
             doPan(e.touches[0].clientX, e.touches[0].clientY);
-        } else if (touchTargetActive && e.touches.length === 1) {
+        } else if (touchTarget && e.touches.length === 1 && activeTool === 'track' && !isSpaceDown) {
             e.preventDefault();
-            updateTouchTarget(e.touches[0]);
+            if (state.loupeEnabled) touchTargetActive = true;
+            updateTouchTarget(e, true);
         }
     }, { passive: false });
 
     window.addEventListener('touchend', e => {
         endPan();
-        if (touchTargetActive) {
+        if (touchTarget && activeTool === 'track' && !isSpaceDown) {
             if (e.cancelable) e.preventDefault();
-            // Point is accurately dropped at the exact location tracked under crosshair
+            // Point is accurately dropped at the exact location
             processPoint(touchTarget.x, touchTarget.y); 
             touchTargetActive = false;
             touchTarget = null;
@@ -521,6 +582,12 @@
         
         const coords = getCanvasCoords(e.clientX, e.clientY);
         processPoint(coords.x, coords.y);
+
+        // Keep loupe active immediately after dropping point on PC
+        if (state.loupeEnabled && activeTool === 'track') {
+            touchTargetActive = true;
+            updateTouchTarget(e, false);
+        }
     }
 
     function clearTrackingData() {
@@ -534,25 +601,24 @@
         document.getElementById('analysis-tab').classList.toggle('disabled', !ok);
     }
 
-    // Separated drawing logic so we can reuse it inside the magnifier!
-    function drawAllMarkers(ctx) {
+    function drawAllMarkers(ctx, scaleRatio = 1) {
         if (state.calibPt1) {
-            ctx.beginPath(); ctx.arc(state.calibPt1.x, state.calibPt1.y, 2, 0, 2*Math.PI);
+            ctx.beginPath(); ctx.arc(state.calibPt1.x, state.calibPt1.y, 3 * scaleRatio, 0, 2*Math.PI);
             ctx.fillStyle = '#ffc107'; ctx.fill();
         }
         if (state.calibPt1 && state.calibPt2) {
-            ctx.beginPath(); ctx.arc(state.calibPt2.x, state.calibPt2.y, 2, 0, 2*Math.PI); ctx.fill();
+            ctx.beginPath(); ctx.arc(state.calibPt2.x, state.calibPt2.y, 3 * scaleRatio, 0, 2*Math.PI); ctx.fill();
             ctx.beginPath(); ctx.moveTo(state.calibPt1.x, state.calibPt1.y); ctx.lineTo(state.calibPt2.x, state.calibPt2.y);
-            ctx.strokeStyle = '#ffc107'; ctx.lineWidth = 1; ctx.stroke();
+            ctx.strokeStyle = '#ffc107'; ctx.lineWidth = 1.5 * scaleRatio; ctx.stroke();
         }
 
         state.trackedPoints.forEach((pt, i) => {
             const cur = Math.abs(pt.time - video.currentTime) < 0.001;
-            ctx.beginPath(); ctx.arc(pt.px, pt.py, cur ? 3 : 2, 0, 2*Math.PI);
+            ctx.beginPath(); ctx.arc(pt.px, pt.py, (cur ? 4 : 2.5) * scaleRatio, 0, 2*Math.PI);
             ctx.fillStyle = cur ? '#0d6efd' : '#dc3545'; ctx.fill();
             if (i > 0) {
                 ctx.beginPath(); ctx.moveTo(state.trackedPoints[i-1].px, state.trackedPoints[i-1].py); ctx.lineTo(pt.px, pt.py);
-                ctx.strokeStyle = 'rgba(220,53,69,0.4)'; ctx.lineWidth = 1; ctx.stroke();
+                ctx.strokeStyle = 'rgba(220,53,69,0.5)'; ctx.lineWidth = 1.5 * scaleRatio; ctx.stroke();
             }
         });
     }
@@ -560,68 +626,68 @@
     function redrawCanvas() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // Draw normal markers
-        drawAllMarkers(ctx);
+        // Use an un-zoomed display scale mapping to keep marker sizes visually consistent on screen
+        const displayScale = (canvas.getBoundingClientRect().width / vZoom) / canvas.width;
+        
+        drawAllMarkers(ctx, 1 / (displayScale * vZoom));
 
-        // --- Rewritten Touch Magnifier ---
-        // Uses context transformation instead of manual mapping to guarantee 
-        // 100% pixel-perfect accuracy under all zoom/pan conditions.
         if (touchTargetActive && touchTarget) {
             const MAG_FACTOR = 2; // Fixed internal 2x magnification inside the loupe
-            const r = 50 / vZoom; // Radius adjusts so visual size remains fixed regardless of CSS zoom
+            
+            // Fixed visual 60px radius on the screen, converted mathematically to canvas pixels
+            const r = 60 / (displayScale * vZoom); 
+            
             const actualX = touchTarget.x;
             const actualY = touchTarget.y;
             
-            // Default offset above the finger
-            let visualOffset = 90; 
-            
-            // Smart feature: if touching very close to the top of the screen,
-            // flip the magnifier to show BELOW the finger so it's not cut off!
-            if (touchTarget.clientY < 110) {
-                visualOffset = -90; // flip down
+            // For PC users, center exactly on mouse. For mobile, offset above the finger.
+            let visualOffset = 0; 
+            if (touchTarget.isTouch) {
+                visualOffset = 90; 
+                if (touchTarget.clientY < 110) {
+                    visualOffset = -90; // flip down to avoid cutting off screen edge
+                }
             }
             
             const magX = actualX;
-            const magY = actualY - (visualOffset / vZoom);
+            const magY = actualY - (visualOffset / (displayScale * vZoom));
             
             ctx.save();
             
             // 1. Draw outline and define circular clipping mask
             ctx.beginPath();
             ctx.arc(magX, magY, r, 0, 2*Math.PI);
-            ctx.lineWidth = 3 / vZoom;
+            ctx.lineWidth = 3 / (displayScale * vZoom);
             ctx.strokeStyle = '#ffffff';
             ctx.shadowColor = 'rgba(0,0,0,0.5)';
-            ctx.shadowBlur = 10 / vZoom;
+            ctx.shadowBlur = 10 / (displayScale * vZoom);
             ctx.stroke();
             ctx.clip();
             
-            // Black background fallback
             ctx.fillStyle = '#000';
             ctx.fill();
             
             // 2. Transform the coordinate system for perfect magnification
-            // Shift context to center of magnifier, scale up, shift back to touched spot
             ctx.translate(magX, magY);
             ctx.scale(MAG_FACTOR, MAG_FACTOR);
             ctx.translate(-actualX, -actualY);
             
-            // 3. Draw the video (now perfectly aligned and scaled!)
+            // 3. Draw the video (perfectly aligned with native resolution!)
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             
-            // 4. Draw markers inside the magnifier so the user can see existing points!
-            drawAllMarkers(ctx);
+            // 4. Draw markers inside the magnifier
+            drawAllMarkers(ctx, 1 / (displayScale * vZoom * MAG_FACTOR));
             
             ctx.restore(); // Undo transforms and clipping mask
             
             // 5. Draw the precision crosshair perfectly centered in the magnifier
             ctx.save();
             ctx.beginPath();
-            const chSize = 8 / vZoom;
+            const chSize = 10 / (displayScale * vZoom);
             ctx.moveTo(magX - chSize, magY); ctx.lineTo(magX + chSize, magY);
             ctx.moveTo(magX, magY - chSize); ctx.lineTo(magX, magY + chSize);
             ctx.strokeStyle = '#00ff00';
-            ctx.lineWidth = 1.5 / vZoom;
+            ctx.lineWidth = 1.5 / (displayScale * vZoom);
             ctx.stroke();
             ctx.restore();
         }
@@ -655,7 +721,6 @@
         const vr = t.map(x => 2*reg.A*x + reg.B);
         const ar = t.map(x => 2*reg.A);
         
-        // Calculate R-squared for position
         const yMean = y.reduce((acc, val) => acc + val, 0) / y.length;
         const ssTot = y.reduce((acc, val) => acc + Math.pow(val - yMean, 2), 0);
         const ssRes = y.reduce((acc, val, i) => acc + Math.pow(val - yr[i], 2), 0);
