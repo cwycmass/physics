@@ -6,24 +6,19 @@ DEVELOPER NOTE & ARCHITECTURE GUIDE
 Project: Free Fall Analysis (自由落體分析)
 Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
 
-1. Coordinate Systems (CRITICAL):
-   - Screen/CSS Space: What the user sees and touches. Affected by CSS zoom/pan.
-   - Native Video Space: The actual dimensions of the video file. ALL data 
-     (tracking points, calibration) is stored in this space so it remains 
-     accurate even if the window is resized.
-   - High-DPI Canvas Space: The internal canvas resolution is multiplied by 
-     window.devicePixelRatio to keep vector lines (crosshairs) razor sharp.
+1. Pure Canvas Architecture (THE ULTIMATE FIX):
+   - The <video> element is used as a data source. It is visually hidden using 
+     `opacity: 0` (NOT `display: none`, which prevents browsers from decoding frames).
+   - The Canvas engine draws BOTH the video frame (`ctx.drawImage`) AND the 
+     tracking markers using the exact same transformation matrix.
+   - This completely eliminates "Dual-Engine Drift" because CSS layout rounding 
+     no longer conflicts with Canvas math. Calibration and points will remain 
+     100% pixel-perfect locked to the video features regardless of zoom level.
 
 2. The Loupe (Magnifier) Engine:
-   - Uses `ctx.clip()` to create a circular viewing window.
-   - Scales the context by 2x, draws the video, then RESTORES the context.
-   - Draws the crosshair *after* restoring so the lines don't get artificially 
-     thickened by the 2x zoom.
-
-3. Physics Engine:
-   - Position (y): Quadratic regression (y = At² + Bt + C) using matrix determinants.
-   - Velocity (v): First derivative (v = 2At + B).
-   - Acceleration (a): Second derivative (a = 2A), where 2A equals gravity (g).
+   - Samples the original video texture and perfectly scales it.
+   - Computes a dynamic `visualScale` factor to ensure crosshair and marker 
+     thicknesses remain crisp and identical whether zoomed at 1x or 15x.
 =============================================================================
 -->
 <html lang="zh-HK">
@@ -36,11 +31,9 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* Optimize touch interactions to prevent accidental browser zooming/panning */
         body, button, input, canvas, .nav-link { touch-action: manipulation; }
         body, html { height: 100%; margin: 0; overflow: hidden; background-color: #121212; }
 
-        /* Left Sidebar - Compact UI for controls */
         .sidebar {
             width: 320px;
             min-width: 320px;
@@ -58,26 +51,19 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
         .sidebar .form-control-sm, .sidebar .btn-sm, .sidebar .input-group-text { font-size: 0.8rem; }
         .control-card { box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 0.5rem; }
 
-        /* Right Workspace - Houses the Video and Canvas */
         .workspace { flex-grow: 1; height: 100%; position: relative; display: flex; flex-direction: column; background-color: #000; }
         
-        /* Video Wrapper & Container handle CSS zoom/pan independently of the Canvas drawing */
-        #video-wrapper { flex-grow: 1; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
-        .video-container { position: relative; transform-origin: top left; } 
-        #video-element { width: 100%; height: 100%; display: block; }
+        #video-wrapper { flex-grow: 1; position: relative; overflow: hidden; background-color: #000; display: flex; justify-content: center; align-items: center; }
         
-        /* The tracking canvas sits exactly on top of the video */
-        #tracking-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; }
+        #tracking-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; touch-action: none; pointer-events: auto; }
 
         .keyboard-key { background-color: #333; color: white; border-radius: 3px; padding: 1px 5px; font-family: monospace; font-size: 0.8em; }
 
-        /* Analysis screen layout */
         #analysis-workspace { background-color: #f1f3f5; overflow-y: auto; }
         .chart-box { background: white; border-radius: 6px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); height: 280px; margin-bottom: 1rem; }
         
         .table-compact th, .table-compact td { padding: 0.2rem !important; font-size: 0.75rem; }
 
-        /* Used to visually disable steps until prerequisites (like video upload) are met */
         .disabled-section { opacity: 0.4; pointer-events: none; filter: grayscale(100%); transition: all 0.3s ease; }
     </style>
 </head>
@@ -85,15 +71,11 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
 
 <div class="d-flex w-100 h-100">
 
-    <!-- ========================================== -->
-    <!-- LEFT SIDEBAR (Controls & Data)             -->
-    <!-- ========================================== -->
     <div class="sidebar p-2 shadow-sm">
         <header class="mb-2 text-center">
             <h5 class="fw-bold text-primary m-0">自由落體分析</h5>
         </header>
 
-        <!-- Tabs for switching between Tracking Mode and Analysis Mode -->
         <ul class="nav nav-pills nav-fill mb-2" id="appTabs" role="tablist">
             <li class="nav-item">
                 <button class="nav-link active border fw-bold py-1" id="tracking-tab" data-bs-toggle="pill" data-bs-target="#tracking-controls" type="button">1. 追蹤</button>
@@ -104,10 +86,8 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
         </ul>
 
         <div class="tab-content flex-grow-1 overflow-hidden">
-            <!-- TRACKING CONTROLS TAB -->
             <div class="tab-pane fade show active h-100" id="tracking-controls">
                 
-                <!-- Step 1: Upload Video -->
                 <div class="card control-card">
                     <div class="card-body">
                         <h6 class="card-title fw-bold"><span class="badge bg-secondary">1</span> 載入影片</h6>
@@ -119,7 +99,6 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
                     </div>
                 </div>
 
-                <!-- Step 2: Calibration (Disabled until video is loaded) -->
                 <div class="card control-card border-warning disabled-section" id="step2-card">
                     <div class="card-body">
                         <h6 class="card-title fw-bold text-warning-emphasis"><span class="badge bg-warning text-dark">2</span> 比例尺</h6>
@@ -129,7 +108,6 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
                         </div>
                         <div id="calib-instructions" class="text-muted small mb-1">點擊上方按鈕，在影片選取長度。</div>
                         
-                        <!-- Input for physical length appears after marking two points -->
                         <div id="calib-input-ui" class="bg-light border rounded p-1 mb-1 d-none">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white">實際長度</span>
@@ -146,13 +124,15 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
                     </div>
                 </div>
 
-                <!-- Step 3: Tracking (Disabled until calibration is done) -->
                 <div class="card control-card border-primary disabled-section" id="step3-card">
                     <div class="card-body">
                         <h6 class="card-title fw-bold text-primary"><span class="badge bg-primary">3</span> 標記</h6>
                         <div class="d-flex justify-content-between align-items-center mb-2 bg-light rounded border p-1">
                             <span class="small fw-bold">已標記: <span id="point-count" class="text-primary ms-1">0</span> 點</span>
-                            <button class="btn btn-sm btn-outline-danger py-0 px-2" onclick="clearTrackingData()">清除</button>
+                            <div>
+                                <button class="btn btn-sm btn-outline-secondary py-0 px-2 me-1" id="btn-undo" onclick="undoLastPoint()" disabled title="復原最後一點 (Ctrl+Z)">復原</button>
+                                <button class="btn btn-sm btn-outline-danger py-0 px-2" onclick="clearTrackingData()">清除</button>
+                            </div>
                         </div>
                         <button class="btn btn-success btn-sm w-100 fw-bold shadow-sm py-1" id="btn-analyze" onclick="goToAnalysis()" disabled>
                             分析數據 ➔
@@ -161,16 +141,13 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
                 </div>
             </div>
 
-            <!-- ANALYSIS DATA TAB -->
             <div class="tab-pane fade h-100 d-flex flex-column" id="analysis-controls">
-                <!-- Displays the calculated Quadratic Regression Equation -->
                 <div class="p-2 bg-white rounded shadow-sm border mb-2 text-center mt-2">
                     <div class="p-1 bg-light rounded border small" id="regression-equation" style="font-size: 0.85rem;">
                         等待數據...
                     </div>
                 </div>
 
-                <!-- Data Table for Position-Time points -->
                 <div class="table-responsive bg-white rounded shadow-sm border flex-grow-1 mb-2" style="max-height: 40vh;">
                     <table class="table table-striped table-compact m-0 text-center" id="data-table">
                         <thead class="table-dark sticky-top">
@@ -189,29 +166,22 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- RIGHT WORKSPACE (Video & Charts)           -->
-    <!-- ========================================== -->
     <div class="workspace">
         
-        <!-- VIDEO TRACKING WORKSPACE -->
         <div id="video-workspace" class="w-100 h-100 d-flex flex-column">
             
             <div id="video-wrapper">
-                <!-- Placeholder shown before upload -->
                 <div id="video-placeholder" class="text-secondary text-center position-absolute z-0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-film mb-2 opacity-50" viewBox="0 0 16 16"><path d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm4 0v6h8V1H4zm8 8H4v6h8V9zM1 1v2h2V1H1zm2 3H1v2h2V4zM1 7v2h2V7H1zm2 3H1v2h2v-2zm-2 3v2h2v-2H1zM15 1h-2v2h2V1zm-2 3v2h2V4h-2zm2 3h-2v2h2V7zm-2 3v2h2v-2h-2zm2 3h-2v2h2v-2z"/></svg>
                     <p class="small m-0">尚未載入影片</p>
                 </div>
                 
-                <!-- Contains actual video and drawing canvas -->
-                <div class="video-container" id="video-container">
-                    <video id="video-element" playsinline muted></video>
-                    <canvas id="tracking-canvas"></canvas>
-                </div>
+                <!-- Hidden video source. Note: Using opacity: 0 instead of display: none 
+                     so the browser is still forced to decode the frames into memory! -->
+                <video id="video-element" playsinline muted style="position: absolute; opacity: 0; pointer-events: none; width: 10px; height: 10px; z-index: -1;"></video>
+                <canvas id="tracking-canvas"></canvas>
             </div>
 
-            <!-- Bottom Toolbar for Video Controls -->
             <div class="bg-dark text-white p-1 d-flex justify-content-center align-items-center position-relative" style="height: 50px;">
                 <div class="position-absolute start-0 ms-2 d-flex gap-1 z-2">
                     <button id="tool-track" class="btn btn-sm btn-primary py-0 px-2" onclick="setTool('track')" title="標記模式">🎯 標記</button>
@@ -220,7 +190,6 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
                 </div>
 
                 <div class="d-flex align-items-center gap-3">
-                    <!-- Previous Frame Button (Hold to seek fast) -->
                     <button class="btn btn-sm btn-secondary py-0" 
                             onpointerdown="startHold(prevFrame)" onpointerup="stopHold()" onpointerleave="stopHold()" onpointercancel="stopHold()">
                         <span class="keyboard-key">←</span>
@@ -230,7 +199,6 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
                         <span id="time-display">0.000</span>s
                     </div>
                     
-                    <!-- Next Frame Button (Hold to seek fast) -->
                     <button class="btn btn-sm btn-secondary py-0" 
                             onpointerdown="startHold(nextFrame)" onpointerup="stopHold()" onpointerleave="stopHold()" onpointercancel="stopHold()">
                         <span class="keyboard-key">→</span>
@@ -241,7 +209,6 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
             </div>
         </div>
 
-        <!-- ANALYSIS CHARTS WORKSPACE (Hidden initially) -->
         <div id="analysis-workspace" class="w-100 h-100 p-3 d-none">
             <h5 class="mb-3 fw-bold">運動圖表</h5>
             <div class="row g-2">
@@ -258,85 +225,79 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
 <script>
     // ==========================================
     // GLOBAL STATE MANAGEMENT
-    // Stores all data needed for the application to function.
     // ==========================================
     const state = {
         videoLoaded: false, 
-        fps: 30, // Frames per second (used to calculate delta time)
-        pixelsPerMeter: null, // Conversion ratio from video pixels to real-world meters
-        originY: null, // The Y-coordinate of the first tracked point (acts as Y=0)
+        fps: 30, 
+        pixelsPerMeter: null,
         
-        trackedPoints: [], // Array of objects: { time: float, px: x-coord, py: y-coord }
-        physicsData: [], // Processed data: { t: time, y: position_in_meters }
+        trackedPoints: [], 
+        pointIdCounter: 0, 
+        physicsData: [], 
         
-        calibMode: 0, // 0: Off, 1: Waiting for Start Point, 2: Waiting for End Point, 3: Waiting for Length Input
+        calibMode: 0, 
         calibPt1: null, 
         calibPt2: null, 
-        tempPxDistance: 0, // Distance in pixels between calibPt1 and calibPt2
+        tempPxDistance: 0, 
         
-        handledTouch: false, // Prevents duplicate events firing on mobile devices
-        loupeEnabled: true // State of the Magnifying Glass feature
+        handledTouch: false,
+        loupeEnabled: true 
     };
 
-    // DOM Elements
     const video = document.getElementById('video-element');
     const canvas = document.getElementById('tracking-canvas');
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    const vWrapper = document.getElementById('video-wrapper');
     const vPlace = document.getElementById('video-placeholder');
     
-    // Chart instances (stored globally so they can be destroyed and recreated)
     let posChartInst, velChartInst, accChartInst;
-    
-    // Viewport transform variables for CSS zooming and panning
-    let vZoom = 1, vPanX = 0, vPanY = 0, isVPan = false;
+    let vZoom = 1, vPanX = 0, vPanY = 0;
 
-    // Toggles UI panels based on current state (e.g. enable tracking only if calibrated)
     function updateSectionStates() {
         document.getElementById('step2-card').classList.toggle('disabled-section', !state.videoLoaded);
         document.getElementById('step3-card').classList.toggle('disabled-section', !(state.videoLoaded && state.pixelsPerMeter));
     }
 
     // ==========================================
-    // EVENT LISTENERS: FILE UPLOAD & TABS
+    // EVENT LISTENERS
     // ==========================================
     document.getElementById('video-upload').addEventListener('change', e => {
         if(!e.target.files[0]) return;
         
-        // Load local file as video source
+        // Load file but don't set currentTime here yet, let loadedmetadata handle it
         video.src = URL.createObjectURL(e.target.files[0]);
-        video.currentTime = 0;
         
-        // Reset all variables
         state.pixelsPerMeter = null;
         document.getElementById('scale-display').innerText = `未設定`;
         document.getElementById('calib-instructions').innerText = "點擊上方按鈕，在影片選取長度。";
         clearTrackingData();
         cancelCalibration();
         
-        // Reset Viewport
         vZoom = 1; vPanX = 0; vPanY = 0;
-        updateVideoTransform();
         updateSectionStates();
     });
 
     document.getElementById('fps-input').addEventListener('change', e => state.fps = parseFloat(e.target.value) || 30);
-    
-    // Resize the canvas whenever the window changes size to maintain alignment
     window.addEventListener('resize', syncCanvasSize);
     
-    // Triggered when video metadata (like width/height) is successfully loaded
+    // Fired when the video dimensions and duration are ready
     video.addEventListener('loadedmetadata', () => {
         state.videoLoaded = true; 
         vPlace.style.display = 'none'; 
         syncCanvasSize();
         updateSectionStates();
+        // Force video to seek slightly to guarantee the first frame is fully decoded
+        video.currentTime = 0.001; 
     });
 
-    // Handle Bootstrap Tab Switching
+    // Fallback events to ensure Canvas always redrawing when frames update
+    video.addEventListener('loadeddata', redrawCanvas);
+    video.addEventListener('canplay', redrawCanvas);
+
     document.getElementById('tracking-tab').addEventListener('show.bs.tab', () => {
         document.getElementById('video-workspace').classList.remove('d-none');
         document.getElementById('analysis-workspace').classList.add('d-none');
-        setTimeout(syncCanvasSize, 50); // Small delay to ensure CSS transitions finish
+        setTimeout(syncCanvasSize, 50);
     });
     
     document.getElementById('analysis-tab').addEventListener('show.bs.tab', () => {
@@ -345,60 +306,46 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
     });
 
     // ==========================================
-    // CANVAS SIZING & HIGH-DPI SCALING (CRITICAL)
+    // CANVAS SIZING (PURE CANVAS ARCHITECTURE)
     // ==========================================
-    const vWrapper = document.getElementById('video-wrapper');
-    const vContainer = document.getElementById('video-container');
-
-    // Mathematically perfectly fit the container to the aspect ratio to prevent ANY letterboxing.
-    // Also forces Canvas to render in High-DPI matching the screen ratio for crisp visuals.
     function syncCanvasSize() {
         if (!state.videoLoaded) return;
-        
-        const vWidth = video.videoWidth;
-        const vHeight = video.videoHeight;
-        if (!vWidth || !vHeight) return;
-
-        const wrapperWidth = vWrapper.clientWidth;
-        const wrapperHeight = vWrapper.clientHeight;
-        
-        const vRatio = vWidth / vHeight;
-        const wRatio = wrapperWidth / wrapperHeight;
-        
-        let finalWidth, finalHeight;
-        // Letterbox calculation to fit video inside wrapper while maintaining aspect ratio
-        if (vRatio > wRatio) {
-            finalWidth = wrapperWidth;
-            finalHeight = wrapperWidth / vRatio;
-        } else {
-            finalHeight = wrapperHeight;
-            finalWidth = wrapperHeight * vRatio;
-        }
-        
-        // Size the container visually in CSS
-        vContainer.style.width = finalWidth + 'px';
-        vContainer.style.height = finalHeight + 'px';
-        
-        // High-DPI Canvas scaling: Multiplies internal resolution by device pixel ratio
-        // This ensures the loupe and crosshairs look incredibly sharp on iPads/Mobile.
+        const wRect = vWrapper.getBoundingClientRect();
         const dpr = window.devicePixelRatio || 1;
-        canvas.width = finalWidth * dpr;
-        canvas.height = finalHeight * dpr;
-        
+        canvas.width = Math.round(wRect.width * dpr);
+        canvas.height = Math.round(wRect.height * dpr);
         redrawCanvas();
     }
 
-    // ==========================================
-    // VIEWPORT & TOOL INTERACTIONS (PAN, ZOOM)
-    // ==========================================
-    let activeTool = 'track'; // 'track' or 'pan'
-    let isSpaceDown = false, hasPanned = false;
-    let lastClientX = 0, lastClientY = 0;
-    
-    // Variables for pinch-to-zoom on mobile
-    let initialPinchDist = 0, initialPinchZoom = 1;
+    function getBaseVideoRect() {
+        const vw = video.videoWidth;
+        const vh = video.videoHeight;
+        if (!vw || !vh) return {x:0, y:0, w:0, h:0};
 
-    // Target for the magnifying glass
+        const dpr = window.devicePixelRatio || 1;
+        const ww = canvas.width / dpr;
+        const wh = canvas.height / dpr;
+        
+        const vRatio = vw / vh;
+        const wRatio = ww / wh;
+        
+        let w, h;
+        if (vRatio > wRatio) {
+            w = ww; h = ww / vRatio;
+        } else {
+            h = wh; w = wh * vRatio;
+        }
+        
+        return { x: (ww - w) / 2, y: (wh - h) / 2, w: w, h: h };
+    }
+
+    // ==========================================
+    // VIEWPORT INTERACTIONS & MATH
+    // ==========================================
+    let activeTool = 'track';
+    let isSpaceDown = false, isVPan = false, hasPanned = false;
+    let lastClientX = 0, lastClientY = 0;
+
     let touchTargetActive = false;
     let touchTarget = null;
 
@@ -412,28 +359,43 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
     function toggleLoupe() {
         state.loupeEnabled = !state.loupeEnabled;
         document.getElementById('tool-loupe').className = `btn btn-sm py-0 px-2 ${state.loupeEnabled ? 'btn-info text-dark fw-bold' : 'btn-outline-light'}`;
-        if (!state.loupeEnabled) {
-            touchTargetActive = false;
-            redrawCanvas(); // Clear loupe if disabled
-        }
+        if (!state.loupeEnabled) { touchTargetActive = false; redrawCanvas(); }
     }
 
-    // Updates mouse cursor based on current tool/state (e.g., grabbing hand)
     function updateCursor() {
-        const cursor = (activeTool === 'pan' || isSpaceDown) ? (isVPan ? 'grabbing' : 'grab') : 'default';
-        const canvasCursor = (activeTool === 'pan' || isSpaceDown) ? (isVPan ? 'grabbing' : 'grab') : 'crosshair';
+        const cursor = (activeTool === 'pan' || isSpaceDown) ? (isVPan ? 'grabbing' : 'grab') : 'crosshair';
         vWrapper.style.cursor = cursor;
-        canvas.style.cursor = canvasCursor;
     }
 
-    // Desktop Mouse Wheel Zoom
+    function applyZoom(mx, my, newZoom) {
+        newZoom = Math.max(1, Math.min(newZoom, 15));
+        if (newZoom === 1) {
+            vPanX = 0; vPanY = 0;
+        } else {
+            const base = getBaseVideoRect();
+            const curW = base.w * vZoom;
+            const curH = base.h * vZoom;
+            const curX = base.x + vPanX;
+            const curY = base.y + vPanY;
+            
+            const pctX = (mx - curX) / curW;
+            const pctY = (my - curY) / curH;
+            
+            const newW = base.w * newZoom;
+            const newH = base.h * newZoom;
+            
+            vPanX = (mx - (pctX * newW)) - base.x;
+            vPanY = (my - (pctY * newH)) - base.y;
+        }
+        vZoom = newZoom;
+    }
+
     vWrapper.addEventListener('wheel', e => {
         if (!state.videoLoaded) return;
         e.preventDefault();
-        vZoom += e.deltaY * -0.001; // Scale zoom speed
-        vZoom = Math.max(1, Math.min(vZoom, 10)); // Restrict zoom to 1x - 10x range
-        if (vZoom === 1) { vPanX = 0; vPanY = 0; } // Reset pan if fully zoomed out
-        updateVideoTransform();
+        const wRect = vWrapper.getBoundingClientRect();
+        applyZoom(e.clientX - wRect.left, e.clientY - wRect.top, vZoom + (e.deltaY * -0.001));
+        redrawCanvas();
     });
 
     function startPan(cx, cy) {
@@ -445,54 +407,46 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
     function doPan(cx, cy) {
         const dx = cx - lastClientX;
         const dy = cy - lastClientY;
-        // Distinguish a click from a drag
         if (Math.abs(dx) > 1 || Math.abs(dy) > 1) hasPanned = true;
         vPanX += dx; vPanY += dy;
         lastClientX = cx; lastClientY = cy;
-        updateVideoTransform();
+        redrawCanvas();
     }
 
     function endPan() {
         if (isVPan) { isVPan = false; updateCursor(); }
     }
 
-    // ==========================================
-    // COORDINATE MAPPING (CRITICAL MATH)
-    // ==========================================
-    // Maps screen coordinates (clientX/Y) directly to the Video's Native Resolution space.
-    // Bypasses any CSS scale/translate to find the true pixel in the video file.
     function getVideoCoords(clientX, clientY) {
-        const rect = canvas.getBoundingClientRect();
+        const wRect = vWrapper.getBoundingClientRect();
+        const mx = clientX - wRect.left;
+        const my = clientY - wRect.top;
+        
+        const base = getBaseVideoRect();
+        const curX = base.x + vPanX;
+        const curY = base.y + vPanY;
+        const curW = base.w * vZoom;
+        const curH = base.h * vZoom;
+        
         return {
-            x: (clientX - rect.left) / rect.width * video.videoWidth,
-            y: (clientY - rect.top) / rect.height * video.videoHeight
+            x: ((mx - curX) / curW) * video.videoWidth,
+            y: ((my - curY) / curH) * video.videoHeight,
+            clientY: clientY
         };
     }
 
-    // Updates the position of the Loupe based on cursor/finger
     function updateTouchTarget(e, isTouch) {
         const clientX = isTouch ? e.touches[0].clientX : e.clientX;
         const clientY = isTouch ? e.touches[0].clientY : e.clientY;
         const coords = getVideoCoords(clientX, clientY);
-        touchTarget = { 
-            x: coords.x, 
-            y: coords.y,
-            clientY: clientY, // Needed to check proximity to top edge
-            isTouch: isTouch
-        };
+        touchTarget = { x: coords.x, y: coords.y, clientY: clientY, isTouch: isTouch };
         redrawCanvas();
     }
 
-    // ==========================================
-    // MOUSE & TOUCH EVENT HANDLERS
-    // ==========================================
-
     vWrapper.addEventListener('mousedown', e => {
         if (!state.videoLoaded) return;
-        // Middle click (1), Right click (2), or Space+Left click to pan
         if ((e.button === 0 && (activeTool === 'pan' || isSpaceDown)) || e.button === 1 || e.button === 2) {
-            e.preventDefault();
-            startPan(e.clientX, e.clientY);
+            e.preventDefault(); startPan(e.clientX, e.clientY);
         }
     });
 
@@ -500,139 +454,126 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
         if (!state.videoLoaded) return;
         if (isVPan) {
             doPan(e.clientX, e.clientY);
-        } else if (state.loupeEnabled && activeTool === 'track' && !isSpaceDown && e.target === canvas) {
-            // Hovering over canvas shows the magnifier
-            touchTargetActive = true;
-            updateTouchTarget(e, false);
-        } else if (touchTargetActive && e.target !== canvas) {
-            // Mouse left the canvas, hide magnifier
-            touchTargetActive = false;
-            redrawCanvas();
+        } else {
+            const coords = getVideoCoords(e.clientX, e.clientY);
+            const inBounds = coords.x >= 0 && coords.x <= video.videoWidth && coords.y >= 0 && coords.y <= video.videoHeight;
+            
+            if (state.loupeEnabled && activeTool === 'track' && !isSpaceDown && inBounds) {
+                touchTargetActive = true;
+                updateTouchTarget(e, false);
+            } else if (touchTargetActive) {
+                touchTargetActive = false;
+                redrawCanvas();
+            }
         }
     });
 
     window.addEventListener('mouseup', endPan);
-    vWrapper.addEventListener('contextmenu', e => e.preventDefault()); // Prevent right-click menu
-    
+    vWrapper.addEventListener('contextmenu', e => e.preventDefault()); 
     vWrapper.addEventListener('mouseleave', () => {
         if (touchTargetActive) { touchTargetActive = false; redrawCanvas(); }
     });
 
-    // Touch Support (Mobile/Tablets)
+    // Advanced Touch Support (Pinch & Pan combo)
+    let pinchStartDist = 0, pinchStartZoom = 1;
+    let lastPinchCenter = {x: 0, y: 0};
+
     vWrapper.addEventListener('touchstart', e => {
         if (!state.videoLoaded) return;
         if (e.touches.length === 2) {
-            // Pinch to zoom gesture
             e.preventDefault();
-            initialPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-            initialPinchZoom = vZoom;
+            pinchStartDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            pinchStartZoom = vZoom;
+            lastPinchCenter = { x: (e.touches[0].clientX + e.touches[1].clientX) / 2, y: (e.touches[0].clientY + e.touches[1].clientY) / 2 };
             isVPan = false; touchTargetActive = false; touchTarget = null; redrawCanvas();
         } else if (e.touches.length === 1 && (activeTool === 'pan' || isSpaceDown)) {
-            // Single finger drag for panning
-            e.preventDefault();
-            startPan(e.touches[0].clientX, e.touches[0].clientY);
-        } else if (e.touches.length === 1 && activeTool === 'track' && !isSpaceDown && e.target === canvas) {
-            // Single finger touch down prepares tracking and shows loupe
-            e.preventDefault();
-            if (state.loupeEnabled) touchTargetActive = true;
-            updateTouchTarget(e, true);
+            e.preventDefault(); startPan(e.touches[0].clientX, e.touches[0].clientY);
+        } else if (e.touches.length === 1 && activeTool === 'track' && !isSpaceDown) {
+            const coords = getVideoCoords(e.touches[0].clientX, e.touches[0].clientY);
+            const inBounds = coords.x >= 0 && coords.x <= video.videoWidth && coords.y >= 0 && coords.y <= video.videoHeight;
+            if (inBounds) {
+                e.preventDefault();
+                if (state.loupeEnabled) touchTargetActive = true;
+                updateTouchTarget(e, true);
+            }
         }
     }, { passive: false });
 
     window.addEventListener('touchmove', e => {
         if (!state.videoLoaded) return;
-        if (e.touches.length === 2) {
-            // Processing Pinch to Zoom distance
+        if (e.touches.length === 2 && pinchStartDist > 0) {
             e.preventDefault();
             const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-            if (initialPinchDist > 0) {
-                const scale = dist / initialPinchDist;
-                vZoom = Math.max(1, Math.min(initialPinchZoom * scale, 10));
-                if (vZoom === 1) { vPanX = 0; vPanY = 0; }
-                updateVideoTransform();
-            }
+            const center = { x: (e.touches[0].clientX + e.touches[1].clientX) / 2, y: (e.touches[0].clientY + e.touches[1].clientY) / 2 };
+            
+            vPanX += center.x - lastPinchCenter.x;
+            vPanY += center.y - lastPinchCenter.y;
+            lastPinchCenter = center;
+            
+            const wRect = vWrapper.getBoundingClientRect();
+            applyZoom(center.x - wRect.left, center.y - wRect.top, pinchStartZoom * (dist / pinchStartDist));
+            redrawCanvas();
         } else if (isVPan && e.touches.length === 1) {
-            e.preventDefault();
-            doPan(e.touches[0].clientX, e.touches[0].clientY);
+            e.preventDefault(); doPan(e.touches[0].clientX, e.touches[0].clientY);
         } else if (touchTarget && e.touches.length === 1 && activeTool === 'track' && !isSpaceDown) {
-            // Dragging finger moves the loupe around
             e.preventDefault();
-            if (state.loupeEnabled) touchTargetActive = true;
-            updateTouchTarget(e, true);
+            const coords = getVideoCoords(e.touches[0].clientX, e.touches[0].clientY);
+            const inBounds = coords.x >= -30 && coords.x <= video.videoWidth + 30 && coords.y >= -30 && coords.y <= video.videoHeight + 30;
+            if (inBounds && state.loupeEnabled) {
+                touchTargetActive = true; updateTouchTarget(e, true);
+            } else {
+                touchTargetActive = false; redrawCanvas();
+            }
         }
     }, { passive: false });
 
     window.addEventListener('touchend', e => {
+        if (e.touches.length < 2) pinchStartDist = 0;
         endPan();
-        // Point is actually registered when finger is lifted (touchend)
         if (touchTarget && activeTool === 'track' && !isSpaceDown) {
             if (e.cancelable) e.preventDefault();
             processPoint(touchTarget.x, touchTarget.y); 
-            touchTargetActive = false;
-            touchTarget = null;
-            
-            // Prevent synthetic mouse clicks firing immediately after touch
-            state.handledTouch = true;
-            redrawCanvas();
+            touchTargetActive = false; touchTarget = null;
+            state.handledTouch = true; redrawCanvas();
             setTimeout(() => { state.handledTouch = false; }, 300);
         }
     });
-
-    // Apply the CSS Transform to the Video Container
-    function updateVideoTransform() {
-        vContainer.style.transform = `translate(${vPanX}px, ${vPanY}px) scale(${vZoom})`;
-    }
 
     // ==========================================
     // KEYBOARD & PLAYBACK CONTROLS
     // ==========================================
     document.addEventListener('keydown', e => {
         if (!state.videoLoaded || ['INPUT'].includes(document.activeElement.tagName)) return;
-        // Spacebar activates pan tool temporarily
-        if (e.code === 'Space') {
-            e.preventDefault();
-            if (!isSpaceDown) { isSpaceDown = true; updateCursor(); }
-        }
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); undoLastPoint(); }
+        if (e.code === 'Space') { e.preventDefault(); if (!isSpaceDown) { isSpaceDown = true; updateCursor(); } }
         if (e.key === 'ArrowRight') nextFrame();
         if (e.key === 'ArrowLeft') prevFrame();
     });
 
-    document.addEventListener('keyup', e => {
-        if (e.code === 'Space') { isSpaceDown = false; updateCursor(); }
-    });
+    document.addEventListener('keyup', e => { if (e.code === 'Space') { isSpaceDown = false; updateCursor(); } });
 
-    // Hold-to-seek logic for Frame Forward/Backward buttons
     let frameHoldTimer = null, frameHoldInterval = null;
-    
-    function startHold(action) {
-        if (!state.videoLoaded) return;
-        action();
-        frameHoldTimer = setTimeout(() => { frameHoldInterval = setInterval(action, 60); }, 300);
-    }
+    function startHold(action) { if (!state.videoLoaded) return; action(); frameHoldTimer = setTimeout(() => { frameHoldInterval = setInterval(action, 60); }, 300); }
+    function stopHold() { clearTimeout(frameHoldTimer); clearInterval(frameHoldInterval); }
 
-    function stopHold() {
-        clearTimeout(frameHoldTimer); clearInterval(frameHoldInterval);
-    }
-
-    // Time calculation based on user-provided FPS
-    function nextFrame() { if(state.videoLoaded) { video.currentTime = Math.min(video.duration, video.currentTime + 1/state.fps); setTimeout(updateTime, 30); } }
-    function prevFrame() { if(state.videoLoaded) { video.currentTime = Math.max(0, video.currentTime - 1/state.fps); setTimeout(updateTime, 30); } }
+    function nextFrame() { if(state.videoLoaded) { video.currentTime = Math.min(video.duration, video.currentTime + 1/state.fps); } }
+    function prevFrame() { if(state.videoLoaded) { video.currentTime = Math.max(0, video.currentTime - 1/state.fps); } }
     
-    function updateTime() { 
+    // This is vital: Redraws canvas every time the video's playhead moves
+    video.addEventListener('seeked', () => { 
         document.getElementById('time-display').innerText = video.currentTime.toFixed(3); 
         redrawCanvas(); 
-    }
-    video.addEventListener('seeked', updateTime); // Redraw whenever video position changes
+    });
 
     // ==========================================
-    // CALIBRATION TOOL
+    // DATA & CALIBRATION 
     // ==========================================
     function startCalibration() {
         if (!state.videoLoaded) return alert("請先載入影片！");
         state.calibMode = 1; state.calibPt1 = state.calibPt2 = null;
         toggleCalibUI(true);
         document.getElementById('calib-instructions').innerHTML = "<span class='text-danger fw-bold'>👉 1. 點擊起點</span>";
-        canvas.style.cursor = 'crosshair'; redrawCanvas();
+        updateCursor(); redrawCanvas();
     }
 
     function cancelCalibration() {
@@ -648,7 +589,6 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
         document.getElementById('calib-input-ui').classList.add('d-none');
     }
 
-    // Calculates scaling ratio: Pixels per Meter
     function confirmCalibration() {
         const d = parseFloat(document.getElementById('calib-length-input').value);
         if (d > 0) {
@@ -656,18 +596,11 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
             document.getElementById('scale-display').innerText = `1m = ${state.pixelsPerMeter.toFixed(0)}px`;
             state.calibMode = 0; toggleCalibUI(false);
             document.getElementById('calib-instructions').innerHTML = "<span class='text-success fw-bold'>✓ 已設定</span>";
-            redrawCanvas();
-            updateSectionStates();
+            redrawCanvas(); updateSectionStates();
         }
     }
 
-    // ==========================================
-    // POINT TRACKING & DATA COLLECTION
-    // ==========================================
-    
-    // Processes a click/touch coordinate on the canvas
     function processPoint(cx, cy) {
-        // Calibration Mode Logic
         if (state.calibMode === 1) {
             state.calibPt1 = { x: cx, y: cy }; state.calibMode = 2;
             document.getElementById('calib-instructions').innerHTML = "<span class='text-danger fw-bold'>👉 2. 點擊終點</span>";
@@ -675,307 +608,245 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
         } 
         if (state.calibMode === 2) {
             state.calibPt2 = { x: cx, y: cy }; state.calibMode = 3;
-            // Calculate distance using Pythagorean theorem
             state.tempPxDistance = Math.hypot(state.calibPt2.x - state.calibPt1.x, state.calibPt2.y - state.calibPt1.y);
             document.getElementById('calib-instructions').innerText = "👉 3. 輸入長度";
             document.getElementById('calib-input-ui').classList.remove('d-none');
             redrawCanvas(); return;
         }
-        if (state.calibMode === 3) return; // Wait for user to type length
+        if (state.calibMode === 3) return; 
 
-        // Tracking Mode Logic
         if (!state.pixelsPerMeter) return alert("請先校準比例尺！");
 
         const t = video.currentTime;
-        // The Y-coordinate of the very first dot becomes "0 meters" baseline
-        if (state.trackedPoints.length === 0) state.originY = cy; 
-        
-        // Check if a point already exists near this timestamp, overwrite if true
         const idx = state.trackedPoints.findIndex(p => Math.abs(p.time - t) < 0.001);
+        const newPoint = { time: t, px: cx, py: cy, id: state.pointIdCounter++ };
+
+        if (idx >= 0) state.trackedPoints[idx] = newPoint; 
+        else state.trackedPoints.push(newPoint); 
         
-        if (idx >= 0) state.trackedPoints[idx] = { time: t, px: cx, py: cy };
-        else state.trackedPoints.push({ time: t, px: cx, py: cy });
-        
-        // Keep data sorted chronologically
         state.trackedPoints.sort((a, b) => a.time - b.time);
-        updateUI(); redrawCanvas(); 
-        nextFrame(); // Auto-advance to next frame to speed up tracking
+        
+        updateUI(); redrawCanvas(); nextFrame(); 
     }
 
-    // Canvas click event (used for Desktop Mouse)
-    canvas.addEventListener('click', handleCanvasClick);
-    function handleCanvasClick(e) {
-        if (state.handledTouch) {
-            state.handledTouch = false;
-            return;
+    function undoLastPoint() {
+        if (state.trackedPoints.length === 0) return;
+
+        let latestIdx = 0;
+        for (let i = 1; i < state.trackedPoints.length; i++) {
+            if (state.trackedPoints[i].id > state.trackedPoints[latestIdx].id) latestIdx = i;
         }
-        if (!state.videoLoaded || activeTool === 'pan' || hasPanned || isSpaceDown) {
-            hasPanned = false; 
-            return;
-        }
+        const removedPoint = state.trackedPoints.splice(latestIdx, 1)[0];
+        if (state.trackedPoints.length === 0) state.pointIdCounter = 0;
+        
+        updateUI();
+        if (state.videoLoaded) video.currentTime = removedPoint.time; else redrawCanvas();
+    }
+
+    vWrapper.addEventListener('click', e => {
+        if (state.handledTouch) { state.handledTouch = false; return; }
+        if (!state.videoLoaded || activeTool === 'pan' || hasPanned || isSpaceDown) { hasPanned = false; return; }
         
         const coords = getVideoCoords(e.clientX, e.clientY);
+        if (coords.x < 0 || coords.x > video.videoWidth || coords.y < 0 || coords.y > video.videoHeight) return;
+        
         processPoint(coords.x, coords.y);
 
-        // Keep loupe active immediately after clicking if enabled
         if (state.loupeEnabled && activeTool === 'track') {
-            touchTargetActive = true;
-            updateTouchTarget(e, false);
+            touchTargetActive = true; updateTouchTarget(e, false);
         }
-    }
+    });
 
     function clearTrackingData() {
-        state.trackedPoints = []; state.originY = null; updateUI(); redrawCanvas();
+        state.trackedPoints = []; state.pointIdCounter = 0; 
+        updateUI(); redrawCanvas();
     }
 
     function updateUI() {
         document.getElementById('point-count').innerText = state.trackedPoints.length;
-        const ok = state.trackedPoints.length >= 3; // Need at least 3 points for quadratic regression
+        const ok = state.trackedPoints.length >= 3; 
         document.getElementById('btn-analyze').disabled = !ok;
         document.getElementById('analysis-tab').classList.toggle('disabled', !ok);
+        document.getElementById('btn-undo').disabled = state.trackedPoints.length === 0;
     }
 
     // ==========================================
-    // CANVAS RENDERING ENGINE
+    // PURE CANVAS RENDERING ENGINE
     // ==========================================
-    
-    // Helper function to draw the red tracking dots and yellow calibration lines
-    function drawAllMarkers(ctx, scaleRatio = 1) {
-        // Draw calibration points and connecting line
+    function drawAllMarkers(ctx, visualScale) {
         if (state.calibPt1) {
-            ctx.beginPath(); ctx.arc(state.calibPt1.x, state.calibPt1.y, 3 * scaleRatio, 0, 2*Math.PI);
+            ctx.beginPath(); ctx.arc(state.calibPt1.x, state.calibPt1.y, 3 * visualScale, 0, 2*Math.PI);
             ctx.fillStyle = '#ffc107'; ctx.fill();
         }
         if (state.calibPt1 && state.calibPt2) {
-            ctx.beginPath(); ctx.arc(state.calibPt2.x, state.calibPt2.y, 3 * scaleRatio, 0, 2*Math.PI); ctx.fill();
+            ctx.beginPath(); ctx.arc(state.calibPt2.x, state.calibPt2.y, 3 * visualScale, 0, 2*Math.PI); ctx.fill();
             ctx.beginPath(); ctx.moveTo(state.calibPt1.x, state.calibPt1.y); ctx.lineTo(state.calibPt2.x, state.calibPt2.y);
-            ctx.strokeStyle = '#ffc107'; ctx.lineWidth = 1.5 * scaleRatio; ctx.stroke();
+            ctx.strokeStyle = '#ffc107'; ctx.lineWidth = 1.5 * visualScale; ctx.stroke();
         }
 
-        // Draw tracked physics points
         state.trackedPoints.forEach((pt, i) => {
-            const cur = Math.abs(pt.time - video.currentTime) < 0.001; // Is this the current frame?
-            ctx.beginPath(); ctx.arc(pt.px, pt.py, (cur ? 4 : 2.5) * scaleRatio, 0, 2*Math.PI);
-            ctx.fillStyle = cur ? '#0d6efd' : '#dc3545'; // Blue for current frame, Red for others
+            const cur = Math.abs(pt.time - video.currentTime) < 0.001; 
+            ctx.beginPath(); ctx.arc(pt.px, pt.py, (cur ? 4 : 2.5) * visualScale, 0, 2*Math.PI);
+            ctx.fillStyle = cur ? '#0d6efd' : '#dc3545'; 
             ctx.fill();
             
-            // Draw connecting lines between points to show trajectory
             if (i > 0) {
                 ctx.beginPath(); ctx.moveTo(state.trackedPoints[i-1].px, state.trackedPoints[i-1].py); ctx.lineTo(pt.px, pt.py);
-                ctx.strokeStyle = 'rgba(220,53,69,0.5)'; ctx.lineWidth = 1.5 * scaleRatio; ctx.stroke();
+                ctx.strokeStyle = 'rgba(220,53,69,0.5)'; ctx.lineWidth = 1.5 * visualScale; ctx.stroke();
             }
         });
     }
 
-    // Main rendering loop for the Canvas
     function redrawCanvas() {
-        // 1. Reset Transform to handle High-DPI clear safely
+        const dpr = window.devicePixelRatio || 1;
         ctx.setTransform(1, 0, 0, 1, 0, 0); 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // 2. Scale context to Native Video Coordinate Space.
-        // Since canvas.width was multiplied by window.devicePixelRatio, 
-        // the browser will render these video-coordinates sharply using extra physical pixels.
-        const renderScale = canvas.width / video.videoWidth;
-        ctx.scale(renderScale, renderScale);
+        // Always fill background
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // cssToVideoScale mathematically locks visual sizes (like a 60px radius)
-        // so they don't visually shrink/grow if the video is 4K vs 480p, or if user CSS zooms.
-        const cssToVideoScale = video.videoWidth / (vContainer.clientWidth * vZoom);
+        // Safety check to ensure video is fully ready before drawing
+        if (!state.videoLoaded || video.videoWidth === 0 || video.videoHeight === 0) return;
         
-        // Draw the standard un-magnified markers
-        drawAllMarkers(ctx, cssToVideoScale);
+        const base = getBaseVideoRect();
+        const curX = base.x + vPanX;
+        const curY = base.y + vPanY;
+        const curW = base.w * vZoom;
+        const curH = base.h * vZoom;
+        
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        
+        // 1. Draw the Video Frame strictly using the Canvas engine
+        ctx.drawImage(video, curX, curY, curW, curH);
+        
+        // 2. Map coordinates exactly to the video bounds
+        ctx.translate(curX, curY);
+        const scaleX = curW / video.videoWidth;
+        const scaleY = curH / video.videoHeight;
+        ctx.scale(scaleX, scaleY);
+        
+        // 3. Keep markers physically identical sized regardless of zoom
+        const visualScale = 1 / scaleX; 
+        drawAllMarkers(ctx, visualScale);
 
-        // 3. Draw The Loupe (Magnifier Window)
+        // 4. Render the Loupe
         if (touchTargetActive && touchTarget) {
-            const MAG_FACTOR = 2; // Zoom strength of the magnifier
-            const r = 60 * cssToVideoScale; // Circular radius of the lens
+            const MAG_FACTOR = 2; 
+            const r = 60 * visualScale; 
             
             const actualX = touchTarget.x;
             const actualY = touchTarget.y;
             
-            // Offset the magnifier visually upwards for touch devices so the finger doesn't hide it
             let visualOffset = 0; 
             if (touchTarget.isTouch) {
-                visualOffset = 90 * cssToVideoScale; 
-                // Flip offset downwards if close to the top edge of the screen
-                if (touchTarget.clientY < 110) {
-                    visualOffset = -90 * cssToVideoScale; 
-                }
+                visualOffset = 90 * visualScale; 
+                if (touchTarget.clientY < 110) visualOffset = -90 * visualScale; 
             }
             
             const magX = actualX;
             const magY = actualY - visualOffset;
             
-            ctx.save(); // Save context before applying clipping and scaling
+            ctx.save(); 
+            ctx.beginPath(); ctx.arc(magX, magY, r, 0, 2*Math.PI); ctx.clip();
+            ctx.fillStyle = '#000'; ctx.fill();
             
-            // Create Clipping Mask for the circular lens
-            ctx.beginPath();
-            ctx.arc(magX, magY, r, 0, 2*Math.PI);
-            ctx.clip();
-            
-            // Black background fallback inside the lens
-            ctx.fillStyle = '#000';
-            ctx.fill();
-            
-            // Transform context into the Magnified Space
             ctx.translate(magX, magY);
             ctx.scale(MAG_FACTOR, MAG_FACTOR);
             ctx.translate(-actualX, -actualY);
             
-            // Draw the underlying video into the lens. Because of the transform, 
-            // it will be zoomed in 2x centered exactly on the actualX/Y coordinate.
+            // Draw original video texture directly inside the magnified loupe area
             ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+            drawAllMarkers(ctx, visualScale / MAG_FACTOR);
             
-            // Draw markers inside the magnifier, scaling them down so they don't look overly huge
-            drawAllMarkers(ctx, cssToVideoScale / MAG_FACTOR);
+            ctx.restore(); 
             
-            ctx.restore(); // Exit Magnified Space
-            
-            // 4. Draw Sharp Crosshair and Loupe Border
-            // Drawn AFTER ctx.restore() so they are NOT blurred or thickened by MAG_FACTOR.
             ctx.save();
             ctx.beginPath();
-            const chSize = 10 * cssToVideoScale;
-            // Crosshair lines
+            const chSize = 10 * visualScale;
             ctx.moveTo(magX - chSize, magY); ctx.lineTo(magX + chSize, magY);
             ctx.moveTo(magX, magY - chSize); ctx.lineTo(magX, magY + chSize);
             ctx.strokeStyle = '#00ff00';
-            ctx.lineWidth = 1.5 * cssToVideoScale;
+            ctx.lineWidth = 1.5 * visualScale;
             ctx.stroke();
             
-            // Magnifier Border
             ctx.beginPath();
             ctx.arc(magX, magY, r, 0, 2*Math.PI);
-            ctx.lineWidth = 3 * cssToVideoScale;
+            ctx.lineWidth = 3 * visualScale;
             ctx.strokeStyle = '#ffffff';
             ctx.shadowColor = 'rgba(0,0,0,0.5)';
-            ctx.shadowBlur = 10 * cssToVideoScale;
+            ctx.shadowBlur = 10 * visualScale;
             ctx.stroke();
             ctx.restore();
         }
+        
+        ctx.restore(); 
     }
 
     // ==========================================
     // PHYSICS & MATH ANALYSIS ENGINE
     // ==========================================
-    
-    // Switches UI to Analysis Mode
     function goToAnalysis() {
         if (state.trackedPoints.length < 3) return;
         calcPhysics(); drawCharts(); fillTable();
         bootstrap.Tab.getOrCreateInstance(document.querySelector('#analysis-tab')).show();
     }
 
-    // Converts pixel coordinates into physical meters relative to the first point
     function calcPhysics() {
-        const p = state.trackedPoints, s = state.pixelsPerMeter; 
+        const p = state.trackedPoints; 
+        const s = state.pixelsPerMeter; 
         state.physicsData = [];
-        for (let i = 0; i < p.length; i++) {
-            // y is inverted in canvas space (down is positive). 
-            // Standard physics uses down as positive for freefall generally, or we just track displacement.
-            state.physicsData.push({ t: p[i].time, y: (p[i].py - state.originY)/s });
-        }
+        const originY = p.length > 0 ? p[0].py : 0;
+        for (let i = 0; i < p.length; i++) state.physicsData.push({ t: p[i].time, y: (p[i].py - originY) / s });
     }
 
-    // Performs Quadratic Regression: y = At² + Bt + C
-    // Uses the Least Squares Method solved via matrix determinants (Cramer's Rule)
     function getReg(d) {
         let st=0, st2=0, st3=0, st4=0, sy=0, sty=0, st2y=0, n=d.length;
-        
-        // Calculate all necessary sums
-        d.forEach(r => { 
-            let t=r.t, y=r.y; 
-            st+=t; st2+=t*t; st3+=t*t*t; st4+=t*t*t*t; 
-            sy+=y; sty+=t*y; st2y+=t*t*y; 
-        });
-        
-        // Helper function to calculate 3x3 matrix determinant
+        d.forEach(r => { let t=r.t, y=r.y; st+=t; st2+=t*t; st3+=t*t*t; st4+=t*t*t*t; sy+=y; sty+=t*y; st2y+=t*t*y; });
         const det = m => m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1]) - m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0]) + m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
-        
-        // System of equations to solve for A, B, C
         const D = det([[st4,st3,st2],[st3,st2,st],[st2,st,n]]);
-        if(Math.abs(D)<1e-10) return {A:0,B:0,C:0}; // Matrix is singular, cannot solve
-        
-        return { 
-            A: det([[st2y,st3,st2],[sty,st2,st],[sy,st,n]])/D, 
-            B: det([[st4,st2y,st2],[st3,sty,st],[st2,sy,n]])/D, 
-            C: det([[st4,st3,st2y],[st3,st2,sty],[st2,st,sy]])/D 
-        };
+        if(Math.abs(D)<1e-10) return {A:0,B:0,C:0}; 
+        return { A: det([[st2y,st3,st2],[sty,st2,st],[sy,st,n]])/D, B: det([[st4,st2y,st2],[st3,sty,st],[st2,sy,n]])/D, C: det([[st4,st3,st2y],[st3,st2,sty],[st2,st,sy]])/D };
     }
 
-    // Renders Chart.js Graphs and calculates Acceleration (Gravity)
     function drawCharts() {
         const t = state.physicsData.map(d=>d.t), y = state.physicsData.map(d=>d.y);
-        
-        // 1. Calculate Regression for Position (y = At² + Bt + C)
         const reg = getReg(state.physicsData);
-        const yr = t.map(x => reg.A*x*x + reg.B*x + reg.C); // Modeled position points
-        
-        // 2. Derive Velocity (v = dy/dt = 2At + B)
+        const yr = t.map(x => reg.A*x*x + reg.B*x + reg.C);
         const vr = t.map(x => 2*reg.A*x + reg.B);
-        
-        // 3. Derive Acceleration (a = dv/dt = 2A) -> This is Earth's Gravity (g)!
         const ar = t.map(x => 2*reg.A);
         
-        // Calculate R-squared (Goodness of Fit)
         const yMean = y.reduce((acc, val) => acc + val, 0) / y.length;
         const ssTot = y.reduce((acc, val) => acc + Math.pow(val - yMean, 2), 0);
         const ssRes = y.reduce((acc, val, i) => acc + Math.pow(val - yr[i], 2), 0);
         const r2 = ssTot === 0 ? 1 : 1 - (ssRes / ssTot);
 
-        // Generate equation strings for UI display
         const htmlEqY = `<i>y</i> = ${reg.A.toFixed(3)}<i>t</i>² ${reg.B>=0?'+':''}${reg.B.toFixed(3)}<i>t</i> ${reg.C>=0?'+':''}${reg.C.toFixed(3)}`;
         const textEqY = `𝑦 = ${reg.A.toFixed(3)}𝑡² ${reg.B>=0?'+':''}${reg.B.toFixed(3)}𝑡 ${reg.C>=0?'+':''}${reg.C.toFixed(3)}`;
         const textEqV = `𝑣 = ${(reg.A*2).toFixed(3)}𝑡 ${reg.B>=0?'+':''}${reg.B.toFixed(3)}`;
         const textEqA = `𝑎 = ${(reg.A*2).toFixed(3)}`;
 
-        // Display Equations and derived 'g'
-        document.getElementById('regression-equation').innerHTML = 
-            `${htmlEqY}<br><strong class="text-danger fs-6 d-block mt-1"><i>g</i> ≈ ${(reg.A*2).toFixed(2)} m s⁻²</strong>`;
+        document.getElementById('regression-equation').innerHTML = `${htmlEqY}<br><strong class="text-danger fs-6 d-block mt-1"><i>g</i> ≈ ${(reg.A*2).toFixed(2)} m s⁻²</strong>`;
 
-        // Destroy previous chart instances to prevent canvas memory leaks/glitches
-        if(posChartInst) posChartInst.destroy(); 
-        if(velChartInst) velChartInst.destroy(); 
-        if(accChartInst) accChartInst.destroy();
-        
-        // Setup Chart configurations
+        if(posChartInst) posChartInst.destroy(); if(velChartInst) velChartInst.destroy(); if(accChartInst) accChartInst.destroy();
         const tMin = Math.min(...t), tMax = Math.max(...t);
-        const getOpt = (titleText, yTitle) => ({ 
-            responsive: true, maintainAspectRatio: false, animation: false,
-            plugins: { title: { display: true, text: titleText, color: '#333', font: {size: 13} }, legend: { display: false } },
-            scales: { 
-                x: { type: 'linear', min: tMin, max: tMax, title: { display: true, text: '𝑡 / s' } },
-                y: { title: { display: true, text: yTitle } }
-            }
-        });
+        const getOpt = (titleText, yTitle) => ({ responsive: true, maintainAspectRatio: false, animation: false, plugins: { title: { display: true, text: titleText, color: '#333', font: {size: 13} }, legend: { display: false } }, scales: { x: { type: 'linear', min: tMin, max: tMax, title: { display: true, text: '𝑡 / s' } }, y: { title: { display: true, text: yTitle } } } });
 
-        // Initialize 3 separate charts
         posChartInst = new Chart(document.getElementById('posChart'), { type: 'scatter', data: { datasets: [{ type: 'scatter', label: '𝑦 / m', data: state.physicsData.map(d=>({x:d.t,y:d.y})), backgroundColor: '#0d6efd' }, { type: 'line', label: '𝑦 迴歸', data: t.map((x,i)=>({x,y:yr[i]})), borderColor: '#0d6efd', pointRadius: 0 }] }, options: getOpt(`${textEqY} (R² = ${r2.toFixed(4)})`, '𝑦 / m') });
         velChartInst = new Chart(document.getElementById('velChart'), { type: 'line', data: { datasets: [{ label: '𝑣 迴歸', data: t.map((x,i)=>({x,y:vr[i]})), borderColor: '#198754', pointRadius: 0 }] }, options: getOpt(textEqV, '𝑣 / m s⁻¹') });
         accChartInst = new Chart(document.getElementById('accChart'), { type: 'line', data: { datasets: [{ label: '𝑎 迴歸', data: t.map((x,i)=>({x,y:ar[i]})), borderColor: '#dc3545', pointRadius: 0 }] }, options: getOpt(textEqA, '𝑎 / m s⁻²') });
     }
 
-    // Populate the HTML Table with raw Position/Time data
     function fillTable() {
         const tbody = document.querySelector('#data-table tbody'); tbody.innerHTML = '';
-        state.physicsData.forEach(d => {
-            tbody.innerHTML += `<tr><td>${d.t.toFixed(3)}</td><td>${d.y.toFixed(3)}</td></tr>`;
-        });
+        state.physicsData.forEach(d => tbody.innerHTML += `<tr><td>${d.t.toFixed(3)}</td><td>${d.y.toFixed(3)}</td></tr>`);
     }
 
-    // Export tracking data as CSV for Excel/Google Sheets
     function exportCSV() {
         if(!state.physicsData.length) return;
-        // Prefix with BOM (\uFEFF) to ensure Excel reads UTF-8 characters properly
         let c = "data:text/csv;charset=utf-8,\uFEFFt(s),y(m)\n";
         state.physicsData.forEach(d => c += `${d.t.toFixed(4)},${d.y.toFixed(4)}\n`);
-        
-        // Create an invisible link to trigger the browser's download mechanic
-        const a = document.createElement("a"); 
-        a.href = encodeURI(c); 
-        a.download = "data.csv"; 
-        a.click();
+        const a = document.createElement("a"); a.href = encodeURI(c); a.download = "data.csv"; a.click();
     }
 </script>
 </body>
