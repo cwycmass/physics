@@ -6,19 +6,15 @@ DEVELOPER NOTE & ARCHITECTURE GUIDE
 Project: Free Fall Analysis (自由落體分析)
 Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
 
-1. Pure Canvas Architecture (THE ULTIMATE FIX):
-   - The <video> element is used as a data source. It is visually hidden using 
-     `opacity: 0` (NOT `display: none`, which prevents browsers from decoding frames).
-   - The Canvas engine draws BOTH the video frame (`ctx.drawImage`) AND the 
-     tracking markers using the exact same transformation matrix.
-   - This completely eliminates "Dual-Engine Drift" because CSS layout rounding 
-     no longer conflicts with Canvas math. Calibration and points will remain 
-     100% pixel-perfect locked to the video features regardless of zoom level.
-
-2. The Loupe (Magnifier) Engine:
-   - Samples the original video texture and perfectly scales it.
-   - Computes a dynamic `visualScale` factor to ensure crosshair and marker 
-     thicknesses remain crisp and identical whether zoomed at 1x or 15x.
+Updates for iPad / Touch Devices:
+- Added strict `user-select: none` and `-webkit-touch-callout: none` to prevent 
+  long-touch text selection and context menus from interfering with tracking.
+- Touch events now use `isTrackingTouch` to perfectly isolate 1-finger tracking 
+  from 2-finger panning.
+- FIX: 'hasPanned' flag is now strictly reset on mousedown, touchstart, and 
+  tool switching to prevent the "takes two clicks to register" bug after panning.
+- CSV EXPORT: Updated headers to "t / s, y / m" and aligned precision to 3 
+  decimal places to match screen display and physical measurement limits.
 =============================================================================
 -->
 <html lang="zh-HK">
@@ -31,6 +27,21 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        /* Globally disable text selection and iOS context menus for app-like feel */
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Re-enable selection for input fields only */
+        input, textarea {
+            -webkit-user-select: auto;
+            user-select: auto;
+        }
+
         body, button, input, canvas, .nav-link { touch-action: manipulation; }
         body, html { height: 100%; margin: 0; overflow: hidden; background-color: #121212; }
 
@@ -176,9 +187,7 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
                     <p class="small m-0">尚未載入影片</p>
                 </div>
                 
-                <!-- Hidden video source. Note: Using opacity: 0 instead of display: none 
-                     so the browser is still forced to decode the frames into memory! -->
-                <video id="video-element" playsinline muted style="position: absolute; opacity: 0; pointer-events: none; width: 10px; height: 10px; z-index: -1;"></video>
+                <video id="video-element" playsinline webkit-playsinline muted style="position: absolute; opacity: 0.001; pointer-events: none; width: 100%; height: 100%; left: 0; top: 0; z-index: 1;"></video>
                 <canvas id="tracking-canvas"></canvas>
             </div>
 
@@ -264,7 +273,6 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
     document.getElementById('video-upload').addEventListener('change', e => {
         if(!e.target.files[0]) return;
         
-        // Load file but don't set currentTime here yet, let loadedmetadata handle it
         video.src = URL.createObjectURL(e.target.files[0]);
         
         state.pixelsPerMeter = null;
@@ -280,17 +288,14 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
     document.getElementById('fps-input').addEventListener('change', e => state.fps = parseFloat(e.target.value) || 30);
     window.addEventListener('resize', syncCanvasSize);
     
-    // Fired when the video dimensions and duration are ready
     video.addEventListener('loadedmetadata', () => {
         state.videoLoaded = true; 
         vPlace.style.display = 'none'; 
         syncCanvasSize();
         updateSectionStates();
-        // Force video to seek slightly to guarantee the first frame is fully decoded
         video.currentTime = 0.001; 
     });
 
-    // Fallback events to ensure Canvas always redrawing when frames update
     video.addEventListener('loadeddata', redrawCanvas);
     video.addEventListener('canplay', redrawCanvas);
 
@@ -303,10 +308,15 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
     document.getElementById('analysis-tab').addEventListener('show.bs.tab', () => {
         document.getElementById('video-workspace').classList.add('d-none');
         document.getElementById('analysis-workspace').classList.remove('d-none');
+        if (state.trackedPoints.length >= 3) {
+            calcPhysics(); 
+            drawCharts(); 
+            fillTable();
+        }
     });
 
     // ==========================================
-    // CANVAS SIZING (PURE CANVAS ARCHITECTURE)
+    // CANVAS SIZING
     // ==========================================
     function syncCanvasSize() {
         if (!state.videoLoaded) return;
@@ -348,9 +358,12 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
 
     let touchTargetActive = false;
     let touchTarget = null;
+    let isTrackingTouch = false;
 
     function setTool(tool) {
         activeTool = tool;
+        isVPan = false; 
+        hasPanned = false;
         document.getElementById('tool-track').className = `btn btn-sm py-0 px-2 ${tool === 'track' ? 'btn-primary' : 'btn-outline-light'}`;
         document.getElementById('tool-pan').className = `btn btn-sm py-0 px-2 ${tool === 'pan' ? 'btn-primary' : 'btn-outline-light'}`;
         updateCursor();
@@ -443,8 +456,10 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
         redrawCanvas();
     }
 
+    // MOUSE EVENTS
     vWrapper.addEventListener('mousedown', e => {
         if (!state.videoLoaded) return;
+        hasPanned = false; 
         if ((e.button === 0 && (activeTool === 'pan' || isSpaceDown)) || e.button === 1 || e.button === 2) {
             e.preventDefault(); startPan(e.clientX, e.clientY);
         }
@@ -474,25 +489,30 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
         if (touchTargetActive) { touchTargetActive = false; redrawCanvas(); }
     });
 
-    // Advanced Touch Support (Pinch & Pan combo)
+    // ADVANCED TOUCH EVENTS
     let pinchStartDist = 0, pinchStartZoom = 1;
     let lastPinchCenter = {x: 0, y: 0};
 
     vWrapper.addEventListener('touchstart', e => {
         if (!state.videoLoaded) return;
+        hasPanned = false; 
+        
         if (e.touches.length === 2) {
             e.preventDefault();
             pinchStartDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
             pinchStartZoom = vZoom;
             lastPinchCenter = { x: (e.touches[0].clientX + e.touches[1].clientX) / 2, y: (e.touches[0].clientY + e.touches[1].clientY) / 2 };
-            isVPan = false; touchTargetActive = false; touchTarget = null; redrawCanvas();
+            
+            isVPan = false; touchTargetActive = false; touchTarget = null; isTrackingTouch = false; 
+            redrawCanvas();
         } else if (e.touches.length === 1 && (activeTool === 'pan' || isSpaceDown)) {
             e.preventDefault(); startPan(e.touches[0].clientX, e.touches[0].clientY);
         } else if (e.touches.length === 1 && activeTool === 'track' && !isSpaceDown) {
             const coords = getVideoCoords(e.touches[0].clientX, e.touches[0].clientY);
             const inBounds = coords.x >= 0 && coords.x <= video.videoWidth && coords.y >= 0 && coords.y <= video.videoHeight;
             if (inBounds) {
-                e.preventDefault();
+                e.preventDefault(); 
+                isTrackingTouch = true; 
                 if (state.loupeEnabled) touchTargetActive = true;
                 updateTouchTarget(e, true);
             }
@@ -515,7 +535,7 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
             redrawCanvas();
         } else if (isVPan && e.touches.length === 1) {
             e.preventDefault(); doPan(e.touches[0].clientX, e.touches[0].clientY);
-        } else if (touchTarget && e.touches.length === 1 && activeTool === 'track' && !isSpaceDown) {
+        } else if (isTrackingTouch && e.touches.length === 1) {
             e.preventDefault();
             const coords = getVideoCoords(e.touches[0].clientX, e.touches[0].clientY);
             const inBounds = coords.x >= -30 && coords.x <= video.videoWidth + 30 && coords.y >= -30 && coords.y <= video.videoHeight + 30;
@@ -530,12 +550,18 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
     window.addEventListener('touchend', e => {
         if (e.touches.length < 2) pinchStartDist = 0;
         endPan();
-        if (touchTarget && activeTool === 'track' && !isSpaceDown) {
-            if (e.cancelable) e.preventDefault();
-            processPoint(touchTarget.x, touchTarget.y); 
-            touchTargetActive = false; touchTarget = null;
-            state.handledTouch = true; redrawCanvas();
-            setTimeout(() => { state.handledTouch = false; }, 300);
+        
+        if (isTrackingTouch) {
+            isTrackingTouch = false;
+            if (touchTarget) {
+                if (e.cancelable) e.preventDefault();
+                processPoint(touchTarget.x, touchTarget.y); 
+            }
+            touchTargetActive = false; 
+            touchTarget = null;
+            state.handledTouch = true; 
+            redrawCanvas();
+            setTimeout(() => { state.handledTouch = false; }, 400);
         }
     });
 
@@ -556,10 +582,19 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
     function startHold(action) { if (!state.videoLoaded) return; action(); frameHoldTimer = setTimeout(() => { frameHoldInterval = setInterval(action, 60); }, 300); }
     function stopHold() { clearTimeout(frameHoldTimer); clearInterval(frameHoldInterval); }
 
-    function nextFrame() { if(state.videoLoaded) { video.currentTime = Math.min(video.duration, video.currentTime + 1/state.fps); } }
-    function prevFrame() { if(state.videoLoaded) { video.currentTime = Math.max(0, video.currentTime - 1/state.fps); } }
+    function nextFrame() { 
+        if(state.videoLoaded) { 
+            video.currentTime = Math.min(video.duration, video.currentTime + 1/state.fps); 
+            document.getElementById('time-display').innerText = video.currentTime.toFixed(3); 
+        } 
+    }
+    function prevFrame() { 
+        if(state.videoLoaded) { 
+            video.currentTime = Math.max(0, video.currentTime - 1/state.fps); 
+            document.getElementById('time-display').innerText = video.currentTime.toFixed(3); 
+        } 
+    }
     
-    // This is vital: Redraws canvas every time the video's playhead moves
     video.addEventListener('seeked', () => { 
         document.getElementById('time-display').innerText = video.currentTime.toFixed(3); 
         redrawCanvas(); 
@@ -640,7 +675,10 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
         if (state.trackedPoints.length === 0) state.pointIdCounter = 0;
         
         updateUI();
-        if (state.videoLoaded) video.currentTime = removedPoint.time; else redrawCanvas();
+        if (state.videoLoaded) {
+            video.currentTime = removedPoint.time; 
+            document.getElementById('time-display').innerText = video.currentTime.toFixed(3);
+        } else redrawCanvas();
     }
 
     vWrapper.addEventListener('click', e => {
@@ -701,11 +739,9 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
         const dpr = window.devicePixelRatio || 1;
         ctx.setTransform(1, 0, 0, 1, 0, 0); 
         
-        // Always fill background
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // Safety check to ensure video is fully ready before drawing
         if (!state.videoLoaded || video.videoWidth === 0 || video.videoHeight === 0) return;
         
         const base = getBaseVideoRect();
@@ -717,20 +753,16 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
         ctx.save();
         ctx.scale(dpr, dpr);
         
-        // 1. Draw the Video Frame strictly using the Canvas engine
         ctx.drawImage(video, curX, curY, curW, curH);
         
-        // 2. Map coordinates exactly to the video bounds
         ctx.translate(curX, curY);
         const scaleX = curW / video.videoWidth;
         const scaleY = curH / video.videoHeight;
         ctx.scale(scaleX, scaleY);
         
-        // 3. Keep markers physically identical sized regardless of zoom
         const visualScale = 1 / scaleX; 
         drawAllMarkers(ctx, visualScale);
 
-        // 4. Render the Loupe
         if (touchTargetActive && touchTarget) {
             const MAG_FACTOR = 2; 
             const r = 60 * visualScale; 
@@ -755,7 +787,6 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
             ctx.scale(MAG_FACTOR, MAG_FACTOR);
             ctx.translate(-actualX, -actualY);
             
-            // Draw original video texture directly inside the magnified loupe area
             ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
             drawAllMarkers(ctx, visualScale / MAG_FACTOR);
             
@@ -788,7 +819,6 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
     // ==========================================
     function goToAnalysis() {
         if (state.trackedPoints.length < 3) return;
-        calcPhysics(); drawCharts(); fillTable();
         bootstrap.Tab.getOrCreateInstance(document.querySelector('#analysis-tab')).show();
     }
 
@@ -844,8 +874,8 @@ Tech Stack: HTML5 Canvas, Vanilla JavaScript, Bootstrap 5.3, Chart.js
 
     function exportCSV() {
         if(!state.physicsData.length) return;
-        let c = "data:text/csv;charset=utf-8,\uFEFFt(s),y(m)\n";
-        state.physicsData.forEach(d => c += `${d.t.toFixed(4)},${d.y.toFixed(4)}\n`);
+        let c = "data:text/csv;charset=utf-8,\uFEFFt / s,y / m\n";
+        state.physicsData.forEach(d => c += `${d.t.toFixed(3)},${d.y.toFixed(3)}\n`);
         const a = document.createElement("a"); a.href = encodeURI(c); a.download = "data.csv"; a.click();
     }
 </script>
