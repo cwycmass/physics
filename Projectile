@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拋體運動分析 - 廠商會中學物理科</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-container {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .card-header {
+            font-weight: 600;
+            background-color: #e9ecef;
+            border-bottom: 1px solid #dee2e6;
+        }
+        /* Flexbox Layout Updates for 100vh fitting */
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-container {
+            flex-grow: 1;
+            padding: 15px;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .content-row {
+            flex-grow: 1;
+            min-height: 0;
+            margin: 0;
+        }
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow-y: auto;
+            padding-right: 15px;
+            /* Divider line removed */
+        }
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 0;
+            padding-left: 0;
+            padding: 15px;
+        }
+        .tab-content {
+            flex-grow: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .tab-content > .tab-pane {
+            height: 100%;
+            flex-direction: column;
+        }
+        .tab-content > .active {
+            display: flex; /* Override Bootstrap's display: block to maintain flex layout */
+        }
+        .flex-card {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .flex-card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            padding: 0.5rem;
+        }
+        .simulation-canvas-container {
+            background-color: transparent;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            position: relative;
+            flex-grow: 1;
+            min-height: 0;
+            width: 100%;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.2rem;
+            font-size: 0.95rem;
+        }
+        .data-table-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+        }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 0.35rem;
+            height: 100%;
+            width: 100%;
+        }
+        .chart-cell {
+            position: relative;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            padding: 4px;
+            background: #fff;
+            min-height: 0;
+            min-width: 0;
+            height: 100%;
+            width: 100%;
+        }
+        .footer-text {
+            color: #6c757d;
+            font-size: 0.75rem;
+            text-align: center;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid #dee2e6;
+        }
+        .nav-tabs .nav-link {
+            color: #495057;
+            font-weight: 600;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 0.4rem 0.8rem; /* Reduced padding */
+            font-size: 0.9rem; /* Reduced font size */
+        }
+        .nav-tabs .nav-link.active {
+            color: #0d6efd;
+            background-color: #fff;
+            border-bottom-color: #fff;
+        }
+        var, i {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid main-container">
+        <div class="row content-row">
+            
+            <!-- Left Column: Title, Controls and Footer -->
+            <div class="col-lg-3 col-md-4 mb-3 mb-md-0 left-panel">
+                
+                <h4 class="mb-3 text-primary fw-bold">
+                    <i class="fa-solid fa-rocket me-2"></i>拋體運動分析
+                </h4>
+
+                <!-- Card 1: Parameters -->
+                <div class="card shadow-sm mb-2">
+                    <div class="card-header text-primary py-2">
+                        <i class="fa-solid fa-sliders me-2"></i>參數設定
+                    </div>
+                    <div class="card-body py-2">
+                        <!-- Initial Velocity -->
+                        <div class="mb-2">
+                            <div class="control-label">
+                                <span>初速 (<i>u</i>):</span>
+                                <span id="val-u" class="fw-bold text-primary">15.0 m s<sup>-1</sup></span>
+                            </div>
+                            <input type="range" class="form-range" id="input-u" min="1" max="686" step="1" value="15">
+                        </div>
+                        
+                        <!-- Launch Angle -->
+                        <div class="mb-2">
+                            <div class="control-label">
+                                <span>發射角 (<i>θ</i>):</span>
+                                <span id="val-theta" class="fw-bold text-primary">45°</span>
+                            </div>
+                            <input type="range" class="form-range" id="input-theta" min="0" max="90" step="1" value="45">
+                        </div>
+
+                        <!-- Initial Height -->
+                        <div class="mb-2">
+                            <div class="control-label">
+                                <span>初始高度 (<i>h</i>):</span>
+                                <span id="val-h" class="fw-bold text-primary">0.0 m</span>
+                            </div>
+                            <input type="range" class="form-range" id="input-h" min="0" max="300" step="1" value="0">
+                        </div>
+
+                        <!-- Gravity -->
+                        <div class="mb-2">
+                            <div class="control-label">
+                                <span>重力加速度 (<i>g</i>):</span>
+                                <span id="val-g" class="fw-bold text-primary">9.81 m s<sup>-2</sup></span>
+                            </div>
+                            <select class="form-select form-select-sm" id="input-g">
+                                <option value="9.81" selected>地球 (9.81 m s⁻²)</option>
+                                <option value="1.62">月球 (1.62 m s⁻²)</option>
+                                <option value="3.71">火星 (3.71 m s⁻²)</option>
+                                <option value="0">無重力 (0 m s⁻²)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Controls -->
+                <div class="card shadow-sm mb-2">
+                    <div class="card-header text-success py-2">
+                        <i class="fa-solid fa-gamepad me-2"></i>模擬控制
+                    </div>
+                    <div class="card-body text-center py-2 d-flex gap-2">
+                        <button id="btn-play" class="btn btn-success flex-grow-1 fw-bold"><i class="fa-solid fa-rocket me-2"></i>發射</button>
+                        <button id="btn-clear" class="btn btn-outline-danger fw-bold" title="清除所有"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="footer-text mt-auto pt-2">
+                    廠商會中學．物理科
+                </div>
+            </div>
+
+            <!-- Right Column: Visualization, Charts, Data Tabs -->
+            <div class="col-lg-9 col-md-8 right-panel">
+                
+                <!-- Right Nav Tabs -->
+                <ul class="nav nav-tabs mb-2" id="rightTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="viz-tab" data-bs-toggle="tab" data-bs-target="#viz-pane" type="button" role="tab" aria-controls="viz-pane" aria-selected="true">
+                            <i class="fa-solid fa-display me-1"></i> 視覺化
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="chart-tab" data-bs-toggle="tab" data-bs-target="#chart-pane" type="button" role="tab" aria-controls="chart-pane" aria-selected="false">
+                            <i class="fa-solid fa-chart-line me-1"></i> 運動圖表
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="data-tab" data-bs-toggle="tab" data-bs-target="#data-pane" type="button" role="tab" aria-controls="data-pane" aria-selected="false">
+                            <i class="fa-solid fa-table me-1"></i> 分析數據
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Right Tabs Content -->
+                <div class="tab-content" id="rightTabsContent">
+                    
+                    <!-- Tab 1: Visualization -->
+                    <div class="tab-pane fade show active" id="viz-pane" role="tabpanel" aria-labelledby="viz-tab" tabindex="0">
+                        <div class="card shadow-sm flex-card">
+                            <div class="card-header d-flex justify-content-between align-items-center py-2">
+                                <span>模擬畫面</span>
+                                <span id="live-stats" class="badge bg-primary fs-6"><i>t</i>: 0.00 s | <i>x</i>: 0.00 m | <i>y</i>: 0.00 m</span>
+                            </div>
+                            <div class="card-body flex-card-body">
+                                <div class="simulation-canvas-container">
+                                    <canvas id="sim-canvas"></canvas>
+                                </div>
+                                <div class="mt-2 row text-center fs-6 text-muted">
+                                    <div class="col-4">最大高度: <span id="stat-max-h" class="fw-bold text-dark">0.00</span> m</div>
+                                    <div class="col-4">飛行時間: <span id="stat-time" class="fw-bold text-dark">0.00</span> s</div>
+                                    <div class="col-4">水平射程: <span id="stat-range" class="fw-bold text-dark">0.00</span> m</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: Charts (6 Graphs) -->
+                    <div class="tab-pane fade" id="chart-pane" role="tabpanel" aria-labelledby="chart-tab" tabindex="0">
+                        <div class="card shadow-sm flex-card">
+                            <div class="card-body flex-card-body p-1">
+                                <div class="chart-grid">
+                                    <div class="chart-cell"><canvas id="chart-x"></canvas></div>
+                                    <div class="chart-cell"><canvas id="chart-y"></canvas></div>
+                                    <div class="chart-cell"><canvas id="chart-vx"></canvas></div>
+                                    <div class="chart-cell"><canvas id="chart-vy"></canvas></div>
+                                    <div class="chart-cell"><canvas id="chart-ax"></canvas></div>
+                                    <div class="chart-cell"><canvas id="chart-ay"></canvas></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 3: Data -->
+                    <div class="tab-pane fade" id="data-pane" role="tabpanel" aria-labelledby="data-tab" tabindex="0">
+                        <div class="card shadow-sm flex-card">
+                            <div class="card-header text-end py-1 border-bottom-0">
+                                <button id="btn-csv" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-download me-1"></i>下載 CSV</button>
+                            </div>
+                            <div class="card-body flex-card-body p-0">
+                                <div class="data-table-container">
+                                    <table class="table table-striped table-hover mb-0 text-center" id="data-table">
+                                        <thead class="table-light sticky-top">
+                                            <tr>
+                                                <th><i>t</i> / s</th>
+                                                <th><i>x</i> / m</th>
+                                                <th><i>y</i> / m</th>
+                                                <th><i>v<sub>x</sub></i> / m s<sup>-1</sup></th>
+                                                <th><i>v<sub>y</sub></i> / m s<sup>-1</sup></th>
+                                                <th><i>a<sub>x</sub></i> / m s<sup>-2</sup></th>
+                                                <th><i>a<sub>y</sub></i> / m s<sup>-2</sup></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Data rows injected via JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS for Tabs functionality -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Simulation Logic -->
+    <script>
+        // DOM Elements
+        const inputs = {
+            u: document.getElementById('input-u'),
+            theta: document.getElementById('input-theta'),
+            h: document.getElementById('input-h'),
+            g: document.getElementById('input-g')
+        };
+        const displays = {
+            u: document.getElementById('val-u'),
+            theta: document.getElementById('val-theta'),
+            h: document.getElementById('val-h'),
+            g: document.getElementById('val-g')
+        };
+        const stats = {
+            live: document.getElementById('live-stats'),
+            maxH: document.getElementById('stat-max-h'),
+            time: document.getElementById('stat-time'),
+            range: document.getElementById('stat-range')
+        };
+        const btns = {
+            play: document.getElementById('btn-play'),
+            clear: document.getElementById('btn-clear'),
+            csv: document.getElementById('btn-csv')
+        };
+        const tbody = document.querySelector('#data-table tbody');
+        const canvas = document.getElementById('sim-canvas');
+        const ctx = canvas.getContext('2d');
+
+        const MAX_PROJECTILES = 10;
+
+        // Physics State
+        let state = {
+            projectiles: [], // Stores multiple active projectiles
+            pastSimulations: [], // Stores previous histories
+            animFrameId: null,
+            lastTimestamp: null
+        };
+
+        // Charts Dictionary
+        let charts = {};
+
+        // Scale factors for canvas
+        let scale = 1;
+        let originX = 50;
+        let originY = 350;
+
+        // Initialize Application
+        function init() {
+            // Resize Canvas
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // Tab change event to resize canvas properly if previously hidden
+            document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(tab => {
+                tab.addEventListener('shown.bs.tab', event => {
+                    if (event.target.id === 'viz-tab') {
+                        resizeCanvas();
+                    }
+                });
+            });
+
+            // Bind Event Listeners
+            Object.keys(inputs).forEach(key => {
+                inputs[key].addEventListener('input', updateParams);
+            });
+            btns.play.addEventListener('click', playSim);
+            btns.clear.addEventListener('click', clearAll);
+            btns.csv.addEventListener('click', downloadCSV);
+
+            // Chart.js Light Mode Defaults
+            Chart.defaults.color = '#6c757d';
+            Chart.defaults.borderColor = '#dee2e6';
+
+            // Init Charts
+            initCharts();
+
+            // Initial Draw
+            updateParams();
+            // Setup initial drawing state
+            const p = getParams();
+            state.y = p.h;
+            calculateScale();
+            drawFrame();
+        }
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            originY = canvas.height - 40;
+            originX = 40;
+            drawFrame(); // Redraw if paused
+        }
+
+        function getParams() {
+            return {
+                u: parseFloat(inputs.u.value),
+                theta: parseFloat(inputs.theta.value) * (Math.PI / 180), // Convert to radians
+                h: parseFloat(inputs.h.value),
+                g: parseFloat(inputs.g.value)
+            };
+        }
+
+        function updateParams() {
+            const p = getParams();
+            displays.u.innerHTML = `${p.u.toFixed(1)} m s<sup>-1</sup>`;
+            displays.theta.innerHTML = `${inputs.theta.value}°`;
+            displays.h.innerHTML = `${p.h.toFixed(1)} m`;
+            displays.g.innerHTML = `${p.g} m s<sup>-2</sup>`;
+            
+            if(state.projectiles.length === 0) {
+                // If no active simulations, update the preview state
+                calculateScale();
+                drawFrame();
+            }
+        }
+
+        function calculateScale() {
+            const p = getParams();
+            // Estimate max range and max height to fit canvas
+            const v0x = p.u * Math.cos(p.theta);
+            const v0y = p.u * Math.sin(p.theta);
+            
+            // Time to peak
+            const tPeak = p.g > 0 ? v0y / p.g : 0;
+            const maxH = p.h + (p.g > 0 ? (v0y * v0y) / (2 * p.g) : p.h + v0y * 5); // Fallback for 0g
+
+            // Total time (quadratic equation: -0.5*g*t^2 + v0y*t + h = 0)
+            let tTotal = 0;
+            if (p.g > 0) {
+                tTotal = (v0y + Math.sqrt(v0y * v0y + 2 * p.g * p.h)) / p.g;
+            } else {
+                tTotal = 10; // arbitrary max time for 0g
+            }
+            
+            const maxR = v0x * tTotal;
+
+            // Stats update
+            stats.maxH.innerText = maxH.toFixed(2);
+            stats.time.innerText = tTotal.toFixed(2);
+            stats.range.innerText = maxR.toFixed(2);
+
+            // Calculate scale (pixels per meter)
+            const availableWidth = canvas.width - originX - 40;
+            const availableHeight = originY - 40;
+            
+            const scaleX = maxR > 0 ? availableWidth / (maxR * 1.1) : 10;
+            const scaleY = maxH > 0 ? availableHeight / (maxH * 1.2) : 10;
+            
+            scale = Math.min(scaleX, scaleY);
+            if (scale < 0.0001) scale = 0.0001; // Allow zooming out for huge ranges, prevent 0
+        }
+
+        function updateLaunchButton() {
+            if (state.projectiles.length >= MAX_PROJECTILES) {
+                btns.play.disabled = true;
+                btns.play.innerHTML = '<i class="fa-solid fa-hourglass-half me-2"></i>冷卻中...';
+                btns.play.classList.replace('btn-success', 'btn-secondary');
+            } else {
+                btns.play.disabled = false;
+                btns.play.innerHTML = '<i class="fa-solid fa-rocket me-2"></i>發射';
+                btns.play.classList.replace('btn-secondary', 'btn-success');
+            }
+        }
+
+        function clearAll() {
+            // Stop any ongoing animation
+            if (state.animFrameId) {
+                cancelAnimationFrame(state.animFrameId);
+                state.animFrameId = null;
+            }
+            state.lastTimestamp = null;
+            
+            // Clear all projectiles and history
+            state.projectiles = [];
+            state.pastSimulations = [];
+            
+            // Reset UI components
+            clearData();
+            updateLaunchButton();
+            stats.live.innerHTML = `<i>t</i>: 0.00 s | <i>x</i>: 0.00 m | <i>y</i>: 0.00 m`;
+            
+            // Redraw empty state
+            calculateScale();
+            drawFrame();
+        }
+
+        function playSim() {
+            if (state.projectiles.length >= MAX_PROJECTILES) return;
+
+            const p = getParams();
+            
+            // Mark all currently active projectiles as older
+            state.projectiles.forEach(pr => pr.isLatest = false);
+
+            // Create new projectile instance
+            const newProj = {
+                t: 0,
+                x: 0,
+                y: p.h,
+                vx: p.u * Math.cos(p.theta),
+                vy: p.u * Math.sin(p.theta),
+                g: p.g,
+                h: p.h,
+                history: [],
+                lastRecordTime: 0,
+                isLatest: true
+            };
+
+            state.projectiles.push(newProj);
+            
+            calculateScale();
+            clearData();
+            recordData(newProj); // Record t=0
+
+            updateLaunchButton();
+            
+            // Start loop if not already running
+            if (!state.animFrameId) {
+                state.lastTimestamp = null;
+                state.animFrameId = requestAnimationFrame(simulationLoop);
+            }
+        }
+
+        const SIM_SPEED = 1.0; // 1 real second = 1 sim second
+
+        function simulationLoop(timestamp) {
+            if (state.lastTimestamp === null) {
+                state.lastTimestamp = timestamp;
+            }
+
+            // Calculate delta time in seconds, capped at 0.1s to prevent huge jumps
+            let dt = ((timestamp - state.lastTimestamp) / 1000) * SIM_SPEED;
+            if (dt > 0.1) dt = 0.1;
+            
+            state.lastTimestamp = timestamp;
+
+            // Skip frame if dt is zero or negative
+            if (dt <= 0) {
+                state.animFrameId = requestAnimationFrame(simulationLoop);
+                return;
+            }
+
+            // Loop backwards so we can safely remove landed projectiles
+            for (let i = state.projectiles.length - 1; i >= 0; i--) {
+                let pr = state.projectiles[i];
+
+                // Update Physics
+                pr.t += dt;
+                pr.x = pr.vx * pr.t;
+                pr.y = pr.h + (pr.vy * pr.t) - (0.5 * pr.g * pr.t * pr.t);
+                
+                // Check ground collision
+                if (pr.y <= 0) {
+                    pr.y = 0;
+                    // Interpolate exact landing time
+                    if (pr.g > 0) {
+                        pr.t = (pr.vy + Math.sqrt(pr.vy * pr.vy + 2 * pr.g * pr.h)) / pr.g;
+                        pr.x = pr.vx * pr.t;
+                    }
+                    
+                    if (pr.isLatest) recordData(pr); // Final record
+                    else {
+                        pr.history.push({
+                            t: pr.t, x: pr.x, y: pr.y, 
+                            vx: pr.vx, vy: pr.vy - pr.g * pr.t, 
+                            ax: 0, ay: -pr.g
+                        });
+                    }
+
+                    // Archive to past simulations
+                    state.pastSimulations.push([...pr.history]);
+                    if (state.pastSimulations.length > 5) {
+                        state.pastSimulations.shift();
+                    }
+
+                    // Remove from active list
+                    state.projectiles.splice(i, 1);
+                    updateLaunchButton();
+                } else {
+                    // Record data at smaller intervals to ensure smooth curve
+                    if (pr.t - pr.lastRecordTime >= 0.015) {
+                        if (pr.isLatest) recordData(pr);
+                        else {
+                            pr.history.push({
+                                t: pr.t, x: pr.x, y: pr.y, 
+                                vx: pr.vx, vy: pr.vy - pr.g * pr.t, 
+                                ax: 0, ay: -pr.g
+                            });
+                        }
+                        pr.lastRecordTime = pr.t;
+                    }
+                }
+            }
+
+            // Update UI Stats for newest projectile
+            let latestPr = state.projectiles.find(p => p.isLatest);
+            if (latestPr) {
+                updateLiveStats(latestPr);
+            }
+
+            drawFrame();
+
+            // Keep looping if there are any flying projectiles left
+            if (state.projectiles.length > 0) {
+                state.animFrameId = requestAnimationFrame(simulationLoop);
+            } else {
+                state.animFrameId = null;
+                state.lastTimestamp = null;
+            }
+        }
+
+        function updateLiveStats(pr) {
+            stats.live.innerHTML = `<i>t</i>: ${pr.t.toFixed(2)} s | <i>x</i>: ${pr.x.toFixed(2)} m | <i>y</i>: ${pr.y.toFixed(2)} m`;
+        }
+
+        function drawFrame() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Ground and Axes
+            ctx.beginPath();
+            ctx.strokeStyle = '#ced4da';
+            ctx.lineWidth = 2;
+            ctx.moveTo(0, originY);
+            ctx.lineTo(canvas.width, originY);
+            ctx.moveTo(originX, 0);
+            ctx.lineTo(originX, canvas.height);
+            ctx.stroke();
+
+            // Calculate dynamic step size for grid to prevent text overlap
+            const minPixelDist = 45; // Minimum pixels between labels
+            const rawStep = minPixelDist / scale;
+            const power = Math.floor(Math.log10(rawStep));
+            const f = rawStep / Math.pow(10, power);
+            // Snap to "nice" intervals (1, 2, 5, 10...)
+            const niceF = (f < 1.5) ? 1 : (f < 3) ? 2 : (f < 7) ? 5 : 10;
+            const step = niceF * Math.pow(10, power) || 1;
+
+            // Helper to format label (handle decimals for very zoomed-in views)
+            const formatLabel = (val) => step < 1 ? val.toFixed(1) : val.toString();
+
+            // Draw Grid marks
+            ctx.fillStyle = '#6c757d';
+            ctx.font = '10px Arial';
+            
+            // X axis marks
+            ctx.textAlign = 'center';
+            for(let i=0; i< (canvas.width/scale); i+=step) {
+                let px = originX + i * scale;
+                ctx.fillRect(px, originY - 3, 2, 6);
+                if(i>0) ctx.fillText(formatLabel(i), px, originY + 15);
+            }
+            
+            // Y axis marks
+            ctx.textAlign = 'right';
+            for(let i=0; i< (originY/scale); i+=step) {
+                let py = originY - i * scale;
+                ctx.fillRect(originX - 3, py, 6, 2);
+                if(i>0) ctx.fillText(formatLabel(i), originX - 8, py + 4);
+            }
+
+            // Proper Visualization Labels
+            ctx.textAlign = 'left'; // Reset text alignment
+            ctx.fillStyle = '#495057';
+            ctx.font = '13px "Times New Roman"';
+            ctx.fillText('𝑥 / m', canvas.width - 40, originY - 15);
+            ctx.fillText('𝑦 / m', originX + 10, 20);
+
+            // Draw Past Simulations (Dotted, fading)
+            state.pastSimulations.forEach((sim, index) => {
+                ctx.beginPath();
+                // Opacity increases as index increases (older = more transparent)
+                let alpha = ((index + 1) / (state.pastSimulations.length + 1)) * 0.6;
+                ctx.strokeStyle = `rgba(13, 110, 253, ${alpha})`;
+                ctx.lineWidth = 2;
+                ctx.setLineDash([4, 4]); // Dotted line
+                
+                sim.forEach((pt, i) => {
+                    let px = originX + pt.x * scale;
+                    let py = originY - pt.y * scale;
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                });
+                ctx.stroke();
+            });
+
+            ctx.setLineDash([]); // Reset dash for other elements
+
+            // Draw Initial Height Platform if > 0
+            const params = getParams();
+            if(params.h > 0) {
+                ctx.fillStyle = '#adb5bd';
+                let platH = params.h * scale;
+                ctx.fillRect(originX - 20, originY - platH, 20, platH);
+            }
+
+            // Draw Active Projectiles
+            state.projectiles.forEach((pr) => {
+                // Trajectory Line
+                if (pr.history.length > 0) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = pr.isLatest ? '#0d6efd' : '#0a58ca';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([]);
+                    
+                    pr.history.forEach((pt, index) => {
+                        let px = originX + pt.x * scale;
+                        let py = originY - pt.y * scale;
+                        if (index === 0) ctx.moveTo(px, py);
+                        else ctx.lineTo(px, py);
+                    });
+                    
+                    let currPx = originX + pr.x * scale;
+                    let currPy = originY - pr.y * scale;
+                    ctx.lineTo(currPx, currPy);
+                    ctx.stroke();
+                }
+
+                // Projectile Ball
+                let px = originX + pr.x * scale;
+                let py = originY - pr.y * scale;
+                
+                ctx.beginPath();
+                ctx.arc(px, py, 8, 0, Math.PI * 2);
+                ctx.fillStyle = pr.isLatest ? '#dc3545' : '#ffc107'; // Red for newest, Yellow for older
+                ctx.fill();
+                ctx.strokeStyle = '#212529';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
+        }
+
+        // --- Data & Charts ---
+
+        function createChart(ctxElement, yTitle, color) {
+            return new Chart(ctxElement, {
+                type: 'scatter',
+                data: { datasets: [{ data: [], borderColor: color, backgroundColor: color, showLine: true }] },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 0 },
+                    elements: { 
+                        point: { radius: 1.5 },
+                        line: { tension: 0 } // tension: 0 prevents the bezier curve from overshooting
+                    },
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: { 
+                                display: true, 
+                                text: '𝑡 / s',
+                                font: { family: '"Times New Roman", Times, serif' }
+                            },
+                            min: 0
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: { 
+                                display: true, 
+                                text: yTitle,
+                                font: { family: '"Times New Roman", Times, serif' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initCharts() {
+            charts.x = createChart(document.getElementById('chart-x').getContext('2d'), '𝑥 / m', '#0d6efd');
+            charts.y = createChart(document.getElementById('chart-y').getContext('2d'), '𝑦 / m', '#dc3545');
+            charts.vx = createChart(document.getElementById('chart-vx').getContext('2d'), '𝑣ₓ / m s⁻¹', '#0dcaf0');
+            charts.vy = createChart(document.getElementById('chart-vy').getContext('2d'), '𝑣ᵧ / m s⁻¹', '#fd7e14');
+            charts.ax = createChart(document.getElementById('chart-ax').getContext('2d'), '𝑎ₓ / m s⁻²', '#6c757d');
+            charts.ay = createChart(document.getElementById('chart-ay').getContext('2d'), '𝑎ᵧ / m s⁻²', '#20c997');
+        }
+
+        function recordData(pr) {
+            // Calculate Instantaneous Physics values
+            const curr_vx = pr.vx;
+            const curr_vy = pr.vy - pr.g * pr.t;
+            const curr_ax = 0;
+            const curr_ay = -pr.g;
+
+            const pt = { 
+                t: pr.t, x: pr.x, y: pr.y, 
+                vx: curr_vx, vy: curr_vy, 
+                ax: curr_ax, ay: curr_ay 
+            };
+            pr.history.push(pt);
+
+            // Update Table
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${pt.t.toFixed(2)}</td>
+                             <td>${pt.x.toFixed(2)}</td>
+                             <td>${pt.y.toFixed(2)}</td>
+                             <td>${pt.vx.toFixed(2)}</td>
+                             <td>${pt.vy.toFixed(2)}</td>
+                             <td>${pt.ax.toFixed(2)}</td>
+                             <td>${pt.ay.toFixed(2)}</td>`;
+            tbody.appendChild(row);
+
+            // Scroll table to bottom
+            const container = document.querySelector('.data-table-container');
+            container.scrollTop = container.scrollHeight;
+
+            // Update Charts
+            charts.x.data.datasets[0].data.push({ x: pt.t, y: pt.x });
+            charts.y.data.datasets[0].data.push({ x: pt.t, y: pt.y });
+            charts.vx.data.datasets[0].data.push({ x: pt.t, y: pt.vx });
+            charts.vy.data.datasets[0].data.push({ x: pt.t, y: pt.vy });
+            charts.ax.data.datasets[0].data.push({ x: pt.t, y: pt.ax });
+            charts.ay.data.datasets[0].data.push({ x: pt.t, y: pt.ay });
+
+            Object.values(charts).forEach(chart => chart.update());
+        }
+
+        function clearData() {
+            tbody.innerHTML = '';
+            Object.values(charts).forEach(chart => {
+                chart.data.datasets[0].data = [];
+                chart.update();
+            });
+        }
+
+        function downloadCSV() {
+            let targetHistory = [];
+            let latestPr = state.projectiles.find(p => p.isLatest);
+            
+            // Get data from newest active projectile, or the last completed one
+            if (latestPr) {
+                targetHistory = latestPr.history;
+            } else if (state.pastSimulations.length > 0) {
+                targetHistory = state.pastSimulations[state.pastSimulations.length - 1];
+            }
+
+            if (targetHistory.length === 0) {
+                alert("沒有數據可供下載。請先運行模擬。");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "t / s,x / m,y / m,v_x / m s^-1,v_y / m s^-1,a_x / m s^-2,a_y / m s^-2\n";
+
+            targetHistory.forEach(row => {
+                csvContent += `${row.t.toFixed(3)},${row.x.toFixed(3)},${row.y.toFixed(3)},${row.vx.toFixed(3)},${row.vy.toFixed(3)},${row.ax.toFixed(3)},${row.ay.toFixed(3)}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "projectile_data.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Run Init
+        window.onload = init;
+    </script>
+</body>
+</html>
