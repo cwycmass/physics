@@ -2,37 +2,34 @@
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>拋體運動分析 - 廠商會中學物理科</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ==========================================================================
+           [DEV NOTES: CSS Architecture]
+           - Layout: Uses Flexbox to strictly lock the app to 100vh (viewport height), 
+             preventing whole-page scrolling.
+           - 'min-height: 0': This is a crucial trick used on flex/grid children here. 
+             It prevents Chart.js canvases from expanding indefinitely and breaking out 
+             of their containers.
+           - Grid: The chart section uses CSS Grid for exactly 6 equal cells regardless 
+             of aspect ratio.
+           ========================================================================== */
+        
+        /* Consolidated and iPad/Mobile optimized body */
         body {
             background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh;
+            height: 100vh; /* Fallback for older browsers */
+            height: 100dvh; /* Dynamic viewport height for iOS/iPad Safari */
+            overflow: hidden; /* Prevent entire page from scrolling */
             display: flex;
             flex-direction: column;
-        }
-        .main-container {
-            flex-grow: 1;
-            padding: 20px;
-        }
-        .card-header {
-            font-weight: 600;
-            background-color: #e9ecef;
-            border-bottom: 1px solid #dee2e6;
-        }
-        /* Flexbox Layout Updates for 100vh fitting */
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            touch-action: manipulation; /* Disable double-tap to zoom globally */
         }
         .main-container {
             flex-grow: 1;
@@ -40,6 +37,11 @@
             min-height: 0;
             display: flex;
             flex-direction: column;
+        }
+        .card-header {
+            font-weight: 600;
+            background-color: #e9ecef;
+            border-bottom: 1px solid #dee2e6;
         }
         .content-row {
             flex-grow: 1;
@@ -101,6 +103,7 @@
             display: block;
             width: 100%;
             height: 100%;
+            touch-action: none; /* Disable all pinch-zoom and panning on canvas specifically */
         }
         .control-label {
             display: flex;
@@ -159,6 +162,21 @@
         var, i {
             font-family: 'Times New Roman', Times, serif;
             font-style: italic;
+        }
+
+        /* Responsive tweaks specifically for iPad Landscape or shorter screens */
+        @media (max-height: 850px) {
+            .main-container { padding: 8px; }
+            .left-panel { padding-right: 8px; }
+            .right-panel { padding: 8px; }
+            .card-header { padding: 0.3rem 0.5rem !important; font-size: 0.9rem; }
+            .card-body { padding: 0.3rem 0.5rem !important; }
+            .mb-2 { margin-bottom: 0.3rem !important; }
+            h4.mb-3 { margin-bottom: 0.5rem !important; font-size: 1.1rem; }
+            .control-label { font-size: 0.85rem; margin-bottom: 0.1rem; }
+            input[type="range"] { height: 1.2rem; margin-top: 0; }
+            .btn { padding: 0.25rem 0.5rem; font-size: 0.95rem; }
+            .footer-text { padding-top: 0.5rem; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -342,6 +360,15 @@
 
     <!-- Simulation Logic -->
     <script>
+        /* ==========================================================================
+           [DEV NOTES: JavaScript Architecture]
+           - Rendering: Uses an Immediate Mode GUI pattern for the canvas. The canvas 
+             is completely cleared and redrawn every frame via `requestAnimationFrame`.
+           - State Management: All volatile data is kept in the `state` object. 
+             Projectiles are tracked in an array to allow multiple simultaneous flights.
+           - Physics Engine: Uses basic Euler integration formulas.
+           ========================================================================== */
+
         // DOM Elements
         const inputs = {
             u: document.getElementById('input-u'),
@@ -459,40 +486,77 @@
             }
         }
 
-        function calculateScale() {
-            const p = getParams();
-            // Estimate max range and max height to fit canvas
+        function getTrajectoryBounds(p) {
+            // [DEV] Calculates all theoretical max limits of the trajectory
             const v0x = p.u * Math.cos(p.theta);
             const v0y = p.u * Math.sin(p.theta);
             
-            // Time to peak
-            const tPeak = p.g > 0 ? v0y / p.g : 0;
-            const maxH = p.h + (p.g > 0 ? (v0y * v0y) / (2 * p.g) : p.h + v0y * 5); // Fallback for 0g
-
-            // Total time (quadratic equation: -0.5*g*t^2 + v0y*t + h = 0)
             let tTotal = 0;
+            let maxH = 0;
+            
             if (p.g > 0) {
                 tTotal = (v0y + Math.sqrt(v0y * v0y + 2 * p.g * p.h)) / p.g;
+                maxH = p.h + (v0y * v0y) / (2 * p.g);
             } else {
                 tTotal = 10; // arbitrary max time for 0g
+                maxH = p.h + v0y * 5; // Fallback for 0g
             }
             
             const maxR = v0x * tTotal;
+            const vfy = v0y - p.g * tTotal;
+            
+            return { tTotal, maxH, maxR, v0x, v0y, vfy };
+        }
+
+        function calculateScale() {
+            // [DEV] Estimates the maximum bounds (peak height & max range) of the trajectory 
+            // before launch to automatically set the camera zoom (scale) to fit perfectly.
+            const p = getParams();
+            const b = getTrajectoryBounds(p);
 
             // Stats update
-            stats.maxH.innerText = maxH.toFixed(2);
-            stats.time.innerText = tTotal.toFixed(2);
-            stats.range.innerText = maxR.toFixed(2);
+            stats.maxH.innerText = b.maxH.toFixed(2);
+            stats.time.innerText = b.tTotal.toFixed(2);
+            stats.range.innerText = b.maxR.toFixed(2);
 
             // Calculate scale (pixels per meter)
             const availableWidth = canvas.width - originX - 40;
             const availableHeight = originY - 40;
             
-            const scaleX = maxR > 0 ? availableWidth / (maxR * 1.1) : 10;
-            const scaleY = maxH > 0 ? availableHeight / (maxH * 1.2) : 10;
+            // [DEV] The 1.1 and 1.2 divisors add a 10-20% margin padding so the curve 
+            // doesn't touch the very edges of the canvas.
+            const scaleX = b.maxR > 0 ? availableWidth / (b.maxR * 1.1) : 10;
+            const scaleY = b.maxH > 0 ? availableHeight / (b.maxH * 1.2) : 10;
             
             scale = Math.min(scaleX, scaleY);
-            if (scale < 0.0001) scale = 0.0001; // Allow zooming out for huge ranges, prevent 0
+            if (scale < 0.0001) scale = 0.0001; // Allow zooming out for huge ranges, prevent dividing by 0
+        }
+
+        function updateChartScales(bounds, p) {
+            // [DEV] Fix chart scales based on the predicted max bounds to prevent 
+            // the axes from continuously re-scaling during the animation.
+            const tMax = bounds.tTotal > 0 ? bounds.tTotal * 1.05 : 1;
+            
+            const setScale = (chart, yMin, yMax) => {
+                chart.options.scales.x.max = tMax;
+                chart.options.scales.y.min = yMin;
+                chart.options.scales.y.max = yMax;
+            };
+
+            setScale(charts.x, 0, bounds.maxR > 0 ? bounds.maxR * 1.05 : 1);
+            setScale(charts.y, 0, bounds.maxH > 0 ? bounds.maxH * 1.05 : 1);
+            
+            const vxMax = bounds.v0x > 0 ? bounds.v0x * 1.2 : 1;
+            setScale(charts.vx, 0, vxMax);
+            
+            const vyMin = Math.min(bounds.vfy * 1.1, bounds.vfy - 1, -1);
+            const vyMax = Math.max(bounds.v0y * 1.1, bounds.v0y + 1, 1);
+            setScale(charts.vy, vyMin, vyMax);
+            
+            setScale(charts.ax, -2, 2);
+            setScale(charts.ay, -(p.g) - 2, 2);
+            
+            Object.values(charts).forEach(chart => chart.update());
         }
 
         function updateLaunchButton() {
@@ -521,6 +585,15 @@
             
             // Reset UI components
             clearData();
+
+            // Clear chart scale limits to allow auto-scaling next time
+            Object.values(charts).forEach(chart => {
+                delete chart.options.scales.x.max;
+                delete chart.options.scales.y.min;
+                delete chart.options.scales.y.max;
+                chart.update();
+            });
+
             updateLaunchButton();
             stats.live.innerHTML = `<i>t</i>: 0.00 s | <i>x</i>: 0.00 m | <i>y</i>: 0.00 m`;
             
@@ -533,6 +606,7 @@
             if (state.projectiles.length >= MAX_PROJECTILES) return;
 
             const p = getParams();
+            const bounds = getTrajectoryBounds(p);
             
             // Mark all currently active projectiles as older
             state.projectiles.forEach(pr => pr.isLatest = false);
@@ -554,6 +628,7 @@
             state.projectiles.push(newProj);
             
             calculateScale();
+            updateChartScales(bounds, p);
             clearData();
             recordData(newProj); // Record t=0
 
@@ -569,11 +644,15 @@
         const SIM_SPEED = 1.0; // 1 real second = 1 sim second
 
         function simulationLoop(timestamp) {
+            // [DEV] Track time delta between frames to ensure smooth, accurate physics 
+            // regardless of the user's monitor refresh rate (e.g. 60Hz vs 144Hz)
             if (state.lastTimestamp === null) {
                 state.lastTimestamp = timestamp;
             }
 
             // Calculate delta time in seconds, capped at 0.1s to prevent huge jumps
+            // [DEV] Capping dt is CRITICAL. If a user switches browser tabs, requestAnimationFrame 
+            // pauses. When they return, dt would be huge, causing the ball to "tunnel" through the floor.
             let dt = ((timestamp - state.lastTimestamp) / 1000) * SIM_SPEED;
             if (dt > 0.1) dt = 0.1;
             
@@ -586,18 +665,19 @@
             }
 
             // Loop backwards so we can safely remove landed projectiles
+            // [DEV] Always loop arrays backwards if you plan to splice() items out of them!
             for (let i = state.projectiles.length - 1; i >= 0; i--) {
                 let pr = state.projectiles[i];
 
-                // Update Physics
+                // Update Physics (Kinematic Equations)
                 pr.t += dt;
-                pr.x = pr.vx * pr.t;
-                pr.y = pr.h + (pr.vy * pr.t) - (0.5 * pr.g * pr.t * pr.t);
+                pr.x = pr.vx * pr.t; // Constant horizontal velocity
+                pr.y = pr.h + (pr.vy * pr.t) - (0.5 * pr.g * pr.t * pr.t); // Accelerated vertical motion
                 
                 // Check ground collision
                 if (pr.y <= 0) {
                     pr.y = 0;
-                    // Interpolate exact landing time
+                    // Interpolate exact landing time to fix visual clipping into the ground
                     if (pr.g > 0) {
                         pr.t = (pr.vy + Math.sqrt(pr.vy * pr.vy + 2 * pr.g * pr.h)) / pr.g;
                         pr.x = pr.vx * pr.t;
@@ -659,6 +739,9 @@
         }
 
         function drawFrame() {
+            // [DEV] The canvas rendering order uses the Painter's Algorithm (Back to Front):
+            // 1. Clear -> 2. Grid & Axes -> 3. Past Histories -> 4. Platform -> 5. Active Projectiles
+
             // Clear canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -673,6 +756,8 @@
             ctx.stroke();
 
             // Calculate dynamic step size for grid to prevent text overlap
+            // [DEV] This formula guarantees labels are always roughly ~45px apart, 
+            // intelligently generating "nice" axis numbers (10, 50, 100, etc.) as the scale changes.
             const minPixelDist = 45; // Minimum pixels between labels
             const rawStep = minPixelDist / scale;
             const power = Math.floor(Math.log10(rawStep));
