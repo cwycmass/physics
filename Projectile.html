@@ -30,6 +30,8 @@
             display: flex;
             flex-direction: column;
             touch-action: manipulation; /* Disable double-tap to zoom globally */
+            -webkit-user-select: none; /* Prevent accidental text selection (Safari) */
+            user-select: none; /* Prevent accidental text selection (Standard) */
         }
         .main-container {
             flex-grow: 1;
@@ -118,6 +120,8 @@
             font-size: 0.85rem;
             border: 1px solid #dee2e6;
             border-radius: 0.25rem;
+            -webkit-user-select: auto; /* Re-enable text selection for data table */
+            user-select: auto;
         }
         .chart-grid {
             display: grid;
