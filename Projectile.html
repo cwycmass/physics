@@ -178,6 +178,11 @@
             .btn { padding: 0.25rem 0.5rem; font-size: 0.95rem; }
             .footer-text { padding-top: 0.5rem; font-size: 0.7rem; }
         }
+
+        /* Clean up details summary focus outline */
+        details > summary:focus {
+            outline: none;
+        }
     </style>
 </head>
 <body>
@@ -193,7 +198,7 @@
                 </h4>
 
                 <!-- Card 1: Parameters -->
-                <div class="card shadow-sm mb-2">
+                <div class="card shadow-sm mb-3">
                     <div class="card-header text-primary py-2">
                         <i class="fa-solid fa-sliders me-2"></i>參數設定
                     </div>
@@ -213,7 +218,7 @@
                                 <span>發射角 (<i>θ</i>):</span>
                                 <span id="val-theta" class="fw-bold text-primary">45°</span>
                             </div>
-                            <input type="range" class="form-range" id="input-theta" min="0" max="90" step="1" value="45">
+                            <input type="range" class="form-range" id="input-theta" min="0" max="90" step="0.1" value="45">
                         </div>
 
                         <!-- Initial Height -->
@@ -242,13 +247,40 @@
                 </div>
 
                 <!-- Card 2: Controls -->
-                <div class="card shadow-sm mb-2">
+                <div class="card shadow-sm mb-3">
                     <div class="card-header text-success py-2">
                         <i class="fa-solid fa-gamepad me-2"></i>模擬控制
                     </div>
                     <div class="card-body text-center py-2 d-flex gap-2">
                         <button id="btn-play" class="btn btn-success flex-grow-1 fw-bold"><i class="fa-solid fa-rocket me-2"></i>發射</button>
                         <button id="btn-clear" class="btn btn-outline-danger fw-bold" title="清除所有"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                </div>
+
+                <!-- Card 3: Quiz -->
+                <div class="card shadow-sm mb-2">
+                    <div class="card-header text-dark py-2" style="background-color: #fff3cd; border-bottom: 1px solid #ffecb5;">
+                        <i class="fa-solid fa-clipboard-question me-2 text-warning"></i>考考你
+                    </div>
+                    <div class="card-body py-2 px-3" style="font-size: 0.85rem;">
+                        <details class="mb-2">
+                            <summary class="fw-semibold text-dark" style="cursor: pointer;">1. 射程最大的發射角為何？</summary>
+                            <div class="mt-2 text-muted ps-2 border-start border-2 border-warning">
+                                當初始高度為 0 時，發射角為 <strong>45°</strong> 可達到最大的水平射程。
+                            </div>
+                        </details>
+                        <details class="mb-2">
+                            <summary class="fw-semibold text-dark" style="cursor: pointer;">2. 哪個角度的飛行時間最長？</summary>
+                            <div class="mt-2 text-muted ps-2 border-start border-2 border-warning">
+                                在相同初速下，發射角為 <strong>90°</strong> (垂直向上) 時，拋體在空中的飛行時間最長。
+                            </div>
+                        </details>
+                        <details class="mb-0">
+                            <summary class="fw-semibold text-dark" style="cursor: pointer;">3. 同一射程可能對應幾個發射角？</summary>
+                            <div class="mt-2 text-muted ps-2 border-start border-2 border-warning">
+                                必須在<strong>初始高度為 0</strong> 的前提下，若射程小於最大射程，才會有 <strong>2 個互餘的角度</strong> (例如 30° 和 60°) 落在同一位置。若高度大於 0，此對稱性將被打破！
+                            </div>
+                        </details>
                     </div>
                 </div>
 
@@ -286,9 +318,12 @@
                     <!-- Tab 1: Visualization -->
                     <div class="tab-pane fade show active" id="viz-pane" role="tabpanel" aria-labelledby="viz-tab" tabindex="0">
                         <div class="card shadow-sm flex-card">
-                            <div class="card-header d-flex justify-content-between align-items-center py-2">
+                            <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center py-2 gap-2">
                                 <span>模擬畫面</span>
-                                <span id="live-stats" class="badge bg-primary fs-6"><i>t</i>: 0.00 s | <i>x</i>: 0.00 m | <i>y</i>: 0.00 m</span>
+                                <span id="live-stats" class="badge bg-primary fw-normal text-wrap lh-base" style="font-size: 0.85rem; text-align: left;">
+                                    <i>t</i> = 0.00 s | <i>x</i> = 0.00 m | <i>y</i> = 0.00 m <span class="d-none d-lg-inline">|</span><br class="d-lg-none">
+                                    <i>v<sub>x</sub></i> = 0.00 m s<sup>-1</sup> | <i>v<sub>y</sub></i> = 0.00 m s<sup>-1</sup> | <i>a<sub>x</sub></i> = 0.00 m s<sup>-2</sup> | <i>a<sub>y</sub></i> = 0.00 m s<sup>-2</sup>
+                                </span>
                             </div>
                             <div class="card-body flex-card-body">
                                 <div class="simulation-canvas-container">
@@ -585,17 +620,9 @@
             
             // Reset UI components
             clearData();
-
-            // Clear chart scale limits to allow auto-scaling next time
-            Object.values(charts).forEach(chart => {
-                delete chart.options.scales.x.max;
-                delete chart.options.scales.y.min;
-                delete chart.options.scales.y.max;
-                chart.update();
-            });
-
             updateLaunchButton();
-            stats.live.innerHTML = `<i>t</i>: 0.00 s | <i>x</i>: 0.00 m | <i>y</i>: 0.00 m`;
+            stats.live.innerHTML = `<i>t</i> = 0.00 s | <i>x</i> = 0.00 m | <i>y</i> = 0.00 m <span class="d-none d-lg-inline">|</span><br class="d-lg-none">
+                                    <i>v<sub>x</sub></i> = 0.00 m s<sup>-1</sup> | <i>v<sub>y</sub></i> = 0.00 m s<sup>-1</sup> | <i>a<sub>x</sub></i> = 0.00 m s<sup>-2</sup> | <i>a<sub>y</sub></i> = 0.00 m s<sup>-2</sup>`;
             
             // Redraw empty state
             calculateScale();
@@ -735,7 +762,10 @@
         }
 
         function updateLiveStats(pr) {
-            stats.live.innerHTML = `<i>t</i>: ${pr.t.toFixed(2)} s | <i>x</i>: ${pr.x.toFixed(2)} m | <i>y</i>: ${pr.y.toFixed(2)} m`;
+            const curr_vy = pr.vy - pr.g * pr.t;
+            const curr_ay = -pr.g;
+            stats.live.innerHTML = `<i>t</i> = ${pr.t.toFixed(2)} s | <i>x</i> = ${pr.x.toFixed(2)} m | <i>y</i> = ${pr.y.toFixed(2)} m <span class="d-none d-lg-inline">|</span><br class="d-lg-none">
+                                    <i>v<sub>x</sub></i> = ${pr.vx.toFixed(2)} m s<sup>-1</sup> | <i>v<sub>y</sub></i> = ${curr_vy.toFixed(2)} m s<sup>-1</sup> | <i>a<sub>x</sub></i> = 0.00 m s<sup>-2</sup> | <i>a<sub>y</sub></i> = ${curr_ay.toFixed(2)} m s<sup>-2</sup>`;
         }
 
         function drawFrame() {
