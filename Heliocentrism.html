@@ -182,7 +182,6 @@
             flex-shrink: 0;
         }
 
-        /* Essential for circular black space */
         .canvas-wrapper {
             position: relative;
             flex: 1;
@@ -197,7 +196,7 @@
 
         canvas.main-sim {
             background: #000;
-            border-radius: 50%; /* Force circular shape */
+            border-radius: 50%;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
             display: block;
             aspect-ratio: 1 / 1;
@@ -262,6 +261,8 @@
             max-width: 800px;
             width: 100%;
             position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
         }
 
         .close-btn {
@@ -338,7 +339,7 @@
                 <label data-i18n="speed">模擬速度:</label>
                 <div class="speed-controls">
                     <button id="speedDownBtn" class="speed-btn">🐢</button>
-                    <span id="speedDisplay" class="speed-display">0.8x</span>
+                    <span id="speedDisplay" class="speed-display">0.1x</span>
                     <button id="speedUpBtn" class="speed-btn">🚀</button>
                 </div>
             </div>
@@ -385,7 +386,7 @@
         <div class="info-box">
             <button class="close-btn" onclick="document.getElementById('infoModal').classList.remove('active')">&times;</button>
             <h3 data-i18n="infoTitle" style="color:white; margin-bottom:15px;">📖 伽利略的重大發現</h3>
-            <p data-i18n="infoP1" style="color:#e2e8f0; font-size:0.95rem; line-height:1.6;"></p>
+            <p data-i18n="infoP1" style="color:#e2e8f0; font-size:0.95rem; line-height:1.8;"></p>
         </div>
     </div>
 
@@ -407,36 +408,39 @@
                 geoAlert_moon: '注意：月球在兩個模型中都繞著地球！',
                 helioAlert_moon: '觀察：月相與地心說預測一致！',
                 openInfo: '說明', footerText: '廠商會中學：物理科',
-                sun: '太陽', earth: '地球', planetLabel_venus: '金星', planetLabel_mars: '火星', planetLabel_moon: '月球', moon: '月球'
+                sun: '太陽', earth: '地球', planetLabel_venus: '金星', planetLabel_mars: '火星', planetLabel_moon: '月球', moon: '月球',
+                infoTitle: '📖 物理學歷史：伽利略的發現',
+                infoP1: '在 17 世紀初，伽利略利用望遠鏡觀察金星。他發現金星與月球一樣，具有完整的相位變化（從新相到滿相）。<br><br>這對「地心說」是一個致命的打擊。在地心說模型中（左圖），金星位於地球與太陽之間的本輪上，這意味著我們永遠只能看到金星的背光面或側面，因此金星絕不會出現「滿相」。<br><br>但在「日心說」中（右圖），金星繞太陽公轉。當金星運行到太陽的另一側時，我們可以看到完整的向光面（滿相），且此時距離最遠，看起來最小。當它靠近地球時，體積變大但呈現新相。伽利略的這一觀察，成為了支持日心說最有利的證據之一。'
             },
             'en': {
                 title: 'Venus Phases: Geocentrism vs Heliocentrism',
                 selectPlanet: 'Select Target:',
                 opt_venus: 'Venus', opt_mars: 'Mars', opt_moon: 'Moon',
                 speed: 'Speed:', orbits: 'Orbits', los: 'Sight', labels: 'Labels',
-                geoTitle_venus: 'Geocentric', helioTitle_venus: 'Heliocentric',
+                geoTitle_venus: 'Geocentric (Ptolemy)', helioTitle_venus: 'Heliocentric (Copernicus)',
                 geoTitle_mars: 'Geocentric', helioTitle_mars: 'Heliocentric',
                 geoTitle_moon: 'Geocentric', helioTitle_moon: 'Heliocentric',
                 teleView: '🔭 Telescope View',
                 geoAlert_venus: 'Note: Venus can NEVER be full!',
-                helioAlert_venus: 'Full when small, crescent when large!',
+                helioAlert_venus: 'Full Phase when small, Crescent when large!',
                 geoAlert_mars: 'Note: Mars never shows a crescent.',
                 helioAlert_mars: 'Observe: Largest at Opposition!',
                 geoAlert_moon: 'Note: Moon orbits Earth in both.',
                 helioAlert_moon: 'Observe: Identical predictions!',
                 openInfo: 'Info', footerText: 'CMA Secondary School: Physics',
-                sun: 'Sun', earth: 'Earth', planetLabel_venus: 'Venus', planetLabel_mars: 'Mars', planetLabel_moon: 'Moon', moon: 'Moon'
+                sun: 'Sun', earth: 'Earth', planetLabel_venus: 'Venus', planetLabel_mars: 'Mars', planetLabel_moon: 'Moon', moon: 'Moon',
+                infoTitle: '📖 History of Physics: Galileo\'s Discovery',
+                infoP1: 'In the early 17th century, Galileo observed Venus with his telescope and discovered that it goes through a full cycle of phases, much like the Moon.<br><br>This was a fatal blow to the Geocentric model (left). In Ptolemy\'s system, Venus was kept between Earth and the Sun on its epicycle, meaning it could only ever show a crescent or "new" phase to Earth. It could never be "full".<br><br>However, in the Heliocentric model (right), Venus orbits the Sun. When it is on the opposite side of the Sun, we see its full illuminated half (Full Phase), and it appears smallest due to the distance. When it is closest to Earth, it appears large but as a thin crescent. This evidence was crucial in proving the Copernican system.'
             }
         };
 
         let currentLang = 'zh-TW';
         let time = 0;
         let isPlaying = true;
-        let simSpeed = 0.8;
+        let simSpeed = 0.1; // Default speed set to 0.1x
         let planetMode = 'venus';
-        const BASE_SIZE = 400; // Logical pixels
+        const BASE_SIZE = 400; 
 
-        const canvasList = ['geoMain', 'helioMain', 'geoTele', 'helioTele'];
         const ctxs = {};
         const canvases = {};
 
@@ -445,18 +449,12 @@
             const ctx = canvas.getContext('2d', { alpha: false });
             const dpr = window.devicePixelRatio || 1;
             
-            // Set internal resolution
             canvas.width = logicalWidth * dpr;
             canvas.height = logicalHeight * dpr;
-            
-            // Set CSS size
             canvas.style.width = logicalWidth + 'px';
             canvas.style.height = logicalHeight + 'px';
             
-            // Scale context to use logical units
             ctx.scale(dpr, dpr);
-            
-            // Visual smoothing for high-end look
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
             
@@ -474,7 +472,6 @@
         window.addEventListener('resize', initCanvases);
         initCanvases();
 
-        // Parameters
         let pHelioEarthRadius=140, pHelioPlanetRadius=100, pHelioEarthSpeed=0.5, pHelioPlanetSpeed=0.7;
         let pGeoSunRadius=160, pGeoDefRadius=80, pGeoEpiRadius=60, pGeoSunSpeed=0.5, pGeoDefSpeed=0.5, pGeoEpiSpeed=0.7;
         let pColor='#fcd34d', pColorDark='#92400e', rEarth=8, rSun=12, rPlanet=6, rMoon=2.5, rMoonOrbit=22;
@@ -533,16 +530,18 @@
             ctx.restore();
 
             if (document.getElementById('showLabels').checked) {
+                ctx.save();
                 ctx.fillStyle = '#ffffff';
-                // HD Font Settings
-                ctx.font = 'bold 13px sans-serif';
+                ctx.font = 'bold 13px "Microsoft JhengHei", sans-serif';
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'middle';
-                // Add tiny drop shadow for text contrast
-                ctx.shadowColor = 'rgba(0,0,0,0.8)';
-                ctx.shadowBlur = 2;
-                ctx.fillText(label, x + radius + 4, y + 2);
-                ctx.shadowBlur = 0;
+                // HD Shadow for text
+                ctx.shadowColor = 'black';
+                ctx.shadowBlur = 3;
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = 1;
+                ctx.fillText(label, x + radius + 4, y + 1);
+                ctx.restore();
             }
         }
 
@@ -647,8 +646,8 @@
         }
 
         document.getElementById('playPauseBtn').onclick = () => { isPlaying = !isPlaying; document.getElementById('playPauseBtn').innerText = isPlaying?'⏸':'▶'; };
-        document.getElementById('speedUpBtn').onclick = () => { simSpeed = Math.min(3, simSpeed+0.2); updateLabels(); };
-        document.getElementById('speedDownBtn').onclick = () => { simSpeed = Math.max(0.2, simSpeed-0.2); updateLabels(); };
+        document.getElementById('speedUpBtn').onclick = () => { simSpeed = Math.min(3, simSpeed+0.1); updateLabels(); };
+        document.getElementById('speedDownBtn').onclick = () => { simSpeed = Math.max(0.1, simSpeed-0.1); updateLabels(); };
 
         setPlanetParameters();
         updateLabels();
