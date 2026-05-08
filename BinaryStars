@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>雙星系統 | Binary Star</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --panel: #161b22;
+            --text: #c9d1d9;
+            --accent: #58a6ff;
+            --border: #30363d;
+            --star1: #ffffff;
+            --star2: #ffd700;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--panel);
+            padding: 0.6rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .header-right { display: flex; gap: 8px; }
+
+        button, select {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        select { background: #30363d; border: 1px solid var(--border); appearance: none; padding-right: 25px; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 10px auto; }
+        button:hover { filter: brightness(1.1); }
+        button#langToggle { background: #238636; }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            flex-direction: row;
+            overflow: hidden;
+        }
+
+        #controls {
+            width: 190px;
+            min-width: 180px;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            padding: 1rem 0.6rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        .control-group { display: flex; flex-direction: column; gap: 4px; }
+        
+        .control-group label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #e6edf3;
+            align-items: center;
+        }
+
+        .val-display { color: var(--accent); font-weight: bold; font-size: 0.8rem; }
+        input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+
+        #visuals {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0.8rem;
+            gap: 0.8rem;
+            overflow: hidden;
+            background: #0d1117;
+        }
+
+        .view-row {
+            display: flex;
+            gap: 0.8rem;
+            flex: 1.4;
+            min-height: 0;
+        }
+
+        .canvas-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .card-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8b949e;
+            z-index: 10;
+            pointer-events: none;
+            background: rgba(22, 27, 34, 0.8);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        #periodDisplay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.75rem;
+            color: var(--accent);
+            z-index: 10;
+            font-weight: bold;
+            background: rgba(22, 27, 34, 0.8);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        canvas.orbit-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+            touch-action: none;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            padding: 30px 10px 10px 10px;
+            box-sizing: border-box;
+        }
+
+        .observer-icon {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent);
+            font-size: 0.65rem;
+            pointer-events: none;
+            background: rgba(22, 27, 34, 0.85);
+            padding: 3px 6px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        footer {
+            background-color: var(--panel);
+            border-top: 1px solid var(--border);
+            text-align: center;
+            padding: 4px;
+            font-size: 0.75rem;
+            color: #8b949e;
+            flex-shrink: 0;
+        }
+
+        #helpModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            padding: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-body {
+            background: var(--panel);
+            max-width: 500px;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; overflow-y: auto; }
+            body { height: auto; overflow: auto; }
+            #controls { width: auto; border-right: none; border-bottom: 1px solid var(--border); }
+            #visuals { height: 800px; flex: none; }
+            .view-row { flex-direction: column; flex: 2; }
+        }
+
+        sub { font-size: 0.7em; vertical-align: sub; }
+        i { font-style: italic; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <svg width="20" height="20" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="#58a6ff" stroke-width="2" stroke-dasharray="10 5" />
+            <circle cx="50" cy="10" r="8" fill="#fff" />
+            <circle cx="50" cy="90" r="5" fill="#ffd700" />
+        </svg>
+        <h2 style="margin:0; font-size: 1rem;" data-i18n="appTitle">雙星系統</h2>
+    </div>
+    <div class="header-right">
+        <button id="helpTrigger" data-i18n="helpBtn">說明</button>
+        <button id="langToggle">繁/Eng</button>
+    </div>
+</header>
+
+<div class="main-container">
+    <aside id="controls">
+        <div class="control-group">
+            <label data-i18n="presetLabel">真實案例預設</label>
+            <select id="systemPreset">
+                <option value="custom" data-i18n="pCustom">自定義參數</option>
+                <option value="sirius" data-i18n="pSirius">天狼星 (Sirius A & B)</option>
+                <option value="alphacen" data-i18n="pAlphaCen">南門二 (Alpha Centauri AB)</option>
+                <option value="pulsar" data-i18n="pPulsar">脈衝雙星 (Hulse-Taylor Pulsar)</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label><span><span data-i18n="mass1Label"><i>S</i><sub>1</sub> 質量</span></span> <span class="val-display"><span id="m1Label">1.0</span> M<sub>☉</sub></span></label>
+            <input type="range" id="mass1" min="0.1" max="50" step="0.1" value="1.0">
+        </div>
+
+        <div class="control-group">
+            <label><span><span data-i18n="mass2Label"><i>S</i><sub>2</sub> 質量</span></span> <span class="val-display"><span id="m2Label">1.0</span> M<sub>☉</sub></span></label>
+            <input type="range" id="mass2" min="0.1" max="50" step="0.1" value="1.0">
+        </div>
+
+        <div class="control-group">
+            <label><span><span data-i18n="distanceLabel">軌道距離</span></span> <span class="val-display"><span id="distLabel">1.0</span> AU</span></label>
+            <input type="range" id="distance" min="0.1" max="100" step="0.1" value="1.0">
+        </div>
+
+        <div class="control-group">
+            <label><span data-i18n="eccLabel">離心率</span> <span class="val-display" id="eccLabel">0.00</span></label>
+            <input type="range" id="eccentricity" min="0" max="0.95" step="0.01" value="0">
+        </div>
+
+        <div class="control-group">
+            <label><span data-i18n="incLabel">傾角</span> <span class="val-display" id="incLabel">90°</span></label>
+            <input type="range" id="inclination" min="0" max="90" step="1" value="90">
+        </div>
+
+        <div class="control-group">
+            <label><span data-i18n="azimuthLabel">方向</span> <span class="val-display" id="azimuthLabel">0°</span></label>
+            <input type="range" id="azimuth" min="0" max="360" step="1" value="0">
+        </div>
+
+        <div class="control-group">
+            <label><span data-i18n="speedLabel">模擬速度</span> <span class="val-display" id="speedLabel">1.0x</span></label>
+            <input type="range" id="simSpeed" min="0.1" max="5" step="0.1" value="1.0">
+        </div>
+
+        <div class="control-group">
+            <button id="playPauseBtn" style="width: 100%; padding: 6px; background: #238636; margin-top: 5px;" data-i18n="pauseBtn">暫停</button>
+        </div>
+
+        <div class="control-group" style="margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--border);">
+            <label style="display: flex; flex-direction: row; align-items: flex-start; gap: 6px; cursor: pointer;">
+                <input type="checkbox" id="exaggerateColor" style="width: auto; margin-top: 2px;">
+                <span data-i18n="exaggerateColor" style="font-size: 0.7rem; line-height: 1.2;">誇張地顯示紅移或藍移</span>
+            </label>
+            <div id="colorWarning" style="display: none; font-size: 0.65rem; color: #ff7b72; margin-top: 5px; line-height: 1.4;" data-i18n="colorWarning">注意：此顏色變化為誇張化顯示。真實的恆星都卜勒效應極其微弱，肉眼無法察覺，需使用光柵或光譜儀測量波長變化。</div>
+        </div>
+    </aside>
+
+    <section id="visuals">
+        <div class="view-row">
+            <div class="canvas-card">
+                <span class="card-label" data-i18n="earthView">地球視角</span>
+                <div class="observer-icon">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="9" stroke-dasharray="4 4"></circle>
+                        <circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+                    </svg>
+                    <span data-i18n="earthOut">地球方向 (垂直穿出)</span>
+                </div>
+                <div class="canvas-container">
+                    <canvas id="orbitCanvas1" class="orbit-canvas"></canvas>
+                </div>
+            </div>
+            
+            <div class="canvas-card">
+                <span class="card-label" data-i18n="sideView">側面視角</span>
+                <div style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 15px; pointer-events: none; z-index: 5;">
+                    <div class="observer-icon" style="position: static; transform: none; background: rgba(22, 27, 34, 0.9);">
+                        <span style="font-size: 0.8rem; line-height: 1;">⬅</span>
+                        <span data-i18n="earthLeft">地球方向</span>
+                    </div>
+                </div>
+                <div class="canvas-container">
+                    <canvas id="orbitCanvas2" class="orbit-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="canvas-card" style="flex: 0.8;">
+            <span class="card-label" data-i18n="rvCurve">徑向速度圖</span>
+            <div id="periodDisplay">--</div>
+            <div class="chart-wrapper">
+                <canvas id="rvChart"></canvas>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer data-i18n="footer">廠商會中學：物理科</footer>
+
+<div id="helpModal">
+    <div class="modal-body">
+        <h3 style="color: var(--accent); margin-top: 0;" data-i18n="helpTitle">關於雙星系統與徑向速度</h3>
+        <ul style="padding-left: 1.2rem; font-size: 0.85rem; line-height: 1.6;">
+            <li data-i18n="help1" style="margin-bottom: 8px;"><strong>都卜勒效應與光譜：</strong> 當恆星靠近地球時，光波被壓縮而變短（藍移）；遠離時波長變長（紅移）。</li>
+            <li data-i18n="help2" style="margin-bottom: 8px;"><strong>徑向速度的測量：</strong> 這些紅藍移在肉眼下無法察覺，天文學家利用光譜儀觀察恆星光譜中吸收線的微小位移，來計算其沿視線方向的速度（徑向速度）。</li>
+            <li data-i18n="help3" style="margin-bottom: 8px;"><strong>研究雙星系統：</strong> 即使伴星太暗無法直接看見，透過觀測主星徑向速度的週期性變化（如下方的正弦曲線），就能推算出伴星的質量與軌道特徵。</li>
+            <li data-i18n="help4"><strong>軌道傾角的影響：</strong> 若軌道面與視線垂直（傾角 0°），則沒有徑向運動，使得徑向速度法在此情況下失效。</li>
+        </ul>
+        <button id="closeHelp" style="width: 100%; margin-top: 15px;" data-i18n="helpClose">關閉</button>
+    </div>
+</div>
+
+<script>
+    const translations = {
+        en: {
+            appTitle: "Binary Star Sim",
+            helpBtn: "Help",
+            presetLabel: "Presets",
+            pCustom: "Custom",
+            pSirius: "Sirius A & B",
+            pAlphaCen: "Alpha Centauri AB",
+            pPulsar: "Hulse-Taylor Pulsar",
+            earthView: "Earth View",
+            sideView: "Side View",
+            rvCurve: "RV Curve",
+            mass1Label: "<i>S</i><sub>1</sub> Mass",
+            mass2Label: "<i>S</i><sub>2</sub> Mass",
+            distanceLabel: "Distance (a)",
+            eccLabel: "Eccentricity",
+            incLabel: "Inclination",
+            azimuthLabel: "Orientation",
+            speedLabel: "Speed",
+            pauseBtn: "Pause",
+            playBtn: "Play",
+            periodLabel: "Period <i>T</i>: ",
+            years: " yrs",
+            exaggerateColor: "Exaggerate Redshift/Blueshift",
+            colorWarning: "Notice: Color shifts are highly exaggerated. Real Doppler shifts are invisible to the naked eye and require a diffraction grating or spectrometer to detect wavelength changes.",
+            footer: "CMA Secondary School: Physics",
+            helpTitle: "Binary Systems & Radial Velocity",
+            help1: "<strong>Doppler Effect:</strong> As a star moves toward Earth, its light waves compress (Blueshift); as it moves away, they stretch (Redshift).",
+            help2: "<strong>Measuring Radial Velocity:</strong> These color shifts are invisible to the naked eye. Astronomers use spectrometers to measure tiny shifts in spectral absorption lines, calculating the star's speed along our line of sight.",
+            help3: "<strong>Studying Binary Systems:</strong> Even if a companion star is too dim to see, its presence, mass, and orbit can be inferred by observing the periodic variations in the primary star's radial velocity (the sine wave).",
+            help4: "<strong>Role of Inclination:</strong> If the orbit is face-on (0° inclination), there is no motion toward or away from us, making the radial velocity method ineffective.",
+            helpClose: "Got it",
+            yAxis: "Radial Velocity (km/s)",
+            xAxis: "Time (Years)"
+        },
+        zh: {
+            appTitle: "雙星系統模擬",
+            helpBtn: "說明",
+            presetLabel: "預設案例",
+            pCustom: "自定義",
+            pSirius: "天狼星 (Sirius A & B)",
+            pAlphaCen: "南門二 (Alpha Centauri AB)",
+            pPulsar: "脈衝雙星 (Hulse-Taylor Pulsar)",
+            earthView: "地球視角",
+            sideView: "側面視角",
+            rvCurve: "徑向速度圖",
+            mass1Label: "<i>S</i><sub>1</sub> 質量",
+            mass2Label: "<i>S</i><sub>2</sub> 質量",
+            distanceLabel: "軌道距離",
+            eccLabel: "離心率",
+            incLabel: "軌道傾角",
+            azimuthLabel: "軌道方向",
+            speedLabel: "模擬速度",
+            pauseBtn: "暫停",
+            playBtn: "播放",
+            periodLabel: "軌道週期 <i>T</i>: ",
+            years: " 年",
+            exaggerateColor: "誇張地顯示紅移或藍移",
+            colorWarning: "注意：此顏色變化為誇張化顯示。真實的恆星都卜勒效應極其微弱，肉眼無法察覺，需使用光柵或光譜儀測量波長變化。",
+            footer: "廠商會中學：物理科",
+            helpTitle: "關於雙星系統與徑向速度",
+            help1: "<strong>都卜勒效應與光譜：</strong> 當恆星靠近地球時，光波被壓縮而變短（藍移）；遠離時波長變長（紅移）。",
+            help2: "<strong>徑向速度的測量：</strong> 這些紅藍移肉眼無法察覺，天文學家利用光譜儀觀察恆星光譜中吸收線的微小位移，來計算其沿視線方向的速度（徑向速度）。",
+            help3: "<strong>研究雙星系統：</strong> 即使伴星太暗無法直接看見，透過觀測主星徑向速度的週期性變化（如下方圖表），就能推算出伴星的質量與軌道特徵。",
+            help4: "<strong>軌道傾角的影響：</strong> 若軌道面與視線垂直（傾角 0°），則沒有徑向運動，使得徑向速度法無法測量到速度變化。",
+            helpClose: "關閉",
+            yAxis: "徑向速度 (km/s)",
+            xAxis: "時間 (年)"
+        }
+    };
+    
+    let currentLang = 'zh';
+
+    const state = {
+        m1: 1.0,
+        m2: 1.0,
+        a_phys: 1.0,
+        eccentricity: 0.0,
+        inclination: 90,
+        azimuth: 0,
+        speed: 1.0,
+        exaggerateColor: false,
+        currentMaxRV: 100,
+        period: 1.0
+    };
+
+    const presets = {
+        sirius: { m1: 2.06, m2: 1.02, a: 20, e: 0.59, i: 44 },
+        alphacen: { m1: 1.1, m2: 0.9, a: 23, e: 0.52, i: 79 },
+        pulsar: { m1: 1.44, m2: 1.38, a: 0.013, e: 0.617, i: 47 }
+    };
+
+    const canvas1 = document.getElementById('orbitCanvas1');
+    const ctx1 = canvas1.getContext('2d');
+    const canvas2 = document.getElementById('orbitCanvas2');
+    const ctx2 = canvas2.getContext('2d');
+    const chartCanvas = document.getElementById('rvChart');
+    const presetSelect = document.getElementById('systemPreset');
+    
+    let time = 0;
+    let isPlaying = true;
+    let visualScale = 1;
+
+    function resize() {
+        [canvas1, canvas2].forEach(c => {
+            const rect = c.parentElement.getBoundingClientRect();
+            c.width = rect.width;
+            c.height = rect.height;
+        });
+        visualScale = (Math.min(canvas1.width, canvas1.height) * 0.35) / 100;
+    }
+
+    const rvChart = new Chart(chartCanvas, {
+        type: 'line',
+        data: {
+            datasets: [
+                { label: 'S1', data: [], borderColor: '#ffffff', borderWidth: 2, pointRadius: 0, tension: 0.3 },
+                { label: 'S2', data: [], borderColor: '#ffd700', borderWidth: 2, pointRadius: 0, tension: 0.3 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false, animation: false,
+            scales: {
+                y: { 
+                    grid: { color: '#30363d' }, 
+                    title: { display: true, text: 'Velocity (km/s)', color: '#8b949e', font: { size: 10 } },
+                    ticks: { color: '#8b949e', font: { size: 9 } }
+                },
+                x: { 
+                    type: 'linear', min: 0, max: 2, 
+                    title: { display: true, text: 'Time (Years)', color: '#8b949e', font: { size: 10 } },
+                    ticks: { color: '#8b949e', font: { size: 9 } },
+                    grid: { color: '#30363d' }
+                }
+            },
+            plugins: { legend: { display: false } }
+        },
+        plugins: [{
+            id: 'scrubber',
+            afterDraw: (chart) => {
+                const ctx = chart.ctx;
+                const pTime = ((time / (Math.PI * 2)) * state.period) % (2 * state.period);
+                const x = chart.scales.x.getPixelForValue(pTime);
+                ctx.save(); ctx.beginPath(); ctx.moveTo(x, chart.scales.y.top); ctx.lineTo(x, chart.scales.y.bottom);
+                ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(88, 166, 255, 0.6)'; ctx.stroke(); ctx.restore();
+            }
+        }]
+    });
+
+    function solveKepler(M, e) {
+        let E = M;
+        for(let i=0; i<6; i++) E = E - (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+        return E;
+    }
+
+    function calculatePeriod() {
+        state.period = Math.sqrt(Math.pow(state.a_phys, 3) / (state.m1 + state.m2));
+        const unit = translations[currentLang].years;
+        document.getElementById('periodDisplay').innerHTML = translations[currentLang].periodLabel + state.period.toPrecision(3) + unit;
+    }
+
+    function getPositions(t) {
+        const e = state.eccentricity;
+        const M = t % (Math.PI * 2);
+        const E = solveKepler(M, e);
+        const a_render = 100;
+        const x_p = a_render * (Math.cos(E) - e);
+        const y_p = a_render * Math.sqrt(1 - e*e) * Math.sin(E);
+
+        const totalM = state.m1 + state.m2;
+        const v_unit = 29.8 * Math.sqrt(totalM / state.a_phys);
+        const dE = 1 / (1 - e * Math.cos(E));
+        const vy_p = v_unit * Math.sqrt(1 - e*e) * Math.cos(E) * dE;
+
+        const incRad = (state.inclination * Math.PI) / 180;
+        const azRad = (state.azimuth * Math.PI) / 180;
+        
+        const rv1 = -vy_p * Math.sin(incRad) * (state.m2 / totalM);
+        const rv2 = vy_p * Math.sin(incRad) * (state.m1 / totalM);
+
+        const x_inc = x_p, y_inc = y_p * Math.cos(incRad), z_inc = y_p * Math.sin(incRad);
+        const x_final = x_inc * Math.cos(azRad) - y_inc * Math.sin(azRad);
+        const y_final = x_inc * Math.sin(azRad) + y_inc * Math.cos(azRad);
+        const z_final = z_inc;
+
+        return {
+            s1: { x: -x_final * (state.m2/totalM), y: -y_final * (state.m2/totalM), z: -z_final * (state.m2/totalM), rv: rv1 },
+            s2: { x: x_final * (state.m1/totalM), y: y_final * (state.m1/totalM), z: z_final * (state.m1/totalM), rv: rv2 }
+        };
+    }
+
+    function getColor(rv, baseC) {
+        if (!state.exaggerateColor || Math.abs(rv) < 0.001) return baseC;
+        const r = rv > 0 ? 255 : 80;
+        const g = rv > 0 ? 80 : 160;
+        const b = rv > 0 ? 80 : 255;
+        let intensity = Math.pow(Math.min(Math.abs(rv)/state.currentMaxRV, 1), 0.7) * 0.85;
+        const bc = baseC === 'white' ? {r:255,g:255,b:255} : {r:255,g:215,b:0};
+        return `rgb(${Math.round(bc.r+(r-bc.r)*intensity)},${Math.round(bc.g+(g-bc.g)*intensity)},${Math.round(bc.b+(b-bc.b)*intensity)})`;
+    }
+
+    function generateChartData() {
+        calculatePeriod();
+        const d1 = [], d2 = [];
+        let maxFound = 0;
+        for(let i=0; i<=200; i++) {
+            const f = i/100;
+            const pos = getPositions(f * Math.PI * 2);
+            const timeVal = f * state.period;
+            d1.push({x: timeVal, y: pos.s1.rv}); 
+            d2.push({x: timeVal, y: pos.s2.rv});
+            maxFound = Math.max(maxFound, Math.abs(pos.s1.rv), Math.abs(pos.s2.rv));
+        }
+        state.currentMaxRV = maxFound || 10;
+        rvChart.data.datasets[0].data = d1;
+        rvChart.data.datasets[1].data = d2;
+        
+        rvChart.options.scales.x.max = 2 * state.period;
+        rvChart.options.scales.x.title.text = translations[currentLang].xAxis;
+        rvChart.options.scales.y.title.text = translations[currentLang].yAxis;
+        
+        const b = Math.max(state.currentMaxRV * 1.3, 10);
+        rvChart.options.scales.y.min = -b; rvChart.options.scales.y.max = b;
+        rvChart.update('none');
+    }
+
+    function resetToCustom() {
+        if (presetSelect.value !== 'custom') presetSelect.value = 'custom';
+    }
+
+    function draw() {
+        ctx1.clearRect(0,0,canvas1.width,canvas1.height); 
+        ctx2.clearRect(0,0,canvas2.width,canvas2.height);
+        
+        const cx1 = canvas1.width/2, cy1 = canvas1.height/2;
+        const cx2 = canvas2.width/2 + 10, cy2 = canvas2.height/2;
+        
+        if (isPlaying) time += 0.02 * state.speed;
+        const pos = getPositions(time);
+
+        [ {ctx:ctx1,cx:cx1,cy:cy1}, {ctx:ctx2,cx:cx2,cy:cy2} ].forEach(v => {
+            v.ctx.strokeStyle = '#21262d'; v.ctx.setLineDash([4,4]);
+            v.ctx.beginPath(); v.ctx.arc(v.cx,v.cy,3,0,Math.PI*2); v.ctx.stroke(); v.ctx.setLineDash([]);
+        });
+
+        [ {ctx:ctx1,v1:true,cx:cx1,cy:cy1},{ctx:ctx2,v1:false,cx:cx2,cy:cy2} ].forEach(v => {
+            ['s1','s2'].forEach(sk => {
+                v.ctx.beginPath(); v.ctx.strokeStyle = sk==='s1' ? 'rgba(255,255,255,0.1)' : 'rgba(255,215,0,0.1)';
+                for(let i=0; i<=Math.PI*2; i+=0.1) {
+                    const p = getPositions(i);
+                    const pt = v.v1 ? {x:v.cx+p[sk].x*visualScale, y:v.cy+p[sk].y*visualScale} : {x:v.cx-p[sk].z*visualScale, y:v.cy+p[sk].x*visualScale};
+                    if(i===0) v.ctx.moveTo(pt.x,pt.y); else v.ctx.lineTo(pt.x,pt.y);
+                }
+                v.ctx.stroke();
+            });
+        });
+
+        const r1 = 8, r2 = 5 + (state.m2/state.m1)*3;
+        [ {ctx:ctx1,v1:true,cx:cx1,cy:cy1},{ctx:ctx2,v1:false,cx:cx2,cy:cy2} ].forEach(v => {
+            [['s1','white',r1, 1],['s2','#ffd700',r2, 2]].forEach(([sk,bc,r, idx]) => {
+                const pt = v.v1 ? {x:v.cx+pos[sk].x*visualScale,y:v.cy+pos[sk].y*visualScale} : {x:v.cx-pos[sk].z*visualScale,y:v.cy+pos[sk].x*visualScale};
+                const finalColor = getColor(pos[sk].rv, bc);
+                
+                v.ctx.shadowBlur = 10; v.ctx.shadowColor = finalColor;
+                v.ctx.fillStyle = finalColor;
+                v.ctx.beginPath(); v.ctx.arc(pt.x,pt.y,r,0,Math.PI*2); v.ctx.fill(); v.ctx.shadowBlur = 0;
+
+                v.ctx.fillStyle = "rgba(255,255,255,0.8)";
+                v.ctx.textAlign = "left";
+                v.ctx.font = "italic bold 11px serif";
+                const baseLabel = "S";
+                const baseWidth = v.ctx.measureText(baseLabel).width;
+                v.ctx.fillText(baseLabel, pt.x - (baseWidth/2 + 2), pt.y - r - 6);
+                v.ctx.font = "bold 8px sans-serif";
+                v.ctx.fillText(idx, pt.x - (baseWidth/2 + 2) + baseWidth, pt.y - r - 4);
+            });
+        });
+        
+        requestAnimationFrame(draw);
+    }
+
+    const ids = ['mass1','mass2','distance','eccentricity','inclination','azimuth','simSpeed'];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        el.oninput = (e) => {
+            resetToCustom();
+            const val = parseFloat(e.target.value);
+            if(id==='mass1') { state.m1 = val; document.getElementById('m1Label').innerText = val.toFixed(1); }
+            if(id==='mass2') { state.m2 = val; document.getElementById('m2Label').innerText = val.toFixed(1); }
+            if(id==='distance') { state.a_phys = val; document.getElementById('distLabel').innerText = val.toFixed(1); }
+            if(id==='eccentricity') { state.eccentricity = val; document.getElementById('eccLabel').innerText = val.toFixed(2); }
+            if(id==='inclination') { state.inclination = val; document.getElementById('incLabel').innerText = val + "°"; }
+            if(id==='azimuth') { state.azimuth = val; document.getElementById('azimuthLabel').innerText = val + "°"; }
+            if(id==='simSpeed') { state.speed = val; document.getElementById('speedLabel').innerText = val.toFixed(1) + "x"; }
+            generateChartData();
+        };
+    });
+
+    presetSelect.onchange = e => {
+        const p = presets[e.target.value];
+        if(!p) return;
+        state.m1 = p.m1; state.m2 = p.m2; state.a_phys = p.a; state.eccentricity = p.e; state.inclination = p.i;
+        ['mass1','mass2','distance','eccentricity','inclination'].forEach(id => {
+            const v = id==='distance'?p.a:(id==='mass1'?p.m1:(id==='mass2'?p.m2:(id==='eccentricity'?p.e:p.i)));
+            document.getElementById(id).value = v;
+        });
+        document.getElementById('m1Label').innerText = p.m1; document.getElementById('m2Label').innerText = p.m2;
+        document.getElementById('distLabel').innerText = p.a; document.getElementById('eccLabel').innerText = p.e;
+        document.getElementById('incLabel').innerText = p.i + "°";
+        generateChartData();
+    };
+
+    document.getElementById('exaggerateColor').onchange = e => {
+        state.exaggerateColor = e.target.checked;
+        document.getElementById('colorWarning').style.display = state.exaggerateColor ? 'block' : 'none';
+    };
+
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    playPauseBtn.onclick = () => {
+        isPlaying = !isPlaying;
+        playPauseBtn.innerText = isPlaying ? translations[currentLang].pauseBtn : translations[currentLang].playBtn;
+        playPauseBtn.style.background = isPlaying ? '#238636' : '#d73a49';
+    };
+
+    let isDragging = false, lx, ly;
+    function start(e) { isDragging = true; lx = e.clientX || e.touches?.[0].clientX; ly = e.clientY || e.touches?.[0].clientY; }
+    function end() { isDragging = false; }
+    function move(e) {
+        if(!isDragging) return;
+        resetToCustom();
+        const cx = e.clientX || e.touches?.[0].clientX, cy = e.clientY || e.touches?.[0].clientY;
+        state.azimuth = (state.azimuth - (cx - lx)*0.4 + 360) % 360;
+        state.inclination = Math.max(0, Math.min(90, state.inclination - (cy - ly)*0.4));
+        lx = cx; ly = cy;
+        document.getElementById('azimuth').value = Math.round(state.azimuth);
+        document.getElementById('azimuthLabel').innerText = Math.round(state.azimuth) + "°";
+        document.getElementById('inclination').value = Math.round(state.inclination);
+        document.getElementById('incLabel').innerText = Math.round(state.inclination) + "°";
+        generateChartData();
+    }
+    
+    [canvas1, canvas2].forEach(c => {
+        c.addEventListener('mousedown', start); c.addEventListener('touchstart', start);
+    });
+    window.addEventListener('mouseup', end); window.addEventListener('touchend', end);
+    window.addEventListener('mousemove', move); window.addEventListener('touchmove', move);
+
+    document.getElementById('helpTrigger').onclick = () => document.getElementById('helpModal').style.display = 'flex';
+    document.getElementById('closeHelp').onclick = () => document.getElementById('helpModal').style.display = 'none';
+    document.getElementById('langToggle').onclick = () => {
+        currentLang = currentLang === 'zh' ? 'en' : 'zh';
+        applyLang();
+    };
+
+    function applyLang() {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if(translations[currentLang][key]) el.innerHTML = translations[currentLang][key];
+        });
+        generateChartData();
+    }
+
+    window.addEventListener('resize', resize);
+    resize(); applyLang(); generateChartData(); draw();
+</script>
+</body>
+</html>
