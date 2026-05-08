@@ -33,7 +33,6 @@
             min-height: 100vh;
         }
 
-        /* 螢幕適應設定 (No scroll on PC/iPad) */
         @media (min-width: 768px) and (min-height: 600px) {
             body {
                 height: 100vh;
@@ -68,11 +67,9 @@
                 position: absolute;
                 top: 0;
                 right: 0;
-                margin-top: 0;
             }
         }
 
-        /* 佈局容器：包含左側欄與主模擬區 */
         .layout-wrapper {
             display: flex;
             flex-direction: column;
@@ -87,7 +84,6 @@
             }
         }
 
-        /* 左側選單列 */
         .sidebar {
             background: var(--panel-bg);
             border-radius: 12px;
@@ -102,7 +98,7 @@
 
         @media (min-width: 768px) {
             .sidebar {
-                width: 140px; /* 將左側選單寬度進一步縮小 */
+                width: 150px;
                 overflow-y: auto;
             }
         }
@@ -136,11 +132,6 @@
             color: white;
             font-size: 1.2rem;
             cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        .speed-btn:active {
-            transform: scale(0.8);
         }
 
         .speed-display {
@@ -161,12 +152,12 @@
             gap: 15px;
             justify-content: center;
             flex: 1;
-            min-height: 0; /* 關鍵：允許 Flex 子元素縮小 */
+            min-height: 0;
         }
 
         @media (min-width: 768px) {
             .sim-container {
-                flex-wrap: nowrap; /* iPad/PC 保持左右並排 */
+                flex-wrap: nowrap;
             }
         }
 
@@ -180,7 +171,6 @@
             flex-direction: column;
             align-items: center;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-            min-height: 0;
         }
 
         .panel h2 {
@@ -189,37 +179,36 @@
             text-align: center;
             border-bottom: 2px solid var(--accent);
             padding-bottom: 5px;
-            display: inline-block;
             flex-shrink: 0;
         }
 
-        /* 最大化動畫區域 */
+        /* Essential for circular black space */
         .canvas-wrapper {
             position: relative;
-            margin-bottom: 10px;
             flex: 1;
+            width: 100%;
             min-height: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%;
             overflow: hidden;
+            background: transparent;
         }
 
         canvas.main-sim {
             background: #000;
-            border-radius: 50%;
+            border-radius: 50%; /* Force circular shape */
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+            display: block;
+            aspect-ratio: 1 / 1;
             max-width: 100%;
             max-height: 100%;
-            height: 100%; /* 強制填滿容器高度 */
-            aspect-ratio: 1 / 1; /* 強制保持正方形比例 */
             object-fit: contain;
         }
 
         .telescope-view {
             display: flex;
-            flex-direction: row; /* 水平排列以節省垂直空間 */
+            flex-direction: row;
             align-items: center;
             background: rgba(0, 0, 0, 0.4);
             padding: 10px 15px;
@@ -228,6 +217,7 @@
             width: 100%;
             gap: 15px;
             flex-shrink: 0;
+            margin-top: 10px;
         }
 
         .tele-info {
@@ -237,23 +227,15 @@
             flex: 1;
         }
 
-        .telescope-view h3 {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-        }
-
         canvas.tele-sim {
             background: #000;
             border-radius: 50%;
             border: 2px solid #475569;
-            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1);
-            width: 80px; /* 縮小視覺尺寸但保持高解析度 */
+            width: 80px;
             height: 80px;
             flex-shrink: 0;
         }
 
-        /* 隱藏原本的 info-box，改為 Modal 樣式 */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -280,8 +262,6 @@
             max-width: 800px;
             width: 100%;
             position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            margin: 0; /* 移除原本的 margin */
         }
 
         .close-btn {
@@ -293,108 +273,8 @@
             color: #fff;
             font-size: 1.5rem;
             cursor: pointer;
-            transition: color 0.2s;
         }
 
-        .close-btn:hover {
-            color: #f87171;
-        }
-
-        .info-box h3 {
-            color: #fff;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-            padding-right: 20px;
-        }
-
-        .info-cols {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        /* 大螢幕時，說明文字變成左右兩欄以節省高度 */
-        @media (min-width: 768px) {
-            .info-cols {
-                flex-direction: row;
-                gap: 20px;
-            }
-            .info-cols p {
-                flex: 1;
-            }
-        }
-
-        .info-box p {
-            color: #e2e8f0;
-            margin-bottom: 0;
-            font-size: 0.9rem;
-        }
-
-        .highlight {
-            color: var(--venus-color);
-            font-weight: bold;
-        }
-        
-        /* Educational label pointing out the missing phase */
-        .alert-text {
-            color: #f87171;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            font-weight: bold;
-            min-height: 20px;
-        }
-
-        .lang-btn {
-            padding: 6px 12px;
-            border-radius: 6px;
-            background: var(--accent);
-            color: var(--bg-dark);
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            font-family: inherit;
-            transition: opacity 0.2s;
-        }
-        .lang-btn:hover {
-            opacity: 0.8;
-        }
-
-        .action-btn {
-            padding: 6px 12px;
-            border-radius: 6px;
-            background: var(--earth-color);
-            color: var(--text-light);
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            font-family: inherit;
-            font-size: 1.1rem;
-            width: 40px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.2s;
-        }
-        .action-btn:hover {
-            opacity: 0.8;
-        }
-
-        .info-btn {
-            background: #1e3a8a;
-            border: 1px solid var(--accent);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-        .info-btn:hover {
-            background: #2563eb;
-        }
-
-        /* 天體選擇按鈕樣式 */
         .planet-btn {
             background: #334155;
             border: 1px solid #475569;
@@ -402,74 +282,33 @@
             padding: 8px 10px;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
-            font-family: inherit;
             width: 100%;
             text-align: left;
-            transition: all 0.2s;
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 0.9rem;
         }
 
-        .planet-btn:hover {
-            background: #475569;
-        }
-
         .planet-btn.active {
             background: var(--earth-color);
             border-color: var(--accent);
-            box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
         }
 
-        .planet-icon {
-            font-size: 1.2rem;
+        .alert-text {
+            color: #f87171;
+            font-size: 0.85rem;
+            margin-top: 2px;
+            font-weight: bold;
         }
 
-        /* 左側選單標題樣式 */
-        .sidebar-title {
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            color: var(--accent);
-            display: block;
-        }
-
-        /* 英文模式專屬微調 (防止英文單字過長導致換行與滾動) */
-        [data-lang="en"] .sidebar {
-            padding: 15px 12px; /* 縮減左右內距，給文字更多空間 */
-        }
-
-        [data-lang="en"] .sidebar-title,
-        [data-lang="en"] .control-group label {
-            font-size: 0.75rem;
-            line-height: 1.2;
-        }
-
-        [data-lang="en"] .planet-btn {
-            font-size: 0.75rem;
-            padding: 6px 8px;
-        }
-
-        [data-lang="en"] .speed-display {
-            font-size: 0.8rem;
-        }
-
-        [data-lang="en"] .speed-btn {
-            font-size: 1rem;
-        }
-
-        /* 頁尾樣式 */
         footer {
             text-align: center;
-            padding-top: 5px;
+            padding: 5px;
             font-size: 0.8rem;
             color: var(--text-muted);
             border-top: 1px solid #334155;
-            margin-top: 5px;
-            flex-shrink: 0;
         }
-
     </style>
 </head>
 <body>
@@ -477,85 +316,62 @@
     <header>
         <h1 data-i18n="title">金星盈虧的兩種解釋：地心說 vs 日心說</h1>
         <div class="top-right-controls">
-            <button id="openInfoBtn" class="info-btn" onclick="document.getElementById('infoModal').classList.add('active')" data-i18n="openInfo">說明</button>
-            <button id="langToggle" class="lang-btn" onclick="toggleLang()">繁/Eng</button>
+            <button class="info-btn" style="background:#1e3a8a; color:white; border:1px solid #38bdf8; padding:5px 12px; border-radius:6px; cursor:pointer;" onclick="document.getElementById('infoModal').classList.add('active')" data-i18n="openInfo">說明</button>
+            <button class="lang-btn" style="background:#38bdf8; border:none; padding:5px 12px; border-radius:6px; cursor:pointer; font-weight:bold;" onclick="toggleLang()">繁/Eng</button>
         </div>
     </header>
 
     <div class="layout-wrapper">
-        <!-- 左側選單列 -->
         <aside class="sidebar">
-            <div class="control-group" style="margin-bottom: 10px; width: 100%;">
-                <label class="sidebar-title" data-i18n="selectPlanet">選擇觀察天體:</label>
-                <div style="display: flex; flex-direction: column; gap: 6px; width: 100%;">
-                    <button class="planet-btn active" id="btn-venus" onclick="selectPlanet('venus')">
-                        <span class="planet-icon">♀</span> <span data-i18n="opt_venus">金星</span>
-                    </button>
-                    <button class="planet-btn" id="btn-moon" onclick="selectPlanet('moon')">
-                        <span class="planet-icon">☾</span> <span data-i18n="opt_moon">月球</span>
-                    </button>
-                    <button class="planet-btn" id="btn-mars" onclick="selectPlanet('mars')">
-                        <span class="planet-icon">♂</span> <span data-i18n="opt_mars">火星</span>
-                    </button>
-                </div>
+            <div class="control-group">
+                <label data-i18n="selectPlanet" style="color:var(--accent); font-size:0.8rem;">選擇觀察天體:</label>
+                <button class="planet-btn active" id="btn-venus" onclick="selectPlanet('venus')">♀ <span data-i18n="opt_venus">金星</span></button>
+                <button class="planet-btn" id="btn-moon" onclick="selectPlanet('moon')">☾ <span data-i18n="opt_moon">月球</span></button>
+                <button class="planet-btn" id="btn-mars" onclick="selectPlanet('mars')">♂ <span data-i18n="opt_mars">火星</span></button>
             </div>
             
-            <div class="control-group row" style="justify-content: center; margin-bottom: 10px;">
-                <button id="playPauseBtn" class="action-btn" aria-label="Play/Pause">⏸</button>
+            <div class="control-group row" style="justify-content: center;">
+                <button id="playPauseBtn" style="background:var(--earth-color); color:white; border:none; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:1.2rem;">⏸</button>
             </div>
             
             <div class="control-group">
                 <label data-i18n="speed">模擬速度:</label>
                 <div class="speed-controls">
-                    <button id="speedDownBtn" class="speed-btn" aria-label="Slower">🐢</button>
+                    <button id="speedDownBtn" class="speed-btn">🐢</button>
                     <span id="speedDisplay" class="speed-display">0.8x</span>
-                    <button id="speedUpBtn" class="speed-btn" aria-label="Faster">🚀</button>
+                    <button id="speedUpBtn" class="speed-btn">🚀</button>
                 </div>
             </div>
             
-            <div class="control-group row">
-                <input type="checkbox" id="showOrbits" checked>
-                <label for="showOrbits" data-i18n="orbits">顯示軌道</label>
-            </div>
-            
-            <div class="control-group row">
-                <input type="checkbox" id="showLOS" checked>
-                <label for="showLOS" data-i18n="los">顯示視線</label>
-            </div>
-            
-            <div class="control-group row">
-                <input type="checkbox" id="showLabels" checked>
-                <label for="showLabels" data-i18n="labels">顯示標籤</label>
-            </div>
+            <div class="control-group row"><input type="checkbox" id="showOrbits" checked><label for="showOrbits" data-i18n="orbits">顯示軌道</label></div>
+            <div class="control-group row"><input type="checkbox" id="showLOS" checked><label for="showLOS" data-i18n="los">顯示視線</label></div>
+            <div class="control-group row"><input type="checkbox" id="showLabels" checked><label for="showLabels" data-i18n="labels">顯示標籤</label></div>
         </aside>
 
-        <!-- 主模擬區 -->
         <main class="sim-container">
-            <!-- Geocentric Panel -->
             <div class="panel">
                 <h2 data-i18n="geoTitle">地心說</h2>
                 <div class="canvas-wrapper">
-                    <canvas id="geoMain" width="400" height="400" class="main-sim"></canvas>
+                    <canvas id="geoMain" class="main-sim"></canvas>
                 </div>
                 <div class="telescope-view">
-                    <canvas id="geoTele" width="160" height="160" class="tele-sim"></canvas>
+                    <canvas id="geoTele" class="tele-sim"></canvas>
                     <div class="tele-info">
-                        <h3 data-i18n="teleView">🔭 望遠鏡視角</h3>
+                        <h3 data-i18n="teleView" style="font-size:0.9rem; color:var(--text-muted);">🔭 望遠鏡視角</h3>
                         <div class="alert-text" id="geoAlert" data-i18n="geoAlert">注意：金星永遠無法呈現滿相！</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Heliocentric Panel -->
             <div class="panel">
                 <h2 data-i18n="helioTitle">日心說</h2>
                 <div class="canvas-wrapper">
-                    <canvas id="helioMain" width="400" height="400" class="main-sim"></canvas>
+                    <canvas id="helioMain" class="main-sim"></canvas>
                 </div>
                 <div class="telescope-view">
-                    <canvas id="helioTele" width="160" height="160" class="tele-sim"></canvas>
+                    <canvas id="helioTele" class="tele-sim"></canvas>
                     <div class="tele-info">
-                        <h3 data-i18n="teleView">🔭 望遠鏡視角</h3>
+                        <h3 data-i18n="teleView" style="font-size:0.9rem; color:var(--text-muted);">🔭 望遠鏡視角</h3>
                         <div class="alert-text" style="color:#4ade80;" data-i18n="helioAlert">觀察：滿相時最小，新相時最大！</div>
                     </div>
                 </div>
@@ -563,599 +379,280 @@
         </main>
     </div>
 
-    <!-- 頁尾 -->
-    <footer>
-        <span data-i18n="footerText">廠商會中學：物理科</span>
-    </footer>
+    <footer><span data-i18n="footerText">廠商會中學：物理科</span></footer>
 
-    <!-- 伽利略發現說明 (Modal) -->
     <div id="infoModal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('active')">
         <div class="info-box">
             <button class="close-btn" onclick="document.getElementById('infoModal').classList.remove('active')">&times;</button>
-            <h3 data-i18n="infoTitle">📖 伽利略的重大發現</h3>
-            <p data-i18n="infoP1" style="margin-bottom: 10px;">在 1610 年，伽利略用望遠鏡觀察金星，找到了推翻「地心說」的關鍵鐵證。</p>
-            <div class="info-cols">
-                <p data-i18n="infoP2"><strong>為什麼地心說是錯的？（左圖）</strong><br>在地心說中，金星永遠被困在地球和太陽之間。這樣的話，金星的向光面永遠背對著我們，我們<span class="highlight">應該只能看到「新相」</span>，絕對不可能看到滿相。</p>
-                <p data-i18n="infoP3"><strong>日心說的完美解釋（右圖）</strong><br>日心說認為金星繞著太陽轉。當金星繞到太陽後方時，它的向光面會完全朝向地球，形成<span class="highlight">「滿相」</span>，而且因為距離變遠，看起來特別小。伽利略真實觀測到了這個滿相現象，直接證明了太陽才是中心！</p>
-            </div>
+            <h3 data-i18n="infoTitle" style="color:white; margin-bottom:15px;">📖 伽利略的重大發現</h3>
+            <p data-i18n="infoP1" style="color:#e2e8f0; font-size:0.95rem; line-height:1.6;"></p>
         </div>
     </div>
 
     <script>
-        /**
-         * Simulation Logic
-         * Uses HTML5 Canvas API for self-contained, dependency-free rendering.
-         */
-
-        // Get context for all 4 canvases
-        const ctxGeoMain = document.getElementById('geoMain').getContext('2d');
-        const ctxGeoTele = document.getElementById('geoTele').getContext('2d');
-        const ctxHelioMain = document.getElementById('helioMain').getContext('2d');
-        const ctxHelioTele = document.getElementById('helioTele').getContext('2d');
-
-        // UI Controls
-        const showOrbits = document.getElementById('showOrbits');
-        const showLOS = document.getElementById('showLOS');
-        const showLabels = document.getElementById('showLabels');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const speedDownBtn = document.getElementById('speedDownBtn');
-        const speedUpBtn = document.getElementById('speedUpBtn');
-        const speedDisplay = document.getElementById('speedDisplay');
-
-        // Global Simulation Variables
-        let time = 0;
-        let isPlaying = true;
-        let simSpeed = 0.8;
-        let planetMode = 'venus'; // 'venus' or 'mars' or 'moon'
-        const cx = 200; // Center X for main canvas
-        const cy = 200; // Center Y for main canvas
-
-        // --- Dynamic Physics Parameters ---
-        let pHelioEarthRadius, pHelioPlanetRadius;
-        let pHelioEarthSpeed, pHelioPlanetSpeed;
-        let pGeoSunRadius, pGeoDefRadius, pGeoEpiRadius;
-        let pGeoSunSpeed, pGeoDefSpeed, pGeoEpiSpeed;
-        let pColor, pColorDark;
-        let rEarth, rSun, rPlanet, rMoon, rMoonOrbit; // 新增動態尺寸變數
-
-        // Colors (Static ones moved to top for initialization)
-        const colEarth = '#3b82f6';
-        const colEarthDark = '#1e3a8a';
-        const colSun = '#fbbf24';
-        const colMoon = '#cbd5e1'; 
-        const colMoonDark = '#475569'; 
-        const colOrbit = '#475569';
-        const colLOS = 'rgba(255, 255, 255, 0.4)';
-
-        // --- i18n Dictionary ---
         const i18n = {
             'zh-TW': {
+                title: '金星盈虧的兩種解釋：地心說 vs 日心說',
                 selectPlanet: '選擇觀察天體:',
-                opt_venus: '金星',
-                opt_mars: '火星',
-                opt_moon: '月球',
-                title_venus: '金星盈虧的兩種解釋：地心說 vs 日心說',
-                title_mars: '火星大小的兩種解釋：地心說 vs 日心說',
-                title_moon: '月相的兩種解釋：為何無法推翻地心說？',
-                speed: '模擬速度:',
-                orbits: '顯示軌道',
-                los: '顯示視線',
-                labels: '顯示標籤',
-                geoTitle_venus: '地心說 (托勒密 - 內行星)',
-                helioTitle_venus: '日心說 (哥白尼 - 內行星)',
-                geoTitle_mars: '地心說 (托勒密 - 外行星)',
-                helioTitle_mars: '日心說 (哥白尼 - 外行星)',
-                geoTitle_moon: '地心說 (月球繞地)',
-                helioTitle_moon: '日心說 (月球繞地)',
+                opt_venus: '金星', opt_mars: '火星', opt_moon: '月球',
+                speed: '模擬速度:', orbits: '顯示軌道', los: '顯示視線', labels: '顯示標籤',
+                geoTitle_venus: '地心說 (托勒密)', helioTitle_venus: '日心說 (哥白尼)',
+                geoTitle_mars: '地心說 (托勒密)', helioTitle_mars: '日心說 (哥白尼)',
+                geoTitle_moon: '地心說 (月球繞地)', helioTitle_moon: '日心說 (月球繞地)',
                 teleView: '🔭 望遠鏡視角',
                 geoAlert_venus: '注意：金星永遠無法呈現滿相！',
                 helioAlert_venus: '觀察：滿相時最小，新相時最大！',
                 geoAlert_mars: '注意：火星始終以向光面朝向地球。',
-                helioAlert_mars: '觀察：火星在「衝」(最近) 時體積最大！',
+                helioAlert_mars: '觀察：火星在「衝」時體積最大！',
                 geoAlert_moon: '注意：月球在兩個模型中都繞著地球！',
-                helioAlert_moon: '觀察：月相與地心說預測完全一致！',
-                infoTitle_venus: '📖 伽利略的重大發現',
-                infoP1_venus: '在 1610 年，伽利略用望遠鏡觀察金星，找到了推翻「地心說」的關鍵鐵證。',
-                infoP2_venus: '<strong>為什麼地心說是錯的？（左圖）</strong><br>在地心說中，金星永遠被困在地球和太陽之間。這樣的話，金星的向光面永遠背對著我們，我們<span class="highlight">應該只能看到「新相」</span>，絕對不可能看到滿相。',
-                infoP3_venus: '<strong>日心說的完美解釋（右圖）</strong><br>日心說認為金星繞著太陽轉。當金星繞到太陽後方時，它的向光面會完全朝向地球，形成<span class="highlight">「滿相」</span>，而且因為距離變遠，看起來特別小。伽利略真實觀測到了這個滿相現象，直接證明了太陽才是中心！',
-                infoTitle_mars: '📖 關於火星的軌道與大小',
-                infoP1_mars: '金星的盈虧推翻了地心說，那火星（外行星）呢？',
-                infoP2_mars: '<strong>地心說的複雜設計（左圖）</strong><br>為了解釋火星的軌跡，地心說設計了複雜的「本輪」，並硬性規定它必須與太陽的連線平行。這導致火星幾乎永遠以亮面朝向我們，無法產生像金星那樣明顯的盈虧變化。',
-                infoP3_mars: '<strong>日心說的自然現象（右圖）</strong><br>在日心說中，地球在內圈「超車」外圈的火星。超車時距離最近（稱為「衝」），火星看起來最巨大。雖然兩種模型都預測火星沒有「新相」，但日心說的幾何解釋自然且簡單得多！',
-                infoTitle_moon: '📖 為什麼月相不能推翻地心說？',
-                infoP1_moon: '為什麼伽利略不看月亮就好？因為「月相變化」無法用來判斷誰對誰錯！',
-                infoP2_moon: '<strong>兩者的共識：月球繞著地球轉</strong><br>不論是地心說（左圖）還是日心說（右圖），都同意月球是繞著地球公轉的。',
-                infoP3_moon: '<strong>預測完全相同</strong><br>因為太陽光照射月球的角度變化，在兩種模型中是一模一樣的，所以它們都能完美解釋從新相到滿相的變化。這也是為什麼伽利略必須去觀察「金星」，才能找到地心說的致命破綻！',
-                sun: '太陽',
-                earth: '地球',
-                planetLabel_venus: '金星',
-                planetLabel_mars: '火星',
-                planetLabel_moon: '月球',
-                epicycle: '本輪',
-                deferent: '均輪',
-                moon: '月球',
-                openInfo: '說明',
-                footerText: '廠商會中學：物理科'
+                helioAlert_moon: '觀察：月相與地心說預測一致！',
+                openInfo: '說明', footerText: '廠商會中學：物理科',
+                sun: '太陽', earth: '地球', planetLabel_venus: '金星', planetLabel_mars: '火星', planetLabel_moon: '月球', moon: '月球'
             },
             'en': {
+                title: 'Venus Phases: Geocentrism vs Heliocentrism',
                 selectPlanet: 'Select Target:',
-                opt_venus: 'Venus',
-                opt_mars: 'Mars',
-                opt_moon: 'Moon',
-                title_venus: 'Two Explanations of Venus Phases',
-                title_mars: 'Two Explanations of Mars Apparent Size',
-                title_moon: 'Moon Phases: Why didn\'t they prove Heliocentrism?',
-                speed: 'Simulation Speed:',
-                orbits: 'Orbital Paths',
-                los: 'Line of Sight',
-                labels: 'Labels',
-                geoTitle_venus: 'Geocentric (Ptolemy - Inferior)',
-                helioTitle_venus: 'Heliocentric (Copernicus - Inferior)',
-                geoTitle_mars: 'Geocentric (Ptolemy - Superior)',
-                helioTitle_mars: 'Heliocentric (Copernicus - Superior)',
-                geoTitle_moon: 'Geocentric (Moon orbits Earth)',
-                helioTitle_moon: 'Heliocentric (Moon orbits Earth)',
+                opt_venus: 'Venus', opt_mars: 'Mars', opt_moon: 'Moon',
+                speed: 'Speed:', orbits: 'Orbits', los: 'Sight', labels: 'Labels',
+                geoTitle_venus: 'Geocentric', helioTitle_venus: 'Heliocentric',
+                geoTitle_mars: 'Geocentric', helioTitle_mars: 'Heliocentric',
+                geoTitle_moon: 'Geocentric', helioTitle_moon: 'Heliocentric',
                 teleView: '🔭 Telescope View',
                 geoAlert_venus: 'Note: Venus can NEVER be full!',
-                helioAlert_venus: 'Observe: Smallest when full, largest when crescent!',
-                geoAlert_mars: 'Note: Mars never shows a crescent phase.',
-                helioAlert_mars: 'Observe: Largest size at Opposition!',
-                geoAlert_moon: 'Note: The Moon still orbits Earth.',
-                helioAlert_moon: 'Observe: Phases match Geocentric exactly!',
-                infoTitle_venus: '📖 Galileo\'s Great Discovery',
-                infoP1_venus: 'In 1610, Galileo used his telescope to observe Venus, finding the ultimate proof against the Geocentric model.',
-                infoP2_venus: '<strong>Why was Geocentrism wrong? (Left)</strong><br>In this model, Venus is trapped between Earth and the Sun. Thus, its lit side mostly faces away from us, meaning we <span class="highlight">should only ever see a "Crescent"</span> and NEVER a full Venus.',
-                infoP3_venus: '<strong>The Heliocentric Answer (Right)</strong><br>This model puts Venus orbiting the Sun. When Venus goes behind the Sun, we can see its fully lit side, creating a <span class="highlight">"Full" phase</span>. Galileo actually observed this full phase, proving the Sun is the center!',
-                infoTitle_mars: '📖 About Mars\' Orbit and Phases',
-                infoP1_mars: 'Venus disproved Geocentrism, but what about Mars?',
-                infoP2_mars: '<strong>A Complex Design (Left)</strong><br>To explain Mars\' orbit, the Geocentric model used a complex "epicycle" forced to always stay parallel to the Sun. This kept Mars\' lit face mostly towards Earth, preventing major phase changes.',
-                infoP3_mars: '<strong>A Natural Phenomenon (Right)</strong><br>In the Heliocentric model, the faster Earth overtakes Mars on the inside track. During this pass ("Opposition"), Mars is closest and looks huge. Both models predict similar phases for Mars, making Heliocentrism much simpler and more elegant!',
-                infoTitle_moon: '📖 Why didn\'t Moon phases disprove Geocentrism?',
-                infoP1_moon: 'Why didn\'t Galileo just look at the Moon? Because lunar phases cannot prove which model is right!',
-                infoP2_moon: '<strong>The Agreement: The Moon orbits Earth</strong><br>Both the Geocentric (Left) and Heliocentric (Right) models completely agree that the Moon orbits the Earth.',
-                infoP3_moon: '<strong>Identical Predictions</strong><br>Because the angle of sunlight hitting the Moon changes in the exact same way in both models, they both perfectly explain the phases from New to Full Moon. This is why Galileo had to observe Venus to find the fatal flaw in Geocentrism!',
-                sun: 'Sun',
-                earth: 'Earth',
-                planetLabel_venus: 'Venus',
-                planetLabel_mars: 'Mars',
-                planetLabel_moon: 'Moon',
-                epicycle: 'Epicycle',
-                deferent: 'Deferent',
-                moon: 'Moon',
-                openInfo: 'Info',
-                footerText: 'CMA Secondary School: Physics'
+                helioAlert_venus: 'Full when small, crescent when large!',
+                geoAlert_mars: 'Note: Mars never shows a crescent.',
+                helioAlert_mars: 'Observe: Largest at Opposition!',
+                geoAlert_moon: 'Note: Moon orbits Earth in both.',
+                helioAlert_moon: 'Observe: Identical predictions!',
+                openInfo: 'Info', footerText: 'CMA Secondary School: Physics',
+                sun: 'Sun', earth: 'Earth', planetLabel_venus: 'Venus', planetLabel_mars: 'Mars', planetLabel_moon: 'Moon', moon: 'Moon'
             }
         };
 
         let currentLang = 'zh-TW';
-        
-        function updateLabels() {
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const baseKey = el.getAttribute('data-i18n');
-                let keyToUse = baseKey;
-                // Check if a planet-specific string exists (e.g., title_venus)
-                if (i18n[currentLang][baseKey + '_' + planetMode]) {
-                    keyToUse = baseKey + '_' + planetMode;
-                }
-                if (i18n[currentLang][keyToUse]) {
-                    el.innerHTML = i18n[currentLang][keyToUse];
-                }
-            });
+        let time = 0;
+        let isPlaying = true;
+        let simSpeed = 0.8;
+        let planetMode = 'venus';
+        const BASE_SIZE = 400; // Logical pixels
+
+        const canvasList = ['geoMain', 'helioMain', 'geoTele', 'helioTele'];
+        const ctxs = {};
+        const canvases = {};
+
+        function setupHDCanvas(id, logicalWidth, logicalHeight) {
+            const canvas = document.getElementById(id);
+            const ctx = canvas.getContext('2d', { alpha: false });
+            const dpr = window.devicePixelRatio || 1;
+            
+            // Set internal resolution
+            canvas.width = logicalWidth * dpr;
+            canvas.height = logicalHeight * dpr;
+            
+            // Set CSS size
+            canvas.style.width = logicalWidth + 'px';
+            canvas.style.height = logicalHeight + 'px';
+            
+            // Scale context to use logical units
+            ctx.scale(dpr, dpr);
+            
+            // Visual smoothing for high-end look
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            
+            ctxs[id] = ctx;
+            canvases[id] = canvas;
         }
 
-        function toggleLang() {
-            currentLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
-            document.body.setAttribute('data-lang', currentLang);
-            updateLabels();
+        function initCanvases() {
+            setupHDCanvas('geoMain', BASE_SIZE, BASE_SIZE);
+            setupHDCanvas('helioMain', BASE_SIZE, BASE_SIZE);
+            setupHDCanvas('geoTele', 160, 160);
+            setupHDCanvas('helioTele', 160, 160);
         }
+
+        window.addEventListener('resize', initCanvases);
+        initCanvases();
+
+        // Parameters
+        let pHelioEarthRadius=140, pHelioPlanetRadius=100, pHelioEarthSpeed=0.5, pHelioPlanetSpeed=0.7;
+        let pGeoSunRadius=160, pGeoDefRadius=80, pGeoEpiRadius=60, pGeoSunSpeed=0.5, pGeoDefSpeed=0.5, pGeoEpiSpeed=0.7;
+        let pColor='#fcd34d', pColorDark='#92400e', rEarth=8, rSun=12, rPlanet=6, rMoon=2.5, rMoonOrbit=22;
 
         function setPlanetParameters() {
             if (planetMode === 'venus') {
-                pHelioEarthRadius = 140;
-                pHelioPlanetRadius = 100;
-                pHelioEarthSpeed = 0.5;
-                pHelioPlanetSpeed = 0.5 * Math.pow(140 / 100, 1.5); // Kepler's 3rd Law
-
-                pGeoSunRadius = 160;
-                pGeoDefRadius = 80;   
-                pGeoEpiRadius = pGeoDefRadius * (100 / 140); 
-                pGeoSunSpeed = 0.5; 
-                pGeoDefSpeed = 0.5; 
-                pGeoEpiSpeed = pHelioPlanetSpeed; 
-
-                pColor = '#fcd34d'; // Gold/Yellow
-                pColorDark = '#92400e';
-                
-                rEarth = 8; rSun = 12; rPlanet = 6; rMoon = 2.5; rMoonOrbit = 22;
+                pHelioEarthRadius = 140; pHelioPlanetRadius = 100; pHelioEarthSpeed = 0.5; pHelioPlanetSpeed = 0.83;
+                pGeoSunRadius = 160; pGeoDefRadius = 80; pGeoEpiRadius = 57; pGeoSunSpeed = 0.5; pGeoDefSpeed = 0.5; pGeoEpiSpeed = 0.83;
+                pColor = '#fcd34d'; pColorDark = '#92400e'; rEarth = 8; rSun = 12; rPlanet = 6;
             } else if (planetMode === 'mars') {
-                pHelioEarthRadius = 75;
-                pHelioPlanetRadius = 114; 
-                pHelioEarthSpeed = 0.5;
-                pHelioPlanetSpeed = 0.5 * Math.pow(75 / 114, 1.5); 
-
-                pGeoSunRadius = 24; 
-                pGeoDefRadius = 114;  
-                pGeoEpiRadius = 75;   
-                pGeoSunSpeed = 0.5; 
-                pGeoDefSpeed = pHelioPlanetSpeed; 
-                pGeoEpiSpeed = pGeoSunSpeed; 
-
-                pColor = '#ef4444'; // Mars Red
-                pColorDark = '#7f1d1d';
-                
-                rEarth = 6; rSun = 8; rPlanet = 5; rMoon = 2; rMoonOrbit = 12;
+                pHelioEarthRadius = 75; pHelioPlanetRadius = 114; pHelioEarthSpeed = 0.5; pHelioPlanetSpeed = 0.27;
+                pGeoSunRadius = 24; pGeoDefRadius = 114; pGeoEpiRadius = 75; pGeoSunSpeed = 0.5; pGeoDefSpeed = 0.27; pGeoEpiSpeed = 0.5;
+                pColor = '#ef4444'; pColorDark = '#7f1d1d'; rEarth = 6; rSun = 8; rPlanet = 5;
             } else if (planetMode === 'moon') {
-                // 特殊模式：專注於月相，隱藏金星/火星的本輪與均輪，放大月球軌道
-                pHelioEarthRadius = 140;
-                pHelioEarthSpeed = 0.5;
-                pHelioPlanetRadius = 140; // 不繪製，僅為防呆
-                pHelioPlanetSpeed = 0;
-
-                pGeoSunRadius = 160;
-                pGeoSunSpeed = 0.5;
-                pGeoDefRadius = 0;
-                pGeoEpiRadius = 0;
-                pGeoDefSpeed = 0;
-                pGeoEpiSpeed = 0;
-
-                pColor = colMoon; 
-                pColorDark = colMoonDark;
-                
-                rEarth = 10; rSun = 14; rPlanet = 0; rMoon = 6; rMoonOrbit = 40;
+                pHelioEarthRadius = 140; pHelioEarthSpeed = 0.5; pHelioPlanetRadius = 140; pHelioPlanetSpeed = 0;
+                pGeoSunRadius = 160; pGeoSunSpeed = 0.5; pGeoDefRadius = 0; pGeoEpiRadius = 0;
+                pColor = '#cbd5e1'; pColorDark = '#475569'; rEarth = 10; rSun = 14; rPlanet = 0; rMoon = 6; rMoonOrbit = 40;
             }
         }
 
-        // 天體選擇按鈕邏輯
         function selectPlanet(mode) {
             planetMode = mode;
-            
-            // 更新按鈕的視覺啟用狀態 (Active Class)
-            document.getElementById('btn-venus').classList.remove('active');
-            document.getElementById('btn-moon').classList.remove('active');
-            document.getElementById('btn-mars').classList.remove('active');
+            document.querySelectorAll('.planet-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('btn-' + mode).classList.add('active');
-
             setPlanetParameters();
             updateLabels();
         }
 
-        // Initialize defaults
-        document.body.setAttribute('data-lang', currentLang);
-        setPlanetParameters();
-        updateLabels();
-
-        // Play/Pause button logic
-        playPauseBtn.addEventListener('click', () => {
-            isPlaying = !isPlaying;
-            playPauseBtn.innerText = isPlaying ? '⏸' : '▶';
-        });
-
-        // Speed buttons logic
-        speedDownBtn.addEventListener('click', () => {
-            simSpeed = Math.max(0.2, simSpeed - 0.2);
-            speedDisplay.innerText = simSpeed.toFixed(1) + 'x';
-        });
-
-        speedUpBtn.addEventListener('click', () => {
-            simSpeed = Math.min(5.0, simSpeed + 0.2);
-            speedDisplay.innerText = simSpeed.toFixed(1) + 'x';
-        });
-
-        // Star background cache
-        let stars = [];
-        for(let i=0; i<100; i++) {
-            stars.push({
-                x: Math.random() * 400,
-                y: Math.random() * 400,
-                r: Math.random() * 1.5,
-                a: Math.random()
-            });
+        function toggleLang() {
+            currentLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
+            updateLabels();
         }
 
-        function drawStars(ctx) {
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, 400, 400);
-            stars.forEach(s => {
-                ctx.fillStyle = `rgba(255, 255, 255, ${s.a})`;
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                ctx.fill();
+        function updateLabels() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const suffixKey = key + '_' + planetMode;
+                el.innerHTML = i18n[currentLang][suffixKey] || i18n[currentLang][key] || key;
             });
+            document.getElementById('speedDisplay').innerText = simSpeed.toFixed(1) + 'x';
         }
 
-        // --- Helper: Draw Planet ---
-        // 加入 labelOffsetY 參數，避免月球與地球的文字標籤在畫面上重疊
-        function drawPlanet(ctx, x, y, radius, colorBright, colorDark, label, sunX, sunY, isSun = false, labelOffsetY = 4) {
+        function drawBody(ctx, x, y, radius, colorBright, colorDark, label, sunX, sunY, isSun=false) {
+            ctx.save();
             if (isSun) {
                 ctx.fillStyle = colorBright;
-                ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Subtle glow
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = colorBright;
-                ctx.fill();
-                ctx.shadowBlur = 0;
+                ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI*2); ctx.fill();
+                ctx.shadowBlur = 15; ctx.shadowColor = colorBright; ctx.fill();
             } else {
-                // Draw dark hemisphere
                 ctx.fillStyle = colorDark;
-                ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Draw bright hemisphere facing the sun
-                let angleToSun = Math.atan2(sunY - y, sunX - x);
+                ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI*2); ctx.fill();
+                let angle = Math.atan2(sunY - y, sunX - x);
                 ctx.fillStyle = colorBright;
-                ctx.beginPath();
-                ctx.arc(x, y, radius, angleToSun - Math.PI/2, angleToSun + Math.PI/2);
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(x, y, radius, angle - Math.PI/2, angle + Math.PI/2); ctx.fill();
             }
+            ctx.restore();
 
-            if (showLabels.checked) {
-                ctx.fillStyle = '#fff';
-                ctx.font = '12px Microsoft JhengHei';
-                ctx.fillText(label, x + radius + 5, y + labelOffsetY);
+            if (document.getElementById('showLabels').checked) {
+                ctx.fillStyle = '#ffffff';
+                // HD Font Settings
+                ctx.font = 'bold 13px sans-serif';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                // Add tiny drop shadow for text contrast
+                ctx.shadowColor = 'rgba(0,0,0,0.8)';
+                ctx.shadowBlur = 2;
+                ctx.fillText(label, x + radius + 4, y + 2);
+                ctx.shadowBlur = 0;
             }
         }
 
-        // --- Helper: Draw Telescope Phase ---
-        function drawTelescopePhase(ctx, E, V, S, maxDist, planetColor) {
-            ctx.clearRect(0, 0, 160, 160);
+        function drawTelescope(ctx, E, V, S, maxDist, pColor) {
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, 160, 160);
             
-            // Vectors
-            let VE = { x: E.x - V.x, y: E.y - V.y };
-            let VS = { x: S.x - V.x, y: S.y - V.y };
+            let dx = E.x - V.x, dy = E.y - V.y;
+            let dist = Math.sqrt(dx*dx + dy*dy);
+            let appRad = Math.min(25 * (maxDist / dist), 70);
             
-            let dist = Math.hypot(VE.x, VE.y);
+            let nVE = { x: dx/dist, y: dy/dist };
+            let dsx = S.x - V.x, dsy = S.y - V.y;
+            let slen = Math.sqrt(dsx*dsx + dsy*dsy);
+            let nVS = { x: dsx/slen, y: dsy/slen };
             
-            // Apparent size based on distance (inverse proportional)
-            // Base size when distance is maxDist
-            let baseRadius = 25; 
-            let apparentRadius = baseRadius * (maxDist / dist);
-            // Limit max size to not break canvas
-            apparentRadius = Math.min(apparentRadius, 70); 
-
-            // Normalize vectors to calculate phase angle
-            let lenVE = Math.hypot(VE.x, VE.y);
-            let lenVS = Math.hypot(VS.x, VS.y);
-            let nVE = { x: VE.x/lenVE, y: VE.y/lenVE };
-            let nVS = { x: VS.x/lenVS, y: VS.y/lenVS };
-
-            // Dot product = cos(alpha). Range [-1, 1]. -1 is New, 1 is Full.
             let dot = nVE.x * nVS.x + nVE.y * nVS.y;
-            // Cross product determines if Sun is to the left or right
             let cross = nVE.x * nVS.y - nVE.y * nVS.x;
-
-            let isRightBright = cross > 0;
-            let k = dot; 
             
-            let tc = 80; // Center of 160x160 canvas
-
-            // 1. Draw Dark Circle (Shadow side)
-            ctx.fillStyle = '#111';
-            ctx.beginPath();
-            ctx.arc(tc, tc, apparentRadius, 0, Math.PI * 2);
-            ctx.fill();
-
-            // 2. Draw Bright Half
-            ctx.fillStyle = planetColor;
-            ctx.beginPath();
-            if (isRightBright) {
-                ctx.arc(tc, tc, apparentRadius, -Math.PI/2, Math.PI/2);
-            } else {
-                ctx.arc(tc, tc, apparentRadius, Math.PI/2, -Math.PI/2);
-            }
-            ctx.fill();
-
-            // 3. Draw phase boundary (Ellipse)
-            // Ellipse width depends on |k|. 
-            // If k < 0 (crescent), the ellipse covers the bright half with dark color.
-            // If k > 0 (gibbous/full), the ellipse covers the dark half with bright color.
-            let ellipseWidth = Math.max(0.1, apparentRadius * Math.abs(k));
+            ctx.translate(80, 80);
+            ctx.fillStyle = '#222';
+            ctx.beginPath(); ctx.arc(0, 0, appRad, 0, Math.PI*2); ctx.fill();
             
+            ctx.fillStyle = pColor;
             ctx.beginPath();
-            ctx.ellipse(tc, tc, ellipseWidth, apparentRadius, 0, 0, Math.PI*2);
-            
-            if (k < 0) {
-                ctx.fillStyle = '#111'; // Shadow eats into the bright side
-            } else {
-                ctx.fillStyle = planetColor; // Light extends into the dark side
-            }
+            if (cross > 0) ctx.arc(0, 0, appRad, -Math.PI/2, Math.PI/2);
+            else ctx.arc(0, 0, appRad, Math.PI/2, -Math.PI/2);
             ctx.fill();
+            
+            let ew = Math.max(0.1, appRad * Math.abs(dot));
+            ctx.beginPath(); ctx.ellipse(0, 0, ew, appRad, 0, 0, Math.PI*2);
+            ctx.fillStyle = (dot < 0) ? '#222' : pColor;
+            ctx.fill();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            const dpr = window.devicePixelRatio || 1;
+            ctx.scale(dpr, dpr);
         }
 
-        // --- Main Animation Loop ---
+        function drawOrbits(ctx, orbits) {
+            if (!document.getElementById('showOrbits').checked) return;
+            ctx.strokeStyle = 'rgba(71, 85, 105, 0.6)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            orbits.forEach(r => {
+                ctx.beginPath(); ctx.arc(200, 200, r, 0, Math.PI*2); ctx.stroke();
+            });
+            ctx.setLineDash([]);
+        }
+
         function animate() {
-            if (isPlaying) {
-                time += simSpeed * 0.02;
-            }
-
-            // ==========================================
-            // 1. HELIOCENTRIC MODEL (Right Side)
-            // ==========================================
-            drawStars(ctxHelioMain);
-
-            let hSun = { x: cx, y: cy };
-            let hEarth = {
-                x: cx + pHelioEarthRadius * Math.cos(time * pHelioEarthSpeed),
-                y: cy + pHelioEarthRadius * Math.sin(time * pHelioEarthSpeed)
-            };
+            if (isPlaying) time += 0.02 * simSpeed;
             
-            let hPlanet = { x: 0, y: 0 };
-            if (planetMode !== 'moon') {
-                hPlanet = {
-                    x: cx + pHelioPlanetRadius * Math.cos(time * pHelioPlanetSpeed),
-                    y: cy + pHelioPlanetRadius * Math.sin(time * pHelioPlanetSpeed)
-                };
+            const cx = 200, cy = 200;
+            const labels = i18n[currentLang];
+
+            // Heliocentric
+            let hCtx = ctxs.helioMain;
+            hCtx.fillStyle = '#000000'; hCtx.fillRect(0,0,400,400);
+            drawOrbits(hCtx, planetMode === 'moon' ? [pHelioEarthRadius] : [pHelioEarthRadius, pHelioPlanetRadius]);
+            
+            let hSun = {x:cx, y:cy};
+            let hEarth = {x:cx+pHelioEarthRadius*Math.cos(time*pHelioEarthSpeed), y:cy+pHelioEarthRadius*Math.sin(time*pHelioEarthSpeed)};
+            let hPlanet = {x:cx+pHelioPlanetRadius*Math.cos(time*pHelioPlanetSpeed), y:cy+pHelioPlanetRadius*Math.sin(time*pHelioPlanetSpeed)};
+            let hMoon = {x:hEarth.x+rMoonOrbit*Math.cos(time*6.5), y:hEarth.y+rMoonOrbit*Math.sin(time*6.5)};
+            
+            let hTarget = planetMode === 'moon' ? hMoon : hPlanet;
+            if (document.getElementById('showLOS').checked) {
+                hCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+                hCtx.beginPath(); hCtx.moveTo(hEarth.x, hEarth.y); hCtx.lineTo(hTarget.x, hTarget.y); hCtx.stroke();
             }
             
-            // 月球繞地球 (約一年13次滿月)
-            let hMoon = {
-                x: hEarth.x + rMoonOrbit * Math.cos(time * pHelioEarthSpeed * 13),
-                y: hEarth.y + rMoonOrbit * Math.sin(time * pHelioEarthSpeed * 13)
-            };
-            
-            let targetHelio = planetMode === 'moon' ? hMoon : hPlanet;
+            drawBody(hCtx, hSun.x, hSun.y, rSun, '#fbbf24', '#fbbf24', labels.sun, 0, 0, true);
+            drawBody(hCtx, hEarth.x, hEarth.y, rEarth, '#3b82f6', '#1e3a8a', labels.earth, hSun.x, hSun.y);
+            if (planetMode==='moon') drawBody(hCtx, hMoon.x, hMoon.y, rMoon, '#cbd5e1', '#475569', labels.moon, hSun.x, hSun.y);
+            else drawBody(hCtx, hPlanet.x, hPlanet.y, rPlanet, pColor, pColorDark, labels['planetLabel_'+planetMode], hSun.x, hSun.y);
+            drawTelescope(ctxs.helioTele, hEarth, hTarget, hSun, 280, pColor);
 
-            // Orbits
-            if (showOrbits.checked) {
-                ctxHelioMain.strokeStyle = colOrbit;
-                ctxHelioMain.setLineDash([4, 4]);
-                ctxHelioMain.beginPath(); ctxHelioMain.arc(cx, cy, pHelioEarthRadius, 0, Math.PI*2); ctxHelioMain.stroke();
-                
-                if (planetMode !== 'moon') {
-                    ctxHelioMain.beginPath(); ctxHelioMain.arc(cx, cy, pHelioPlanetRadius, 0, Math.PI*2); ctxHelioMain.stroke();
-                }
-                ctxHelioMain.setLineDash([]);
-                
-                // 月球軌道 (僅在月球模式時顯示)
-                if (planetMode === 'moon') {
-                    ctxHelioMain.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-                    ctxHelioMain.beginPath(); ctxHelioMain.arc(hEarth.x, hEarth.y, rMoonOrbit, 0, Math.PI*2); ctxHelioMain.stroke();
-                }
+            // Geocentric
+            let gCtx = ctxs.geoMain;
+            gCtx.fillStyle = '#000000'; gCtx.fillRect(0,0,400,400);
+            drawOrbits(gCtx, [pGeoSunRadius, pGeoDefRadius]);
+            
+            let gEarth = {x:cx, y:cy};
+            let gSun = {x:cx+pGeoSunRadius*Math.cos(time*pGeoSunSpeed), y:cy+pGeoSunRadius*Math.sin(time*pGeoSunSpeed)};
+            let defPos = {x:cx+pGeoDefRadius*Math.cos(time*pGeoDefSpeed), y:cy+pGeoDefRadius*Math.sin(time*pGeoDefSpeed)};
+            let gPlanet = {x:defPos.x+pGeoEpiRadius*Math.cos(time*pGeoEpiSpeed), y:defPos.y+pGeoEpiRadius*Math.sin(time*pGeoEpiSpeed)};
+            let gMoon = {x:cx+rMoonOrbit*Math.cos(time*6.5), y:cy+rMoonOrbit*Math.sin(time*6.5)};
+            
+            let gTarget = planetMode === 'moon' ? gMoon : gPlanet;
+            if (document.getElementById('showLOS').checked) {
+                gCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+                gCtx.beginPath(); gCtx.moveTo(gEarth.x, gEarth.y); gCtx.lineTo(gTarget.x, gTarget.y); gCtx.stroke();
             }
 
-            // Line of Sight
-            if (showLOS.checked) {
-                ctxHelioMain.strokeStyle = colLOS;
-                ctxHelioMain.beginPath();
-                ctxHelioMain.moveTo(hEarth.x, hEarth.y);
-                ctxHelioMain.lineTo(targetHelio.x, targetHelio.y);
-                ctxHelioMain.stroke();
-            }
-
-            // Planets
-            drawPlanet(ctxHelioMain, hSun.x, hSun.y, rSun, colSun, colSun, i18n[currentLang].sun, hSun.x, hSun.y, true);
-            drawPlanet(ctxHelioMain, hEarth.x, hEarth.y, rEarth, colEarth, colEarthDark, i18n[currentLang].earth, hSun.x, hSun.y, false, 14);
-            
-            // 月球 (僅在月球模式時顯示)
-            if (planetMode === 'moon') {
-                drawPlanet(ctxHelioMain, hMoon.x, hMoon.y, rMoon, colMoon, colMoonDark, i18n[currentLang].moon, hSun.x, hSun.y, false, -4);
-            }
-            
-            if (planetMode !== 'moon') {
-                drawPlanet(ctxHelioMain, hPlanet.x, hPlanet.y, rPlanet, pColor, pColorDark, i18n[currentLang]['planetLabel_' + planetMode], hSun.x, hSun.y, false);
-            }
-
-            // Telescope View
-            let tHelioDist = planetMode === 'moon' ? rMoonOrbit : pHelioEarthRadius + pHelioPlanetRadius;
-            drawTelescopePhase(ctxHelioTele, hEarth, targetHelio, hSun, tHelioDist, pColor);
-
-
-            // ==========================================
-            // 2. GEOCENTRIC MODEL (Left Side)
-            // ==========================================
-            drawStars(ctxGeoMain);
-
-            let gEarth = { x: cx, y: cy };
-            // Sun orbits Earth
-            let gSun = {
-                x: cx + pGeoSunRadius * Math.cos(time * pGeoSunSpeed),
-                y: cy + pGeoSunRadius * Math.sin(time * pGeoSunSpeed)
-            };
-            
-            // 月球繞地球
-            let gMoon = {
-                x: gEarth.x + rMoonOrbit * Math.cos(time * pHelioEarthSpeed * 13),
-                y: gEarth.y + rMoonOrbit * Math.sin(time * pHelioEarthSpeed * 13)
-            };
-            
-            // Deferent center
-            let defCenter = {
-                x: cx + pGeoDefRadius * Math.cos(time * pGeoDefSpeed),
-                y: cy + pGeoDefRadius * Math.sin(time * pGeoDefSpeed)
-            };
-            
-            // Planet orbits on Epicycle
-            let gPlanet = { x: 0, y: 0 };
-            if (planetMode === 'venus') {
-                gPlanet.x = defCenter.x + pGeoEpiRadius * Math.cos(time * pGeoEpiSpeed);
-                gPlanet.y = defCenter.y + pGeoEpiRadius * Math.sin(time * pGeoEpiSpeed);
-            } else if (planetMode === 'mars') {
-                gPlanet.x = defCenter.x + pGeoEpiRadius * Math.cos(time * pGeoSunSpeed);
-                gPlanet.y = defCenter.y + pGeoEpiRadius * Math.sin(time * pGeoSunSpeed);
-            }
-            
-            let targetGeo = planetMode === 'moon' ? gMoon : gPlanet;
-
-            // Orbits
-            if (showOrbits.checked) {
-                ctxGeoMain.strokeStyle = colOrbit;
-                ctxGeoMain.setLineDash([4, 4]);
-                
-                ctxGeoMain.beginPath(); ctxGeoMain.arc(cx, cy, pGeoSunRadius, 0, Math.PI*2); ctxGeoMain.stroke();
-                
-                if (planetMode !== 'moon') {
-                    ctxGeoMain.beginPath(); ctxGeoMain.arc(cx, cy, pGeoDefRadius, 0, Math.PI*2); ctxGeoMain.stroke();
-                    
-                    ctxGeoMain.strokeStyle = (planetMode === 'venus') ? 'rgba(252, 211, 77, 0.3)' : 'rgba(239, 68, 68, 0.3)';
-                    ctxGeoMain.beginPath(); ctxGeoMain.arc(defCenter.x, defCenter.y, pGeoEpiRadius, 0, Math.PI*2); ctxGeoMain.stroke();
-                }
-                ctxGeoMain.setLineDash([]);
-                
-                // 月球軌道 (僅在月球模式時顯示)
-                if (planetMode === 'moon') {
-                    ctxGeoMain.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-                    ctxGeoMain.beginPath(); ctxGeoMain.arc(gEarth.x, gEarth.y, rMoonOrbit, 0, Math.PI*2); ctxGeoMain.stroke();
-                }
-
-                // Visualizing the Ptolemaic Constraints
-                ctxGeoMain.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-                ctxGeoMain.beginPath();
-                if (planetMode === 'venus') {
-                    ctxGeoMain.moveTo(gEarth.x, gEarth.y);
-                    ctxGeoMain.lineTo(gSun.x, gSun.y);
-                } else if (planetMode === 'mars') {
-                    ctxGeoMain.moveTo(gEarth.x, gEarth.y);
-                    ctxGeoMain.lineTo(gSun.x, gSun.y);
-                    
-                    ctxGeoMain.moveTo(defCenter.x, defCenter.y);
-                    ctxGeoMain.lineTo(gPlanet.x, gPlanet.y);
-                }
-                ctxGeoMain.stroke();
-                
-                if(showLabels.checked && planetMode !== 'moon') {
-                    ctxGeoMain.fillStyle = 'rgba(255, 255, 255, 0.5)';
-                    ctxGeoMain.font = '10px Microsoft JhengHei';
-                    ctxGeoMain.fillText(i18n[currentLang].epicycle, defCenter.x - 25, defCenter.y - pGeoEpiRadius - 5);
-                    ctxGeoMain.fillText(i18n[currentLang].deferent, cx - 15, cy - pGeoDefRadius - 5);
-                }
-            }
-
-            // Line of Sight
-            if (showLOS.checked) {
-                ctxGeoMain.strokeStyle = colLOS;
-                ctxGeoMain.beginPath();
-                ctxGeoMain.moveTo(gEarth.x, gEarth.y);
-                ctxGeoMain.lineTo(targetGeo.x, targetGeo.y);
-                ctxGeoMain.stroke();
-            }
-
-            // Planets
-            drawPlanet(ctxGeoMain, gEarth.x, gEarth.y, rEarth, colEarth, colEarthDark, i18n[currentLang].earth, gSun.x, gSun.y, false, 14);
-            
-            // 月球 (僅在月球模式時顯示)
-            if (planetMode === 'moon') {
-                drawPlanet(ctxGeoMain, gMoon.x, gMoon.y, rMoon, colMoon, colMoonDark, i18n[currentLang].moon, gSun.x, gSun.y, false, -4);
-            }
-
-            drawPlanet(ctxGeoMain, gSun.x, gSun.y, rSun, colSun, colSun, i18n[currentLang].sun, gSun.x, gSun.y, true);
-            
-            if (planetMode !== 'moon') {
-                drawPlanet(ctxGeoMain, gPlanet.x, gPlanet.y, rPlanet, pColor, pColorDark, i18n[currentLang]['planetLabel_' + planetMode], gSun.x, gSun.y, false);
-            }
-
-            // Telescope View 
-            let tGeoDist = planetMode === 'moon' ? rMoonOrbit : pHelioEarthRadius + pHelioPlanetRadius;
-            drawTelescopePhase(ctxGeoTele, gEarth, targetGeo, gSun, tGeoDist, pColor);
+            drawBody(gCtx, gEarth.x, gEarth.y, rEarth, '#3b82f6', '#1e3a8a', labels.earth, gSun.x, gSun.y);
+            drawBody(gCtx, gSun.x, gSun.y, rSun, '#fbbf24', '#fbbf24', labels.sun, 0,0,true);
+            if (planetMode==='moon') drawBody(gCtx, gMoon.x, gMoon.y, rMoon, '#cbd5e1', '#475569', labels.moon, gSun.x, gSun.y);
+            else drawBody(gCtx, gPlanet.x, gPlanet.y, rPlanet, pColor, pColorDark, labels['planetLabel_'+planetMode], gSun.x, gSun.y);
+            drawTelescope(ctxs.geoTele, gEarth, gTarget, gSun, 280, pColor);
 
             requestAnimationFrame(animate);
         }
 
-        // Start Animation Loop
-        animate();
+        document.getElementById('playPauseBtn').onclick = () => { isPlaying = !isPlaying; document.getElementById('playPauseBtn').innerText = isPlaying?'⏸':'▶'; };
+        document.getElementById('speedUpBtn').onclick = () => { simSpeed = Math.min(3, simSpeed+0.2); updateLabels(); };
+        document.getElementById('speedDownBtn').onclick = () => { simSpeed = Math.max(0.2, simSpeed-0.2); updateLabels(); };
 
+        setPlanetParameters();
+        updateLabels();
+        animate();
     </script>
 </body>
 </html>
