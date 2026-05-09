@@ -436,6 +436,7 @@
                 helioAlert_moon: '觀察：月相與地心說預測一致！',
                 openInfo: '說明', footerText: '廠商會中學：物理科',
                 sun: '太陽', earth: '地球', planetLabel_venus: '金星', planetLabel_mars: '火星', planetLabel_moon: '月球', moon: '月球',
+                epicycle: '本輪', deferent: '均輪',
                 infoTitle: '📖 物理學歷史：伽利略的發現',
                 infoP1: '在 17 世紀初，伽利略利用望遠鏡觀察金星。他發現金星與月球一樣，具有完整的相位變化（從新相到滿相）。<br><br>這對「地心說」是一個致命的打擊。在地心說模型中（左圖），金星位於地球與太陽之間的本輪上，這意味著我們永遠只能看到金星的背光面或側面，因此金星絕不會出現「滿相」。<br><br>但在「日心說」中（右圖），金星繞太陽公轉。當金星運行到太陽的另一側時，我們可以看到完整的向光面（滿相），且此時距離最遠，看起來最小。當它靠近地球時，體積變大但呈現新相。伽利略的這一觀察，成為了支持日心說最有利的證據之一。'
             },
@@ -456,6 +457,7 @@
                 helioAlert_moon: 'Observe: Identical predictions!',
                 openInfo: 'Info', footerText: 'CMA Secondary School: Physics',
                 sun: 'Sun', earth: 'Earth', planetLabel_venus: 'Venus', planetLabel_mars: 'Mars', planetLabel_moon: 'Moon', moon: 'Moon',
+                epicycle: 'Epicycle', deferent: 'Deferent',
                 infoTitle: '📖 History of Physics: Galileo\'s Discovery',
                 infoP1: 'In the early 17th century, Galileo observed Venus with his telescope and discovered that it goes through a full cycle of phases, much like the Moon.<br><br>This was a fatal blow to the Geocentric model (left). In Ptolemy\'s system, Venus was kept between Earth and the Sun on its epicycle, meaning it could only ever show a crescent or "new" phase to Earth. It could never be "full".<br><br>However, in the Heliocentric model (right), Venus orbits the Sun. When it is on the opposite side of the Sun, we see its full illuminated half (Full Phase), and it appears smallest due to the distance. When it is closest to Earth, it appears large but as a thin crescent. This evidence was crucial in proving the Copernican system.'
             }
@@ -708,7 +710,10 @@
             let gCtx = ctxs.geoMain;
             gCtx.fillStyle = '#000000'; 
             gCtx.fillRect(0, 0, LOGICAL_SIZE, LOGICAL_SIZE);
-            drawOrbits(gCtx, [pGeoSunRadius, pGeoDefRadius]);
+            
+            // 繪製均輪與軌道
+            let geoOrbits = planetMode === 'moon' ? [pGeoSunRadius, rMoonOrbit] : [pGeoSunRadius, pGeoDefRadius];
+            drawOrbits(gCtx, geoOrbits);
             
             let gEarth = {x:cx, y:cy};
             let gSun = {x:cx+pGeoSunRadius*Math.cos(time*pGeoSunSpeed), y:cy+pGeoSunRadius*Math.sin(time*pGeoSunSpeed)};
@@ -717,6 +722,45 @@
             let gMoon = {x:cx+rMoonOrbit*Math.cos(time*6.5), y:cy+rMoonOrbit*Math.sin(time*6.5)};
             
             let gTarget = planetMode === 'moon' ? gMoon : gPlanet;
+            
+            // 畫本輪與幾何限制線
+            if (document.getElementById('showOrbits').checked && planetMode !== 'moon') {
+                // 繪製本輪 (Epicycle)
+                gCtx.strokeStyle = (planetMode === 'venus') ? 'rgba(252, 211, 77, 0.4)' : 'rgba(239, 68, 68, 0.4)';
+                gCtx.lineWidth = 1;
+                gCtx.setLineDash([4, 4]);
+                gCtx.beginPath();
+                gCtx.arc(defPos.x, defPos.y, pGeoEpiRadius, 0, Math.PI * 2);
+                gCtx.stroke();
+                gCtx.setLineDash([]);
+                
+                // 繪製托勒密幾何輔助線
+                gCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+                gCtx.beginPath();
+                if (planetMode === 'venus') {
+                    // 金星的本輪中心永遠在地球-太陽連線上
+                    gCtx.moveTo(gEarth.x, gEarth.y);
+                    gCtx.lineTo(gSun.x, gSun.y);
+                } else if (planetMode === 'mars') {
+                    // 火星的本輪半徑永遠平行於地球-太陽連線
+                    gCtx.moveTo(gEarth.x, gEarth.y);
+                    gCtx.lineTo(gSun.x, gSun.y);
+                    gCtx.moveTo(defPos.x, defPos.y);
+                    gCtx.lineTo(gPlanet.x, gPlanet.y);
+                }
+                gCtx.stroke();
+            }
+
+            // 畫軌道標籤 (均輪與本輪)
+            if (document.getElementById('showLabels').checked && planetMode !== 'moon') {
+                gCtx.save();
+                gCtx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                gCtx.font = '11px "Microsoft JhengHei", sans-serif';
+                gCtx.textAlign = 'center';
+                gCtx.fillText(labels.deferent, cx, cy - pGeoDefRadius - 6);
+                gCtx.fillText(labels.epicycle, defPos.x, defPos.y - pGeoEpiRadius - 6);
+                gCtx.restore();
+            }
             
             // 畫視線 (Line of Sight)
             if (document.getElementById('showLOS').checked) {
