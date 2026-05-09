@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>開普勒行星運動定律 | Kepler's Laws of Planetary Motion</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax for rendering physics formulas -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        /* Custom styles for sliders to look better in dark mode */
+        input[type=range] {
+            accent-color: #3b82f6;
+        }
+        .glow {
+            box-shadow: 0 0 20px 5px rgba(234, 179, 8, 0.4);
+        }
+        /* Ensure canvas remains sharp */
+        canvas {
+            image-rendering: auto;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 h-screen w-screen overflow-hidden flex flex-col font-sans selection:bg-blue-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="flex-none flex justify-between items-center p-3 md:p-4 bg-slate-900 border-b border-slate-800 shadow-md">
+        <h1 class="text-lg md:text-2xl font-bold text-blue-400 tracking-wide" data-i18n="title">
+            開普勒行星運動定律
+        </h1>
+        <div class="flex gap-2 md:gap-3">
+            <button id="btn-info" class="px-3 md:px-4 py-2 bg-amber-500 hover:bg-amber-400 text-amber-950 rounded-md transition duration-200 font-bold flex items-center shadow-lg shadow-amber-500/20">
+                <span data-i18n="infoBtn">說明</span>
+            </button>
+            <button id="btn-lang" class="px-3 md:px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md transition duration-200 font-medium">
+                繁/Eng
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col lg:flex-row p-2 md:p-4 gap-4 overflow-hidden min-h-0">
+        
+        <!-- Controls Sidebar (Moved to Left) -->
+        <div class="w-full lg:w-80 flex flex-col gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-md flex-shrink-0 overflow-y-auto h-auto lg:h-full max-h-[40vh] lg:max-h-full">
+            
+            <!-- Presets Dropdown -->
+            <div>
+                <label class="flex justify-between text-xs md:text-sm font-medium mb-1">
+                    <span data-i18n="preset" class="text-slate-300">預設天體：</span>
+                </label>
+                <select id="preset-select" class="w-full bg-slate-800 border border-slate-600 rounded p-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500 cursor-pointer">
+                    <option value="custom" data-i18n="presetCustom">自訂 (Custom)</option>
+                    <option value="mercury" data-i18n="presetMercury">水星 (Mercury)</option>
+                    <option value="venus" data-i18n="presetVenus">金星 (Venus)</option>
+                    <option value="earth" data-i18n="presetEarth" selected>地球 (Earth)</option>
+                    <option value="mars" data-i18n="presetMars">火星 (Mars)</option>
+                    <option value="jupiter" data-i18n="presetJupiter">木星 (Jupiter)</option>
+                    <option value="halley" data-i18n="presetHalley">哈雷彗星 (Halley's Comet)</option>
+                </select>
+            </div>
+
+            <!-- Law 1 & 3: Shape & Orbit Size -->
+            <div class="space-y-3">
+                <div>
+                    <label class="flex justify-between text-xs md:text-sm font-medium mb-1">
+                        <span data-i18n="semiMajor">軌道半長軸 (a)：</span>
+                        <span id="val-a" class="text-blue-300 font-mono">1.00 AU</span>
+                    </label>
+                    <input type="range" id="slider-a" min="0.1" max="20" step="0.1" value="1.0" class="w-full cursor-pointer">
+                    <p class="text-[10px] md:text-xs text-slate-400 mt-1" data-i18n="law3Desc">影響行星公轉週期 (第三定律)</p>
+                </div>
+
+                <div>
+                    <label class="flex justify-between text-xs md:text-sm font-medium mb-1">
+                        <span data-i18n="eccentricity">軌道離心率 (e)：</span>
+                        <span id="val-e" class="text-blue-300 font-mono">0.017</span>
+                    </label>
+                    <input type="range" id="slider-e" min="0" max="0.99" step="0.001" value="0.017" class="w-full cursor-pointer">
+                    <p class="text-[10px] md:text-xs text-slate-400 mt-1" data-i18n="law1Desc">決定橢圓的扁平程度 (第一定律)</p>
+                </div>
+            </div>
+
+            <!-- Orbit Stats (Calculated) -->
+            <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 space-y-1 md:space-y-2 mt-auto lg:mt-0">
+                <div class="flex justify-between items-center text-xs md:text-sm">
+                    <span class="text-slate-400" data-i18n="period">公轉週期 (T)：</span>
+                    <span id="val-t" class="font-mono text-emerald-400 font-bold">2.83 yr</span>
+                </div>
+                <div class="flex justify-between items-center text-xs md:text-sm">
+                    <span class="text-slate-400" data-i18n="t2a3">比值 (T² / a³)：</span>
+                    <span class="font-mono text-emerald-400 font-bold">1.00</span>
+                </div>
+            </div>
+
+            <!-- Law 2: Equal Areas -->
+            <div class="pt-2 border-t border-slate-700">
+                <button id="btn-areas" class="w-full py-2 md:py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition duration-200 font-semibold shadow-lg shadow-indigo-500/20 active:scale-95 flex justify-center items-center gap-2 text-sm md:text-base">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                    <span data-i18n="toggleAreas">顯示掃過面積 (第二定律)</span>
+                </button>
+                <p class="text-[10px] md:text-xs text-slate-400 mt-2 text-center" data-i18n="law2Desc">顯示在相等時間間隔內掃過的面積。</p>
+                
+                <button id="btn-vectors" class="w-full py-2 md:py-3 mt-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition duration-200 font-semibold shadow-lg active:scale-95 flex justify-center items-center gap-2 text-sm md:text-base border border-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <span data-i18n="toggleVectors">顯示速度與加速度向量</span>
+                </button>
+            </div>
+            
+            <div class="pt-2 border-t border-slate-700">
+                 <label class="flex justify-between text-xs md:text-sm font-medium mb-1">
+                    <span data-i18n="simSpeed">模擬運行速度</span>
+                    <span id="val-speed" class="text-blue-300 font-mono">0.5x</span>
+                </label>
+                <input type="range" id="slider-speed" min="0" max="10" step="0.1" value="0.5" class="w-full cursor-pointer">
+            </div>
+
+        </div>
+
+        <!-- Canvas Container (Moved to Right) -->
+        <div class="flex-grow relative bg-slate-900 rounded-xl border border-slate-700 flex items-center justify-center overflow-hidden shadow-inner min-h-[40vh] lg:min-h-0">
+            <canvas id="simulationCanvas" class="block w-full h-full"></canvas>
+            
+            <!-- Legend overlay -->
+            <div class="absolute top-2 left-2 md:top-4 md:left-4 bg-slate-950/70 p-2 md:p-3 rounded-lg border border-slate-700 backdrop-blur-sm pointer-events-none">
+                <div class="flex items-center gap-2 mb-1">
+                    <div class="w-3 h-3 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]"></div>
+                    <span class="text-xs md:text-sm font-medium" data-i18n="sun">太陽 (焦點)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-blue-400 shadow-[0_0_8px_#60a5fa]"></div>
+                    <span class="text-xs md:text-sm font-medium" data-i18n="planet">行星</span>
+                </div>
+                <!-- Vector Legends -->
+                <div id="legend-vectors" class="hidden mt-2 pt-2 border-t border-slate-700">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg width="24" height="10" viewBox="0 0 24 10" class="overflow-visible">
+                            <line x1="0" y1="5" x2="20" y2="5" stroke="#22c55e" stroke-width="2" />
+                            <polygon points="18,1 24,5 18,9" fill="#22c55e" />
+                        </svg>
+                        <span class="text-xs md:text-sm font-medium" data-i18n="legendVel">速度</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg width="24" height="10" viewBox="0 0 24 10" class="overflow-visible">
+                            <line x1="0" y1="5" x2="20" y2="5" stroke="#ef4444" stroke-width="2" />
+                            <polygon points="18,1 24,5 18,9" fill="#ef4444" />
+                        </svg>
+                        <span class="text-xs md:text-sm font-medium" data-i18n="legendAcc">加速度</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="flex-none bg-slate-900 border-t border-slate-800 p-2 md:p-3 text-center">
+        <p class="text-slate-400 font-medium tracking-widest text-xs md:text-sm" data-i18n="footer">
+            廠商會中學：物理科
+        </p>
+    </footer>
+
+    <!-- Info Modal Overlay -->
+    <div id="info-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="info-modal-content">
+            <div class="p-3 md:p-4 border-b border-slate-800 flex justify-between items-center bg-slate-800/50 flex-none">
+                <h2 class="text-lg md:text-xl font-bold text-white flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                    <span data-i18n="infoTitle">開普勒定律 - HKDSE 相關公式</span>
+                </h2>
+                <button id="btn-close-modal" class="text-slate-400 hover:text-white transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <div class="p-4 md:p-6 space-y-4 md:space-y-6 overflow-y-auto flex-grow">
+                <!-- Law 1 -->
+                <div class="bg-slate-950/50 p-3 md:p-4 rounded-lg border border-slate-800">
+                    <h3 class="text-base md:text-lg font-semibold text-blue-300 mb-2" data-i18n="law1Title">1. 第一定律：橢圓定律 (Law of Ellipses)</h3>
+                    <p class="text-xs md:text-sm text-slate-300 mb-3" data-i18n="info1Desc">所有行星繞太陽運行的軌道都是橢圓形，太陽位於橢圓的其中一個焦點 (Focus) 上。</p>
+                    <div class="flex flex-col items-center text-sm md:text-base py-2 gap-2 text-slate-200">
+                        <div class="flex items-center gap-4 w-full justify-center" data-i18n="law1Formula">
+                            <div>$$a = \frac{1}{2}(\text{近日點與遠日點的距離})$$</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Law 2 -->
+                <div class="bg-slate-950/50 p-3 md:p-4 rounded-lg border border-slate-800">
+                    <h3 class="text-base md:text-lg font-semibold text-blue-300 mb-2" data-i18n="law2Title">2. 第二定律：等面積定律 (Law of Equal Areas)</h3>
+                    <p class="text-xs md:text-sm text-slate-300 mb-3" data-i18n="info2Desc">連接太陽和行星的線段在相等的時間內掃過相等的面積。因此行星在近日點速率最大，遠日點速率最小。</p>
+                </div>
+
+                <!-- Law 3 -->
+                <div class="bg-slate-950/50 p-3 md:p-4 rounded-lg border border-slate-800">
+                    <h3 class="text-base md:text-lg font-semibold text-blue-300 mb-2" data-i18n="law3Title">3. 第三定律 (Third Law)</h3>
+                    <p class="text-xs md:text-sm text-slate-300 mb-3" data-i18n="info3Desc">行星公轉週期 (T) 的平方，與軌道半長軸 (a) 的立方成正比。在 DSE 必修部分中，常假設軌道為圓形 (a=r)，並以萬有引力提供向心力來推導此定律：</p>
+                    <div class="flex flex-col items-center text-sm md:text-base py-2 gap-3 text-slate-200 bg-slate-900/50 rounded p-2">
+                        <div class="flex items-center gap-4 w-full justify-center">
+                            <span class="text-xs text-slate-400" data-i18n="lblDerive1">萬有引力 = 向心力</span>
+                        </div>
+                        <div class="flex items-center gap-4 w-full justify-center">
+                            <div>$$\frac{GMm}{r^2} = m\left(\frac{2\pi}{T}\right)^2 r$$</div>
+                        </div>
+                        <div class="flex items-center gap-4 w-full justify-center mt-1">
+                            <div>$$T^2 = \left(\frac{4\pi^2}{GM}\right) r^3$$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-3 md:p-4 border-t border-slate-800 bg-slate-800/30 text-center flex-none">
+                <button id="btn-close-modal-bottom" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-md transition duration-200 text-sm md:text-base" data-i18n="infoClose">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- APPLICATION LOGIC & PHYSICS ENGINE         -->
+    <!-- ========================================== -->
+    <script>
+        // ==========================================
+        // 1. DICTIONARY & LOCALIZATION (I18N)
+        // ==========================================
+        const i18n = {
+            zh: {
+                title: "開普勒行星運動定律",
+                infoBtn: "說明",
+                sun: "太陽",
+                planet: "行星",
+                semiMajor: "軌道半長軸 <i>a</i>：",
+                eccentricity: "軌道離心率 <i>e</i>：",
+                law1Desc: "決定橢圓的扁平程度 (第一定律)",
+                law3Desc: "影響行星公轉週期 (第三定律)",
+                period: "公轉週期 <i>T</i>：",
+                t2a3: "比值 <i>T</i>²/<i>a</i>³ (<i>T</i>:年, <i>a</i>:AU)：",
+                unitYear: "年",
+                toggleAreas: "顯示掃過面積 (第二定律)",
+                toggleVectors: "顯示速度與加速度向量",
+                legendVel: "速度",
+                legendAcc: "加速度",
+                law2Desc: "顯示在相等時間間隔內掃過的面積。",
+                simSpeed: "模擬運行速度",
+                footer: "廠商會中學：物理科",
+                infoTitle: "開普勒定律 - HKDSE 相關公式",
+                preset: "預設天體：",
+                presetCustom: "自訂",
+                presetMercury: "水星",
+                presetVenus: "金星",
+                presetEarth: "地球",
+                presetMars: "火星",
+                presetJupiter: "木星",
+                presetHalley: "哈雷彗星",
+                law1Title: "1. 第一定律：橢圓定律",
+                info1Desc: "在 HKDSE 核心部分中，我們常將行星軌道簡化為圓形。而在天文學選修單元中，需認識真實軌道為橢圓，太陽位於其中一個焦點。軌道半長軸 <i>a</i> 可由以下公式求出：",
+                law1Formula: "<div>$$a = \\frac{1}{2}(\\text{近日點與遠日點的距離})$$</div>",
+                law2Title: "2. 第二定律：等面積定律",
+                info2Desc: "連接太陽和行星的線段在相等的時間內掃過相等的面積。因此，行星在接近太陽（近日點）時速率最大，遠離太陽（遠日點）時速率最小。",
+                law3Title: "3. 第三定律",
+                info3Desc: "利用「萬有引力提供向心力」，假設軌道為圓形 (軌道半長軸 <i>a</i> = 軌道半徑 <i>r</i>)，來推導出週期 <i>T</i> 與軌道半徑 <i>r</i> 的關係：",
+                lblDerive1: "萬有引力 = 向心力",
+                infoClose: "關閉"
+            },
+            en: {
+                title: "Kepler's Laws of Planetary Motion",
+                infoBtn: "Info",
+                sun: "Sun",
+                planet: "Planet",
+                semiMajor: "Semi-major Axis <i>a</i>: ",
+                eccentricity: "Eccentricity <i>e</i>: ",
+                law1Desc: "Determines ellipse flatness (1st Law)",
+                law3Desc: "Affects Orbital Period (3rd Law)",
+                period: "Orbital Period <i>T</i>:",
+                t2a3: "Ratio <i>T</i>²/<i>a</i>³ (<i>T</i>:yr, <i>a</i>:AU):",
+                unitYear: "yr",
+                toggleAreas: "Toggle Swept Areas (2nd Law)",
+                toggleVectors: "Toggle Velocity & Acceleration Vectors",
+                legendVel: "Velocity",
+                legendAcc: "Acceleration",
+                law2Desc: "Displays areas swept in equal time intervals.",
+                simSpeed: "Simulation Speed",
+                footer: "廠商會中學：物理科",
+                infoTitle: "Kepler's Laws - HKDSE Formulas",
+                preset: "Preset Object: ",
+                presetCustom: "Custom",
+                presetMercury: "Mercury",
+                presetVenus: "Venus",
+                presetEarth: "Earth",
+                presetMars: "Mars",
+                presetJupiter: "Jupiter",
+                presetHalley: "Halley's Comet",
+                law1Title: "1. Law of Ellipses",
+                info1Desc: "In the HKDSE Core section, we often simplify planetary orbits as circular. In the Astronomy elective module, it is required to recognize that real orbits are elliptical, with the Sun located at one focus. The semi-major axis <i>a</i> can be found using the following formula:",
+                law1Formula: "<div>$$a = \\frac{1}{2}(\\text{distance between perihelion and aphelion})$$</div>",
+                law2Title: "2. Law of Equal Areas",
+                info2Desc: "A planet sweeps out equal areas in equal times. Therefore, the planet moves fastest when closest to the Sun (perihelion) and slowest when farthest (aphelion).",
+                law3Title: "3. Third Law",
+                info3Desc: "Using 'Gravitational Force provides Centripetal Force' and assuming a circular orbit (semi-major axis <i>a</i> = orbital radius <i>r</i>), we derive the relationship between period <i>T</i> and orbital radius <i>r</i>:",
+                lblDerive1: "Gravitational Force = Centripetal Force",
+                infoClose: "Close"
+            }
+        };
+
+        // State variable for current language
+        let currentLang = 'zh';
+
+        /**
+         * Applies the selected language strings to the DOM elements.
+         * Scans for the `data-i18n` attribute and updates innerHTML.
+         */
+        function applyLanguage() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang][key]) {
+                    el.innerHTML = i18n[currentLang][key];
+                }
+            });
+            // Re-run MathJax rendering if formulas were dynamically updated inside text
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        /**
+         * Toggles the application language between Traditional Chinese and English.
+         */
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            applyLanguage();
+            updateUI(false); // Update the dynamic text units (e.g., "yr" vs "年") dynamically
+        }
+
+        document.getElementById('btn-lang').addEventListener('click', toggleLanguage);
+
+        // ==========================================
+        // 2. MODAL LOGIC (INFO PANEL)
+        // ==========================================
+        const modal = document.getElementById('info-modal');
+        const modalContent = document.getElementById('info-modal-content');
+        const btnInfo = document.getElementById('btn-info');
+        const btnClose1 = document.getElementById('btn-close-modal');
+        const btnClose2 = document.getElementById('btn-close-modal-bottom');
+
+        /**
+         * Opens the Info modal with a fade-in and scale-up animation.
+         */
+        function openModal() {
+            modal.classList.remove('hidden');
+            void modal.offsetWidth; // Trigger reflow to restart CSS transitions
+            modal.classList.remove('opacity-0');
+            modalContent.classList.remove('scale-95');
+        }
+
+        /**
+         * Closes the Info modal with a fade-out and scale-down animation.
+         */
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // Matches the duration-300 Tailwind class
+        }
+
+        btnInfo.addEventListener('click', openModal);
+        btnClose1.addEventListener('click', closeModal);
+        btnClose2.addEventListener('click', closeModal);
+        
+        // Close modal when clicking outside the content box
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+
+        // ==========================================
+        // 3. CANVAS SETUP & STATE MANAGEMENT
+        // ==========================================
+        const canvas = document.getElementById('simulationCanvas');
+        const ctx = canvas.getContext('2d', { alpha: false }); // Disable alpha for rendering optimization
+        
+        let width, height;
+        let BASE_SCALE = 100; // Pixels per Astronomical Unit (AU), updated dynamically
+
+        // Core physics and simulation state parameters
+        let params = {
+            a: 1.0,      // Semi-major axis (AU)
+            e: 0.017,    // Eccentricity (0 to <1)
+            M: 0,        // Mean anomaly (Radians) - Represents theoretical time elapsed
+            speed: 0.5,  // Simulation playback speed multiplier
+            showAreas: false,   // Toggle for 2nd Law area visualization
+            showVectors: false  // Toggle for Velocity/Acceleration vectors
+        };
+
+        // Cache DOM elements for quick updates
+        const sliderA = document.getElementById('slider-a');
+        const sliderE = document.getElementById('slider-e');
+        const sliderSpeed = document.getElementById('slider-speed');
+        const btnAreas = document.getElementById('btn-areas');
+        const btnVectors = document.getElementById('btn-vectors');
+        const presetSelect = document.getElementById('preset-select');
+        
+        const valA = document.getElementById('val-a');
+        const valE = document.getElementById('val-e');
+        const valT = document.getElementById('val-t');
+        const valSpeed = document.getElementById('val-speed');
+
+        // Preset celestial body orbital parameters (a in AU, e is dimensionless)
+        const presets = {
+            mercury: { a: 0.39, e: 0.206 },
+            venus: { a: 0.72, e: 0.007 },
+            earth: { a: 1.0, e: 0.017 },
+            mars: { a: 1.52, e: 0.093 },
+            jupiter: { a: 5.20, e: 0.048 },
+            halley: { a: 17.8, e: 0.967 }
+        };
+
+        /**
+         * Calculates the dynamic scaling factor (BASE_SCALE) to ensure the 
+         * entire elliptical orbit always perfectly fits within the canvas bounds.
+         */
+        function updateScale() {
+            if (!width || !height) return;
+            
+            // Calculate semi-minor axis (b) using b = a * sqrt(1 - e^2)
+            const b = params.a * Math.sqrt(1 - params.e * params.e);
+            
+            // Scale dynamically to fit the exact bounding box of the ellipse (2a x 2b)
+            // We use 40% (0.4) instead of 50% to leave a 10% safety margin around the canvas edges
+            const scaleX = (width * 0.40) / params.a;
+            const scaleY = (height * 0.40) / b;
+            
+            // The simulation scale is bound by whichever dimension (X or Y) is tighter
+            BASE_SCALE = Math.min(scaleX, scaleY);
+        }
+
+        /**
+         * Handles window resizing, adjusting canvas resolution for High-DPI (Retina) 
+         * displays to keep the lines sharp, and triggers a scale update.
+         */
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            width = rect.width;
+            height = rect.height;
+
+            updateScale();
+        }
+        window.addEventListener('resize', resizeCanvas);
+        
+
+        // ==========================================
+        // 4. PHYSICS ENGINE (KEPLER MATH UTILS)
+        // ==========================================
+
+        /**
+         * Helper function to draw a directed arrow on the canvas for vectors.
+         */
+        function drawArrow(ctx, fromx, fromy, tox, toy, color) {
+            const headlen = 10; // Length of the arrowhead in pixels
+            const dx = tox - fromx;
+            const dy = toy - fromy;
+            const angle = Math.atan2(dy, dx);
+            
+            ctx.beginPath();
+            ctx.moveTo(fromx, fromy);
+            ctx.lineTo(tox, toy);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.lineTo(tox, toy);
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+        
+        /**
+         * Solves Kepler's Equation: M = E - e * sin(E)
+         * Uses the Newton-Raphson iterative method to find the Eccentric Anomaly (E)
+         * given the Mean Anomaly (M) and Eccentricity (e).
+         * @param {number} M - Mean Anomaly (radians)
+         * @param {number} e - Eccentricity
+         * @returns {number} E - Eccentric Anomaly (radians)
+         */
+        function solveKepler(M, e) {
+            let E = M; // Initial guess
+            const tolerance = 1e-6; // Accuracy threshold
+            for (let i = 0; i < 15; i++) {
+                // Newton-Raphson adjustment step: f(E) / f'(E)
+                let deltaE = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+                E -= deltaE;
+                if (Math.abs(deltaE) < tolerance) break;
+            }
+            return E;
+        }
+
+        /**
+         * Converts Eccentric Anomaly (E) to True Anomaly (theta).
+         * True Anomaly is the actual physical angle of the planet from the perihelion.
+         */
+        function getTrueAnomaly(E, e) {
+            return 2 * Math.atan2(
+                Math.sqrt(1 + e) * Math.sin(E / 2),
+                Math.sqrt(1 - e) * Math.cos(E / 2)
+            );
+        }
+
+        /**
+         * Calculates the (x, y) coordinates of the planet relative to the focus (Sun).
+         * Uses the polar equation of an ellipse: r = a(1 - e^2) / (1 + e*cos(theta)).
+         */
+        function getOrbitalPosition(M, a, e) {
+            let E = solveKepler(M, e);
+            let theta = getTrueAnomaly(E, e);
+            let r = (a * (1 - e * e)) / (1 + e * Math.cos(theta));
+            return {
+                x: r * Math.cos(theta) * BASE_SCALE,
+                y: r * Math.sin(theta) * BASE_SCALE,
+                r: r,
+                theta: theta
+            };
+        }
+
+
+        // ==========================================
+        // 5. RENDER LOOP
+        // ==========================================
+        let lastTime = performance.now();
+
+        /**
+         * Main animation loop. Computes physics delta, clears canvas, 
+         * and redraws all orbital elements at 60fps.
+         */
+        function draw() {
+            const currentTime = performance.now();
+            const dt = (currentTime - lastTime) / 1000; // Delta time in seconds
+            lastTime = currentTime;
+
+            // Clear background
+            ctx.fillStyle = '#0f172a'; // Tailwind slate-950
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.save();
+            
+            // Offset the focal point (Sun) so the geometric *center* of the ellipse 
+            // sits exactly at the screen center. The center of an ellipse is located 
+            // at distance `a*e` from the focus along the major axis.
+            const focusOffsetX = params.a * params.e * BASE_SCALE;
+            ctx.translate((width / 2) + focusOffsetX, height / 2);
+
+            // Calculate Mean Motion (n) using Kepler's Third Law (T^2 = a^3)
+            const T = Math.pow(params.a, 1.5);
+            const n = (2 * Math.PI) / T; // Angular velocity of Mean Anomaly
+            
+            // Advance the simulation time (Mean anomaly)
+            params.M += n * dt * params.speed;
+            params.M %= (2 * Math.PI); // Keep bounded between 0 and 2PI
+
+            // --- 5.1 Draw Orbit Path ---
+            // Smooth Fix: We iterate by Eccentric Anomaly (E) to guarantee uniform 
+            // spatial spacing of line segments, preventing jagged polygons near perihelion.
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+            ctx.lineWidth = 1.5;
+            
+            const pathResolution = 300; // Number of segments making up the ellipse
+            const b = params.a * Math.sqrt(1 - params.e * params.e);
+            for (let i = 0; i <= pathResolution; i++) {
+                const E_val = (i / pathResolution) * 2 * Math.PI;
+                // Cartesian coordinates relative to the focus (Sun)
+                const x = params.a * (Math.cos(E_val) - params.e) * BASE_SCALE;
+                const y = b * Math.sin(E_val) * BASE_SCALE;
+                
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // --- 5.2 Draw Swept Areas (2nd Law) ---
+            if (params.showAreas) {
+                const numSectors = 8; // Divide orbit into 8 equal TIME sectors (Mean Anomaly)
+                const sectorSizeM = (2 * Math.PI) / numSectors;
+
+                for (let s = 0; s < numSectors; s++) {
+                    const startM = s * sectorSizeM;
+                    const endM = (s + 1) * sectorSizeM;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0); // Ray starts from focus (Sun)
+                    
+                    // High resolution (150) for smooth colored arcs, particularly near perihelion
+                    const arcResolution = 150;
+                    for(let i=0; i<=arcResolution; i++) {
+                        let m = startM + (i / arcResolution) * (endM - startM);
+                        let pos = getOrbitalPosition(m, params.a, params.e);
+                        ctx.lineTo(pos.x, pos.y);
+                    }
+                    ctx.lineTo(0, 0); // Close shape back to focus
+
+                    // Alternate sector colors for visibility
+                    if (s % 2 === 0) {
+                        ctx.fillStyle = 'rgba(59, 130, 246, 0.2)'; // Blue tint
+                    } else {
+                        ctx.fillStyle = 'rgba(99, 102, 241, 0.25)'; // Indigo tint
+                    }
+                    ctx.fill();
+                    ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)';
+                    ctx.stroke();
+                }
+                
+                // Highlight the specific time sector the planet is currently travelling inside
+                const currentSector = Math.floor(params.M / sectorSizeM);
+                const hlStartM = currentSector * sectorSizeM;
+                const hlEndM = params.M;
+                
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                
+                // Dynamic yellow highlight arc filling up as time progresses
+                const hlResolution = 50;
+                for(let i=0; i<=hlResolution; i++) {
+                    let m = hlStartM + (i / hlResolution) * (hlEndM - hlStartM);
+                    let pos = getOrbitalPosition(m, params.a, params.e);
+                    ctx.lineTo(pos.x, pos.y);
+                }
+                ctx.lineTo(0,0);
+                ctx.fillStyle = 'rgba(234, 179, 8, 0.4)';
+                ctx.fill();
+            }
+
+            // --- 5.3 Draw Sun (Focus) ---
+            ctx.beginPath();
+            // Scale sun dynamically but clamp it so it doesn't get ridiculously huge/tiny
+            const sunRadius = Math.min(Math.max(6, 15 * (BASE_SCALE/100)), 25);
+            ctx.arc(0, 0, sunRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = '#facc15';
+            ctx.shadowColor = '#facc15';
+            ctx.shadowBlur = 20;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // --- 5.4 Draw Planet ---
+            const planetPos = getOrbitalPosition(params.M, params.a, params.e);
+            ctx.beginPath();
+            // Scale planet dynamically but clamp it
+            const planetRadius = Math.min(Math.max(4, 8 * (BASE_SCALE/100)), 12);
+            ctx.arc(planetPos.x, planetPos.y, planetRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = '#60a5fa';
+            ctx.shadowColor = '#60a5fa';
+            ctx.shadowBlur = 15;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Draw connecting line from Sun to Planet
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(planetPos.x, planetPos.y);
+            ctx.strokeStyle = 'rgba(96, 165, 250, 0.5)';
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // --- 5.5 Draw Velocity & Acceleration Vectors ---
+            if (params.showVectors) {
+                // To get velocity, we take the time derivative of the positional vectors.
+                const E = solveKepler(params.M, params.e);
+                const E_dot = n / (1 - params.e * Math.cos(E)); // Derivative of Kepler's Equation
+                
+                // Cartesian components of planet position relative to focus (in AU)
+                const x_au = params.a * (Math.cos(E) - params.e);
+                const y_au = params.a * Math.sqrt(1 - params.e * params.e) * Math.sin(E);
+                
+                // Velocity in AU/yr
+                const vx = -params.a * Math.sin(E) * E_dot;
+                const vy = params.a * Math.sqrt(1 - params.e * params.e) * Math.cos(E) * E_dot;
+                
+                // Acceleration in AU/yr^2 (Gravitational Parameter GM = 4*pi^2 in these units)
+                const GM = 4 * Math.PI * Math.PI;
+                const r_mag = Math.sqrt(x_au * x_au + y_au * y_au);
+                const ax = -(GM / (r_mag * r_mag)) * (x_au / r_mag);
+                const ay = -(GM / (r_mag * r_mag)) * (y_au / r_mag);
+                
+                // Dynamic Auto-Scaling for Vectors: 
+                // We calculate theoretical maximums for the current orbit to normalize vector lengths.
+                const rp = params.a * (1 - params.e); // Perihelion distance
+                const v_max = Math.sqrt(GM * (2 / rp - 1 / params.a)); // Max velocity (vis-viva eq at perihelion)
+                const a_max = GM / (rp * rp); // Max acceleration (Newton's Law at perihelion)
+
+                // Set maximum visual length of arrows to 25% of the smaller screen dimension
+                const max_arrow_px = Math.min(width, height) * 0.25;
+
+                // Create constant scale factors for THIS specific planet setup 
+                // Ensures vectors don't overflow the screen, but relative lengths are maintained within the orbit.
+                const v_scale = max_arrow_px / v_max;
+                const a_scale = max_arrow_px / a_max;
+                
+                let vx_vis = vx * v_scale;
+                let vy_vis = vy * v_scale;
+                let ax_vis = ax * a_scale;
+                let ay_vis = ay * a_scale;
+                
+                // Enforce a minimum pixel length (15px) just to ensure the arrowhead is always 
+                // visible even at extreme aphelions where velocity approaches zero.
+                const min_arrow_px = 15;
+                const v_vis_mag = Math.sqrt(vx_vis * vx_vis + vy_vis * vy_vis);
+                const a_vis_mag = Math.sqrt(ax_vis * ax_vis + ay_vis * ay_vis);
+                
+                if (v_vis_mag > 0 && v_vis_mag < min_arrow_px) {
+                    vx_vis *= min_arrow_px / v_vis_mag;
+                    vy_vis *= min_arrow_px / v_vis_mag;
+                }
+                
+                if (a_vis_mag > 0 && a_vis_mag < min_arrow_px) {
+                    ax_vis *= min_arrow_px / a_vis_mag;
+                    ay_vis *= min_arrow_px / a_vis_mag;
+                }
+
+                // Render the arrows on canvas
+                drawArrow(ctx, planetPos.x, planetPos.y, planetPos.x + vx_vis, planetPos.y + vy_vis, '#22c55e'); // Green Velocity
+                drawArrow(ctx, planetPos.x, planetPos.y, planetPos.x + ax_vis, planetPos.y + ay_vis, '#ef4444'); // Red Acceleration
+            }
+
+            ctx.restore();
+
+            // Loop
+            requestAnimationFrame(draw);
+        }
+
+        // ==========================================
+        // 6. EVENT LISTENERS & UI UPDATES
+        // ==========================================
+        
+        /**
+         * Reads DOM inputs, updates physics `params`, recalculates calculated values (T),
+         * and updates UI text. Also triggers a canvas scale update.
+         * @param {boolean} fromSlider - True if triggered by a manual slider drag
+         */
+        function updateUI(fromSlider = false) {
+            if (fromSlider) {
+                presetSelect.value = 'custom'; // Switch dropdown to 'Custom' if user drags sliders
+            }
+            params.a = parseFloat(sliderA.value);
+            params.e = parseFloat(sliderE.value);
+            params.speed = parseFloat(sliderSpeed.value);
+            
+            valA.textContent = params.a.toFixed(2) + " AU";
+            valE.textContent = params.e.toFixed(3);
+            valSpeed.textContent = params.speed.toFixed(1) + "x";
+            
+            // Calculate orbital period (3rd Law: T^2 = a^3 -> T = a^1.5)
+            const T = Math.pow(params.a, 1.5);
+            const unit = i18n[currentLang].unitYear || 'yr';
+            valT.textContent = T.toFixed(2) + " " + unit;
+
+            updateScale();
+        }
+
+        // Bind slider events
+        sliderA.addEventListener('input', () => updateUI(true));
+        sliderE.addEventListener('input', () => updateUI(true));
+        sliderSpeed.addEventListener('input', () => updateUI(false));
+
+        // Preset dropdown logic
+        presetSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (presets[val]) {
+                sliderA.value = presets[val].a;
+                sliderE.value = presets[val].e;
+                updateUI(false);
+            }
+        });
+
+        // Toggle button logic for 2nd Law Areas
+        btnAreas.addEventListener('click', () => {
+            params.showAreas = !params.showAreas;
+            if (params.showAreas) {
+                // Active state styling
+                btnAreas.classList.replace('bg-indigo-600', 'bg-emerald-600');
+                btnAreas.classList.replace('hover:bg-indigo-500', 'hover:bg-emerald-500');
+                btnAreas.classList.replace('shadow-indigo-500/20', 'shadow-emerald-500/20');
+            } else {
+                // Inactive state styling
+                btnAreas.classList.replace('bg-emerald-600', 'bg-indigo-600');
+                btnAreas.classList.replace('hover:bg-emerald-500', 'hover:bg-indigo-500');
+                btnAreas.classList.replace('shadow-emerald-500/20', 'shadow-indigo-500/20');
+            }
+        });
+
+        // Toggle button logic for Vectors
+        btnVectors.addEventListener('click', () => {
+            params.showVectors = !params.showVectors;
+            const legend = document.getElementById('legend-vectors');
+            if (params.showVectors) {
+                // Active state styling
+                btnVectors.classList.replace('bg-slate-700', 'bg-slate-600');
+                btnVectors.classList.add('border-green-500', 'text-green-400');
+                legend.classList.remove('hidden');
+            } else {
+                // Inactive state styling
+                btnVectors.classList.replace('bg-slate-600', 'bg-slate-700');
+                btnVectors.classList.remove('border-green-500', 'text-green-400');
+                legend.classList.add('hidden');
+            }
+        });
+
+        // Initialize application on load
+        window.onload = () => {
+            applyLanguage();
+            resizeCanvas();
+            updateUI();
+            requestAnimationFrame(draw);
+        };
+
+    </script>
+</body>
+</html>
