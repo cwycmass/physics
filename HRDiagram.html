@@ -2,195 +2,232 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Meta tags optimized for a mobile app-like experience (no zooming) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Interactive Hertzsprung-Russell Diagram</title>
+    <title>赫羅圖｜HR Diagram</title>
+    <!-- Tailwind CSS for rapid styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
+        /* Strict lock on HTML and Body to prevent any native scrolling/bouncing on iOS */
+        html, body {
             background-color: #0b0f19;
             color: #e2e8f0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Prevent overscroll/bounce effect on iOS */
-            overscroll-behavior-y: none; 
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+            overscroll-behavior: none; 
         }
+        
+        /* App container uses dynamic viewport height (dvh) to account for iOS Chrome/Safari address bars */
+        #app-container {
+            height: 100%;
+            height: 100dvh; 
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Prevent touch gestures from reloading the page on canvas */
         canvas {
             display: block;
-            touch-action: none; /* Prevent pull-to-refresh on mobile */
+            touch-action: none; 
         }
+        
+        /* Utility class for glowing titles */
         .glow-text {
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
+        
+        /* Gradient background for the sidebar */
         .sidebar {
             background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
-            border-left: 1px solid #334155;
         }
-        /* Custom scrollbar for sidebar if needed */
+        
+        /* Custom scrollbar styling for the sidebar to match the dark theme */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<!-- Use 100dvh so it respects mobile browser UI bars, fallback to h-screen -->
-<body class="flex flex-col h-screen h-[100dvh] w-screen overflow-hidden bg-[#0b0f19]">
+<body>
 
-    <!-- Main Content Container (Canvas + Sidebar) -->
-    <div class="flex flex-col md:flex-row flex-1 min-h-0 w-full">
-        
-        <!-- Main Canvas Area -->
-        <!-- Adjusted layout: Canvas takes 45vh on mobile, remaining space goes to sidebar to prevent scrolling -->
-        <div class="h-[45vh] md:h-full md:flex-1 relative min-h-0 w-full shrink-0 md:shrink">
-            <canvas id="hr-canvas" class="w-full h-full cursor-crosshair block"></canvas>
+    <!-- Main Application Wrapper -->
+    <div id="app-container" class="relative z-0">
+        <!-- Flex container: Column on mobile (Canvas top, Sidebar bottom), Row on Desktop (Canvas left, Sidebar right) -->
+        <div class="flex flex-col md:flex-row flex-1 min-h-0 w-full">
             
-            <!-- Loading Overlay -->
-            <div id="loading-indicator" class="absolute inset-0 flex items-center justify-center bg-[#0b0f19]/80 z-10 transition-opacity duration-300">
-                <div class="text-center">
-                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-400 mb-2"></div>
-                    <p id="loading-text" class="text-xs md:text-sm text-blue-300 px-4">正在從 VizieR API 獲取 Hipparcos 星表...</p>
-                </div>
-            </div>
-
-            <!-- Diagram Labels -->
-            <div class="absolute bottom-2 md:bottom-4 left-0 right-0 flex justify-center pointer-events-none opacity-50">
-                <span id="label-temp-axis" class="text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em]">← 表面溫度 (K)</span>
-            </div>
-            <div class="absolute top-1/2 left-2 md:left-4 -translate-y-1/2 -rotate-90 pointer-events-none opacity-50 origin-left">
-                <span id="label-lum-axis" class="text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em]">光度 (<i>L</i>/<i>L</i><sub>⊙</sub>) →</span>
-            </div>
-        </div>
-
-        <!-- Info Sidebar -->
-        <!-- Fixed layout to prevent scrolling: Flex-1 on mobile, tighter padding and margins -->
-        <div class="sidebar w-full md:w-96 flex-1 md:flex-none md:h-full flex flex-col shrink-0 z-20 overflow-y-auto border-t border-slate-700 md:border-t-0">
-            
-            <div class="p-2 md:p-4 pb-2 border-b border-slate-700 flex justify-between items-start shrink-0">
-                <div>
-                    <h1 id="ui-title" class="text-xl md:text-2xl font-bold text-white mb-1 glow-text">赫羅圖</h1>
-                    <p id="ui-desc" class="text-xs md:text-sm text-slate-400">在圖表上拖曳發光的恆星以探索其屬性。</p>
-                </div>
-                <div class="flex items-center gap-2 ml-2 shrink-0">
-                    <button id="btn-info" onclick="openInfoModal()" class="px-2 py-1 md:px-3 md:py-1 bg-blue-600 hover:bg-blue-500 rounded text-[10px] md:text-xs font-semibold text-white transition-colors border border-blue-500 shadow-sm">
-                        說明
-                    </button>
-                    <button onclick="toggleLang()" class="px-2 py-1 md:px-3 md:py-1 bg-slate-700 hover:bg-slate-600 rounded text-[10px] md:text-xs font-semibold text-white transition-colors border border-slate-500 shadow-sm">
-                        繁/Eng
-                    </button>
-                </div>
-            </div>
-
-            <div class="p-2 md:p-4 pt-2 flex-1 flex flex-col gap-2 md:gap-4 min-h-0">
+            <!-- ========================================== -->
+            <!-- CANVAS AREA (Left/Top)                     -->
+            <!-- ========================================== -->
+            <!-- Fixed at 45% height on mobile to ensure controls fit without scrolling, fills remaining space on desktop -->
+            <div class="h-[45%] md:h-full md:flex-1 relative min-h-0 w-full shrink-0">
+                <!-- The actual interactive canvas -->
+                <canvas id="hr-canvas" class="w-full h-full cursor-crosshair block"></canvas>
                 
-                <!-- Controls -->
-                <div class="bg-slate-800/50 rounded-lg p-2 md:p-3 border border-slate-700 shadow-inner flex items-center gap-2 shrink-0">
-                    <input type="checkbox" id="zone-toggle" class="w-4 h-4 rounded bg-slate-900 border-slate-600 text-blue-500 focus:ring-blue-500/50 focus:ring-offset-slate-800 cursor-pointer" onchange="toggleZones(event)">
-                    <label id="ui-show-zones" for="zone-toggle" class="text-xs md:text-sm text-slate-300 cursor-pointer select-none">顯示恆星區域與太陽位置</label>
+                <!-- Loading Overlay: Shown while fetching Hipparcos data from VizieR -->
+                <div id="loading-indicator" class="absolute inset-0 flex items-center justify-center bg-[#0b0f19]/80 z-10 transition-opacity duration-300">
+                    <div class="text-center">
+                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-400 mb-2"></div>
+                        <p id="loading-text" class="text-xs md:text-sm text-blue-300 px-4">正在從 VizieR API 獲取 Hipparcos 星表...</p>
+                    </div>
                 </div>
 
-                <!-- Famous Stars Dropdown -->
-                <div class="bg-slate-800/50 rounded-lg p-2 md:p-3 border border-slate-700 shadow-inner shrink-0">
-                    <label id="ui-jump-to" class="text-[10px] md:text-sm uppercase tracking-wider text-slate-400 mb-1 md:mb-2 font-semibold block">跳轉至著名恆星</label>
-                    <select id="star-select" onchange="jumpToStar()" class="w-full bg-slate-900 border border-slate-600 text-white text-[10px] md:text-sm rounded p-1 md:p-2 mb-1 md:mb-2 outline-none focus:border-blue-500 cursor-pointer">
-                        <!-- Options generated by JS -->
-                    </select>
-                    <p id="ui-star-hint" class="text-[9px] md:text-[10px] text-blue-300/70 leading-tight">提示：在夜空中看起來很亮的恆星，其絕對光度不一定很高！（例如半人馬座α星）</p>
+                <!-- Axis Labels overlaying the canvas -->
+                <div class="absolute bottom-2 md:bottom-4 left-0 right-0 flex justify-center pointer-events-none opacity-50">
+                    <span id="label-temp-axis" class="text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em]">← 表面溫度 (K)</span>
+                </div>
+                <div class="absolute top-1/2 left-2 md:left-4 -translate-y-1/2 -rotate-90 pointer-events-none opacity-50 origin-left">
+                    <span id="label-lum-axis" class="text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em]">光度 (<i>L</i>/<i>L</i><sub>⊙</sub>) →</span>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SIDEBAR CONTROL PANEL (Right/Bottom)       -->
+            <!-- ========================================== -->
+            <!-- Takes the remaining 55% on mobile, fixed 384px (w-96) width on desktop -->
+            <div class="sidebar w-full md:w-96 h-[55%] md:h-full flex flex-col shrink-0 z-20 overflow-y-auto border-t border-slate-700 md:border-t-0 md:border-l">
+                
+                <!-- Header: Title and Buttons -->
+                <div class="p-3 md:p-4 pb-2 border-b border-slate-700 flex justify-between items-start shrink-0">
+                    <div class="min-w-0 flex-1 pr-4">
+                        <!-- Allowed to wrap naturally instead of truncating, preventing text being blocked -->
+                        <h1 id="ui-title" class="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 glow-text leading-tight">赫羅圖｜HR Diagram</h1>
+                        <p id="ui-desc" class="text-[10px] md:text-xs text-slate-400 mt-1 leading-snug">在圖表上拖曳發光的恆星以探索其屬性。</p>
+                    </div>
+                    <!-- Action Buttons pushed to the top right corner -->
+                    <div class="flex items-start gap-1 sm:gap-2 shrink-0 pt-1">
+                        <button id="btn-info" onclick="openInfoModal()" class="px-2 py-1 md:px-3 md:py-1 bg-blue-600 hover:bg-blue-500 rounded text-[10px] md:text-xs font-semibold text-white transition-colors border border-blue-500 shadow-sm">
+                            說明
+                        </button>
+                        <button onclick="toggleLang()" class="px-2 py-1 md:px-3 md:py-1 bg-slate-700 hover:bg-slate-600 rounded text-[10px] md:text-xs font-semibold text-white transition-colors border border-slate-500 shadow-sm">
+                            繁/Eng
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Current Star Stats -->
-                <div class="bg-slate-800/50 rounded-lg p-2 md:p-3 border border-slate-700 shadow-inner shrink-0">
-                    <h2 id="ui-active-props" class="text-[10px] md:text-sm uppercase tracking-wider text-slate-400 mb-1 md:mb-3 font-semibold">當前恆星屬性</h2>
+                <!-- Scrollable Control Content -->
+                <div class="p-2 md:p-4 pt-2 flex-1 flex flex-col gap-2 md:gap-4 min-h-0">
                     
-                    <div class="grid grid-cols-2 gap-1 md:gap-3">
-                        <div>
-                            <p id="ui-temp" class="text-[10px] md:text-xs text-slate-400">表面溫度</p>
-                            <p class="text-sm md:text-lg font-mono text-white"><span id="stat-temp">5778</span> K</p>
-                        </div>
-                        <div>
-                            <p id="ui-lum" class="text-[10px] md:text-xs text-slate-400">光度</p>
-                            <p class="text-sm md:text-lg font-mono text-white"><span id="stat-lum">1.00</span> <i>L</i><sub>⊙</sub></p>
-                        </div>
-                        <div>
-                            <p id="ui-rad" class="text-[10px] md:text-xs text-slate-400">半徑</p>
-                            <p class="text-sm md:text-lg font-mono text-white"><span id="stat-rad">1.00</span> <i>R</i><sub>⊙</sub></p>
-                        </div>
-                        <div>
-                            <p id="ui-class" class="text-[10px] md:text-xs text-slate-400">光譜型</p>
-                            <p class="text-sm md:text-lg font-bold" id="stat-class" style="color: #FFD2A1">G</p>
-                        </div>
+                    <!-- 1. View Options (Zone Toggle) -->
+                    <div class="bg-slate-800/50 rounded-lg p-2 md:p-3 border border-slate-700 shadow-inner flex items-center gap-2 shrink-0">
+                        <input type="checkbox" id="zone-toggle" class="w-4 h-4 rounded bg-slate-900 border-slate-600 text-blue-500 focus:ring-blue-500/50 focus:ring-offset-slate-800 cursor-pointer" onchange="toggleZones(event)">
+                        <label id="ui-show-zones" for="zone-toggle" class="text-xs md:text-sm text-slate-300 cursor-pointer select-none">顯示恆星區域與太陽位置</label>
                     </div>
-                </div>
 
-                <!-- Visual Size Comparison -->
-                <div class="bg-slate-800/50 rounded-lg p-2 md:p-3 border border-slate-700 shadow-inner flex flex-col items-center shrink-0">
-                    <h2 id="ui-size-comp" class="text-[10px] md:text-sm uppercase tracking-wider text-slate-400 mb-1 md:mb-2 font-semibold w-full text-left">大小比較</h2>
-                    <!-- Adjusted Layout: Tighter height on mobile to prevent overflow -->
-                    <div class="w-full flex items-stretch justify-center bg-slate-900 rounded-lg py-1 h-14 md:h-24">
-                        <!-- Sun Side -->
-                        <div class="flex flex-col items-center justify-end w-1/2 border-r border-slate-700/50 pb-1">
-                            <div class="flex-1 flex items-center justify-center relative w-full overflow-hidden">
-                                <!-- Solid Ball for Sun -->
-                                <div id="visual-sun" class="rounded-full bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.5)] transition-all duration-75" title="The Sun" style="width: 16px; height: 16px;"></div>
+                    <!-- 2. Famous Stars Jump Menu -->
+                    <div class="bg-slate-800/50 rounded-lg p-2 md:p-3 border border-slate-700 shadow-inner shrink-0">
+                        <label id="ui-jump-to" class="text-[10px] md:text-sm uppercase tracking-wider text-slate-400 mb-1 md:mb-2 font-semibold block">跳轉至夜空最亮恆星 (視星等)</label>
+                        <select id="star-select" onchange="jumpToStar()" class="w-full bg-slate-900 border border-slate-600 text-white text-[10px] md:text-sm rounded p-1 md:p-2 mb-1 md:mb-2 outline-none focus:border-blue-500 cursor-pointer">
+                            <!-- Options generated dynamically by populateStarDropdown() -->
+                        </select>
+                        <p id="ui-star-hint" class="text-[9px] md:text-[10px] text-blue-300/70 leading-tight">提示：在夜空中看起來很亮的恆星，其絕對光度不一定很高！（例如半人馬座α星）</p>
+                    </div>
+
+                    <!-- 3. Current Star Properties Panel -->
+                    <div class="bg-slate-800/50 rounded-lg p-2 md:p-3 border border-slate-700 shadow-inner shrink-0">
+                        <h2 id="ui-active-props" class="text-[10px] md:text-sm uppercase tracking-wider text-slate-400 mb-1 md:mb-3 font-semibold">當前恆星屬性</h2>
+                        <div class="grid grid-cols-2 gap-1 md:gap-3">
+                            <div>
+                                <p id="ui-temp" class="text-[10px] md:text-xs text-slate-400">表面溫度</p>
+                                <p class="text-sm md:text-lg font-mono text-white"><span id="stat-temp">5778</span> K</p>
                             </div>
-                            <span id="ui-sun-label" class="text-[9px] md:text-[10px] text-yellow-500/70 z-10">太陽</span>
-                        </div>
-                        
-                        <!-- Star Side -->
-                        <div class="flex flex-col items-center justify-end w-1/2 pb-1 relative overflow-hidden">
-                            <div class="flex-1 flex items-center justify-center w-full relative">
-                                <div id="visual-star" class="absolute rounded-full shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-75"></div>
+                            <div>
+                                <p id="ui-lum" class="text-[10px] md:text-xs text-slate-400">光度</p>
+                                <p class="text-sm md:text-lg font-mono text-white"><span id="stat-lum">1.00</span> <i>L</i><sub>⊙</sub></p>
                             </div>
-                            <span id="ui-star-label" class="text-[9px] md:text-[10px] text-slate-400 z-10 drop-shadow-md">目標恆星</span>
+                            <div>
+                                <p id="ui-rad" class="text-[10px] md:text-xs text-slate-400">半徑</p>
+                                <p class="text-sm md:text-lg font-mono text-white"><span id="stat-rad">1.00</span> <i>R</i><sub>⊙</sub></p>
+                            </div>
+                            <div>
+                                <p id="ui-class" class="text-[10px] md:text-xs text-slate-400">光譜型</p>
+                                <p class="text-sm md:text-lg font-bold" id="stat-class" style="color: #FFD2A1">G</p>
+                            </div>
                         </div>
                     </div>
-                    <p id="scale-warning" class="text-[9px] md:text-[10px] text-slate-500 mt-1 text-center hidden">恆星太大，無法完全顯示</p>
-                </div>
-                
-                <div class="mt-auto pt-1 md:pt-2 text-[10px] md:text-xs text-slate-500 text-center shrink-0 pb-1">
-                    <p id="catalogue-status">背景：模擬星群</p>
+
+                    <!-- 4. Visual Size Comparison Panel -->
+                    <div class="bg-slate-800/50 rounded-lg p-2 md:p-3 border border-slate-700 shadow-inner flex flex-col items-center shrink-0">
+                        <h2 id="ui-size-comp" class="text-[10px] md:text-sm uppercase tracking-wider text-slate-400 mb-1 md:mb-2 font-semibold w-full text-left">大小比較</h2>
+                        <!-- Layout: Side by side comparison -->
+                        <div class="w-full flex items-stretch justify-center bg-slate-900 rounded-lg py-1 h-14 md:h-24">
+                            <!-- Left: Sun -->
+                            <div class="flex flex-col items-center justify-end w-1/2 border-r border-slate-700/50 pb-1 relative overflow-hidden">
+                                <div class="flex-1 w-full relative">
+                                    <div id="visual-sun" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.5)] transition-all duration-75" title="The Sun" style="width: 16px; height: 16px;"></div>
+                                </div>
+                                <span id="ui-sun-label" class="text-[9px] md:text-[10px] text-yellow-500/70 z-10 drop-shadow-md">太陽</span>
+                            </div>
+                            <!-- Right: Target Star -->
+                            <div class="flex flex-col items-center justify-end w-1/2 pb-1 relative overflow-hidden">
+                                <div class="flex-1 w-full relative">
+                                    <div id="visual-star" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-75"></div>
+                                </div>
+                                <span id="ui-star-label" class="text-[9px] md:text-[10px] text-slate-400 z-10 drop-shadow-md">目標恆星</span>
+                            </div>
+                        </div>
+                        <p id="scale-warning" class="text-[9px] md:text-[10px] text-slate-500 mt-1 text-center hidden">恆星太大，無法完全顯示</p>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- ========================================== -->
+        <!-- FOOTER                                     -->
+        <!-- ========================================== -->
+        <footer class="h-6 md:h-8 bg-slate-900 border-t border-slate-800 flex items-center justify-center shrink-0 z-30">
+            <p class="text-[10px] md:text-xs text-slate-500 tracking-widest" id="ui-footer">廠商會中學 · 物理科</p>
+        </footer>
     </div>
 
-    <!-- Footer -->
-    <footer class="h-6 md:h-8 bg-slate-900 border-t border-slate-800 flex items-center justify-center shrink-0 z-30">
-        <p class="text-[10px] md:text-xs text-slate-500 tracking-widest" id="ui-footer">廠商會中學 · 物理科</p>
-    </footer>
-
-    <!-- Info Modal -->
-    <div id="info-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-800 rounded-xl border border-slate-600 shadow-2xl max-w-lg w-full max-h-[80vh] flex flex-col">
+    <!-- ========================================== -->
+    <!-- EDUCATIONAL INFO MODAL                     -->
+    <!-- ========================================== -->
+    <!-- Placed safely outside the app container to ensure flawless stacking order -->
+    <div id="info-modal" class="fixed inset-0 z-[9999] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-800 rounded-xl border border-slate-600 shadow-2xl max-w-lg w-full max-h-[80vh] flex flex-col break-words">
             <div class="p-4 border-b border-slate-700 flex justify-between items-center shrink-0">
-                <h3 id="modal-title" class="text-lg font-bold text-white">赫羅圖物理學原理 (HKDSE)</h3>
+                <h3 id="modal-title" class="text-lg font-bold text-white">赫羅圖物理學原理</h3>
                 <button onclick="closeInfoModal()" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
             </div>
             <div class="p-4 overflow-y-auto text-sm text-slate-300 space-y-4" id="modal-content">
-                <!-- Content injected via JS -->
+                <!-- Content injected dynamically by i18n logic -->
             </div>
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- APPLICATION LOGIC (JavaScript)             -->
+    <!-- ========================================== -->
     <script>
-        // --- Constants & Config ---
+        // --- 1. Canvas Setup & Core Constants ---
         const canvas = document.getElementById('hr-canvas');
-        const ctx = canvas.getContext('2d', { alpha: false });
+        // REMOVED { alpha: false } to fix hardware compositing layer bugs on iOS/Safari which caused canvas to render above modals
+        const ctx = canvas.getContext('2d'); 
         
-        // HR Diagram Boundaries
+        // Diagram Mathematical Boundaries (Logarithmic scales)
+        // Temperature on the X axis decreases left-to-right (40,000K to 2,500K)
         const LOG_T_MAX = Math.log10(40000); // 40,000 K (O class)
         const LOG_T_MIN = Math.log10(2500);  // 2,500 K (M class)
-        const LOG_L_MAX = 6.0;               // 1,000,000 L_sun
-        const LOG_L_MIN = -4.0;              // 0.0001 L_sun
-        const SUN_TEMP = 5778;
+        // Luminosity on the Y axis increases bottom-to-top (0.0001 to 1,000,000 Solar Lums)
+        const LOG_L_MAX = 6.0;               // 10^6 L_sun
+        const LOG_L_MIN = -4.0;              // 10^-4 L_sun
+        const SUN_TEMP = 5778;               // Reference Temp for Sun
 
-        // State
+        // App State
         let width, height;
-        let catalogueStars = [];
+        let catalogueStars = []; // Holds the fetched/simulated background stars
         let isDragging = false;
         let showZones = false;
         let currentLang = 'zh';
-        let isRealData = false;
-        let starCount = 0;
 
-        // Top Brightest Stars Data (Added Sun & Apparent Magnitude 'vmag')
+        // Famous Stars Data Array for the Dropdown menu
+        // Includes temperature (T), luminosity (L), and apparent magnitude (vmag)
         const famousStars = [
             { id: "sun", T: 5778, L: 1.0, vmag: -26.74 },
             { id: "sirius", T: 9940, L: 25.4, vmag: -1.46 },
@@ -205,7 +242,17 @@
             { id: "betelgeuse", T: 3600, L: 126000, vmag: 0.50 }
         ];
         
-        // i18n Dictionary
+        // The Interactive Target Star (Defaulted to match the Sun initially)
+        let activeStar = {
+            T: SUN_TEMP,
+            L: 1.0,
+            x: 0,
+            y: 0,
+            radius: 8, // Fixed hit/draw radius on canvas
+            color: '#ffffff'
+        };
+
+        // --- 2. Internationalization (i18n) Data ---
         const i18n = {
             zh: {
                 title: "赫羅圖",
@@ -219,8 +266,6 @@
                 sun: "太陽",
                 scaleWarn: "恆星太大，無法完全顯示",
                 loading: "正在從 VizieR API 獲取 Hipparcos 星表...",
-                catReal: "背景：真實數據 ({count} 顆 Hipparcos 恆星)",
-                catSim: "背景：模擬星群",
                 tempAxis: "← 表面溫度 (K)",
                 lumAxis: "光度 (<i>L</i>/<i>L</i><sub>⊙</sub>) →",
                 showZones: "顯示恆星區域與太陽位置",
@@ -272,8 +317,6 @@
                 sun: "Sun",
                 scaleWarn: "Star is too large to fit entirely in view",
                 loading: "Fetching Hipparcos Catalogue from VizieR API...",
-                catReal: "Background: Real data ({count} stars from Hipparcos)",
-                catSim: "Background: Procedural Simulation",
                 tempAxis: "← Surface Temperature (K)",
                 lumAxis: "Luminosity (<i>L</i>/<i>L</i><sub>⊙</sub>) →",
                 showZones: "Show Stellar Zones & Sun Position",
@@ -315,52 +358,46 @@
             }
         };
 
-        // The Interactive Star (Defaulted to Sun-like)
-        let activeStar = {
-            T: SUN_TEMP,
-            L: 1.0,
-            x: 0,
-            y: 0,
-            radius: 8, // Draw radius
-            color: '#ffffff'
-        };
-
-        // --- Core Math Functions ---
-        // Map Temperature to Canvas X (Note: High Temp is on the LEFT)
+        // --- 3. Astrometric Math Functions ---
+        
+        // Map Temperature (Kelvin) to Canvas X Coordinate.
+        // Uses inverse Log10 mapping since HR diagrams place hotter stars on the left.
         function tempToX(t) {
             const logT = Math.log10(Math.max(1, t));
             const progress = (LOG_T_MAX - logT) / (LOG_T_MAX - LOG_T_MIN);
             return progress * width;
         }
 
-        // Map X to Temperature
+        // Map Canvas X Coordinate back to Temperature (Kelvin).
         function xToTemp(x) {
             const progress = x / width;
             const logT = LOG_T_MAX - (progress * (LOG_T_MAX - LOG_T_MIN));
             return Math.pow(10, logT);
         }
 
-        // Map Luminosity to Canvas Y (Note: High Lum is on the TOP)
+        // Map Luminosity (Solar units) to Canvas Y Coordinate.
+        // Uses inverse Log10 mapping (brightest at the top, y=0).
         function lumToY(l) {
             const logL = Math.log10(Math.max(1e-10, l));
             const progress = (LOG_L_MAX - logL) / (LOG_L_MAX - LOG_L_MIN);
             return progress * height;
         }
 
-        // Map Y to Luminosity
+        // Map Canvas Y Coordinate back to Luminosity (Solar units).
         function yToLum(y) {
             const progress = y / height;
             const logL = LOG_L_MAX - (progress * (LOG_L_MAX - LOG_L_MIN));
             return Math.pow(10, logL);
         }
 
-        // Calculate Stellar Radius in Solar Radii: L = R^2 * T^4 (in solar units)
+        // Calculate Stellar Radius using the Stefan-Boltzmann law relation: L ∝ R^2 * T^4
+        // Rearranged to output Radius relative to our Sun (R_sun = 1.0)
         function calculateRadius(t, l) {
             const tRatio = t / SUN_TEMP;
             return Math.sqrt(l) / Math.pow(tRatio, 2);
         }
 
-        // Get Spectral Class
+        // Determine Morgan-Keenan Spectral Classification based strictly on surface temperature.
         function getSpectralClass(t) {
             if (t >= 30000) return 'O';
             if (t >= 10000) return 'B';
@@ -371,19 +408,20 @@
             return 'M';
         }
 
-        // Convert Kelvin to RGB (Approximation algorithm by Tanner Helland)
+        // Convert Kelvin temperature to an RGB color string.
+        // Based on Tanner Helland's color approximation algorithm for blackbody radiation.
         function kelvinToRGB(temp) {
             let t = Math.max(1000, Math.min(40000, temp)) / 100;
             let r, g, b;
 
-            // Red
+            // Calculate Red component
             if (t <= 66) { r = 255; } 
             else {
                 r = t - 60;
                 r = 329.698727446 * Math.pow(r, -0.1332047592);
             }
 
-            // Green
+            // Calculate Green component
             if (t <= 66) {
                 g = t;
                 g = 99.4708025861 * Math.log(g) - 161.1195681661;
@@ -392,7 +430,7 @@
                 g = 288.1221695283 * Math.pow(g, -0.0755148492);
             }
 
-            // Blue
+            // Calculate Blue component
             if (t >= 66) { b = 255; } 
             else if (t <= 19) { b = 0; } 
             else {
@@ -400,6 +438,7 @@
                 b = 138.5177312231 * Math.log(b) - 305.0447927307;
             }
 
+            // Clamp values between 0 and 255
             r = Math.max(0, Math.min(255, r));
             g = Math.max(0, Math.min(255, g));
             b = Math.max(0, Math.min(255, b));
@@ -407,63 +446,68 @@
             return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
         }
 
-        // --- Data Fetching (Online Catalogue) ---
+        // --- 4. Data Processing (API Fetching) ---
+
+        // Fetches real astronomical data from the Hipparcos catalog via the CDS VizieR API.
         async function fetchStarCatalogue() {
             try {
+                // Fetch top 2500 brightest stars (Vmag), including B-V color index and Parallax (Plx).
                 const response = await fetch('https://vizier.cds.unistra.fr/viz-bin/asu-tsv?-source=I/239/hip_main&-out=Vmag,B-V,Plx&-out.max=2500&-sort=Vmag', {
-                    signal: AbortSignal.timeout(5000)
+                    signal: AbortSignal.timeout(5000) // 5s timeout to prevent hanging
                 });
                 
                 if (!response.ok) throw new Error("Network response was not ok");
                 
                 const text = await response.text();
                 const lines = text.split('\n');
-                
                 catalogueStars = [];
                 
                 for (const line of lines) {
+                    // Skip comments and empty lines in the TSV
                     if (line.startsWith('#') || line.trim() === '') continue;
                     
                     const cols = line.split('\t').map(c => c.trim());
-                    const vmag = parseFloat(cols[0]);
-                    const bv = parseFloat(cols[1]);
-                    const plx = parseFloat(cols[2]);
+                    const vmag = parseFloat(cols[0]); // Apparent magnitude
+                    const bv = parseFloat(cols[1]);   // B-V Color index
+                    const plx = parseFloat(cols[2]);  // Parallax in milliarcseconds
                     
                     if (!isNaN(vmag) && !isNaN(bv) && !isNaN(plx) && plx > 0) {
+                        // Calculate Distance in parsecs: d = 1000 / Plx(mas)
                         const distance = 1000 / plx;
+                        
+                        // Absolute Magnitude (M): M = m - 5*log10(d) + 5
                         const absMag = vmag - 5 * Math.log10(distance) + 5;
+                        
+                        // Luminosity in Solar units: L = 10^((M_sun - M_star) / 2.5) 
+                        // Note: Absolute magnitude of Sun is ~4.83
                         const L = Math.pow(10, (4.83 - absMag) / 2.5);
+                        
+                        // Temperature (Ballesteros' formula using B-V index)
                         const T = 4600 * (1 / (0.92 * bv + 1.7) + 1 / (0.92 * bv + 0.62));
                         
+                        // Filter out extreme outliers to keep the diagram clean
                         if (T > 2000 && T < 50000 && L > 0.00001 && L < 1000000) {
-                            catalogueStars.push({ 
-                                T: T, 
-                                L: L, 
-                                color: kelvinToRGB(T) 
-                            });
+                            catalogueStars.push({ T: T, L: L, color: kelvinToRGB(T) });
                         }
                     }
                 }
 
-                if (catalogueStars.length > 0) {
-                    isRealData = true;
-                    starCount = catalogueStars.length;
-                } else {
-                    throw new Error("Parsed data empty");
-                }
+                if (catalogueStars.length === 0) throw new Error("Parsed data empty");
+                
             } catch (error) {
-                console.warn("Could not fetch/parse VizieR data, falling back to simulated data.", error);
+                console.warn("Could not fetch VizieR data, falling back to simulated data.", error);
+                // Fallback to mathematically generated data if the API fails or is offline
                 generateSimulatedCatalogue();
-                isRealData = false;
             } finally {
-                updateI18n();
+                // Remove loading spinner
                 document.getElementById('loading-indicator').style.opacity = '0';
                 setTimeout(() => document.getElementById('loading-indicator').style.display = 'none', 300);
-                draw();
+                draw(); // Render the canvas
             }
         }
 
-        // Fallback: Generate realistic HR diagram distribution if offline
+        // Generates a mathematically approximate distribution of HR diagram stars 
+        // in case the live API data fails to load.
         function generateSimulatedCatalogue() {
             catalogueStars = [];
             const numStars = 2000;
@@ -473,28 +517,35 @@
                 const rand = Math.random();
 
                 if (rand < 0.85) {
+                    // Main Sequence (85% of stars)
+                    // log L ≈ 5.5 * log(T/T_sun) with random scatter
                     const logT = LOG_T_MIN + (Math.random() * (LOG_T_MAX - LOG_T_MIN));
                     T = Math.pow(10, logT);
                     const baseLogL = 5.5 * Math.log10(T / SUN_TEMP);
                     const scatterLogL = baseLogL + (Math.random() * 1.5 - 0.75);
                     L = Math.pow(10, scatterLogL);
                 } else if (rand < 0.95) {
+                    // Red Giants (10%)
                     T = 3000 + Math.random() * 2500;
                     L = 50 + Math.random() * 1000;
                 } else {
+                    // White Dwarfs (5%)
                     T = 8000 + Math.random() * 20000;
                     L = 0.0001 + Math.random() * 0.01;
                 }
 
+                // Push to array if within bounds
                 if (L > Math.pow(10, LOG_L_MIN) && L < Math.pow(10, LOG_L_MAX)) {
                      catalogueStars.push({ T, L, color: kelvinToRGB(T) });
                 }
             }
         }
 
-        // --- Rendering ---
+        // --- 5. Canvas Rendering Logic ---
+
+        // Resizes the canvas context to match physical CSS dimensions, taking 
+        // high-DPI (Retina) displays into account to prevent blurriness.
         function resize() {
-            // Because canvas is flexed, we must measure its parent explicitly.
             const rect = canvas.parentElement.getBoundingClientRect();
             const dpr = window.devicePixelRatio || 1;
             canvas.width = rect.width * dpr;
@@ -505,23 +556,57 @@
             width /= dpr;
             height /= dpr;
             
+            // Re-sync active star position after resize
             activeStar.x = tempToX(activeStar.T);
             activeStar.y = lumToY(activeStar.L);
-            
             draw();
         }
 
-        function drawGrid() {
-            ctx.strokeStyle = '#1e293b'; // Tailwind slate-800
-            ctx.lineWidth = 1;
-            ctx.fillStyle = '#64748b'; // Tailwind slate-500
+        // Draws the Spectral Scale (OBAFGKM) and Color gradient bar at the top of the canvas
+        function drawSpectralScale() {
+            const barHeight = width < 400 ? 6 : 10;
             
-            // Adjust font size for mobile width
+            // Linear gradient representing surface temperature
+            const grad = ctx.createLinearGradient(0, 0, width, 0);
+            for (let i = 0; i <= 1; i += 0.05) {
+                grad.addColorStop(i, kelvinToRGB(xToTemp(i * width)));
+            }
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, width, barHeight);
+
+            // Spectral class markers placed roughly at the center of their temperature ranges
+            const classes = [
+                { letter: 'O', t: 34641 },
+                { letter: 'B', t: 17320 },
+                { letter: 'A', t: 8660 },
+                { letter: 'F', t: 6708 },
+                { letter: 'G', t: 5585 },
+                { letter: 'K', t: 4386 },
+                { letter: 'M', t: 3041 }
+            ];
+            
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.font = width < 400 ? 'bold 10px sans-serif' : 'bold 14px sans-serif';
+            ctx.fillStyle = '#94a3b8'; // slate-400
+            
+            classes.forEach(c => {
+                const x = tempToX(c.t);
+                ctx.fillText(c.letter, x, barHeight + 4);
+            });
+        }
+
+        // Draws the background grid (Temperature and Luminosity lines)
+        function drawGrid() {
+            ctx.strokeStyle = '#1e293b'; // slate-800
+            ctx.lineWidth = 1;
+            ctx.fillStyle = '#64748b'; // slate-500
             ctx.font = width < 400 ? '9px monospace' : '10px monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
 
             // Vertical lines (Temperature)
+            const textYOffset = width < 400 ? 24 : 32; // Drop text below spectral bar
             const temps = [40000, 20000, 10000, 7500, 5000, 3000];
             temps.forEach(t => {
                 const x = tempToX(t);
@@ -530,13 +615,13 @@
                 ctx.lineTo(x, height);
                 ctx.stroke();
                 
-                // Show fewer labels on small screens to prevent overlap
+                // Hide some labels on small screens to prevent overlap
                 if (width > 400 || (t === 40000 || t === 10000 || t === 3000)) {
-                    ctx.fillText(`${t} K`, x, 5); 
+                    ctx.fillText(`${t} K`, x, textYOffset); 
                 }
             });
 
-            // Horizontal lines (Luminosity)
+            // Horizontal lines (Luminosity - log 10 scale)
             ctx.textAlign = 'left';
             ctx.textBaseline = 'middle';
             for (let logL = LOG_L_MIN; logL <= LOG_L_MAX; logL += 2) {
@@ -552,13 +637,14 @@
             }
         }
 
+        // Renders the highlighted evolutionary zones (if toggle is active)
         function drawZones() {
             if (!showZones) return;
 
             const t = i18n[currentLang];
             ctx.save();
             
-            // Draw Sun Position
+            // 1. Draw Sun Reference lines and dot
             const sunX = tempToX(SUN_TEMP);
             const sunY = lumToY(1.0);
             ctx.strokeStyle = 'rgba(234, 179, 8, 0.6)'; // yellow-500
@@ -580,14 +666,13 @@
             ctx.fillStyle = '#fde047';
             ctx.fillText(t.sun, sunX + 6, sunY - 8);
 
-            // Zones styling
+            // 2. Setup styles for the Zone labels
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             const fontSize = width < 400 ? 12 : 14;
-            // Added 'bold' to the font styling for better visibility
             ctx.font = `italic bold ${fontSize}px sans-serif`;
 
-            // Helper for drawing high-contrast pill labels
+            // Helper function to draw high-contrast "pill" shaped labels for zones
             function drawPillLabel(text, x, y, textColor, rotation = 0) {
                 ctx.save();
                 ctx.translate(x, y);
@@ -598,7 +683,7 @@
                 const textWidth = ctx.measureText(text).width;
                 const textHeight = fontSize;
                 
-                // Dark pill background (increased opacity to 0.95 for higher contrast)
+                // Dark pill background
                 ctx.fillStyle = 'rgba(15, 23, 42, 0.95)'; 
                 ctx.beginPath();
                 if (ctx.roundRect) {
@@ -608,10 +693,10 @@
                 }
                 ctx.fill();
                 
-                // Pill border
+                // Pill colored border
                 ctx.strokeStyle = textColor;
-                ctx.lineWidth = 1.5; // Slightly thicker border
-                ctx.globalAlpha = 0.8; // Increased border visibility
+                ctx.lineWidth = 1.5; 
+                ctx.globalAlpha = 0.8; 
                 ctx.stroke();
                 ctx.globalAlpha = 1.0;
 
@@ -619,12 +704,14 @@
                 ctx.fillStyle = textColor;
                 ctx.shadowColor = textColor;
                 ctx.shadowBlur = 6;
-                ctx.fillText(text, 0, 1); // +1px for visual centering
+                ctx.fillText(text, 0, 1); // +1px offsets perfectly for visual vertical centering
                 
                 ctx.restore();
             }
 
-            // Main Sequence Band
+            // --- Draw Highlight Polygons/Ellipses ---
+            
+            // Main Sequence Band (Diagonal line with thick stroke)
             ctx.strokeStyle = 'rgba(100, 116, 139, 0.3)';
             ctx.beginPath();
             ctx.moveTo(tempToX(40000), lumToY(100000));
@@ -638,7 +725,7 @@
             
             ctx.lineWidth = 1;
 
-            // Red Giants
+            // Red Giants (Ellipse)
             ctx.fillStyle = 'rgba(239, 68, 68, 0.1)'; 
             ctx.strokeStyle = 'rgba(239, 68, 68, 0.3)';
             ctx.beginPath();
@@ -646,7 +733,7 @@
             ctx.fill();
             ctx.stroke();
 
-            // Supergiants
+            // Supergiants (Ellipse)
             ctx.fillStyle = 'rgba(217, 119, 6, 0.1)'; 
             ctx.strokeStyle = 'rgba(217, 119, 6, 0.3)';
             ctx.beginPath();
@@ -654,7 +741,7 @@
             ctx.fill();
             ctx.stroke();
 
-            // White Dwarfs
+            // White Dwarfs (Ellipse)
             ctx.fillStyle = 'rgba(56, 189, 248, 0.1)'; 
             ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
             ctx.beginPath();
@@ -662,7 +749,7 @@
             ctx.fill();
             ctx.stroke();
 
-            // Draw all labels on top
+            // --- Render labels on top of everything ---
             drawPillLabel(t.zoneMS, tempToX(10000), lumToY(100), 'rgba(226, 232, 240, 1)', -Math.PI / 5.5);
             drawPillLabel(t.zoneGiants, tempToX(4500), lumToY(100), 'rgba(252, 165, 165, 1)');
             drawPillLabel(t.zoneSuper, tempToX(10000), lumToY(100000), 'rgba(253, 230, 138, 1)');
@@ -671,13 +758,14 @@
             ctx.restore();
         }
 
+        // Draws the actual points representing the background star catalogue
         function drawCatalogue() {
             for (const star of catalogueStars) {
                 const x = tempToX(star.T);
                 const y = lumToY(star.L);
                 
                 ctx.fillStyle = star.color;
-                // Scale star sizes down slightly on mobile
+                // Add tiny visual variance to radius based on Luminosity (purely for aesthetics)
                 const maxR = width < 400 ? 1.5 : 2.5;
                 const r = Math.max(0.5, Math.min(maxR, (Math.log10(star.L) - LOG_L_MIN) * 0.3));
                 
@@ -689,11 +777,20 @@
             ctx.globalAlpha = 1.0;
         }
 
+        // Draws the interactive glowing target star that the user controls
         function drawActiveStar() {
             const x = activeStar.x;
             const y = activeStar.y;
             activeStar.color = kelvinToRGB(activeStar.T);
+            
+            // Calculate dynamic visual radius based on physical size (R)
+            const R = calculateRadius(activeStar.T, activeStar.L);
+            const logR = Math.log10(Math.max(0.0001, R));
+            // Base radius is 8px (Sun, where logR = 0). 
+            // Scales down to ~3px for White Dwarfs, and up to ~30px for Supergiants.
+            activeStar.radius = Math.max(3, Math.min(30, 8 + logR * 6));
 
+            // Outer glow radial gradient
             const gradient = ctx.createRadialGradient(x, y, activeStar.radius * 0.5, x, y, activeStar.radius * 4);
             gradient.addColorStop(0, activeStar.color);
             gradient.addColorStop(0.2, activeStar.color);
@@ -704,11 +801,13 @@
             ctx.arc(x, y, activeStar.radius * 4, 0, Math.PI * 2);
             ctx.fill();
 
+            // Solid core
             ctx.fillStyle = '#ffffff';
             ctx.beginPath();
             ctx.arc(x, y, activeStar.radius, 0, Math.PI * 2);
             ctx.fill();
             
+            // Draw Target Reticle outline
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
             ctx.lineWidth = 1;
             const retSize = activeStar.radius + 6;
@@ -718,24 +817,32 @@
             ctx.stroke();
         }
 
+        // Main render loop
         function draw() {
+            // Prevent drawing before canvas is properly sized
+            if (!width || !height) return;
+
+            // Clear canvas
             ctx.fillStyle = '#0b0f19';
             ctx.fillRect(0, 0, width, height);
 
+            // Render elements in depth order (Bottom to Top)
+            drawSpectralScale();
             drawGrid();
             drawZones();
             drawCatalogue();
             drawActiveStar();
         }
 
-        // --- UI Updates ---
+        // --- 6. DOM & UI Updates ---
+
+        // Helper to format physics values cleanly
         function formatNumber(num) {
-            if (num < 0.01 || num > 9999) {
-                return num.toExponential(2);
-            }
+            if (num < 0.01 || num > 9999) return num.toExponential(2);
             return num.toFixed(2);
         }
 
+        // Updates all numerical text in the UI based on `activeStar` properties
         function updateStatsPanel() {
             const T = activeStar.T;
             const L = activeStar.L;
@@ -750,33 +857,30 @@
             classEl.innerText = sClass;
             classEl.style.color = activeStar.color;
 
+            // Update Visual Size comparison balls
             const visualStar = document.getElementById('visual-star');
             const visualSun = document.getElementById('visual-sun');
             const scaleWarning = document.getElementById('scale-warning');
             
-            // Adjust max visible radius limit based on screen width/height to match new CSS
-            const maxVisualRadius = window.innerWidth < 768 ? 20 : 40; 
-            const baseSunRadius = window.innerWidth < 768 ? 5 : 8;
+            // Limit bounds to avoid breaking the CSS flexbox container
+            const maxVisualRadius = window.innerWidth < 768 ? 18 : 36; 
+            const baseSunRadius = window.innerWidth < 768 ? 4 : 6;
             
             let sunR = baseSunRadius;
             let starR = R * sunR;
             
-            // If the star is too big, scale both the star and the sun down
+            // Dynamic scaling logic: if the star is too big to fit, we scale the star down
+            // to the maximum box size, and scale the Sun down proportionally.
             if (starR > maxVisualRadius) {
                 starR = maxVisualRadius;
-                sunR = starR / R;
+                sunR = starR / R; // Recalculate relative sun radius
                 
-                // Floor the sun's radius to 1px so it remains a visible dot
+                // If the sun drops below 1px, freeze it at 1px so it remains visible,
+                // and break the true scale. Allow starR to freely expand past container!
                 if (sunR < 1) {
                     sunR = 1;
-                    starR = R * sunR;
-                    
-                    if (starR > maxVisualRadius) {
-                        starR = maxVisualRadius;
-                        scaleWarning.classList.remove('hidden');
-                    } else {
-                        scaleWarning.classList.add('hidden');
-                    }
+                    starR = R * sunR; // Star is larger than maxVisualRadius now
+                    scaleWarning.classList.remove('hidden');
                 } else {
                     scaleWarning.classList.add('hidden');
                 }
@@ -792,26 +896,31 @@
             visualStar.style.backgroundColor = activeStar.color;
         }
 
+        // Populates the HTML <select> dropdown with famous stars array
         function populateStarDropdown() {
             const select = document.getElementById('star-select');
             const currentVal = select.value;
+            
+            // Add default empty option translated
             select.innerHTML = `<option value="">${i18n[currentLang].selectStar}</option>`;
             
             famousStars.forEach(star => {
                 const opt = document.createElement('option');
                 opt.value = star.id;
                 
-                // Format Apparent Magnitude (+ for positive, keep 2 decimals)
+                // Format Apparent Magnitude (Vmag) e.g. "+0.50" or "-1.46"
                 const magStr = star.vmag > 0 ? `+${star.vmag.toFixed(2)}` : star.vmag.toFixed(2);
                 
-                // Set text to: StarName (+0.00)
+                // Insert translated name and magnitude bracket
                 opt.innerText = `${i18n[currentLang][`star_${star.id}`]} (${magStr})`;
                 select.appendChild(opt);
             });
             
+            // Retain user's current selection if language changes
             select.value = currentVal;
         }
 
+        // Swaps all text elements to match the current dictionary logic (zh/en)
         function updateI18n() {
             const t = i18n[currentLang];
             document.getElementById('ui-title').innerText = t.title;
@@ -838,16 +947,10 @@
             document.getElementById('modal-content').innerHTML = t.modalBody;
             
             populateStarDropdown();
-            
-            const statusEl = document.getElementById('catalogue-status');
-            if (isRealData) {
-                statusEl.innerText = t.catReal.replace('{count}', starCount);
-            } else {
-                statusEl.innerText = t.catSim;
-            }
-            
-            draw();
+            draw(); // Redraw canvas to update translated Zone labels
         }
+
+        // --- 7. Event Handlers ---
 
         function toggleLang() {
             currentLang = currentLang === 'zh' ? 'en' : 'zh';
@@ -867,6 +970,7 @@
             document.getElementById('info-modal').classList.add('hidden');
         }
 
+        // Dropdown change event
         function jumpToStar() {
             const select = document.getElementById('star-select');
             const starId = select.value;
@@ -874,8 +978,11 @@
 
             const star = famousStars.find(s => s.id === starId);
             if (star) {
+                // Update physics model
                 activeStar.T = star.T;
                 activeStar.L = star.L;
+                
+                // Recalculate canvas coordinates
                 activeStar.x = tempToX(activeStar.T);
                 activeStar.y = lumToY(activeStar.L);
                 
@@ -884,27 +991,28 @@
             }
         }
 
-        // Close modal when clicking outside the box
+        // Close modal when clicking on the dark background overlay
         document.getElementById('info-modal').addEventListener('click', function(e) {
             if (e.target === this) closeInfoModal();
         });
 
-        // --- Interaction ---
+        // --- Pointer Event Logic (Mouse/Touch) ---
         function handlePointerDown(e) {
             const rect = canvas.getBoundingClientRect();
+            // Normalize touch vs mouse
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             
             const mouseX = clientX - rect.left;
             const mouseY = clientY - rect.top;
 
+            // Check if user clicked within the interactive radius of the star
             const dist = Math.hypot(mouseX - activeStar.x, mouseY - activeStar.y);
-            // Increase hit box area on mobile touches
             const hitThreshold = e.touches ? activeStar.radius * 6 + 20 : activeStar.radius * 5 + 10;
             
             if (dist < hitThreshold) { 
                 isDragging = true;
-                // Reset the dropdown if user manually drags the star away
+                // Disconnect from the dropdown since user is taking manual control
                 document.getElementById('star-select').value = "";
                 e.preventDefault();
             }
@@ -917,14 +1025,16 @@
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
+            // Clamp coordinates to canvas bounds
             activeStar.x = Math.max(0, Math.min(width, clientX - rect.left));
             activeStar.y = Math.max(0, Math.min(height, clientY - rect.top));
 
+            // Reverse calculate Physics properties based on dragged location
             activeStar.T = xToTemp(activeStar.x);
             activeStar.L = yToLum(activeStar.y);
 
             updateStatsPanel();
-            requestAnimationFrame(draw);
+            requestAnimationFrame(draw); // Performant re-render
             e.preventDefault();
         }
 
@@ -932,32 +1042,33 @@
             isDragging = false;
         }
 
+        // Register Mouse events
         canvas.addEventListener('mousedown', handlePointerDown);
         window.addEventListener('mousemove', handlePointerMove);
         window.addEventListener('mouseup', handlePointerUp);
         
-        // Use passive: false to allow preventDefault() which stops scrolling when dragging the star
+        // Register Touch events (passive: false allows e.preventDefault() to stop screen scrolling)
         canvas.addEventListener('touchstart', handlePointerDown, {passive: false});
         window.addEventListener('touchmove', handlePointerMove, {passive: false});
         window.addEventListener('touchend', handlePointerUp);
         window.addEventListener('touchcancel', handlePointerUp);
 
-        // Throttle resize events
+        // Throttle resize events to prevent visual lag
         let resizeTimeout;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(resize, 100);
         });
 
-        // --- Initialization ---
+        // --- 8. Initialization ---
         function init() {
+            resize(); // Must be called first to define canvas width/height before drawing
             updateI18n();
-            resize(); 
             updateStatsPanel();
-            fetchStarCatalogue();
+            fetchStarCatalogue(); // Start pulling external data
         }
 
-        // Start
+        // Boot
         init();
     </script>
 </body>
