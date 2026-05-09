@@ -5,15 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>金星盈虧的兩種解釋：地心說 vs 日心說</title>
     <style>
+        /* ==========================================
+           CSS 變數與全域設定 (Global Variables & Reset)
+           ========================================== */
         :root {
-            --bg-dark: #0f172a;
-            --panel-bg: #1e293b;
-            --accent: #38bdf8;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
-            --earth-color: #3b82f6;
-            --sun-color: #fbbf24;
-            --venus-color: #fcd34d;
+            --bg-dark: #0f172a;       /* 背景深藍色 */
+            --panel-bg: #1e293b;      /* 面板背景色 */
+            --accent: #38bdf8;        /* 強調色(亮藍) */
+            --text-light: #f8fafc;    /* 主要文字顏色 */
+            --text-muted: #94a3b8;    /* 次要文字顏色 */
+            --earth-color: #3b82f6;   /* 地球顏色 */
+            --sun-color: #fbbf24;     /* 太陽顏色 */
+            --venus-color: #fcd34d;   /* 金星顏色 */
         }
 
         * {
@@ -22,6 +25,9 @@
             padding: 0;
         }
 
+        /* 動態視口高度 (dvh) 修復 iOS Chrome/Safari 底部工具列遮擋問題
+           確保在手機上依然能完整看見 footer
+        */
         body {
             font-family: 'Microsoft JhengHei', 'PingFang TC', 'Helvetica Neue', sans-serif;
             background-color: var(--bg-dark);
@@ -31,16 +37,22 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            min-height: 100dvh; /* iOS 專屬修復 */
         }
 
+        /* 桌機與平板排版 (鎖定滾動，充滿螢幕) */
         @media (min-width: 768px) and (min-height: 600px) {
             body {
                 height: 100vh;
+                height: 100dvh;
                 overflow: hidden; 
                 padding: 15px 20px;
             }
         }
 
+        /* ==========================================
+           頁首 (Header)
+           ========================================== */
         header {
             text-align: center;
             margin-bottom: 10px;
@@ -70,18 +82,19 @@
             }
         }
 
+        /* ==========================================
+           主佈局 (Layout & Sidebar)
+           ========================================== */
         .layout-wrapper {
             display: flex;
             flex-direction: column;
             flex: 1;
             gap: 15px;
-            min-height: 0;
+            min-height: 0; /* 允許 Flex 子元素在需要時縮小，避免擠出螢幕 */
         }
 
         @media (min-width: 768px) {
-            .layout-wrapper {
-                flex-direction: row;
-            }
+            .layout-wrapper { flex-direction: row; }
         }
 
         .sidebar {
@@ -97,10 +110,7 @@
         }
 
         @media (min-width: 768px) {
-            .sidebar {
-                width: 150px;
-                overflow-y: auto;
-            }
+            .sidebar { width: 150px; overflow-y: auto; }
         }
 
         .control-group {
@@ -116,6 +126,9 @@
             align-items: center;
         }
 
+        /* ==========================================
+           按鈕與 UI 元件 (Buttons & UI)
+           ========================================== */
         .speed-controls {
             display: flex;
             align-items: center;
@@ -146,6 +159,29 @@
             height: 18px;
         }
 
+        .planet-btn {
+            background: #334155;
+            border: 1px solid #475569;
+            color: white;
+            padding: 8px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .planet-btn.active {
+            background: var(--earth-color);
+            border-color: var(--accent);
+        }
+
+        /* ==========================================
+           模擬區與畫布 (Simulation & Canvas)
+           ========================================== */
         .sim-container {
             display: flex;
             flex-wrap: wrap;
@@ -156,9 +192,7 @@
         }
 
         @media (min-width: 768px) {
-            .sim-container {
-                flex-wrap: nowrap;
-            }
+            .sim-container { flex-wrap: nowrap; }
         }
 
         .panel {
@@ -182,6 +216,8 @@
             flex-shrink: 0;
         }
 
+        /* 動態正方形容器：利用 flex 撐滿，內部靠 JS 強制畫布為完美正方形
+        */
         .canvas-wrapper {
             position: relative;
             flex: 1;
@@ -194,17 +230,15 @@
             background: transparent;
         }
 
+        /* 畫布本體：強制顯示為圓形 */
         canvas.main-sim {
             background: #000;
-            border-radius: 50%;
+            border-radius: 50%; /* 完美圓形 */
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
             display: block;
-            aspect-ratio: 1 / 1;
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
         }
 
+        /* 望遠鏡視圖面板 */
         .telescope-view {
             display: flex;
             flex-direction: row;
@@ -226,15 +260,24 @@
             flex: 1;
         }
 
+        /* 望遠鏡小畫布 */
         canvas.tele-sim {
             background: #000;
             border-radius: 50%;
             border: 2px solid #475569;
-            width: 80px;
-            height: 80px;
             flex-shrink: 0;
         }
 
+        .alert-text {
+            color: #f87171;
+            font-size: 0.85rem;
+            margin-top: 2px;
+            font-weight: bold;
+        }
+
+        /* ==========================================
+           說明彈窗 (Modal)
+           ========================================== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -249,9 +292,7 @@
             padding: 20px;
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
 
         .info-box {
             background: #1e3a8a;
@@ -276,33 +317,9 @@
             cursor: pointer;
         }
 
-        .planet-btn {
-            background: #334155;
-            border: 1px solid #475569;
-            color: white;
-            padding: 8px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-        }
-
-        .planet-btn.active {
-            background: var(--earth-color);
-            border-color: var(--accent);
-        }
-
-        .alert-text {
-            color: #f87171;
-            font-size: 0.85rem;
-            margin-top: 2px;
-            font-weight: bold;
-        }
-
+        /* ==========================================
+           頁尾 (Footer)
+           ========================================== */
         footer {
             text-align: center;
             padding: 5px;
@@ -314,6 +331,7 @@
 </head>
 <body>
 
+    <!-- 頁首與頂部控制 -->
     <header>
         <h1 data-i18n="title">金星盈虧的兩種解釋：地心說 vs 日心說</h1>
         <div class="top-right-controls">
@@ -323,6 +341,7 @@
     </header>
 
     <div class="layout-wrapper">
+        <!-- 左側選單 -->
         <aside class="sidebar">
             <div class="control-group">
                 <label data-i18n="selectPlanet" style="color:var(--accent); font-size:0.8rem;">選擇觀察天體:</label>
@@ -349,7 +368,9 @@
             <div class="control-group row"><input type="checkbox" id="showLabels" checked><label for="showLabels" data-i18n="labels">顯示標籤</label></div>
         </aside>
 
+        <!-- 模擬動畫區 -->
         <main class="sim-container">
+            <!-- 地心說 (Geocentric) 面板 -->
             <div class="panel">
                 <h2 data-i18n="geoTitle">地心說</h2>
                 <div class="canvas-wrapper">
@@ -364,6 +385,7 @@
                 </div>
             </div>
 
+            <!-- 日心說 (Heliocentric) 面板 -->
             <div class="panel">
                 <h2 data-i18n="helioTitle">日心說</h2>
                 <div class="canvas-wrapper">
@@ -380,8 +402,10 @@
         </main>
     </div>
 
+    <!-- 頁尾 -->
     <footer><span data-i18n="footerText">廠商會中學：物理科</span></footer>
 
+    <!-- 說明彈窗 -->
     <div id="infoModal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('active')">
         <div class="info-box">
             <button class="close-btn" onclick="document.getElementById('infoModal').classList.remove('active')">&times;</button>
@@ -391,6 +415,9 @@
     </div>
 
     <script>
+        // ==========================================
+        // 多國語言字典 (i18n Dictionary)
+        // ==========================================
         const i18n = {
             'zh-TW': {
                 title: '金星盈虧的兩種解釋：地心說 vs 日心說',
@@ -434,27 +461,40 @@
             }
         };
 
+        // ==========================================
+        // 系統狀態 (System State)
+        // ==========================================
         let currentLang = 'zh-TW';
         let time = 0;
         let isPlaying = true;
-        let simSpeed = 0.1; // Default speed set to 0.1x
+        let simSpeed = 0.1; // 預設速度改為 0.1x
         let planetMode = 'venus';
-        const BASE_SIZE = 400; 
+        const LOGICAL_SIZE = 400; // 內部繪圖邏輯座標大小 (400x400)
 
         const ctxs = {};
         const canvases = {};
 
-        function setupHDCanvas(id, logicalWidth, logicalHeight) {
+        // ==========================================
+        // HD 高解析度畫布設定 (High-DPI Setup)
+        // ==========================================
+        function setupHDCanvas(id, cssWidth, cssHeight, logicalBaseSize) {
             const canvas = document.getElementById(id);
             const ctx = canvas.getContext('2d', { alpha: false });
-            const dpr = window.devicePixelRatio || 1;
+            const dpr = window.devicePixelRatio || 1; // 獲取螢幕像素密度 (Retina為2或3)
             
-            canvas.width = logicalWidth * dpr;
-            canvas.height = logicalHeight * dpr;
-            canvas.style.width = logicalWidth + 'px';
-            canvas.style.height = logicalHeight + 'px';
+            // 1. 設定畫布的物理像素 (提供高解析度緩衝)
+            canvas.width = cssWidth * dpr;
+            canvas.height = cssHeight * dpr;
             
-            ctx.scale(dpr, dpr);
+            // 2. 設定畫布的 CSS 尺寸 (螢幕上顯示的大小)
+            canvas.style.width = cssWidth + 'px';
+            canvas.style.height = cssHeight + 'px';
+            
+            // 3. 縮放 Context，讓後續的繪圖(0~logicalBaseSize)自動適應實際物理大小
+            const scale = (cssWidth * dpr) / logicalBaseSize;
+            ctx.scale(scale, scale);
+            
+            // 4. 開啟高畫質渲染平滑
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
             
@@ -462,16 +502,31 @@
             canvases[id] = canvas;
         }
 
+        // ==========================================
+        // 視窗自適應邏輯 (Resize Logic)
+        // ==========================================
         function initCanvases() {
-            setupHDCanvas('geoMain', BASE_SIZE, BASE_SIZE);
-            setupHDCanvas('helioMain', BASE_SIZE, BASE_SIZE);
-            setupHDCanvas('geoTele', 160, 160);
-            setupHDCanvas('helioTele', 160, 160);
+            // 設定主模擬區域 (確保黑屏永遠是完美正方形/圓形)
+            const wrappers = document.querySelectorAll('.canvas-wrapper');
+            wrappers.forEach((w, i) => {
+                const id = i === 0 ? 'geoMain' : 'helioMain';
+                // 取容器寬高的最小值，確保畫布始終是正方形
+                const size = Math.max(Math.min(w.clientWidth, w.clientHeight), 100);
+                setupHDCanvas(id, size, size, LOGICAL_SIZE);
+            });
+
+            // 設定望遠鏡視圖 (CSS 設為 80x80，但內部邏輯用 160x160 繪製)
+            setupHDCanvas('geoTele', 80, 80, 160);
+            setupHDCanvas('helioTele', 80, 80, 160);
         }
 
         window.addEventListener('resize', initCanvases);
+        // 初始化畫布
         initCanvases();
 
+        // ==========================================
+        // 物理參數 (Physics Parameters)
+        // ==========================================
         let pHelioEarthRadius=140, pHelioPlanetRadius=100, pHelioEarthSpeed=0.5, pHelioPlanetSpeed=0.7;
         let pGeoSunRadius=160, pGeoDefRadius=80, pGeoEpiRadius=60, pGeoSunSpeed=0.5, pGeoDefSpeed=0.5, pGeoEpiSpeed=0.7;
         let pColor='#fcd34d', pColorDark='#92400e', rEarth=8, rSun=12, rPlanet=6, rMoon=2.5, rMoonOrbit=22;
@@ -492,6 +547,9 @@
             }
         }
 
+        // ==========================================
+        // 互動控制 (Interaction Controls)
+        // ==========================================
         function selectPlanet(mode) {
             planetMode = mode;
             document.querySelectorAll('.planet-btn').forEach(b => b.classList.remove('active'));
@@ -509,20 +567,27 @@
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 const suffixKey = key + '_' + planetMode;
+                // 若有特定天體的翻譯則使用，否則使用共用翻譯
                 el.innerHTML = i18n[currentLang][suffixKey] || i18n[currentLang][key] || key;
             });
             document.getElementById('speedDisplay').innerText = simSpeed.toFixed(1) + 'x';
         }
 
+        // ==========================================
+        // 核心繪圖函數 (Rendering Functions)
+        // ==========================================
+        
+        // 繪製天體 (帶有光影面與 HD 標籤)
         function drawBody(ctx, x, y, radius, colorBright, colorDark, label, sunX, sunY, isSun=false) {
             ctx.save();
             if (isSun) {
                 ctx.fillStyle = colorBright;
                 ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI*2); ctx.fill();
-                ctx.shadowBlur = 15; ctx.shadowColor = colorBright; ctx.fill();
+                ctx.shadowBlur = 15; ctx.shadowColor = colorBright; ctx.fill(); // 太陽光暈
             } else {
                 ctx.fillStyle = colorDark;
                 ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI*2); ctx.fill();
+                // 計算對著太陽的角度，繪製亮面
                 let angle = Math.atan2(sunY - y, sunX - x);
                 ctx.fillStyle = colorBright;
                 ctx.beginPath(); ctx.arc(x, y, radius, angle - Math.PI/2, angle + Math.PI/2); ctx.fill();
@@ -532,11 +597,10 @@
             if (document.getElementById('showLabels').checked) {
                 ctx.save();
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 13px "Microsoft JhengHei", sans-serif';
+                ctx.font = 'bold 13px "Microsoft JhengHei", sans-serif'; // HD 字體設定
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'middle';
-                // HD Shadow for text
-                ctx.shadowColor = 'black';
+                ctx.shadowColor = 'black'; // 文字陰影增加對比度
                 ctx.shadowBlur = 3;
                 ctx.shadowOffsetX = 1;
                 ctx.shadowOffsetY = 1;
@@ -545,61 +609,76 @@
             }
         }
 
+        // 繪製望遠鏡視角 (盈虧變化)
         function drawTelescope(ctx, E, V, S, maxDist, pColor) {
-            ctx.fillStyle = '#000000';
-            ctx.fillRect(0, 0, 160, 160);
+            ctx.save(); // 保存初始的 HD Scale 狀態
             
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, 160, 160); // 清除 160x160 邏輯區域
+            
+            // 向量計算 (計算視直徑與相位角)
             let dx = E.x - V.x, dy = E.y - V.y;
             let dist = Math.sqrt(dx*dx + dy*dy);
-            let appRad = Math.min(25 * (maxDist / dist), 70);
+            let appRad = Math.min(25 * (maxDist / dist), 70); // 近大遠小
             
             let nVE = { x: dx/dist, y: dy/dist };
             let dsx = S.x - V.x, dsy = S.y - V.y;
             let slen = Math.sqrt(dsx*dsx + dsy*dsy);
             let nVS = { x: dsx/slen, y: dsy/slen };
             
-            let dot = nVE.x * nVS.x + nVE.y * nVS.y;
-            let cross = nVE.x * nVS.y - nVE.y * nVS.x;
+            let dot = nVE.x * nVS.x + nVE.y * nVS.y;     // 決定盈虧程度
+            let cross = nVE.x * nVS.y - nVE.y * nVS.x;   // 決定亮面在左或右
             
-            ctx.translate(80, 80);
+            ctx.translate(80, 80); // 移動到望遠鏡中央
+            
+            // 畫暗面底圖
             ctx.fillStyle = '#222';
             ctx.beginPath(); ctx.arc(0, 0, appRad, 0, Math.PI*2); ctx.fill();
             
+            // 畫一半的絕對亮面
             ctx.fillStyle = pColor;
             ctx.beginPath();
             if (cross > 0) ctx.arc(0, 0, appRad, -Math.PI/2, Math.PI/2);
             else ctx.arc(0, 0, appRad, Math.PI/2, -Math.PI/2);
             ctx.fill();
             
+            // 畫橢圓形邊界來形成盈虧視覺
             let ew = Math.max(0.1, appRad * Math.abs(dot));
             ctx.beginPath(); ctx.ellipse(0, 0, ew, appRad, 0, 0, Math.PI*2);
             ctx.fillStyle = (dot < 0) ? '#222' : pColor;
             ctx.fill();
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            const dpr = window.devicePixelRatio || 1;
-            ctx.scale(dpr, dpr);
+            
+            ctx.restore(); // 恢復狀態，避免 translate 累積或破壞 HD Scale
         }
 
+        // 繪製軌道線
         function drawOrbits(ctx, orbits) {
             if (!document.getElementById('showOrbits').checked) return;
             ctx.strokeStyle = 'rgba(71, 85, 105, 0.6)';
             ctx.lineWidth = 1;
             ctx.setLineDash([5, 5]);
             orbits.forEach(r => {
-                ctx.beginPath(); ctx.arc(200, 200, r, 0, Math.PI*2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(LOGICAL_SIZE/2, LOGICAL_SIZE/2, r, 0, Math.PI*2); ctx.stroke();
             });
             ctx.setLineDash([]);
         }
 
+        // ==========================================
+        // 主動畫迴圈 (Main Animation Loop)
+        // ==========================================
         function animate() {
             if (isPlaying) time += 0.02 * simSpeed;
             
-            const cx = 200, cy = 200;
+            const cx = LOGICAL_SIZE / 2; // 200
+            const cy = LOGICAL_SIZE / 2; // 200
             const labels = i18n[currentLang];
 
-            // Heliocentric
+            // ---------------------------
+            // 1. 日心說 (Heliocentric)
+            // ---------------------------
             let hCtx = ctxs.helioMain;
-            hCtx.fillStyle = '#000000'; hCtx.fillRect(0,0,400,400);
+            hCtx.fillStyle = '#000000'; 
+            hCtx.fillRect(0, 0, LOGICAL_SIZE, LOGICAL_SIZE);
             drawOrbits(hCtx, planetMode === 'moon' ? [pHelioEarthRadius] : [pHelioEarthRadius, pHelioPlanetRadius]);
             
             let hSun = {x:cx, y:cy};
@@ -608,6 +687,8 @@
             let hMoon = {x:hEarth.x+rMoonOrbit*Math.cos(time*6.5), y:hEarth.y+rMoonOrbit*Math.sin(time*6.5)};
             
             let hTarget = planetMode === 'moon' ? hMoon : hPlanet;
+            
+            // 畫視線 (Line of Sight)
             if (document.getElementById('showLOS').checked) {
                 hCtx.strokeStyle = 'rgba(255,255,255,0.2)';
                 hCtx.beginPath(); hCtx.moveTo(hEarth.x, hEarth.y); hCtx.lineTo(hTarget.x, hTarget.y); hCtx.stroke();
@@ -617,11 +698,16 @@
             drawBody(hCtx, hEarth.x, hEarth.y, rEarth, '#3b82f6', '#1e3a8a', labels.earth, hSun.x, hSun.y);
             if (planetMode==='moon') drawBody(hCtx, hMoon.x, hMoon.y, rMoon, '#cbd5e1', '#475569', labels.moon, hSun.x, hSun.y);
             else drawBody(hCtx, hPlanet.x, hPlanet.y, rPlanet, pColor, pColorDark, labels['planetLabel_'+planetMode], hSun.x, hSun.y);
+            
+            // 更新日心說望遠鏡
             drawTelescope(ctxs.helioTele, hEarth, hTarget, hSun, 280, pColor);
 
-            // Geocentric
+            // ---------------------------
+            // 2. 地心說 (Geocentric)
+            // ---------------------------
             let gCtx = ctxs.geoMain;
-            gCtx.fillStyle = '#000000'; gCtx.fillRect(0,0,400,400);
+            gCtx.fillStyle = '#000000'; 
+            gCtx.fillRect(0, 0, LOGICAL_SIZE, LOGICAL_SIZE);
             drawOrbits(gCtx, [pGeoSunRadius, pGeoDefRadius]);
             
             let gEarth = {x:cx, y:cy};
@@ -631,6 +717,8 @@
             let gMoon = {x:cx+rMoonOrbit*Math.cos(time*6.5), y:cy+rMoonOrbit*Math.sin(time*6.5)};
             
             let gTarget = planetMode === 'moon' ? gMoon : gPlanet;
+            
+            // 畫視線 (Line of Sight)
             if (document.getElementById('showLOS').checked) {
                 gCtx.strokeStyle = 'rgba(255,255,255,0.2)';
                 gCtx.beginPath(); gCtx.moveTo(gEarth.x, gEarth.y); gCtx.lineTo(gTarget.x, gTarget.y); gCtx.stroke();
@@ -640,11 +728,16 @@
             drawBody(gCtx, gSun.x, gSun.y, rSun, '#fbbf24', '#fbbf24', labels.sun, 0,0,true);
             if (planetMode==='moon') drawBody(gCtx, gMoon.x, gMoon.y, rMoon, '#cbd5e1', '#475569', labels.moon, gSun.x, gSun.y);
             else drawBody(gCtx, gPlanet.x, gPlanet.y, rPlanet, pColor, pColorDark, labels['planetLabel_'+planetMode], gSun.x, gSun.y);
+            
+            // 更新地心說望遠鏡
             drawTelescope(ctxs.geoTele, gEarth, gTarget, gSun, 280, pColor);
 
             requestAnimationFrame(animate);
         }
 
+        // ==========================================
+        // 初始化執行 (Initialization)
+        // ==========================================
         document.getElementById('playPauseBtn').onclick = () => { isPlaying = !isPlaying; document.getElementById('playPauseBtn').innerText = isPlaying?'⏸':'▶'; };
         document.getElementById('speedUpBtn').onclick = () => { simSpeed = Math.min(3, simSpeed+0.1); updateLabels(); };
         document.getElementById('speedDownBtn').onclick = () => { simSpeed = Math.max(0.1, simSpeed-0.1); updateLabels(); };
