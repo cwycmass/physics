@@ -113,10 +113,16 @@
                 <!-- Scrollable Control Content -->
                 <div class="p-2 md:p-4 pt-2 flex-1 flex flex-col gap-2 md:gap-4 min-h-0">
                     
-                    <!-- 1. View Options (Zone Toggle) -->
-                    <div class="bg-slate-800/50 rounded-lg p-2 md:p-3 border border-slate-700 shadow-inner flex items-center gap-2 shrink-0">
-                        <input type="checkbox" id="zone-toggle" class="w-4 h-4 rounded bg-slate-900 border-slate-600 text-blue-500 focus:ring-blue-500/50 focus:ring-offset-slate-800 cursor-pointer" onchange="toggleZones(event)">
-                        <label id="ui-show-zones" for="zone-toggle" class="text-xs md:text-sm text-slate-300 cursor-pointer select-none">顯示恆星區域與太陽位置</label>
+                    <!-- 1. View Options (Toggles) -->
+                    <div class="bg-slate-800/50 rounded-lg p-2 md:p-3 border border-slate-700 shadow-inner flex flex-col gap-2 shrink-0">
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="zone-toggle" class="w-4 h-4 rounded bg-slate-900 border-slate-600 text-blue-500 focus:ring-blue-500/50 focus:ring-offset-slate-800 cursor-pointer" onchange="toggleZones(event)">
+                            <label id="ui-show-zones" for="zone-toggle" class="text-xs md:text-sm text-slate-300 cursor-pointer select-none">顯示恆星區域與太陽位置</label>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="isoradius-toggle" class="w-4 h-4 rounded bg-slate-900 border-slate-600 text-blue-500 focus:ring-blue-500/50 focus:ring-offset-slate-800 cursor-pointer" onchange="toggleIsoradius(event)">
+                            <label id="ui-show-isoradius" for="isoradius-toggle" class="text-xs md:text-sm text-slate-300 cursor-pointer select-none">顯示等半徑線</label>
+                        </div>
                     </div>
 
                     <!-- 2. Famous Stars Jump Menu -->
@@ -224,6 +230,7 @@
         let catalogueStars = []; // Holds the fetched/simulated background stars
         let isDragging = false;
         let showZones = false;
+        let showIsoradius = false; // New state for isoradius lines
         let currentLang = 'zh';
 
         // Famous Stars Data Array for the Dropdown menu
@@ -269,6 +276,7 @@
                 tempAxis: "← 表面溫度 (K)",
                 lumAxis: "光度 (<i>L</i>/<i>L</i><sub>⊙</sub>) →",
                 showZones: "顯示恆星區域與太陽位置",
+                showIsoradius: "顯示等半徑線",
                 zoneMS: "主序星",
                 zoneGiants: "紅巨星",
                 zoneSuper: "超巨星",
@@ -320,6 +328,7 @@
                 tempAxis: "← Surface Temperature (K)",
                 lumAxis: "Luminosity (<i>L</i>/<i>L</i><sub>⊙</sub>) →",
                 showZones: "Show Stellar Zones & Sun Position",
+                showIsoradius: "Show Isoradius Lines",
                 zoneMS: "Main Sequence",
                 zoneGiants: "Red Giants",
                 zoneSuper: "Supergiants",
@@ -637,6 +646,70 @@
             }
         }
 
+        // Draws the Isoradius lines (lines of constant stellar radius)
+        function drawIsoradius() {
+            if (!showIsoradius) return;
+            ctx.save();
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)'; // slate-400 with transparency
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 4]);
+
+            // Powers of 10 for Solar Radii to display
+            const radiuses = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000];
+            const superscripts = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+            
+            // On a log-log HR diagram, lines of constant R are straight lines.
+            // We evaluate them from T_MAX (left) to T_MIN (right).
+            const T1 = Math.pow(10, LOG_T_MAX);
+            const T2 = Math.pow(10, LOG_T_MIN);
+            const x1 = tempToX(T1);
+            const x2 = tempToX(T2);
+
+            radiuses.forEach(r => {
+                const L1 = r * r * Math.pow(T1 / SUN_TEMP, 4);
+                const L2 = r * r * Math.pow(T2 / SUN_TEMP, 4);
+                const y1 = lumToY(L1);
+                const y2 = lumToY(L2);
+
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+
+                // Find a visible point along the line to place the label safely on screen
+                let labelProgress = -1;
+                for (let p = 0.15; p <= 0.85; p += 0.05) {
+                    let testY = y1 + (y2 - y1) * p;
+                    if (testY > 40 && testY < height - 40) {
+                        labelProgress = p;
+                        break;
+                    }
+                }
+
+                if (labelProgress !== -1) {
+                    const labelX = x1 + (x2 - x1) * labelProgress;
+                    const labelY = y1 + (y2 - y1) * labelProgress;
+                    // Calculate angle for text rotation to match the line slope
+                    const angle = Math.atan2(y2 - y1, x2 - x1);
+
+                    ctx.save();
+                    ctx.translate(labelX, labelY);
+                    ctx.rotate(angle);
+                    
+                    ctx.fillStyle = 'rgba(148, 163, 184, 0.9)'; // slate-400
+                    ctx.font = '10px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+                    
+                    // Format text to 10^x using unicode superscripts for visual elegance
+                    let rText = r === 1 ? '1' : '10' + String(Math.log10(r)).split('').map(c => superscripts[c] || c).join('');
+                    ctx.fillText(`${rText} R⊙`, 0, -2);
+                    ctx.restore();
+                }
+            });
+            ctx.restore();
+        }
+
         // Renders the highlighted evolutionary zones (if toggle is active)
         function drawZones() {
             if (!showZones) return;
@@ -829,6 +902,7 @@
             // Render elements in depth order (Bottom to Top)
             drawSpectralScale();
             drawGrid();
+            drawIsoradius();
             drawZones();
             drawCatalogue();
             drawActiveStar();
@@ -934,6 +1008,7 @@
             document.getElementById('ui-sun-label').innerText = t.sun;
             document.getElementById('scale-warning').innerText = t.scaleWarn;
             document.getElementById('ui-show-zones').innerText = t.showZones;
+            document.getElementById('ui-show-isoradius').innerText = t.showIsoradius;
             document.getElementById('label-temp-axis').innerHTML = t.tempAxis;
             document.getElementById('label-lum-axis').innerHTML = t.lumAxis;
             document.getElementById('loading-text').innerText = t.loading;
@@ -959,6 +1034,11 @@
 
         function toggleZones(e) {
             showZones = e.target.checked;
+            draw();
+        }
+
+        function toggleIsoradius(e) {
+            showIsoradius = e.target.checked;
             draw();
         }
 
