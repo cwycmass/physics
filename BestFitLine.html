@@ -633,19 +633,27 @@
             const sx0 = screenX(0);
 
             // X-axis numbers
+            let labelY = sy0 + 5; // Just below the X axis
+            if (labelY > rect.height - 15) labelY = rect.height - 15; // Clamp to bottom
+            if (labelY < 5) labelY = 5; // Clamp to top
+            
             ctx.textAlign = "center";
-            ctx.textBaseline = "bottom";
+            ctx.textBaseline = "top";
             for (let x = Math.ceil(viewport.minX/stepX)*stepX; x <= viewport.maxX; x += stepX) {
-                if (Math.abs(x) < 1e-10 && sy0 >= 0 && sy0 <= rect.height) continue; // Skip 0 label
-                ctx.fillText(parseFloat(x.toPrecision(4)).toString(), screenX(x), rect.height - 4);
+                if (Math.abs(x) < 1e-10) continue; // Skip 0 label
+                ctx.fillText(parseFloat(x.toPrecision(4)).toString(), screenX(x), labelY);
             }
             
             // Y-axis numbers
-            ctx.textAlign = "left";
+            let labelX = sx0 - 5; // Just left of the Y axis
+            if (labelX < 25) labelX = 25; // Clamp to left (leave room for right-aligned text)
+            if (labelX > rect.width - 5) labelX = rect.width - 5; // Clamp to right
+            
+            ctx.textAlign = "right";
             ctx.textBaseline = "middle";
             for (let y = Math.ceil(viewport.minY/stepY)*stepY; y <= viewport.maxY; y += stepY) {
-                if (Math.abs(y) < 1e-10 && sx0 >= 0 && sx0 <= rect.width) continue; // Skip 0 label
-                ctx.fillText(parseFloat(y.toPrecision(4)).toString(), 4, screenY(y));
+                if (Math.abs(y) < 1e-10) continue; // Skip 0 label
+                ctx.fillText(parseFloat(y.toPrecision(4)).toString(), labelX, screenY(y));
             }
 
             // 4. Draw Main Axes with Arrows and Italic Labels (Physics Standard)
@@ -897,7 +905,10 @@
                 const oy = (rect.top - wrapperRect.top) * dpr;
 
                 eCtx.fillStyle = '#000000';
-                eCtx.font = `italic bold ${18 * dpr}px 'Times New Roman', serif`;
+                
+                const fItalic = `italic bold ${18 * dpr}px 'Times New Roman', serif`;
+                const fNormal = `bold ${18 * dpr}px 'Times New Roman', serif`;
+
                 eCtx.textAlign = 'left';
                 eCtx.textBaseline = 'top';
 
@@ -905,16 +916,38 @@
                 
                 // Use plain text formatter (3 sig figs) since canvas fillText doesn't support LaTeX
                 const mFmtPlain = formatValPlain(m);
-                let eqText = `y = ${mFmtPlain}x`;
+                
+                // Separate variables (italic) from numbers and symbols (normal)
+                let eqParts = [
+                    { text: "y", font: fItalic },
+                    { text: ` = ${mFmtPlain}`, font: fNormal },
+                    { text: "x", font: fItalic }
+                ];
+                
                 if (Math.abs(c) > 1e-9) {
                     const cFmtPlain = formatValPlain(Math.abs(c));
-                    eqText += c > 0 ? ` + ${cFmtPlain}` : ` - ${cFmtPlain}`;
+                    const sign = c > 0 ? " + " : " - ";
+                    eqParts.push({ text: `${sign}${cFmtPlain}`, font: fNormal });
                 }
-                const r2Text = `R² = ${r2 === 0 ? "0" : Number(r2).toPrecision(3)}`;
+
+                let r2Parts = [
+                    { text: "R", font: fItalic },
+                    { text: `² = ${r2 === 0 ? "0" : Number(r2).toPrecision(3)}`, font: fNormal }
+                ];
+
+                // Helper to draw mixed-font text
+                function drawMixedText(parts, startX, startY) {
+                    let curX = startX;
+                    parts.forEach(p => {
+                        eCtx.font = p.font;
+                        eCtx.fillText(p.text, curX, startY);
+                        curX += eCtx.measureText(p.text).width;
+                    });
+                }
 
                 // Burn Text on export image based on dragged overlay coordinates
-                eCtx.fillText(eqText, ox + 8 * dpr, oy + 8 * dpr);
-                eCtx.fillText(r2Text, ox + 8 * dpr, oy + 8 * dpr + 24 * dpr);
+                drawMixedText(eqParts, ox + 8 * dpr, oy + 8 * dpr);
+                drawMixedText(r2Parts, ox + 8 * dpr, oy + 8 * dpr + 24 * dpr);
             }
 
             // Trigger browser download via anchor tag
