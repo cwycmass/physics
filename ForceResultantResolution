@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>力學向量加法與分解 Force Vector Operations</title>
+    
+    <!-- 引入 Tailwind CSS 進行快速的現代化響應式排版 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 引入 MathJax 來渲染嚴謹的物理與數學公式 (SI 制格式) -->
+    <script>
+        window.MathJax = {
+            tex: { 
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                packages: {'[+]': ['textcomp']}
+            },
+            startup: { typeset: false } // 關閉自動渲染，由我們的 JS 手動觸發
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* 基礎設置，防止頁面捲動 */
+        body {
+            height: 100dvh;
+            overflow: hidden;
+            font-family: "PingFang HK", "Microsoft JhengHei", sans-serif;
+        }
+
+        /* 畫布的網格背景：改得更密集 (25px)，稍微加深一點點顏色作為幾何參考 */
+        .canvas-bg {
+            background-color: #f8fafc;
+            background-image: 
+                linear-gradient(#e2e8f0 1px, transparent 1px),
+                linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+            background-size: 25px 25px;
+            /* background-position 會交由 JavaScript 動態控制以對齊原點 */
+        }
+
+        /* 針對控制面板的自訂滾動條 */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+        
+        /* 分頁按鈕的活躍與非活躍狀態樣式 */
+        .tab-active { color: #2563eb; border-bottom: 2px solid #2563eb; }
+        .tab-inactive { color: #64748b; border-bottom: 2px solid transparent; }
+        .tab-inactive:hover { color: #3b82f6; }
+        
+        /* 確保 MathJax 容器不會破壞 flex 排版 */
+        mjx-container { display: inline-block !important; }
+    </style>
+</head>
+<body class="flex flex-col bg-slate-100 text-slate-800">
+
+    <!-- 頂部標題列 -->
+    <header class="bg-[#1e3c72] text-white p-3 flex justify-between items-center shadow-md flex-shrink-0 z-20">
+        <h1 id="titleText" class="text-lg font-bold tracking-wide">力學向量加法與分解</h1>
+        <div class="flex gap-2 sm:gap-3">
+            <button id="helpBtn" class="bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded text-sm transition-colors border border-blue-400 shadow">說明</button>
+            <button id="langBtn" class="bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded text-sm transition-colors border border-blue-400 shadow">繁/Eng</button>
+        </div>
+    </header>
+
+    <!-- 主內容區 (左右分割排版) -->
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+        
+        <!-- 左側：控制面板 -->
+        <aside class="w-full md:w-80 lg:w-[26rem] bg-white shadow-[2px_0_15px_rgba(0,0,0,0.08)] z-10 flex flex-col flex-shrink-0 transition-all duration-300 max-h-[45vh] md:max-h-full md:border-r md:border-slate-200">
+            
+            <!-- 分頁按鈕區 -->
+            <div class="flex border-b border-slate-200 bg-slate-50 flex-shrink-0">
+                <button id="tabAddition" class="flex-1 py-3 text-sm font-bold tab-active transition-colors">加法</button>
+                <button id="tabResolution" class="flex-1 py-3 text-sm font-bold tab-inactive transition-colors">分解</button>
+            </div>
+
+            <div class="p-4 flex flex-col gap-3 overflow-y-auto custom-scrollbar flex-1 relative">
+                
+                <!-- ================= 加法模式 UI (Addition Mode) ================= -->
+                <div id="uiAddition" class="flex flex-col gap-3 h-full">
+                    <div class="flex flex-col gap-1">
+                        <label id="modeLabel" class="text-sm font-bold text-slate-700">顯示方式:</label>
+                        <div class="flex flex-col gap-2 mt-1 bg-slate-50 border border-slate-200 p-2 rounded">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="visMode" value="head-to-tail" class="w-4 h-4 text-blue-600 focus:ring-blue-500" checked>
+                                <span id="optHeadToTail" class="text-sm text-slate-700">首尾相接法則</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="visMode" value="parallelogram" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                                <span id="optParallelogram" class="text-sm text-slate-700">平行四邊形法則</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-200">
+
+                    <!-- 向量輸入區 -->
+                    <div class="flex gap-2">
+                        <div class="flex-1 flex flex-col gap-1">
+                            <label id="magLabel" class="text-sm font-bold text-slate-700">大小 $F$ (N):</label>
+                            <input type="number" id="magnitude" value="10" min="0" step="0.5" class="border border-slate-300 rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div class="flex-1 flex flex-col gap-1">
+                            <label id="angleLabel" class="text-sm font-bold text-slate-700">角度 $\theta$ ($^\circ$):</label>
+                            <input type="number" id="angle" value="45" min="0" max="360" step="1" class="border border-slate-300 rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+                    
+                    <!-- 動作按鈕 -->
+                    <div class="flex gap-2 mt-1">
+                        <button id="addBtn" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-2 rounded transition-colors text-sm shadow-sm">加入</button>
+                        <button id="clearBtn" class="flex-1 bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-2 rounded transition-colors text-sm shadow-sm">清除</button>
+                        <!-- 重播按鈕：加入 disabled 狀態的樣式 -->
+                        <button id="replayBtn" class="flex-1 bg-blue-500 hover:bg-blue-600 disabled:bg-slate-400 disabled:opacity-70 disabled:cursor-not-allowed text-white font-bold py-2 px-2 rounded transition-colors text-sm shadow-sm" disabled>重播</button>
+                    </div>
+
+                    <!-- 已加入的向量列表 -->
+                    <div id="vectorList" class="flex-1 min-h-[100px] border border-slate-200 rounded bg-slate-50 p-2 overflow-y-auto custom-scrollbar flex flex-col gap-1">
+                        <!-- 動態插入的向量項目將出現在這 -->
+                    </div>
+
+                    <!-- 合力計算結果框 -->
+                    <div class="mt-auto bg-red-50 p-3 rounded border-l-4 border-red-600 shadow-inner flex-shrink-0">
+                        <strong id="resultTitle" class="text-sm text-slate-800">合力:</strong>
+                        <div id="resultOutput" class="mt-1 text-[1.05rem] font-medium text-red-700 leading-relaxed">
+                            $R = 0.00 \text{ N}$<br>$\theta = 0.0^\circ$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= 分解模式 UI (Resolution Mode) ================= -->
+                <div id="uiResolution" class="hidden flex-col gap-3 h-full">
+                    <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex flex-col gap-2">
+                        <strong id="resVectorLabel" class="text-sm text-indigo-900 block mb-1">待分解的力:</strong>
+                        <div class="flex gap-2">
+                            <div class="flex-1 flex flex-col gap-1">
+                                <label id="resMagLabel" class="text-[0.8rem] font-bold text-slate-700">大小 $F$ (N):</label>
+                                <input type="number" id="resMagnitude" value="20" min="0" step="0.5" class="w-full border border-slate-300 rounded p-1.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none input-trigger">
+                            </div>
+                            <div class="flex-1 flex flex-col gap-1">
+                                <label id="resAngleLabel" class="text-[0.8rem] font-bold text-slate-700">角度 $\theta$ ($^\circ$):</label>
+                                <input type="number" id="resAngle" value="60" min="0" max="360" step="1" class="w-full border border-slate-300 rounded p-1.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none input-trigger">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-200">
+                    
+                    <strong id="resAxesLabel" class="text-sm text-slate-800">分解方向:</strong>
+                    <div class="flex gap-2">
+                        <div class="flex-1 flex flex-col gap-1">
+                            <label id="axis1Label" class="text-[0.8rem] font-bold text-blue-700">軸 1 傾角 $\alpha$ ($^\circ$):</label>
+                            <input type="number" id="resAxis1" value="0" step="1" class="w-full border border-blue-200 bg-blue-50 rounded p-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none input-trigger">
+                        </div>
+                        <div class="flex-1 flex flex-col gap-1">
+                            <label id="axis2Label" class="text-[0.8rem] font-bold text-emerald-700">軸 2 傾角 $\beta$ ($^\circ$):</label>
+                            <input type="number" id="resAxis2" value="90" step="1" class="w-full border border-emerald-200 bg-emerald-50 rounded p-1.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none input-trigger">
+                        </div>
+                    </div>
+
+                    <div class="mt-auto bg-slate-50 p-3 rounded border-l-4 border-slate-400 shadow-inner flex-shrink-0" id="resResultBox">
+                        <strong id="resResultTitle" class="text-sm text-slate-800">分量結果:</strong>
+                        <div id="resOutput" class="mt-2 text-[1.05rem] font-medium text-slate-700 leading-relaxed">
+                            <!-- 分解結果會在這裡動態更新 -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- 右側：主要繪圖區域 (Canvas) -->
+        <section class="flex-1 relative canvas-bg" id="canvasContainer">
+            <canvas id="vectorCanvas" class="absolute top-0 left-0 w-full h-full cursor-crosshair"></canvas>
+        </section>
+    </main>
+
+    <!-- 底部資訊列 -->
+    <footer id="footerText" class="bg-slate-800 text-slate-300 flex items-center justify-center h-10 text-sm tracking-widest flex-shrink-0 z-20">
+        廠商會中學：物理科
+    </footer>
+
+    <!-- 彈出式說明視窗 (Help Modal) -->
+    <div id="helpModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 relative flex flex-col max-h-[90vh]">
+            <button id="closeModal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 text-2xl leading-none">&times;</button>
+            <h2 id="modalTitle" class="text-xl font-bold text-[#1e3c72] mb-4">向量操作說明</h2>
+            <div id="modalBody" class="overflow-y-auto custom-scrollbar text-slate-700 text-sm leading-relaxed">
+                <!-- 說明文字交由多語言腳本動態插入 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 應用程式核心邏輯 (JavaScript) ==================== -->
+    <script>
+        /**
+         * ==========================================
+         * 1. 顏色與樣式配置 (Styling Configuration)
+         * ==========================================
+         */
+        const VECTOR_COLORS = ['#2563EB', '#059669', '#D97706', '#7C3AED', '#0D9488', '#DB2777', '#4F46E5', '#65A30D'];
+        const RESULTANT_COLOR = '#DC2626';
+
+        function hexToRgba(hex, alpha) {
+            let r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
+        /**
+         * ==========================================
+         * 2. 多語言與翻譯系統 (i18n & Translations)
+         * ==========================================
+         */
+        let isEnglish = false;
+        const translations = {
+            zh: {
+                title: "力學向量加法與分解",
+                help: "說明",
+                tabAdd: "加法", 
+                tabRes: "分解",
+                modeLabel: "顯示方式:", 
+                magLabel: "大小 $F$ (N):", 
+                angleLabel: "角度 $\\theta$ ($^\\circ$):",
+                add: "加入", 
+                clear: "清除", 
+                replay: "重播",
+                resultTitle: "合力:",
+                resVectorLabel: "待分解的力:", 
+                resMagLabel: "大小 $F$ (N):", 
+                resAngleLabel: "角度 $\\theta$ ($^\\circ$):",
+                resAxesLabel: "分解方向:", 
+                axis1Label: "軸 1 傾角 $\\alpha$ ($^\\circ$):", 
+                axis2Label: "軸 2 傾角 $\\beta$ ($^\\circ$):",
+                resResultTitle: "分量結果:",
+                footer: "廠商會中學：物理科",
+                modalTitle: "向量操作說明",
+                modalBody: `<p class="mb-3 font-bold text-blue-800">【加法模式】</p>
+                <ol class="list-decimal pl-6 space-y-1 mb-4 text-slate-600">
+                    <li>加入多個向量。系統提供多種顯示方式：</li>
+                    <li><strong>首尾相接 / 平行四邊形</strong>：以動畫演示力的合成法則。</li>
+                    <li>合力一律以<strong>粗紅箭頭</strong>表示。</li>
+                </ol>
+                <p class="mb-3 font-bold text-indigo-800">【分解模式】</p>
+                <ol class="list-decimal pl-6 space-y-1 mb-4 text-slate-600">
+                    <li>輸入一個待分解的力 $F$ (粗紅箭頭，代表它是由分量合成的總和)。</li>
+                    <li>輸入兩個<strong>不平行</strong>的任意軸傾角 $\\alpha$ 與 $\\beta$。</li>
+                    <li>程式會求出分量 (藍色及綠色)。如果計算值為負數，代表該分量與軸方向相反。</li>
+                </ol>
+                <div class="bg-slate-100 p-4 rounded-lg mt-4 border border-slate-200">
+                    <p class="font-bold mb-2 text-slate-800">分解數學公式 (正弦定理)：</p>
+                    <div class="text-center overflow-x-auto text-xs">
+                        $$F_1 = F \\frac{\\sin(\\beta - \\theta)}{\\sin(\\beta - \\alpha)}$$
+                        $$F_2 = F \\frac{\\sin(\\theta - \\alpha)}{\\sin(\\beta - \\alpha)}$$
+                        <p class="mt-2 text-slate-500">($\\theta$: 向量角度, $\\alpha, \\beta$: 兩軸傾角)</p>
+                    </div>
+                </div>`,
+                vectorText: "向量",
+                optHeadToTail: "首尾相接法則",
+                optParallelogram: "平行四邊形法則",
+                errParallel: "無法分解：軸互相平行！",
+                compAlongAxis1: "(沿軸 1)",
+                compAlongAxis2: "(沿軸 2)"
+            },
+            en: {
+                title: "Force Vector Operations",
+                help: "Help",
+                tabAdd: "Addition", 
+                tabRes: "Resolution",
+                modeLabel: "Visualization:", 
+                magLabel: "Magnitude $F$ (N):", 
+                angleLabel: "Angle $\\theta$ ($^\\circ$):",
+                add: "Add", 
+                clear: "Clear", 
+                replay: "Replay",
+                resultTitle: "Resultant:",
+                resVectorLabel: "Force to Resolve:", 
+                resMagLabel: "Mag $F$ (N):", 
+                resAngleLabel: "Angle $\\theta$ ($^\\circ$):",
+                resAxesLabel: "Arbitrary Axes:", 
+                axis1Label: "Axis 1 Inclination $\\alpha$ ($^\\circ$):", 
+                axis2Label: "Axis 2 Inclination $\\beta$ ($^\\circ$):",
+                resResultTitle: "Components:",
+                footer: "CMA Secondary School: Physics",
+                modalTitle: "Vector Operations Guide",
+                modalBody: `<p class="mb-3 font-bold text-blue-800">【Addition Mode】</p>
+                <ol class="list-decimal pl-6 space-y-1 mb-4 text-slate-600">
+                    <li>Add multiple vectors. Choose visualizations:</li>
+                    <li><strong>Polygon / Parallelogram</strong>: Animated geometric addition.</li>
+                    <li>The resultant is ALWAYS the <strong>Thick Red Arrow</strong>.</li>
+                </ol>
+                <p class="mb-3 font-bold text-indigo-800">【Resolution Mode】</p>
+                <ol class="list-decimal pl-6 space-y-1 mb-4 text-slate-600">
+                    <li>Input ONE main force $F$ to resolve (shown as thick red, as it is the "sum").</li>
+                    <li>Input TWO <strong>non-parallel</strong> axis inclinations $\\alpha$ and $\\beta$.</li>
+                    <li>The system calculates the components along these axes (Blue and Green). A negative value means it points opposite to the specified axis.</li>
+                </ol>
+                <div class="bg-slate-100 p-4 rounded-lg mt-4 border border-slate-200">
+                    <p class="font-bold mb-2 text-slate-800">Resolution Formula (Sine Rule):</p>
+                    <div class="text-center overflow-x-auto text-xs">
+                        $$F_1 = F \\frac{\\sin(\\beta - \\theta)}{\\sin(\\beta - \\alpha)}$$
+                        $$F_2 = F \\frac{\\sin(\\theta - \\alpha)}{\\sin(\\beta - \\alpha)}$$
+                        <p class="mt-2 text-slate-500">($\\theta$: Vector angle, $\\alpha, \\beta$: Axis inclinations)</p>
+                    </div>
+                </div>`,
+                vectorText: "Vector",
+                optHeadToTail: "Polygon Rule",
+                optParallelogram: "Parallelogram Rule",
+                errParallel: "Cannot resolve: Parallel axes!",
+                compAlongAxis1: "(along Axis 1)",
+                compAlongAxis2: "(along Axis 2)"
+            }
+        };
+
+        const tMap = {
+            titleText: 'title', helpBtn: 'help', 
+            tabAddition: 'tabAdd', tabResolution: 'tabRes',
+            modeLabel: 'modeLabel', magLabel: 'magLabel', angleLabel: 'angleLabel', 
+            addBtn: 'add', clearBtn: 'clear', replayBtn: 'replay', resultTitle: 'resultTitle', 
+            resVectorLabel: 'resVectorLabel', resMagLabel: 'resMagLabel', resAngleLabel: 'resAngleLabel',
+            resAxesLabel: 'resAxesLabel', axis1Label: 'axis1Label', axis2Label: 'axis2Label',
+            resResultTitle: 'resResultTitle', footerText: 'footer', modalTitle: 'modalTitle', modalBody: 'modalBody',
+            optHeadToTail: 'optHeadToTail', optParallelogram: 'optParallelogram'
+        };
+
+        /**
+         * ==========================================
+         * 3. 應用程式全域狀態 (Global Application State)
+         * ==========================================
+         */
+        let appMode = 'addition'; 
+        let vectors = [];
+        let scale = 10;
+        let originX = 0, originY = 0;
+        let cw = 0, ch = 0; 
+        
+        let resData = { F: 20, theta: 60, a1: 0, a2: 90, F1: 0, F2: 0, parallel: false };
+
+        /**
+         * ==========================================
+         * 4. 畫布初始化與視窗重整 (Canvas Setup)
+         * ==========================================
+         */
+        const canvas = document.getElementById('vectorCanvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvasContainer');
+        const replayBtn = document.getElementById('replayBtn');
+
+        let animId = null;
+        let animStartTime = 0;
+        let animElements = [];
+        let maxAnimTimeT = 0;
+        const STAGE_DURATION_MS = 800; 
+
+        function renderMath(elements) {
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise(elements).catch(e => console.log(e.message));
+            }
+        }
+
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            cw = container.clientWidth;
+            ch = container.clientHeight;
+            
+            canvas.width = cw * dpr;
+            canvas.height = ch * dpr;
+            
+            ctx.resetTransform();
+            ctx.scale(dpr, dpr);
+
+            triggerDraw();
+        }
+
+        const resizeObserver = new ResizeObserver(() => {
+            resizeCanvas();
+        });
+        resizeObserver.observe(container);
+
+        /**
+         * ==========================================
+         * 5. 分頁與運算邏輯 (Tab Switching & Math Logic)
+         * ==========================================
+         */
+        document.getElementById('tabAddition').addEventListener('click', () => switchMode('addition'));
+        document.getElementById('tabResolution').addEventListener('click', () => switchMode('resolution'));
+
+        function switchMode(mode) {
+            appMode = mode;
+            const tAdd = document.getElementById('tabAddition');
+            const tRes = document.getElementById('tabResolution');
+            const uiAdd = document.getElementById('uiAddition');
+            const uiRes = document.getElementById('uiResolution');
+
+            if (mode === 'addition') {
+                tAdd.className = "flex-1 py-3 text-sm font-bold tab-active transition-colors";
+                tRes.className = "flex-1 py-3 text-sm font-bold tab-inactive transition-colors";
+                uiAdd.classList.remove('hidden'); uiAdd.classList.add('flex');
+                uiRes.classList.remove('flex'); uiRes.classList.add('hidden');
+            } else {
+                tRes.className = "flex-1 py-3 text-sm font-bold tab-active transition-colors";
+                tAdd.className = "flex-1 py-3 text-sm font-bold tab-inactive transition-colors";
+                uiRes.classList.remove('hidden'); uiRes.classList.add('flex');
+                uiAdd.classList.remove('flex'); uiAdd.classList.add('hidden');
+                updateResolutionLogic(); 
+            }
+            triggerDraw();
+        }
+
+        document.querySelectorAll('.input-trigger').forEach(el => {
+            el.addEventListener('input', () => {
+                if(appMode === 'resolution') updateResolutionLogic();
+            });
+        });
+
+        function updateResolutionLogic() {
+            const F = parseFloat(document.getElementById('resMagnitude').value) || 0;
+            const thetaDeg = parseFloat(document.getElementById('resAngle').value) || 0;
+            const a1Deg = parseFloat(document.getElementById('resAxis1').value) || 0;
+            const a2Deg = parseFloat(document.getElementById('resAxis2').value) || 0;
+
+            const rad = Math.PI / 180;
+            const theta = thetaDeg * rad;
+            const a1 = a1Deg * rad;
+            const a2 = a2Deg * rad;
+
+            const det = Math.sin(a2 - a1);
+            resData = { F, theta, a1, a2, thetaDeg, a1Deg, a2Deg, F1: 0, F2: 0, parallel: false };
+
+            const outBox = document.getElementById('resOutput');
+            const t = isEnglish ? translations.en : translations.zh;
+
+            if (Math.abs(det) < 0.0001) {
+                resData.parallel = true;
+                outBox.innerHTML = `<span class="text-red-600">${t.errParallel}</span>`;
+            } else {
+                resData.F1 = F * Math.sin(a2 - theta) / det;
+                resData.F2 = F * Math.sin(theta - a1) / det;
+                
+                outBox.innerHTML = `
+                    <div class="flex items-center text-blue-700">
+                        <span class="w-3 h-3 rounded-full inline-block mr-2 bg-[${VECTOR_COLORS[0]}]"></span>
+                        $F_1 = ${resData.F1.toFixed(2)} \\text{ N}$ <span class="text-sm text-slate-500 ml-2">${t.compAlongAxis1}</span>
+                    </div>
+                    <div class="flex items-center text-emerald-700 mt-2">
+                        <span class="w-3 h-3 rounded-full inline-block mr-2 bg-[${VECTOR_COLORS[1]}]"></span>
+                        $F_2 = ${resData.F2.toFixed(2)} \\text{ N}$ <span class="text-sm text-slate-500 ml-2">${t.compAlongAxis2}</span>
+                    </div>
+                `;
+                renderMath([outBox]);
+            }
+            triggerDraw();
+        }
+
+        /**
+         * ==========================================
+         * 6. 座標視圖對齊與邊界計算 (Viewport & Grid Auto-fitting)
+         * ==========================================
+         */
+        function updateViewport() {
+            let minX = 0, maxX = 0, minY = 0, maxY = 0;
+            const addPt = (x, y) => {
+                if (x < minX) minX = x; if (x > maxX) maxX = x;
+                if (y < minY) minY = y; if (y > maxY) maxY = y;
+            };
+            addPt(0, 0);
+
+            if (appMode === 'addition' && vectors.length > 0) {
+                const modeInput = document.querySelector('input[name="visMode"]:checked');
+                const mode = modeInput ? modeInput.value : 'head-to-tail';
+
+                if (mode === 'head-to-tail') {
+                    let px = 0, py = 0;
+                    vectors.forEach((v, i) => {
+                        let vx = v.mag * Math.cos(v.rad), vy = v.mag * Math.sin(v.rad);
+                        addPt(px + vx, py + vy);
+                        px += vx; py += vy;
+                    });
+                    addPt(px, py);
+                } else if (mode === 'parallelogram') {
+                    let curX = 0, curY = 0;
+                    vectors.forEach((v, i) => {
+                        let vx = v.mag * Math.cos(v.rad), vy = v.mag * Math.sin(v.rad);
+                        addPt(vx, vy);
+                        if (i > 0) addPt(curX + vx, curY + vy);
+                        curX += vx; curY += vy;
+                    });
+                    addPt(curX, curY);
+                }
+            } else if (appMode === 'resolution' && !resData.parallel && resData.F > 0) {
+                addPt(resData.F * Math.cos(resData.theta), resData.F * Math.sin(resData.theta));
+                addPt(resData.F1 * Math.cos(resData.a1), resData.F1 * Math.sin(resData.a1));
+                addPt(resData.F2 * Math.cos(resData.a2), resData.F2 * Math.sin(resData.a2));
+            }
+
+            const padding = 55; 
+            let dw = maxX - minX, dh = maxY - minY;
+            if (dw < 0.1) dw = 0.1; if (dh < 0.1) dh = 0.1;
+
+            let usableW = Math.max(10, cw - padding * 2);
+            let usableH = Math.max(10, ch - padding * 2);
+
+            let scaleX = usableW / dw;
+            let scaleY = usableH / dh;
+            scale = Math.min(scaleX, scaleY);
+            
+            if (scale > 300) scale = 300;
+            if (scale < 0.5) scale = 0.5;
+
+            const mathCenterX = (minX + maxX) / 2;
+            const mathCenterY = (minY + maxY) / 2;
+
+            originX = cw / 2 - mathCenterX * scale;
+            originY = ch / 2 + mathCenterY * scale;
+
+            // ===== CSS 背景網格對齊至計算出來的原點 =====
+            container.style.backgroundPosition = `${originX}px ${originY}px`;
+        }
+
+        const getCanvasX = (mathX) => originX + mathX * scale;
+        const getCanvasY = (mathY) => originY - mathY * scale;
+
+        /**
+         * ==========================================
+         * 7. 基礎繪圖原件 (Drawing Primitives)
+         * ==========================================
+         */
+        function drawArrow(x0, y0, x1, y1, color, width = 2, dashed = false, showHead = true, progress = 1, alpha = 1) {
+            if (progress <= 0) return;
+            ctx.save(); ctx.globalAlpha = alpha;
+            let currX = x0 + (x1 - x0) * progress;
+            let currY = y0 + (y1 - y0) * progress;
+
+            ctx.beginPath();
+            ctx.moveTo(x0, y0); ctx.lineTo(currX, currY);
+            ctx.strokeStyle = color; ctx.lineWidth = width;
+            if (dashed) ctx.setLineDash([6, 6]);
+            ctx.stroke();
+
+            const dist = Math.hypot(currX - x0, currY - y0);
+            if (showHead && !dashed && dist > 1) {
+                const angle = Math.atan2(y1 - y0, x1 - x0);
+                const headLen = Math.max(12, width * 3.5); 
+                ctx.beginPath();
+                ctx.moveTo(currX, currY);
+                ctx.lineTo(currX - headLen * Math.cos(angle - Math.PI / 6), currY - headLen * Math.sin(angle - Math.PI / 6));
+                ctx.lineTo(currX - headLen * Math.cos(angle + Math.PI / 6), currY - headLen * Math.sin(angle + Math.PI / 6));
+                ctx.closePath();
+                ctx.fillStyle = color; ctx.fill();
+            }
+            ctx.restore();
+        }
+
+        function drawInfiniteLine(angleRad, color) {
+            const r = Math.max(cw, ch) * 2;
+            const dx = r * Math.cos(angleRad), dy = r * Math.sin(angleRad);
+            ctx.beginPath();
+            ctx.moveTo(originX - dx, originY + dy);
+            ctx.lineTo(originX + dx, originY - dy);
+            ctx.strokeStyle = color; ctx.lineWidth = 1;
+            ctx.setLineDash([4, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        /**
+         * ==========================================
+         * 8. 模式渲染核心分派 (Main Render Controller)
+         * ==========================================
+         */
+        function triggerDraw() {
+            updateViewport();
+            
+            if (appMode === 'resolution') {
+                if (animId) cancelAnimationFrame(animId);
+                replayBtn.classList.add('hidden');
+                drawResolutionStatic();
+            } else { 
+                if (vectors.length > 0) {
+                    replayBtn.classList.remove('hidden');
+                    replayBtn.disabled = false;
+                } else {
+                    replayBtn.classList.remove('hidden');
+                    replayBtn.disabled = true;
+                }
+                startAnimation();
+            }
+        }
+
+        function drawResolutionStatic() {
+            ctx.clearRect(0, 0, cw, ch);
+            if (resData.F <= 0) return;
+
+            drawInfiniteLine(resData.a1, hexToRgba(VECTOR_COLORS[0], 0.3));
+            drawInfiniteLine(resData.a2, hexToRgba(VECTOR_COLORS[1], 0.3));
+
+            if (resData.parallel) {
+                const mx = getCanvasX(resData.F * Math.cos(resData.theta));
+                const my = getCanvasY(resData.F * Math.sin(resData.theta));
+                drawArrow(originX, originY, mx, my, RESULTANT_COLOR, 4.5);
+                return;
+            }
+
+            const c1X = resData.F1 * Math.cos(resData.a1), c1Y = resData.F1 * Math.sin(resData.a1);
+            const c2X = resData.F2 * Math.cos(resData.a2), c2Y = resData.F2 * Math.sin(resData.a2);
+            const mX = resData.F * Math.cos(resData.theta), mY = resData.F * Math.sin(resData.theta);
+
+            drawArrow(getCanvasX(c1X), getCanvasY(c1Y), getCanvasX(mX), getCanvasY(mY), hexToRgba(VECTOR_COLORS[1], 0.4), 1.5, true, false);
+            drawArrow(getCanvasX(c2X), getCanvasY(c2Y), getCanvasX(mX), getCanvasY(mY), hexToRgba(VECTOR_COLORS[0], 0.4), 1.5, true, false);
+
+            drawArrow(originX, originY, getCanvasX(c1X), getCanvasY(c1Y), VECTOR_COLORS[0], 3);
+            drawArrow(originX, originY, getCanvasX(c2X), getCanvasY(c2Y), VECTOR_COLORS[1], 3);
+
+            drawArrow(originX, originY, getCanvasX(mX), getCanvasY(mY), RESULTANT_COLOR, 4.5);
+        }
+
+        /**
+         * ==========================================
+         * 9. 動畫引擎 (Animation Engine)
+         * ==========================================
+         */
+        function buildAnimationElements() {
+            animElements = []; maxAnimTimeT = 0;
+            if (vectors.length === 0) return;
+            const modeInput = document.querySelector('input[name="visMode"]:checked');
+            const mode = modeInput ? modeInput.value : 'head-to-tail';
+
+            if (mode === 'head-to-tail') {
+                let pMathX = 0, pMathY = 0;
+                let resultantStartTime = vectors.length;
+
+                vectors.forEach((v, i) => {
+                    const color = VECTOR_COLORS[i % VECTOR_COLORS.length];
+                    const vMathX = v.mag * Math.cos(v.rad), vMathY = v.mag * Math.sin(v.rad);
+                    const pCanX = getCanvasX(pMathX), pCanY = getCanvasY(pMathY);
+                    const nCanX = getCanvasX(pMathX + vMathX), nCanY = getCanvasY(pMathY + vMathY);
+
+                    // 在合力開始畫的時候，將之前的分量淡化
+                    animElements.push({ x0: pCanX, y0: pCanY, x1: nCanX, y1: nCanY, color, width: 2.5, dashed: false, showHead: true, tStart: i, tFade: resultantStartTime });
+                    
+                    pMathX += vMathX; pMathY += vMathY;
+                });
+                animElements.push({ x0: originX, y0: originY, x1: getCanvasX(pMathX), y1: getCanvasY(pMathY), color: RESULTANT_COLOR, width: 4.5, dashed: false, showHead: true, tStart: vectors.length, tFade: Infinity });
+                maxAnimTimeT = vectors.length + 1;
+
+            } else if (mode === 'parallelogram') {
+                let cMathX = vectors[0].mag * Math.cos(vectors[0].rad), cMathY = vectors[0].mag * Math.sin(vectors[0].rad);
+                let fadeT_V0 = (vectors.length > 1) ? 4 : Infinity;
+                animElements.push({ x0: originX, y0: originY, x1: getCanvasX(cMathX), y1: getCanvasY(cMathY), color: VECTOR_COLORS[0], width: 2.5, dashed: false, showHead: true, tStart: 0, tFade: fadeT_V0 });
+
+                if (vectors.length === 1) { maxAnimTimeT = 1; return; }
+
+                for (let i = 1; i < vectors.length; i++) {
+                    let tBase = (i - 1) * 3;
+                    let vMathX = vectors[i].mag * Math.cos(vectors[i].rad), vMathY = vectors[i].mag * Math.sin(vectors[i].rad);
+                    let isFinal = (i === vectors.length - 1);
+                    let fadeT = isFinal ? Infinity : tBase + 4;
+                    const colorVi = VECTOR_COLORS[i % VECTOR_COLORS.length];
+
+                    animElements.push({ x0: originX, y0: originY, x1: getCanvasX(vMathX), y1: getCanvasY(vMathY), color: colorVi, width: 2.5, dashed: false, showHead: true, tStart: tBase + 1, tFade: fadeT });
+                    animElements.push({ x0: getCanvasX(cMathX), y0: getCanvasY(cMathY), x1: getCanvasX(cMathX + vMathX), y1: getCanvasY(cMathY + vMathY), color: hexToRgba(colorVi, 0.4), width: 2, dashed: true, showHead: false, tStart: tBase + 2, tFade: fadeT });
+                    animElements.push({ x0: getCanvasX(vMathX), y0: getCanvasY(vMathY), x1: getCanvasX(cMathX + vMathX), y1: getCanvasY(cMathY + vMathY), color: 'rgba(148, 163, 184, 0.7)', width: 2, dashed: true, showHead: false, tStart: tBase + 2, tFade: fadeT });
+
+                    cMathX += vMathX; cMathY += vMathY;
+                    let rFadeT = isFinal ? Infinity : tBase + 7;
+                    animElements.push({ x0: originX, y0: originY, x1: getCanvasX(cMathX), y1: getCanvasY(cMathY), color: isFinal ? RESULTANT_COLOR : 'rgba(239, 68, 68, 0.5)', width: isFinal ? 4.5 : 3, dashed: false, showHead: true, tStart: tBase + 3, tFade: rFadeT });
+                    maxAnimTimeT = tBase + 4;
+                }
+            }
+        }
+
+        function startAnimation() {
+            if (animId) cancelAnimationFrame(animId);
+            if (vectors.length === 0) {
+                ctx.clearRect(0, 0, cw, ch);
+                return;
+            }
+            buildAnimationElements();
+            animStartTime = Date.now();
+            animateLoop();
+        }
+
+        function animateLoop() {
+            ctx.clearRect(0, 0, cw, ch);
+            let currentTimeT = (Date.now() - animStartTime) / STAGE_DURATION_MS;
+
+            animElements.forEach(el => {
+                if (currentTimeT >= el.tStart) {
+                    let progress = Math.min(1, currentTimeT - el.tStart);
+                    let alpha = 1;
+                    if (currentTimeT >= el.tFade) {
+                        let fadeProgress = Math.min(1, currentTimeT - el.tFade);
+                        alpha = 1 - (fadeProgress * 0.8);
+                    }
+                    drawArrow(el.x0, el.y0, el.x1, el.y1, el.color, el.width, el.dashed, el.showHead, progress, alpha);
+                }
+            });
+            if (currentTimeT < maxAnimTimeT + 1) animId = requestAnimationFrame(animateLoop);
+        }
+
+        /**
+         * ==========================================
+         * 10. 使用者互動與事件監聽 (User Interaction)
+         * ==========================================
+         */
+        function updateVectorList() {
+            const listDiv = document.getElementById('vectorList');
+            listDiv.innerHTML = '';
+            const t = isEnglish ? translations.en : translations.zh;
+            
+            let sx = 0, sy = 0;
+            vectors.forEach((v, i) => {
+                sx += v.mag * Math.cos(v.rad); sy += v.mag * Math.sin(v.rad);
+                const color = VECTOR_COLORS[i % VECTOR_COLORS.length];
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center bg-white p-2 border border-slate-200 rounded shadow-sm text-sm';
+                
+                div.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="w-3 h-3 rounded-full inline-block mr-2 shadow-inner border border-black/10" style="background-color: ${color};"></span>
+                        <span class="font-bold text-slate-700">${t.vectorText} ${i+1}: <span class="text-slate-600 font-medium ml-1"> $${v.mag} \\text{ N}, ${v.angle}^\\circ$ </span></span>
+                    </div>
+                    <button class="text-red-400 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded transition-colors font-bold text-lg leading-none" onclick="removeVec(${i})">×</button>
+                `;
+                listDiv.appendChild(div);
+            });
+
+            const rMag = Math.sqrt(sx*sx + sy*sy);
+            let rAng = Math.atan2(sy, sx) * 180 / Math.PI;
+            if (rAng < 0) rAng += 360;
+
+            const resOut = document.getElementById('resultOutput');
+            if (vectors.length > 0) {
+                resOut.innerHTML = `$R = ${rMag.toFixed(2)} \\text{ N}$ <br> $\\theta = ${rAng.toFixed(1)}^\\circ$`;
+            } else {
+                resOut.innerHTML = `$R = 0.00 \\text{ N}$ <br> $\\theta = 0.0^\\circ$`;
+            }
+            
+            renderMath([listDiv, resOut]);
+        }
+
+        window.removeVec = (i) => { vectors.splice(i, 1); updateVectorList(); triggerDraw(); };
+
+        document.getElementById('addBtn').addEventListener('click', () => {
+            const m = parseFloat(document.getElementById('magnitude').value), a = parseFloat(document.getElementById('angle').value);
+            if (!isNaN(m) && !isNaN(a) && m > 0) {
+                vectors.push({ mag: m, angle: a, rad: a * Math.PI / 180 });
+                updateVectorList(); triggerDraw();
+            }
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', () => { vectors = []; updateVectorList(); triggerDraw(); });
+        replayBtn.addEventListener('click', startAnimation);
+        
+        document.querySelectorAll('input[name="visMode"]').forEach(radio => {
+            radio.addEventListener('change', triggerDraw);
+        });
+
+        document.getElementById('langBtn').addEventListener('click', () => {
+            isEnglish = !isEnglish;
+            updateLanguageUI();
+        });
+
+        function updateLanguageUI() {
+            const t = isEnglish ? translations.en : translations.zh;
+            for (const [id, key] of Object.entries(tMap)) {
+                const el = document.getElementById(id);
+                if(el) el.innerHTML = t[key];
+            }
+
+            updateVectorList();
+            if (appMode === 'resolution') updateResolutionLogic();
+            
+            renderMath([document.body]); 
+        }
+
+        const modal = document.getElementById('helpModal');
+        document.getElementById('helpBtn').addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            renderMath([document.getElementById('modalBody')]);
+        });
+        document.getElementById('closeModal').addEventListener('click', () => modal.classList.add('hidden'));
+        window.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+
+        window.onload = () => {
+            updateLanguageUI(); 
+            resizeCanvas();     
+            switchMode('addition'); 
+        };
+
+    </script>
+</body>
+</html>
