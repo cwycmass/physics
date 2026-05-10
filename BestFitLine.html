@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最佳擬合線｜Best-fit Line</title>
+
+    <!-- Tailwind CSS for rapid UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom Tailwind theme configuration matching the "Modern SI Standard"
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3c72',    // Deep Blue for headers and primary buttons
+                        secondary: '#2a5298',  // Lighter blue for hovers
+                        result: '#DC2626',     // Bold Red for regression lines and results
+                        vector: '#10B981'      // Emerald green (available for future physics vectors)
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- MathJax 3 for rendering LaTeX formulas dynamically -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' },
+            startup: { typeset: false } // Disabled auto-typeset; we trigger it manually after DOM updates
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        /* --- Custom UI Styles --- */
+        
+        /* Custom Scrollbar for the sidebar to look modern */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Remove default number input spinners for a cleaner look */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; }
+
+        /* Canvas Background Grid Pattern */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+                linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+        }
+
+        /* Input field focus transitions */
+        .input-cell { transition: border-color 0.2s, box-shadow 0.2s; }
+        .input-cell:focus { outline: none; border-color: #1e3c72; box-shadow: 0 0 0 2px rgba(30,60,114,0.2); }
+
+        /* --- MathJax CSS Fixes --- */
+        /* Prevent Tailwind's preflight from forcing MathJax SVGs onto new lines, causing layout jumps */
+        mjx-container {
+            display: inline-block !important;
+            vertical-align: middle;
+        }
+        mjx-container svg {
+            display: inline !important;
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen text-slate-800 bg-slate-50 font-sans overflow-hidden">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-primary text-white shadow-md z-20 flex justify-between items-center px-6 py-3">
+        <h1 class="text-xl font-bold tracking-wide" data-i18n="title">Best Fit Line Calculator</h1>
+        <div class="flex items-center gap-4">
+            <button onclick="toggleHelp()" class="hover:bg-secondary px-3 py-1 rounded-md transition" data-i18n="helpBtn">Help</button>
+            <button onclick="toggleLang()" class="bg-white text-primary font-semibold px-3 py-1 rounded-md shadow hover:bg-slate-100 transition" id="langToggle">繁/Eng</button>
+        </div>
+    </header>
+
+    <!-- Main Layout: Sidebar on left, Canvas on right -->
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+        
+        <!-- Control Sidebar -->
+        <aside class="w-full md:w-80 lg:w-96 bg-white shadow-xl z-10 flex flex-col h-full overflow-y-auto">
+            <div class="p-5 flex-1 flex flex-col gap-5">
+                
+                <!-- Data Input Section -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h2 class="text-sm font-semibold text-slate-500 mb-3 uppercase tracking-wider" data-i18n="dataInput">Data Points (Max 50)</h2>
+                    <div class="grid grid-cols-[30px_1fr_1fr_30px] gap-2 mb-2 font-semibold text-center text-slate-600 italic">
+                        <div>#</div><div>x</div><div>y</div><div></div>
+                    </div>
+                    <!-- Inputs are dynamically injected here by JS -->
+                    <div id="pointsContainer" class="flex flex-col gap-2"></div>
+                    <button onclick="addPoint()" id="addBtn" class="mt-3 w-full py-2 border-2 border-dashed border-slate-300 text-slate-500 rounded-lg hover:bg-slate-100 hover:text-slate-700 transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        <span data-i18n="addPt">Add Point</span>
+                    </button>
+                </div>
+
+                <!-- Simulation Controls Section -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <label class="flex items-center gap-2 cursor-pointer mb-4 text-sm font-medium">
+                        <input type="checkbox" id="forceOrigin" class="w-4 h-4 text-primary rounded focus:ring-primary border-gray-300 shrink-0">
+                        <span data-i18n="forceOrigin" class="whitespace-nowrap">Force through origin ($y=mx$)</span>
+                    </label>
+                    <button onclick="startSimulation()" class="w-full bg-primary hover:bg-secondary text-white py-3 rounded-lg font-semibold shadow-md transition-all active:scale-95" data-i18n="calcBtn">
+                        Calculate & Animate
+                    </button>
+                </div>
+
+                <!-- Error Messages Box (Hidden by default) -->
+                <div id="errorBox" class="hidden bg-red-50 text-red-700 p-3 rounded-lg border border-red-200 text-sm"></div>
+
+                <!-- Export Utilities Section -->
+                <div class="flex gap-2 mt-4 w-full">
+                    <button onclick="downloadPNG()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg font-semibold shadow-sm border border-slate-300 transition-all flex items-center justify-center gap-2 text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <span data-i18n="downloadPNG">PNG</span>
+                    </button>
+                    <button onclick="downloadCSV()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg font-semibold shadow-sm border border-slate-300 transition-all flex items-center justify-center gap-2 text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span data-i18n="downloadCSV">CSV</span>
+                    </button>
+                </div>
+                
+                <!-- Draggable Reminder (Appears after simulation starts) -->
+                <div id="dragReminder" class="hidden text-xs text-slate-500 mt-2 text-center drop-shadow-sm transition-opacity duration-300">
+                    <span data-i18n="dragReminder">💡 Tip: You can drag the formula label on the graph before downloading.</span>
+                </div>
+
+                <!-- Footer -->
+                <div class="mt-auto pt-4 text-center text-sm font-medium text-slate-400">
+                    <span data-i18n="footer">廠商會中學．物理科</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Canvas Drawing Area -->
+        <section class="flex-1 relative bg-grid cursor-crosshair" id="canvasWrapper">
+            <!-- High-DPI Canvas for rendering points, axes, and lines -->
+            <canvas id="simCanvas" class="absolute inset-0 w-full h-full"></canvas>
+            
+            <!-- Dynamic Math Formula Overlay (Draggable, Transparent, Smart Positioned) -->
+            <div id="mathOverlay" class="hidden absolute bg-transparent px-2 py-2 cursor-grab pointer-events-auto select-none touch-none transition-opacity duration-300 drop-shadow-[0_0_3px_rgba(255,255,255,1)]">
+                <!-- Formula dynamically injected here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Help / Educational Modal -->
+    <div id="helpModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 transform scale-95 transition-transform duration-300" id="helpModalContent">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-primary" data-i18n="helpTitle">Mathematical Principles</h2>
+                <button onclick="toggleHelp()" class="text-slate-400 hover:text-slate-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="space-y-4 text-sm text-slate-600" id="helpContent">
+                <p data-i18n="helpP1">Linear regression finds the straight line that best fits a set of data points by minimizing the sum of the squares of the vertical residuals.</p>
+                <div class="bg-slate-50 p-3 rounded text-center border border-slate-200">
+                    <span id="helpFormula1">$$y = mx + c$$</span>
+                </div>
+                <p data-i18n="helpP2">The coefficient of determination, $R^2$, indicates how well the regression line approximates the real data points. A value of $1$ means a perfect fit.</p>
+                <div class="bg-slate-50 p-3 rounded text-center border border-slate-200">
+                    <span id="helpFormula2">$$R^2 = 1 - \frac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}$$</span>
+                </div>
+            </div>
+            <button onclick="toggleHelp()" class="mt-6 w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary transition" data-i18n="closeBtn">Close</button>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================
+           1. APPLICATION STATE & CONFIGURATION
+           ========================================== */
+        const MAX_POINTS = 50;
+        let state = {
+            lang: 'zh', // Default language
+            // Initial mock data to guide the user
+            points: [{x: '1', y: '2'}, {x: '2', y: '4'}, {x: '3', y: '5'}, {x: '4', y: '4'}, {x: '5', y: '5'}],
+            results: null, // Holds calculated regression line data (m, c, r2, validPts)
+            animation: { active: false, progress: 0, reqId: null }
+        };
+
+        // Canvas context variables (initialized after load to prevent global null reference errors)
+        let canvas, ctx, wrapper;
+        
+        // Viewport config handles zooming and panning translation between "math space" and "screen space"
+        let viewport = { scaleX: 1, scaleY: 1, minX: -10, maxX: 10, minY: -10, maxY: 10 };
+
+        /* ==========================================
+           2. BILINGUAL DICTIONARY (i18n)
+           ========================================== */
+        const dict = {
+            en: {
+                title: "Best-fit Line", helpBtn: "Help", dataInput: "Data Points (Max 50)",
+                addPt: "Add Point", forceOrigin: "Force through origin ($y=mx$)", calcBtn: "Calculate & Animate",
+                results: "Results", replay: "Replay Animation", helpTitle: "Mathematical Principles",
+                helpP1: "Linear regression finds the straight line that best fits a set of data points by minimizing the sum of the squares of the vertical residuals.",
+                helpP2: "The coefficient of determination (R-squared) indicates how well the regression line approximates the real data points. A value of 1 means a perfect fit.",
+                closeBtn: "Close", errInsufficient: "Need at least 2 valid points.",
+                errVertical: "Cannot compute: All X values are identical.",
+                errOriginZero: "Cannot compute unique line (all X values are zero).",
+                footer: "CMA Secondary School • Physics",
+                downloadPNG: "Download PNG",
+                downloadCSV: "Download CSV",
+                dragReminder: "💡 Tip: Drag the formula label on the graph to a good position before downloading."
+            },
+            zh: {
+                title: "最佳擬合線", helpBtn: "說明", dataInput: "座標數據 (最多50組)",
+                addPt: "新增座標", forceOrigin: "強制通過原點($y=mx$)", calcBtn: "計算並繪製動畫",
+                results: "計算結果", replay: "重播動畫", helpTitle: "數學原理",
+                helpP1: "線性回歸透過最小化垂直殘差平方和，找出最能代表一組數據點的直線。",
+                helpP2: "決定係數 (R平方) 顯示回歸線對實際數據點的近似程度。數值為1代表完全擬合。",
+                closeBtn: "關閉", errInsufficient: "至少需要兩組有效座標對。",
+                errVertical: "無法計算：所有X值均相同（垂直線）。",
+                errOriginZero: "無法計算唯一最佳擬合線（所有X值均為零）。",
+                footer: "廠商會中學．物理科",
+                downloadPNG: "下載 PNG",
+                downloadCSV: "下載 CSV",
+                dragReminder: "💡 提示：下載前，您可自由拖曳圖表上的公式標籤至合適位置。"
+            }
+        };
+
+        /* ==========================================
+           3. INITIALIZATION & I18N LOGIC
+           ========================================== */
+        function init() {
+            canvas = document.getElementById('simCanvas');
+            ctx = canvas.getContext('2d', { alpha: false }); // alpha: false optimizes background clearing
+            wrapper = document.getElementById('canvasWrapper');
+
+            initDrag(); // Setup mouse/touch listeners for formula label
+
+            renderInputs(); // Draw HTML input rows
+            setupCanvas();  // Configure high-DPI scaling
+            window.addEventListener('resize', setupCanvas);
+            
+            updateI18n(); // Apply initial language
+            
+            // Typeset initial LaTeX equations in the Help modal and Sidebar
+            MathJax.typesetPromise(['#helpFormula1', '#helpFormula2']).then(() => {
+                MathJax.typesetPromise(['#forceOrigin']);
+            });
+            drawInitialState(); // Draw initial points on load
+        }
+
+        function toggleLang() {
+            state.lang = state.lang === 'en' ? 'zh' : 'en';
+            updateI18n();
+            renderInputs();
+            if(state.results) updateMathJaxDisplay();
+        }
+
+        function updateI18n() {
+            // Traverse all elements with a 'data-i18n' attribute and translate them
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[state.lang][key]) el.innerHTML = dict[state.lang][key];
+            });
+            
+            // Special handling for the checkbox label to safely render MathJax inside it
+            const span = document.querySelector('[data-i18n="forceOrigin"]');
+            span.innerHTML = state.lang === 'en' ? 'Force through origin (\\(y=mx\\))' : '強制通過原點(\\(y=mx\\))';
+            
+            // CRITICAL FIX: Ensure the text containing MathJax stays on one line to prevent layout breaking
+            span.style.whiteSpace = 'nowrap'; 
+            
+            MathJax.typesetPromise([span]);
+        }
+
+        /* ==========================================
+           4. DATA INPUT & UI MANAGEMENT
+           ========================================== */
+        
+        // Regenerates the DOM for all the x/y input cells based on state.points
+        function renderInputs() {
+            const container = document.getElementById('pointsContainer');
+            container.innerHTML = '';
+            state.points.forEach((pt, i) => {
+                const row = document.createElement('div');
+                row.className = "grid grid-cols-[30px_1fr_1fr_30px] gap-2 items-center";
+                row.innerHTML = `
+                    <div class="text-center text-slate-400 text-sm">${i + 1}</div>
+                    <input type="number" step="any" value="${pt.x}" onchange="updatePoint(${i}, 'x', this.value)" onpaste="handlePaste(event, ${i}, 'x')" class="input-cell w-full bg-white border border-slate-200 rounded py-1 px-2 text-center text-sm">
+                    <input type="number" step="any" value="${pt.y}" onchange="updatePoint(${i}, 'y', this.value)" onpaste="handlePaste(event, ${i}, 'y')" class="input-cell w-full bg-white border border-slate-200 rounded py-1 px-2 text-center text-sm">
+                    <button onclick="removePoint(${i})" class="text-slate-400 hover:text-red-500 transition flex justify-center" title="Remove">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                `;
+                container.appendChild(row);
+            });
+            // Hide "Add Point" button if max capacity reached
+            document.getElementById('addBtn').style.display = state.points.length >= MAX_POINTS ? 'none' : 'flex';
+        }
+
+        function updatePoint(index, axis, value) {
+            state.points[index][axis] = value;
+            clearResults();
+            drawInitialState();
+        }
+
+        // Handles Excel data pasting into input fields. Splits by Tab (\t) and Newline (\n)
+        function handlePaste(e, startRow, startAxis) {
+            e.preventDefault();
+            const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+            if (!pasteData) return;
+
+            const rows = pasteData.split(/\r?\n/);
+            let currRow = startRow;
+            
+            for (let i = 0; i < rows.length; i++) {
+                if (currRow >= MAX_POINTS) break;
+                
+                const rowStr = rows[i].trim();
+                if (rowStr === '' && i === rows.length - 1) continue; // skip trailing blanks
+
+                // Standardize European commas to dots for parseFloat compatibility
+                const cols = rowStr.split(/\t/).map(val => val.trim().replace(',', '.'));
+                
+                // Ensure the state array has enough rows allocated
+                if (!state.points[currRow]) {
+                    state.points.push({x: '', y: ''});
+                }
+                
+                // Populate X and Y based on what cell was active during paste
+                if (startAxis === 'x') {
+                    if (cols.length >= 1 && cols[0] !== '') state.points[currRow].x = cols[0];
+                    if (cols.length >= 2 && cols[1] !== '') state.points[currRow].y = cols[1];
+                } else {
+                    // Pasting started on a Y cell, only grab the first column of the clipboard
+                    if (cols.length >= 1 && cols[0] !== '') state.points[currRow].y = cols[0];
+                }
+                currRow++;
+            }
+            
+            renderInputs();
+            clearResults();
+            drawInitialState();
+        }
+
+        function addPoint() {
+            if (state.points.length < MAX_POINTS) {
+                state.points.push({x: '', y: ''});
+                renderInputs();
+            }
+        }
+
+        function removePoint(index) {
+            state.points.splice(index, 1);
+            renderInputs();
+            clearResults();
+            drawInitialState();
+        }
+
+        function showError(key) {
+            const box = document.getElementById('errorBox');
+            box.textContent = dict[state.lang][key];
+            box.classList.remove('hidden');
+        }
+
+        function hideError() {
+            document.getElementById('errorBox').classList.add('hidden');
+        }
+
+        // Clear existing regression calculations when data changes
+        function clearResults() {
+            state.results = null;
+            document.getElementById('mathOverlay').classList.add('hidden');
+            document.getElementById('dragReminder').classList.add('hidden');
+            hideError();
+        }
+
+        // Format number to 3 significant figures and convert to LaTeX Scientific Notation if needed
+        function formatValLaTeX(val) {
+            if (val === 0) return "0";
+            let str = Number(val).toPrecision(3);
+            if (str.includes('e')) {
+                let parts = str.split('e');
+                let base = parts[0];
+                let exp = parseInt(parts[1], 10);
+                return `${base} \\times 10^{${exp}}`;
+            }
+            return str;
+        }
+
+        // Format number to 3 significant figures in plain text (used for PNG export canvas burning)
+        function formatValPlain(val) {
+            if (val === 0) return "0";
+            let str = Number(val).toPrecision(3);
+            if (str.includes('e')) {
+                let parts = str.split('e');
+                let base = parts[0];
+                let exp = parseInt(parts[1], 10);
+                return `${base} × 10^${exp}`;
+            }
+            return str;
+        }
+
+        /* ==========================================
+           5. PHYSICS & MATH ENGINE (LINEAR REGRESSION)
+           ========================================== */
+        function startSimulation() {
+            hideError();
+            
+            // Filter out empty rows and parse strings into numbers
+            const validPts = state.points
+                .filter(p => p.x !== '' && p.y !== '' && !isNaN(p.x) && !isNaN(p.y))
+                .map(p => ({ x: parseFloat(p.x), y: parseFloat(p.y) }));
+
+            if (validPts.length < 2) {
+                showError('errInsufficient');
+                return;
+            }
+
+            const forceOrigin = document.getElementById('forceOrigin').checked;
+            const n = validPts.length;
+            
+            // Calculate necessary sums for OLS formulas
+            let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+            validPts.forEach(p => {
+                sumX += p.x; sumY += p.y;
+                sumXY += p.x * p.y;
+                sumX2 += p.x * p.x;
+                sumY2 += p.y * p.y;
+            });
+
+            let m = 0, c = 0, r2 = 0;
+
+            if (forceOrigin) {
+                // Slope calculation when forced through (0,0)
+                if (sumX2 === 0) return showError('errOriginZero');
+                m = sumXY / sumX2;
+                c = 0; // Y-intercept is 0
+            } else {
+                // Standard Ordinary Least Squares (OLS) slope and intercept
+                const denom = (n * sumX2) - (sumX * sumX);
+                if (denom === 0) return showError('errVertical');
+                m = ((n * sumXY) - (sumX * sumY)) / denom;
+                c = (sumY - m * sumX) / n;
+            }
+
+            // Calculate Coefficient of Determination (R^2)
+            const meanY = sumY / n;
+            let sst = 0, ssr = 0; // Total Sum of Squares, Sum of Squares of Residuals
+            validPts.forEach(p => {
+                sst += Math.pow(p.y - meanY, 2);
+                const predictedY = m * p.x + c;
+                ssr += Math.pow(p.y - predictedY, 2);
+            });
+
+            if (sst === 0) r2 = (ssr === 0) ? 1 : 0; // Handle zero variance edge case
+            else r2 = 1 - (ssr / sst);
+
+            // Save results to state and trigger visual updates
+            state.results = { m, c, r2, pts: validPts };
+            calculateViewport(); // Re-adjust canvas boundaries
+            replayAnimation();   // Trigger line drawing animation
+        }
+
+        // Generates the LaTeX equation string and updates the draggable overlay
+        function updateMathJaxDisplay() {
+            if(!state.results) return;
+            const { m, c, r2 } = state.results;
+            
+            // Format to 3 significant figures for LaTeX
+            const mFmt = formatValLaTeX(m);
+            const r2Fmt = r2 === 0 ? "0" : Number(r2).toPrecision(3);
+            
+            // Build LaTeX string using inline math delimiters \( ... \) for strict font sizing
+            let eq = `\\(y = ${mFmt}x`;
+            if (Math.abs(c) > 1e-9) {
+                const cFmt = formatValLaTeX(Math.abs(c));
+                eq += c > 0 ? ` + ${cFmt}` : ` - ${cFmt}`;
+            }
+            eq += `\\)`;
+
+            const overlay = document.getElementById('mathOverlay');
+            overlay.innerHTML = `
+                <div class="text-left text-[18px] text-black font-semibold leading-tight">${eq}</div>
+                <div class="text-left text-[18px] text-black font-semibold leading-tight mt-1">\\(R^2 = ${r2Fmt}\\)</div>
+            `;
+            
+            // Typeset the newly injected LaTeX and calculate smart initial position
+            MathJax.typesetPromise([overlay]).then(() => {
+                overlay.classList.remove('hidden');
+                document.getElementById('dragReminder').classList.remove('hidden');
+                
+                const rect = wrapper.getBoundingClientRect();
+                const ow = overlay.offsetWidth;
+                const oh = overlay.offsetHeight;
+                
+                // Start by positioning near the mathematical midpoint of the line
+                const midX = (viewport.minX + viewport.maxX) / 2;
+                const midY = m * midX + c;
+                
+                let px = screenX(midX);
+                let py = screenY(midY);
+                
+                // Offset slightly to be just above the line without covering it
+                px -= (ow / 2);
+                py -= (oh + 15);
+                
+                // Clamp position so the formula box never goes off-screen
+                px = Math.max(10, Math.min(rect.width - ow - 10, px));
+                py = Math.max(10, Math.min(rect.height - oh - 10, py));
+                
+                overlay.style.left = `${px}px`;
+                overlay.style.top = `${py}px`;
+            });
+        }
+
+        /* ==========================================
+           6. CANVAS RENDERING ENGINE
+           ========================================== */
+        
+        // Handles setup for High-DPI screens (Retina displays) to prevent blurry graphics
+        function setupCanvas() {
+            if (!canvas || !wrapper) return;
+            const rect = wrapper.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr); // Scale internal context by pixel density
+            
+            if (!state.animation.active) {
+                if (state.results) drawScene(1); // Redraw full line
+                else drawInitialState();         // Redraw points only
+            }
+        }
+
+        // Dynamically calculates the physical viewport bounds needed to frame all points + origin
+        function calculateViewport() {
+            let ptsX = state.results.pts.map(p => p.x);
+            let ptsY = state.results.pts.map(p => p.y);
+
+            // Force origin (0,0) to be included so axes always cross at true (0,0)
+            ptsX.push(0);
+            ptsY.push(0);
+
+            let minX = Math.min(...ptsX), maxX = Math.max(...ptsX);
+            let minY = Math.min(...ptsY), maxY = Math.max(...ptsY);
+
+            let dx = maxX - minX;
+            let dy = maxY - minY;
+
+            // Handle edge case where all points form a single point or horizontal/vertical line
+            if (dx === 0) dx = Math.abs(minX) > 0 ? Math.abs(minX) * 0.5 : 10;
+            if (dy === 0) dy = Math.abs(minY) > 0 ? Math.abs(minY) * 0.5 : 10;
+
+            // Add 10% padding to bounds so data doesn't touch the very edge of the canvas
+            viewport.minX = minX - dx * 0.1;
+            viewport.maxX = maxX + dx * 0.1;
+            viewport.minY = minY - dy * 0.1;
+            viewport.maxY = maxY + dy * 0.1;
+
+            // Calculate scaling ratios (Screen Pixels / Math Units)
+            const rect = wrapper.getBoundingClientRect();
+            viewport.scaleX = rect.width / (viewport.maxX - viewport.minX);
+            viewport.scaleY = rect.height / (viewport.maxY - viewport.minY);
+        }
+
+        // Coordinate transforms from Math World to Screen Pixels
+        function screenX(worldX) { return (worldX - viewport.minX) * viewport.scaleX; }
+        // Y is inverted because Canvas Y grows downwards, but Math Y grows upwards
+        function screenY(worldY) { return (viewport.maxY - worldY) * viewport.scaleY; }
+
+        function drawInitialState() {
+            const validPts = state.points
+                .filter(p => p.x !== '' && p.y !== '' && !isNaN(p.x) && !isNaN(p.y))
+                .map(p => ({ x: parseFloat(p.x), y: parseFloat(p.y) }));
+            
+            if (validPts.length > 0) {
+                // Fake a result object temporarily to use standard calculateViewport pipeline
+                state.results = { pts: validPts, m: 0, c: 0, r2: 0, isInitial: true };
+                calculateViewport();
+            } else {
+                // Default blank view if no data entered
+                viewport.minX = -10; viewport.maxX = 10; viewport.minY = -10; viewport.maxY = 10;
+                const rect = wrapper.getBoundingClientRect();
+                viewport.scaleX = rect.width / 20;
+                viewport.scaleY = rect.height / 20;
+            }
+            drawScene(0, validPts); // 0 progress = don't draw regression line
+        }
+
+        // Intelligent grid spacing algorithm based on current zoom level
+        function getGridStep(pxPerUnit) {
+            const rawStep = 80 / pxPerUnit; // Target ~80px gap between grid lines
+            const mag = Math.floor(Math.log10(rawStep));
+            const magPow = Math.pow(10, mag);
+            const msd = rawStep / magPow;
+            
+            // Snap to aesthetically pleasing intervals (1, 2, or 5)
+            if (msd >= 5) return 5 * magPow;
+            if (msd >= 2) return 2 * magPow;
+            return 1 * magPow;
+        }
+
+        // Main rendering function (called continuously during animation)
+        function drawScene(progress, manualPts = null) {
+            const rect = wrapper.getBoundingClientRect();
+            
+            // 1. Clear background
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, rect.width, rect.height);
+
+            const stepX = getGridStep(viewport.scaleX);
+            const stepY = getGridStep(viewport.scaleY);
+
+            // 2. Draw subtle background grid pattern
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let x = Math.ceil(viewport.minX/stepX)*stepX; x <= viewport.maxX; x += stepX) {
+                ctx.moveTo(screenX(x), 0); ctx.lineTo(screenX(x), rect.height);
+            }
+            for (let y = Math.ceil(viewport.minY/stepY)*stepY; y <= viewport.maxY; y += stepY) {
+                ctx.moveTo(0, screenY(y)); ctx.lineTo(rect.width, screenY(y));
+            }
+            ctx.stroke();
+
+            // 3. Draw Grid Numeric Labels
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = "12px ui-sans-serif, system-ui, sans-serif";
+            const sy0 = screenY(0);
+            const sx0 = screenX(0);
+
+            // X-axis numbers
+            ctx.textAlign = "center";
+            ctx.textBaseline = "bottom";
+            for (let x = Math.ceil(viewport.minX/stepX)*stepX; x <= viewport.maxX; x += stepX) {
+                if (Math.abs(x) < 1e-10 && sy0 >= 0 && sy0 <= rect.height) continue; // Skip 0 label
+                ctx.fillText(parseFloat(x.toPrecision(4)).toString(), screenX(x), rect.height - 4);
+            }
+            
+            // Y-axis numbers
+            ctx.textAlign = "left";
+            ctx.textBaseline = "middle";
+            for (let y = Math.ceil(viewport.minY/stepY)*stepY; y <= viewport.maxY; y += stepY) {
+                if (Math.abs(y) < 1e-10 && sx0 >= 0 && sx0 <= rect.width) continue; // Skip 0 label
+                ctx.fillText(parseFloat(y.toPrecision(4)).toString(), 4, screenY(y));
+            }
+
+            // 4. Draw Main Axes with Arrows and Italic Labels (Physics Standard)
+            ctx.strokeStyle = '#64748b';
+            ctx.fillStyle = '#64748b';
+            ctx.lineWidth = 2;
+            ctx.font = "italic 18px 'Times New Roman', serif"; // Serif font for math variables
+            
+            let axisY = sy0;
+            let axisX = sx0;
+            
+            // X Axis Line (Only draw if origin is actually visible on screen)
+            if (axisY >= 0 && axisY <= rect.height) {
+                ctx.beginPath();
+                ctx.moveTo(0, axisY); 
+                ctx.lineTo(rect.width - 12, axisY); // leave room for arrow
+                ctx.stroke();
+
+                // X Arrow Head
+                ctx.beginPath();
+                ctx.moveTo(rect.width - 2, axisY);
+                ctx.lineTo(rect.width - 14, axisY - 5);
+                ctx.lineTo(rect.width - 14, axisY + 5);
+                ctx.fill();
+
+                // X Math Label
+                ctx.textAlign = "right";
+                ctx.textBaseline = "bottom";
+                ctx.fillText("x", rect.width - 15, axisY - 8);
+            }
+            
+            // Y Axis Line
+            if (axisX >= 0 && axisX <= rect.width) {
+                ctx.beginPath();
+                ctx.moveTo(axisX, rect.height); 
+                ctx.lineTo(axisX, 12); 
+                ctx.stroke();
+
+                // Y Arrow Head
+                ctx.beginPath();
+                ctx.moveTo(axisX, 2);
+                ctx.lineTo(axisX - 5, 14);
+                ctx.lineTo(axisX + 5, 14);
+                ctx.fill();
+
+                // Y Math Label
+                ctx.textAlign = "left";
+                ctx.textBaseline = "top";
+                ctx.fillText("y", axisX + 10, 10);
+            }
+
+            // 5. Draw the actual Data Points
+            const pts = manualPts || (state.results ? state.results.pts : []);
+            
+            // Draw Data points as "X" marks in Mid Blue
+            ctx.strokeStyle = '#2563eb'; // Tailwind blue-600
+            ctx.lineWidth = 2;
+            const crossSize = 5;
+
+            pts.forEach(p => {
+                const px = screenX(p.x); 
+                const py = screenY(p.y);
+                ctx.beginPath();
+                ctx.moveTo(px - crossSize, py - crossSize);
+                ctx.lineTo(px + crossSize, py + crossSize);
+                ctx.moveTo(px + crossSize, py - crossSize);
+                ctx.lineTo(px - crossSize, py + crossSize);
+                ctx.stroke();
+            });
+
+            // 6. Draw Regression Line and Residuals (Animated)
+            if (state.results && !state.results.isInitial && progress > 0) {
+                const { m, c } = state.results;
+                
+                // Calculate how much of the line to draw based on current animation progress
+                const startX = viewport.minX;
+                const endX = viewport.maxX;
+                const currentX = startX + (endX - startX) * progress;
+
+                // Draw Residuals (vertical dotted lines from point to regression line)
+                ctx.strokeStyle = 'rgba(220, 38, 38, 0.3)'; // Faded Red
+                ctx.setLineDash([4, 4]); // Dotted pattern
+                ctx.lineWidth = 1;
+                pts.forEach(p => {
+                    if (p.x <= currentX) { // Only draw residuals for the part of the line currently drawn
+                        ctx.beginPath();
+                        ctx.moveTo(screenX(p.x), screenY(p.y));
+                        ctx.lineTo(screenX(p.x), screenY(m * p.x + c));
+                        ctx.stroke();
+                    }
+                });
+                ctx.setLineDash([]); // Reset dash for normal lines
+
+                // Draw solid Best Fit Line
+                ctx.strokeStyle = '#DC2626'; // Solid Red
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(screenX(startX), screenY(m * startX + c));
+                ctx.lineTo(screenX(currentX), screenY(m * currentX + c));
+                ctx.stroke();
+            }
+        }
+
+        /* ==========================================
+           7. ANIMATION ENGINE
+           ========================================== */
+        // Handles the fluid drawing of the regression line across the screen
+        function replayAnimation() {
+            if (state.animation.reqId) cancelAnimationFrame(state.animation.reqId);
+            document.getElementById('mathOverlay').classList.add('hidden');
+            
+            state.animation.active = true;
+            state.animation.progress = 0;
+            const duration = 1000; // Animation length in ms
+            let startTime = null;
+
+            function animate(time) {
+                if (!startTime) startTime = time;
+                let elapsed = time - startTime;
+                let progress = Math.min(elapsed / duration, 1);
+                
+                // Cubic ease-out mathematical function for smooth deceleration
+                let easeOut = 1 - Math.pow(1 - progress, 3);
+                
+                drawScene(easeOut);
+                
+                if (progress < 1) {
+                    state.animation.reqId = requestAnimationFrame(animate);
+                } else {
+                    // Animation complete
+                    state.animation.active = false;
+                    updateMathJaxDisplay(); // Reveal the formula label
+                }
+            }
+            state.animation.reqId = requestAnimationFrame(animate);
+        }
+
+        /* ==========================================
+           8. MODAL & UI HELPERS
+           ========================================== */
+        function toggleHelp() {
+            const modal = document.getElementById('helpModal');
+            const content = document.getElementById('helpModalContent');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth; // Force CSS reflow to trigger transition
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+            } else {
+                modal.classList.add('opacity-0');
+                content.classList.add('scale-95');
+                setTimeout(() => modal.classList.add('hidden'), 300); // Wait for fade out
+            }
+        }
+
+        /* ==========================================
+           9. DRAG & DROP INTERACTION (Formula Label)
+           ========================================== */
+        let isDragging = false;
+        let dragStartX, dragStartY;
+        let initialOverlayX, initialOverlayY;
+
+        function initDrag() {
+            const overlay = document.getElementById('mathOverlay');
+            // Support both mouse and touch events
+            overlay.addEventListener('mousedown', dragStart);
+            overlay.addEventListener('touchstart', dragStart, {passive: false});
+            window.addEventListener('mousemove', dragMove);
+            window.addEventListener('touchmove', dragMove, {passive: false});
+            window.addEventListener('mouseup', dragEnd);
+            window.addEventListener('touchend', dragEnd);
+        }
+
+        function dragStart(e) {
+            if (!state.results) return;
+            isDragging = true;
+            // Normalize touch vs mouse coordinates
+            const evt = e.touches ? e.touches[0] : e;
+            dragStartX = evt.clientX;
+            dragStartY = evt.clientY;
+            
+            const overlay = document.getElementById('mathOverlay');
+            initialOverlayX = parseFloat(overlay.style.left) || 0;
+            initialOverlayY = parseFloat(overlay.style.top) || 0;
+            overlay.style.cursor = 'grabbing';
+            if (e.touches && e.cancelable) e.preventDefault(); // Prevent page scrolling on mobile
+        }
+
+        function dragMove(e) {
+            if (!isDragging) return;
+            if (e.touches && e.cancelable) e.preventDefault();
+            
+            const evt = e.touches ? e.touches[0] : e;
+            const dx = evt.clientX - dragStartX;
+            const dy = evt.clientY - dragStartY;
+
+            const overlay = document.getElementById('mathOverlay');
+            const rect = wrapper.getBoundingClientRect();
+            let newX = initialOverlayX + dx;
+            let newY = initialOverlayY + dy;
+
+            // Clamp bounds so user cannot drag label completely outside canvas
+            newX = Math.max(0, Math.min(rect.width - overlay.offsetWidth, newX));
+            newY = Math.max(0, Math.min(rect.height - overlay.offsetHeight, newY));
+
+            overlay.style.left = `${newX}px`;
+            overlay.style.top = `${newY}px`;
+        }
+
+        function dragEnd() {
+            if (isDragging) {
+                isDragging = false;
+                document.getElementById('mathOverlay').style.cursor = 'grab';
+            }
+        }
+
+        /* ==========================================
+           10. EXPORT UTILITIES (PNG & CSV)
+           ========================================== */
+           
+        // Exports the canvas drawing area along with the MathJax text burnt into the image
+        function downloadPNG() {
+            // Generate timestamp for filename: YYYYMMDDHHMMSS
+            const now = new Date();
+            const pad = n => String(n).padStart(2, '0');
+            const ts = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+            const filename = `LR_${ts}.png`;
+
+            // Create a temporary off-screen canvas to composite the final image
+            const expCanvas = document.createElement('canvas');
+            expCanvas.width = canvas.width;
+            expCanvas.height = canvas.height;
+            const eCtx = expCanvas.getContext('2d');
+
+            // Draw Background and Line Graphics from active canvas
+            eCtx.drawImage(canvas, 0, 0);
+
+            // Draw Math Formula onto the export canvas 
+            // (MathJax SVG cannot be easily exported via toDataURL natively due to security constraints, 
+            // so we approximate it by writing text directly onto the export canvas matching the drag location)
+            const overlay = document.getElementById('mathOverlay');
+            if (!overlay.classList.contains('hidden') && state.results) {
+                const rect = overlay.getBoundingClientRect();
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1; // Compensate for high-dpi screens
+
+                // Calculate exact coordinates relative to the canvas origin
+                const ox = (rect.left - wrapperRect.left) * dpr;
+                const oy = (rect.top - wrapperRect.top) * dpr;
+
+                eCtx.fillStyle = '#000000';
+                eCtx.font = `italic bold ${18 * dpr}px 'Times New Roman', serif`;
+                eCtx.textAlign = 'left';
+                eCtx.textBaseline = 'top';
+
+                const { m, c, r2 } = state.results;
+                
+                // Use plain text formatter (3 sig figs) since canvas fillText doesn't support LaTeX
+                const mFmtPlain = formatValPlain(m);
+                let eqText = `y = ${mFmtPlain}x`;
+                if (Math.abs(c) > 1e-9) {
+                    const cFmtPlain = formatValPlain(Math.abs(c));
+                    eqText += c > 0 ? ` + ${cFmtPlain}` : ` - ${cFmtPlain}`;
+                }
+                const r2Text = `R² = ${r2 === 0 ? "0" : Number(r2).toPrecision(3)}`;
+
+                // Burn Text on export image based on dragged overlay coordinates
+                eCtx.fillText(eqText, ox + 8 * dpr, oy + 8 * dpr);
+                eCtx.fillText(r2Text, ox + 8 * dpr, oy + 8 * dpr + 24 * dpr);
+            }
+
+            // Trigger browser download via anchor tag
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = expCanvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Exports active data points to a CSV file for Excel
+        function downloadCSV() {
+            const now = new Date();
+            const pad = n => String(n).padStart(2, '0');
+            const ts = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+            const filename = `LR_${ts}.csv`;
+
+            // \uFEFF is the Byte Order Mark (BOM) ensuring Excel natively interprets the file as UTF-8
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "x,y\n"; // Header row
+            
+            // Loop state array and export only non-empty rows
+            state.points.forEach(p => {
+                if(p.x !== '' || p.y !== '') {
+                    csvContent += `${p.x},${p.y}\n`;
+                }
+            });
+
+            // Create invisible link and trigger download
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', filename);
+            document.body.appendChild(link); // Required for Firefox compatibility
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Boot application
+        window.onload = init;
+    </script>
+</body>
+</html>
