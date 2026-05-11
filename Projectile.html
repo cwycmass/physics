@@ -3,760 +3,611 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>拋體運動分析 - 廠商會中學物理科</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
+    <title>拋體運動分析 | Projectile Motion</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3c72',
+                        secondary: '#2a5298',
+                        vector: '#0ea5e9',
+                        resultant: '#DC2626',
+                        bglight: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- MathJax 3 -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady();
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <style>
-        /* ==========================================================================
-           [DEV NOTES: CSS Architecture]
-           - Layout: Uses Flexbox to strictly lock the app to 100vh (viewport height), 
-             preventing whole-page scrolling.
-           - 'min-height: 0': This is a crucial trick used on flex/grid children here. 
-             It prevents Chart.js canvases from expanding indefinitely and breaking out 
-             of their containers.
-           - Grid: The chart section uses CSS Grid for exactly 6 equal cells regardless 
-             of aspect ratio.
-           ========================================================================== */
+        /* --- CSS Architecture --- */
+        body { touch-action: manipulation; }
         
-        /* Consolidated and iPad/Mobile optimized body */
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh; /* Fallback for older browsers */
-            height: 100dvh; /* Dynamic viewport height for iOS/iPad Safari */
-            overflow: hidden; /* Prevent entire page from scrolling */
-            display: flex;
-            flex-direction: column;
-            touch-action: manipulation; /* Disable double-tap to zoom globally */
-            -webkit-user-select: none; /* Prevent accidental text selection (Safari) */
-            user-select: none; /* Prevent accidental text selection (Standard) */
-        }
-        .main-container {
-            flex-grow: 1;
-            padding: 15px;
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .card-header {
-            font-weight: 600;
-            background-color: #e9ecef;
-            border-bottom: 1px solid #dee2e6;
-        }
-        .content-row {
-            flex-grow: 1;
-            min-height: 0;
-            margin: 0;
-        }
-        .left-panel {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow-y: auto;
-            padding-right: 15px;
-            /* Divider line removed */
-        }
-        .right-panel {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            min-height: 0;
-            padding-left: 0;
-            padding: 15px;
-        }
-        .tab-content {
-            flex-grow: 1;
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .tab-content > .tab-pane {
-            height: 100%;
-            flex-direction: column;
-        }
-        .tab-content > .active {
-            display: flex; /* Override Bootstrap's display: block to maintain flex layout */
-        }
-        .flex-card {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-        }
-        .flex-card-body {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-            padding: 0.5rem;
-        }
-        .simulation-canvas-container {
-            background-color: transparent;
-            border: 1px solid #dee2e6;
-            border-radius: 0.25rem;
-            position: relative;
-            flex-grow: 1;
-            min-height: 0;
-            width: 100%;
-        }
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-            touch-action: none; /* Disable all pinch-zoom and panning on canvas specifically */
-        }
-        .control-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.2rem;
-            font-size: 0.95rem;
-        }
-        .data-table-container {
-            flex-grow: 1;
-            overflow-y: auto;
-            overflow-x: auto;
-            font-size: 0.85rem;
-            border: 1px solid #dee2e6;
-            border-radius: 0.25rem;
-            -webkit-user-select: auto; /* Re-enable text selection for data table */
-            user-select: auto;
-        }
-        .chart-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr 1fr;
-            gap: 0.35rem;
-            height: 100%;
-            width: 100%;
-        }
-        .chart-cell {
-            position: relative;
-            border: 1px solid #dee2e6;
-            border-radius: 0.25rem;
-            padding: 4px;
-            background: #fff;
-            min-height: 0;
-            min-width: 0;
-            height: 100%;
-            width: 100%;
-        }
-        .footer-text {
-            color: #6c757d;
-            font-size: 0.75rem;
-            text-align: center;
-            margin-top: auto;
-            padding-top: 1rem;
-            border-top: 1px solid #dee2e6;
-        }
-        .nav-tabs .nav-link {
-            color: #495057;
-            font-weight: 600;
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            padding: 0.4rem 0.8rem; /* Reduced padding */
-            font-size: 0.9rem; /* Reduced font size */
-        }
-        .nav-tabs .nav-link.active {
-            color: #0d6efd;
-            background-color: #fff;
-            border-bottom-color: #fff;
-        }
-        var, i {
-            font-family: 'Times New Roman', Times, serif;
-            font-style: italic;
-        }
+        /* Custom Scrollbar for Sidebar & Data Tables */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* Responsive tweaks specifically for iPad Landscape or shorter screens */
-        @media (max-height: 850px) {
-            .main-container { padding: 8px; }
-            .left-panel { padding-right: 8px; }
-            .right-panel { padding: 8px; }
-            .card-header { padding: 0.3rem 0.5rem !important; font-size: 0.9rem; }
-            .card-body { padding: 0.3rem 0.5rem !important; }
-            .mb-2 { margin-bottom: 0.3rem !important; }
-            h4.mb-3 { margin-bottom: 0.5rem !important; font-size: 1.1rem; }
-            .control-label { font-size: 0.85rem; margin-bottom: 0.1rem; }
-            input[type="range"] { height: 1.2rem; margin-top: 0; }
-            .btn { padding: 0.25rem 0.5rem; font-size: 0.95rem; }
-            .footer-text { padding-top: 0.5rem; font-size: 0.7rem; }
-        }
+        /* Hide number input spinners */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 
-        /* Clean up details summary focus outline */
-        details > summary:focus {
-            outline: none;
-        }
+        /* Tab Active States */
+        .tab-btn.active { border-bottom: 2px solid #1e3c72; color: #1e3c72; font-weight: 600; }
+        
+        /* Utility */
+        .hidden-pane { display: none !important; }
     </style>
 </head>
-<body>
+<body class="h-screen w-screen overflow-hidden flex flex-col bg-bglight text-slate-800 font-sans">
 
-    <div class="container-fluid main-container">
-        <div class="row content-row">
+    <!-- --- 1. Header & Navigation --- -->
+    <header class="bg-primary text-white shadow-md z-20 flex-none flex justify-between items-center px-4 py-3">
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-rocket text-xl"></i>
+            <h1 class="text-lg md:text-xl font-bold tracking-wide" id="app-title" data-i18n="title">拋體運動分析</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="toggleHelp()" class="text-white/80 hover:text-white transition-colors" title="Formulas & Help">
+                <i class="fa-solid fa-circle-info text-xl"></i>
+            </button>
+            <button onclick="toggleLanguage()" class="bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full text-sm font-semibold transition-colors border border-white/30">
+                <span id="lang-btn">Eng / 繁</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- --- 2. Main Workspace --- -->
+    <div class="flex flex-1 overflow-hidden flex-col md:flex-row">
+        
+        <!-- Sidebar Controls -->
+        <aside class="w-full md:w-80 lg:w-96 bg-white border-r border-slate-200 shadow-[2px_0_8px_rgba(0,0,0,0.05)] z-10 flex flex-col flex-none">
             
-            <!-- Left Column: Title, Controls and Footer -->
-            <div class="col-lg-3 col-md-4 mb-3 mb-md-0 left-panel">
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-5">
                 
-                <h4 class="mb-3 text-primary fw-bold">
-                    <i class="fa-solid fa-rocket me-2"></i>拋體運動分析
-                </h4>
-
-                <!-- Card 1: Parameters -->
-                <div class="card shadow-sm mb-3">
-                    <div class="card-header text-primary py-2">
-                        <i class="fa-solid fa-sliders me-2"></i>參數設定
+                <!-- Parameters Card -->
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-sm">
+                    <h2 class="text-sm font-bold text-primary mb-3 flex items-center gap-2 border-b border-slate-200 pb-2">
+                        <i class="fa-solid fa-sliders"></i> <span data-i18n="params">參數設定</span>
+                    </h2>
+                    
+                    <!-- Control: Initial Velocity -->
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                            <label class="text-slate-600 font-medium"><span data-i18n="u">初速</span> ($u$)</label>
+                            <span class="font-bold text-primary"><span id="val-u">15.0</span> m s⁻¹</span>
+                        </div>
+                        <input type="range" id="input-u" min="0.1" max="100" step="0.1" value="15.0" class="w-full accent-primary">
                     </div>
-                    <div class="card-body py-2">
-                        <!-- Initial Velocity -->
-                        <div class="mb-2">
-                            <div class="control-label">
-                                <span>初速 (<i>u</i>):</span>
-                                <span id="val-u" class="fw-bold text-primary">15.0 m s<sup>-1</sup></span>
-                            </div>
-                            <input type="range" class="form-range" id="input-u" min="1" max="686" step="1" value="15">
-                        </div>
-                        
-                        <!-- Launch Angle -->
-                        <div class="mb-2">
-                            <div class="control-label">
-                                <span>發射角 (<i>θ</i>):</span>
-                                <span id="val-theta" class="fw-bold text-primary">45°</span>
-                            </div>
-                            <input type="range" class="form-range" id="input-theta" min="0" max="90" step="0.1" value="45">
-                        </div>
 
-                        <!-- Initial Height -->
-                        <div class="mb-2">
-                            <div class="control-label">
-                                <span>初始高度 (<i>h</i>):</span>
-                                <span id="val-h" class="fw-bold text-primary">0.0 m</span>
-                            </div>
-                            <input type="range" class="form-range" id="input-h" min="0" max="300" step="1" value="0">
+                    <!-- Control: Angle -->
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                            <label class="text-slate-600 font-medium"><span data-i18n="theta">發射角</span> ($\theta$)</label>
+                            <span class="font-bold text-primary"><span id="val-theta">45.0</span>°</span>
                         </div>
+                        <input type="range" id="input-theta" min="0" max="90" step="0.1" value="45.0" class="w-full accent-primary">
+                    </div>
 
-                        <!-- Gravity -->
-                        <div class="mb-2">
-                            <div class="control-label">
-                                <span>重力加速度 (<i>g</i>):</span>
-                                <span id="val-g" class="fw-bold text-primary">9.81 m s<sup>-2</sup></span>
-                            </div>
-                            <select class="form-select form-select-sm" id="input-g">
-                                <option value="9.81" selected>地球 (9.81 m s⁻²)</option>
-                                <option value="1.62">月球 (1.62 m s⁻²)</option>
-                                <option value="3.71">火星 (3.71 m s⁻²)</option>
-                                <option value="0">無重力 (0 m s⁻²)</option>
-                            </select>
+                    <!-- Control: Initial Height -->
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                            <label class="text-slate-600 font-medium"><span data-i18n="h">初始高度</span> ($h$)</label>
+                            <span class="font-bold text-primary"><span id="val-h">0.0</span> m</span>
+                        </div>
+                        <input type="range" id="input-h" min="0" max="100" step="0.5" value="0.0" class="w-full accent-primary">
+                    </div>
+
+                    <!-- Control: Gravity -->
+                    <div>
+                        <label class="text-slate-600 font-medium text-sm block mb-1"><span data-i18n="g">重力加速度</span> ($g$)</label>
+                        <select id="input-g" class="w-full bg-white border border-slate-300 text-slate-700 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="9.81" selected data-i18n="gEarth">地球 Earth (9.81 m s⁻²)</option>
+                            <option value="1.62" data-i18n="gMoon">月球 Moon (1.62 m s⁻²)</option>
+                            <option value="3.71" data-i18n="gMars">火星 Mars (3.71 m s⁻²)</option>
+                            <option value="0" data-i18n="gZero">無重力 Zero-G (0 m s⁻²)</option>
+                        </select>
+                    </div>
+
+                    <!-- Control: Vectors Overlay -->
+                    <div class="mt-4 border-t border-slate-200 pt-3">
+                        <label class="text-slate-600 font-medium text-sm block mb-2"><i class="fa-solid fa-arrows-up-down-left-right"></i> <span data-i18n="showVectors">顯示向量</span></label>
+                        <div class="space-y-2 text-sm text-slate-700">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="chk-v" class="accent-primary w-4 h-4" checked>
+                                <span><span data-i18n="showV">速度</span> ($v$)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="chk-vcomp" class="accent-primary w-4 h-4">
+                                <span><span data-i18n="showVComp">速度分量</span> ($v_x, v_y$)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="chk-a" class="accent-primary w-4 h-4">
+                                <span><span data-i18n="showA">加速度</span> ($a$)</span>
+                            </label>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 2: Controls -->
-                <div class="card shadow-sm mb-3">
-                    <div class="card-header text-success py-2">
-                        <i class="fa-solid fa-gamepad me-2"></i>模擬控制
-                    </div>
-                    <div class="card-body text-center py-2 d-flex gap-2">
-                        <button id="btn-play" class="btn btn-success flex-grow-1 fw-bold"><i class="fa-solid fa-rocket me-2"></i>發射</button>
-                        <button id="btn-clear" class="btn btn-outline-danger fw-bold" title="清除所有"><i class="fa-solid fa-trash-can"></i></button>
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="btn-play" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all active:scale-95 flex justify-center items-center gap-2">
+                        <i class="fa-solid fa-play"></i> <span data-i18n="btnLaunch">發射</span>
+                    </button>
+                    <button id="btn-clear" class="bg-white border-2 border-slate-300 hover:bg-slate-100 text-slate-700 font-bold py-2 px-4 rounded-lg transition-all active:scale-95 flex justify-center items-center gap-2">
+                        <i class="fa-solid fa-trash-can"></i> <span data-i18n="btnClear">清除</span>
+                    </button>
+                </div>
+
+                <!-- Live Diagnostics -->
+                <div class="bg-sky-50 border border-sky-200 rounded-xl p-3 shadow-sm text-xs font-mono text-slate-700">
+                    <div class="grid grid-cols-2 gap-y-2">
+                        <div>$t$: <span id="stat-t" class="font-bold text-sky-700">0.00</span> s</div>
+                        <div>$x$: <span id="stat-x" class="font-bold text-sky-700">0.00</span> m</div>
+                        <div>$y$: <span id="stat-y" class="font-bold text-sky-700">0.00</span> m</div>
+                        <div>$v_x$: <span id="stat-vx" class="font-bold text-sky-700">0.00</span></div>
+                        <div>$v_y$: <span id="stat-vy" class="font-bold text-sky-700">0.00</span></div>
                     </div>
                 </div>
 
-                <!-- Card 3: Quiz -->
-                <div class="card shadow-sm mb-2">
-                    <div class="card-header text-dark py-2" style="background-color: #fff3cd; border-bottom: 1px solid #ffecb5;">
-                        <i class="fa-solid fa-clipboard-question me-2 text-warning"></i>考考你
-                    </div>
-                    <div class="card-body py-2 px-3" style="font-size: 0.85rem;">
-                        <details class="mb-2">
-                            <summary class="fw-semibold text-dark" style="cursor: pointer;">1. 射程最大的發射角為何？</summary>
-                            <div class="mt-2 text-muted ps-2 border-start border-2 border-warning">
-                                當初始高度為 0 時，發射角為 <strong>45°</strong> 可達到最大的水平射程。
-                            </div>
-                        </details>
-                        <details class="mb-2">
-                            <summary class="fw-semibold text-dark" style="cursor: pointer;">2. 哪個角度的飛行時間最長？</summary>
-                            <div class="mt-2 text-muted ps-2 border-start border-2 border-warning">
-                                在相同初速下，發射角為 <strong>90°</strong> (垂直向上) 時，拋體在空中的飛行時間最長。
-                            </div>
-                        </details>
-                        <details class="mb-0">
-                            <summary class="fw-semibold text-dark" style="cursor: pointer;">3. 同一射程可能對應幾個發射角？</summary>
-                            <div class="mt-2 text-muted ps-2 border-start border-2 border-warning">
-                                必須在<strong>初始高度為 0</strong> 的前提下，若射程小於最大射程，才會有 <strong>2 個互餘的角度</strong> (例如 30° 和 60°) 落在同一位置。若高度大於 0，此對稱性將被打破！
-                            </div>
-                        </details>
-                    </div>
-                </div>
+            </div>
 
-                <!-- Footer -->
-                <div class="footer-text mt-auto pt-2">
-                    廠商會中學．物理科
+            <!-- Mandatory Footer -->
+            <div class="p-3 bg-slate-100 border-t border-slate-200 text-center text-xs text-slate-500 font-medium">
+                <span id="footer-text" data-i18n="footer">廠商會中學．物理科</span>
+            </div>
+        </aside>
+
+        <!-- Main Display Area -->
+        <main class="flex-1 flex flex-col min-w-0 min-h-0 bg-white relative">
+            
+            <!-- Tab Headers -->
+            <div class="flex border-b border-slate-200 bg-slate-50 px-4 pt-2 gap-4 flex-none">
+                <button class="tab-btn active pb-2 px-2 text-slate-500 hover:text-primary transition-colors focus:outline-none" data-target="pane-canvas">
+                    <i class="fa-solid fa-display mr-1"></i> <span data-i18n="tabViz">視覺化</span>
+                </button>
+                <button class="tab-btn pb-2 px-2 text-slate-500 hover:text-primary transition-colors focus:outline-none" data-target="pane-charts">
+                    <i class="fa-solid fa-chart-line mr-1"></i> <span data-i18n="tabCharts">圖表</span>
+                </button>
+                <button class="tab-btn pb-2 px-2 text-slate-500 hover:text-primary transition-colors focus:outline-none" data-target="pane-data">
+                    <i class="fa-solid fa-table mr-1"></i> <span data-i18n="tabData">數據</span>
+                </button>
+            </div>
+
+            <!-- Tab Content: Canvas -->
+            <div id="pane-canvas" class="pane flex-1 relative w-full h-full overflow-hidden">
+                <!-- High-DPI Canvas -->
+                <canvas id="sim-canvas" class="w-full h-full block touch-none"></canvas>
+                
+                <!-- Max Info Overlay -->
+                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm border border-slate-200 rounded-lg p-3 shadow-md text-sm pointer-events-none">
+                    <div class="grid grid-cols-2 gap-x-6 gap-y-1">
+                        <div class="text-slate-500" data-i18n="lblMaxH">最大高度</div>
+                        <div class="font-bold text-right text-primary"><span id="lbl-max-h">0.00</span> m</div>
+                        <div class="text-slate-500" data-i18n="lblRange">水平射程</div>
+                        <div class="font-bold text-right text-primary"><span id="lbl-range">0.00</span> m</div>
+                        <div class="text-slate-500" data-i18n="lblTime">飛行時間</div>
+                        <div class="font-bold text-right text-primary"><span id="lbl-time">0.00</span> s</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Right Column: Visualization, Charts, Data Tabs -->
-            <div class="col-lg-9 col-md-8 right-panel">
+            <!-- Tab Content: Charts -->
+            <div id="pane-charts" class="pane flex-1 hidden-pane p-2 bg-slate-100 overflow-y-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 grid-rows-3 gap-2 h-full min-h-[600px] md:min-h-0">
+                    <div class="bg-white rounded-lg border border-slate-200 p-2 relative shadow-sm"><canvas id="chart-x"></canvas></div>
+                    <div class="bg-white rounded-lg border border-slate-200 p-2 relative shadow-sm"><canvas id="chart-y"></canvas></div>
+                    <div class="bg-white rounded-lg border border-slate-200 p-2 relative shadow-sm"><canvas id="chart-vx"></canvas></div>
+                    <div class="bg-white rounded-lg border border-slate-200 p-2 relative shadow-sm"><canvas id="chart-vy"></canvas></div>
+                    <div class="bg-white rounded-lg border border-slate-200 p-2 relative shadow-sm"><canvas id="chart-ax"></canvas></div>
+                    <div class="bg-white rounded-lg border border-slate-200 p-2 relative shadow-sm"><canvas id="chart-ay"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Data Table -->
+            <div id="pane-data" class="pane flex-1 hidden-pane flex flex-col bg-white">
+                <div class="p-2 border-b flex justify-end">
+                    <button id="btn-csv" class="text-sm bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 py-1 px-3 rounded shadow-sm transition-colors">
+                        <i class="fa-solid fa-download mr-1"></i> <span data-i18n="btnCSV">下載 CSV</span>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-auto custom-scrollbar">
+                    <table class="w-full text-center text-sm" id="data-table">
+                        <thead class="bg-slate-50 sticky top-0 border-b border-slate-200 shadow-sm z-10 text-primary font-medium">
+                            <tr>
+                                <th class="py-2 px-1">$t$ (s)</th>
+                                <th class="py-2 px-1">$x$ (m)</th>
+                                <th class="py-2 px-1">$y$ (m)</th>
+                                <th class="py-2 px-1">$v_x$ (m s⁻¹)</th>
+                                <th class="py-2 px-1">$v_y$ (m s⁻¹)</th>
+                                <th class="py-2 px-1">$a_x$ (m s⁻²)</th>
+                                <th class="py-2 px-1">$a_y$ (m s⁻²)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-600 divide-y divide-slate-100 font-mono text-xs">
+                            <!-- Injected rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- --- 3. Help/Instruction Modal --- -->
+    <div id="help-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden flex flex-col max-h-full">
+            <div class="bg-primary px-6 py-4 flex justify-between items-center text-white">
+                <h3 class="font-bold text-lg" data-i18n="helpTitle">運動學方程 Kinematic Equations</h3>
+                <button onclick="toggleHelp()" class="text-white/70 hover:text-white transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto text-slate-700 space-y-4">
+                <p data-i18n="helpDesc" class="text-sm">拋體運動可分解為互相獨立的水平（等速）及垂直（等加速）運動：</p>
                 
-                <!-- Right Nav Tabs -->
-                <ul class="nav nav-tabs mb-2" id="rightTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="viz-tab" data-bs-toggle="tab" data-bs-target="#viz-pane" type="button" role="tab" aria-controls="viz-pane" aria-selected="true">
-                            <i class="fa-solid fa-display me-1"></i> 視覺化
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="chart-tab" data-bs-toggle="tab" data-bs-target="#chart-pane" type="button" role="tab" aria-controls="chart-pane" aria-selected="false">
-                            <i class="fa-solid fa-chart-line me-1"></i> 運動圖表
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="data-tab" data-bs-toggle="tab" data-bs-target="#data-pane" type="button" role="tab" aria-controls="data-pane" aria-selected="false">
-                            <i class="fa-solid fa-table me-1"></i> 分析數據
-                        </button>
-                    </li>
-                </ul>
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <h4 class="font-bold text-sm text-primary mb-2 border-b pb-1" data-i18n="helpHoriz">水平運動 Horizontal (x-axis)</h4>
+                    <p class="mb-1">$a_x = 0$</p>
+                    <p class="mb-1">$v_x = u \cos(\theta)$</p>
+                    <p>$x = u \cos(\theta) \cdot t$</p>
+                </div>
 
-                <!-- Right Tabs Content -->
-                <div class="tab-content" id="rightTabsContent">
-                    
-                    <!-- Tab 1: Visualization -->
-                    <div class="tab-pane fade show active" id="viz-pane" role="tabpanel" aria-labelledby="viz-tab" tabindex="0">
-                        <div class="card shadow-sm flex-card">
-                            <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center py-2 gap-2">
-                                <span>模擬畫面</span>
-                                <span id="live-stats" class="badge bg-primary fw-normal text-wrap lh-base" style="font-size: 0.85rem; text-align: left;">
-                                    <i>t</i> = 0.00 s | <i>x</i> = 0.00 m | <i>y</i> = 0.00 m <span class="d-none d-lg-inline">|</span><br class="d-lg-none">
-                                    <i>v<sub>x</sub></i> = 0.00 m s<sup>-1</sup> | <i>v<sub>y</sub></i> = 0.00 m s<sup>-1</sup> | <i>a<sub>x</sub></i> = 0.00 m s<sup>-2</sup> | <i>a<sub>y</sub></i> = 0.00 m s<sup>-2</sup>
-                                </span>
-                            </div>
-                            <div class="card-body flex-card-body">
-                                <div class="simulation-canvas-container">
-                                    <canvas id="sim-canvas"></canvas>
-                                </div>
-                                <div class="mt-2 row text-center fs-6 text-muted">
-                                    <div class="col-4">最大高度: <span id="stat-max-h" class="fw-bold text-dark">0.00</span> m</div>
-                                    <div class="col-4">飛行時間: <span id="stat-time" class="fw-bold text-dark">0.00</span> s</div>
-                                    <div class="col-4">水平射程: <span id="stat-range" class="fw-bold text-dark">0.00</span> m</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tab 2: Charts (6 Graphs) -->
-                    <div class="tab-pane fade" id="chart-pane" role="tabpanel" aria-labelledby="chart-tab" tabindex="0">
-                        <div class="card shadow-sm flex-card">
-                            <div class="card-body flex-card-body p-1">
-                                <div class="chart-grid">
-                                    <div class="chart-cell"><canvas id="chart-x"></canvas></div>
-                                    <div class="chart-cell"><canvas id="chart-y"></canvas></div>
-                                    <div class="chart-cell"><canvas id="chart-vx"></canvas></div>
-                                    <div class="chart-cell"><canvas id="chart-vy"></canvas></div>
-                                    <div class="chart-cell"><canvas id="chart-ax"></canvas></div>
-                                    <div class="chart-cell"><canvas id="chart-ay"></canvas></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tab 3: Data -->
-                    <div class="tab-pane fade" id="data-pane" role="tabpanel" aria-labelledby="data-tab" tabindex="0">
-                        <div class="card shadow-sm flex-card">
-                            <div class="card-header text-end py-1 border-bottom-0">
-                                <button id="btn-csv" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-download me-1"></i>下載 CSV</button>
-                            </div>
-                            <div class="card-body flex-card-body p-0">
-                                <div class="data-table-container">
-                                    <table class="table table-striped table-hover mb-0 text-center" id="data-table">
-                                        <thead class="table-light sticky-top">
-                                            <tr>
-                                                <th><i>t</i> / s</th>
-                                                <th><i>x</i> / m</th>
-                                                <th><i>y</i> / m</th>
-                                                <th><i>v<sub>x</sub></i> / m s<sup>-1</sup></th>
-                                                <th><i>v<sub>y</sub></i> / m s<sup>-1</sup></th>
-                                                <th><i>a<sub>x</sub></i> / m s<sup>-2</sup></th>
-                                                <th><i>a<sub>y</sub></i> / m s<sup>-2</sup></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Data rows injected via JS -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <h4 class="font-bold text-sm text-primary mb-2 border-b pb-1" data-i18n="helpVert">垂直運動 Vertical (y-axis)</h4>
+                    <p class="mb-1">$a_y = -g$</p>
+                    <p class="mb-1">$v_y = u \sin(\theta) - gt$</p>
+                    <p>$y = h + u \sin(\theta) \cdot t - \frac{1}{2}gt^2$</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS for Tabs functionality -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Simulation Logic -->
+    <!-- --- JavaScript Logic --- -->
     <script>
         /* ==========================================================================
-           [DEV NOTES: JavaScript Architecture]
-           - Rendering: Uses an Immediate Mode GUI pattern for the canvas. The canvas 
-             is completely cleared and redrawn every frame via `requestAnimationFrame`.
-           - State Management: All volatile data is kept in the `state` object. 
-             Projectiles are tracked in an array to allow multiple simultaneous flights.
-           - Physics Engine: Uses basic Euler integration formulas.
+           [1] I18N (Internationalization) Dictionary
            ========================================================================== */
+        const dict = {
+            zh: {
+                title: "拋體運動分析", params: "參數設定", u: "初速", theta: "發射角", h: "初始高度", g: "重力加速度",
+                gEarth: "地球 Earth (9.81 m s⁻²)", gMoon: "月球 Moon (1.62 m s⁻²)", gMars: "火星 Mars (3.71 m s⁻²)", gZero: "無重力 Zero-G (0 m s⁻²)",
+                btnLaunch: "發射", btnClear: "清除", footer: "廠商會中學．物理科",
+                tabViz: "視覺化", tabCharts: "圖表", tabData: "數據", btnCSV: "下載 CSV",
+                lblMaxH: "最大高度", lblRange: "水平射程", lblTime: "飛行時間",
+                helpTitle: "運動學方程 Kinematic Equations", helpDesc: "拋體運動可分解為互相獨立的水平（等速）及垂直（等加速）運動：",
+                helpHoriz: "水平運動 (等速)", helpVert: "垂直運動 (等加速)",
+                showVectors: "顯示向量", showV: "速度", showVComp: "速度分量", showA: "加速度"
+            },
+            en: {
+                title: "Projectile Motion", params: "Parameters", u: "Initial Vel.", theta: "Angle", h: "Init. Height", g: "Gravity",
+                gEarth: "Earth (9.81 m s⁻²)", gMoon: "Moon (1.62 m s⁻²)", gMars: "Mars (3.71 m s⁻²)", gZero: "Zero-G (0 m s⁻²)",
+                btnLaunch: "Launch", btnClear: "Clear", footer: "CMA Secondary School. Physics Department.",
+                tabViz: "Visuals", tabCharts: "Charts", tabData: "Data", btnCSV: "Export CSV",
+                lblMaxH: "Max Height", lblRange: "Max Range", lblTime: "Flight Time",
+                helpTitle: "Kinematic Equations", helpDesc: "Projectile motion can be resolved into independent horizontal (constant velocity) and vertical (constant acceleration) components:",
+                helpHoriz: "Horizontal (Const. Velocity)", helpVert: "Vertical (Const. Acceleration)",
+                showVectors: "Show Vectors", showV: "Velocity", showVComp: "Components", showA: "Acceleration"
+            }
+        };
 
-        // DOM Elements
-        const inputs = {
-            u: document.getElementById('input-u'),
-            theta: document.getElementById('input-theta'),
-            h: document.getElementById('input-h'),
-            g: document.getElementById('input-g')
-        };
-        const displays = {
-            u: document.getElementById('val-u'),
-            theta: document.getElementById('val-theta'),
-            h: document.getElementById('val-h'),
-            g: document.getElementById('val-g')
-        };
-        const stats = {
-            live: document.getElementById('live-stats'),
-            maxH: document.getElementById('stat-max-h'),
-            time: document.getElementById('stat-time'),
-            range: document.getElementById('stat-range')
-        };
-        const btns = {
-            play: document.getElementById('btn-play'),
-            clear: document.getElementById('btn-clear'),
-            csv: document.getElementById('btn-csv')
-        };
-        const tbody = document.querySelector('#data-table tbody');
-        const canvas = document.getElementById('sim-canvas');
-        const ctx = canvas.getContext('2d');
+        let currentLang = 'zh';
 
-        const MAX_PROJECTILES = 10;
+        function toggleLanguage() {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[currentLang][key]) {
+                    el.childNodes.forEach(child => {
+                        if (child.nodeType === Node.TEXT_NODE && child.textContent.trim().length > 0) {
+                            child.textContent = dict[currentLang][key];
+                        } else if(el.childNodes.length === 1 && child.nodeType === Node.TEXT_NODE) {
+                             el.textContent = dict[currentLang][key];
+                        }
+                    });
+                    if(el.childNodes.length === 0) el.textContent = dict[currentLang][key];
+                }
+            });
+            document.getElementById('input-g').querySelectorAll('option').forEach(opt => {
+               opt.textContent = dict[currentLang][opt.getAttribute('data-i18n')];
+            });
 
-        // Physics State
-        let state = {
-            projectiles: [], // Stores multiple active projectiles
-            pastSimulations: [], // Stores previous histories
+            updateChartLabels();
+            MathJax.typesetPromise();
+            drawFrame();
+        }
+
+        function toggleHelp() {
+            const modal = document.getElementById('help-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        /* ==========================================================================
+           [2] Global State & Physics Configuration
+           ========================================================================== */
+        const state = {
+            projectiles: [],
+            pastSimulations: [],
             animFrameId: null,
-            lastTimestamp: null
+            lastTimestamp: null,
+            MAX_PROJECTILES: 5,
+            scale: 1,       
+            originX: 60,    
+            originY: 0      
         };
 
-        // Charts Dictionary
+        const els = {
+            u: document.getElementById('input-u'), theta: document.getElementById('input-theta'),
+            h: document.getElementById('input-h'), g: document.getElementById('input-g'),
+            valU: document.getElementById('val-u'), valTheta: document.getElementById('val-theta'),
+            valH: document.getElementById('val-h'),
+            statT: document.getElementById('stat-t'), statX: document.getElementById('stat-x'),
+            statY: document.getElementById('stat-y'), statVx: document.getElementById('stat-vx'),
+            statVy: document.getElementById('stat-vy'),
+            lblMaxH: document.getElementById('lbl-max-h'), lblRange: document.getElementById('lbl-range'),
+            lblTime: document.getElementById('lbl-time'),
+            canvas: document.getElementById('sim-canvas'),
+            ctx: document.getElementById('sim-canvas').getContext('2d'),
+            tbody: document.querySelector('#data-table tbody'),
+            chkV: document.getElementById('chk-v'),
+            chkVComp: document.getElementById('chk-vcomp'),
+            chkA: document.getElementById('chk-a')
+        };
+
         let charts = {};
 
-        // Scale factors for canvas
-        let scale = 1;
-        let originX = 50;
-        let originY = 350;
-
-        // Initialize Application
+        /* ==========================================================================
+           [3] Initialization & Event Bindings
+           ========================================================================== */
         function init() {
-            // Resize Canvas
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'font-semibold', 'text-primary'));
+                    document.querySelectorAll('.pane').forEach(p => p.classList.add('hidden-pane'));
+                    
+                    const target = e.currentTarget;
+                    target.classList.add('active', 'font-semibold', 'text-primary');
+                    document.getElementById(target.getAttribute('data-target')).classList.remove('hidden-pane');
+                    
+                    if (target.getAttribute('data-target') === 'pane-canvas') resizeCanvas();
+                });
+            });
 
-            // Tab change event to resize canvas properly if previously hidden
-            document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(tab => {
-                tab.addEventListener('shown.bs.tab', event => {
-                    if (event.target.id === 'viz-tab') {
-                        resizeCanvas();
+            ['u', 'theta', 'h', 'g'].forEach(key => {
+                els[key].addEventListener('input', () => {
+                    updateParamDisplays();
+                    if(state.projectiles.length === 0) {
+                        calculateScale();
+                        drawFrame();
                     }
                 });
             });
 
-            // Bind Event Listeners
-            Object.keys(inputs).forEach(key => {
-                inputs[key].addEventListener('input', updateParams);
+            // Trigger redraw on toggle change if the app isn't playing
+            ['chkV', 'chkVComp', 'chkA'].forEach(key => {
+                els[key].addEventListener('change', () => {
+                    if (!state.animFrameId) drawFrame();
+                });
             });
-            btns.play.addEventListener('click', playSim);
-            btns.clear.addEventListener('click', clearAll);
-            btns.csv.addEventListener('click', downloadCSV);
 
-            // Chart.js Light Mode Defaults
-            Chart.defaults.color = '#6c757d';
-            Chart.defaults.borderColor = '#dee2e6';
+            document.getElementById('btn-play').addEventListener('click', playSim);
+            document.getElementById('btn-clear').addEventListener('click', clearAll);
+            document.getElementById('btn-csv').addEventListener('click', downloadCSV);
 
-            // Init Charts
+            window.addEventListener('resize', resizeCanvas);
+            
             initCharts();
+            updateParamDisplays();
+            resizeCanvas();
+        }
 
-            // Initial Draw
-            updateParams();
-            // Setup initial drawing state
-            const p = getParams();
-            state.y = p.h;
+        /* ==========================================================================
+           [4] High-DPI Canvas & Scaling Math
+           ========================================================================== */
+        function resizeCanvas() {
+            const container = els.canvas.parentElement;
+            const dpr = window.devicePixelRatio || 1;
+            
+            els.canvas.style.width = container.clientWidth + 'px';
+            els.canvas.style.height = container.clientHeight + 'px';
+            
+            els.canvas.width = container.clientWidth * dpr;
+            els.canvas.height = container.clientHeight * dpr;
+            
+            els.ctx.scale(dpr, dpr);
+            
+            state.originY = container.clientHeight - 40;
+            state.originX = 50;
+
             calculateScale();
             drawFrame();
         }
 
-        function resizeCanvas() {
-            const container = canvas.parentElement;
-            canvas.width = container.clientWidth;
-            canvas.height = container.clientHeight;
-            originY = canvas.height - 40;
-            originX = 40;
-            drawFrame(); // Redraw if paused
-        }
-
         function getParams() {
             return {
-                u: parseFloat(inputs.u.value),
-                theta: parseFloat(inputs.theta.value) * (Math.PI / 180), // Convert to radians
-                h: parseFloat(inputs.h.value),
-                g: parseFloat(inputs.g.value)
+                u: parseFloat(els.u.value),
+                theta: parseFloat(els.theta.value) * (Math.PI / 180),
+                h: parseFloat(els.h.value),
+                g: parseFloat(els.g.value)
             };
         }
 
-        function updateParams() {
-            const p = getParams();
-            displays.u.innerHTML = `${p.u.toFixed(1)} m s<sup>-1</sup>`;
-            displays.theta.innerHTML = `${inputs.theta.value}°`;
-            displays.h.innerHTML = `${p.h.toFixed(1)} m`;
-            displays.g.innerHTML = `${p.g} m s<sup>-2</sup>`;
-            
-            if(state.projectiles.length === 0) {
-                // If no active simulations, update the preview state
-                calculateScale();
-                drawFrame();
-            }
+        function updateParamDisplays() {
+            els.valU.innerText = parseFloat(els.u.value).toFixed(1);
+            els.valTheta.innerText = parseFloat(els.theta.value).toFixed(1);
+            els.valH.innerText = parseFloat(els.h.value).toFixed(1);
         }
 
         function getTrajectoryBounds(p) {
-            // [DEV] Calculates all theoretical max limits of the trajectory
             const v0x = p.u * Math.cos(p.theta);
             const v0y = p.u * Math.sin(p.theta);
-            
-            let tTotal = 0;
-            let maxH = 0;
+            let tTotal = 0, maxH = 0;
             
             if (p.g > 0) {
                 tTotal = (v0y + Math.sqrt(v0y * v0y + 2 * p.g * p.h)) / p.g;
                 maxH = p.h + (v0y * v0y) / (2 * p.g);
             } else {
-                tTotal = 10; // arbitrary max time for 0g
-                maxH = p.h + v0y * 5; // Fallback for 0g
+                tTotal = 5; 
+                maxH = p.h + v0y * tTotal;
             }
             
             const maxR = v0x * tTotal;
             const vfy = v0y - p.g * tTotal;
-            
             return { tTotal, maxH, maxR, v0x, v0y, vfy };
         }
 
         function calculateScale() {
-            // [DEV] Estimates the maximum bounds (peak height & max range) of the trajectory 
-            // before launch to automatically set the camera zoom (scale) to fit perfectly.
             const p = getParams();
             const b = getTrajectoryBounds(p);
 
-            // Stats update
-            stats.maxH.innerText = b.maxH.toFixed(2);
-            stats.time.innerText = b.tTotal.toFixed(2);
-            stats.range.innerText = b.maxR.toFixed(2);
+            els.lblMaxH.innerText = b.maxH.toFixed(2);
+            els.lblTime.innerText = b.tTotal.toFixed(2);
+            els.lblRange.innerText = b.maxR.toFixed(2);
 
-            // Calculate scale (pixels per meter)
-            const availableWidth = canvas.width - originX - 40;
-            const availableHeight = originY - 40;
+            const cw = els.canvas.clientWidth - state.originX - 40;
+            const ch = state.originY - 40;
             
-            // [DEV] The 1.1 and 1.2 divisors add a 10-20% margin padding so the curve 
-            // doesn't touch the very edges of the canvas.
-            const scaleX = b.maxR > 0 ? availableWidth / (b.maxR * 1.1) : 10;
-            const scaleY = b.maxH > 0 ? availableHeight / (b.maxH * 1.2) : 10;
+            const scaleX = b.maxR > 0 ? cw / (b.maxR * 1.1) : 10;
+            const scaleY = b.maxH > 0 ? ch / (b.maxH * 1.2) : 10;
             
-            scale = Math.min(scaleX, scaleY);
-            if (scale < 0.0001) scale = 0.0001; // Allow zooming out for huge ranges, prevent dividing by 0
+            state.scale = Math.min(scaleX, scaleY);
+            if (state.scale < 0.0001) state.scale = 0.0001; 
         }
 
-        function updateChartScales(bounds, p) {
-            // [DEV] Fix chart scales based on the predicted max bounds to prevent 
-            // the axes from continuously re-scaling during the animation.
-            const tMax = bounds.tTotal > 0 ? bounds.tTotal * 1.05 : 1;
-            
-            const setScale = (chart, yMin, yMax) => {
-                chart.options.scales.x.max = tMax;
-                chart.options.scales.y.min = yMin;
-                chart.options.scales.y.max = yMax;
-            };
-
-            setScale(charts.x, 0, bounds.maxR > 0 ? bounds.maxR * 1.05 : 1);
-            setScale(charts.y, 0, bounds.maxH > 0 ? bounds.maxH * 1.05 : 1);
-            
-            const vxMax = bounds.v0x > 0 ? bounds.v0x * 1.2 : 1;
-            setScale(charts.vx, 0, vxMax);
-            
-            const vyMin = Math.min(bounds.vfy * 1.1, bounds.vfy - 1, -1);
-            const vyMax = Math.max(bounds.v0y * 1.1, bounds.v0y + 1, 1);
-            setScale(charts.vy, vyMin, vyMax);
-            
-            setScale(charts.ax, -2, 2);
-            setScale(charts.ay, -(p.g) - 2, 2);
-            
-            Object.values(charts).forEach(chart => chart.update());
-        }
-
-        function updateLaunchButton() {
-            if (state.projectiles.length >= MAX_PROJECTILES) {
-                btns.play.disabled = true;
-                btns.play.innerHTML = '<i class="fa-solid fa-hourglass-half me-2"></i>冷卻中...';
-                btns.play.classList.replace('btn-success', 'btn-secondary');
-            } else {
-                btns.play.disabled = false;
-                btns.play.innerHTML = '<i class="fa-solid fa-rocket me-2"></i>發射';
-                btns.play.classList.replace('btn-secondary', 'btn-success');
-            }
-        }
-
-        function clearAll() {
-            // Stop any ongoing animation
-            if (state.animFrameId) {
-                cancelAnimationFrame(state.animFrameId);
-                state.animFrameId = null;
-            }
-            state.lastTimestamp = null;
-            
-            // Clear all projectiles and history
-            state.projectiles = [];
-            state.pastSimulations = [];
-            
-            // Reset UI components
-            clearData();
-            updateLaunchButton();
-            stats.live.innerHTML = `<i>t</i> = 0.00 s | <i>x</i> = 0.00 m | <i>y</i> = 0.00 m <span class="d-none d-lg-inline">|</span><br class="d-lg-none">
-                                    <i>v<sub>x</sub></i> = 0.00 m s<sup>-1</sup> | <i>v<sub>y</sub></i> = 0.00 m s<sup>-1</sup> | <i>a<sub>x</sub></i> = 0.00 m s<sup>-2</sup> | <i>a<sub>y</sub></i> = 0.00 m s<sup>-2</sup>`;
-            
-            // Redraw empty state
-            calculateScale();
-            drawFrame();
-        }
+        /* ==========================================================================
+           [5] Core Physics Engine Loop
+           ========================================================================== */
+        const SIM_SPEED = 1.0; 
 
         function playSim() {
-            if (state.projectiles.length >= MAX_PROJECTILES) return;
+            if (state.projectiles.length >= state.MAX_PROJECTILES) return;
 
             const p = getParams();
-            const bounds = getTrajectoryBounds(p);
+            const b = getTrajectoryBounds(p);
             
-            // Mark all currently active projectiles as older
             state.projectiles.forEach(pr => pr.isLatest = false);
 
-            // Create new projectile instance
             const newProj = {
-                t: 0,
-                x: 0,
-                y: p.h,
-                vx: p.u * Math.cos(p.theta),
-                vy: p.u * Math.sin(p.theta),
-                g: p.g,
-                h: p.h,
+                t: 0, x: 0, y: p.h,
+                vx: p.u * Math.cos(p.theta), vy: p.u * Math.sin(p.theta),
+                g: p.g, h: p.h,
                 history: [],
                 lastRecordTime: 0,
-                isLatest: true
+                isLatest: true,
+                totalTimeExpected: b.tTotal 
             };
 
             state.projectiles.push(newProj);
             
             calculateScale();
-            updateChartScales(bounds, p);
+            updateChartBounds(b, p);
             clearData();
-            recordData(newProj); // Record t=0
+            recordData(newProj); 
 
-            updateLaunchButton();
-            
-            // Start loop if not already running
             if (!state.animFrameId) {
                 state.lastTimestamp = null;
                 state.animFrameId = requestAnimationFrame(simulationLoop);
             }
         }
 
-        const SIM_SPEED = 1.0; // 1 real second = 1 sim second
+        function clearAll() {
+            if (state.animFrameId) {
+                cancelAnimationFrame(state.animFrameId);
+                state.animFrameId = null;
+            }
+            state.lastTimestamp = null;
+            state.projectiles = [];
+            state.pastSimulations = [];
+            
+            clearData();
+            
+            els.statT.innerText = "0.00"; els.statX.innerText = "0.00"; els.statY.innerText = "0.00";
+            els.statVx.innerText = "0.00"; els.statVy.innerText = "0.00";
+            
+            calculateScale();
+            drawFrame();
+        }
 
         function simulationLoop(timestamp) {
-            // [DEV] Track time delta between frames to ensure smooth, accurate physics 
-            // regardless of the user's monitor refresh rate (e.g. 60Hz vs 144Hz)
-            if (state.lastTimestamp === null) {
-                state.lastTimestamp = timestamp;
-            }
+            if (state.lastTimestamp === null) state.lastTimestamp = timestamp;
 
-            // Calculate delta time in seconds, capped at 0.1s to prevent huge jumps
-            // [DEV] Capping dt is CRITICAL. If a user switches browser tabs, requestAnimationFrame 
-            // pauses. When they return, dt would be huge, causing the ball to "tunnel" through the floor.
             let dt = ((timestamp - state.lastTimestamp) / 1000) * SIM_SPEED;
             if (dt > 0.1) dt = 0.1;
-            
             state.lastTimestamp = timestamp;
 
-            // Skip frame if dt is zero or negative
             if (dt <= 0) {
                 state.animFrameId = requestAnimationFrame(simulationLoop);
                 return;
             }
 
-            // Loop backwards so we can safely remove landed projectiles
-            // [DEV] Always loop arrays backwards if you plan to splice() items out of them!
             for (let i = state.projectiles.length - 1; i >= 0; i--) {
                 let pr = state.projectiles[i];
 
-                // Update Physics (Kinematic Equations)
                 pr.t += dt;
-                pr.x = pr.vx * pr.t; // Constant horizontal velocity
-                pr.y = pr.h + (pr.vy * pr.t) - (0.5 * pr.g * pr.t * pr.t); // Accelerated vertical motion
+                pr.x = pr.vx * pr.t; 
+                pr.y = pr.h + (pr.vy * pr.t) - (0.5 * pr.g * pr.t * pr.t); 
                 
-                // Check ground collision
+                // Fix: dynamic recording ensures smoothness at low speeds
+                const recordInterval = Math.max(0.002, pr.totalTimeExpected / 300);
+
                 if (pr.y <= 0) {
                     pr.y = 0;
-                    // Interpolate exact landing time to fix visual clipping into the ground
                     if (pr.g > 0) {
                         pr.t = (pr.vy + Math.sqrt(pr.vy * pr.vy + 2 * pr.g * pr.h)) / pr.g;
                         pr.x = pr.vx * pr.t;
                     }
                     
-                    if (pr.isLatest) recordData(pr); // Final record
-                    else {
-                        pr.history.push({
-                            t: pr.t, x: pr.x, y: pr.y, 
-                            vx: pr.vx, vy: pr.vy - pr.g * pr.t, 
-                            ax: 0, ay: -pr.g
-                        });
-                    }
+                    if (pr.isLatest) recordData(pr);
+                    else pushToHistory(pr);
 
-                    // Archive to past simulations
                     state.pastSimulations.push([...pr.history]);
-                    if (state.pastSimulations.length > 5) {
-                        state.pastSimulations.shift();
-                    }
+                    if (state.pastSimulations.length > 5) state.pastSimulations.shift();
 
-                    // Remove from active list
                     state.projectiles.splice(i, 1);
-                    updateLaunchButton();
                 } else {
-                    // Record data at smaller intervals to ensure smooth curve
-                    if (pr.t - pr.lastRecordTime >= 0.015) {
+                    if (pr.t - pr.lastRecordTime >= recordInterval) {
                         if (pr.isLatest) recordData(pr);
-                        else {
-                            pr.history.push({
-                                t: pr.t, x: pr.x, y: pr.y, 
-                                vx: pr.vx, vy: pr.vy - pr.g * pr.t, 
-                                ax: 0, ay: -pr.g
-                            });
-                        }
+                        else pushToHistory(pr);
                         pr.lastRecordTime = pr.t;
                     }
                 }
             }
 
-            // Update UI Stats for newest projectile
             let latestPr = state.projectiles.find(p => p.isLatest);
             if (latestPr) {
-                updateLiveStats(latestPr);
+                els.statT.innerText = latestPr.t.toFixed(2);
+                els.statX.innerText = latestPr.x.toFixed(2);
+                els.statY.innerText = latestPr.y.toFixed(2);
+                els.statVx.innerText = latestPr.vx.toFixed(2);
+                els.statVy.innerText = (latestPr.vy - latestPr.g * latestPr.t).toFixed(2);
             }
 
             drawFrame();
 
-            // Keep looping if there are any flying projectiles left
             if (state.projectiles.length > 0) {
                 state.animFrameId = requestAnimationFrame(simulationLoop);
             } else {
@@ -765,212 +616,283 @@
             }
         }
 
-        function updateLiveStats(pr) {
-            const curr_vy = pr.vy - pr.g * pr.t;
-            const curr_ay = -pr.g;
-            stats.live.innerHTML = `<i>t</i> = ${pr.t.toFixed(2)} s | <i>x</i> = ${pr.x.toFixed(2)} m | <i>y</i> = ${pr.y.toFixed(2)} m <span class="d-none d-lg-inline">|</span><br class="d-lg-none">
-                                    <i>v<sub>x</sub></i> = ${pr.vx.toFixed(2)} m s<sup>-1</sup> | <i>v<sub>y</sub></i> = ${curr_vy.toFixed(2)} m s<sup>-1</sup> | <i>a<sub>x</sub></i> = 0.00 m s<sup>-2</sup> | <i>a<sub>y</sub></i> = ${curr_ay.toFixed(2)} m s<sup>-2</sup>`;
+        function pushToHistory(pr) {
+            pr.history.push({
+                t: pr.t, x: pr.x, y: pr.y, 
+                vx: pr.vx, vy: pr.vy - pr.g * pr.t, 
+                ax: 0, ay: -pr.g
+            });
         }
 
+        /* ==========================================================================
+           [6] Rendering Engine (Canvas Immediate Mode)
+           ========================================================================== */
         function drawFrame() {
-            // [DEV] The canvas rendering order uses the Painter's Algorithm (Back to Front):
-            // 1. Clear -> 2. Grid & Axes -> 3. Past Histories -> 4. Platform -> 5. Active Projectiles
+            const cw = els.canvas.clientWidth;
+            const ch = els.canvas.clientHeight;
+            const ctx = els.ctx;
+            const scl = state.scale;
 
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, cw, ch);
 
-            // Draw Ground and Axes
             ctx.beginPath();
-            ctx.strokeStyle = '#ced4da';
-            ctx.lineWidth = 2;
-            ctx.moveTo(0, originY);
-            ctx.lineTo(canvas.width, originY);
-            ctx.moveTo(originX, 0);
-            ctx.lineTo(originX, canvas.height);
+            ctx.strokeStyle = '#cbd5e1'; 
+            ctx.lineWidth = 1.5;
+            ctx.moveTo(0, state.originY); ctx.lineTo(cw, state.originY);
+            ctx.moveTo(state.originX, 0); ctx.lineTo(state.originX, ch);
             ctx.stroke();
 
-            // Calculate dynamic step size for grid to prevent text overlap
-            // [DEV] This formula guarantees labels are always roughly ~45px apart, 
-            // intelligently generating "nice" axis numbers (10, 50, 100, etc.) as the scale changes.
-            const minPixelDist = 45; // Minimum pixels between labels
-            const rawStep = minPixelDist / scale;
+            const rawStep = 45 / scl;
             const power = Math.floor(Math.log10(rawStep));
             const f = rawStep / Math.pow(10, power);
-            // Snap to "nice" intervals (1, 2, 5, 10...)
             const niceF = (f < 1.5) ? 1 : (f < 3) ? 2 : (f < 7) ? 5 : 10;
             const step = niceF * Math.pow(10, power) || 1;
-
-            // Helper to format label (handle decimals for very zoomed-in views)
             const formatLabel = (val) => step < 1 ? val.toFixed(1) : val.toString();
 
-            // Draw Grid marks
-            ctx.fillStyle = '#6c757d';
-            ctx.font = '10px Arial';
+            ctx.fillStyle = '#64748b'; 
+            ctx.font = '10px sans-serif';
             
-            // X axis marks
             ctx.textAlign = 'center';
-            for(let i=0; i< (canvas.width/scale); i+=step) {
-                let px = originX + i * scale;
-                ctx.fillRect(px, originY - 3, 2, 6);
-                if(i>0) ctx.fillText(formatLabel(i), px, originY + 15);
+            for(let i=0; i < (cw/scl); i+=step) {
+                let px = state.originX + i * scl;
+                ctx.fillRect(px, state.originY - 3, 2, 6);
+                if(i>0) ctx.fillText(formatLabel(i), px, state.originY + 15);
             }
             
-            // Y axis marks
             ctx.textAlign = 'right';
-            for(let i=0; i< (originY/scale); i+=step) {
-                let py = originY - i * scale;
-                ctx.fillRect(originX - 3, py, 6, 2);
-                if(i>0) ctx.fillText(formatLabel(i), originX - 8, py + 4);
+            for(let i=0; i < (state.originY/scl); i+=step) {
+                let py = state.originY - i * scl;
+                ctx.fillRect(state.originX - 3, py, 6, 2);
+                if(i>0) ctx.fillText(formatLabel(i), state.originX - 8, py + 4);
             }
 
-            // Proper Visualization Labels
-            ctx.textAlign = 'left'; // Reset text alignment
-            ctx.fillStyle = '#495057';
-            ctx.font = '13px "Times New Roman"';
-            ctx.fillText('𝑥 / m', canvas.width - 40, originY - 15);
-            ctx.fillText('𝑦 / m', originX + 10, 20);
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#1e3c72'; 
+            ctx.font = 'italic 12px "Times New Roman", serif';
+            ctx.fillText('x / m', cw - 35, state.originY - 10);
+            ctx.fillText('y / m', state.originX + 10, 15);
 
-            // Draw Past Simulations (Dotted, fading)
-            state.pastSimulations.forEach((sim, index) => {
+            const p = getParams();
+            if(p.h > 0) {
+                ctx.fillStyle = '#e2e8f0'; 
+                ctx.fillRect(state.originX - 20, state.originY - (p.h * scl), 20, (p.h * scl));
+            }
+
+            state.pastSimulations.forEach((sim, idx) => {
                 ctx.beginPath();
-                // Opacity increases as index increases (older = more transparent)
-                let alpha = ((index + 1) / (state.pastSimulations.length + 1)) * 0.6;
-                ctx.strokeStyle = `rgba(13, 110, 253, ${alpha})`;
+                let alpha = ((idx + 1) / (state.pastSimulations.length + 1)) * 0.4;
+                ctx.strokeStyle = `rgba(14, 165, 233, ${alpha})`; 
                 ctx.lineWidth = 2;
-                ctx.setLineDash([4, 4]); // Dotted line
+                ctx.setLineDash([4, 4]);
                 
                 sim.forEach((pt, i) => {
-                    let px = originX + pt.x * scale;
-                    let py = originY - pt.y * scale;
+                    let px = state.originX + pt.x * scl;
+                    let py = state.originY - pt.y * scl;
                     if (i === 0) ctx.moveTo(px, py);
                     else ctx.lineTo(px, py);
                 });
                 ctx.stroke();
             });
 
-            ctx.setLineDash([]); // Reset dash for other elements
+            ctx.setLineDash([]);
 
-            // Draw Initial Height Platform if > 0
-            const params = getParams();
-            if(params.h > 0) {
-                ctx.fillStyle = '#adb5bd';
-                let platH = params.h * scale;
-                ctx.fillRect(originX - 20, originY - platH, 20, platH);
-            }
-
-            // Draw Active Projectiles
             state.projectiles.forEach((pr) => {
-                // Trajectory Line
                 if (pr.history.length > 0) {
                     ctx.beginPath();
-                    ctx.strokeStyle = pr.isLatest ? '#0d6efd' : '#0a58ca';
-                    ctx.lineWidth = 2;
-                    ctx.setLineDash([]);
+                    ctx.strokeStyle = pr.isLatest ? '#DC2626' : '#ea580c'; 
+                    ctx.lineWidth = 2.5;
                     
-                    pr.history.forEach((pt, index) => {
-                        let px = originX + pt.x * scale;
-                        let py = originY - pt.y * scale;
-                        if (index === 0) ctx.moveTo(px, py);
+                    pr.history.forEach((pt, idx) => {
+                        let px = state.originX + pt.x * scl;
+                        let py = state.originY - pt.y * scl;
+                        if (idx === 0) ctx.moveTo(px, py);
                         else ctx.lineTo(px, py);
                     });
-                    
-                    let currPx = originX + pr.x * scale;
-                    let currPy = originY - pr.y * scale;
-                    ctx.lineTo(currPx, currPy);
+                    let cPx = state.originX + pr.x * scl;
+                    let cPy = state.originY - pr.y * scl;
+                    ctx.lineTo(cPx, cPy);
                     ctx.stroke();
                 }
 
-                // Projectile Ball
-                let px = originX + pr.x * scale;
-                let py = originY - pr.y * scale;
+                let bx = state.originX + pr.x * scl;
+                let by = state.originY - pr.y * scl;
                 
+                // Draw Vectors for the active projectile
+                if (pr.isLatest) {
+                    const vScale = 4; // visual multiplier for velocity arrows
+                    const aScale = 5; // visual multiplier for acceleration arrow
+                    const curVy = pr.vy - pr.g * pr.t;
+                    
+                    const drawArrow = (dx, dy, color) => {
+                        if (dx === 0 && dy === 0) return;
+                        const headlen = 8;
+                        const angle = Math.atan2(dy, dx);
+                        const toX = bx + dx;
+                        const toY = by + dy;
+                        
+                        ctx.beginPath();
+                        ctx.strokeStyle = color;
+                        ctx.lineWidth = 2.5;
+                        ctx.moveTo(bx, by);
+                        ctx.lineTo(toX, toY);
+                        ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+                        ctx.moveTo(toX, toY);
+                        ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+                        ctx.stroke();
+                    };
+
+                    const drawLabel = (mainTxt, subTxt, x, y, color) => {
+                        ctx.textAlign = 'left';
+                        ctx.textBaseline = 'middle';
+                        
+                        ctx.font = 'italic 16px "Times New Roman", serif';
+                        let wMain = ctx.measureText(mainTxt).width;
+                        ctx.font = 'italic 12px "Times New Roman", serif';
+                        let wSub = subTxt ? ctx.measureText(subTxt).width : 0;
+                        
+                        let totalW = wMain + (subTxt ? wSub + 2 : 0);
+                        let startX = x - totalW / 2;
+                        let startY = y;
+
+                        const drawTextGroup = (isStroke) => {
+                            if(isStroke) {
+                                ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                                ctx.lineWidth = 4;
+                                ctx.lineJoin = 'round';
+                            } else {
+                                ctx.fillStyle = color;
+                            }
+
+                            ctx.font = 'italic 16px "Times New Roman", serif';
+                            if(isStroke) ctx.strokeText(mainTxt, startX, startY);
+                            else ctx.fillText(mainTxt, startX, startY);
+
+                            if (subTxt) {
+                                ctx.font = 'italic 12px "Times New Roman", serif';
+                                if(isStroke) ctx.strokeText(subTxt, startX + wMain + 2, startY + 4);
+                                else ctx.fillText(subTxt, startX + wMain + 2, startY + 4);
+                            }
+                        };
+
+                        drawTextGroup(true);  // outline for contrast
+                        drawTextGroup(false); // actual text
+                    };
+
+                    if (els.chkVComp.checked) {
+                        let vx_dx = pr.vx * vScale;
+                        let vy_dy = -curVy * vScale;
+                        
+                        if (Math.abs(vx_dx) > 0.1) {
+                            drawArrow(vx_dx, 0, '#8b5cf6');   // vx: purple
+                            drawLabel('v', 'x', bx + vx_dx + 15, by + 12, '#8b5cf6');
+                        }
+                        
+                        if (Math.abs(vy_dy) > 0.1) {
+                            drawArrow(0, vy_dy, '#f59e0b'); // vy: amber
+                            let yOffset = vy_dy < 0 ? -15 : 15;
+                            drawLabel('v', 'y', bx - 15, by + vy_dy + yOffset, '#f59e0b');
+                        }
+                    }
+                    if (els.chkV.checked) {
+                        let v_dx = pr.vx * vScale;
+                        let v_dy = -curVy * vScale;
+                        if (Math.abs(v_dx) > 0.1 || Math.abs(v_dy) > 0.1) {
+                            drawArrow(v_dx, v_dy, '#10b981'); // v: emerald
+                            
+                            let v_angle = Math.atan2(v_dy, v_dx);
+                            let lbl_x = bx + v_dx + 22 * Math.cos(v_angle);
+                            let lbl_y = by + v_dy + 22 * Math.sin(v_angle);
+                            drawLabel('v', '', lbl_x, lbl_y, '#10b981');
+                        }
+                    }
+                    if (els.chkA.checked) {
+                        let a_dy = pr.g * aScale;
+                        if (a_dy > 0) {
+                            drawArrow(0, a_dy, '#f43f5e');   // a: rose
+                            drawLabel('a', '', bx + 15, by + a_dy + 15, '#f43f5e');
+                        }
+                    }
+                }
+
+                // Draw projectile body
                 ctx.beginPath();
-                ctx.arc(px, py, 8, 0, Math.PI * 2);
-                ctx.fillStyle = pr.isLatest ? '#dc3545' : '#ffc107'; // Red for newest, Yellow for older
+                ctx.arc(bx, by, 6, 0, Math.PI * 2);
+                ctx.fillStyle = pr.isLatest ? '#1e3c72' : '#94a3b8'; 
                 ctx.fill();
-                ctx.strokeStyle = '#212529';
-                ctx.lineWidth = 1;
-                ctx.stroke();
             });
         }
 
-        // --- Data & Charts ---
+        /* ==========================================================================
+           [7] Data Handling & Chart.js
+           ========================================================================== */
+        Chart.defaults.font.family = "'Times New Roman', serif";
+        Chart.defaults.color = '#475569';
 
-        function createChart(ctxElement, yTitle, color) {
-            return new Chart(ctxElement, {
+        function createChart(id, yTitle, color) {
+            return new Chart(document.getElementById(id).getContext('2d'), {
                 type: 'scatter',
-                data: { datasets: [{ data: [], borderColor: color, backgroundColor: color, showLine: true }] },
+                data: { datasets: [{ data: [], borderColor: color, backgroundColor: color, showLine: true, borderWidth: 2 }] },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: { duration: 0 },
-                    elements: { 
-                        point: { radius: 1.5 },
-                        line: { tension: 0 } // tension: 0 prevents the bezier curve from overshooting
-                    },
+                    responsive: true, maintainAspectRatio: false, animation: false,
+                    elements: { point: { radius: 0 }, line: { tension: 0 } },
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: {
-                            type: 'linear',
-                            title: { 
-                                display: true, 
-                                text: '𝑡 / s',
-                                font: { family: '"Times New Roman", Times, serif' }
-                            },
-                            min: 0
-                        },
-                        y: {
-                            beginAtZero: true,
-                            title: { 
-                                display: true, 
-                                text: yTitle,
-                                font: { family: '"Times New Roman", Times, serif' }
-                            }
-                        }
+                        x: { title: { display: true, text: 't / s' }, min: 0 },
+                        y: { title: { display: true, text: yTitle } }
                     }
                 }
             });
         }
 
         function initCharts() {
-            charts.x = createChart(document.getElementById('chart-x').getContext('2d'), '𝑥 / m', '#0d6efd');
-            charts.y = createChart(document.getElementById('chart-y').getContext('2d'), '𝑦 / m', '#dc3545');
-            charts.vx = createChart(document.getElementById('chart-vx').getContext('2d'), '𝑣ₓ / m s⁻¹', '#0dcaf0');
-            charts.vy = createChart(document.getElementById('chart-vy').getContext('2d'), '𝑣ᵧ / m s⁻¹', '#fd7e14');
-            charts.ax = createChart(document.getElementById('chart-ax').getContext('2d'), '𝑎ₓ / m s⁻²', '#6c757d');
-            charts.ay = createChart(document.getElementById('chart-ay').getContext('2d'), '𝑎ᵧ / m s⁻²', '#20c997');
+            charts.x = createChart('chart-x', 'x / m', '#0ea5e9'); 
+            charts.y = createChart('chart-y', 'y / m', '#10b981'); 
+            charts.vx = createChart('chart-vx', 'v_x / m s⁻¹', '#8b5cf6'); 
+            charts.vy = createChart('chart-vy', 'v_y / m s⁻¹', '#f59e0b'); 
+            charts.ax = createChart('chart-ax', 'a_x / m s⁻²', '#64748b'); 
+            charts.ay = createChart('chart-ay', 'a_y / m s⁻²', '#f43f5e'); 
+        }
+
+        function updateChartLabels() {
+            charts.x.options.scales.x.title.text = 't / s';
+            Object.values(charts).forEach(c => c.update());
+        }
+
+        function updateChartBounds(b, p) {
+            const tMax = b.tTotal > 0 ? b.tTotal * 1.05 : 1;
+            const setScl = (c, yMin, yMax) => { c.options.scales.x.max = tMax; c.options.scales.y.min = yMin; c.options.scales.y.max = yMax; };
+
+            setScl(charts.x, 0, b.maxR > 0 ? b.maxR * 1.05 : 1);
+            setScl(charts.y, 0, b.maxH > 0 ? b.maxH * 1.05 : 1);
+            setScl(charts.vx, 0, b.v0x > 0 ? b.v0x * 1.2 : 1);
+            
+            const vyMin = Math.min(b.vfy * 1.1, b.vfy - 1, -1);
+            const vyMax = Math.max(b.v0y * 1.1, b.v0y + 1, 1);
+            setScl(charts.vy, vyMin, vyMax);
+            
+            setScl(charts.ax, -2, 2);
+            setScl(charts.ay, -(p.g) - 2, 2);
+            Object.values(charts).forEach(c => c.update());
         }
 
         function recordData(pr) {
-            // Calculate Instantaneous Physics values
-            const curr_vx = pr.vx;
             const curr_vy = pr.vy - pr.g * pr.t;
-            const curr_ax = 0;
-            const curr_ay = -pr.g;
-
-            const pt = { 
-                t: pr.t, x: pr.x, y: pr.y, 
-                vx: curr_vx, vy: curr_vy, 
-                ax: curr_ax, ay: curr_ay 
-            };
+            const pt = { t: pr.t, x: pr.x, y: pr.y, vx: pr.vx, vy: curr_vy, ax: 0, ay: -pr.g };
             pr.history.push(pt);
 
-            // Update Table
             const row = document.createElement('tr');
-            row.innerHTML = `<td>${pt.t.toFixed(2)}</td>
-                             <td>${pt.x.toFixed(2)}</td>
-                             <td>${pt.y.toFixed(2)}</td>
-                             <td>${pt.vx.toFixed(2)}</td>
-                             <td>${pt.vy.toFixed(2)}</td>
-                             <td>${pt.ax.toFixed(2)}</td>
-                             <td>${pt.ay.toFixed(2)}</td>`;
-            tbody.appendChild(row);
-
-            // Scroll table to bottom
-            const container = document.querySelector('.data-table-container');
+            row.innerHTML = `<td class="py-1 border-t border-slate-100">${pt.t.toFixed(2)}</td>
+                             <td class="py-1 border-t border-slate-100">${pt.x.toFixed(2)}</td>
+                             <td class="py-1 border-t border-slate-100">${pt.y.toFixed(2)}</td>
+                             <td class="py-1 border-t border-slate-100">${pt.vx.toFixed(2)}</td>
+                             <td class="py-1 border-t border-slate-100">${pt.vy.toFixed(2)}</td>
+                             <td class="py-1 border-t border-slate-100">${pt.ax.toFixed(2)}</td>
+                             <td class="py-1 border-t border-slate-100">${pt.ay.toFixed(2)}</td>`;
+            els.tbody.appendChild(row);
+            
+            const container = els.tbody.parentElement.parentElement;
             container.scrollTop = container.scrollHeight;
 
-            // Update Charts
             charts.x.data.datasets[0].data.push({ x: pt.t, y: pt.x });
             charts.y.data.datasets[0].data.push({ x: pt.t, y: pt.y });
             charts.vx.data.datasets[0].data.push({ x: pt.t, y: pt.vx });
@@ -978,50 +900,42 @@
             charts.ax.data.datasets[0].data.push({ x: pt.t, y: pt.ax });
             charts.ay.data.datasets[0].data.push({ x: pt.t, y: pt.ay });
 
-            Object.values(charts).forEach(chart => chart.update());
+            Object.values(charts).forEach(c => c.update());
         }
 
         function clearData() {
-            tbody.innerHTML = '';
-            Object.values(charts).forEach(chart => {
-                chart.data.datasets[0].data = [];
-                chart.update();
+            els.tbody.innerHTML = '';
+            Object.values(charts).forEach(c => {
+                c.data.datasets[0].data = [];
+                c.update();
             });
         }
 
         function downloadCSV() {
-            let targetHistory = [];
+            let target = [];
             let latestPr = state.projectiles.find(p => p.isLatest);
             
-            // Get data from newest active projectile, or the last completed one
-            if (latestPr) {
-                targetHistory = latestPr.history;
-            } else if (state.pastSimulations.length > 0) {
-                targetHistory = state.pastSimulations[state.pastSimulations.length - 1];
-            }
+            if (latestPr) target = latestPr.history;
+            else if (state.pastSimulations.length > 0) target = state.pastSimulations[state.pastSimulations.length - 1];
 
-            if (targetHistory.length === 0) {
-                alert("沒有數據可供下載。請先運行模擬。");
+            if (target.length === 0) {
+                alert(currentLang === 'zh' ? "沒有數據！" : "No data to export!");
                 return;
             }
 
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "t / s,x / m,y / m,v_x / m s^-1,v_y / m s^-1,a_x / m s^-2,a_y / m s^-2\n";
-
-            targetHistory.forEach(row => {
-                csvContent += `${row.t.toFixed(3)},${row.x.toFixed(3)},${row.y.toFixed(3)},${row.vx.toFixed(3)},${row.vy.toFixed(3)},${row.ax.toFixed(3)},${row.ay.toFixed(3)}\n`;
+            let csv = "data:text/csv;charset=utf-8,t (s),x (m),y (m),v_x (m/s),v_y (m/s),a_x (m/s^2),a_y (m/s^2)\n";
+            target.forEach(r => {
+                csv += `${r.t.toFixed(3)},${r.x.toFixed(3)},${r.y.toFixed(3)},${r.vx.toFixed(3)},${r.vy.toFixed(3)},${r.ax.toFixed(3)},${r.ay.toFixed(3)}\n`;
             });
 
-            const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "projectile_data.csv");
+            link.setAttribute("href", encodeURI(csv));
+            link.setAttribute("download", "kinematics_data.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
-        // Run Init
         window.onload = init;
     </script>
 </body>
