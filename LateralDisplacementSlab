@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lateral Displacement Simulator | 側向位移模擬器</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- MathJax 3 for Physics Formulas -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom Configuration and Styling -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cma: {
+                            blue: '#1e3c72',
+                            light: '#2a5298',
+                            dark: '#112240',
+                        },
+                        vector: {
+                            blue: '#3b82f6',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            purple: '#8b5cf6',
+                            teal: '#14b8a6',
+                            red: '#DC2626',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        math: ['"Times New Roman"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar for Controls */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Range Sliders */
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 6px; cursor: pointer; background: #e2e8f0; border-radius: 99px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 20px; width: 20px; border-radius: 50%; background: #1e3c72;
+            cursor: pointer; -webkit-appearance: none; margin-top: -7px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 2px solid #fff; transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+        input[type=range]:focus { outline: none; }
+        
+        /* Glass Modal */
+        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 h-screen flex flex-col overflow-hidden font-sans">
+
+    <!-- Header -->
+    <header class="bg-cma-blue text-white shadow-md z-20 flex-none">
+        <div class="px-6 py-4 flex justify-between items-center max-w-7xl mx-auto w-full">
+            <h1 id="app-title" class="text-xl md:text-2xl font-bold tracking-wide">側向位移：長方形透明介質板</h1>
+            <div class="flex items-center gap-3">
+                <button id="btn-help" class="px-3 py-1.5 bg-cma-light hover:bg-blue-600 rounded-lg text-sm font-medium transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span id="label-help">說明</span>
+                </button>
+                <button id="btn-lang" class="px-3 py-1.5 border border-white/30 hover:bg-white/10 rounded-lg text-sm font-medium transition">
+                    EN
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content: Split Pane -->
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden max-w-7xl mx-auto w-full">
+        
+        <!-- Sidebar Controls -->
+        <aside class="w-full md:w-80 lg:w-96 bg-white shadow-[2px_0_8px_rgba(0,0,0,0.05)] z-10 flex flex-col flex-none order-2 md:order-1 h-1/2 md:h-full border-t md:border-t-0 border-slate-200">
+            <div class="p-5 overflow-y-auto custom-scrollbar flex-1 space-y-6">
+                
+                <!-- Inputs Section -->
+                <div class="space-y-5">
+                    <h2 id="title-controls" class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">參數設定</h2>
+                    
+                    <!-- Angle Slider -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="text-sm font-semibold text-slate-700" id="label-i">入射角 ($i$)</label>
+                            <span class="text-lg font-bold text-cma-blue"><span id="val-i">45</span>°</span>
+                        </div>
+                        <input type="range" id="slider-i" min="0" max="85" step="1" value="45">
+                        <div id="warn-i" class="text-xs text-vector-red mt-1 hidden flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                            <span id="msg-warn">受幾何條件限制</span>
+                        </div>
+                    </div>
+
+                    <!-- Refractive Index Slider -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="text-sm font-semibold text-slate-700" id="label-n">介質折射率 ($n$)</label>
+                            <span class="text-lg font-bold text-cma-blue" id="val-n">1.50</span>
+                        </div>
+                        <input type="range" id="slider-n" min="1.0" max="3.0" step="0.01" value="1.50">
+                        <div class="flex justify-between text-xs text-slate-400 px-1">
+                            <span>空氣 (1.0)</span>
+                            <span>鑽石 (2.42)</span>
+                        </div>
+                    </div>
+
+                    <!-- Thickness Slider -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="text-sm font-semibold text-slate-700" id="label-t">介質板厚度 ($t$)</label>
+                            <span class="text-lg font-bold text-cma-blue"><span id="val-t">5.0</span> cm</span>
+                        </div>
+                        <input type="range" id="slider-t" min="1.0" max="10.0" step="0.1" value="5.0">
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div>
+                    <h2 id="title-results" class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">即時結果</h2>
+                    <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-600" id="label-r">折射角 ($r$)</span>
+                            <span class="font-bold text-vector-emerald" id="res-r">28.13°</span>
+                        </div>
+                        <div class="flex justify-between items-center border-t border-blue-100 pt-3">
+                            <span class="text-sm font-bold text-slate-700" id="label-d">側向位移 ($d$)</span>
+                            <span class="text-xl font-extrabold text-vector-red"><span id="res-d">1.62</span> cm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="pt-2 pb-6">
+                    <button id="btn-replay" class="w-full py-3 bg-cma-blue hover:bg-cma-light text-white rounded-xl font-bold shadow-md shadow-blue-900/20 transition-all active:scale-[0.98] flex justify-center items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        <span id="label-replay">重播光線動畫</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Footer (Sidebar Bottom) -->
+            <div class="p-4 bg-slate-100/50 border-t border-slate-200 text-center flex-none">
+                <p id="footer-text" class="text-xs font-semibold text-slate-500 tracking-wider">
+                    廠商會中學．物理科
+                </p>
+            </div>
+        </aside>
+
+        <!-- Canvas Area -->
+        <section class="flex-1 relative bg-slate-100 flex flex-col order-1 md:order-2 h-1/2 md:h-full overflow-hidden">
+            <!-- Canvas Container -->
+            <div id="canvas-container" class="absolute inset-0 m-4 md:m-6 rounded-2xl bg-white shadow-sm border border-slate-200 overflow-hidden">
+                <canvas id="simCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <!-- Help Modal -->
+    <div id="modal-help" class="fixed inset-0 bg-slate-900/40 z-50 hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-2xl rounded-2xl shadow-2xl border border-white/50 transform scale-95 transition-transform duration-300 overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-white/50">
+                <h3 id="modal-title" class="text-xl font-bold text-cma-blue">物理原理與公式</h3>
+                <button id="btn-close-help" class="text-slate-400 hover:text-slate-600 transition p-1 rounded-md hover:bg-slate-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <p id="modal-desc-1" class="text-slate-600 mb-4 leading-relaxed">
+                    當光線斜射入兩面平行的透明介質板時，會發生兩次折射。由於空氣的折射率 ($n_1 \approx 1$) 通常小於介質的折射率 ($n_2$)，光線進入介質時會偏向法線；離開介質時則偏離法線。
+                </p>
+                <div class="bg-slate-50 rounded-xl p-4 mb-4 border border-slate-100 text-center overflow-x-auto">
+                    <p class="text-sm font-semibold text-slate-500 mb-2" id="modal-law">斯涅爾定律 (Snell's Law)</p>
+                    <div class="text-lg">$$ n_1 \sin(i) = n_2 \sin(r) $$</div>
+                </div>
+                <p id="modal-desc-2" class="text-slate-600 mb-4 leading-relaxed">
+                    出射光線與入射光線平行，但會產生一段垂直距離的偏移，稱為<strong>側向位移 (Lateral Displacement)</strong> $d$。其大小可由幾何關係推導：
+                </p>
+                <div class="bg-blue-50/50 rounded-xl p-4 border border-blue-100 text-center overflow-x-auto">
+                    <p class="text-sm font-semibold text-cma-blue mb-2" id="modal-formula">側向位移公式</p>
+                    <div class="text-xl text-cma-blue">$$ d = \frac{t \cdot \sin(i - r)}{\cos(r)} $$</div>
+                </div>
+                <ul class="mt-4 space-y-2 text-sm text-slate-600 list-disc list-inside">
+                    <li id="modal-list-1">$t$ 為介質板的厚度</li>
+                    <li id="modal-list-2">$i$ 為入射角</li>
+                    <li id="modal-list-3">$r$ 為折射角</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        /* --- 1. Global State & Internationalization --- */
+        const i18n = {
+            zh: {
+                title: "側向位移：長方形透明介質板",
+                helpBtn: "說明",
+                langToggle: "EN",
+                controlsTitle: "參數設定",
+                iLabel: "入射角 ($i$)",
+                nLabel: "介質折射率 ($n$)",
+                tLabel: "介質板厚度 ($t$)",
+                warnMsg: "受幾何條件限制",
+                resultsTitle: "即時結果",
+                rLabel: "折射角 ($r$)",
+                dLabel: "側向位移 ($d$)",
+                replayBtn: "重播光線動畫",
+                footer: "廠商會中學．物理科",
+                modalTitle: "物理原理與公式",
+                modalDesc1: "當光線斜射入兩面平行的透明介質板時，會發生兩次折射。由於空氣的折射率 ($n_1 \\approx 1$) 通常小於介質的折射率 ($n_2$)，光線進入介質時會偏向法線；離開介質時則偏離法線。",
+                modalLaw: "斯涅爾定律 (Snell's Law)",
+                modalDesc2: "出射光線與入射光線平行，但會產生一段垂直距離的偏移，稱為<strong>側向位移 (Lateral Displacement)</strong> $d$。其大小可由幾何關係推導：",
+                modalFormula: "側向位移公式",
+                modalList1: "$t$ 為介質板的厚度",
+                modalList2: "$i$ 為入射角",
+                modalList3: "$r$ 為折射角",
+                airLabel: "空氣",
+                mediumLabel: "介質",
+            },
+            en: {
+                title: "Lateral Displacement in a Rectangular Slab",
+                helpBtn: "Theory",
+                langToggle: "繁",
+                controlsTitle: "Parameters",
+                iLabel: "Angle of Incidence ($i$)",
+                nLabel: "Refractive Index ($n$)",
+                tLabel: "Thickness of Slab ($t$)",
+                warnMsg: "Limited by geometry",
+                resultsTitle: "Live Results",
+                rLabel: "Angle of Refraction ($r$)",
+                dLabel: "Lateral Displacement ($d$)",
+                replayBtn: "Replay Animation",
+                footer: "CMA Secondary School. Physics Department.",
+                modalTitle: "Physics Theory & Formula",
+                modalDesc1: "When a ray of light passes obliquely through a parallel-sided transparent slab, it undergoes refraction twice. Since the refractive index of air ($n_1 \\approx 1$) is usually less than that of the slab ($n_2$), the ray bends towards the normal upon entering and away from the normal upon exiting.",
+                modalLaw: "Snell's Law",
+                modalDesc2: "The emergent ray is parallel to the incident ray but is shifted laterally by a perpendicular distance, known as the <strong>Lateral Displacement</strong> $d$. It can be derived geometrically:",
+                modalFormula: "Lateral Displacement Formula",
+                modalList1: "$t$ is the thickness of the slab",
+                modalList2: "$i$ is the angle of incidence",
+                modalList3: "$r$ is the angle of refraction",
+                airLabel: "Air",
+                mediumLabel: "Medium",
+            }
+        };
+
+        let currentLang = 'zh';
+        
+        // Physics variables
+        let params = {
+            i: 45,      // degrees
+            n: 1.50,
+            t: 5.0      // cm
+        };
+
+        // Render Scale
+        const CM_TO_PX = 30; // 30 pixels per cm
+
+        // Animation State
+        let anim = {
+            progress: 1.0,  // 0.0 to 1.0
+            id: null,
+            duration: 1500, // ms
+            startTime: null
+        };
+
+        /* --- 2. DOM Elements & Initialization --- */
+        const els = {
+            // UI
+            sliderI: document.getElementById('slider-i'),
+            sliderN: document.getElementById('slider-n'),
+            sliderT: document.getElementById('slider-t'),
+            valI: document.getElementById('val-i'),
+            valN: document.getElementById('val-n'),
+            valT: document.getElementById('val-t'),
+            resR: document.getElementById('res-r'),
+            resD: document.getElementById('res-d'),
+            warnI: document.getElementById('warn-i'),
+            
+            // Canvas
+            container: document.getElementById('canvas-container'),
+            canvas: document.getElementById('simCanvas'),
+            
+            // Buttons
+            btnReplay: document.getElementById('btn-replay'),
+            btnLang: document.getElementById('btn-lang'),
+            btnHelp: document.getElementById('btn-help'),
+            btnCloseHelp: document.getElementById('btn-close-help'),
+            modalHelp: document.getElementById('modal-help'),
+        };
+
+        const ctx = els.canvas.getContext('2d', { alpha: false });
+
+        // Colors based on Master Instructions
+        const COLORS = {
+            bg: '#f8fafc',
+            grid: '#e2e8f0',
+            axes: '#cbd5e1',
+            slabFill: 'rgba(224, 246, 255, 0.4)',
+            slabBorder: '#0ea5e9',
+            normal: '#94a3b8',
+            incident: '#3b82f6', // vector.blue
+            refracted: '#10b981', // vector.emerald
+            emergent: '#DC2626', // vector.red (Resultant)
+            extended: '#fca5a5',
+            displacement: '#DC2626', // vector.red
+            textMain: '#1e293b',
+        };
+
+        /* --- 3. UI and Language Logic --- */
+        function toggleLanguage() {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            const t = i18n[currentLang];
+
+            document.getElementById('app-title').textContent = t.title;
+            document.getElementById('label-help').textContent = t.helpBtn;
+            els.btnLang.textContent = t.langToggle;
+            
+            document.getElementById('title-controls').textContent = t.controlsTitle;
+            document.getElementById('label-i').innerHTML = t.iLabel;
+            document.getElementById('label-n').innerHTML = t.nLabel;
+            document.getElementById('label-t').innerHTML = t.tLabel;
+            document.getElementById('msg-warn').textContent = t.warnMsg;
+            
+            document.getElementById('title-results').textContent = t.resultsTitle;
+            document.getElementById('label-r').innerHTML = t.rLabel;
+            document.getElementById('label-d').innerHTML = t.dLabel;
+            document.getElementById('label-replay').textContent = t.replayBtn;
+            
+            document.getElementById('footer-text').textContent = t.footer;
+
+            document.getElementById('modal-title').textContent = t.modalTitle;
+            document.getElementById('modal-desc-1').innerHTML = t.modalDesc1;
+            document.getElementById('modal-law').textContent = t.modalLaw;
+            document.getElementById('modal-desc-2').innerHTML = t.modalDesc2;
+            document.getElementById('modal-formula').textContent = t.modalFormula;
+            document.getElementById('modal-list-1').innerHTML = t.modalList1;
+            document.getElementById('modal-list-2').innerHTML = t.modalList2;
+            document.getElementById('modal-list-3').innerHTML = t.modalList3;
+
+            // Retrigger MathJax parsing for dynamically updated math elements
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+            
+            updateCalculations();
+        }
+
+        function toggleModal(show) {
+            if (show) {
+                els.modalHelp.classList.remove('hidden');
+                // Trigger reflow
+                void els.modalHelp.offsetWidth;
+                els.modalHelp.classList.remove('opacity-0');
+                els.modalHelp.querySelector('div').classList.remove('scale-95');
+            } else {
+                els.modalHelp.classList.add('opacity-0');
+                els.modalHelp.querySelector('div').classList.add('scale-95');
+                setTimeout(() => els.modalHelp.classList.add('hidden'), 300);
+            }
+        }
+
+        /* --- 4. Physics Engine --- */
+        function updateCalculations() {
+            const i_rad = params.i * Math.PI / 180;
+            const n1 = 1.0;
+            const n2 = params.n;
+            
+            // Snell's Law
+            const sin_r = (n1 * Math.sin(i_rad)) / n2;
+            const r_rad = Math.asin(sin_r);
+            const r_deg = r_rad * 180 / Math.PI;
+            
+            // Lateral Displacement
+            let d_cm = 0;
+            if (Math.cos(r_rad) !== 0) {
+                d_cm = params.t * Math.sin(i_rad - r_rad) / Math.cos(r_rad);
+            }
+
+            // Geometric Constraint: Prevent ray from exiting the side of the slab visually
+            // To ensure the diagram is neat, we calculate the max lateral travel inside the slab
+            // slab max half width relative to rendering
+            const maxWidth_px = (els.canvas.width / window.devicePixelRatio) * 0.4; // 40% of canvas width
+            const maxWidth_cm = maxWidth_px / CM_TO_PX;
+            
+            const max_tan_r = maxWidth_cm / params.t;
+            const max_r_rad = Math.atan(max_tan_r);
+            const max_sin_i = n2 * Math.sin(max_r_rad);
+            
+            let max_i_deg = 85;
+            if (max_sin_i < 1) {
+                max_i_deg = Math.floor(Math.asin(max_sin_i) * 180 / Math.PI);
+            }
+
+            els.sliderI.max = max_i_deg;
+            
+            if (params.i > max_i_deg) {
+                params.i = max_i_deg;
+                els.sliderI.value = params.i;
+                els.warnI.classList.remove('hidden');
+            } else if (max_i_deg < 85) {
+                els.warnI.classList.remove('hidden');
+            } else {
+                els.warnI.classList.add('hidden');
+            }
+
+            // Update UI Labels
+            els.valI.textContent = params.i;
+            els.valN.textContent = params.n.toFixed(2);
+            els.valT.textContent = params.t.toFixed(1);
+            
+            els.resR.textContent = `${r_deg.toFixed(2)}°`;
+            els.resD.textContent = d_cm.toFixed(2);
+
+            // Trigger Redraw
+            requestAnimationFrame(draw);
+        }
+
+        /* --- 5. Canvas Engine --- */
+        function resizeCanvas() {
+            const rect = els.container.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            
+            els.canvas.width = rect.width * dpr;
+            els.canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            
+            requestAnimationFrame(draw);
+        }
+
+        function drawGrid(width, height) {
+            ctx.fillStyle = COLORS.bg;
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.beginPath();
+            ctx.strokeStyle = COLORS.grid;
+            ctx.lineWidth = 1;
+            
+            const gridSize = CM_TO_PX;
+            // Draw relative to center logic, but simpler to just tile from top-left
+            for (let x = 0; x <= width; x += gridSize) {
+                ctx.moveTo(x, 0); ctx.lineTo(x, height);
+            }
+            for (let y = 0; y <= height; y += gridSize) {
+                ctx.moveTo(0, y); ctx.lineTo(width, y);
+            }
+            ctx.stroke();
+        }
+
+        function drawArrowLine(ctx, x1, y1, x2, y2, color, width) {
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+
+            // Arrow head in the middle
+            const midX = (x1 + x2) / 2;
+            const midY = (y1 + y2) / 2;
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            const headlen = 10;
+
+            ctx.beginPath();
+            ctx.fillStyle = color;
+            ctx.moveTo(midX, midY);
+            ctx.lineTo(midX - headlen * Math.cos(angle - Math.PI / 6), midY - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(midX - headlen * Math.cos(angle + Math.PI / 6), midY - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.fill();
+        }
+        
+        function drawArcAngle(ctx, cx, cy, radStart, radEnd, radius, color, labelText) {
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1.5;
+            ctx.arc(cx, cy, radius, radStart, radEnd);
+            ctx.stroke();
+
+            const midAngle = (radStart + radEnd) / 2;
+            const lx = cx + (radius + 15) * Math.cos(midAngle);
+            const ly = cy + (radius + 15) * Math.sin(midAngle);
+
+            ctx.fillStyle = color;
+            ctx.font = 'italic 16px "Times New Roman"';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(labelText, lx, ly);
+        }
+
+        function draw() {
+            const rect = els.container.getBoundingClientRect();
+            const w = rect.width;
+            const h = rect.height;
+
+            // Clear and draw grid
+            drawGrid(w, h);
+
+            // Mathematical Logic to Canvas Coordinates
+            // Define origin (P_inc) at the center-left of the canvas
+            const originX = w * 0.3;
+            const originY = h * 0.25;
+            
+            const t_px = params.t * CM_TO_PX;
+            const slabWidth_px = w * 0.8; // Draw a wide enough slab
+            
+            // Draw Slab
+            ctx.fillStyle = COLORS.slabFill;
+            ctx.fillRect(originX - slabWidth_px * 0.2, originY, slabWidth_px, t_px);
+            ctx.strokeStyle = COLORS.slabBorder;
+            ctx.lineWidth = 2;
+            ctx.strokeRect(originX - slabWidth_px * 0.2, originY, slabWidth_px, t_px);
+            
+            // Labels for Medium (with bilingual & mixed font support)
+            ctx.fillStyle = COLORS.textMain;
+            ctx.textAlign = 'right';
+            const labelX = originX + slabWidth_px * 0.75;
+            
+            const drawMixedText = (text1, italicText, text3, x, y) => {
+                ctx.font = '14px sans-serif';
+                const w3 = ctx.measureText(text3).width;
+                ctx.fillText(text3, x, y);
+                
+                ctx.font = 'italic 16px "Times New Roman"';
+                const w2 = ctx.measureText(italicText).width;
+                ctx.fillText(italicText, x - w3, y);
+                
+                ctx.font = '14px sans-serif';
+                ctx.fillText(text1, x - w3 - w2, y);
+            };
+
+            drawMixedText(`${i18n[currentLang].airLabel} (`, 'n', ' ≈ 1)', labelX, originY - 10);
+            drawMixedText(`${i18n[currentLang].mediumLabel} (`, 'n', ` = ${params.n.toFixed(2)})`, labelX, originY + t_px - 10);
+
+            // Angles
+            const i_rad = params.i * Math.PI / 180;
+            const n1 = 1.0, n2 = params.n;
+            const r_rad = Math.asin((n1 * Math.sin(i_rad)) / n2);
+
+            // Key Points
+            const rayLen = 250; // Length of rays outside slab
+            
+            const P_src = { x: originX - rayLen * Math.sin(i_rad), y: originY - rayLen * Math.cos(i_rad) };
+            const P_inc = { x: originX, y: originY };
+            const P_out = { x: originX + t_px * Math.tan(r_rad), y: originY + t_px };
+            const P_end = { x: P_out.x + rayLen * Math.sin(i_rad), y: P_out.y + rayLen * Math.cos(i_rad) };
+            const P_ext = { x: originX + (rayLen + t_px) * Math.sin(i_rad), y: originY + (rayLen + t_px) * Math.cos(i_rad) };
+
+            // Animation Progress logic
+            // Total path is divided into 3 segments: Incident (0-0.3), Refracted (0.3-0.6), Emergent (0.6-1.0)
+            const p = anim.progress;
+
+            // Draw Normals
+            ctx.beginPath();
+            ctx.strokeStyle = COLORS.normal;
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            // Normal 1
+            ctx.moveTo(P_inc.x, P_inc.y - 60); ctx.lineTo(P_inc.x, P_inc.y + 60);
+            // Normal 2
+            if (p > 0.3) {
+                ctx.moveTo(P_out.x, P_out.y - 60); ctx.lineTo(P_out.x, P_out.y + 60);
+            }
+            ctx.stroke();
+            ctx.setLineDash([]); // Reset
+
+            // Draw Rays
+            if (p <= 0.3) {
+                // Segment 1 partial
+                const sp = p / 0.3;
+                drawArrowLine(ctx, P_src.x, P_src.y, P_src.x + (P_inc.x - P_src.x)*sp, P_src.y + (P_inc.y - P_src.y)*sp, COLORS.incident, 3);
+            } else {
+                // Segment 1 full
+                drawArrowLine(ctx, P_src.x, P_src.y, P_inc.x, P_inc.y, COLORS.incident, 3);
+                
+                if (p <= 0.6) {
+                    // Segment 2 partial
+                    const sp = (p - 0.3) / 0.3;
+                    drawArrowLine(ctx, P_inc.x, P_inc.y, P_inc.x + (P_out.x - P_inc.x)*sp, P_inc.y + (P_out.y - P_inc.y)*sp, COLORS.refracted, 3);
+                } else {
+                    // Segment 2 full
+                    drawArrowLine(ctx, P_inc.x, P_inc.y, P_out.x, P_out.y, COLORS.refracted, 3);
+                    
+                    // Extended Ray (Dashed)
+                    ctx.beginPath();
+                    ctx.strokeStyle = COLORS.extended;
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([6, 4]);
+                    ctx.moveTo(P_inc.x, P_inc.y);
+                    ctx.lineTo(P_ext.x, P_ext.y);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    // Segment 3 partial or full
+                    const sp = Math.min((p - 0.6) / 0.4, 1.0);
+                    drawArrowLine(ctx, P_out.x, P_out.y, P_out.x + (P_end.x - P_out.x)*sp, P_out.y + (P_end.y - P_out.y)*sp, COLORS.emergent, 3);
+
+                    // Draw Angles (only when mostly finished)
+                    if (p > 0.9 && params.i > 2) {
+                        drawArcAngle(ctx, P_inc.x, P_inc.y, 1.5 * Math.PI - i_rad, 1.5 * Math.PI, 35, COLORS.textMain, 'i');
+                        drawArcAngle(ctx, P_inc.x, P_inc.y, 0.5 * Math.PI - r_rad, 0.5 * Math.PI, 45, COLORS.textMain, 'r');
+                        drawArcAngle(ctx, P_out.x, P_out.y, 0.5 * Math.PI - i_rad, 0.5 * Math.PI, 35, COLORS.textMain, 'e');
+                    }
+
+                    // Draw Displacement (only at end)
+                    if (p >= 1.0 && params.i > 0) {
+                        // Math to find projection point on extended ray
+                        const dx = Math.sin(i_rad);
+                        const dy = Math.cos(i_rad);
+                        const vx = P_out.x - P_inc.x;
+                        const vy = P_out.y - P_inc.y;
+                        const proj = vx * dx + vy * dy;
+                        const P_proj = {
+                            x: P_inc.x + proj * dx,
+                            y: P_inc.y + proj * dy
+                        };
+
+                        // Offset line to make it visible
+                        const offset = 40;
+                        const P_out_o = { x: P_out.x + offset * dx, y: P_out.y + offset * dy };
+                        const P_proj_o = { x: P_proj.x + offset * dx, y: P_proj.y + offset * dy };
+
+                        // Draw perpendicular indicator
+                        ctx.beginPath();
+                        ctx.strokeStyle = COLORS.displacement;
+                        ctx.setLineDash([4, 4]);
+                        ctx.moveTo(P_out.x, P_out.y); ctx.lineTo(P_out_o.x, P_out_o.y);
+                        ctx.moveTo(P_proj.x, P_proj.y); ctx.lineTo(P_proj_o.x, P_proj_o.y);
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+
+                        // Draw measure line with double arrows
+                        drawArrowLine(ctx, P_out_o.x, P_out_o.y, P_proj_o.x, P_proj_o.y, COLORS.displacement, 2);
+                        drawArrowLine(ctx, P_proj_o.x, P_proj_o.y, P_out_o.x, P_out_o.y, COLORS.displacement, 2); // Reverse arrow
+
+                        // Draw 'd' label
+                        const midX = (P_out_o.x + P_proj_o.x) / 2;
+                        const midY = (P_out_o.y + P_proj_o.y) / 2;
+                        
+                        ctx.fillStyle = '#ffffff';
+                        ctx.beginPath(); ctx.arc(midX, midY, 12, 0, Math.PI * 2); ctx.fill();
+                        
+                        ctx.fillStyle = COLORS.displacement;
+                        ctx.font = 'italic bold 18px "Times New Roman"';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText('d', midX, midY);
+                    }
+                }
+            }
+        }
+
+        /* --- 6. Animation Loop --- */
+        function startAnimation() {
+            if (anim.id) cancelAnimationFrame(anim.id);
+            anim.progress = 0;
+            anim.startTime = performance.now();
+            
+            function step(timestamp) {
+                const elapsed = timestamp - anim.startTime;
+                anim.progress = Math.min(elapsed / anim.duration, 1.0);
+                draw();
+                if (anim.progress < 1.0) {
+                    anim.id = requestAnimationFrame(step);
+                }
+            }
+            anim.id = requestAnimationFrame(step);
+        }
+
+        function interruptAnimation() {
+            if (anim.id) cancelAnimationFrame(anim.id);
+            anim.progress = 1.0;
+            draw();
+        }
+
+        /* --- 7. Event Listeners --- */
+        window.addEventListener('resize', resizeCanvas);
+        
+        els.btnLang.addEventListener('click', toggleLanguage);
+        els.btnHelp.addEventListener('click', () => toggleModal(true));
+        els.btnCloseHelp.addEventListener('click', () => toggleModal(false));
+        els.modalHelp.addEventListener('click', (e) => {
+            if(e.target === els.modalHelp) toggleModal(false);
+        });
+
+        els.btnReplay.addEventListener('click', startAnimation);
+
+        // Sliders
+        const updateParams = (e) => {
+            params[e.target.id.split('-')[1]] = parseFloat(e.target.value);
+            interruptAnimation(); // Snapping immediately visually
+            updateCalculations();
+        };
+
+        els.sliderI.addEventListener('input', updateParams);
+        els.sliderN.addEventListener('input', updateParams);
+        els.sliderT.addEventListener('input', updateParams);
+
+        // Init
+        resizeCanvas();
+        updateCalculations();
+        startAnimation(); // Initial draw with animation
+
+    </script>
+</body>
+</html>
