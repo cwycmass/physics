@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMASS Physics Lab Online | 物理互動實驗室</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Lucide 圖示庫 -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+            background-color: #0f172a;
+            /* 添加科技感網格背景 */
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        
+        /* 隱藏/顯示多語系設定 */
+        html[lang="en"] .lang-zh { display: none !important; }
+        html[lang="zh-Hant"] .lang-en { display: none !important; }
+
+        .glass-header {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* 英雄區塊的背景動畫光暈 */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob { 
+            animation: blob 8s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
+
+        /* 卡片光暈過渡效果 */
+        .card-hover-glow {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .card-hover-glow:hover {
+            transform: translateY(-6px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen transition-colors duration-300 relative selection:bg-blue-500/30 selection:text-blue-200">
+
+    <!-- 導覽欄 / 頁眉 -->
+    <nav class="glass-header sticky top-0 z-50 px-6 py-4 transition-all">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="group flex flex-col">
+                <h1 class="text-xl md:text-2xl font-800 tracking-tight text-white uppercase flex items-center gap-2">
+                    <i data-lucide="atom" class="w-6 h-6 text-blue-500 group-hover:rotate-90 transition-transform duration-700"></i>
+                    CMASS <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Physics Lab</span>
+                </h1>
+                <p class="text-[10px] sm:text-xs text-slate-400 uppercase tracking-widest font-semibold mt-0.5">
+                    <span class="lang-zh">線上互動實驗室</span>
+                    <span class="lang-en">Interactive Simulations Portfolio</span>
+                </p>
+            </a>
+            
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex gap-6 text-sm font-medium">
+                    <button id="open-modal-btn" class="text-slate-400 hover:text-white transition-colors flex items-center gap-1 focus:outline-none">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                        <span class="lang-zh">課程單元</span><span class="lang-en">Curriculum</span>
+                    </button>
+                </div>
+                
+                <!-- 語言切換按鈕 -->
+                <button id="lang-toggle" class="bg-slate-800/80 hover:bg-slate-700 border border-slate-700/50 text-slate-200 px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 shadow-inner hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+                    <i data-lucide="languages" class="w-4 h-4 text-blue-400"></i>
+                    <span class="lang-zh tracking-wider">EN</span>
+                    <span class="lang-en tracking-wider">繁中</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄區塊 -->
+    <header class="relative pt-12 pb-10 px-6 overflow-hidden flex flex-col justify-center min-h-[40vh]">
+        <!-- 背景裝飾性光暈 -->
+        <div class="absolute inset-0 z-0 pointer-events-none flex justify-center items-center">
+            <div class="absolute w-72 h-72 md:w-96 md:h-96 bg-blue-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob"></div>
+            <div class="absolute w-72 h-72 md:w-96 md:h-96 bg-emerald-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob animation-delay-2000 translate-x-20"></div>
+            <div class="absolute w-72 h-72 md:w-96 md:h-96 bg-indigo-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob animation-delay-4000 -translate-x-20"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto text-center mt-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs md:text-sm font-semibold mb-6">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                </span>
+                <span class="lang-zh">支援動覺及視覺型學習者</span>
+                <span class="lang-en">Empowering Kinesthetic & Visual Learners</span>
+            </div>
+            <h2 class="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight leading-tight md:leading-tight text-balance">
+                <span class="lang-zh">透過 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400">AI 驅動的互動視覺學習</span><br>掌握物理定律</span>
+                <span class="lang-en">Master Physics through <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400">AI-Driven Visual Learning</span></span>
+            </h2>
+            <p class="text-base md:text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed text-balance">
+                <span class="lang-zh">結合 AI 協作編程 (Vibe Coding) 與網頁互動技術，轉化抽象概念為生動具體，全面深化學習體驗與理解力。</span>
+                <span class="lang-en">Built with AI-powered vibe coding, this interactive platform transforms abstract HKDSE Physics concepts into vivid visual simulations, enhancing your understanding and learning experience.</span>
+            </p>
+
+            <!-- Quick Links -->
+            <div id="quick-links" class="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+                <!-- 由腳本注入 -->
+            </div>
+        </div>
+    </header>
+
+    <!-- 內容容器 -->
+    <main id="main-content" class="relative z-10 max-w-7xl mx-auto px-6 pb-24 pt-10">
+        <!-- 應用程式將由腳本注入此處 -->
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="border-t border-slate-800/60 bg-slate-900/50 backdrop-blur-sm py-12 text-center text-slate-500 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col items-center gap-4">
+            <i data-lucide="graduation-cap" class="w-8 h-8 text-slate-700"></i>
+            <p class="text-slate-400 font-medium text-sm md:text-base">
+                <span class="lang-zh">廠商會中學．物理科 © <span id="year"></span></span>
+                <span class="lang-en">CMA Secondary School Physics Department © <span id="year-en"></span></span>
+            </p>
+            <p class="text-xs text-slate-600">Built for interactive learning.</p>
+        </div>
+    </footer>
+
+    <!-- 課程單元 Modal -->
+    <div id="syllabus-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center px-4 py-6 opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm modal-backdrop"></div>
+        <div class="relative bg-slate-800 border border-slate-700 w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden transform scale-95 transition-transform duration-300 modal-content-box">
+            <div class="p-5 border-b border-slate-700 flex justify-between items-center bg-slate-800/80">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i data-lucide="book-open" class="w-5 h-5 text-blue-400"></i>
+                    <span class="lang-zh">HKDSE 物理課程簡介</span>
+                    <span class="lang-en">HKDSE Physics Syllabus</span>
+                </h3>
+                <button class="text-slate-400 hover:text-white transition-colors modal-close-btn focus:outline-none">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-6">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-blue-500/50 transition-colors">
+                        <h4 class="font-bold text-orange-400 mb-2">Core 1: 熱和氣體 / Heat & Gases</h4>
+                        <p class="text-sm text-slate-300">涵蓋溫度、熱容量、比潛熱及理想氣體定律的分子運動論。</p>
+                        <p class="text-sm text-slate-400 mt-1">Temperature, specific heat capacity, specific latent heat, and kinetic theory of ideal gases.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-blue-500/50 transition-colors">
+                        <h4 class="font-bold text-blue-400 mb-2">Core 2: 力和運動 / Force & Motion</h4>
+                        <p class="text-sm text-slate-300">牛頓運動定律、動量、拋體運動、圓周運動及引力。</p>
+                        <p class="text-sm text-slate-400 mt-1">Newton's laws, momentum, projectile motion, circular motion, and gravitation.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-blue-500/50 transition-colors">
+                        <h4 class="font-bold text-cyan-400 mb-2">Core 3: 波動 / Wave Motion</h4>
+                        <p class="text-sm text-slate-300">波動特性、光學、干涉和繞射現象、聲學原理。</p>
+                        <p class="text-sm text-slate-400 mt-1">Wave properties, optics, interference, diffraction, and acoustics.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-blue-500/50 transition-colors">
+                        <h4 class="font-bold text-yellow-400 mb-2">Core 4: 電和磁 / Electricity & Magnetism</h4>
+                        <p class="text-sm text-slate-300">靜電學、電路學、電磁感應及交流電原理。</p>
+                        <p class="text-sm text-slate-400 mt-1">Electrostatics, circuits, electromagnetism, and alternating current.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-blue-500/50 transition-colors">
+                        <h4 class="font-bold text-emerald-400 mb-2">Core 5: 放射現象 / Radioactivity</h4>
+                        <p class="text-sm text-slate-300">輻射種類、半衰期、核裂變與核聚變的能量轉換。</p>
+                        <p class="text-sm text-slate-400 mt-1">Types of radiation, half-life, nuclear fission and fusion energy.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-blue-500/50 transition-colors">
+                        <h4 class="font-bold text-purple-400 mb-2">Electives / 選修單元</h4>
+                        <p class="text-sm text-slate-300">E1 天文學與航天科學 (Astronomy) 及 E3 能量與能源的使用 (Energy Use)。</p>
+                        <p class="text-sm text-slate-400 mt-1">E1 Astronomy & Space Science, E3 Energy and Use of Energy.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 設定當前年份
+        const currentYear = new Date().getFullYear();
+        document.getElementById('year').textContent = currentYear;
+        document.getElementById('year-en').textContent = currentYear;
+
+        /**
+         * 設定：HKDSE 課程單元 (雙語)
+         * 加入 icon 設定以便搭配 Lucide 圖示
+         */
+        const TOPIC_CONFIG = {
+            "Core 1": { 
+                zh: "必修部分 1: 熱和氣體", en: "Core 1: Heat and Gases", 
+                order: 1, color: "from-orange-500 to-red-500", icon: "thermometer",
+                short_zh: "熱學", short_en: "Heat & Gases"
+            },
+            "Core 2": { 
+                zh: "必修部分 2: 力和運動", en: "Core 2: Force and Motion", 
+                order: 2, color: "from-blue-500 to-indigo-500", icon: "activity",
+                short_zh: "力學", short_en: "Force & Motion"
+            },
+            "Core 3": { 
+                zh: "必修部分 3: 波動", en: "Core 3: Wave Motion", 
+                order: 3, color: "from-cyan-400 to-blue-500", icon: "waves",
+                short_zh: "波動", short_en: "Wave Motion"
+            },
+            "Core 4": { 
+                zh: "必修部分 4: 電和磁", en: "Core 4: Electricity & Magnetism", 
+                order: 4, color: "from-yellow-400 to-orange-500", icon: "zap",
+                short_zh: "電磁學", short_en: "Electromagnetism"
+            },
+            "Core 5": { 
+                zh: "必修部分 5: 放射現象和核能", en: "Core 5: Radioactivity & Nuclear", 
+                order: 5, color: "from-emerald-400 to-teal-500", icon: "radio",
+                short_zh: "放射現象", short_en: "Radioactivity"
+            },
+            "E1": { 
+                zh: "選修部分 1: 天文學和航天科學", en: "E1: Astronomy & Space Science", 
+                order: 6, color: "from-purple-500 to-pink-500", icon: "telescope",
+                short_zh: "天文學", short_en: "Astronomy"
+            },
+            "E3": { 
+                zh: "選修部分 3: 能量和能源的使用", en: "E3: Energy and Use of Energy", 
+                order: 7, color: "from-lime-400 to-emerald-500", icon: "battery-charging",
+                short_zh: "能量", short_en: "Energy"
+            },
+            "Others": {
+                zh: "其他: 實用工具與資源", en: "Others: Utilities & Resources",
+                order: 8, color: "from-slate-400 to-gray-500", icon: "calculator",
+                short_zh: "實用工具", short_en: "Utilities"
+            }
+        };
+
+        /**
+         * 數據區域：雙語應用程式數據
+         * 修復了重複的比熱容量實驗，改為潛熱實驗
+         */
+        const apps = [
+            {
+                title_zh: "比熱容量實驗",
+                title_en: "Specific Heat Capacity Lab",
+                topic_id: "Core 1",
+                order: 1,
+                desc_zh: "測量並計算不同物質在加熱過程中的能量轉移和溫度變化關係。",
+                desc_en: "Calculate energy transfer and temperature change in different substances during heating.",
+                link: "apps/heat-capacity/index.html",
+                image: "https://images.unsplash.com/photo-1532187875605-1ef6ca237bbd?auto=format&fit=crop&q=80&w=600"
+            },
+            {
+                title_zh: "潛熱測量實驗",
+                title_en: "Latent Heat Simulation",
+                topic_id: "Core 1",
+                order: 2,
+                desc_zh: "觀察冰熔化及水沸騰時的溫度變化，並測量其比潛熱。",
+                desc_en: "Observe state changes during melting and boiling, and measure specific latent heat.",
+                link: "apps/latent-heat/index.html",
+                image: "https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?auto=format&fit=crop&q=80&w=600"
+            },
+            {
+                title_zh: "拋體運動模擬器",
+                title_en: "Projectile Simulator",
+                topic_id: "Core 2",
+                order: 1,
+                desc_zh: "分析不同發射角度和初速度下的二維拋體運動學特性與軌跡。",
+                desc_en: "Analyze 2D kinematics and trajectories with variable launch angles and initial velocities.",
+                link: "apps/projectile/index.html",
+                image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=600"
+            },
+            {
+                title_zh: "楊氏雙縫干涉",
+                title_en: "Young's Double Slit",
+                topic_id: "Core 3",
+                order: 1,
+                desc_zh: "可視化光波的干涉圖樣，調整波長及縫距並測量干涉條紋間距。",
+                desc_en: "Visualize interference patterns, adjust wavelengths, and measure fringe separation.",
+                link: "apps/double-slit/index.html",
+                image: "https://images.unsplash.com/photo-1506318137071-a8e063b4b519?auto=format&fit=crop&q=80&w=600"
+            },
+            {
+                title_zh: "直流電路構建器",
+                title_en: "DC Circuit Builder",
+                topic_id: "Core 4",
+                order: 1,
+                desc_zh: "自由構建串聯和並聯電路，使用虛擬儀表驗證歐姆定律與基爾霍夫定律。",
+                desc_en: "Build series and parallel circuits to verify Ohm's and Kirchhoff's Laws with virtual meters.",
+                link: "apps/circuits/index.html",
+                image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&q=80&w=600"
+            },
+            {
+                title_zh: "開普勒行星定律",
+                title_en: "Kepler's Laws",
+                topic_id: "E1",
+                order: 1,
+                desc_zh: "模擬行星繞恆星運行的橢圓軌道，並驗證面積定律與週期定律。",
+                desc_en: "Simulate planetary elliptical orbits and verify the Law of Areas and Law of Periods.",
+                link: "apps/astronomy/index.html",
+                image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=600"
+            },
+            {
+                title_zh: "家居能源效率模擬",
+                title_en: "Home Energy Efficiency",
+                topic_id: "E3",
+                order: 1,
+                desc_zh: "計算與比較不同家用電器的能源消耗、能源標籤效率及電費成本。",
+                desc_en: "Calculate and compare energy consumption, efficiency, and electricity cost of household appliances.",
+                link: "apps/energy-efficiency/index.html",
+                image: "https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&q=80&w=600"
+            },
+            {
+                title_zh: "科學計算機",
+                title_en: "Scientific Calculator",
+                topic_id: "Others",
+                order: 1,
+                desc_zh: "內建常數表與科學記號運算的進階虛擬計算機。",
+                desc_en: "Advanced virtual calculator with constants table and scientific notation.",
+                link: "apps/calculator/index.html",
+                image: "https://images.unsplash.com/photo-1574607383476-f517f260d30b?auto=format&fit=crop&q=80&w=600"
+            },
+            {
+                title_zh: "HKDSE 公式表",
+                title_en: "Formula Reference",
+                topic_id: "Others",
+                order: 2,
+                desc_zh: "完整的物理科考試公式與重要常數參考表。",
+                desc_en: "Complete reference table for physics formulas and constants.",
+                link: "apps/formula/index.html",
+                image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=600"
+            }
+        ];
+
+        // 渲染邏輯
+        function renderApps() {
+            const mainContent = document.getElementById('main-content');
+            
+            // 按主題分組
+            const grouped = apps.reduce((acc, app) => {
+                (acc[app.topic_id] = acc[app.topic_id] || []).push(app);
+                return acc;
+            }, {});
+
+            // 根據 TOPIC_CONFIG 排序主題
+            const sortedTopicKeys = Object.keys(grouped).sort((a, b) => {
+                return (TOPIC_CONFIG[a]?.order || 99) - (TOPIC_CONFIG[b]?.order || 99);
+            });
+
+            // 建立 HTML 字串以優化 DOM 操作效能
+            let htmlContent = '';
+
+            sortedTopicKeys.forEach(id => {
+                const config = TOPIC_CONFIG[id];
+                const sortedApps = grouped[id].sort((a, b) => a.order - b.order);
+                
+                // 生成該主題下的卡片 HTML
+                const cardsHtml = sortedApps.map(app => `
+                    <div class="card-hover-glow glass-card rounded-2xl overflow-hidden flex flex-col group relative">
+                        <div class="aspect-[16/10] relative overflow-hidden bg-slate-800">
+                            <img src="${app.image}" alt="" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out opacity-80 group-hover:opacity-100">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+                            
+                            <!-- Topic Badge -->
+                            <div class="absolute top-4 left-4 px-3 py-1 bg-slate-900/80 backdrop-blur-md rounded-full border border-slate-700/50 flex items-center gap-1.5">
+                                <div class="w-2 h-2 rounded-full bg-gradient-to-r ${config.color}"></div>
+                                <span class="text-[10px] font-bold tracking-wider text-slate-300 uppercase">${id}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 flex flex-col flex-grow relative z-10 -mt-6">
+                            <h3 class="text-xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:${config.color} transition-all duration-300">
+                                <span class="lang-zh">${app.title_zh}</span>
+                                <span class="lang-en">${app.title_en}</span>
+                            </h3>
+                            <p class="text-slate-400 text-sm line-clamp-3 mb-6 flex-grow leading-relaxed">
+                                <span class="lang-zh">${app.desc_zh}</span>
+                                <span class="lang-en">${app.desc_en}</span>
+                            </p>
+                            
+                            <a href="${app.link}" class="relative w-full py-3.5 px-4 rounded-xl overflow-hidden group/btn bg-slate-800 border border-slate-700 text-center transition-all duration-300 hover:border-transparent">
+                                <div class="absolute inset-0 bg-gradient-to-r ${config.color} opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                                <div class="relative flex justify-center items-center gap-2 text-sm font-bold text-slate-300 group-hover/btn:text-white transition-colors">
+                                    <i data-lucide="play" class="w-4 h-4"></i>
+                                    <span class="lang-zh">開啟實驗室</span>
+                                    <span class="lang-en">Launch Simulation</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                `).join('');
+
+                // 組合主題區塊
+                htmlContent += `
+                    <section id="topic-${id}" class="mb-24 scroll-mt-28">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-slate-800/80 border border-slate-700/50 shadow-inner">
+                                <i data-lucide="${config.icon}" class="w-6 h-6 text-transparent bg-clip-text bg-gradient-to-br ${config.color}" style="color: transparent; fill: url(#gradient); stroke: currentcolor;"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-extrabold tracking-wide text-white uppercase flex flex-col">
+                                    <span class="lang-zh">${config.zh}</span>
+                                    <span class="lang-en">${config.en}</span>
+                                </h2>
+                                <div class="h-1 w-12 bg-gradient-to-r ${config.color} rounded-full mt-2"></div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            ${cardsHtml}
+                        </div>
+                    </section>
+                `;
+            });
+
+            mainContent.innerHTML = htmlContent;
+
+            // 建立 Quick Links
+            const quickLinksContainer = document.getElementById('quick-links');
+            if (quickLinksContainer) {
+                let quickLinksHtml = '';
+                sortedTopicKeys.forEach(id => {
+                    const config = TOPIC_CONFIG[id];
+                    quickLinksHtml += `
+                        <a href="#topic-${id}" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/80 border border-slate-700 hover:bg-slate-700 hover:border-slate-500 transition-all text-sm font-medium text-slate-300 hover:text-white shadow-sm">
+                            <div class="w-2 h-2 rounded-full bg-gradient-to-r ${config.color}"></div>
+                            <span class="lang-zh">${config.short_zh}</span>
+                            <span class="lang-en">${config.short_en}</span>
+                        </a>
+                    `;
+                });
+                quickLinksContainer.innerHTML = quickLinksHtml;
+            }
+            
+            // 重新初始化 Lucide 圖示
+            lucide.createIcons();
+        }
+
+        // 語言切換邏輯 (已修復：切換 document.documentElement 的 lang 屬性)
+        const langToggle = document.getElementById('lang-toggle');
+        langToggle.addEventListener('click', () => {
+            const currentLang = document.documentElement.lang || 'zh-Hant';
+            const newLang = currentLang === 'zh-Hant' ? 'en' : 'zh-Hant';
+            
+            document.documentElement.lang = newLang;
+            localStorage.setItem('pref-lang', newLang);
+        });
+
+        // Modal (課程單元) 邏輯
+        const modal = document.getElementById('syllabus-modal');
+        const openBtn = document.getElementById('open-modal-btn');
+        const closeBtns = document.querySelectorAll('.modal-close-btn, .modal-backdrop');
+        const modalBox = modal.querySelector('.modal-content-box');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            // 小延遲以確保 CSS transition 發揮作用
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalBox.classList.remove('scale-95');
+                modalBox.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalBox.classList.remove('scale-100');
+            modalBox.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        openBtn.addEventListener('click', openModal);
+        closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
+
+        // 載入偏好並渲染
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('pref-lang');
+            if (savedLang) {
+                document.documentElement.lang = savedLang;
+            }
+            renderApps();
+            // 初始化固定寫在 HTML 裡的 Lucide 圖示
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
