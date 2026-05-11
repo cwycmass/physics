@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音頻產生器及頻譜分析儀Sound Generator & Frequency Analyzer</title>
+
+    <!-- Tailwind CSS for modern UI architecture -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax 3 for high-quality LaTeX rendering -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* --- 1. Global Styles & Visual Design --- */
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        
+        /* Custom Scrollbar for the Control Sidebar */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f8fafc; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Range Slider Styling consistent with Primary UI Palette (#1e3c72) */
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%;
+            background: #1e3c72; cursor: pointer; margin-top: -7px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px; cursor: pointer; background: #e2e8f0; border-radius: 2px;
+        }
+
+        /* Interactive Element States */
+        .btn-wave.active {
+            background-color: #1e3c72; color: white; border-color: #1e3c72;
+            box-shadow: 0 4px 6px -1px rgba(30, 60, 114, 0.3);
+        }
+        .tab-btn.active { border-bottom: 3px solid #1e3c72; color: #1e3c72; font-weight: 700; }
+
+        #canvas-wrapper {
+            background-color: #0f172a; /* Slate-950 for deep contrast */
+            border-radius: 0.75rem;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+            overflow: hidden;
+            position: relative;
+        }
+        canvas { display: block; width: 100%; height: 100%; image-rendering: auto; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col h-screen overflow-hidden">
+
+    <!-- --- Header Section --- -->
+    <header class="bg-[#1e3c72] text-white flex justify-between items-center px-6 py-3 shadow-lg z-20 shrink-0">
+        <div class="flex items-center gap-3">
+            <div class="bg-white/20 p-1.5 rounded-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+            </div>
+            <h1 id="ui-title" class="text-lg font-bold tracking-tight">聲音與頻譜實驗室</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <button id="btn-help" class="text-white/80 hover:text-white transition-colors flex items-center gap-1.5 text-sm font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span id="ui-help">說明</span>
+            </button>
+            <button id="btn-lang" class="bg-white/10 hover:bg-white/20 px-4 py-1 rounded-full text-xs font-bold transition-all border border-white/30 uppercase tracking-widest">
+                English
+            </button>
+        </div>
+    </header>
+
+    <!-- --- Main Layout --- -->
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+        
+        <!-- Sidebar Controls -->
+        <aside class="w-full md:w-80 bg-white border-r border-slate-200 flex flex-col shadow-xl z-10 shrink-0">
+            <!-- Mode Selection Tabs -->
+            <div class="flex border-b border-slate-200 bg-slate-50 shrink-0">
+                <button class="tab-btn active flex-1 py-4 text-xs font-bold uppercase tracking-wider transition-all" data-mode="gen" id="tab-gen">音頻產生器</button>
+                <button class="tab-btn flex-1 py-4 text-xs font-bold uppercase tracking-wider transition-all" data-mode="spec" id="tab-spec">頻譜分析儀</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-5 space-y-6 custom-scrollbar">
+                
+                <!-- Panel 1: Signal Generator -->
+                <div id="panel-gen" class="space-y-6 animate-in fade-in duration-300">
+                    <!-- Master Control -->
+                    <div class="flex justify-center flex-col items-center gap-3">
+                        <button id="btn-play" class="group w-20 h-20 rounded-full bg-white border-4 border-[#1e3c72] hover:bg-blue-50 transition-all flex items-center justify-center shadow-lg active:scale-95">
+                            <svg id="icon-play" class="w-8 h-8 text-[#1e3c72] ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <svg id="icon-stop" class="w-8 h-8 text-red-600 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+                        </button>
+                        <span id="lbl-play-state" class="text-xs font-bold text-slate-500 uppercase tracking-tighter">播放</span>
+                    </div>
+
+                    <!-- Frequency Card -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <label id="lbl-freq" class="font-bold text-slate-700 text-xs uppercase">頻率 $f$</label>
+                            <div class="flex items-center gap-1">
+                                <input type="number" id="freq-input" value="440" min="20" max="20000" step="1" class="w-20 px-2 py-1 text-right text-sm font-mono border border-slate-300 rounded-md focus:ring-2 ring-blue-100 outline-none">
+                                <span class="text-[10px] font-bold text-slate-400">Hz</span>
+                            </div>
+                        </div>
+                        <input type="range" id="freq-slider" min="0" max="1000" value="700">
+                        <div class="flex gap-1.5 justify-between">
+                            <button onclick="adjustOctave(0.5)" class="flex-1 py-1.5 text-[10px] bg-white border border-slate-200 rounded hover:bg-slate-100 font-bold transition">÷2</button>
+                            <button onclick="setFreq(440)" class="flex-1 py-1.5 text-[10px] bg-white border border-[#1e3c72] text-[#1e3c72] rounded hover:bg-blue-50 font-bold transition">440Hz</button>
+                            <button onclick="adjustOctave(2)" class="flex-1 py-1.5 text-[10px] bg-white border border-slate-200 rounded hover:bg-slate-100 font-bold transition">×2</button>
+                        </div>
+                    </div>
+
+                    <!-- Waveform Card -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <label id="lbl-wave" class="font-bold text-slate-700 text-xs uppercase block mb-3">波形類型</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button class="btn-wave active p-2 border border-slate-200 rounded-lg text-[10px] font-bold transition-all bg-white flex flex-col items-center gap-1" data-type="sine">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 12c2.5-6 6-6 9 0s7.5 6 11 0"/></svg>
+                                <span class="wave-name" data-zh="正弦波" data-en="Sine">正弦波</span>
+                            </button>
+                            <button class="btn-wave p-2 border border-slate-200 rounded-lg text-[10px] font-bold transition-all bg-white flex flex-col items-center gap-1" data-type="square">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12h5V7h6v10h6v-5h1"/></svg>
+                                <span class="wave-name" data-zh="方波" data-en="Square">方波</span>
+                            </button>
+                            <button class="btn-wave p-2 border border-slate-200 rounded-lg text-[10px] font-bold transition-all bg-white flex flex-col items-center gap-1" data-type="sawtooth">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 18L10 6v12l6-12v12l4-8"/></svg>
+                                <span class="wave-name" data-zh="鋸齒波" data-en="Sawtooth">鋸齒波</span>
+                            </button>
+                            <button class="btn-wave p-2 border border-slate-200 rounded-lg text-[10px] font-bold transition-all bg-white flex flex-col items-center gap-1" data-type="triangle">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 18L12 6l9 12"/></svg>
+                                <span class="wave-name" data-zh="三角波" data-en="Triangle">三角波</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Volume Card -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <label id="lbl-vol" class="font-bold text-slate-700 text-xs uppercase">振幅 $A$</label>
+                            <span id="vol-display" class="text-[10px] font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">50%</span>
+                        </div>
+                        <input type="range" id="vol-slider" min="0" max="100" value="50">
+                    </div>
+                </div>
+
+                <!-- Panel 2: Spectrum Analyzer -->
+                <div id="panel-spec" class="hidden space-y-6 animate-in slide-in-from-right-4 duration-300">
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center space-y-4">
+                        <p id="desc-spec" class="text-xs leading-relaxed text-blue-800 font-medium">
+                            使用設備麥克風擷取環境聲音，並利用快速傅立葉轉換 (FFT) 顯示實時頻譜。
+                        </p>
+                        <button id="btn-mic" class="bg-[#1e3c72] hover:bg-blue-800 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all active:scale-95 w-full flex justify-center items-center gap-2 text-sm uppercase tracking-wider">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                            <span id="lbl-mic">啟用麥克風</span>
+                        </button>
+                    </div>
+                    <div id="mic-error" class="hidden bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl text-xs font-bold flex items-center gap-2">
+                        <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/></svg>
+                        <span id="mic-err-text">麥克風存取失敗</span>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- Visualization Canvas Area -->
+        <section class="flex-1 p-4 md:p-6 bg-slate-100 flex flex-col relative overflow-hidden">
+            <div id="canvas-wrapper" class="flex-1 w-full h-full relative group">
+                <canvas id="physics-canvas"></canvas>
+                
+                <!-- Instructions / Replay Overlay -->
+                <div id="canvas-overlay" class="absolute inset-0 bg-slate-950/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <div class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest">
+                        Real-time Physics Engine Active
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mandatory Footer -->
+            <footer class="mt-4 flex justify-between items-center px-2">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest" id="footer-text">
+                    廠商會中學．物理科
+                </div>
+                <div class="flex gap-3 text-[10px] font-mono text-slate-400">
+                    <span id="canvas-status">STATUS: READY</span>
+                    <span id="sim-time">T: 0.00s</span>
+                </div>
+            </footer>
+        </section>
+    </main>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
+            <div class="bg-[#1e3c72] p-5 flex justify-between items-center text-white">
+                <h2 class="text-lg font-bold tracking-tight" id="modal-title">實驗原理與操作</h2>
+                <button id="close-help" class="p-1 hover:bg-white/10 rounded-lg transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="p-8 text-slate-700 text-sm space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar" id="modal-content">
+                <!-- Content Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- --- 2. Physics & Logic --- -->
+    <script>
+        /* --- A. Global State & Config --- */
+        let currentLang = 'zh';
+        let currentMode = 'gen';
+        
+        const MIN_FREQ = 20;
+        const MAX_FREQ = 20000;
+        const LOG_SLIDER_MAX = 1000;
+        
+        const FFT_SIZE = 8192;
+        const SPEC_MIN_DB = -100;
+        const SPEC_MAX_DB = -10;
+        const SPEC_DRAW_MAX_FREQ = 12000;
+
+        // UI Dictionary
+        const strings = {
+            zh: {
+                title: "聲音與頻譜實驗室", help: "說明", gen: "音頻產生器", spec: "頻譜分析儀",
+                freq: "頻率 $f$", wave: "波形類型", vol: "振幅 $A$", play: "播放", stop: "停止",
+                descSpec: "使用設備麥克風擷取環境聲音，並利用快速傅立葉轉換 (FFT) 顯示實時頻譜。",
+                micStart: "啟用麥克風", micStop: "停止麥克風", micErr: "麥克風存取失敗",
+                footer: "廠商會中學．物理科", modalTitle: "實驗原理與操作",
+                modalBody: `
+                    <div class="space-y-4">
+                        <section>
+                            <h3 class="font-bold text-[#1e3c72] border-b pb-1 mb-2">1. 音頻產生器 (Signal Generator)</h3>
+                            <p>聲音是縱波，由介質中的壓力波動傳播。本模擬產生的波形公式為：$y(t) = A \sin(2\pi f t)$。</p>
+                            <ul class="list-disc ml-5 mt-2 space-y-1 text-slate-500">
+                                <li><b>正弦波 (Sine):</b> 純音，僅包含單一頻率成分。</li>
+                                <li><b>方波 (Square):</b> 包含奇數倍諧波，聽起來較為清脆。</li>
+                                <li><b>頻率 $f$:</b> 決定音調的高低（單位：Hz）。</li>
+                            </ul>
+                        </section>
+                        <section>
+                            <h3 class="font-bold text-[#1e3c72] border-b pb-1 mb-2">2. 頻譜分析 (Spectrum Analysis)</h3>
+                            <p>利用<b>快速傅立葉轉換 (FFT)</b>，我們可以將複雜的時域波形分解為不同頻率的組成成分。這在物理學中稱為頻譜分析。</p>
+                            <p class="mt-2">縱軸代表振幅（分貝 dB），橫軸代表頻率。尖峰位置即代表環境中的主頻率。</p>
+                        </section>
+                    </div>`
+            },
+            en: {
+                title: "Sound & Frequency Lab", help: "Help", gen: "Signal Generator", spec: "Spectrum Analyzer",
+                freq: "Frequency $f$", wave: "Waveform", vol: "Amplitude $A$", play: "Play", stop: "Stop",
+                descSpec: "Capture ambient sound via microphone and visualize the frequency components using FFT.",
+                micStart: "Start Mic", micStop: "Stop Mic", micErr: "Microphone Access Failed",
+                footer: "CMA Secondary School. Physics Department.", modalTitle: "Physics & Operation",
+                modalBody: `
+                    <div class="space-y-4">
+                        <section>
+                            <h3 class="font-bold text-[#1e3c72] border-b pb-1 mb-2">1. Signal Generator</h3>
+                            <p>Sound is a longitudinal wave propagating via pressure variations. This simulation models the wave as: $y(t) = A \sin(2\pi f t)$.</p>
+                            <ul class="list-disc ml-5 mt-2 space-y-1 text-slate-500">
+                                <li><b>Sine Wave:</b> A pure tone consisting of a single frequency.</li>
+                                <li><b>Square Wave:</b> Contains odd harmonics, sounding "bright".</li>
+                                <li><b>Frequency $f$:</b> Determines the pitch (Unit: Hz).</li>
+                            </ul>
+                        </section>
+                        <section>
+                            <h3 class="font-bold text-[#1e3c72] border-b pb-1 mb-2">2. Spectrum Analysis</h3>
+                            <p>Using <b>Fast Fourier Transform (FFT)</b>, we decompose complex time-domain waves into their frequency components.</p>
+                            <p class="mt-2">The vertical axis represents amplitude (dB), and the horizontal axis represents frequency. Peaks indicate dominant frequencies in the environment.</p>
+                        </section>
+                    </div>`
+            }
+        };
+
+        /* --- B. Audio Engine --- */
+        let audioCtx, oscillator, gainNode, analyser;
+        let isPlaying = false;
+        let isMicActive = false;
+        let micStream, micSource;
+        let genParams = { freq: 440, volume: 0.5, type: 'sine' };
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function togglePlay() {
+            initAudio();
+            const btn = document.getElementById('btn-play');
+            const iconPlay = document.getElementById('icon-play');
+            const iconStop = document.getElementById('icon-stop');
+            const lbl = document.getElementById('lbl-play-state');
+
+            if (isPlaying) {
+                if (gainNode) {
+                    gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.015);
+                    setTimeout(() => {
+                        if (oscillator) { oscillator.stop(); oscillator.disconnect(); }
+                        if (gainNode) gainNode.disconnect();
+                        oscillator = null; gainNode = null;
+                    }, 50);
+                }
+                isPlaying = false;
+                iconPlay.classList.remove('hidden');
+                iconStop.classList.add('hidden');
+                lbl.innerText = strings[currentLang].play;
+                document.getElementById('canvas-status').innerText = "STATUS: IDLE";
+            } else {
+                oscillator = audioCtx.createOscillator();
+                gainNode = audioCtx.createGain();
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 2048;
+
+                oscillator.type = genParams.type;
+                oscillator.frequency.setValueAtTime(genParams.freq, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(genParams.volume, audioCtx.currentTime + 0.05);
+
+                oscillator.connect(gainNode);
+                gainNode.connect(analyser);
+                analyser.connect(audioCtx.destination);
+
+                oscillator.start();
+                isPlaying = true;
+                iconPlay.classList.add('hidden');
+                iconStop.classList.remove('hidden');
+                lbl.innerText = strings[currentLang].stop;
+                document.getElementById('canvas-status').innerText = "STATUS: GENERATING";
+            }
+        }
+
+        async function toggleMic() {
+            initAudio();
+            const errBox = document.getElementById('mic-error');
+            const btn = document.getElementById('btn-mic');
+            const lbl = document.getElementById('lbl-mic');
+
+            if (isMicActive) {
+                if (micStream) micStream.getTracks().forEach(t => t.stop());
+                if (micSource) micSource.disconnect();
+                isMicActive = false;
+                lbl.innerText = strings[currentLang].micStart;
+                btn.classList.replace('bg-red-600', 'bg-[#1e3c72]');
+                document.getElementById('canvas-status').innerText = "STATUS: IDLE";
+            } else {
+                try {
+                    errBox.classList.add('hidden');
+                    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    micSource = audioCtx.createMediaStreamSource(micStream);
+                    analyser = audioCtx.createAnalyser();
+                    analyser.fftSize = FFT_SIZE;
+                    analyser.smoothingTimeConstant = 0.8;
+                    
+                    micSource.connect(analyser);
+                    isMicActive = true;
+                    lbl.innerText = strings[currentLang].micStop;
+                    btn.classList.replace('bg-[#1e3c72]', 'bg-red-600');
+                    document.getElementById('canvas-status').innerText = "STATUS: ANALYZING";
+                } catch (e) {
+                    errBox.classList.remove('hidden');
+                    document.getElementById('mic-err-text').innerText = strings[currentLang].micErr;
+                }
+            }
+        }
+
+        /* --- C. Canvas Rendering --- */
+        const canvas = document.getElementById('physics-canvas');
+        const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('canvas-wrapper');
+        let width, height;
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = wrapper.getBoundingClientRect();
+            width = rect.width;
+            height = rect.height;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            ctx.scale(dpr, dpr);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function draw() {
+            requestAnimationFrame(draw);
+            ctx.clearRect(0, 0, width, height);
+            
+            // Grid Background
+            drawGrid();
+
+            if (currentMode === 'gen') {
+                drawOscilloscope();
+            } else {
+                drawSpectrum();
+            }
+            
+            // Update T
+            if (isPlaying || isMicActive) {
+                const now = audioCtx ? audioCtx.currentTime : 0;
+                document.getElementById('sim-time').innerText = `T: ${now.toFixed(2)}s`;
+            }
+        }
+
+        function drawGrid() {
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 0.5;
+            const step = 40;
+            ctx.beginPath();
+            for(let x=0; x<width; x+=step) { ctx.moveTo(x,0); ctx.lineTo(x,height); }
+            for(let y=0; y<height; y+=step) { ctx.moveTo(0,y); ctx.lineTo(width,y); }
+            ctx.stroke();
+        }
+
+        function drawOscilloscope() {
+            ctx.strokeStyle = '#334155';
+            ctx.beginPath();
+            ctx.moveTo(0, height/2);
+            ctx.lineTo(width, height/2);
+            ctx.stroke();
+
+            if (!isPlaying || !analyser) {
+                // Static Wave
+                ctx.strokeStyle = '#64748b';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(0, height/2);
+                ctx.lineTo(width, height/2);
+                ctx.stroke();
+                return;
+            }
+
+            const data = new Float32Array(analyser.frequencyBinCount);
+            analyser.getFloatTimeDomainData(data);
+
+            // Simple zero-crossing trigger for stability
+            let offset = 0;
+            for(let i=0; i<data.length/2; i++) {
+                if(data[i] < 0 && data[i+1] >= 0) { offset = i; break; }
+            }
+
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#10b981'; // Emerald Vector
+            ctx.beginPath();
+            const slice = width / (data.length / 4);
+            let x = 0;
+            for(let i=offset; i<data.length; i++) {
+                const y = (height/2) + data[i] * (height/3);
+                if(i === offset) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+                x += slice;
+                if (x > width) break;
+            }
+            ctx.stroke();
+            
+            // Label
+            ctx.fillStyle = '#10b981';
+            ctx.font = 'bold 12px monospace';
+            ctx.fillText(`FREQ: ${genParams.freq} Hz`, 20, 30);
+        }
+
+        function drawSpectrum() {
+            const margin = { left: 50, right: 20, top: 20, bottom: 40 };
+            const pW = width - margin.left - margin.right;
+            const pH = height - margin.top - margin.bottom;
+
+            // Axis
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(margin.left, margin.top);
+            ctx.lineTo(margin.left, margin.top + pH);
+            ctx.lineTo(margin.left + pW, margin.top + pH);
+            ctx.stroke();
+
+            // Frequency Labels
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            for(let f=0; f<=SPEC_DRAW_MAX_FREQ; f+=2000) {
+                const x = margin.left + (f / SPEC_DRAW_MAX_FREQ) * pW;
+                ctx.fillText(`${f/1000}k`, x, margin.top + pH + 15);
+            }
+
+            if (!isMicActive || !analyser) return;
+
+            const data = new Float32Array(analyser.frequencyBinCount);
+            analyser.getFloatFrequencyData(data);
+
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#ef4444'; // Red Resultant
+            ctx.beginPath();
+            
+            const points = analyser.frequencyBinCount;
+            const maxIdx = Math.floor(SPEC_DRAW_MAX_FREQ * points / (audioCtx.sampleRate/2));
+
+            for(let i=0; i<maxIdx; i++) {
+                const x = margin.left + (i / maxIdx) * pW;
+                const db = Math.max(data[i], SPEC_MIN_DB);
+                const y = margin.top + pH - ((db - SPEC_MIN_DB) / (SPEC_MAX_DB - SPEC_MIN_DB)) * pH;
+                
+                if(i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            
+            // Find Peak
+            let maxDb = -Infinity, peakIdx = 0;
+            for(let i=5; i<maxIdx; i++) {
+                if(data[i] > maxDb) { maxDb = data[i]; peakIdx = i; }
+            }
+            if (maxDb > -80) {
+                const peakFreq = Math.round(peakIdx * (audioCtx.sampleRate/2) / points);
+                const px = margin.left + (peakIdx / maxIdx) * pW;
+                const py = margin.top + pH - ((maxDb - SPEC_MIN_DB) / (SPEC_MAX_DB - SPEC_MIN_DB)) * pH;
+                
+                ctx.fillStyle = 'rgba(239, 68, 68, 0.2)';
+                ctx.beginPath();
+                ctx.arc(px, py, 6, 0, Math.PI*2);
+                ctx.fill();
+                ctx.fillStyle = '#ef4444';
+                ctx.fillText(`${peakFreq} Hz`, px, py - 10);
+            }
+        }
+
+        /* --- D. UI Interactivity --- */
+        function updateUI() {
+            document.getElementById('ui-title').innerText = strings[currentLang].title;
+            document.getElementById('ui-help').innerText = strings[currentLang].help;
+            document.getElementById('btn-lang').innerText = currentLang === 'zh' ? 'English' : '繁體中文';
+            document.getElementById('tab-gen').innerText = strings[currentLang].gen;
+            document.getElementById('tab-spec').innerText = strings[currentLang].spec;
+            document.getElementById('lbl-freq').innerHTML = strings[currentLang].freq;
+            document.getElementById('lbl-wave').innerText = strings[currentLang].wave;
+            document.getElementById('lbl-vol').innerHTML = strings[currentLang].vol;
+            document.getElementById('desc-spec').innerText = strings[currentLang].descSpec;
+            document.getElementById('lbl-mic').innerText = isMicActive ? strings[currentLang].micStop : strings[currentLang].micStart;
+            document.getElementById('footer-text').innerText = strings[currentLang].footer;
+            document.getElementById('modal-title').innerText = strings[currentLang].modalTitle;
+            document.getElementById('modal-content').innerHTML = strings[currentLang].modalBody;
+            
+            document.querySelectorAll('.wave-name').forEach(el => {
+                el.innerText = el.getAttribute(`data-${currentLang}`);
+            });
+            
+            if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
+                MathJax.typesetPromise().catch(err => console.log('MathJax error:', err));
+            }
+        }
+
+        // Freq Controls
+        function calcLog(val) {
+            const minL = Math.log(MIN_FREQ);
+            const maxL = Math.log(MAX_FREQ);
+            const scale = (maxL - minL) / LOG_SLIDER_MAX;
+            return Math.exp(minL + scale * val);
+        }
+        function calcPos(freq) {
+            const minL = Math.log(MIN_FREQ);
+            const maxL = Math.log(MAX_FREQ);
+            return (Math.log(freq) - minL) * LOG_SLIDER_MAX / (maxL - minL);
+        }
+
+        document.getElementById('freq-slider').oninput = (e) => {
+            const f = Math.round(calcLog(e.target.value));
+            genParams.freq = f;
+            document.getElementById('freq-input').value = f;
+            if (oscillator) oscillator.frequency.setTargetAtTime(f, audioCtx.currentTime, 0.01);
+        };
+        document.getElementById('freq-input').onchange = (e) => {
+            let f = parseInt(e.target.value);
+            if(f < MIN_FREQ) f = MIN_FREQ; if(f > MAX_FREQ) f = MAX_FREQ;
+            genParams.freq = f;
+            document.getElementById('freq-slider').value = calcPos(f);
+            if (oscillator) oscillator.frequency.setTargetAtTime(f, audioCtx.currentTime, 0.01);
+        };
+        window.adjustOctave = (mult) => {
+            let f = Math.round(genParams.freq * mult);
+            if(f < MIN_FREQ) f = MIN_FREQ; if(f > MAX_FREQ) f = MAX_FREQ;
+            genParams.freq = f;
+            document.getElementById('freq-input').value = f;
+            document.getElementById('freq-slider').value = calcPos(f);
+            if (oscillator) oscillator.frequency.setTargetAtTime(f, audioCtx.currentTime, 0.01);
+        };
+        window.setFreq = (f) => {
+            genParams.freq = f;
+            document.getElementById('freq-input').value = f;
+            document.getElementById('freq-slider').value = calcPos(f);
+            if (oscillator) oscillator.frequency.setTargetAtTime(f, audioCtx.currentTime, 0.01);
+        };
+
+        // Other Controls
+        document.getElementById('vol-slider').oninput = (e) => {
+            const v = e.target.value;
+            genParams.volume = v / 100;
+            document.getElementById('vol-display').innerText = v + "%";
+            if (gainNode) gainNode.gain.setTargetAtTime(genParams.volume, audioCtx.currentTime, 0.01);
+        };
+
+        document.querySelectorAll('.btn-wave').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.btn-wave').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                genParams.type = btn.dataset.type;
+                if (oscillator) oscillator.type = genParams.type;
+            };
+        });
+
+        // Mode Switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMode = btn.dataset.mode;
+                document.getElementById('panel-gen').classList.toggle('hidden', currentMode !== 'gen');
+                document.getElementById('panel-spec').classList.toggle('hidden', currentMode !== 'spec');
+                
+                // Cleanup audio if switching
+                if (isPlaying) togglePlay();
+                if (isMicActive) toggleMic();
+            };
+        });
+
+        document.getElementById('btn-lang').onclick = () => {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            updateUI();
+        };
+
+        document.getElementById('btn-help').onclick = () => document.getElementById('help-modal').classList.remove('hidden');
+        document.getElementById('close-help').onclick = () => document.getElementById('help-modal').classList.add('hidden');
+        document.getElementById('btn-play').onclick = togglePlay;
+        document.getElementById('btn-mic').onclick = toggleMic;
+
+        // Init
+        updateUI();
+        draw();
+    </script>
+</body>
+</html>
