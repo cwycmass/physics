@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>弗林明左手定則</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax 3 -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' },
+            startup: {
+                pageReady: function () {
+                    return MathJax.startup.defaultPageReady().then(function () {
+                        if (typeof updateUI === 'function') updateUI();
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Three.js Library (r128 - Stable & Fast) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f8fafc; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        body { overscroll-behavior-y: none; }
+        canvas { outline: none; }
+
+        .btn-press { transition: transform 0.1s; }
+        .btn-press:active { transform: scale(0.95); }
+
+        /* Crisp 3D HTML Label Overlays - Now Highly Transparent */
+        .vector-label {
+            position: absolute;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            font-weight: 800;
+            font-size: 14px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(2px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: opacity 0.2s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            z-index: 50;
+        }
+
+        #scoreValue {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s;
+        }
+
+        /* Custom Sliders Styling */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid currentColor;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid currentColor;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col md:flex-row bg-slate-50 text-slate-800 font-sans overflow-hidden">
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 relative transform transition-transform scale-95" id="helpModalContent">
+            <h2 id="modalTitle" class="text-2xl font-bold text-[#1e3c72] mb-4">遊戲玩法與說明</h2>
+            <div class="space-y-4 text-slate-600 leading-relaxed text-sm" id="modalText"></div>
+            <button onclick="toggleModal(false)" class="mt-6 w-full py-3 bg-[#1e3c72] text-white font-semibold rounded-lg hover:bg-blue-800 transition shadow-md btn-press" id="modalCloseBtn">
+                開始學習
+            </button>
+        </div>
+    </div>
+
+    <!-- Feedback Toast -->
+    <div id="toast" class="fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-xl shadow-lg z-40 transition-all duration-300 opacity-0 translate-y-[-20px] pointer-events-none text-white font-semibold flex items-center gap-2">
+        <span id="toastIcon"></span><span id="toastMessage">Feedback</span>
+    </div>
+
+    <!-- LEFT PANE: Control Sidebar -->
+    <div class="w-full md:w-[420px] flex-shrink-0 bg-white shadow-[4px_0_15px_rgba(0,0,0,0.05)] flex flex-col z-10 h-[55vh] md:h-full relative overflow-y-auto">
+        
+        <div class="p-5 bg-[#1e3c72] text-white rounded-br-2xl shadow-md flex-shrink-0">
+            <div class="flex justify-between items-center mb-2">
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide" id="appTitle">弗林明左手定則</h1>
+                    <p class="text-blue-200 text-sm mt-1" id="appSubtitle">3D 真實模擬挑戰</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleModal(true)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold transition flex items-center justify-center">?</button>
+                    <button onclick="toggleLanguage()" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-xs font-semibold transition btn-press">
+                        繁/Eng
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 flex-grow flex flex-col gap-4">
+            
+            <!-- Exciting Scoreboard -->
+            <div class="bg-gradient-to-br from-[#1e3c72] to-[#2a5298] p-4 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative overflow-hidden flex justify-between items-center text-white border border-blue-500/30">
+                <div class="absolute top-0 right-0 -mt-6 -mr-6 w-24 h-24 bg-white opacity-10 rounded-full blur-xl"></div>
+                <div class="absolute bottom-0 left-0 -mb-6 -ml-6 w-20 h-20 bg-white opacity-10 rounded-full blur-xl"></div>
+                <div class="relative z-10 flex flex-col">
+                    <h3 class="font-black tracking-wider text-sm text-blue-100 flex items-center gap-1.5" id="scoreLabel">
+                        <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        分數 Score
+                    </h3>
+                    <p class="text-[11px] text-blue-200 mt-1 opacity-90" id="objectiveText">旋轉 3D 左手模型，與向量對齊！</p>
+                </div>
+                <div class="relative z-10 bg-white/10 backdrop-blur-md border border-white/20 px-5 py-2 rounded-xl text-3xl font-black shadow-inner tabular-nums" id="scoreValue">0</div>
+            </div>
+
+            <!-- Sliders for Local Rotation -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-slate-700 text-[10px] uppercase tracking-wider" id="controlsTitle">微調旋轉</h3>
+                    <button onclick="resetHandRotation()" class="text-[10px] bg-white border border-slate-300 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded transition btn-press font-bold shadow-sm" id="btnReset">重設姿勢</button>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 text-red-600">
+                        <span class="text-[11px] font-bold w-20 flex-shrink-0" id="slThumb">沿拇指旋轉</span>
+                        <input type="range" min="-180" max="180" value="0" class="flex-grow h-2 bg-red-200 rounded-lg appearance-none outline-none" id="sliderF">
+                    </div>
+                    <div class="flex items-center gap-3 text-emerald-600">
+                        <span class="text-[11px] font-bold w-20 flex-shrink-0" id="slIndex">沿食指旋轉</span>
+                        <input type="range" min="-180" max="180" value="0" class="flex-grow h-2 bg-emerald-200 rounded-lg appearance-none outline-none" id="sliderB">
+                    </div>
+                    <div class="flex items-center gap-3 text-amber-500">
+                        <span class="text-[11px] font-bold w-20 flex-shrink-0" id="slMiddle">沿中指旋轉</span>
+                        <input type="range" min="-180" max="180" value="0" class="flex-grow h-2 bg-amber-200 rounded-lg appearance-none outline-none" id="sliderI">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-auto space-y-2 pb-2">
+                <div class="flex gap-2">
+                    <button onclick="checkAnswer()" class="w-2/3 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition transform btn-press flex justify-center items-center text-sm" id="btnCheck">
+                        檢查對齊情況
+                    </button>
+                    <button onclick="checkZeroForce()" class="w-1/3 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-lg shadow-amber-500/30 transition transform btn-press flex justify-center items-center text-sm" id="btnZero">
+                        <i>F</i> = 0
+                    </button>
+                </div>
+                <button onclick="skipQuestion()" class="w-full py-2 bg-white hover:bg-slate-50 text-slate-600 font-semibold rounded-xl border border-slate-300 transition btn-press text-sm" id="btnSkip">
+                    跳過 / 產生新題目 (-5)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT PANE: Canvas Area -->
+    <div class="flex-grow relative flex flex-col h-[45vh] md:h-full bg-slate-50">
+        <div class="flex-grow relative overflow-hidden" id="canvasContainer">
+            <!-- HTML Overlay for crisp 3D labels -->
+            <div id="labelsContainer" class="absolute inset-0 pointer-events-none z-10 overflow-hidden"></div>
+        </div>
+        <!-- Footer -->
+        <div class="bg-[#1e3c72] text-blue-100 py-2.5 text-center text-sm font-medium tracking-wide z-20 border-t border-blue-800 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] flex-shrink-0">
+            <span id="footerText">廠商會中學．物理科</span>
+        </div>
+    </div>
+
+    <script>
+        /* --- 1. State & Bilingual Logic --- */
+        let lang = 'zh', score = 0, solved = false;
+        let currentAngleToI = 90;
+        let currentArrowLength = 2.0;
+        let layoutOffset = 2.0;
+        
+        let targetQuaternion = null; 
+        let currentTargetQ = new THREE.Quaternion();
+        let isAnimatingHand = false;
+        let currentOffsets = { F: new THREE.Vector3(), B: new THREE.Vector3(), I: new THREE.Vector3() };
+        
+        // Excluded Red, Green, and Amber/Yellow to prevent color-matching
+        const SAFE_COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#06b6d4', '#6366f1', '#14b8a6', '#d946ef', '#0ea5e9'];
+        let colorQStr = '#475569', colorAStr = '#475569';
+        let colorQHex = 0x475569, colorAHex = 0x475569;
+
+        const DICT = {
+            en: {
+                title: "Fleming's Left-Hand Rule", subtitle: "Anatomical 3D Challenge",
+                scoreLabel: "Score", objective: "Rotate the 3D hand to match the given environment vectors!",
+                controlsTitle: "Fine Tune Rotation", dragHint: "Slide to twist along the finger's axis. Drag canvas for free rotation.",
+                btnCheck: "Check Alignment", btnSkip: "Skip / Next Question (-5 pts)", btnZero: "<i>F</i> = 0",
+                btnNext: "Next Question", toastSkip: "Skipped (-5). Showing correct alignment.",
+                slThumb: "Rotate about Thumb", slIndex: "Rotate about Index", slMiddle: "Rotate about Middle",
+                btnReset: "Reset", lblTarget: "Target", lblFound: "%s Found!", texPalm: "PALM", texBack: "BACK",
+                toastSuccess: "Excellent! +10 pts. Hand is perfectly aligned.", toastFail: "Incorrect! -1 pt. Try rotating again!",
+                modalTitle: "How to Play",
+                modalText: `
+                    <p>Fleming's Left-Hand Rule determines the direction of magnetic force on a current-carrying wire.</p>
+                    <ul class="list-none pl-2 mt-2 space-y-2 border-l-2 border-[#1e3c72] ml-2">
+                        <li><span class="text-[#DC2626] font-bold">Thumb</span> = Magnetic Force ($F$)</li>
+                        <li><span class="text-[#10B981] font-bold">Index</span> = Magnetic Field ($B$)</li>
+                        <li><span class="text-[#F59E0B] font-bold">Middle</span> = Current ($I$)</li>
+                    </ul>
+                    <p class="mt-3"><b>Your Task:</b></p>
+                    <p>Observe the target symbols. Vectors along the paper are solid lines. <br>Vectors going <b>Into Paper</b> are marked with $\\otimes$. <br>Vectors coming <b>Out of Paper</b> are marked with $\\odot$.</p>
+                    <p>Rotate the 3D mannequin hand using the sliders or by dragging until its colored fingertips align with these symbols. Notice the "PALM" and "BACK" labels to help orient the hand. Click "Check Alignment" to verify!</p>
+                    <p class="mt-2 text-emerald-700 font-medium">If $B$ and $I$ are parallel, force $F$ is zero. In this case, click the <b><i>F</i> = 0</b> button instead.</p>
+                    <p class="mt-1 text-emerald-700 font-medium">If $B$ and $I$ are not $90^{\\circ}$ apart, align the middle finger to $I$ and the index finger to the perpendicular component of $B$.</p>
+                `,
+                modalBtn: "Start Learning", footer: "CMA Secondary School. Physics Department."
+            },
+            zh: {
+                title: "弗林明左手定則", subtitle: "3D 真實模擬挑戰",
+                scoreLabel: "分數", objective: "旋轉 3D 左手模型，使其與已知環境向量對齊！",
+                controlsTitle: "微調旋轉", dragHint: "使用滑桿沿著特定手指軸心旋轉，或直接拖曳畫布自由旋轉。",
+                btnCheck: "檢查對齊情況", btnSkip: "跳過 / 產生新題目 (-5分)", btnZero: "<i>F</i> = 0",
+                btnNext: "下一題", toastSkip: "已跳過 (-5分)。為您顯示正確姿勢。",
+                slThumb: "沿拇指旋轉", slIndex: "沿食指旋轉", slMiddle: "沿中指旋轉",
+                btnReset: "重設姿勢", lblTarget: "目標", lblFound: "已找到 %s！", texPalm: "掌心", texBack: "手背",
+                toastSuccess: "太棒了！得 10 分。左手方向完全正確。", toastFail: "方向未對齊！扣 1 分。請繼續嘗試！",
+                modalTitle: "遊戲玩法與說明",
+                modalText: `
+                    <p>弗林明左手定則用於判斷載流導線在磁場中所受磁力的方向：</p>
+                    <ul class="list-none pl-2 mt-2 space-y-2 border-l-2 border-[#1e3c72] ml-2">
+                        <li><span class="text-[#DC2626] font-bold">拇指</span> = 磁力方向 ($F$)</li>
+                        <li><span class="text-[#10B981] font-bold">食指</span> = 磁場方向 ($B$)</li>
+                        <li><span class="text-[#F59E0B] font-bold">中指</span> = 電流方向 ($I$)</li>
+                    </ul>
+                    <p class="mt-3"><b>你的任務：</b></p>
+                    <p>觀察畫面上的目標符號。沿著紙面的向量以實線表示。<br><b>穿出紙面</b>的向量以 $\\odot$ 符號表示。<br><b>穿入紙面</b>的向量以 $\\otimes$ 符號表示。</p>
+                    <p>請使用滑桿或拖曳來旋轉 3D 左手模型，直到指尖與環境符號完美對齊。可以參考手掌上的 "PALM" (掌心) 和 "BACK" (手背) 標記來確認方向。完成後點擊「檢查對齊情況」！</p>
+                    <p class="mt-2 text-emerald-700 font-medium">如果 $B$ 與 $I$ 平行，則磁力 $F$ 為零。此時請點擊 <b><i>F</i> = 0</b> 按鈕。</p>
+                    <p class="mt-1 text-emerald-700 font-medium">如果 $B$ 與 $I$ 的夾角不是 $90^{\\circ}$，請將中指對齊 $I$，並將食指對齊 $B$ 的垂直分量。</p>
+                `,
+                modalBtn: "開始學習", footer: "廠商會中學．物理科"
+            }
+        };
+
+        const els = {
+            appTitle: document.getElementById('appTitle'), appSubtitle: document.getElementById('appSubtitle'),
+            scoreLabel: document.getElementById('scoreLabel'), scoreValue: document.getElementById('scoreValue'),
+            objectiveText: document.getElementById('objectiveText'),
+            controlsTitle: document.getElementById('controlsTitle'), dragHintText: document.getElementById('dragHintText'),
+            btnCheck: document.getElementById('btnCheck'), btnSkip: document.getElementById('btnSkip'), 
+            btnReset: document.getElementById('btnReset'), btnZero: document.getElementById('btnZero'),
+            slThumb: document.getElementById('slThumb'), slIndex: document.getElementById('slIndex'), slMiddle: document.getElementById('slMiddle'),
+            modalTitle: document.getElementById('modalTitle'), modalText: document.getElementById('modalText'),
+            modalCloseBtn: document.getElementById('modalCloseBtn'), footerText: document.getElementById('footerText')
+        };
+
+        const COLORS = { F: 0xDC2626, B: 0x10B981, I: 0xF59E0B };
+
+        /* --- 2. Three.js Engine & Physics Setup --- */
+        let scene, camera, renderer, handGroup, targetGroup, htmlLabels = {};
+        let matPalm, matBack;
+
+        const baseVec = {
+            F: new THREE.Vector3(-1, 0, 0), // Thumb (Left)
+            B: new THREE.Vector3(0, 1, 0),  // Index (Up)
+            I: new THREE.Vector3(0, 0, 1)   // Middle (Forward)
+        };
+        
+        let targetState = { F: new THREE.Vector3(), B: new THREE.Vector3(), B_perp: new THREE.Vector3(), I: new THREE.Vector3() };
+        let hiddenKey = 'F';
+        let currentCameraDir = new THREE.Vector3(0, 0, 1);
+
+        window.onload = () => {
+            initThreeJS();
+            animate(); 
+            generateQuestion();
+            updateUI();
+            setupSliders();
+        };
+
+        function initThreeJS() {
+            const container = document.getElementById('canvasContainer');
+            
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf8fafc); 
+
+            // "Paper" Grid floor mapped to XY Plane
+            const gridHelper = new THREE.GridHelper(30, 30, 0x94a3b8, 0xe2e8f0);
+            gridHelper.rotation.x = Math.PI / 2; 
+            gridHelper.position.z = -0.5; 
+            scene.add(gridHelper);
+
+            camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight || 1, 0.1, 100);
+            
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); 
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); 
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            
+            renderer.domElement.style.position = 'absolute';
+            renderer.domElement.style.top = '0';
+            renderer.domElement.style.left = '0';
+            renderer.domElement.style.width = '100%';
+            renderer.domElement.style.height = '100%';
+            renderer.domElement.style.zIndex = '0';
+            container.appendChild(renderer.domElement);
+
+            renderer.setSize(container.clientWidth || 500, container.clientHeight || 500, false);
+
+            scene.add(new THREE.AmbientLight(0xffffff, 0.65));
+            
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
+            dirLight.position.set(5, 5, 8);
+            dirLight.castShadow = true;
+            dirLight.shadow.mapSize.width = 1024; dirLight.shadow.mapSize.height = 1024;
+            scene.add(dirLight);
+
+            const fillLight = new THREE.DirectionalLight(0xe2e8f0, 0.4);
+            fillLight.position.set(-5, -5, 5);
+            scene.add(fillLight);
+
+            handGroup = new THREE.Group();
+            scene.add(handGroup);
+            buildAnatomicalHand();
+
+            targetGroup = new THREE.Group();
+            scene.add(targetGroup);
+
+            camera.userData.lastWidth = 0;
+            camera.userData.lastHeight = 0;
+            
+            updateCameraPosition(); 
+            setupInteraction(container);
+        }
+
+        function updateCameraPosition() {
+            const container = document.getElementById('canvasContainer');
+            if(!container) return;
+            const w = container.clientWidth;
+            const h = container.clientHeight;
+            if (w <= 0 || h <= 0) return; 
+
+            if (camera.userData.lastWidth === w && camera.userData.lastHeight === h) return;
+            camera.userData.lastWidth = w;
+            camera.userData.lastHeight = h;
+
+            const aspect = w / h;
+            camera.aspect = aspect;
+            
+            const fovRad = camera.fov * Math.PI / 180;
+            const viewHeight = 2 * Math.tan(fovRad / 2);
+            const viewWidth = viewHeight * aspect;
+            
+            if (viewWidth <= 0 || viewHeight <= 0) return;
+
+            const requiredWorldWidth = (layoutOffset * 2) + 7.0; 
+            const requiredWorldHeight = 9.0;
+
+            const requiredDistX = requiredWorldWidth / viewWidth;
+            const requiredDistY = requiredWorldHeight / viewHeight;
+            const baseDist = 11;
+            let dist = Math.max(baseDist, requiredDistX, requiredDistY);
+            if (!isFinite(dist)) dist = 12;
+
+            camera.position.copy(currentCameraDir).multiplyScalar(dist);
+            camera.lookAt(0, 0, 0);
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h, false);
+
+            const scaleFactor = dist / baseDist;
+            handGroup.scale.setScalar(scaleFactor);
+            handGroup.position.set(layoutOffset * scaleFactor, 0, 0);
+        }
+
+        /* --- 3. Procedural Articulated Hand System & Textures --- */
+        function createHandTexture(type) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256; canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+            const d = DICT[lang];
+
+            if (type === 'palm') {
+                ctx.fillStyle = '#E8B988'; 
+                ctx.fillRect(0, 0, 256, 256);
+                ctx.strokeStyle = 'rgba(180, 120, 80, 0.4)';
+                ctx.lineWidth = 6; ctx.lineCap = 'round';
+                ctx.beginPath(); ctx.moveTo(60, 250); ctx.quadraticCurveTo(128, 128, 220, 100); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(60, 150); ctx.quadraticCurveTo(128, 100, 220, 60); ctx.stroke();
+                ctx.fillStyle = 'rgba(200, 80, 50, 0.8)';
+                ctx.font = 'bold 52px sans-serif'; ctx.textAlign = 'center';
+                ctx.fillText(d.texPalm, 128, 230);
+            } else {
+                ctx.fillStyle = '#D6A676'; 
+                ctx.fillRect(0, 0, 256, 256);
+                ctx.fillStyle = 'rgba(180, 100, 60, 0.2)';
+                ctx.beginPath(); ctx.arc(64, 50, 25, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(128, 50, 25, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(192, 50, 25, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = 'rgba(200, 80, 50, 0.8)';
+                ctx.font = 'bold 52px sans-serif'; ctx.textAlign = 'center';
+                ctx.fillText(d.texBack, 128, 230);
+            }
+
+            const tex = new THREE.CanvasTexture(canvas);
+            if(renderer) tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+            return tex;
+        }
+
+        function buildAnatomicalHand() {
+            const matSkin = new THREE.MeshStandardMaterial({ color: 0xE8B988, roughness: 0.5, metalness: 0.05 });
+            const matF = new THREE.MeshStandardMaterial({ color: COLORS.F, roughness: 0.3, emissive: COLORS.F, emissiveIntensity: 0.2 });
+            const matB = new THREE.MeshStandardMaterial({ color: COLORS.B, roughness: 0.3, emissive: COLORS.B, emissiveIntensity: 0.2 });
+            const matI = new THREE.MeshStandardMaterial({ color: COLORS.I, roughness: 0.3, emissive: COLORS.I, emissiveIntensity: 0.2 });
+
+            const palmTex = createHandTexture('palm');
+            const backTex = createHandTexture('back');
+            matPalm = new THREE.MeshStandardMaterial({ map: palmTex, roughness: 0.6, metalness: 0.05 });
+            matBack = new THREE.MeshStandardMaterial({ map: backTex, roughness: 0.6, metalness: 0.05 });
+
+            function createFinger(radii, lengths, matTip, rotations) {
+                const root = new THREE.Group();
+                let current = root;
+                for (let i = 0; i < lengths.length; i++) {
+                    const joint = new THREE.Group();
+                    if (rotations[i]) joint.rotation.set(rotations[i].x||0, rotations[i].y||0, rotations[i].z||0);
+                    const mat = (i === lengths.length - 1) ? matTip : matSkin;
+                    const rBase = radii[i];
+                    const rTop = radii[i+1] || rBase * 0.8;
+                    const len = lengths[i];
+                    
+                    const boneGeo = new THREE.CylinderGeometry(rTop, rBase, len, 16);
+                    const bone = new THREE.Mesh(boneGeo, mat);
+                    bone.position.y = len / 2; 
+                    bone.castShadow = true; bone.receiveShadow = true;
+                    joint.add(bone);
+                    
+                    const knuckleGeo = new THREE.SphereGeometry(rBase * 1.05, 16, 16);
+                    const knuckle = new THREE.Mesh(knuckleGeo, matSkin);
+                    knuckle.castShadow = true; knuckle.receiveShadow = true;
+                    joint.add(knuckle);
+                    
+                    current.add(joint);
+                    const nextLink = new THREE.Group();
+                    nextLink.position.y = len;
+                    joint.add(nextLink);
+                    current = nextLink;
+                }
+                return root;
+            }
+
+            const palmGeo = new THREE.BoxGeometry(1.0, 0.9, 0.25);
+            const palmMaterials = [matSkin, matSkin, matSkin, matSkin, matPalm, matBack];
+            const palm = new THREE.Mesh(palmGeo, palmMaterials);
+            palm.position.set(0, -0.05, 0); 
+            palm.castShadow = true; palm.receiveShadow = true;
+            handGroup.add(palm);
+
+            const thumb = createFinger([0.14, 0.13, 0.11], [0.4, 0.35], matF, [
+                {x: 0, y: 0, z: Math.PI/2}, 
+                {x: 0, y: 0, z: 0}
+            ]);
+            thumb.position.set(-0.5, -0.2, 0.05);
+            handGroup.add(thumb);
+
+            const index = createFinger([0.11, 0.1, 0.09, 0.08], [0.45, 0.35, 0.25], matB, [
+                {x: 0, y: 0, z: 0}, {x: 0, y: 0, z: 0}, {x: 0, y: 0, z: 0}
+            ]);
+            index.position.set(-0.3, 0.4, 0);
+            handGroup.add(index);
+
+            const middle = createFinger([0.12, 0.11, 0.1, 0.09], [0.5, 0.4, 0.3], matI, [
+                {x: Math.PI/2, y: 0, z: 0}, 
+                {x: 0, y: 0, z: 0}, {x: 0, y: 0, z: 0}
+            ]);
+            middle.position.set(-0.05, 0.4, 0);
+            handGroup.add(middle);
+
+            const ring = createFinger([0.11, 0.1, 0.09, 0.08], [0.45, 0.35, 0.25], matSkin, [
+                {x: Math.PI/2 + 0.3, y: 0, z: 0}, 
+                {x: Math.PI/2, y: 0, z: 0}, {x: Math.PI/2, y: 0, z: 0}
+            ]);
+            ring.position.set(0.2, 0.4, 0);
+            handGroup.add(ring);
+
+            const pinky = createFinger([0.09, 0.08, 0.07, 0.06], [0.35, 0.25, 0.2], matSkin, [
+                {x: Math.PI/2 + 0.5, y: 0, z: 0}, 
+                {x: Math.PI/2, y: 0, z: 0}, {x: Math.PI/2, y: 0, z: 0}
+            ]);
+            pinky.position.set(0.45, 0.35, 0);
+            handGroup.add(pinky);
+
+            handGroup.position.set(0, 0, 0);
+        }
+
+        /* --- 4. Game Interaction & Physics Vector Generation --- */
+        function setupInteraction(container) {
+            let isDragging = false;
+            let prevMouse = {x: 0, y: 0};
+
+            const down = (x, y) => { isDragging = true; prevMouse = {x, y}; };
+            const up = () => { isDragging = false; };
+            const move = (x, y) => {
+                if(!isDragging) return;
+                let dx = x - prevMouse.x;
+                let dy = y - prevMouse.y;
+                prevMouse = {x, y};
+                handGroup.rotateOnWorldAxis(new THREE.Vector3(0,1,0), dx * 0.01);
+                handGroup.rotateOnWorldAxis(new THREE.Vector3(1,0,0), dy * 0.01);
+            };
+
+            container.addEventListener('mousedown', e => down(e.clientX, e.clientY));
+            window.addEventListener('mousemove', e => move(e.clientX, e.clientY));
+            window.addEventListener('mouseup', up);
+
+            container.addEventListener('touchstart', e => down(e.touches[0].clientX, e.touches[0].clientY), {passive: false});
+            window.addEventListener('touchmove', e => { e.preventDefault(); move(e.touches[0].clientX, e.touches[0].clientY); }, {passive: false});
+            window.addEventListener('touchend', up);
+        }
+
+        function setupSliders() {
+            ['F', 'B', 'I'].forEach(key => {
+                const slider = document.getElementById(`slider${key}`);
+                if (!slider) return;
+                let lastVal = 0;
+                
+                slider.addEventListener('input', (e) => {
+                    let currentVal = parseFloat(e.target.value);
+                    let deltaDeg = currentVal - lastVal;
+                    let deltaRad = deltaDeg * (Math.PI / 180);
+                    lastVal = currentVal;
+                    handGroup.rotateOnAxis(baseVec[key], deltaRad);
+                });
+                
+                const resetSlider = () => {
+                    slider.value = 0;
+                    lastVal = 0;
+                    handGroup.quaternion.normalize(); 
+                };
+                slider.addEventListener('change', resetSlider);
+                slider.addEventListener('mouseup', resetSlider);
+                slider.addEventListener('touchend', resetSlider);
+            });
+        }
+
+        function resetHandRotation() {
+            handGroup.quaternion.identity();
+            ['F', 'B', 'I'].forEach(key => {
+                const slider = document.getElementById(`slider${key}`);
+                if (slider) slider.value = 0;
+            });
+        }
+
+        function createTargetVector(dir, colorHex, offset = new THREE.Vector3()) {
+            const group = new THREE.Group();
+            if (dir.lengthSq() < 0.1) return group; // Safe guard against zero vectors
+
+            const length = currentArrowLength;
+
+            if (Math.abs(dir.z) > 0.99) {
+                const isOut = dir.z > 0;
+                const mat = new THREE.MeshBasicMaterial({ color: colorHex, side: THREE.DoubleSide, depthTest: false });
+                
+                const ringGeo = new THREE.RingGeometry(length * 0.25, length * 0.32, 32);
+                const ring = new THREE.Mesh(ringGeo, mat);
+                group.add(ring);
+
+                if (isOut) {
+                    const dotGeo = new THREE.CircleGeometry(length * 0.12, 16);
+                    const dot = new THREE.Mesh(dotGeo, mat);
+                    group.add(dot);
+                } else {
+                    const crossGeo1 = new THREE.PlaneGeometry(length * 0.08, length * 0.5);
+                    const cross1 = new THREE.Mesh(crossGeo1, mat);
+                    cross1.rotation.z = Math.PI / 4;
+                    group.add(cross1);
+
+                    const crossGeo2 = new THREE.PlaneGeometry(length * 0.08, length * 0.5);
+                    const cross2 = new THREE.Mesh(crossGeo2, mat);
+                    cross2.rotation.z = -Math.PI / 4;
+                    group.add(cross2);
+                }
+                
+                group.position.set(offset.x, offset.y, (isOut ? 0.2 : -0.2) + offset.z); 
+            } else {
+                const cylGeo = new THREE.CylinderGeometry(length * 0.04, length * 0.04, length, 12);
+                const cylMat = new THREE.MeshBasicMaterial({ color: colorHex });
+                const cyl = new THREE.Mesh(cylGeo, cylMat);
+                cyl.position.copy(dir.clone().multiplyScalar(length / 2));
+                
+                let unitDir = dir.clone().normalize();
+                if (unitDir.y <= -0.99) cyl.rotation.x = Math.PI;
+                else cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), unitDir);
+                group.add(cyl);
+
+                const coneGeo = new THREE.ConeGeometry(length * 0.15, length * 0.25, 16);
+                const coneMat = new THREE.MeshBasicMaterial({ color: colorHex });
+                const cone = new THREE.Mesh(coneGeo, coneMat);
+                cone.position.copy(dir.clone().multiplyScalar(length));
+                
+                if (unitDir.y <= -0.99) cone.rotation.x = Math.PI;
+                else cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), unitDir);
+                group.add(cone);
+                
+                group.position.copy(offset);
+            }
+
+            return group;
+        }
+
+        function generateQuestion() {
+            solved = false;
+            isAnimatingHand = false;
+            handGroup.quaternion.identity();
+
+            // Distinct, non-matching colors for Target vectors (Exclude Red, Green, Yellow/Amber)
+            let shuffledColors = [...SAFE_COLORS].sort(() => 0.5 - Math.random());
+            colorQStr = shuffledColors[0];
+            colorAStr = shuffledColors[1];
+            colorQHex = parseInt(colorQStr.replace('#', '0x'));
+            colorAHex = parseInt(colorAStr.replace('#', '0x'));
+            
+            const container = document.getElementById('canvasContainer');
+            if (container && container.clientWidth > 0) {
+                const minDim = Math.min(container.clientWidth, container.clientHeight);
+                currentArrowLength = Math.max(1.2, minDim * 0.0035);
+            } else {
+                currentArrowLength = 1.5;
+            }
+
+            const views = [
+                new THREE.Vector3(0, 0, 1),
+                new THREE.Vector3(0.2, 0.3, 0.9).normalize(),
+                new THREE.Vector3(-0.2, 0.3, 0.9).normalize(),
+                new THREE.Vector3(0.2, -0.3, 0.9).normalize(),
+                new THREE.Vector3(-0.2, -0.3, 0.9).normalize()
+            ];
+            currentCameraDir = views[Math.floor(Math.random() * views.length)];
+
+            hiddenKey = ['F', 'B', 'I'][Math.floor(Math.random() * 3)];
+            currentAngleToI = 90;
+
+            const axes = [
+                new THREE.Vector3(1,0,0), new THREE.Vector3(-1,0,0),
+                new THREE.Vector3(0,1,0), new THREE.Vector3(0,-1,0),
+                new THREE.Vector3(0,0,1), new THREE.Vector3(0,0,-1)
+            ];
+            const xyAxes = [
+                new THREE.Vector3(1,0,0), new THREE.Vector3(-1,0,0),
+                new THREE.Vector3(0,1,0), new THREE.Vector3(0,-1,0)
+            ];
+
+            let tI = new THREE.Vector3(), tB = new THREE.Vector3(), tB_perp = new THREE.Vector3(), tF = new THREE.Vector3();
+
+            if (hiddenKey === 'F') {
+                const angles = [0, 30, 45, 60, 90];
+                currentAngleToI = angles[Math.floor(Math.random() * angles.length)];
+
+                if (currentAngleToI === 90) {
+                    tI = axes[Math.floor(Math.random() * axes.length)].clone();
+                    let orthogonalAxes = axes.filter(v => Math.abs(v.dot(tI)) < 0.1);
+                    tB = orthogonalAxes[Math.floor(Math.random() * orthogonalAxes.length)].clone();
+                    tB_perp.copy(tB);
+                    tF.crossVectors(tI, tB);
+                } else if (currentAngleToI === 0) {
+                    tI = axes[Math.floor(Math.random() * axes.length)].clone();
+                    tB.copy(tI); 
+                    
+                    let orthogonalAxes = axes.filter(v => Math.abs(v.dot(tI)) < 0.1);
+                    tB_perp = orthogonalAxes[Math.floor(Math.random() * orthogonalAxes.length)].clone();
+                    tF.set(0,0,0);
+                } else {
+                    tI = xyAxes[Math.floor(Math.random() * xyAxes.length)].clone();
+                    let rad = currentAngleToI * Math.PI / 180;
+                    let sign = Math.random() < 0.5 ? 1 : -1;
+                    tB.copy(tI).applyAxisAngle(new THREE.Vector3(0,0,1), sign * rad);
+                    tB_perp.copy(tI).applyAxisAngle(new THREE.Vector3(0,0,1), sign * Math.PI / 2).normalize();
+                    tF.crossVectors(tI, tB_perp);
+                    tB.x = Math.abs(tB.x) < 1e-10 ? 0 : tB.x;
+                    tB.y = Math.abs(tB.y) < 1e-10 ? 0 : tB.y;
+                }
+            } else {
+                tI = axes[Math.floor(Math.random() * axes.length)].clone();
+                let orthogonalAxes = axes.filter(v => Math.abs(v.dot(tI)) < 0.1);
+                tB = orthogonalAxes[Math.floor(Math.random() * orthogonalAxes.length)].clone();
+                tB_perp.copy(tB);
+                tF.crossVectors(tI, tB);
+                currentAngleToI = 90;
+            }
+
+            targetState.F = tF.clone().round();
+            targetState.B_perp = tB_perp.clone().round();
+            targetState.I = tI.clone().round();
+            targetState.B = tB.clone(); 
+
+            // Calculate precise mathematical answer basis - Protected against NaN crashes
+            let basisF = (currentAngleToI === 0) ? new THREE.Vector3().crossVectors(tI, tB_perp) : targetState.F;
+            if (basisF.lengthSq() > 0.01 && targetState.B_perp.lengthSq() > 0.01 && targetState.I.lengthSq() > 0.01) {
+                let m = new THREE.Matrix4();
+                m.makeBasis(basisF.clone().negate().normalize(), targetState.B_perp.clone().normalize(), targetState.I.clone().normalize());
+                currentTargetQ.setFromRotationMatrix(m).normalize();
+            } else {
+                currentTargetQ.identity();
+            }
+
+            currentOffsets = { F: new THREE.Vector3(), B: new THREE.Vector3(), I: new THREE.Vector3() };
+            if (currentAngleToI === 0) {
+                let perp = new THREE.Vector3();
+                if (Math.abs(tI.z) > 0.9) perp.set(0.4, 0, 0); 
+                else if (Math.abs(tI.x) > 0.9) perp.set(0, 0.4, 0); 
+                else perp.set(0.4, 0, 0); 
+                
+                currentOffsets.B = perp.clone();
+                currentOffsets.I = perp.clone().negate();
+            }
+
+            let pointsRight = false;
+            ['F', 'B', 'I'].forEach(key => {
+                if (key !== hiddenKey && targetState[key].x > 0.1) pointsRight = true;
+            });
+            layoutOffset = pointsRight ? 3.0 : 2.2; 
+            targetGroup.position.set(-layoutOffset, 0, 0);
+            updateCameraPosition(); 
+
+            targetGroup.clear();
+            document.getElementById('labelsContainer').innerHTML = ''; 
+            htmlLabels = {};
+
+            ['F', 'B', 'I'].forEach(key => {
+                if (key !== hiddenKey && !(key === 'F' && currentAngleToI === 0)) {
+                    targetGroup.add(createTargetVector(targetState[key], colorQHex, currentOffsets[key]));
+                    createHtmlLabel(key, targetState[key], `${DICT[lang].lblTarget} <i>${key}</i>`, colorQStr, currentOffsets[key]);
+                }
+            });
+
+            updateUI();
+        }
+
+        function createHtmlLabel(id, vector3Dir, text, colorStr, offset = new THREE.Vector3()) {
+            const div = document.createElement('div');
+            div.className = 'vector-label';
+            div.style.color = colorStr;
+            div.innerHTML = text;
+            div.id = `label-${id}`;
+            document.getElementById('labelsContainer').appendChild(div);
+            
+            if (vector3Dir.lengthSq() < 0.1) {
+                htmlLabels[id] = { elem: div, localPos: offset.clone(), dir: new THREE.Vector3(), isZ: false };
+                return;
+            }
+
+            let isZAxis = Math.abs(vector3Dir.z) > 0.99;
+            let localPos = new THREE.Vector3();
+            if (isZAxis) {
+                localPos.set(0, 0, vector3Dir.z > 0 ? 0.2 : -0.2); 
+            } else {
+                localPos.copy(vector3Dir).multiplyScalar(currentArrowLength); // Pin precisely to the arrow tip
+            }
+            localPos.add(offset);
+            
+            htmlLabels[id] = { elem: div, localPos: localPos, dir: vector3Dir.clone(), isZ: isZAxis };
+        }
+
+        function updateLabelsPosition() {
+            const container = document.getElementById('canvasContainer');
+            if(!container) return;
+            const halfW = container.clientWidth / 2;
+            const halfH = container.clientHeight / 2;
+
+            let originProj = targetGroup.position.clone().project(camera);
+            let originX = (originProj.x * halfW) + halfW;
+            let originY = -(originProj.y * halfH) + halfH;
+
+            let labelData = [];
+            for (let key in htmlLabels) {
+                let data = htmlLabels[key];
+                let worldPos = data.localPos.clone().add(targetGroup.position);
+                let vec = worldPos.project(camera);
+                
+                if (vec.z < 1) { 
+                    let tipX = (vec.x * halfW) + halfW;
+                    let tipY = -(vec.y * halfH) + halfH;
+                    
+                    let dx = tipX - originX;
+                    let dy = tipY - originY;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    
+                    let nx = 0;
+                    let ny = 0;
+                    let pushDist = 30; // base outward push from the tip
+                    
+                    if (dist > 0.001) {
+                        nx = dx / dist;
+                        ny = dy / dist;
+                    }
+                    
+                    if (dist < 0.001 || data.isZ) {
+                        // For Z-axis symbols, push them out radially to top-left to avoid overlaps
+                        nx = -0.707;
+                        ny = -0.707;
+                        pushDist = 45; 
+                    }
+                    
+                    labelData.push({
+                        elem: data.elem,
+                        targetX: tipX + nx * pushDist,
+                        targetY: tipY + ny * pushDist
+                    });
+                } else {
+                    data.elem.style.display = 'none';
+                }
+            }
+
+            // Physics Engine: Anti-collision repulsive force between labels
+            for (let iter = 0; iter < 10; iter++) {
+                for (let i = 0; i < labelData.length; i++) {
+                    for (let j = i + 1; j < labelData.length; j++) {
+                        let d1 = labelData[i];
+                        let d2 = labelData[j];
+                        
+                        let dx = d2.targetX - d1.targetX;
+                        let dy = d2.targetY - d1.targetY;
+                        let dist = Math.sqrt(dx*dx + dy*dy);
+                        
+                        let minDist = 75; // Minimum required distance to ensure legible HTML text
+                        
+                        if (dist < minDist && dist > 0.001) {
+                            let overlap = minDist - dist;
+                            let pushX = (dx / dist) * (overlap / 2);
+                            let pushY = (dy / dist) * (overlap / 2);
+                            
+                            d1.targetX -= pushX;
+                            d1.targetY -= pushY;
+                            d2.targetX += pushX;
+                            d2.targetY += pushY;
+                        } else if (dist <= 0.001) {
+                            // If exactly identical, perturb them
+                            d1.targetY -= 5;
+                            d2.targetY += 5;
+                        }
+                    }
+                }
+            }
+
+            // Apply finalized coordinates to DOM with bounding box constraints
+            labelData.forEach(data => {
+                let x = data.targetX;
+                let y = data.targetY;
+                
+                let pw = data.elem.offsetWidth || 60;
+                let ph = data.elem.offsetHeight || 30;
+
+                // Center line of the container: 48% ensures labels never bleed into the right half (the hand area)
+                let centerLine = container.clientWidth * 0.48;
+
+                let minX = pw / 2 + 10;
+                let maxX = centerLine - pw / 2;
+                if (minX > maxX) minX = maxX; 
+
+                let minY = ph / 2 + 10;
+                let maxY = container.clientHeight - ph / 2 - 10;
+
+                x = Math.max(minX, Math.min(maxX, x));
+                y = Math.max(minY, Math.min(maxY, y));
+
+                data.elem.style.display = 'flex';
+                data.elem.style.left = x + 'px';
+                data.elem.style.top = y + 'px';
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const container = document.getElementById('canvasContainer');
+            if (container && renderer) {
+                const w = container.clientWidth;
+                const h = container.clientHeight;
+                if (w > 0 && h > 0 && (camera.userData.lastWidth !== w || camera.userData.lastHeight !== h)) {
+                    updateCameraPosition();
+                }
+            }
+
+            if (isAnimatingHand && targetQuaternion) {
+                handGroup.quaternion.slerp(targetQuaternion, 0.1);
+                if (handGroup.quaternion.angleTo(targetQuaternion) < 0.01) {
+                    handGroup.quaternion.copy(targetQuaternion);
+                    isAnimatingHand = false;
+                }
+            }
+
+            updateLabelsPosition();
+            if (scene && camera) renderer.render(scene, camera);
+        }
+
+        function updateScoreDisplay() {
+            if (els.scoreValue) {
+                els.scoreValue.innerText = score;
+                els.scoreValue.style.transform = 'scale(1.2)';
+                els.scoreValue.style.color = '#fde047'; // yellow-300
+                setTimeout(() => {
+                    els.scoreValue.style.transform = 'scale(1)';
+                    els.scoreValue.style.color = 'white';
+                }, 300);
+            }
+        }
+
+        function checkZeroForce() {
+            if (solved) {
+                generateQuestion();
+                return;
+            }
+            if (hiddenKey === 'F' && currentAngleToI === 0) {
+                solved = true;
+                score += 10;
+                updateScoreDisplay();
+                
+                showToast(DICT[lang].toastSuccess, 'success');
+                handGroup.quaternion.normalize();
+                targetQuaternion = currentTargetQ.clone();
+                isAnimatingHand = true;
+                
+                createHtmlLabel(hiddenKey, new THREE.Vector3(0,0,0), DICT[lang].lblFound.replace('%s', `<i>F</i> = 0`), colorAStr);
+                updateUI();
+            } else {
+                score = Math.max(0, score - 1);
+                updateScoreDisplay();
+                showToast(DICT[lang].toastFail, 'error');
+            }
+        }
+
+        function checkAnswer() {
+            if (solved) {
+                generateQuestion();
+                return;
+            }
+
+            if (hiddenKey === 'F' && currentAngleToI === 0) {
+                score = Math.max(0, score - 1);
+                updateScoreDisplay();
+                showToast(DICT[lang].toastFail, 'error'); 
+                return;
+            }
+
+            handGroup.quaternion.normalize();
+            const uF = baseVec.F.clone().applyQuaternion(handGroup.quaternion).normalize();
+            const uB = baseVec.B.clone().applyQuaternion(handGroup.quaternion).normalize();
+            const uI = baseVec.I.clone().applyQuaternion(handGroup.quaternion).normalize();
+
+            if (uF.dot(targetState.F) > 0.85 && uB.dot(targetState.B_perp) > 0.85 && uI.dot(targetState.I) > 0.85) {
+                solved = true; 
+                score += 10; 
+                updateScoreDisplay();
+                
+                targetQuaternion = currentTargetQ.clone();
+                isAnimatingHand = true;
+
+                showToast(DICT[lang].toastSuccess, 'success');
+
+                targetGroup.add(createTargetVector(targetState[hiddenKey], colorAHex, currentOffsets[hiddenKey]));
+                createHtmlLabel(hiddenKey, targetState[hiddenKey], DICT[lang].lblFound.replace('%s', `<i>${hiddenKey}</i>`), colorAStr, currentOffsets[hiddenKey]);
+                
+                updateUI();
+            } else {
+                score = Math.max(0, score - 1);
+                updateScoreDisplay();
+                showToast(DICT[lang].toastFail, 'error');
+            }
+        }
+
+        function skipQuestion() {
+            if (solved) return;
+            solved = true;
+            score = Math.max(0, score - 5);
+            updateScoreDisplay();
+            
+            showToast(DICT[lang].toastSkip, 'error');
+            
+            handGroup.quaternion.normalize();
+            targetQuaternion = currentTargetQ.clone();
+            isAnimatingHand = true;
+
+            if (currentAngleToI === 0 && hiddenKey === 'F') {
+                createHtmlLabel(hiddenKey, new THREE.Vector3(0,0,0), DICT[lang].lblFound.replace('%s', `<i>F</i> = 0`), colorAStr);
+            } else {
+                targetGroup.add(createTargetVector(targetState[hiddenKey], colorAHex, currentOffsets[hiddenKey]));
+                createHtmlLabel(hiddenKey, targetState[hiddenKey], DICT[lang].lblFound.replace('%s', `<i>${hiddenKey}</i>`), colorAStr, currentOffsets[hiddenKey]);
+            }
+
+            ['F', 'B', 'I'].forEach(key => {
+                const slider = document.getElementById(`slider${key}`);
+                if (slider) slider.value = 0;
+            });
+
+            updateUI();
+        }
+
+        /* --- 5. UI Updates --- */
+        function toggleLanguage() { 
+            lang = lang === 'en' ? 'zh' : 'en'; 
+            updateUI(); 
+        }
+
+        function updateUI() {
+            const d = DICT[lang];
+            
+            if (els.appTitle) els.appTitle.innerText = d.title; 
+            if (els.appSubtitle) els.appSubtitle.innerText = d.subtitle;
+            if (els.scoreLabel) els.scoreLabel.innerHTML = `<svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg> ${d.scoreLabel}`; 
+            if (els.objectiveText) els.objectiveText.innerText = d.objective;
+            if (els.controlsTitle) els.controlsTitle.innerText = d.controlsTitle; 
+            if (els.slThumb) els.slThumb.innerText = d.slThumb; 
+            if (els.slIndex) els.slIndex.innerText = d.slIndex; 
+            if (els.slMiddle) els.slMiddle.innerText = d.slMiddle;
+            if (els.btnReset) els.btnReset.innerText = d.btnReset;
+            if (els.btnZero) els.btnZero.innerHTML = d.btnZero;
+            if (els.modalTitle) els.modalTitle.innerText = d.modalTitle; 
+            if (els.modalText) els.modalText.innerHTML = d.modalText;
+            if (els.modalCloseBtn) els.modalCloseBtn.innerText = d.modalBtn; 
+            if (els.footerText) els.footerText.innerText = d.footer;
+
+            if (solved) {
+                if (els.btnZero) els.btnZero.style.display = 'none';
+                if (els.btnSkip) els.btnSkip.style.display = 'none';
+                if (els.btnCheck) {
+                    els.btnCheck.className = "w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 transition transform btn-press flex justify-center items-center text-sm";
+                    els.btnCheck.innerText = d.btnNext;
+                }
+            } else {
+                if (els.btnZero) els.btnZero.style.display = 'flex';
+                if (els.btnSkip) els.btnSkip.style.display = 'block';
+                if (els.btnSkip) els.btnSkip.innerText = d.btnSkip; 
+                if (els.btnCheck) {
+                    els.btnCheck.className = "w-2/3 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition transform btn-press flex justify-center items-center text-sm";
+                    els.btnCheck.innerText = d.btnCheck;
+                }
+            }
+
+            if (matPalm && matBack) {
+                matPalm.map.dispose();
+                matBack.map.dispose();
+                matPalm.map = createHandTexture('palm');
+                matBack.map = createHandTexture('back');
+                matPalm.needsUpdate = true;
+                matBack.needsUpdate = true;
+            }
+
+            for (let key in htmlLabels) {
+                if (solved && key === hiddenKey) {
+                    htmlLabels[key].elem.innerHTML = currentAngleToI === 0 ? d.lblFound.replace('%s', `<i>F</i> = 0`) : d.lblFound.replace('%s', `<i>${key}</i>`);
+                } else {
+                    htmlLabels[key].elem.innerHTML = `${d.lblTarget} <i>${key}</i>`;
+                }
+            }
+
+            if(window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+                window.MathJax.typesetPromise([document.getElementById('labelsContainer'), els.modalText]).catch(console.log);
+            }
+        }
+
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            if(!t) return;
+            document.getElementById('toastMessage').innerText = msg;
+            t.className = `fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-xl shadow-lg z-40 transition-all duration-300 flex items-center gap-2 text-white font-bold opacity-100 translate-y-0 ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'}`;
+            document.getElementById('toastIcon').innerHTML = type === 'success' ? '✅' : '❌';
+            setTimeout(() => { t.classList.replace('opacity-100', 'opacity-0'); t.classList.replace('translate-y-0', 'translate-y-[-20px]'); }, 2500);
+        }
+
+        function toggleModal(show) {
+            const m = document.getElementById('helpModal'), c = document.getElementById('helpModalContent');
+            if(!m || !c) return;
+            if(show) { m.classList.remove('hidden'); requestAnimationFrame(() => { m.classList.remove('opacity-0'); c.classList.replace('scale-95', 'scale-100'); }); }
+            else { m.classList.add('opacity-0'); c.classList.replace('scale-100', 'scale-95'); setTimeout(() => m.classList.add('hidden'), 300); }
+        }
+    </script>
+</body>
+</html>
