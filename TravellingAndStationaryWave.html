@@ -88,33 +88,26 @@
         }
 
         /* --- 4. Canvas Styling --- */
-        #simContainer {
+        .canvas-bg {
             background-color: #ffffff;
             background-image: 
                 linear-gradient(#f1f5f9 1px, transparent 1px),
                 linear-gradient(90deg, #f1f5f9 1px, transparent 1px);
             background-size: 50px 50px;
             background-position: center center;
-            border: 2px solid #e2e8f0;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
-            position: relative;
-            cursor: grab;
         }
-        #simContainer:active {
-            cursor: grabbing;
-        }
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-        }
+        
         .canvas-overlay {
             position: absolute;
             z-index: 20;
             pointer-events: none; /* Let clicks pass through to canvas */
+        }
+
+        /* --- 5. Math Variable Styling --- */
+        .math-var {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+            font-weight: normal;
         }
 
         /* Modal Transitions */
@@ -131,7 +124,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-water text-2xl text-blue-200"></i>
-                <h1 class="text-xl font-bold tracking-wide" data-i18n="appTitle">橫波與駐波</h1>
+                <h1 class="text-xl font-bold tracking-wide" data-i18n="appTitle">行波與駐波</h1>
             </div>
             <div class="flex items-center gap-4">
                 <button onclick="toggleHelpModal()" class="text-blue-200 hover:text-white transition" title="Help & Formulas">
@@ -143,18 +136,6 @@
             </div>
         </div>
     </header>
-
-    <!-- Top Navigation Tabs -->
-    <div class="w-full bg-white border-b border-slate-200 shadow-sm z-20 relative">
-        <div class="max-w-screen-2xl mx-auto px-4 flex gap-8">
-            <button id="tabTraveling" onclick="simState.setWaveType('traveling')" class="py-3 px-2 text-sm font-bold border-b-2 border-[#1e3c72] text-[#1e3c72] transition" data-i18n="travelingWaveTab">
-                行波
-            </button>
-            <button id="tabStationary" onclick="simState.setWaveType('stationary')" class="py-3 px-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-[#1e3c72] transition" data-i18n="stationaryWaveTab">
-                駐波
-            </button>
-        </div>
-    </div>
 
     <!-- Main Content -->
     <main class="flex-grow flex flex-col md:flex-row w-full max-w-screen-2xl mx-auto p-4 gap-4 h-[calc(100vh-170px)]">
@@ -180,11 +161,6 @@
                     </button>
                 </div>
                 
-                <div class="mt-4 flex items-center justify-between bg-slate-50 p-2 rounded-lg border border-slate-100">
-                    <span class="text-sm font-medium text-slate-600" data-i18n="simTime">時間 <span class="whitespace-nowrap">(<span class="italic font-serif">t</span>)</span></span>
-                    <span id="timeDisplay" class="font-mono font-bold text-[#1e3c72]">0.00 s</span>
-                </div>
-
                 <!-- Animation Speed Slider -->
                 <div class="mt-4 pt-4 border-t border-slate-100">
                     <div class="flex justify-between items-center mb-1">
@@ -195,6 +171,13 @@
                     </div>
                     <input type="range" id="slideAnimSpeed" min="0.01" max="2.0" step="0.01" value="1.0" oninput="simState.updateAnimSpeed()">
                 </div>
+
+                <!-- Show y-t Graph Button -->
+                <div class="mt-4 pt-4 border-t border-slate-100">
+                    <button onclick="toggleGraph()" class="w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg font-bold transition shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-chart-line"></i> <span id="btnGraphText" data-i18n="showGraph">顯示位移-時間圖 (<i class="math-var">y</i>-<i class="math-var">t</i>)</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Wave Properties Card -->
@@ -203,15 +186,21 @@
                     <i class="fa-solid fa-sliders text-[#1e3c72]"></i>
                     <span data-i18n="waveProps">波形參數</span>
                 </h2>
+
+                <!-- Wave Type Toggle -->
+                <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-lg border border-slate-200 mb-6">
+                    <button id="tabTraveling" onclick="simState.setWaveType('traveling')" class="flex-1 py-2 text-sm font-bold rounded-md transition bg-white shadow-sm text-[#1e3c72]" data-i18n="travelingWaveTab">行波</button>
+                    <button id="tabStationary" onclick="simState.setWaveType('stationary')" class="flex-1 py-2 text-sm font-medium rounded-md transition text-slate-500 hover:text-[#1e3c72]" data-i18n="stationaryWaveTab">駐波</button>
+                </div>
                 
                 <!-- Direction Toggle (Traveling only) -->
                 <div id="directionControlGroup" class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
                     <span class="text-sm font-medium text-slate-700" data-i18n="direction">傳播方向</span>
                     <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-lg border border-slate-200">
-                        <button id="btnDirLeft" onclick="simState.setDirection(-1)" class="px-3 py-1 text-xs font-bold rounded-md transition bg-white shadow-sm text-red-600">
+                        <button id="btnDirLeft" onclick="simState.setDirection(-1)" class="px-3 py-1 text-xs font-medium rounded-md transition text-slate-500 hover:text-red-600">
                             &larr; <span data-i18n="dirLeft">向左</span>
                         </button>
-                        <button id="btnDirRight" onclick="simState.setDirection(1)" class="px-3 py-1 text-xs font-medium rounded-md transition text-slate-500 hover:text-blue-600">
+                        <button id="btnDirRight" onclick="simState.setDirection(1)" class="px-3 py-1 text-xs font-bold rounded-md transition bg-white shadow-sm text-blue-600">
                             <span data-i18n="dirRight">向右</span> &rarr;
                         </button>
                     </div>
@@ -221,7 +210,7 @@
                 <div class="mb-5">
                     <div class="flex justify-between items-center mb-1">
                         <label for="slideAmp" class="text-sm font-medium text-slate-700 whitespace-nowrap">
-                            <span data-i18n="amplitude">起振器振幅</span> <span class="whitespace-nowrap">(<span class="italic font-serif">A</span>)</span>
+                            <span data-i18n="amplitude">起振器振幅</span> <span class="whitespace-nowrap">(<i class="math-var">A</i>)</span>
                         </label>
                         <span class="font-mono text-sm text-[#1e3c72] font-bold whitespace-nowrap"><span id="valAmp">2.0</span> cm</span>
                     </div>
@@ -232,7 +221,7 @@
                 <div class="mb-5">
                     <div class="flex justify-between items-center mb-1">
                         <label for="slideFreq" class="text-sm font-medium text-slate-700 whitespace-nowrap">
-                            <span data-i18n="frequency">頻率</span> <span class="whitespace-nowrap">(<span class="italic font-serif">f</span>)</span>
+                            <span data-i18n="frequency">頻率</span> <span class="whitespace-nowrap">(<i class="math-var">f</i>)</span>
                         </label>
                         <span class="font-mono text-sm text-[#1e3c72] font-bold whitespace-nowrap"><span id="valFreq">10.0</span> Hz</span>
                     </div>
@@ -243,7 +232,7 @@
                 <div class="mb-5">
                     <div class="flex justify-between items-center mb-1">
                         <label for="slideSpeed" class="text-sm font-medium text-slate-700 whitespace-nowrap">
-                            <span data-i18n="waveSpeed">波速率</span> <span class="whitespace-nowrap">(<span class="italic font-serif">v</span>)</span>
+                            <span data-i18n="waveSpeed">波速率</span> <span class="whitespace-nowrap">(<i class="math-var">v</i>)</span>
                         </label>
                         <span class="font-mono text-sm text-[#1e3c72] font-bold whitespace-nowrap"><span id="valSpeed">20</span> m/s</span>
                     </div>
@@ -253,72 +242,96 @@
                 <!-- Derived Values Box -->
                 <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mt-2 flex flex-col gap-2">
                     <div class="flex justify-start items-center gap-2 text-sm">
-                        <span class="font-medium text-[#1e3c72] whitespace-nowrap"><span data-i18n="wavelength">波長</span> <span class="whitespace-nowrap">(<span class="italic font-serif">λ</span>)</span></span> 
+                        <span class="font-medium text-[#1e3c72] whitespace-nowrap"><span data-i18n="wavelength">波長</span> <span class="whitespace-nowrap">(<i class="math-var">λ</i>)</span></span> 
                         <span class="font-mono font-bold text-blue-700 whitespace-nowrap">= <span id="valLambda">2.00</span> m</span>
                     </div>
                     
                     <!-- Dynamic Resonance Indicator (Only for Stationary Mode) -->
                     <div id="resonanceRow" class="hidden justify-between items-center text-sm pt-2 border-t border-blue-200">
-                        <span class="font-medium text-[#1e3c72] whitespace-nowrap"><span data-i18n="resonanceStatus">共振狀態</span> <span class="whitespace-nowrap">(<span class="italic font-serif">L</span>=2m)</span></span>
-                        <span id="valResonance" class="font-bold text-emerald-600 whitespace-nowrap">共振 (n=2)</span>
+                        <span class="font-medium text-[#1e3c72] whitespace-nowrap"><span data-i18n="resonanceStatus">共振狀態</span> <span class="whitespace-nowrap">(<i class="math-var">L</i> = 2 m)</span></span>
+                        <span id="valResonance" class="font-bold text-emerald-600 whitespace-nowrap">共振 (<i class="math-var">n</i>=2)</span>
                     </div>
                 </div>
-
             </div>
         </aside>
 
-        <!-- Canvas Area -->
-        <section class="flex-grow flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden relative min-h-[400px]">
-            <!-- Overlays -->
-            <div class="canvas-overlay top-4 left-4 right-4 flex justify-between items-start">
+        <!-- Right Side: Split View for Canvas and Graph -->
+        <section class="flex-grow flex flex-col gap-4 overflow-hidden relative">
+            
+            <!-- Top Panel: The Main Wave Canvas -->
+            <div id="wavePanel" class="flex-1 flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden relative min-h-[250px]">
                 
-                <!-- Left Side Container -->
-                <div class="flex flex-row gap-2">
-                    <!-- Legend -->
-                    <div class="bg-white/90 backdrop-blur-md px-3 py-2 rounded-lg shadow-sm border border-slate-200 text-xs text-slate-700 space-y-1">
-                        <div class="flex items-center gap-2">
-                            <div class="w-3 h-3 rounded-full bg-red-500 border border-red-700"></div>
-                            <span><span data-i18n="particle">粒子</span> 1</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div class="w-3 h-3 rounded-full bg-blue-500 border border-blue-700"></div>
-                            <span><span data-i18n="particle">粒子</span> 2</span>
-                        </div>
-                        <div id="stationaryLegend" class="hidden mt-2 pt-2 border-t border-slate-300">
+                <!-- Overlays -->
+                <div class="canvas-overlay top-4 left-4 right-4 flex justify-between items-start pointer-events-none">
+                    
+                    <!-- Left Side Container -->
+                    <div class="flex flex-row gap-2 pointer-events-auto">
+                        <!-- Legend -->
+                        <div class="bg-white/90 backdrop-blur-md px-3 py-2 rounded-lg shadow-sm border border-slate-200 text-xs text-slate-700 space-y-1">
                             <div class="flex items-center gap-2">
-                                <div class="w-4 h-0 border-t-2 border-dashed border-slate-400"></div>
-                                <span data-i18n="envelopeLimit">振幅極限包絡線</span>
+                                <div class="w-3 h-3 rounded-full bg-red-500 border border-red-700"></div>
+                                <span><span data-i18n="particle">粒子</span> 1 <span id="legendP1X" class="text-slate-500 ml-1">(<i class="math-var">x</i> = 0.50 m)</span></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-blue-500 border border-blue-700"></div>
+                                <span><span data-i18n="particle">粒子</span> 2 <span id="legendP2X" class="text-slate-500 ml-1">(<i class="math-var">x</i> = 1.50 m)</span></span>
+                            </div>
+                        </div>
+
+                        <!-- Phase Relationship Panel -->
+                        <div class="bg-white/90 backdrop-blur-md px-3 py-2 rounded-lg shadow-sm border border-slate-200 text-xs text-slate-700 flex flex-col justify-center">
+                            <div class="font-bold text-[#1e3c72] mb-1" data-i18n="phaseRelationship">相位關係：</div>
+                            <div class="mb-1">
+                                <span id="lblInPhase" data-i18n="lblInPhase">同相</span> <span class="text-slate-300">/</span>
+                                <span id="lblAntiPhase" data-i18n="lblAntiPhase">反相</span> <span class="text-slate-300">/</span>
+                                <span id="lblOutOfPhase" data-i18n="lblOutOfPhase">異相</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-4 border-t border-slate-200 pt-1 mt-1">
+                                <span data-i18n="phaseDiff">相位差:</span>
+                                <span class="font-mono font-bold text-slate-800"><span id="phaseDiffValue">0</span>&deg;</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Phase Relationship Panel -->
-                    <div class="bg-white/90 backdrop-blur-md px-3 py-2 rounded-lg shadow-sm border border-slate-200 text-xs text-slate-700 flex flex-col justify-center">
-                        <div class="font-bold text-[#1e3c72] mb-1" data-i18n="phaseRelationship">相位關係：</div>
-                        <div class="mb-1">
-                            <span id="lblInPhase" data-i18n="lblInPhase">同相</span> <span class="text-slate-300">/</span>
-                            <span id="lblAntiPhase" data-i18n="lblAntiPhase">反相</span> <span class="text-slate-300">/</span>
-                            <span id="lblOutOfPhase" data-i18n="lblOutOfPhase">異相</span>
-                        </div>
-                        <div class="flex items-center justify-between gap-4 border-t border-slate-200 pt-1 mt-1">
-                            <span data-i18n="phaseDiff">相位差:</span>
-                            <span class="font-mono font-bold text-slate-800"><span id="phaseDiffValue">0</span>&deg;</span>
-                        </div>
+                    <!-- Right Side Container (Timer) -->
+                    <div class="bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg shadow-sm border border-slate-200 flex items-center justify-center gap-2 pointer-events-auto">
+                        <span class="text-sm font-medium text-slate-600" data-i18n="simTime">時間 <span class="whitespace-nowrap">(<i class="math-var">t</i>)</span></span>
+                        <span id="timeDisplay" class="font-mono font-bold text-[#1e3c72] text-sm w-16 text-right">0.00 s</span>
                     </div>
+                </div>
+
+                <!-- The Wave Canvas Container -->
+                <div id="simContainer" class="flex-grow w-full h-full canvas-bg cursor-grab active:cursor-grabbing rounded-b-xl">
+                    <canvas id="waveCanvas" class="absolute top-0 left-0 w-full h-full"></canvas>
                 </div>
             </div>
 
-            <!-- The Canvas -->
-            <div id="simContainer" class="flex-grow w-full h-full">
-                <canvas id="waveCanvas"></canvas>
+            <!-- Bottom Panel: y-t Graph (Dynamically shown/hidden) -->
+            <div id="graphPanel" class="hidden flex-1 flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden relative min-h-[250px] p-3">
+                
+                <!-- Graph Header -->
+                <div class="flex justify-between items-center mb-2 flex-shrink-0">
+                    <div class="flex items-center gap-4">
+                        <h2 class="text-base font-bold text-[#1e3c72] flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span data-i18n="graphTitle">位移-時間圖 (<i class="math-var">y</i>-<i class="math-var">t</i>)</span>
+                        </h2>
+                        <div class="flex justify-center gap-4 text-xs font-medium text-slate-600 ml-4 border-l border-slate-200 pl-4">
+                            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-red-500 border border-red-700"></div><span data-i18n="particle">粒子</span> 1</div>
+                            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-blue-500 border border-blue-700"></div><span data-i18n="particle">粒子</span> 2</div>
+                        </div>
+                    </div>
+                    <button onclick="toggleGraph()" class="text-slate-400 hover:text-red-500 transition px-2">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- Graph Canvas -->
+                <div id="ytContainer" class="flex-grow relative w-full h-full bg-slate-50 border border-slate-200 rounded-lg overflow-hidden cursor-crosshair">
+                    <canvas id="ytGraphCanvas" class="absolute top-0 left-0 w-full h-full"></canvas>
+                </div>
             </div>
-            
-            <!-- Bottom Info Bar -->
-            <div class="bg-slate-50 border-t border-slate-200 p-2 text-xs flex justify-around text-slate-600 font-mono">
-                <div>P1 <span data-i18n="position">位置</span>: <span class="whitespace-nowrap">(<span id="p1X" class="text-red-600 font-bold">0.50</span>m, <span id="p1Y" class="text-red-600">0.00</span>cm)</span></div>
-                <div>P2 <span data-i18n="position">位置</span>: <span class="whitespace-nowrap">(<span id="p2X" class="text-blue-600 font-bold">1.50</span>m, <span id="p2Y" class="text-blue-600">0.00</span>cm)</span></div>
-                <div class="hidden sm:block text-slate-400" data-i18n="dragHint">提示: 可在畫布上水平拖曳粒子</div>
-            </div>
+
         </section>
 
     </main>
@@ -345,7 +358,7 @@
                 <div class="space-y-6 text-slate-700 leading-relaxed text-sm">
                     <section>
                         <h3 class="font-bold text-lg text-slate-800 border-b pb-1 mb-2" data-i18n="waveEqTitle">波動方程 <span class="whitespace-nowrap">(Wave Equation)</span></h3>
-                        <p data-i18n="waveSpeedEqDesc">波速率<span class="italic font-serif px-1">v</span>、頻率<span class="italic font-serif px-1">f</span>與波長<span class="italic font-serif px-1">λ</span>的關係：</p>
+                        <p data-i18n="waveSpeedEqDesc">波速率<i class="math-var px-1">v</i>、頻率<i class="math-var px-1">f</i>與波長<i class="math-var px-1">λ</i>的關係：</p>
                         <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 my-2 text-center text-lg">
                             $$v = f \lambda$$
                         </div>
@@ -353,7 +366,7 @@
 
                     <section>
                         <h3 class="font-bold text-lg text-slate-800 border-b pb-1 mb-2" data-i18n="travelingTitle">行波 <span class="whitespace-nowrap">(Traveling Wave)</span></h3>
-                        <p data-i18n="travelingDesc">沿著<span class="italic font-serif px-1">x</span>軸傳播的簡諧波位移<span class="italic font-serif px-1">y</span>函數 (假設另一端不受限延伸)：</p>
+                        <p data-i18n="travelingDesc">沿著<i class="math-var px-1">x</i>軸傳播的簡諧波位移<i class="math-var px-1">y</i>函數 (假設另一端不受限延伸)：</p>
                         
                         <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 my-2 text-center">
                             <div class="text-lg">
@@ -361,7 +374,7 @@
                             </div>
                             <div class="flex flex-wrap md:flex-nowrap justify-center gap-x-6 gap-y-2 mt-3 pt-3 border-t border-slate-200 text-sm text-slate-600">
                                 <span class="inline-flex items-baseline gap-1 whitespace-nowrap">
-                                    <span class="italic font-serif text-[#1e3c72] font-bold">A</span>: <span data-i18n="amplitudeModal">起振器振幅</span>
+                                    <i class="math-var text-[#1e3c72] font-bold">A</i>: <span data-i18n="amplitudeModal">起振器振幅</span>
                                 </span>
                                 <span class="inline-flex items-baseline gap-1 whitespace-nowrap">
                                     <span class="text-[#1e3c72] font-bold">\(k = \frac{2\pi}{\lambda}\)</span>: <span data-i18n="waveNumber">波數</span>
@@ -373,24 +386,24 @@
                         </div>
 
                         <ul class="list-disc pl-5 mt-2">
-                            <li data-i18n="signRule">負號代表向右傳播 <span class="whitespace-nowrap">(+<span class="italic font-serif">x</span>)</span>，正號代表向左傳播 <span class="whitespace-nowrap">(-<span class="italic font-serif">x</span>)</span>。</li>
+                            <li data-i18n="signRule">負號代表向右傳播 <span class="whitespace-nowrap">(+<i class="math-var">x</i>)</span>，正號代表向左傳播 <span class="whitespace-nowrap">(-<i class="math-var">x</i>)</span>。</li>
                         </ul>
                     </section>
 
                     <section>
                         <h3 class="font-bold text-lg text-slate-800 border-b pb-1 mb-2" data-i18n="stationaryTitle">駐波 <span class="whitespace-nowrap">(Stationary Wave)</span></h3>
-                        <p data-i18n="stationaryDesc">一端為起振器，另一端固定。當弦長 $L$ 為半波長的整數倍時 ($L = n\frac{\lambda}{2}$)，會產生共振形成駐波，振幅劇增；否則為微弱且混亂的震動。</p>
+                        <p data-i18n="stationaryDesc">一端為起振器，另一端固定。當弦長 \(L\) 為半波長的整數倍時 (\(L = n\frac{\lambda}{2}\))，會產生共振形成駐波，振幅劇增；否則為微弱且混亂的震動。</p>
                         <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 my-2 text-center text-lg">
                             $$y(x,t) = \text{Re}\left[ A \frac{\sin(k(L-x) + i\gamma(1-\frac{x}{L}))}{\sin(kL + i\gamma)} e^{-i\omega t} \right]$$
                         </div>
                         <ul class="list-disc pl-5 space-y-2 mt-2">
                             <li>
                                 <strong data-i18n="node">波節 <span class="whitespace-nowrap">(Node)</span></strong>: 
-                                <span data-i18n="nodeDesc">共振時永遠靜止的點</span>&nbsp;$(x = 0, \frac{\lambda}{2}, \lambda, \dots)$
+                                <span data-i18n="nodeDesc">共振時永遠靜止的點</span>&nbsp;\(x = 0, \frac{\lambda}{2}, \lambda, \dots\)
                             </li>
                             <li>
                                 <strong data-i18n="antinode">波腹 <span class="whitespace-nowrap">(Antinode)</span></strong>: 
-                                <span data-i18n="antinodeDesc">共振時振幅最大的點</span>&nbsp;$(x = \frac{\lambda}{4}, \frac{3\lambda}{4}, \frac{5\lambda}{4}, \dots)$
+                                <span data-i18n="antinodeDesc">共振時振幅最大的點</span>&nbsp;\(x = \frac{\lambda}{4}, \frac{3\lambda}{4}, \frac{5\lambda}{4}, \dots\)
                             </li>
                         </ul>
                     </section>
@@ -410,12 +423,15 @@
         /* --- 1. Translations (i18n) --- */
         const dict = {
             zh: {
-                appTitle: "橫波與駐波",
+                appTitle: "行波與駐波",
                 playbackCtrl: "模擬控制",
                 play: "開始",
                 pause: "暫停",
-                simTime: "時間 <span class='whitespace-nowrap'>(<span class='italic font-serif'>t</span>)</span>",
+                simTime: "時間 <span class='whitespace-nowrap'>(<i class='math-var'>t</i>)</span>",
                 animSpeed: "動畫速度",
+                showGraph: "顯示位移-時間圖 (<i class='math-var'>y</i>-<i class='math-var'>t</i>)",
+                hideGraph: "隱藏位移-時間圖 (<i class='math-var'>y</i>-<i class='math-var'>t</i>)",
+                graphTitle: "位移-時間圖 (<i class='math-var'>y</i>-<i class='math-var'>t</i>)",
                 waveProps: "波形參數",
                 travelingWaveTab: "行波",
                 stationaryWaveTab: "駐波",
@@ -434,15 +450,15 @@
                 footer: "廠商會中學．物理科",
                 theoryTitle: "物理原理與公式",
                 waveEqTitle: "波動方程 <span class='whitespace-nowrap'>(Wave Equation)</span>",
-                waveSpeedEqDesc: "波速率<span class='italic font-serif px-1'>v</span>、頻率<span class='italic font-serif px-1'>f</span>與波長<span class='italic font-serif px-1'>λ</span>的關係：",
+                waveSpeedEqDesc: "波速率<i class='math-var px-1'>v</i>、頻率<i class='math-var px-1'>f</i>與波長<i class='math-var px-1'>λ</i>的關係：",
                 travelingTitle: "行波 <span class='whitespace-nowrap'>(Traveling Wave)</span>",
-                travelingDesc: "沿著<span class='italic font-serif px-1'>x</span>軸傳播的簡諧波位移<span class='italic font-serif px-1'>y</span>函數 (假設另一端不受限延伸)：",
+                travelingDesc: "沿著<i class='math-var px-1'>x</i>軸傳播的簡諧波位移<i class='math-var px-1'>y</i>函數 (假設另一端不受限延伸)：",
                 amplitudeModal: "起振器振幅",
                 waveNumber: "波數",
                 angularFreq: "角頻率",
-                signRule: "負號代表向右傳播 <span class='whitespace-nowrap'>(+<span class='italic font-serif'>x</span>)</span>，正號代表向左傳播 <span class='whitespace-nowrap'>(-<span class='italic font-serif'>x</span>)</span>。",
+                signRule: "負號代表向右傳播 <span class='whitespace-nowrap'>(+<i class='math-var'>x</i>)</span>，正號代表向左傳播 <span class='whitespace-nowrap'>(-<i class='math-var'>x</i>)</span>。",
                 stationaryTitle: "駐波 <span class='whitespace-nowrap'>(Stationary Wave)</span>",
-                stationaryDesc: "一端為起振器，另一端固定。當弦長 $L$ 為半波長的整數倍時 ($L = n\\frac{\\lambda}{2}$)，會產生共振形成駐波，振幅劇增；否則為微弱且混亂的震動。",
+                stationaryDesc: "一端為起振器，另一端固定。當弦長 \\(L\\) 為半波長的整數倍時 (\\(L = n\\frac{\\lambda}{2}\\))，會產生共振形成駐波，振幅劇增；否則為微弱且混亂的震動。",
                 node: "波節 <span class='whitespace-nowrap'>(Node)</span>",
                 nodeDesc: "共振時永遠靜止的點",
                 antinode: "波腹 <span class='whitespace-nowrap'>(Antinode)</span>",
@@ -451,16 +467,19 @@
                 phaseRelationship: "相位關係：",
                 phaseDiff: "相位差:",
                 lblInPhase: "同相",
-                lblAntiPhase: "反相",
-                lblOutOfPhase: "異相"
+                lblOutOfPhase: "異相",
+                waveType: "波的類型"
             },
             en: {
-                appTitle: "Travelling & Stationary Waves",
+                appTitle: "Travelling & Stationary Wave",
                 playbackCtrl: "Playback",
                 play: "Play",
                 pause: "Pause",
-                simTime: "Time <span class='whitespace-nowrap'>(<span class='italic font-serif'>t</span>)</span>",
+                simTime: "Time <span class='whitespace-nowrap'>(<i class='math-var'>t</i>)</span>",
                 animSpeed: "Anim Speed",
+                showGraph: "Show <i class='math-var'>y</i>-<i class='math-var'>t</i> Graph",
+                hideGraph: "Hide <i class='math-var'>y</i>-<i class='math-var'>t</i> Graph",
+                graphTitle: "Displacement-Time (<i class='math-var'>y</i>-<i class='math-var'>t</i>) Graph",
                 waveProps: "Parameters",
                 travelingWaveTab: "Traveling Wave",
                 stationaryWaveTab: "Stationary Wave",
@@ -479,15 +498,15 @@
                 footer: "CMA Secondary School. Physics Department.",
                 theoryTitle: "Physics Principles & Formulas",
                 waveEqTitle: "Wave Equation",
-                waveSpeedEqDesc: "Relationship between speed <span class='italic font-serif'>v</span>, frequency <span class='italic font-serif'>f</span>, and wavelength <span class='italic font-serif'>λ</span>:",
+                waveSpeedEqDesc: "Relationship between speed <i class='math-var px-1'>v</i>, frequency <i class='math-var px-1'>f</i>, and wavelength <i class='math-var px-1'>λ</i>:",
                 travelingTitle: "Traveling Wave",
-                travelingDesc: "Displacement <span class='italic font-serif'>y</span> for a harmonic wave traveling along the <span class='italic font-serif'>x</span>-axis (assuming an infinitely long string):",
+                travelingDesc: "Displacement <i class='math-var px-1'>y</i> for a harmonic wave traveling along the <i class='math-var px-1'>x</i>-axis (assuming an infinitely long string):",
                 amplitudeModal: "Vibrator Amplitude",
                 waveNumber: "Wave Number",
                 angularFreq: "Angular Frequency",
-                signRule: "Negative sign implies propagation to the right <span class='whitespace-nowrap'>(+<span class='italic font-serif'>x</span>)</span>, positive to the left <span class='whitespace-nowrap'>(-<span class='italic font-serif'>x</span>)</span>.",
+                signRule: "Negative sign implies propagation to the right <span class='whitespace-nowrap'>(+<i class='math-var'>x</i>)</span>, positive to the left <span class='whitespace-nowrap'>(-<i class='math-var'>x</i>)</span>.",
                 stationaryTitle: "Stationary Wave",
-                stationaryDesc: "One end is a vibrator and the other is fixed. Resonance occurs and forms standing waves with large amplitude ONLY when the string length $L$ is an integer multiple of half-wavelength ($L = n\\frac{\\lambda}{2}$). Otherwise, the vibration is chaotic with low amplitude.",
+                stationaryDesc: "One end is a vibrator and the other is fixed. Resonance occurs and forms standing waves with large amplitude ONLY when the string length \\(L\\) is an integer multiple of half-wavelength (\\(L = n\\frac{\\lambda}{2}\\)). Otherwise, the vibration is chaotic with low amplitude.",
                 node: "Node <span class='whitespace-nowrap'>(N)</span>",
                 nodeDesc: "Stationary points during resonance",
                 antinode: "Antinode <span class='whitespace-nowrap'>(A)</span>",
@@ -496,12 +515,13 @@
                 phaseRelationship: "Phase Relationship:",
                 phaseDiff: "Phase Diff:",
                 lblInPhase: "In Phase",
-                lblAntiPhase: "Antiphase",
-                lblOutOfPhase: "Out of Phase"
+                lblOutOfPhase: "Out of Phase",
+                waveType: "Wave Type"
             }
         };
 
         let currentLang = 'zh';
+        let isGraphVisible = false;
 
         function toggleLanguage() {
             currentLang = currentLang === 'zh' ? 'en' : 'zh';
@@ -517,6 +537,15 @@
             document.getElementById('langToggleText').textContent = currentLang === 'zh' ? '繁 / Eng' : 'Eng / 繁';
             
             simState.updateUI(); // refresh resonance text language
+            
+            // Re-update graph toggle button text based on state
+            const btnText = document.getElementById('btnGraphText');
+            btnText.innerHTML = dict[currentLang][isGraphVisible ? 'hideGraph' : 'showGraph'];
+
+            // Reprocess MathJax after language switch
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
         }
 
         /* --- 2. Global State & Physics Logic --- */
@@ -562,7 +591,7 @@
                 document.getElementById('btnPlay').classList.toggle('opacity-50', playing);
                 document.getElementById('btnPause').disabled = !playing;
                 document.getElementById('btnPause').classList.toggle('opacity-50', !playing);
-                
+
                 if (playing) {
                     this.lastFrameTime = performance.now();
                     requestAnimationFrame(animationLoop);
@@ -572,7 +601,10 @@
             reset() {
                 this.time = 0;
                 this.updateUI();
-                if (!this.isPlaying) drawCanvas();
+                if (!this.isPlaying) {
+                    drawCanvas();
+                    if (isGraphVisible) drawGraph();
+                }
             },
 
             setWaveType(type) {
@@ -582,8 +614,8 @@
                 const tabT = document.getElementById('tabTraveling');
                 const tabS = document.getElementById('tabStationary');
 
-                const activeClass = "py-3 px-2 text-sm font-bold border-b-2 border-[#1e3c72] text-[#1e3c72] transition";
-                const inactiveClass = "py-3 px-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-[#1e3c72] transition";
+                const activeClass = "flex-1 py-2 text-sm font-bold rounded-md transition bg-white shadow-sm text-[#1e3c72]";
+                const inactiveClass = "flex-1 py-2 text-sm font-medium rounded-md transition text-slate-500 hover:text-[#1e3c72]";
 
                 if (isStationary) {
                     tabS.className = activeClass;
@@ -595,11 +627,13 @@
 
                 document.getElementById('directionControlGroup').style.display = isStationary ? 'none' : 'flex';
                 document.getElementById('resonanceRow').style.display = isStationary ? 'flex' : 'none';
-                document.getElementById('stationaryLegend').style.display = isStationary ? 'block' : 'none';
 
                 updateScaleY(); // Dynamically adjust scale based on mode
                 this.updateUI();
-                if (!this.isPlaying) drawCanvas();
+                if (!this.isPlaying) {
+                    drawCanvas();
+                    if (isGraphVisible) drawGraph();
+                }
             },
 
             setDirection(dir) {
@@ -616,7 +650,10 @@
                     btnR.className = "px-3 py-1 text-xs font-bold rounded-md transition bg-white shadow-sm text-blue-600";
                 }
                 
-                if (!this.isPlaying) drawCanvas();
+                if (!this.isPlaying) {
+                    drawCanvas();
+                    if (isGraphVisible) drawGraph();
+                }
             },
 
             updateParams() {
@@ -625,7 +662,10 @@
                 this.v = parseFloat(document.getElementById('slideSpeed').value);
                 
                 this.updateUI();
-                if (!this.isPlaying) drawCanvas();
+                if (!this.isPlaying) {
+                    drawCanvas();
+                    if (isGraphVisible) drawGraph();
+                }
             },
 
             updateAnimSpeed() {
@@ -634,41 +674,32 @@
             },
 
             // --- Phase Calculations (相位計算) ---
-            // Calculates the phase angle of the particle at position x
             getPhase(x) {
                 if (this.waveType === 'traveling') {
-                    // For traveling wave, spatial phase is simply k*x
                     return this.k * x; 
                 } else {
                     if (this.isResonant) {
-                        // Idealized Phase at resonance: 
-                        // Particles in the same loop are exactly in phase. Adjacent loops are exactly antiphase.
                         const k_res = this.n_resonant * Math.PI / this.L;
                         const sinVal = Math.sin(k_res * x);
                         if (Math.abs(sinVal) < 1e-10) return 0; // Exact node
                         return sinVal > 0 ? 0 : Math.PI;
                     } else {
-                        // For stationary damped driven string
-                        // We extract the real and imaginary parts of the spatial amplitude function
                         const { U, V } = this.getU_V(x);
                         return Math.atan2(V, U);
                     }
                 }
             },
 
-            // Returns the absolute phase difference strictly between 0 and 180 degrees
             getPhaseDifference() {
                 let phi1 = this.getPhase(this.p1.x);
                 let phi2 = this.getPhase(this.p2.x);
                 let diff = Math.abs(phi1 - phi2);
                 
-                // Wrap to 0..2pi
                 diff = diff % (2 * Math.PI);
-                // Map to 0..pi (0 to 180 degrees difference)
                 if (diff > Math.PI) {
                     diff = 2 * Math.PI - diff;
                 }
-                return diff * (180 / Math.PI); // Convert to degrees
+                return diff * (180 / Math.PI); 
             },
 
             updateUI() {
@@ -677,29 +708,27 @@
                 document.getElementById('valSpeed').textContent = this.v.toFixed(0);
                 document.getElementById('valLambda').textContent = this.lambda.toFixed(2);
                 document.getElementById('timeDisplay').textContent = this.time.toFixed(2) + ' s';
-                
-                document.getElementById('p1X').textContent = this.p1.x.toFixed(2);
-                document.getElementById('p1Y').textContent = (this.p1.y * 100).toFixed(2); // Show in cm
-                document.getElementById('p2X').textContent = this.p2.x.toFixed(2);
-                document.getElementById('p2Y').textContent = (this.p2.y * 100).toFixed(2); // Show in cm
 
-                // --- Update Resonance Status (更新共振狀態) ---
+                // Update Legend Coordinates
+                document.getElementById('legendP1X').innerHTML = `(<i class="math-var">x</i> = ${this.p1.x.toFixed(2)} m)`;
+                document.getElementById('legendP2X').innerHTML = `(<i class="math-var">x</i> = ${this.p2.x.toFixed(2)} m)`;
+
+                // --- Update Resonance Status ---
                 if (this.waveType === 'stationary') {
                     const statusEl = document.getElementById('valResonance');
 
                     if (this.isResonant) {
-                        statusEl.textContent = currentLang === 'zh' ? `共振 (n=${this.n_resonant})` : `Resonance (n=${this.n_resonant})`;
+                        statusEl.innerHTML = currentLang === 'zh' ? `共振 (<i class="math-var">n</i>=${this.n_resonant})` : `Resonance (<i class="math-var">n</i>=${this.n_resonant})`;
                         statusEl.className = "font-bold text-emerald-600 whitespace-nowrap";
                     } else {
-                        statusEl.textContent = currentLang === 'zh' ? `未共振 (微弱)` : `Chaotic (Low Amp)`;
+                        statusEl.innerHTML = currentLang === 'zh' ? `未共振 (微弱)` : `Chaotic (Low Amp)`;
                         statusEl.className = "font-bold text-red-500 whitespace-nowrap";
                     }
                 }
 
-                // --- Update Phase Relationship UI (更新相位關係顯示) ---
-                // Calculate phase difference and round to nearest integer for strict classification
+                // --- Update Phase Relationship UI ---
                 const diffDeg = this.getPhaseDifference();
-                const roundedDiff = Math.round(diffDeg); // Correct to nearest integer (e.g., 0.4 deg -> 0 deg)
+                const roundedDiff = Math.round(diffDeg); 
                 
                 document.getElementById('phaseDiffValue').textContent = roundedDiff;
 
@@ -707,7 +736,6 @@
                 const lblAnti = document.getElementById('lblAntiPhase');
                 const lblOut = document.getElementById('lblOutOfPhase');
 
-                // Define styling classes for different states
                 const baseClass = "transition-all duration-200 ";
                 const highlightIn = baseClass + "font-bold text-emerald-600";
                 const highlightAnti = baseClass + "font-bold text-purple-600";
@@ -715,27 +743,21 @@
                 const crossedOut = baseClass + "line-through text-slate-400";
                 const normal = baseClass + "text-slate-500";
 
-                // Strict Phase Classification Logic based on nearest integer
                 if (roundedDiff === 0) { 
-                    // 1. In Phase (Exactly 0 degrees): Highlight 同相, cross out the rest
                     lblIn.className = highlightIn;
                     lblAnti.className = crossedOut;
                     lblOut.className = crossedOut;
                 } else if (roundedDiff === 180) { 
-                    // 2. Antiphase (Exactly 180 degrees): Highlight 反相, cross out 同相, leave 異相 alone (normal)
                     lblIn.className = crossedOut;
                     lblAnti.className = highlightAnti;
                     lblOut.className = normal; 
                 } else { 
-                    // 3. Out of Phase (Other degrees): Highlight 異相, cross out 同相 and 反相
                     lblIn.className = crossedOut;
                     lblAnti.className = crossedOut;
                     lblOut.className = highlightOut;
                 }
             },
 
-            // Advanced Physics Engine for Complex String Wave (Driven Damped String)
-            // Solves the exact superposition of infinite boundaries natively.
             getU_V(x) {
                 const a1 = this.k * (this.L - x);
                 const b1 = this.gamma * (1 - x / this.L);
@@ -757,12 +779,10 @@
                 if (this.waveType === 'traveling') return this.A;
                 
                 if (this.isResonant) {
-                    // Idealized envelope at resonance (nodes are perfectly 0)
                     const k_res = this.n_resonant * Math.PI / this.L;
                     const A_max = this.A / this.gamma;
                     return Math.abs(A_max * Math.sin(k_res * x));
                 } else {
-                    // Realistic damped envelope for chaotic non-resonance
                     const { U, V } = this.getU_V(x);
                     return this.A * Math.sqrt(U*U + V*V);
                 }
@@ -774,13 +794,10 @@
                     return this.A * Math.sin(this.k * x + sign * this.omega * t);
                 } else {
                     if (this.isResonant) {
-                        // Idealized pure standing wave at resonance
-                        // Vibrator at x=0 acts strictly as a fixed node.
                         const k_res = this.n_resonant * Math.PI / this.L;
-                        const A_max = this.A / this.gamma; // Amplified resonance
+                        const A_max = this.A / this.gamma; 
                         return A_max * Math.sin(k_res * x) * Math.cos(this.omega * t);
                     } else {
-                        // Realistic damped driven string for chaotic state
                         const { U, V } = this.getU_V(x);
                         return this.A * (U * Math.cos(this.omega * t) + V * Math.sin(this.omega * t));
                     }
@@ -795,20 +812,19 @@
         
         let logicalWidth = 0;
         let logicalHeight = 0;
-        let originY = 0; // Center Y
-        let scaleY = 1; // pixels per meter
+        let originY = 0; 
+        let scaleY = 1; 
 
         function updateScaleY() {
             if (logicalHeight === 0) return;
-            // Physical Max amplitude driven is 0.1m. 
-            // With gamma 0.1, max resonance envelope is ~1.0m. 
-            // For traveling wave, map the max possible amplitude (0.1m) to take up majority of the space to enlarge view.
             const maxDisplayAmplitude = simState.waveType === 'stationary' ? 1.0 : 0.12; 
             scaleY = (logicalHeight / 2) * 0.85 / maxDisplayAmplitude; 
         }
 
         function resizeCanvas() {
             const rect = container.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) return;
+
             const dpr = window.devicePixelRatio || 1;
             
             canvas.width = rect.width * dpr;
@@ -827,7 +843,13 @@
             if (!simState.isPlaying) drawCanvas();
         }
 
-        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            if (isGraphVisible) {
+                resizeGraphCanvas();
+                if (!simState.isPlaying) drawGraph();
+            }
+        });
 
         function drawCanvas() {
             ctx.clearRect(0, 0, logicalWidth, logicalHeight);
@@ -842,19 +864,16 @@
 
             // 1.5 Draw Vibrator and Fixed End for Stationary Mode
             if (simState.waveType === 'stationary') {
-                // Fixed End post (Right)
-                ctx.fillStyle = '#64748b'; // slate-500
+                ctx.fillStyle = '#64748b'; 
                 ctx.fillRect(logicalWidth - 8, originY - 60, 8, 120);
                 
-                // Vibrator box (Left)
-                ctx.fillStyle = '#94a3b8'; // slate-400
+                ctx.fillStyle = '#94a3b8'; 
                 ctx.fillRect(0, originY - 15, 12, 30);
                 ctx.beginPath();
                 ctx.arc(6, originY, 4, 0, Math.PI * 2);
                 ctx.fillStyle = '#cbd5e1';
                 ctx.fill();
                 
-                // Labels
                 ctx.fillStyle = '#475569';
                 ctx.font = 'bold 12px Inter, sans-serif';
                 ctx.textAlign = 'left';
@@ -865,7 +884,7 @@
 
             // 2. Draw Wave
             ctx.beginPath();
-            ctx.strokeStyle = '#1e3c72'; // Deep Blue
+            ctx.strokeStyle = '#1e3c72'; 
             ctx.lineWidth = 3;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
@@ -873,30 +892,24 @@
             for (let px = 0; px <= logicalWidth; px++) {
                 let physicalX = (px / logicalWidth) * simState.L;
                 let physicalY = simState.getDisplacement(physicalX, simState.time);
-                
                 let py = originY - physicalY * scaleY;
-
-                if (px === 0) ctx.moveTo(px, py); 
-                else ctx.lineTo(px, py);
+                if (px === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
             }
             ctx.stroke();
 
-            // 3. Draw Stationary Wave Envelope (Limits)
+            // 3. Draw Envelope
             if (simState.waveType === 'stationary') {
                 ctx.beginPath();
-                ctx.strokeStyle = 'rgba(30, 60, 114, 0.2)'; // Faint Blue
+                ctx.strokeStyle = 'rgba(30, 60, 114, 0.2)';
                 ctx.lineWidth = 2;
                 ctx.setLineDash([5, 5]);
                 
-                // Top envelope
                 for (let px = 0; px <= logicalWidth; px++) {
                     let physicalX = (px / logicalWidth) * simState.L;
                     let E = simState.getEnvelope(physicalX);
                     let py = originY - E * scaleY;
-                    if (px === 0) ctx.moveTo(px, py);
-                    else ctx.lineTo(px, py);
+                    if (px === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
                 }
-                // Bottom envelope
                 for (let px = logicalWidth; px >= 0; px--) {
                     let physicalX = (px / logicalWidth) * simState.L;
                     let E = simState.getEnvelope(physicalX);
@@ -904,10 +917,10 @@
                     ctx.lineTo(px, py);
                 }
                 ctx.stroke();
-                ctx.setLineDash([]); // Reset
+                ctx.setLineDash([]); 
             }
 
-            // 4. Update Particle Heights & Draw Particles
+            // 4. Update Particle Heights
             simState.p1.y = simState.getDisplacement(simState.p1.x, simState.time);
             simState.p2.y = simState.getDisplacement(simState.p2.x, simState.time);
 
@@ -919,7 +932,7 @@
             let p2_py = originY - simState.p2.y * scaleY;
             drawParticle(p2_px, p2_py, '#3b82f6', '#1d4ed8');
 
-            simState.updateUI(); // Keep text readouts synced
+            simState.updateUI();
         }
 
         function drawParticle(x, y, fillStyle, strokeStyle) {
@@ -931,7 +944,6 @@
             ctx.lineWidth = 2;
             ctx.stroke();
             
-            // Draw guiding vertical line to axis
             ctx.beginPath();
             ctx.moveTo(x, originY);
             ctx.lineTo(x, y);
@@ -951,6 +963,10 @@
             
             simState.time += dt;
             drawCanvas();
+            
+            if (isGraphVisible) {
+                drawGraph();
+            }
             
             requestAnimationFrame(animationLoop);
         }
@@ -972,7 +988,6 @@
             const hitRadius = 15;
             const p1_px = (simState.p1.x / simState.L) * logicalWidth;
             const p1_py = originY - simState.p1.y * scaleY;
-            
             const p2_px = (simState.p2.x / simState.L) * logicalWidth;
             const p2_py = originY - simState.p2.y * scaleY;
 
@@ -1007,6 +1022,7 @@
             
             if (!simState.isPlaying) {
                 drawCanvas();
+                if (isGraphVisible) drawGraph();
             }
         }
 
@@ -1023,7 +1039,167 @@
         window.addEventListener('touchmove', onPointerMove, {passive: false});
         window.addEventListener('touchend', onPointerUp);
 
-        /* --- 6. Modals --- */
+        /* --- 6. y-t Graph Logic (In-pane) --- */
+        function toggleGraph() {
+            isGraphVisible = !isGraphVisible;
+            const panel = document.getElementById('graphPanel');
+            const btnText = document.getElementById('btnGraphText');
+            
+            if (isGraphVisible) {
+                panel.classList.remove('hidden');
+                btnText.innerHTML = dict[currentLang]['hideGraph'];
+            } else {
+                panel.classList.add('hidden');
+                btnText.innerHTML = dict[currentLang]['showGraph'];
+            }
+            
+            // Wait briefly for flexbox layout to settle before calculating bounding boxes
+            setTimeout(() => {
+                resizeCanvas();
+                if (isGraphVisible) {
+                    resizeGraphCanvas();
+                    if (!simState.isPlaying) drawGraph();
+                }
+            }, 50);
+        }
+
+        function resizeGraphCanvas() {
+            const canvasG = document.getElementById('ytGraphCanvas');
+            if (!canvasG) return;
+            const containerG = document.getElementById('ytContainer');
+            const rect = containerG.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) return; 
+
+            const dpr = window.devicePixelRatio || 1;
+            canvasG.width = rect.width * dpr;
+            canvasG.height = rect.height * dpr;
+            canvasG.ctx = canvasG.getContext('2d');
+            canvasG.ctx.scale(dpr, dpr);
+            canvasG.logicalWidth = rect.width;
+            canvasG.logicalHeight = rect.height;
+        }
+
+        // Helper to draw axes arrows
+        function drawArrow(ctx, fromX, fromY, toX, toY) {
+            const headlen = 8;
+            const dx = toX - fromX;
+            const dy = toY - fromY;
+            const angle = Math.atan2(dy, dx);
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.stroke();
+        }
+
+        function drawGraph() {
+            const canvasG = document.getElementById('ytGraphCanvas');
+            if (!canvasG || !canvasG.ctx) return;
+            const ctx = canvasG.ctx;
+            const W = canvasG.logicalWidth;
+            const H = canvasG.logicalHeight;
+            const originY = H / 2;
+            
+            ctx.clearRect(0, 0, W, H);
+            
+            // Layout Paddings
+            const padX = 45; // Space for Y-axis and labels
+            const padR = 30; // Space for X-axis arrow
+            const padTop = 20;
+            const padBottom = 20;
+            const plotWidth = W - padX - padR;
+
+            // Map the graph to exactly 3 full cycles
+            const T = 1 / simState.f;
+            const maxT = 3 * T;
+            
+            // Calculate absolute and local current time within the 3-cycle block
+            let baseTime = Math.floor(simState.time / maxT) * maxT;
+            let ct = simState.time % maxT;
+
+            // --- Draw Axes & Arrows ---
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 1.5;
+            
+            // Y-axis (Upward arrow)
+            drawArrow(ctx, padX, H - padBottom, padX, padTop);
+            
+            // X-axis (Rightward arrow)
+            drawArrow(ctx, padX - 10, originY, W - padR + 20, originY);
+            
+            // Axis Labels (SI units formatting: variable italic, unit upright)
+            ctx.fillStyle = '#1e293b';
+            ctx.textBaseline = 'bottom';
+            
+            // Calculate widths for proper centering of 'y / m' over the y-axis
+            ctx.font = 'italic 14px "Times New Roman", Times, serif';
+            let yWidth = ctx.measureText('y').width;
+            ctx.font = '12px Inter, sans-serif';
+            let mWidth = ctx.measureText(' / m').width;
+            let startYLabel = padX - (yWidth + mWidth) / 2;
+            
+            ctx.textAlign = 'left';
+            ctx.font = 'italic 14px "Times New Roman", Times, serif';
+            ctx.fillText('y', startYLabel, padTop - 8);
+            ctx.font = '12px Inter, sans-serif';
+            ctx.fillText(' / m', startYLabel + yWidth, padTop - 8);
+            
+            // Draw 't'
+            ctx.textBaseline = 'middle';
+            let startTLabel = W - padR + 25;
+            
+            ctx.font = 'italic 14px "Times New Roman", Times, serif';
+            ctx.fillText('t', startTLabel, originY);
+
+            // Dynamically reconsider y-scale based on the new graph canvas height
+            const maxDisplayAmplitude = simState.waveType === 'stationary' ? 1.0 : 0.12; 
+            const graphScaleY = (H / 2 - Math.max(padTop, padBottom)) * 0.9 / maxDisplayAmplitude;
+
+            ctx.lineJoin = 'round';
+            
+            // --- Draw Particle 1 Path (Red) ---
+            ctx.beginPath();
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 2;
+            for (let px = 0; px <= plotWidth; px += 2) {
+                let t = (px / plotWidth) * maxT;
+                let actualTime = baseTime + t;
+                let y = simState.getDisplacement(simState.p1.x, actualTime);
+                let py = originY - y * graphScaleY;
+                if (px === 0) ctx.moveTo(padX + px, py); 
+                else ctx.lineTo(padX + px, py);
+            }
+            ctx.stroke();
+
+            // --- Draw Particle 2 Path (Blue) ---
+            ctx.beginPath();
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            for (let px = 0; px <= plotWidth; px += 2) {
+                let t = (px / plotWidth) * maxT;
+                let actualTime = baseTime + t;
+                let y = simState.getDisplacement(simState.p2.x, actualTime);
+                let py = originY - y * graphScaleY;
+                if (px === 0) ctx.moveTo(padX + px, py); 
+                else ctx.lineTo(padX + px, py);
+            }
+            ctx.stroke();
+            
+            // --- Draw Current Time Scrubber Line ---
+            const cx = padX + (ct / maxT) * plotWidth;
+            ctx.beginPath();
+            ctx.moveTo(cx, padTop);
+            ctx.lineTo(cx, H - padBottom);
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        /* --- 7. Theory Modals --- */
         function toggleHelpModal() {
             const modal = document.getElementById('helpModal');
             if (modal.classList.contains('hidden')) {
@@ -1041,9 +1217,8 @@
             }
         }
 
-        /* --- 7. Initialization --- */
+        /* --- 8. Initialization --- */
         window.onload = function() {
-            // Set initial reasonable values
             document.getElementById('slideAmp').value = 2.0;
             document.getElementById('slideFreq').value = 10.0;
             document.getElementById('slideSpeed').value = 20;
@@ -1051,13 +1226,10 @@
             
             simState.updateParams();
             simState.updateAnimSpeed();
+            simState.setDirection(simState.direction); // 強制同步 UI 與引擎狀態
             resizeCanvas();
             
             simState.setPlaying(false);
-            
-            if (window.MathJax && window.MathJax.typesetPromise) {
-                MathJax.typesetPromise();
-            }
         };
 
     </script>
