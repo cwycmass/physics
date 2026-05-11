@@ -141,11 +141,11 @@
     <main class="flex-grow flex flex-col md:flex-row w-full max-w-screen-2xl mx-auto p-4 gap-4 h-[calc(100vh-170px)]">
         
         <!-- Sidebar Controls -->
-        <aside class="w-full md:w-80 lg:w-96 flex flex-col gap-4 overflow-y-auto pr-2 pb-4">
+        <aside class="w-full md:w-80 lg:w-96 flex flex-col gap-3 overflow-y-auto pr-1 pb-1">
             
             <!-- Playback Controls Card -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <h2 class="text-slate-800 font-semibold mb-4 flex items-center gap-2 border-b pb-2">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-slate-800 text-sm font-semibold mb-3 flex items-center gap-2 border-b pb-2">
                     <i class="fa-solid fa-play text-[#1e3c72]"></i>
                     <span data-i18n="playbackCtrl">模擬控制</span>
                 </h2>
@@ -156,13 +156,13 @@
                     <button id="btnPause" onclick="simState.setPlaying(false)" class="flex-1 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium transition shadow-sm flex items-center justify-center gap-2 disabled:opacity-50">
                         <i class="fa-solid fa-pause"></i> <span data-i18n="pause">暫停</span>
                     </button>
-                    <button onclick="simState.reset()" class="w-12 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-medium transition shadow-sm flex items-center justify-center" title="Reset">
+                    <button onclick="simState.reset()" class="w-10 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-medium transition shadow-sm flex items-center justify-center" title="Reset">
                         <i class="fa-solid fa-rotate-left"></i>
                     </button>
                 </div>
                 
                 <!-- Animation Speed Slider -->
-                <div class="mt-4 pt-4 border-t border-slate-100">
+                <div class="mt-3 pt-3 border-t border-slate-100">
                     <div class="flex justify-between items-center mb-1">
                         <label for="slideAnimSpeed" class="text-sm font-medium text-slate-700 whitespace-nowrap">
                             <span data-i18n="animSpeed">動畫速度</span>
@@ -173,28 +173,28 @@
                 </div>
 
                 <!-- Show y-t Graph Button -->
-                <div class="mt-4 pt-4 border-t border-slate-100">
-                    <button onclick="toggleGraph()" class="w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg font-bold transition shadow-sm flex items-center justify-center gap-2">
+                <div class="mt-3 pt-3 border-t border-slate-100">
+                    <button onclick="toggleGraph()" class="w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-sm font-bold transition shadow-sm flex items-center justify-center gap-2">
                         <i class="fa-solid fa-chart-line"></i> <span id="btnGraphText" data-i18n="showGraph">顯示位移-時間圖 (<i class="math-var">y</i>-<i class="math-var">t</i>)</span>
                     </button>
                 </div>
             </div>
 
             <!-- Wave Properties Card -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex-grow">
-                <h2 class="text-slate-800 font-semibold mb-4 flex items-center gap-2 border-b pb-2">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex-grow flex flex-col">
+                <h2 class="text-slate-800 text-sm font-semibold mb-3 flex items-center gap-2 border-b pb-2">
                     <i class="fa-solid fa-sliders text-[#1e3c72]"></i>
                     <span data-i18n="waveProps">波形參數</span>
                 </h2>
 
                 <!-- Wave Type Toggle -->
-                <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-lg border border-slate-200 mb-6">
-                    <button id="tabTraveling" onclick="simState.setWaveType('traveling')" class="flex-1 py-2 text-sm font-bold rounded-md transition bg-white shadow-sm text-[#1e3c72]" data-i18n="travelingWaveTab">行波</button>
-                    <button id="tabStationary" onclick="simState.setWaveType('stationary')" class="flex-1 py-2 text-sm font-medium rounded-md transition text-slate-500 hover:text-[#1e3c72]" data-i18n="stationaryWaveTab">駐波</button>
+                <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-lg border border-slate-200 mb-3">
+                    <button id="tabTraveling" onclick="simState.setWaveType('traveling')" class="flex-1 py-1.5 text-sm font-bold rounded-md transition bg-white shadow-sm text-[#1e3c72]" data-i18n="travelingWaveTab">行波</button>
+                    <button id="tabStationary" onclick="simState.setWaveType('stationary')" class="flex-1 py-1.5 text-sm font-medium rounded-md transition text-slate-500 hover:text-[#1e3c72]" data-i18n="stationaryWaveTab">駐波</button>
                 </div>
                 
                 <!-- Direction Toggle (Traveling only) -->
-                <div id="directionControlGroup" class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                <div id="directionControlGroup" class="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
                     <span class="text-sm font-medium text-slate-700" data-i18n="direction">傳播方向</span>
                     <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-lg border border-slate-200">
                         <button id="btnDirLeft" onclick="simState.setDirection(-1)" class="px-3 py-1 text-xs font-medium rounded-md transition text-slate-500 hover:text-red-600">
@@ -207,7 +207,7 @@
                 </div>
 
                 <!-- Amplitude Slider -->
-                <div class="mb-5">
+                <div class="mb-3">
                     <div class="flex justify-between items-center mb-1">
                         <label for="slideAmp" class="text-sm font-medium text-slate-700 whitespace-nowrap">
                             <span data-i18n="amplitude">起振器振幅</span> <span class="whitespace-nowrap">(<i class="math-var">A</i>)</span>
@@ -218,7 +218,7 @@
                 </div>
 
                 <!-- Frequency Slider -->
-                <div class="mb-5">
+                <div class="mb-3">
                     <div class="flex justify-between items-center mb-1">
                         <label for="slideFreq" class="text-sm font-medium text-slate-700 whitespace-nowrap">
                             <span data-i18n="frequency">頻率</span> <span class="whitespace-nowrap">(<i class="math-var">f</i>)</span>
@@ -229,7 +229,7 @@
                 </div>
 
                 <!-- Wave Speed Slider -->
-                <div class="mb-5">
+                <div class="mb-3">
                     <div class="flex justify-between items-center mb-1">
                         <label for="slideSpeed" class="text-sm font-medium text-slate-700 whitespace-nowrap">
                             <span data-i18n="waveSpeed">波速率</span> <span class="whitespace-nowrap">(<i class="math-var">v</i>)</span>
@@ -240,7 +240,7 @@
                 </div>
 
                 <!-- Derived Values Box -->
-                <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mt-2 flex flex-col gap-2">
+                <div class="bg-blue-50 p-2 rounded-lg border border-blue-100 mt-auto flex flex-col gap-1">
                     <div class="flex justify-start items-center gap-2 text-sm">
                         <span class="font-medium text-[#1e3c72] whitespace-nowrap"><span data-i18n="wavelength">波長</span> <span class="whitespace-nowrap">(<i class="math-var">λ</i>)</span></span> 
                         <span class="font-mono font-bold text-blue-700 whitespace-nowrap">= <span id="valLambda">2.00</span> m</span>
@@ -343,7 +343,7 @@
 
     <!-- Help Modal -->
     <div id="helpModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-2xl font-bold text-[#1e3c72] flex items-center gap-2">
@@ -365,47 +365,40 @@
                     </section>
 
                     <section>
-                        <h3 class="font-bold text-lg text-slate-800 border-b pb-1 mb-2" data-i18n="travelingTitle">行波 <span class="whitespace-nowrap">(Traveling Wave)</span></h3>
-                        <p data-i18n="travelingDesc">沿著<i class="math-var px-1">x</i>軸傳播的簡諧波位移<i class="math-var px-1">y</i>函數 (假設另一端不受限延伸)：</p>
-                        
-                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 my-2 text-center">
-                            <div class="text-lg">
-                                $$y(x,t) = A \sin(kx \pm \omega t)$$
-                            </div>
-                            <div class="flex flex-wrap md:flex-nowrap justify-center gap-x-6 gap-y-2 mt-3 pt-3 border-t border-slate-200 text-sm text-slate-600">
-                                <span class="inline-flex items-baseline gap-1 whitespace-nowrap">
-                                    <i class="math-var text-[#1e3c72] font-bold">A</i>: <span data-i18n="amplitudeModal">起振器振幅</span>
-                                </span>
-                                <span class="inline-flex items-baseline gap-1 whitespace-nowrap">
-                                    <span class="text-[#1e3c72] font-bold">\(k = \frac{2\pi}{\lambda}\)</span>: <span data-i18n="waveNumber">波數</span>
-                                </span>
-                                <span class="inline-flex items-baseline gap-1 whitespace-nowrap">
-                                    <span class="text-[#1e3c72] font-bold">\(\omega = 2\pi f\)</span>: <span data-i18n="angularFreq">角頻率</span>
-                                </span>
-                            </div>
+                        <h3 class="font-bold text-lg text-slate-800 border-b pb-1 mb-3" data-i18n="compareTitle">行波與駐波的比較 (HKDSE)</h3>
+                        <div class="overflow-x-auto rounded-lg border border-slate-200">
+                            <table class="w-full text-sm text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-100 text-[#1e3c72]">
+                                        <th class="border-b border-slate-200 p-3 w-1/4" data-i18n="compProperty">性質</th>
+                                        <th class="border-b border-l border-slate-200 p-3 w-3/8" data-i18n="travelingWaveTab">行波</th>
+                                        <th class="border-b border-l border-slate-200 p-3 w-3/8" data-i18n="stationaryWaveTab">駐波</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-slate-700">
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="border-b border-slate-200 p-3 font-semibold bg-slate-50/50" data-i18n="compEnergy">能量傳遞</td>
+                                        <td class="border-b border-l border-slate-200 p-3" data-i18n="compEnergyT">沿波的傳播方向傳遞能量</td>
+                                        <td class="border-b border-l border-slate-200 p-3" data-i18n="compEnergyS">能量儲存於波瓣中，不向外傳遞</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="border-b border-slate-200 p-3 font-semibold bg-slate-50/50" data-i18n="compAmp">振幅</td>
+                                        <td class="border-b border-l border-slate-200 p-3" data-i18n="compAmpT">波上所有粒子的振幅皆相同</td>
+                                        <td class="border-b border-l border-slate-200 p-3" data-i18n="compAmpS">各粒子振幅不同 (波節為0，波腹最大)</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="border-b border-slate-200 p-3 font-semibold bg-slate-50/50" data-i18n="compPhase">相位</td>
+                                        <td class="border-b border-l border-slate-200 p-3" data-i18n="compPhaseT">一個波長內的粒子相位皆不相同</td>
+                                        <td class="border-b border-l border-slate-200 p-3" data-i18n="compPhaseS">同一波瓣內粒子完全同相；相鄰波瓣粒子完全反相</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="p-3 font-semibold bg-slate-50/50" data-i18n="compProfile">波形</td>
+                                        <td class="border-l border-slate-200 p-3" data-i18n="compProfileT">波形隨時間向前推進</td>
+                                        <td class="border-l border-slate-200 p-3" data-i18n="compProfileS">波形不前進，僅振幅隨時間震盪</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-
-                        <ul class="list-disc pl-5 mt-2">
-                            <li data-i18n="signRule">負號代表向右傳播 <span class="whitespace-nowrap">(+<i class="math-var">x</i>)</span>，正號代表向左傳播 <span class="whitespace-nowrap">(-<i class="math-var">x</i>)</span>。</li>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h3 class="font-bold text-lg text-slate-800 border-b pb-1 mb-2" data-i18n="stationaryTitle">駐波 <span class="whitespace-nowrap">(Stationary Wave)</span></h3>
-                        <p data-i18n="stationaryDesc">一端為起振器，另一端固定。當弦長 \(L\) 為半波長的整數倍時 (\(L = n\frac{\lambda}{2}\))，會產生共振形成駐波，振幅劇增；否則為微弱且混亂的震動。</p>
-                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 my-2 text-center text-lg">
-                            $$y(x,t) = \text{Re}\left[ A \frac{\sin(k(L-x) + i\gamma(1-\frac{x}{L}))}{\sin(kL + i\gamma)} e^{-i\omega t} \right]$$
-                        </div>
-                        <ul class="list-disc pl-5 space-y-2 mt-2">
-                            <li>
-                                <strong data-i18n="node">波節 <span class="whitespace-nowrap">(Node)</span></strong>: 
-                                <span data-i18n="nodeDesc">共振時永遠靜止的點</span>&nbsp;\(x = 0, \frac{\lambda}{2}, \lambda, \dots\)
-                            </li>
-                            <li>
-                                <strong data-i18n="antinode">波腹 <span class="whitespace-nowrap">(Antinode)</span></strong>: 
-                                <span data-i18n="antinodeDesc">共振時振幅最大的點</span>&nbsp;\(x = \frac{\lambda}{4}, \frac{3\lambda}{4}, \frac{5\lambda}{4}, \dots\)
-                            </li>
-                        </ul>
                     </section>
                 </div>
 
@@ -451,22 +444,25 @@
                 theoryTitle: "物理原理與公式",
                 waveEqTitle: "波動方程 <span class='whitespace-nowrap'>(Wave Equation)</span>",
                 waveSpeedEqDesc: "波速率<i class='math-var px-1'>v</i>、頻率<i class='math-var px-1'>f</i>與波長<i class='math-var px-1'>λ</i>的關係：",
-                travelingTitle: "行波 <span class='whitespace-nowrap'>(Traveling Wave)</span>",
-                travelingDesc: "沿著<i class='math-var px-1'>x</i>軸傳播的簡諧波位移<i class='math-var px-1'>y</i>函數 (假設另一端不受限延伸)：",
-                amplitudeModal: "起振器振幅",
-                waveNumber: "波數",
-                angularFreq: "角頻率",
-                signRule: "負號代表向右傳播 <span class='whitespace-nowrap'>(+<i class='math-var'>x</i>)</span>，正號代表向左傳播 <span class='whitespace-nowrap'>(-<i class='math-var'>x</i>)</span>。",
-                stationaryTitle: "駐波 <span class='whitespace-nowrap'>(Stationary Wave)</span>",
-                stationaryDesc: "一端為起振器，另一端固定。當弦長 \\(L\\) 為半波長的整數倍時 (\\(L = n\\frac{\\lambda}{2}\\))，會產生共振形成駐波，振幅劇增；否則為微弱且混亂的震動。",
-                node: "波節 <span class='whitespace-nowrap'>(Node)</span>",
-                nodeDesc: "共振時永遠靜止的點",
-                antinode: "波腹 <span class='whitespace-nowrap'>(Antinode)</span>",
-                antinodeDesc: "共振時振幅最大的點",
+                compareTitle: "行波與駐波的比較 (HKDSE)",
+                compProperty: "性質",
+                compEnergy: "能量傳遞",
+                compEnergyT: "沿波的傳播方向傳遞能量",
+                compEnergyS: "能量儲存於波瓣中，不向外傳遞",
+                compAmp: "振幅",
+                compAmpT: "波上所有粒子的振幅皆相同",
+                compAmpS: "各粒子振幅不同 (波節為0，波腹最大)",
+                compPhase: "相位",
+                compPhaseT: "一個波長內的粒子相位皆不相同",
+                compPhaseS: "同一波瓣內粒子完全同相；相鄰波瓣粒子完全反相",
+                compProfile: "波形",
+                compProfileT: "波形隨時間向前推進",
+                compProfileS: "波形不前進，僅振幅隨時間震盪",
                 close: "關閉",
                 phaseRelationship: "相位關係：",
                 phaseDiff: "相位差:",
                 lblInPhase: "同相",
+                lblAntiPhase: "反相",
                 lblOutOfPhase: "異相",
                 waveType: "波的類型"
             },
@@ -499,22 +495,25 @@
                 theoryTitle: "Physics Principles & Formulas",
                 waveEqTitle: "Wave Equation",
                 waveSpeedEqDesc: "Relationship between speed <i class='math-var px-1'>v</i>, frequency <i class='math-var px-1'>f</i>, and wavelength <i class='math-var px-1'>λ</i>:",
-                travelingTitle: "Traveling Wave",
-                travelingDesc: "Displacement <i class='math-var px-1'>y</i> for a harmonic wave traveling along the <i class='math-var px-1'>x</i>-axis (assuming an infinitely long string):",
-                amplitudeModal: "Vibrator Amplitude",
-                waveNumber: "Wave Number",
-                angularFreq: "Angular Frequency",
-                signRule: "Negative sign implies propagation to the right <span class='whitespace-nowrap'>(+<i class='math-var'>x</i>)</span>, positive to the left <span class='whitespace-nowrap'>(-<i class='math-var'>x</i>)</span>.",
-                stationaryTitle: "Stationary Wave",
-                stationaryDesc: "One end is a vibrator and the other is fixed. Resonance occurs and forms standing waves with large amplitude ONLY when the string length \\(L\\) is an integer multiple of half-wavelength (\\(L = n\\frac{\\lambda}{2}\\)). Otherwise, the vibration is chaotic with low amplitude.",
-                node: "Node <span class='whitespace-nowrap'>(N)</span>",
-                nodeDesc: "Stationary points during resonance",
-                antinode: "Antinode <span class='whitespace-nowrap'>(A)</span>",
-                antinodeDesc: "Max amplitude points during resonance",
+                compareTitle: "Comparison (HKDSE)",
+                compProperty: "Property",
+                compEnergy: "Energy Transfer",
+                compEnergyT: "Transfers energy along the propagation direction",
+                compEnergyS: "Energy is trapped in loops, no net transfer",
+                compAmp: "Amplitude",
+                compAmpT: "All particles vibrate with the same amplitude",
+                compAmpS: "Varies from zero at nodes to maximum at antinodes",
+                compPhase: "Phase",
+                compPhaseT: "Particles within one wavelength have different phases",
+                compPhaseS: "Particles in the same loop are in phase; adjacent loops are in antiphase",
+                compProfile: "Wave Profile",
+                compProfileT: "Advances continuously with time",
+                compProfileS: "Does not advance, oscillates in place",
                 close: "Close",
                 phaseRelationship: "Phase Relationship:",
                 phaseDiff: "Phase Diff:",
                 lblInPhase: "In Phase",
+                lblAntiPhase: "Antiphase",
                 lblOutOfPhase: "Out of Phase",
                 waveType: "Wave Type"
             }
@@ -614,8 +613,8 @@
                 const tabT = document.getElementById('tabTraveling');
                 const tabS = document.getElementById('tabStationary');
 
-                const activeClass = "flex-1 py-2 text-sm font-bold rounded-md transition bg-white shadow-sm text-[#1e3c72]";
-                const inactiveClass = "flex-1 py-2 text-sm font-medium rounded-md transition text-slate-500 hover:text-[#1e3c72]";
+                const activeClass = "flex-1 py-1.5 text-sm font-bold rounded-md transition bg-white shadow-sm text-[#1e3c72]";
+                const inactiveClass = "flex-1 py-1.5 text-sm font-medium rounded-md transition text-slate-500 hover:text-[#1e3c72]";
 
                 if (isStationary) {
                     tabS.className = activeClass;
