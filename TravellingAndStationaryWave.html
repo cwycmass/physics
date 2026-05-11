@@ -121,7 +121,7 @@
 
     <!-- Header -->
     <header class="bg-[#1e3c72] text-white shadow-md z-30 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="max-w-screen-2xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-water text-2xl text-blue-200"></i>
                 <h1 class="text-xl font-bold tracking-wide" data-i18n="appTitle">行波與駐波</h1>
@@ -293,10 +293,16 @@
                         </div>
                     </div>
 
-                    <!-- Right Side Container (Timer) -->
-                    <div class="bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg shadow-sm border border-slate-200 flex items-center justify-center gap-2 pointer-events-auto">
+                    <!-- Right Side Container (Timer & Zoom Controls) -->
+                    <div class="bg-white/90 backdrop-blur-md pl-4 pr-3 py-2 rounded-lg shadow-sm border border-slate-200 flex items-center justify-center gap-2 pointer-events-auto">
                         <span class="text-sm font-medium text-slate-600" data-i18n="simTime">時間 <span class="whitespace-nowrap">(<i class="math-var">t</i>)</span></span>
-                        <span id="timeDisplay" class="font-mono font-bold text-[#1e3c72] text-sm w-16 text-right">0.00 s</span>
+                        <span id="timeDisplay" class="font-mono font-bold text-[#1e3c72] text-sm w-16 text-right border-r border-slate-300 pr-3 mr-1">0.00 s</span>
+                        <button id="btnExpand" onclick="toggleFullscreen()" class="text-slate-500 hover:text-[#1e3c72] transition px-1">
+                            <i class="fa-solid fa-expand text-base"></i>
+                        </button>
+                        <button id="btnShrink" onclick="toggleFullscreen()" class="hidden text-slate-500 hover:text-red-600 transition px-1">
+                            <i class="fa-solid fa-xmark text-lg"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -1038,7 +1044,40 @@
         window.addEventListener('touchmove', onPointerMove, {passive: false});
         window.addEventListener('touchend', onPointerUp);
 
-        /* --- 6. y-t Graph Logic (In-pane) --- */
+        /* --- 6. Fullscreen & Graph Logic (In-pane) --- */
+        let isFullscreen = false;
+
+        function toggleFullscreen() {
+            isFullscreen = !isFullscreen;
+            const panel = document.getElementById('wavePanel');
+            const btnExpand = document.getElementById('btnExpand');
+            const btnShrink = document.getElementById('btnShrink');
+            
+            if (isFullscreen) {
+                // 套用全螢幕樣式 (z-40 可覆蓋上方 Header)
+                panel.classList.remove('relative', 'rounded-xl', 'border', 'border-slate-200', 'shadow-sm', 'flex-1');
+                panel.classList.add('fixed', 'inset-0', 'z-40', 'rounded-none');
+                btnExpand.classList.add('hidden');
+                btnShrink.classList.remove('hidden');
+            } else {
+                // 恢復原狀
+                panel.classList.add('relative', 'rounded-xl', 'border', 'border-slate-200', 'shadow-sm', 'flex-1');
+                panel.classList.remove('fixed', 'inset-0', 'z-40', 'rounded-none');
+                btnExpand.classList.remove('hidden');
+                btnShrink.classList.add('hidden');
+            }
+            
+            // 讓瀏覽器有時間完成版面重排後再重新計算畫布大小
+            setTimeout(() => {
+                resizeCanvas();
+                if (isGraphVisible) resizeGraphCanvas();
+                if (!simState.isPlaying) {
+                    drawCanvas();
+                    if (isGraphVisible) drawGraph();
+                }
+            }, 50);
+        }
+
         function toggleGraph() {
             isGraphVisible = !isGraphVisible;
             const panel = document.getElementById('graphPanel');
