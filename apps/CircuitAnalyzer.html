@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>電路分析 | Circuit Analyzer</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cmaBlue: '#1e3c72',
+                        cmaBlueDark: '#152b53',
+                        vectorEmerald: '#10b981',
+                        vectorAmber: '#f59e0b',
+                        resultantRed: '#DC2626'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- MathJax 3 for Physics/Math formulas -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom CSS -->
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        canvas { display: block; touch-action: none; }
+        
+        .tool-btn { transition: all 0.2s ease; }
+        .tool-btn.active { background-color: #1e3c72; color: white; border-color: #1e3c72; }
+    </style>
+</head>
+<body class="bg-slate-50 flex flex-col h-screen text-slate-800">
+
+    <!-- --- 1. Top Navbar --- -->
+    <header class="bg-cmaBlue text-white shadow-md z-20 flex justify-between items-center px-6 py-3 flex-shrink-0">
+        <div>
+            <h1 class="text-xl font-bold tracking-wide" id="ui-title">Circuit Simulator</h1>
+            <p class="text-xs text-slate-300" id="ui-subtitle">Nodal Analysis Engine</p>
+        </div>
+        <div class="flex gap-4 items-center">
+            <button id="btn-help" class="hover:text-amber-300 transition-colors text-sm font-medium flex items-center gap-1">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span id="ui-help-btn">Help</span>
+            </button>
+            <button id="btn-lang" class="bg-white/10 hover:bg-white/20 px-3 py-1 rounded text-sm font-bold border border-white/30 transition-colors">
+                繁/Eng
+            </button>
+        </div>
+    </header>
+
+    <!-- --- 2. Main Layout (Split Pane) --- -->
+    <main class="flex flex-col md:flex-row flex-1 overflow-hidden">
+        
+        <!-- Sidebar Controls -->
+        <aside class="w-full md:w-80 bg-white border-r border-slate-200 shadow-lg flex flex-col z-10 flex-shrink-0 overflow-y-auto">
+            
+            <!-- Tool Selection -->
+            <div class="p-3 border-b border-slate-100">
+                <h2 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2" id="ui-tools-hdr">Tools</h2>
+                
+                <!-- Component Row -->
+                <div class="grid grid-cols-3 gap-1.5 mb-1.5">
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="wire">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7"></path><path d="M6 9v2a2 2 0 0 0 2 2h3"></path></svg>
+                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-wire">Wire</span>
+                    </button>
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="resistor">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="9" width="14" height="6" fill="white"></rect><line x1="1" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="23" y2="12"></line></svg>
+                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-resistor">Resistor</span>
+                    </button>
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="battery">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="10" y1="6" x2="10" y2="18"></line><line x1="14" y1="9" x2="14" y2="15" stroke-width="4"></line><line x1="2" y1="12" x2="10" y2="12"></line><line x1="14" y1="12" x2="22" y2="12"></line></svg>
+                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-cell">Cell</span>
+                    </button>
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="switch">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle><line x1="6" y1="11" x2="17" y2="6"></line></svg>
+                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-switch">Switch</span>
+                    </button>
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="ammeter">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M10 16l2-8 2 8M10.5 13h3"></path></svg>
+                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-ammeter">Ammeter</span>
+                    </button>
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="voltmeter">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M10 8l2 8 2-8"></path></svg>
+                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-voltmeter">Voltmeter</span>
+                    </button>
+                </div>
+
+                <!-- Action Row -->
+                <div class="grid grid-cols-3 gap-1.5">
+                    <button class="tool-btn active flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="select">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path><path d="M13 13l6 6"></path></svg>
+                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-select">Select</span>
+                    </button>
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="erase">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 20H7L3 16C2.5 15.5 2.5 14.5 3 14L13 4C13.5 3.5 14.5 3.5 15 4L20 9C20.5 9.5 20.5 10.5 20 11L11 20H20V20Z"></path></svg>
+                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-erase">Erase</span>
+                    </button>
+                    <button id="btn-clear" class="flex flex-col items-center justify-center py-1.5 px-1 border border-red-200 rounded-lg text-red-500 hover:bg-red-50 transition-colors">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-clear">Clear</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Properties Panel -->
+            <div class="p-3 flex-1 bg-slate-50 flex flex-col justify-center">
+                <div class="flex-shrink-0">
+                    <h2 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2" id="ui-props-hdr">Properties</h2>
+                </div>
+                
+                <div id="no-selection" class="flex flex-col items-center justify-center text-center text-slate-400 h-24 space-y-1.5 opacity-60">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    <p class="text-[11px]" id="ui-no-sel-text">Select a component to edit.</p>
+                </div>
+
+                <div id="selection-panel" class="hidden space-y-2">
+                    <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="font-bold text-cmaBlue uppercase tracking-wide text-xs" id="prop-type-label">Resistor</span>
+                        </div>
+                        
+                        <div id="value-input-group">
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1" id="ui-val-label">Value</label>
+                            <div class="flex items-center gap-2">
+                                <input type="number" id="prop-value" class="flex-1 w-full px-2 py-1 border border-slate-300 rounded focus:ring-2 focus:ring-cmaBlue focus:border-cmaBlue outline-none text-sm font-mono">
+                                <span class="text-sm font-bold text-slate-600" id="prop-unit">Ω</span>
+                            </div>
+                            <!-- Battery Only Action -->
+                            <div id="battery-actions" class="hidden mt-2 pt-2 border-t border-slate-100">
+                                <button id="btn-reverse-polarity" class="w-full py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[11px] font-bold transition-colors border border-slate-200 flex items-center justify-center gap-1.5">
+                                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                    <span id="ui-reverse-btn">Reverse Polarity</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="switch-input-group" class="hidden">
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1" id="ui-switch-label">State</label>
+                            <button id="btn-toggle-switch" class="w-full py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded text-[11px] font-semibold transition-colors border border-slate-300">
+                                Open
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Meters -->
+                    <div class="bg-blue-50 p-2.5 rounded-xl border border-blue-100 shadow-sm">
+                        <h3 class="text-[10px] font-bold text-cmaBlue uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                            <span id="ui-meters-hdr">Live Meters</span>
+                        </h3>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between items-center bg-white p-1.5 rounded border border-blue-50">
+                                <span class="text-[11px] text-slate-500 font-medium" id="ui-current-lbl">Current (I)</span>
+                                <span class="font-mono font-bold text-blue-700 text-sm" id="meter-current">0.00 A</span>
+                            </div>
+                            <div class="flex justify-between items-center bg-white p-1.5 rounded border border-blue-50">
+                                <span class="text-[11px] text-slate-500 font-medium" id="ui-voltage-lbl">Voltage Drop (V)</span>
+                                <span class="font-mono font-bold text-purple-700 text-sm" id="meter-voltage">0.00 V</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View Options & Auto-fit control -->
+            <div class="p-3 border-t border-slate-200 space-y-1.5 bg-white">
+                <button id="btn-highlight" class="w-full py-1.5 bg-slate-100 hover:bg-yellow-100 text-slate-600 rounded text-[11px] font-semibold transition-colors flex items-center justify-center gap-1.5 border border-slate-200">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                    <span id="ui-highlight-btn">Trace Current Flow</span>
+                </button>
+                <button id="btn-toggle-current" class="w-full py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[11px] font-semibold transition-colors flex items-center justify-center gap-1.5 border border-slate-200">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    <span id="ui-toggle-current-btn">Hide Current Info</span>
+                </button>
+                <button id="btn-center" class="w-full py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[11px] font-semibold transition-colors flex items-center justify-center gap-1.5 border border-slate-200">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h4m14 0h-4M12 3v4m0 14v-4m-5.657-9.899l2.828 2.828m8.486 8.485l-2.828-2.828m0-11.314l2.828 2.828M6.343 17.657l2.828-2.828"></path></svg>
+                    <span id="ui-center-btn">Recenter & Reset Labels</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Canvas Area -->
+        <div class="flex-1 relative bg-[#f8fafc] overflow-hidden" id="canvas-container">
+            <!-- Grid Background via CSS to perfectly align with origin -->
+            <canvas id="circuit-canvas" class="absolute top-0 left-0 cursor-crosshair"></canvas>
+            
+            <!-- Error message overlay -->
+            <div id="error-overlay" class="hidden absolute top-4 left-1/2 -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-lg shadow-md text-sm font-bold z-10 flex items-center gap-2">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span id="error-text">Circuit calculation error.</span>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- --- 3. Mandatory Footer --- -->
+    <footer class="bg-cmaBlueDark text-slate-300 text-center py-2 text-xs font-medium tracking-wide z-20 flex-shrink-0" id="cma-footer">
+        廠商會中學．物理科
+    </footer>
+
+    <!-- --- 4. Modals --- -->
+    <div id="help-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-2xl">
+                <h2 class="text-xl font-bold text-cmaBlue" id="modal-title">Circuit Physics Guide</h2>
+                <button id="btn-close-help" class="text-slate-400 hover:text-slate-700 transition-colors">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 text-slate-600 text-sm leading-relaxed" id="modal-content">
+                <!-- Content injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Clear Confirmation Modal -->
+    <div id="clear-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center">
+            <!-- Expanded viewBox padding prevents stroke clipping -->
+            <div class="w-12 h-12 rounded-full bg-red-100 text-red-500 mx-auto flex items-center justify-center mb-4">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="-2 -2 28 28"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2" id="ui-clear-title">Clear Circuit?</h3>
+            <p class="text-sm text-slate-500 mb-6" id="ui-clear-desc">Are you sure you want to remove all components? This cannot be undone.</p>
+            <div class="flex gap-3 justify-center">
+                <button id="btn-clear-cancel" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors w-full"><span id="ui-clear-cancel">Cancel</span></button>
+                <button id="btn-clear-confirm" class="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors w-full"><span id="ui-clear-confirm">Clear All</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- JAVASCRIPT LOGIC --- -->
+    <script>
+        /* ==========================================
+           SECTION 1: GLOBAL STATE & CONFIGURATION
+           ========================================== */
+        let currentLang = 'zh'; // 'en' or 'zh'
+        let currentTool = 'select';
+        let isHighlighterMode = false;
+        let showCurrentInfo = true;
+        let draggingLabelId = null;
+        let labelHitboxes = [];
+        
+        // Canvas State
+        const canvas = document.getElementById('circuit-canvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvas-container');
+        
+        // Viewport / Camera settings
+        let camera = { x: 0, y: 0, zoom: 1 };
+        const GRID_SIZE = 50; // physical pixels per grid unit
+
+        // Circuit Data
+        let components = []; // Array of { id, type, n1:{x,y}, n2:{x,y}, value, reversed, closed, labelOffset, currentLabelOffset }
+        let simulationResults = { highlights: {} }; // Map of id -> { current, vDrop }
+        let selectedCompId = null;
+        let hoveredEdge = null; // { n1:{x,y}, n2:{x,y} }
+        let isDragging = false;
+        let lastMousePos = { x: 0, y: 0 };
+        let initialPinchDist = null;
+
+        /* ==========================================
+           SECTION 2: BILINGUAL DICTIONARY (i18n)
+           ========================================== */
+        const i18n = {
+            en: {
+                title: "Circuit Simulator",
+                subtitle: "Nodal Analysis Engine",
+                helpBtn: "Help",
+                toolsHdr: "Tools",
+                toolSelect: "Select",
+                toolWire: "Wire",
+                toolResistor: "Resistor",
+                toolCell: "Cell",
+                toolSwitch: "Switch",
+                toolAmmeter: "Ammeter",
+                toolVoltmeter: "Voltmeter",
+                toolErase: "Erase",
+                toolClear: "Clear",
+                propsHdr: "Properties",
+                noSelText: "Select a component on the canvas to edit.",
+                valLabel: "Component Value",
+                internalRes: "Internal Res. (Ω)",
+                reverseBtn: "Reverse Polarity",
+                switchLabel: "State",
+                switchOpen: "Open (Off)",
+                switchClosed: "Closed (On)",
+                metersHdr: "Live Meters",
+                currentLbl: "Current (I)",
+                voltageLbl: "Voltage Drop (V)",
+                centerBtn: "Recenter & Reset Labels",
+                highlightBtn: "Trace Current Flow",
+                hideCurrentBtn: "Hide Current Info",
+                showCurrentBtn: "Show Current Info",
+                footer: "CMA Secondary School. Physics Department.",
+                errorSingular: "Impossible Circuit: Disconnected or unresolved nodes detected.",
+                shortCircuit: "⚠️ Short Circuit Detected! Breaker tripped to protect circuit.",
+                clearTitle: "Clear Circuit?",
+                clearDesc: "Are you sure you want to remove all components? This cannot be undone.",
+                clearCancel: "Cancel",
+                clearConfirm: "Clear All",
+                // Modal Content
+                modalTitle: "Circuit Physics Guide",
+                modalBody: `
+                    <p>This simulator utilizes <strong>Modified Nodal Analysis (MNA)</strong> to solve electrical circuits in real-time. It applies Kirchhoff's Current Law (KCL) at every node.</p>
+                    
+                    <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg my-4">
+                        <p class="font-bold text-yellow-800 mb-1 flex items-center gap-2">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                            Highlighting Activity
+                        </p>
+                        <p class="text-yellow-700 text-xs">The <strong>"Trace Current Flow"</strong> button acts like a set of highlighters. It automatically colors the main path containing the battery in <span class="bg-yellow-300 px-1 rounded text-black">Yellow</span>. When the circuit splits into parallel branches, it assigns them unique colors (<span class="bg-blue-300 px-1 rounded text-black">Blue</span>, <span class="bg-emerald-300 px-1 rounded text-black">Green</span>, etc.). This visualizes how total current divides at junctions and recombinations, practically proving Kirchhoff's Current Law.</p>
+                    </div>
+
+                    <div class="bg-slate-100 p-4 rounded-lg my-4 overflow-x-auto text-center">
+                        <p class="font-bold text-cmaBlue mb-2">Ohm's Law</p>
+                        $$ V = I R $$
+                        <p class="font-bold text-cmaBlue mt-4 mb-2">Kirchhoff's Current Law (KCL)</p>
+                        $$ \\sum_{k=1}^{n} I_k = 0 $$
+                    </div>
+                    <ul class="list-disc pl-5 space-y-2 mt-4">
+                        <li><strong>Standard Assumptions:</strong> To prevent mathematical errors, ideal wires are assigned a resistance of $10^{-6}\\,\\Omega$ and batteries have an internal resistance of $10^{-6}\\,\\Omega$.</li>
+                        <li><strong>Drawing:</strong> Select a component tool and click between the dots on the canvas grid to place it.</li>
+                        <li><strong>Polarity:</strong> For cells, the long line represents the positive terminal. To reverse polarity, click the <em>Reverse Polarity</em> button in the properties panel or input a negative voltage.</li>
+                    </ul>
+                `
+            },
+            zh: {
+                title: "電路模擬器",
+                subtitle: "節點分析引擎",
+                helpBtn: "說明",
+                toolsHdr: "工具",
+                toolSelect: "選取",
+                toolWire: "導線",
+                toolResistor: "電阻器",
+                toolCell: "電池",
+                toolSwitch: "開關",
+                toolAmmeter: "安培計",
+                toolVoltmeter: "伏特計",
+                toolErase: "擦除",
+                toolClear: "清除",
+                propsHdr: "屬性面板",
+                noSelText: "請在畫布上選取元件以進行編輯。",
+                valLabel: "元件數值",
+                internalRes: "內阻 (Ω)",
+                reverseBtn: "反轉極性",
+                switchLabel: "狀態",
+                switchOpen: "斷開 (Off)",
+                switchClosed: "閉合 (On)",
+                metersHdr: "實時儀表",
+                currentLbl: "電流 (I)",
+                voltageLbl: "電壓降 (V)",
+                centerBtn: "置中畫布與重設標籤",
+                highlightBtn: "追蹤電流流向",
+                hideCurrentBtn: "隱藏電流資訊",
+                showCurrentBtn: "顯示電流資訊",
+                footer: "廠商會中學．物理科",
+                errorSingular: "無法計算：檢測到無法解析的斷路節點。",
+                shortCircuit: "⚠️ 檢測到短路！電流過大，已觸發保護斷路。",
+                clearTitle: "清除電路？",
+                clearDesc: "確定要移除所有元件嗎？此操作無法還原。",
+                clearCancel: "取消",
+                clearConfirm: "全部清除",
+                modalTitle: "電路物理指南",
+                modalBody: `
+                    <p>本模擬器使用<strong>修正節點分析法 (MNA)</strong> 實時求解電路。它在每個節點應用基爾霍夫電流定律 (KCL)。</p>
+                    
+                    <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg my-4">
+                        <p class="font-bold text-yellow-800 mb-1 flex items-center gap-2">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                            螢光筆活動 (Trace Current)
+                        </p>
+                        <p class="text-yellow-700 text-xs"><strong>「追蹤電流流向」</strong> 按鈕的功能如同螢光筆。它會自動將包含電池的主電路標示為 <span class="bg-yellow-300 px-1 rounded text-black">黃色</span>。當電路分支成並聯支路時，會分配不同的顏色（如 <span class="bg-blue-300 px-1 rounded text-black">藍色</span>、<span class="bg-emerald-300 px-1 rounded text-black">綠色</span> 等）。這有助於視覺化總電流如何在節點分流與匯合，實際驗證基爾霍夫電流定律。</p>
+                    </div>
+
+                    <div class="bg-slate-100 p-4 rounded-lg my-4 overflow-x-auto text-center">
+                        <p class="font-bold text-cmaBlue mb-2">歐姆定律</p>
+                        $$ V = I R $$
+                        <p class="font-bold text-cmaBlue mt-4 mb-2">基爾霍夫電流定律 (KCL)</p>
+                        $$ \\sum_{k=1}^{n} I_k = 0 $$
+                    </div>
+                    <ul class="list-disc pl-5 space-y-2 mt-4">
+                        <li><strong>標準假設：</strong> 為防止數學錯誤，理想導線被賦予 $10^{-6}\\,\\Omega$ 的電阻，電池則設有 $10^{-6}\\,\\Omega$ 的內阻。</li>
+                        <li><strong>繪製：</strong> 選擇元件工具，然後點擊畫布網格點之間的位置來放置。</li>
+                        <li><strong>極性：</strong> 對於電池，長線代表正極。如需反轉極性，請在屬性面板點擊「反轉極性」按鈕或輸入負電壓。</li>
+                    </ul>
+                `
+            }
+        };
+
+        function updateUI() {
+            const t = i18n[currentLang];
+            document.getElementById('ui-title').innerText = t.title;
+            document.getElementById('ui-subtitle').innerText = t.subtitle;
+            document.getElementById('ui-help-btn').innerText = t.helpBtn;
+            document.getElementById('ui-tools-hdr').innerText = t.toolsHdr;
+            document.getElementById('ui-tool-select').innerText = t.toolSelect;
+            document.getElementById('ui-tool-wire').innerText = t.toolWire;
+            document.getElementById('ui-tool-resistor').innerText = t.toolResistor;
+            document.getElementById('ui-tool-cell').innerText = t.toolCell;
+            document.getElementById('ui-tool-switch').innerText = t.toolSwitch;
+            document.getElementById('ui-tool-ammeter').innerText = t.toolAmmeter;
+            document.getElementById('ui-tool-voltmeter').innerText = t.toolVoltmeter;
+            document.getElementById('ui-tool-erase').innerText = t.toolErase;
+            document.getElementById('ui-tool-clear').innerText = t.toolClear;
+            document.getElementById('ui-props-hdr').innerText = t.propsHdr;
+            document.getElementById('ui-no-sel-text').innerText = t.noSelText;
+            document.getElementById('ui-val-label').innerText = t.valLabel;
+            document.getElementById('ui-reverse-btn').innerText = t.reverseBtn;
+            document.getElementById('ui-switch-label').innerText = t.switchLabel;
+            document.getElementById('ui-meters-hdr').innerText = t.metersHdr;
+            document.getElementById('ui-current-lbl').innerText = t.currentLbl;
+            document.getElementById('ui-voltage-lbl').innerText = t.voltageLbl;
+            document.getElementById('ui-center-btn').innerText = t.centerBtn;
+            document.getElementById('ui-highlight-btn').innerText = t.highlightBtn;
+            document.getElementById('ui-toggle-current-btn').innerText = showCurrentInfo ? t.hideCurrentBtn : t.showCurrentBtn;
+            document.getElementById('cma-footer').innerText = t.footer;
+            document.getElementById('ui-clear-title').innerText = t.clearTitle;
+            document.getElementById('ui-clear-desc').innerText = t.clearDesc;
+            document.getElementById('ui-clear-cancel').innerText = t.clearCancel;
+            document.getElementById('ui-clear-confirm').innerText = t.clearConfirm;
+            document.getElementById('modal-title').innerText = t.modalTitle;
+            document.getElementById('modal-content').innerHTML = t.modalBody;
+            
+            // Re-render LaTeX safely by checking if the function exists
+            if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+                window.MathJax.typesetPromise();
+            }
+        }
+
+        /* ==========================================
+           SECTION 3: PHYSICS ENGINE & GRAPH ANALYSIS
+           ========================================== */
+
+        // Filters out incomplete dangling branches before passing to MNA engine
+        function getActiveComponents(comps) {
+            let active = [...comps];
+            let changed = true;
+            while (changed) {
+                changed = false;
+                const deg = {};
+                active.forEach(c => {
+                    const id1 = `${c.n1.x},${c.n1.y}`;
+                    const id2 = `${c.n2.x},${c.n2.y}`;
+                    deg[id1] = (deg[id1] || 0) + 1;
+                    deg[id2] = (deg[id2] || 0) + 1;
+                });
+                // Prune any components where BOTH ends aren't part of a continuing path
+                const nextActive = active.filter(c => {
+                    const id1 = `${c.n1.x},${c.n1.y}`;
+                    const id2 = `${c.n2.x},${c.n2.y}`;
+                    return deg[id1] > 1 && deg[id2] > 1;
+                });
+                if (nextActive.length !== active.length) {
+                    active = nextActive;
+                    changed = true;
+                }
+            }
+            return active;
+        }
+
+        // Analyzes the circuit graph to group components into distinct branches for highlighting
+        function calculateBranchHighlights(activeComponents) {
+            const nodeDegree = {};
+            const compNodes = {};
+            const adj = {};
+
+            // 1. Build adjacency list and calculate node degrees for active components only
+            activeComponents.forEach(c => {
+                const id1 = `${c.n1.x},${c.n1.y}`;
+                const id2 = `${c.n2.x},${c.n2.y}`;
+                compNodes[c.id] = [id1, id2];
+
+                nodeDegree[id1] = (nodeDegree[id1] || 0) + 1;
+                nodeDegree[id2] = (nodeDegree[id2] || 0) + 1;
+
+                if(!adj[id1]) adj[id1] = [];
+                adj[id1].push(c.id);
+                
+                if(!adj[id2]) adj[id2] = [];
+                adj[id2].push(c.id);
+            });
+
+            const visited = new Set();
+            const segments = [];
+            const labelCompIds = new Set();
+
+            // 2. Extract continuous segments
+            activeComponents.forEach(startComp => {
+                if (visited.has(startComp.id)) return;
+
+                visited.add(startComp.id);
+                const segComps = [startComp.id];
+                let hasBattery = startComp.type === 'battery';
+
+                // Helper to explore continuous wires in one direction
+                const explore = (nodeId, pushMethod) => {
+                    let currNode = nodeId;
+                    while (nodeDegree[currNode] === 2) {
+                        const nextCompId = adj[currNode].find(id => !visited.has(id));
+                        if (!nextCompId) break;
+                        
+                        visited.add(nextCompId);
+                        segComps[pushMethod](nextCompId);
+                        
+                        const c = components.find(comp => comp.id === nextCompId);
+                        if (c && c.type === 'battery') hasBattery = true;
+
+                        const nodes = compNodes[nextCompId];
+                        currNode = (nodes[0] === currNode) ? nodes[1] : nodes[0];
+                    }
+                };
+
+                // Explore both ends of the starting component to build a sorted sequence
+                explore(compNodes[startComp.id][0], 'unshift');
+                explore(compNodes[startComp.id][1], 'push');
+
+                segments.push({ compIds: segComps, hasBattery });
+                
+                // Smart Labeling: Pick a wire near the middle, otherwise a component near the middle
+                const validIds = segComps.filter(id => {
+                    const c = components.find(comp => comp.id === id);
+                    return c && c.type !== 'ammeter' && c.type !== 'voltmeter'; // Let meters render their own values natively
+                });
+                
+                let midId;
+                if (validIds.length > 0) {
+                    const wireIds = validIds.filter(id => components.find(comp => comp.id === id).type === 'wire');
+                    if (wireIds.length > 0) midId = wireIds[Math.floor(wireIds.length / 2)];
+                    else midId = validIds[Math.floor(validIds.length / 2)];
+                } else {
+                    midId = segComps[Math.floor(segComps.length / 2)];
+                }
+                if (midId) labelCompIds.add(midId);
+            });
+
+            // 3. Assign distinct pedagogical colors to segments (Light/Solid variants)
+            const palette = ['#60a5fa', '#34d399', '#f472b6', '#c084fc', '#fb923c', '#2dd4bf']; 
+            let pIdx = 0;
+            const segmentColors = {};
+
+            segments.forEach(seg => {
+                // Main paths get yellow, branches loop through palette
+                let color = seg.hasBattery ? '#fde047' : palette[pIdx % palette.length];
+                if (!seg.hasBattery) pIdx++;
+                
+                seg.compIds.forEach(id => {
+                    segmentColors[id] = color;
+                });
+            });
+
+            return { segmentColors, labelCompIds };
+        }
+
+        // Solves Ax = Z using Gaussian Elimination
+        function solveGauss(A, Z) {
+            const n = A.length;
+            if (n === 0) return [];
+            
+            const mat = A.map(row => [...row]);
+            const vec = [...Z];
+
+            for (let i = 0; i < n; i++) {
+                let maxEl = Math.abs(mat[i][i]), maxRow = i;
+                for (let k = i + 1; k < n; k++) {
+                    if (Math.abs(mat[k][i]) > maxEl) {
+                        maxEl = Math.abs(mat[k][i]);
+                        maxRow = k;
+                    }
+                }
+
+                [mat[maxRow], mat[i]] = [mat[i], mat[maxRow]];
+                [vec[maxRow], vec[i]] = [vec[i], vec[maxRow]];
+
+                // Matrix singular (unsolvable state like infinite parallel short)
+                if (Math.abs(mat[i][i]) < 1e-12) return null; 
+
+                for (let k = i + 1; k < n; k++) {
+                    const c = -mat[k][i] / mat[i][i];
+                    for (let j = i; j < n; j++) {
+                        if (i === j) mat[k][j] = 0;
+                        else mat[k][j] += c * mat[i][j];
+                    }
+                    vec[k] += c * vec[i];
+                }
+            }
+
+            const x = new Array(n).fill(0);
+            for (let i = n - 1; i >= 0; i--) {
+                x[i] = vec[i] / mat[i][i];
+                for (let k = i - 1; k >= 0; k--) {
+                    vec[k] -= mat[k][i] * x[i];
+                }
+            }
+            return x;
+        }
+
+        function runSimulation() {
+            document.getElementById('error-overlay').classList.add('hidden');
+            simulationResults = { highlights: {} };
+            if (components.length === 0) {
+                updatePropertiesPanel();
+                return;
+            }
+
+            // Prune unclosed dangling loops automatically so their currents lock to exactly 0
+            const activeComponents = getActiveComponents(components);
+            const activeSet = new Set(activeComponents.map(c => c.id));
+
+            const nodeMap = new Map();
+            let nodeCount = 0;
+            const getNodeId = (pt) => {
+                const key = `${pt.x},${pt.y}`;
+                if (!nodeMap.has(key)) nodeMap.set(key, nodeCount++);
+                return nodeMap.get(key);
+            };
+
+            const nodeDegree = {};
+            components.forEach(c => { 
+                const id1 = `${c.n1.x},${c.n1.y}`;
+                const id2 = `${c.n2.x},${c.n2.y}`;
+                nodeDegree[id1] = (nodeDegree[id1] || 0) + 1;
+                nodeDegree[id2] = (nodeDegree[id2] || 0) + 1;
+            });
+            simulationResults.nodeDegree = nodeDegree;
+
+            let V = [];
+            
+            // Generate matrix only for logically closed active loops
+            if (activeComponents.length > 0) {
+                activeComponents.forEach(c => { getNodeId(c.n1); getNodeId(c.n2); });
+
+                if (nodeCount > 1) {
+                    const N = nodeCount;
+                    const A = Array.from({ length: N - 1 }, () => new Array(N - 1).fill(0));
+                    const Z = new Array(N - 1).fill(0);
+
+                    // Apply GMIN to prevent singular matrices from disconnected branches
+                    // Use a stronger 1 Megaohm pull-down to strictly avert floating precision singularity in pure ideal wire loops
+                    for (let i = 0; i < N - 1; i++) A[i][i] += 1e-6;
+
+                    activeComponents.forEach(c => {
+                        const u = getNodeId(c.n1); 
+                        const v = getNodeId(c.n2);
+                        
+                        let R, E = 0;
+                        if (c.type === 'wire') R = 1e-6;
+                        else if (c.type === 'resistor') R = c.value || 10;
+                        else if (c.type === 'battery') { 
+                            R = 1e-6; 
+                            E = c.value || 9; 
+                            if (c.reversed) E = -E; // Reverse voltage mapping
+                        }
+                        else if (c.type === 'switch') { R = c.closed ? 1e-6 : 1e9; }
+                        else if (c.type === 'ammeter' || c.type === 'voltmeter') { R = Math.max(c.value, 1e-6); }
+
+                        const g = 1 / Math.max(R, 1e-8); // prevent divide by zero
+                        const i = u - 1;
+                        const j = v - 1;
+
+                        if (u > 0) { A[i][i] += g; Z[i] += E * g; }
+                        if (v > 0) { A[j][j] += g; Z[j] -= E * g; }
+                        if (u > 0 && v > 0) { A[i][j] -= g; A[j][i] -= g; }
+                    });
+
+                    const x = solveGauss(A, Z);
+                    
+                    if (!x) {
+                        document.getElementById('error-text').innerText = i18n[currentLang].errorSingular;
+                        document.getElementById('error-overlay').classList.remove('hidden');
+                        updatePropertiesPanel();
+                        return;
+                    }
+
+                    V = [0, ...x]; // Node 0 is Ground (0V)
+                }
+            }
+
+            let hasShortCircuit = false;
+
+            components.forEach(c => {
+                if (!activeSet.has(c.id)) {
+                    // Completely dead-end incomplete component gets exactly 0 reading!
+                    simulationResults[c.id] = { current: 0, vDrop: c.type === 'battery' ? (c.value || 9) : 0 };
+                    return;
+                }
+
+                const u = getNodeId(c.n1);
+                const v = getNodeId(c.n2);
+                let R, E = 0;
+                if (c.type === 'wire') R = 1e-6;
+                else if (c.type === 'resistor') R = c.value || 10;
+                else if (c.type === 'battery') { 
+                    R = 1e-6; 
+                    E = c.value || 9; 
+                    if (c.reversed) E = -E;
+                }
+                else if (c.type === 'switch') { R = c.closed ? 1e-6 : 1e9; }
+                else if (c.type === 'ammeter' || c.type === 'voltmeter') { R = Math.max(c.value, 1e-6); }
+
+                let current = (V[u] - V[v] - E) / Math.max(R, 1e-8);
+                if (Math.abs(current) < 1e-5) current = 0; // Filter floating point noise
+
+                let vDrop = Math.abs(V[u] - V[v]);
+                if (Math.abs(vDrop) < 1e-5) vDrop = 0;
+                
+                // Extremely excessive current implies a direct short across a battery or similar
+                if (Math.abs(current) >= 500) {
+                    hasShortCircuit = true;
+                }
+
+                simulationResults[c.id] = { current, vDrop };
+            });
+
+            // Trip Breaker immediately upon detecting dangerous Short Circuit
+            if (hasShortCircuit) {
+                document.getElementById('error-text').innerText = i18n[currentLang].shortCircuit;
+                document.getElementById('error-overlay').classList.remove('hidden');
+                
+                Object.values(simulationResults).forEach(res => {
+                    if (res && res.current !== undefined) {
+                        res.current = 0;
+                        res.vDrop = 0;
+                    }
+                });
+            }
+
+            // Calculate highlighter branch segments and determine label locations (Using only active components)
+            const activeOnly = components.filter(c => activeSet.has(c.id));
+            const branchInfo = calculateBranchHighlights(activeOnly);
+            simulationResults.highlights = branchInfo.segmentColors;
+            simulationResults.labelCompIds = branchInfo.labelCompIds;
+
+            updatePropertiesPanel();
+        }
+
+
+        /* ==========================================
+           SECTION 4: CANVAS RENDERING (High-DPI)
+           ========================================== */
+        
+        function resizeCanvas() {
+            const rect = container.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            canvas.style.width = `${rect.width}px`;
+            canvas.style.height = `${rect.height}px`;
+            ctx.scale(dpr, dpr);
+        }
+
+        // Transforms canvas space to math space
+        function screenToWorld(sx, sy) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (sx - rect.left - camera.x) / camera.zoom,
+                y: (sy - rect.top - camera.y) / camera.zoom
+            };
+        }
+
+        // Finds the closest integer grid edge to a world coordinate
+        function getClosestEdge(wx, wy) {
+            const gridX = wx / GRID_SIZE;
+            const gridY = wy / GRID_SIZE;
+            
+            const rx = Math.round(gridX);
+            const ry = Math.round(gridY);
+            
+            // Distance to horizontal vs vertical lines
+            const dx = Math.abs(gridX - rx);
+            const dy = Math.abs(gridY - ry);
+
+            if (dx < dy && dx < 0.3) {
+                // Vertical edge closest
+                const min_y = Math.floor(gridY);
+                return { n1: {x: rx, y: min_y}, n2: {x: rx, y: min_y + 1} };
+            } else if (dy < dx && dy < 0.3) {
+                // Horizontal edge closest
+                const min_x = Math.floor(gridX);
+                return { n1: {x: min_x, y: ry}, n2: {x: min_x + 1, y: ry} };
+            }
+            return null;
+        }
+
+        function drawComponent(c, isHover = false, pass = 1) {
+            const x1 = c.n1.x * GRID_SIZE;
+            const y1 = c.n1.y * GRID_SIZE;
+            const x2 = c.n2.x * GRID_SIZE;
+            const y2 = c.n2.y * GRID_SIZE;
+
+            const cx = (x1 + x2) / 2;
+            const cy = (y1 + y2) / 2;
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            
+            const isSelected = c.id === selectedCompId;
+            const color = isHover ? '#94a3b8' : (isSelected ? '#1e3c72' : '#334155');
+            const lw = isSelected ? 3 : 2;
+
+            const maxScreenFontSize = 14;
+            const compFontSize = Math.min(11, maxScreenFontSize / camera.zoom);
+
+            const res = simulationResults[c.id];
+            const current = res?.current || 0;
+            const hasCurrent = Math.abs(current) > 0.001;
+            const curAngle = current >= 0 ? angle : angle + Math.PI;
+
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(angle);
+            if (isHover) ctx.globalAlpha = 0.5;
+
+            const len = GRID_SIZE;
+            const hl = len / 2;
+
+            if (pass === 1) {
+                ctx.strokeStyle = color;
+                ctx.fillStyle = color;
+                ctx.lineWidth = lw;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                if (currentTool === 'erase' && isHover) {
+                    ctx.strokeStyle = '#DC2626'; // Red for erase target
+                    ctx.lineWidth = 6;
+                    ctx.beginPath(); ctx.moveTo(-hl, 0); ctx.lineTo(hl, 0); ctx.stroke();
+                    ctx.restore();
+                    return;
+                }
+
+                ctx.beginPath();
+                if (c.type === 'wire') {
+                    ctx.moveTo(-hl, 0); ctx.lineTo(hl, 0);
+                    ctx.stroke();
+                } else if (c.type === 'resistor') {
+                    ctx.moveTo(-hl, 0); ctx.lineTo(-12, 0); ctx.stroke();
+                    
+                    // HKDSE Box Resistor
+                    ctx.fillStyle = '#f8fafc';
+                    ctx.fillRect(-12, -5, 24, 10);
+                    ctx.strokeRect(-12, -5, 24, 10);
+                    
+                    ctx.beginPath(); ctx.moveTo(12, 0); ctx.lineTo(hl, 0); ctx.stroke();
+                } else if (c.type === 'battery') {
+                    ctx.save();
+                    if (c.reversed) ctx.scale(-1, 1); // Flip battery physically
+                    
+                    ctx.moveTo(-hl, 0); ctx.lineTo(-4, 0); ctx.stroke();
+                    
+                    // Long positive line
+                    ctx.beginPath(); ctx.moveTo(-4, -12); ctx.lineTo(-4, 12); ctx.stroke();
+                    
+                    // Short negative thick line
+                    ctx.lineWidth = lw + 2;
+                    ctx.beginPath(); ctx.moveTo(4, -7); ctx.lineTo(4, 7); ctx.stroke();
+                    
+                    ctx.lineWidth = lw;
+                    ctx.beginPath(); ctx.moveTo(4, 0); ctx.lineTo(hl, 0); ctx.stroke();
+                    
+                    ctx.restore();
+                } else if (c.type === 'switch') {
+                    // Wires leading to switch dots
+                    ctx.beginPath(); ctx.moveTo(-hl, 0); ctx.lineTo(-10, 0); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(hl, 0); ctx.lineTo(10, 0); ctx.stroke();
+                    
+                    // Switch terminals
+                    ctx.fillStyle = '#f8fafc';
+                    ctx.beginPath(); ctx.arc(-10, 0, 3, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+                    ctx.beginPath(); ctx.arc(10, 0, 3, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+                    
+                    // The throwing switch arm
+                    ctx.beginPath();
+                    if (c.closed) {
+                        ctx.moveTo(-10, 0); ctx.lineTo(10, 0);
+                    } else {
+                        ctx.moveTo(-9, -2); ctx.lineTo(8, -12);
+                    }
+                    ctx.stroke();
+                } else if (c.type === 'ammeter' || c.type === 'voltmeter') {
+                    // Wires leading up to the meter
+                    ctx.beginPath(); ctx.moveTo(-hl, 0); ctx.lineTo(-12, 0); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(hl, 0); ctx.lineTo(12, 0); ctx.stroke();
+                    
+                    // Meter circle
+                    ctx.fillStyle = '#f8fafc';
+                    ctx.beginPath(); ctx.arc(0, 0, 12, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+                    
+                    // Inner text (A or V)
+                    ctx.fillStyle = color;
+                    ctx.font = 'bold 14px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.save();
+                    ctx.rotate(-angle); // Keep symbol perfectly upright
+                    ctx.fillText(c.type === 'ammeter' ? 'A' : 'V', 0, 1);
+                    ctx.restore();
+                }
+                
+                // Draw Current Arrow overlay
+                if (!isHover && hasCurrent && showCurrentInfo) {
+                    ctx.save(); // Save base component transform safely
+                    
+                    if (current < 0) {
+                        ctx.rotate(Math.PI); // Align with flow direction
+                    }
+                    
+                    // --- ANIMATED ARROWS (PERFECT GRID SYNC) ---
+                    const animationSpeed = 30; // px per second
+                    // Spacing fixed to exactly 2 arrows per block (GRID_SIZE / 2)
+                    const spacing = GRID_SIZE / 2; 
+                    const rawTimePhase = (performance.now() * animationSpeed / 1000);
+                    
+                    // Because spacing divides GRID_SIZE perfectly, every node globally shares the exact same phase.
+                    // We no longer need spatial projection; simple modulo time handles perfect synchronization.
+                    let localPhase = rawTimePhase % spacing;
+                    if (localPhase < 0) localPhase += spacing;
+                    
+                    // Draw chevrons only within bounds
+                    for (let offset = -GRID_SIZE/2 - spacing; offset <= GRID_SIZE/2 + spacing; offset += spacing) {
+                        const arrowLocalX = offset + localPhase;
+                        
+                        // Strict half-open boundary [-25, 25) prevents "flashing" double-draws at the exact node connection
+                        if (arrowLocalX >= -GRID_SIZE/2 && arrowLocalX < GRID_SIZE/2) {
+                            ctx.save();
+                            ctx.translate(arrowLocalX, 0); // Directly ON the wire
+                            
+                            // White halo for visibility
+                            ctx.strokeStyle = '#f8fafc';
+                            ctx.lineWidth = 4;
+                            ctx.beginPath();
+                            ctx.moveTo(-3, -4); ctx.lineTo(2, 0); ctx.lineTo(-3, 4);
+                            ctx.stroke();
+
+                            // Red arrow head
+                            ctx.strokeStyle = '#DC2626';
+                            ctx.lineWidth = 2;
+                            ctx.beginPath();
+                            ctx.moveTo(-3, -4); ctx.lineTo(2, 0); ctx.lineTo(-3, 4);
+                            ctx.stroke();
+                            
+                            ctx.restore();
+                        }
+                    }
+
+                    // --- CURRENT LABELS (SMART BRANCH CENTER) ---
+                    if (simulationResults.labelCompIds?.has(c.id)) {
+                        const curFontSize = Math.min(10, (maxScreenFontSize - 2) / camera.zoom);
+                        const curDragDx = c.currentLabelOffset?.x || 0;
+                        const curDragDy = c.currentLabelOffset?.y || 0;
+
+                        ctx.save();
+                        // Un-rotate FIRST so that drag offsets align perfectly with the screen axes
+                        ctx.rotate(current < 0 ? -(angle + Math.PI) : -angle); 
+                        
+                        // Directly ON the component center + user drag offset
+                        ctx.translate(curDragDx, curDragDy);
+                        
+                        ctx.font = `bold ${curFontSize}px sans-serif`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        const curText = `${Math.abs(current).toFixed(2)} A`;
+                        
+                        const curWidth = ctx.measureText(curText).width;
+                        const boxW = curWidth + 8;
+                        const boxH = curFontSize + 6;
+
+                        // Pill background mask for perfect readability (75% transparent = 0.25 alpha)
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+                        ctx.beginPath();
+                        if (typeof ctx.roundRect === 'function') {
+                            ctx.roundRect(-boxW/2, -boxH/2, boxW, boxH, 4);
+                        } else {
+                            ctx.rect(-boxW/2, -boxH/2, boxW, boxH);
+                        }
+                        ctx.fill();
+                        
+                        ctx.fillStyle = '#DC2626';
+                        ctx.fillText(curText, 0, 0);
+
+                        // Save absolute screen position of this label for the dragging hitbox
+                        const dpr = window.devicePixelRatio || 1;
+                        const matrix = ctx.getTransform();
+                        labelHitboxes.push({
+                            id: c.id + '_cur',
+                            compId: c.id,
+                            x: matrix.e / dpr, // Convert backing store pixel to CSS coordinate
+                            y: matrix.f / dpr,
+                            w: boxW * camera.zoom,
+                            h: boxH * camera.zoom
+                        });
+                        
+                        ctx.restore();
+                    }
+                    
+                    ctx.restore(); // Restore base component transform
+                }
+            } else if (pass === 2) {
+                // Component value labels (Stable Offset Placement & Draggable)
+                if (!isHover && c.type !== 'wire' && c.type !== 'switch') {
+                    const text = c.type === 'resistor' ? `${c.value} Ω` : 
+                                 c.type === 'battery' ? `${c.value} V` :
+                                 c.type === 'ammeter' ? `${Math.abs(current).toFixed(2)} A` :
+                                 `${Math.abs(res?.vDrop || 0).toFixed(2)} V`;
+
+                    ctx.font = `bold ${compFontSize}px sans-serif`;
+                    const textWidth = ctx.measureText(text).width;
+                    
+                    const boxW = textWidth + 8;
+                    const boxH = compFontSize + 6;
+
+                    // Stable deterministic placement based on wire orientation
+                    const isHorizontal = Math.abs(Math.cos(angle)) > 0.5;
+                    // Horizontal wires: Text goes above. Vertical Wires: Text goes to the right.
+                    let screenOffsetX = isHorizontal ? 0 : 14;
+                    let screenOffsetY = isHorizontal ? -14 : 0;
+                    
+                    // 45-degree Top-Right angle offset specifically for Metres to avoid covering A/V
+                    if (c.type === 'ammeter' || c.type === 'voltmeter') {
+                        screenOffsetX = 24;
+                        screenOffsetY = -24;
+                    }
+                    
+                    // Combine deterministic placement with custom user-drag offsets
+                    const dragDx = c.labelOffset?.x || 0;
+                    const dragDy = c.labelOffset?.y || 0;
+
+                    ctx.save();
+                    // Fully un-rotate to place it securely in screen space
+                    ctx.rotate(-angle);
+                    ctx.translate(screenOffsetX + dragDx, screenOffsetY + dragDy);
+                    
+                    // Semi-transparent Pill Mask (75% transparent = 0.25 alpha)
+                    ctx.fillStyle = 'rgba(248, 250, 252, 0.25)';
+                    ctx.beginPath();
+                    if (typeof ctx.roundRect === 'function') {
+                        ctx.roundRect(-boxW/2, -boxH/2, boxW, boxH, 4);
+                    } else {
+                        ctx.rect(-boxW/2, -boxH/2, boxW, boxH);
+                    }
+                    ctx.fill();
+
+                    // Record the exact absolute screen position of this label for the dragging hitbox
+                    const dpr = window.devicePixelRatio || 1;
+                    const matrix = ctx.getTransform();
+                    labelHitboxes.push({
+                        id: c.id + '_val',
+                        compId: c.id,
+                        x: matrix.e / dpr, // Convert backing store pixel to CSS coordinate
+                        y: matrix.f / dpr,
+                        w: boxW * camera.zoom,
+                        h: boxH * camera.zoom
+                    });
+
+                    // Text
+                    ctx.fillStyle = color;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(text, 0, 0);
+                    
+                    ctx.restore();
+                }
+            }
+
+            ctx.restore();
+        }
+
+        function renderLoop() {
+            // Reset hitboxes each frame to match current layout precisely
+            labelHitboxes = [];
+
+            const rect = canvas.getBoundingClientRect();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Background Grid (dots)
+            ctx.save();
+            ctx.translate(camera.x, camera.y);
+            ctx.scale(camera.zoom, camera.zoom);
+            
+            const startX = Math.floor(-camera.x / (GRID_SIZE * camera.zoom)) - 1;
+            const startY = Math.floor(-camera.y / (GRID_SIZE * camera.zoom)) - 1;
+            const endX = startX + Math.ceil(rect.width / (GRID_SIZE * camera.zoom)) + 2;
+            const endY = startY + Math.ceil(rect.height / (GRID_SIZE * camera.zoom)) + 2;
+
+            ctx.fillStyle = '#cbd5e1';
+            for (let x = startX; x <= endX; x++) {
+                for (let y = startY; y <= endY; y++) {
+                    ctx.beginPath();
+                    ctx.arc(x * GRID_SIZE, y * GRID_SIZE, 2 / camera.zoom, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // Pedagogical Highlighter (rendered behind components, using Alpha 0.5 to prevent overlap darkening)
+            if (isHighlighterMode) {
+                const colorPaths = {};
+                components.forEach(c => {
+                    const color = simulationResults.highlights[c.id];
+                    if (color) {
+                        if (!colorPaths[color]) colorPaths[color] = new Path2D();
+                        const x1 = c.n1.x * GRID_SIZE;
+                        const y1 = c.n1.y * GRID_SIZE;
+                        const x2 = c.n2.x * GRID_SIZE;
+                        const y2 = c.n2.y * GRID_SIZE;
+                        colorPaths[color].moveTo(x1, y1);
+                        colorPaths[color].lineTo(x2, y2);
+                    }
+                });
+                
+                ctx.save();
+                ctx.globalAlpha = 0.5; 
+                ctx.lineWidth = 16;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                for (let color in colorPaths) {
+                    ctx.strokeStyle = color;
+                    ctx.stroke(colorPaths[color]);
+                }
+                ctx.restore();
+            }
+
+            // Draw Components - Pass 1: Shapes and Current Arrows
+            components.forEach(c => drawComponent(c, false, 1));
+
+            // Draw Components - Pass 2: Component Value Labels
+            components.forEach(c => drawComponent(c, false, 2));
+
+            // Draw Hovered Edge Ghost
+            if (hoveredEdge) {
+                const dummyComp = {
+                    id: 'ghost', type: currentTool === 'erase' ? 'wire' : currentTool,
+                    n1: hoveredEdge.n1, n2: hoveredEdge.n2, value: currentTool === 'battery' ? 9 : 10
+                };
+                if(currentTool !== 'select') {
+                    drawComponent(dummyComp, true, 1);
+                    drawComponent(dummyComp, true, 2);
+                }
+            }
+
+            ctx.restore();
+            requestAnimationFrame(renderLoop);
+        }
+
+
+        /* ==========================================
+           SECTION 5: USER INTERACTION & DOM EVENTS
+           ========================================== */
+
+        // Tool Selection
+        document.querySelectorAll('.tool-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentTool = btn.dataset.tool;
+                hoveredEdge = null;
+            });
+        });
+
+        // Clear All Logic
+        const clearModal = document.getElementById('clear-modal');
+        document.getElementById('btn-clear').addEventListener('click', () => {
+            clearModal.classList.remove('hidden');
+        });
+        document.getElementById('btn-clear-cancel').addEventListener('click', () => {
+            clearModal.classList.add('hidden');
+        });
+        document.getElementById('btn-clear-confirm').addEventListener('click', () => {
+            components = [];
+            selectedCompId = null;
+            runSimulation();
+            clearModal.classList.add('hidden');
+        });
+
+        // Highlight Toggle
+        const btnHighlight = document.getElementById('btn-highlight');
+        btnHighlight.addEventListener('click', () => {
+            isHighlighterMode = !isHighlighterMode;
+            if (isHighlighterMode) {
+                btnHighlight.classList.remove('bg-slate-100', 'text-slate-600', 'border-slate-200');
+                btnHighlight.classList.add('bg-yellow-100', 'text-yellow-700', 'border-yellow-300');
+            } else {
+                btnHighlight.classList.add('bg-slate-100', 'text-slate-600', 'border-slate-200');
+                btnHighlight.classList.remove('bg-yellow-100', 'text-yellow-700', 'border-yellow-300');
+            }
+        });
+
+        // Hide/Show Current Info
+        const btnToggleCurrent = document.getElementById('btn-toggle-current');
+        btnToggleCurrent.addEventListener('click', () => {
+            showCurrentInfo = !showCurrentInfo;
+            updateUI();
+        });
+
+        // Recenter & Auto-Fit Circuit
+        document.getElementById('btn-center').addEventListener('click', () => {
+            const rect = canvas.getBoundingClientRect();
+            
+            if (components.length > 0) {
+                let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+                components.forEach(c => {
+                    minX = Math.min(minX, c.n1.x, c.n2.x);
+                    maxX = Math.max(maxX, c.n1.x, c.n2.x);
+                    minY = Math.min(minY, c.n1.y, c.n2.y);
+                    maxY = Math.max(maxY, c.n1.y, c.n2.y);
+                });
+                
+                const padding = 80; // Padding around the edges
+                const contentW = (maxX - minX) * GRID_SIZE;
+                const contentH = (maxY - minY) * GRID_SIZE;
+                
+                // Prevent division by zero if it's a single dot-sized component
+                const effectiveW = Math.max(contentW, GRID_SIZE);
+                const effectiveH = Math.max(contentH, GRID_SIZE);
+
+                const zoomX = (rect.width - padding * 2) / effectiveW;
+                const zoomY = (rect.height - padding * 2) / effectiveH;
+                
+                let newZoom = Math.min(zoomX, zoomY, 2); // Cap max zoom at 2
+                newZoom = Math.max(newZoom, 0.5); // Cap min zoom
+                
+                const centerX = (minX + maxX) / 2 * GRID_SIZE;
+                const centerY = (minY + maxY) / 2 * GRID_SIZE;
+                
+                camera.zoom = newZoom;
+                camera.x = rect.width / 2 - centerX * newZoom;
+                camera.y = rect.height / 2 - centerY * newZoom;
+            } else {
+                camera = { x: rect.width / 2, y: rect.height / 2, zoom: 1 };
+            }
+            
+            // Reset all label offsets completely
+            components.forEach(c => {
+                c.labelOffset = { x: 0, y: 0 };
+                c.currentLabelOffset = { x: 0, y: 0 };
+            });
+            runSimulation();
+        });
+
+        // Properties Panel Updates
+        const pNoSel = document.getElementById('no-selection');
+        const pSel = document.getElementById('selection-panel');
+        const pInputGrp = document.getElementById('value-input-group');
+        const pSwitchGrp = document.getElementById('switch-input-group');
+        const pBatteryActions = document.getElementById('battery-actions');
+        const pTypeLabel = document.getElementById('prop-type-label');
+        const pValue = document.getElementById('prop-value');
+        const pUnit = document.getElementById('prop-unit');
+        const mCurrent = document.getElementById('meter-current');
+        const mVoltage = document.getElementById('meter-voltage');
+
+        function updatePropertiesPanel() {
+            const comp = components.find(c => c.id === selectedCompId);
+            if (!comp) {
+                pNoSel.classList.remove('hidden');
+                pSel.classList.add('hidden');
+                return;
+            }
+
+            pNoSel.classList.add('hidden');
+            pSel.classList.remove('hidden');
+
+            // Type translations
+            const t = i18n[currentLang];
+            let typeStr = comp.type;
+            if(comp.type === 'wire') typeStr = t.toolWire;
+            if(comp.type === 'resistor') typeStr = t.toolResistor;
+            if(comp.type === 'battery') typeStr = t.toolCell;
+            if(comp.type === 'switch') typeStr = t.toolSwitch;
+            if(comp.type === 'ammeter') typeStr = t.toolAmmeter;
+            if(comp.type === 'voltmeter') typeStr = t.toolVoltmeter;
+            pTypeLabel.innerText = typeStr;
+
+            const btnSwitch = document.getElementById('btn-toggle-switch');
+
+            if (comp.type === 'wire') {
+                pInputGrp.classList.add('hidden');
+                pSwitchGrp.classList.add('hidden');
+                pBatteryActions.classList.add('hidden');
+            } else if (comp.type === 'switch') {
+                pInputGrp.classList.add('hidden');
+                pSwitchGrp.classList.remove('hidden');
+                pBatteryActions.classList.add('hidden');
+                btnSwitch.innerText = comp.closed ? t.switchClosed : t.switchOpen;
+                
+                // Color switch buttons appropriately
+                btnSwitch.className = comp.closed 
+                    ? "w-full py-2 rounded-lg text-sm font-semibold transition-colors border bg-green-100 text-green-700 border-green-300"
+                    : "w-full py-2 rounded-lg text-sm font-semibold transition-colors border bg-slate-200 text-slate-700 hover:bg-slate-300 border-slate-300";
+
+            } else {
+                pInputGrp.classList.remove('hidden');
+                pSwitchGrp.classList.add('hidden');
+                pValue.value = comp.value; // Display positive string
+                pUnit.innerText = 'Ω'; // default
+
+                if (comp.type === 'ammeter' || comp.type === 'voltmeter') {
+                    document.getElementById('ui-val-label').innerText = t.internalRes;
+                } else {
+                    document.getElementById('ui-val-label').innerText = t.valLabel;
+                    if (comp.type === 'battery') pUnit.innerText = 'V';
+                }
+                
+                if (comp.type === 'battery') pBatteryActions.classList.remove('hidden');
+                else pBatteryActions.classList.add('hidden');
+            }
+
+            const res = simulationResults[comp.id];
+            if (res) {
+                mCurrent.innerText = `${Math.abs(res.current).toFixed(3)} A`;
+                mVoltage.innerText = `${res.vDrop.toFixed(3)} V`;
+            } else {
+                mCurrent.innerText = `0.000 A`;
+                mVoltage.innerText = `0.000 V`;
+            }
+        }
+
+        pValue.addEventListener('input', (e) => {
+            const comp = components.find(c => c.id === selectedCompId);
+            if (comp) {
+                const rawVal = parseFloat(e.target.value);
+                if (isNaN(rawVal)) return;
+
+                if (comp.type === 'battery' && rawVal < 0) {
+                    comp.reversed = !comp.reversed;
+                    comp.value = Math.abs(rawVal);
+                    e.target.value = comp.value; // Force display positive
+                } else {
+                    comp.value = Math.abs(rawVal);
+                }
+                runSimulation();
+            }
+        });
+
+        // Switch properties button handler
+        document.getElementById('btn-toggle-switch').addEventListener('click', () => {
+            const comp = components.find(c => c.id === selectedCompId);
+            if (comp && comp.type === 'switch') {
+                comp.closed = !comp.closed;
+                updatePropertiesPanel();
+                runSimulation();
+            }
+        });
+        
+        // Reverse Polarity handler
+        document.getElementById('btn-reverse-polarity').addEventListener('click', () => {
+            const comp = components.find(c => c.id === selectedCompId);
+            if (comp && comp.type === 'battery') {
+                comp.reversed = !comp.reversed;
+                updatePropertiesPanel();
+                runSimulation();
+            }
+        });
+
+        // POINTER EVENT HANDLERS (Unifies Mouse & Touch cleanly for iPad/Mobile support)
+        function getPointer(e) {
+            if (e.touches && e.touches.length > 0) return e.touches[0];
+            if (e.changedTouches && e.changedTouches.length > 0) return e.changedTouches[0];
+            return e;
+        }
+
+        function handlePointerDown(e) {
+            if (e.type === 'touchstart') {
+                if (e.touches.length > 1) return; // 2+ fingers handled by touchmove (pinch/pan)
+                e.preventDefault(); // Stop mouse-emulation on touch devices
+            }
+
+            const pointer = getPointer(e);
+            const rect = canvas.getBoundingClientRect();
+            const cssX = pointer.clientX - rect.left;
+            const cssY = pointer.clientY - rect.top;
+
+            // 1. Check if user is clicking directly on a draggable text label FIRST (Intercept priority)
+            if (currentTool === 'select') {
+                for (let i = labelHitboxes.length - 1; i >= 0; i--) {
+                    const box = labelHitboxes[i];
+                    if (Math.abs(cssX - box.x) <= box.w/2 && Math.abs(cssY - box.y) <= box.h/2) {
+                        draggingLabelId = box.id;
+                        selectedCompId = box.compId; 
+                        lastMousePos = { x: pointer.clientX, y: pointer.clientY };
+                        updatePropertiesPanel();
+                        return; // Intercept click entirely
+                    }
+                }
+            }
+
+            // For touch devices, hoveredEdge isn't pre-calculated by hover events. We calculate it precisely at tap.
+            if (e.type === 'touchstart') {
+                const worldPos = screenToWorld(pointer.clientX, pointer.clientY);
+                if (currentTool === 'select') {
+                    hoveredEdge = null;
+                    let minDist = 0.5; // threshold
+                    components.forEach(c => {
+                        const cx = (c.n1.x + c.n2.x) / 2;
+                        const cy = (c.n1.y + c.n2.y) / 2;
+                        const wx = worldPos.x / GRID_SIZE;
+                        const wy = worldPos.y / GRID_SIZE;
+                        const dist = Math.hypot(cx - wx, cy - wy);
+                        if(dist < minDist) {
+                            minDist = dist;
+                            hoveredEdge = { n1: c.n1, n2: c.n2 };
+                        }
+                    });
+                } else {
+                    hoveredEdge = getClosestEdge(worldPos.x, worldPos.y);
+                }
+            }
+
+            // 2. Pan Canvas
+            const isMiddleClick = e.button === 1;
+            const isLeftClick = e.button === 0 || e.type === 'touchstart';
+            
+            if (isMiddleClick || (isLeftClick && currentTool === 'select' && !hoveredEdge)) {
+                isDragging = true;
+                lastMousePos = { x: pointer.clientX, y: pointer.clientY };
+                canvas.style.cursor = 'grabbing';
+                return;
+            }
+
+            // 3. Selection or Placement Logic
+            if (!hoveredEdge) {
+                selectedCompId = null;
+                updatePropertiesPanel();
+                return;
+            }
+
+            const id = `${hoveredEdge.n1.x},${hoveredEdge.n1.y}-${hoveredEdge.n2.x},${hoveredEdge.n2.y}`;
+            const existingIdx = components.findIndex(c => c.id === id || c.id === `${hoveredEdge.n2.x},${hoveredEdge.n2.y}-${hoveredEdge.n1.x},${hoveredEdge.n1.y}`);
+
+            if (currentTool === 'select') {
+                if (existingIdx >= 0) {
+                    const clickedComp = components[existingIdx];
+                    if (selectedCompId === clickedComp.id && clickedComp.type === 'switch') {
+                        clickedComp.closed = !clickedComp.closed;
+                    }
+                    selectedCompId = clickedComp.id;
+                } else {
+                    selectedCompId = null;
+                }
+            } else if (currentTool === 'erase') {
+                if (existingIdx >= 0) {
+                    components.splice(existingIdx, 1);
+                    if (selectedCompId === components[existingIdx]?.id) selectedCompId = null;
+                }
+            } else {
+                // Place component
+                let val = 0;
+                if (currentTool === 'resistor') val = 10;
+                if (currentTool === 'battery') val = 9;
+                if (currentTool === 'ammeter') val = 1e-6; // Ideal ammeter
+                if (currentTool === 'voltmeter') val = 1e9; // Ideal voltmeter
+
+                if (existingIdx >= 0) {
+                    components[existingIdx] = { id, type: currentTool, n1: hoveredEdge.n1, n2: hoveredEdge.n2, value: val, closed: false, reversed: false, labelOffset: {x:0, y:0}, currentLabelOffset: {x:0, y:0} };
+                } else {
+                    components.push({ id, type: currentTool, n1: hoveredEdge.n1, n2: hoveredEdge.n2, value: val, closed: false, reversed: false, labelOffset: {x:0, y:0}, currentLabelOffset: {x:0, y:0} });
+                }
+                selectedCompId = id;
+            }
+            runSimulation();
+        }
+
+        function handlePointerMove(e) {
+            // Pinch Zoom & 2-Finger Pan Support
+            if (e.type === 'touchmove' && e.touches && e.touches.length === 2) {
+                e.preventDefault();
+                const t1 = e.touches[0];
+                const t2 = e.touches[1];
+                
+                const cx = (t1.clientX + t2.clientX) / 2;
+                const cy = (t1.clientY + t2.clientY) / 2;
+                const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+                
+                if (initialPinchDist === null) {
+                    initialPinchDist = dist;
+                    lastMousePos = { x: cx, y: cy }; // track midpoint for panning
+                } else {
+                    // Zoom
+                    const scale = dist / initialPinchDist;
+                    initialPinchDist = dist; 
+
+                    const worldBefore = screenToWorld(cx, cy);
+                    let newZoom = camera.zoom * scale;
+                    newZoom = Math.max(0.5, Math.min(newZoom, 3));
+                    camera.zoom = newZoom;
+                    const worldAfter = screenToWorld(cx, cy);
+
+                    camera.x += (worldAfter.x - worldBefore.x) * camera.zoom;
+                    camera.y += (worldAfter.y - worldBefore.y) * camera.zoom;
+
+                    // Pan
+                    const dx = cx - lastMousePos.x;
+                    const dy = cy - lastMousePos.y;
+                    camera.x += dx;
+                    camera.y += dy;
+                    lastMousePos = { x: cx, y: cy };
+                }
+                return;
+            } else {
+                initialPinchDist = null;
+            }
+
+            if (e.type === 'touchmove') {
+                if (e.touches.length > 1) return;
+                e.preventDefault(); // Stop scrolling when drawing
+            }
+
+            const pointer = getPointer(e);
+
+            // Check for labels BEFORE edges
+            let hoveringLabel = false;
+            if (currentTool === 'select' && !isDragging && !draggingLabelId) {
+                const rect = canvas.getBoundingClientRect();
+                const cssX = pointer.clientX - rect.left;
+                const cssY = pointer.clientY - rect.top;
+                for (const box of labelHitboxes) {
+                    if (Math.abs(cssX - box.x) <= box.w/2 && Math.abs(cssY - box.y) <= box.h/2) {
+                        hoveringLabel = true; break;
+                    }
+                }
+            }
+
+            if (hoveringLabel) {
+                canvas.style.cursor = 'grab';
+                hoveredEdge = null;
+                return;
+            } else if (!isDragging && !draggingLabelId) {
+                canvas.style.cursor = 'crosshair';
+            }
+
+            // Proceed with Dragging Text Label
+            if (draggingLabelId) {
+                const dx = pointer.clientX - lastMousePos.x;
+                const dy = pointer.clientY - lastMousePos.y;
+                const isVal = draggingLabelId.endsWith('_val');
+                const compId = draggingLabelId.replace('_val', '').replace('_cur', '');
+                const c = components.find(comp => comp.id === compId);
+                
+                if (c) {
+                    if (isVal) {
+                        if (!c.labelOffset) c.labelOffset = {x: 0, y: 0};
+                        let nx = c.labelOffset.x + dx / camera.zoom;
+                        let ny = c.labelOffset.y + dy / camera.zoom;
+                        const dist = Math.hypot(nx, ny);
+                        if (dist > GRID_SIZE) { 
+                            nx = (nx / dist) * GRID_SIZE;
+                            ny = (ny / dist) * GRID_SIZE;
+                        }
+                        c.labelOffset = {x: nx, y: ny};
+                    } else {
+                        if (!c.currentLabelOffset) c.currentLabelOffset = {x: 0, y: 0};
+                        let nx = c.currentLabelOffset.x + dx / camera.zoom;
+                        let ny = c.currentLabelOffset.y + dy / camera.zoom;
+                        const dist = Math.hypot(nx, ny);
+                        if (dist > GRID_SIZE) {
+                            nx = (nx / dist) * GRID_SIZE;
+                            ny = (ny / dist) * GRID_SIZE;
+                        }
+                        c.currentLabelOffset = {x: nx, y: ny};
+                    }
+                }
+                lastMousePos = { x: pointer.clientX, y: pointer.clientY };
+                return;
+            }
+
+            // Proceed with Dragging Viewport
+            if (isDragging) {
+                const dx = pointer.clientX - lastMousePos.x;
+                const dy = pointer.clientY - lastMousePos.y;
+                camera.x += dx;
+                camera.y += dy;
+                lastMousePos = { x: pointer.clientX, y: pointer.clientY };
+                return;
+            }
+
+            // Calculate hovered components
+            const worldPos = screenToWorld(pointer.clientX, pointer.clientY);
+            
+            if (currentTool === 'select') {
+                hoveredEdge = null;
+                let minDist = 0.5; 
+                components.forEach(c => {
+                    const cx = (c.n1.x + c.n2.x) / 2;
+                    const cy = (c.n1.y + c.n2.y) / 2;
+                    const wx = worldPos.x / GRID_SIZE;
+                    const wy = worldPos.y / GRID_SIZE;
+                    const dist = Math.hypot(cx - wx, cy - wy);
+                    if(dist < minDist) {
+                        minDist = dist;
+                        hoveredEdge = { n1: c.n1, n2: c.n2 };
+                    }
+                });
+            } else {
+                hoveredEdge = getClosestEdge(worldPos.x, worldPos.y);
+            }
+        }
+
+        function handlePointerUp(e) {
+            if (draggingLabelId) draggingLabelId = null;
+            isDragging = false;
+            initialPinchDist = null;
+            canvas.style.cursor = 'crosshair';
+            
+            if (e.type === 'touchend' || e.type === 'touchcancel') {
+                hoveredEdge = null; // Remove ghost image explicitly on touch release
+            }
+        }
+
+        // Attach native Mouse AND Touch listeners to create a universal Multi-touch capable board
+        canvas.addEventListener('mousedown', handlePointerDown);
+        window.addEventListener('mousemove', handlePointerMove);
+        window.addEventListener('mouseup', handlePointerUp);
+
+        canvas.addEventListener('touchstart', handlePointerDown, { passive: false });
+        canvas.addEventListener('touchmove', handlePointerMove, { passive: false });
+        window.addEventListener('touchend', handlePointerUp);
+        window.addEventListener('touchcancel', handlePointerUp);
+
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const worldBefore = screenToWorld(e.clientX, e.clientY);
+            
+            const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
+            camera.zoom *= zoomDelta;
+            camera.zoom = Math.max(0.5, Math.min(camera.zoom, 3)); 
+
+            const worldAfter = screenToWorld(e.clientX, e.clientY);
+            camera.x += (worldAfter.x - worldBefore.x) * camera.zoom;
+            camera.y += (worldAfter.y - worldBefore.y) * camera.zoom;
+        }, { passive: false });
+
+
+        /* ==========================================
+           SECTION 6: INITIALIZATION
+           ========================================== */
+        
+        window.addEventListener('resize', resizeCanvas);
+        
+        document.getElementById('btn-lang').addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            updateUI();
+        });
+
+        const helpModal = document.getElementById('help-modal');
+        document.getElementById('btn-help').addEventListener('click', () => {
+            helpModal.classList.remove('hidden');
+        });
+        document.getElementById('btn-close-help').addEventListener('click', () => {
+            helpModal.classList.add('hidden');
+        });
+
+        // Setup Init
+        resizeCanvas();
+        // Start camera near center
+        const startRect = canvas.getBoundingClientRect();
+        camera.x = startRect.width / 2;
+        camera.y = startRect.height / 2;
+        updateUI();
+        requestAnimationFrame(renderLoop);
+
+    </script>
+</body>
+</html>
