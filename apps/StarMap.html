@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動全天星圖 | Interactive Star Map</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax for Physics Formulas -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+
+    <!-- Tailwind Config for Custom Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3c72',
+                        secondary: '#2a5298',
+                        vector: {
+                            blue: '#3b82f6',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            purple: '#8b5cf6',
+                            teal: '#14b8a6',
+                            red: '#DC2626'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- 1. Custom CSS & Overrides --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+        }
+
+        /* Custom Scrollbar for Sidebar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Blueprint Grid Background for the Canvas Container */
+        .bg-grid {
+            background-image: 
+                linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+                linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #1e3c72;
+            cursor: pointer;
+            margin-top: -6px;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col overflow-hidden text-slate-800">
+
+    <!-- --- 2. HTML Layout --- -->
+
+    <!-- Header -->
+    <header class="bg-primary text-white shadow-md flex justify-between items-center px-6 py-3 z-20 shrink-0">
+        <div class="flex items-center gap-3">
+            <!-- App Icon (SVG) -->
+            <svg class="w-8 h-8 text-vector-amber" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+            </svg>
+            <h1 id="ui-title" class="text-xl font-bold tracking-wide">Interactive Star Map</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <button id="btn-help" class="hover:text-vector-amber transition-colors px-3 py-1 border border-white/30 rounded-lg backdrop-blur-sm">
+                <span id="ui-help-btn">Help & Physics</span>
+            </button>
+            <button id="btn-lang" class="bg-white/10 hover:bg-white/20 transition-colors px-3 py-1 rounded-lg font-semibold">
+                繁/Eng
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Split Pane -->
+    <div class="flex flex-1 overflow-hidden flex-col md:flex-row">
+        
+        <!-- Left Sidebar (Controls) -->
+        <aside class="w-full md:w-80 h-[45%] md:h-full bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col z-10 shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+            <div class="flex-1 overflow-y-auto p-5 space-y-6 custom-scrollbar">
+                
+                <!-- Observer Location Card -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <h2 id="ui-loc-title" class="text-sm font-bold text-primary mb-3 uppercase tracking-wider flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        Observer Location
+                    </h2>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1 flex justify-between">
+                                <span id="ui-lat">Latitude (φ)</span>
+                                <span id="val-lat" class="text-primary font-mono">22.3° N</span>
+                            </label>
+                            <input type="range" id="input-lat" min="-90" max="90" step="0.1" value="22.3">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1 flex justify-between">
+                                <span id="ui-lon">Longitude (L)</span>
+                                <span id="val-lon" class="text-primary font-mono">114.2° E</span>
+                            </label>
+                            <input type="range" id="input-lon" min="-180" max="180" step="0.1" value="114.2">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time & Animation Card -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <h2 id="ui-time-title" class="text-sm font-bold text-primary mb-3 uppercase tracking-wider flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Time Control
+                    </h2>
+                    
+                    <div class="text-center mb-3">
+                        <div id="display-date" class="text-lg font-bold text-slate-800 font-mono">2026-05-12</div>
+                        <div id="display-time" class="text-sm text-slate-500 font-mono">14:16:00 UTC+8</div>
+                    </div>
+
+                    <div class="flex gap-2 mb-4">
+                        <button id="btn-play" class="flex-1 bg-primary hover:bg-blue-800 text-white py-2 rounded-lg transition shadow-sm font-semibold flex justify-center items-center gap-1">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                            <span id="ui-play">Play</span>
+                        </button>
+                        <button id="btn-now" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2 rounded-lg transition shadow-sm font-semibold" title="Reset to Now">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
+                        </button>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1 flex justify-between">
+                            <span id="ui-speed">Simulation Speed</span>
+                            <span id="val-speed" class="text-vector-emerald font-mono">x1</span>
+                        </label>
+                        <input type="range" id="input-speed" min="-3" max="5" step="0.1" value="0">
+                    </div>
+                </div>
+
+                <!-- Display Options Card -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <h2 id="ui-disp-title" class="text-sm font-bold text-primary mb-3 uppercase tracking-wider flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        Display Layers
+                    </h2>
+                    
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold text-slate-500 mb-1 flex justify-between">
+                            <span id="ui-mag-limit">Magnitude Limit (Faintest)</span>
+                            <span id="val-mag" class="text-primary font-mono">6.0</span>
+                        </label>
+                        <input type="range" id="input-mag" min="-2" max="6" step="0.1" value="6.0">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" id="chk-constellations" checked class="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary">
+                            <span id="ui-chk-const" class="text-sm text-slate-700 group-hover:text-primary transition">Constellation Lines</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" id="chk-names" checked class="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary">
+                            <span id="ui-chk-names" class="text-sm text-slate-700 group-hover:text-primary transition">Star Names</span>
+                        </label>
+                        <hr class="border-slate-200 my-2">
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" id="chk-grid" class="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary">
+                            <span id="ui-chk-grid" class="text-sm text-slate-700 group-hover:text-primary transition">Alt-Azimuth Grid</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" id="chk-equator" class="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary">
+                            <span id="ui-chk-equ" class="text-sm text-vector-teal font-medium group-hover:text-teal-700 transition">Celestial Equator</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" id="chk-ecliptic" class="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary">
+                            <span id="ui-chk-ecl" class="text-sm text-vector-amber font-medium group-hover:text-amber-700 transition">Ecliptic Path</span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- Right Canvas Area -->
+        <main class="flex-1 relative bg-grid shadow-inner flex flex-col">
+            <div id="canvas-container" class="flex-1 relative w-full h-full cursor-crosshair touch-none">
+                <canvas id="sky-canvas" class="absolute inset-0 block"></canvas>
+                <!-- Tooltip -->
+                <div id="tooltip" class="absolute hidden bg-primary text-white text-xs px-3 py-2 rounded-lg shadow-xl pointer-events-none z-30 transform -translate-x-1/2 -translate-y-[120%] border border-white/20 backdrop-blur-md">
+                    <div id="tt-name" class="font-bold text-sm mb-1">Star Name</div>
+                    <div id="tt-coords" class="text-slate-300 font-mono">RA: -- Dec: --</div>
+                    <div id="tt-altaz" class="text-vector-amber font-mono">Alt: -- Az: --</div>
+                </div>
+            </div>
+            
+            <!-- Instructions Overlay (Bottom Right) -->
+            <div class="absolute bottom-4 right-4 bg-white/80 backdrop-blur-sm p-3 rounded-xl shadow-lg border border-slate-200 pointer-events-none text-xs text-slate-500 max-w-xs">
+                <p id="ui-drag-hint">🌍 The map projects the visible hemisphere. Center is Zenith (straight up). Edge is the Horizon.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mandatory Footer -->
+    <footer class="bg-slate-800 text-slate-300 py-2 px-6 text-center text-sm z-20 shrink-0 shadow-[0_-4px_6px_rgba(0,0,0,0.1)]">
+        <p id="ui-footer" class="font-medium tracking-wide">CMA Secondary School. Physics Department.</p>
+    </footer>
+
+    <!-- Help & Physics Modal -->
+    <div id="modal-help" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white/95 backdrop-blur z-10 rounded-t-2xl">
+                <h3 id="ui-modal-title" class="text-2xl font-bold text-primary">Celestial Motions</h3>
+                <button id="btn-close-help" class="text-slate-400 hover:text-vector-red transition-colors p-1">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-6 text-slate-700 leading-relaxed">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h4 id="ui-m-s1t" class="font-bold text-primary mb-2">1. Daily Motion (Diurnal Motion)</h4>
+                    <p id="ui-m-s1p" class="text-sm leading-relaxed">Every night, celestial objects (stars, planets, the Moon, and the Sun) appear to rise in the East and set in the West. This apparent motion is caused by the Earth rotating on its axis from West to East.</p>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h4 id="ui-m-s2t" class="font-bold text-primary mb-2">2. Stars vs. Planets</h4>
+                    <p id="ui-m-s2p" class="text-sm leading-relaxed">"Stars" maintain fixed positions relative to one another, forming the constellations we see on this map. "Planets" (from the Greek word for "wanderers") slowly change their positions against this background of fixed stars as they orbit the Sun.</p>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h4 id="ui-m-s3t" class="font-bold text-primary mb-2">3. Prograde & Retrograde Motion</h4>
+                    <p id="ui-m-s3p" class="text-sm leading-relaxed">Normally, planets move eastward relative to the stars (Prograde motion). However, occasionally a planet appears to temporarily reverse direction and move westward (Retrograde motion). This is an optical illusion that occurs when a faster-moving Earth overtakes an outer planet, or an inner planet overtakes the Earth.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- 3. Main JavaScript Logic --- -->
+    <script>
+        /**
+         * --- 3.1 Global State & Translation Dictionary ---
+         */
+        const DICT = {
+            en: {
+                title: "Interactive Star Map",
+                helpBtn: "Instructions",
+                locTitle: "Observer Location",
+                lat: "Latitude (φ)",
+                lon: "Longitude (L)",
+                timeTitle: "Time Control",
+                play: "Play",
+                pause: "Pause",
+                speed: "Simulation Speed",
+                dispTitle: "Display Layers",
+                magLimit: "Magnitude Limit (Faintest)",
+                chkConst: "Constellation Lines",
+                chkNames: "Star Names",
+                chkGrid: "Alt-Azimuth Grid",
+                chkEqu: "Celestial Equator",
+                chkEcl: "Ecliptic Path",
+                dragHint: "🌍 The map projects the visible hemisphere. Center is Zenith (straight up). Edge is the Horizon.",
+                footer: "CMA Secondary School. Physics Department.",
+                modalTitle: "Celestial Motions Explained",
+                m_s1t: "1. Daily Motion (Diurnal Motion)",
+                m_s1p: "Every night, celestial objects (stars, planets, the Moon, and the Sun) appear to rise in the East and set in the West. This apparent motion is caused by the Earth rotating on its axis from West to East.",
+                m_s2t: "2. Stars vs. Planets",
+                m_s2p: "\"Stars\" maintain fixed positions relative to one another, forming the constellations we see on this map. \"Planets\" (from the Greek word for \"wanderers\") slowly change their positions against this background of fixed stars as they orbit the Sun.",
+                m_s3t: "3. Prograde & Retrograde Motion",
+                m_s3p: "Normally, planets move eastward relative to the stars (Prograde motion). However, occasionally a planet appears to temporarily reverse direction and move westward (Retrograde motion). This is an optical illusion that occurs when a faster-moving Earth overtakes an outer planet, or an inner planet overtakes the Earth."
+            },
+            zh: {
+                title: "互動全天星圖",
+                helpBtn: "說明",
+                locTitle: "觀測者位置",
+                lat: "緯度 (φ)",
+                lon: "經度 (L)",
+                timeTitle: "時間控制",
+                play: "播放",
+                pause: "暫停",
+                speed: "模擬速度",
+                dispTitle: "顯示圖層",
+                magLimit: "視星等極限 (最暗)",
+                chkConst: "星座連線",
+                chkNames: "恆星名稱",
+                chkGrid: "地平經緯網格",
+                chkEqu: "天赤道 (Celestial Equator)",
+                chkEcl: "黃道 (Ecliptic)",
+                dragHint: "🌍 星圖投影了可見的半球。中心為天頂（正上方），邊緣為地平線。",
+                footer: "廠商會中學．物理科",
+                modalTitle: "天體運動說明",
+                m_s1t: "1. 周日運",
+                m_s1p: "每天晚上，天體（恆星、行星、月球和太陽）看起來都是東升西落。這種視運動是由於地球自西向東自轉所造成的。",
+                m_s2t: "2. 恆星與行星",
+                m_s2p: "「恆星」彼此之間的相對位置是固定的，構成了我們在此星圖上看到的星座。「行星」（字源意為「漫游者」）在繞太陽公轉時，會在固定的恆星背景下緩慢移動。",
+                m_s3t: "3. 順行與逆行",
+                m_s3p: "通常，行星相對於恆星向東移動（順行）。然而，行星有時會暫時改變方向向西移動（逆行）。這是一種視覺錯覺，發生在移動較快的地球超越外行星，或內行星超越地球的時候。"
+            }
+        };
+
+        const STATE = {
+            lang: 'zh',
+            lat: 22.3, // Default Hong Kong
+            lon: 114.2,
+            timeMs: Date.now(), // Use high precision float for smooth physics
+            playing: false,
+            speedExp: 0, // Exponent for speed curve
+            realSpeed: 1, // Multiplier
+            options: {
+                magLimit: 6.0,
+                constellations: true,
+                names: true,
+                grid: false,
+                equator: false,
+                ecliptic: false
+            },
+            hoverStar: null,
+            lastFrameTime: performance.now()
+        };
+
+        /**
+         * --- 3.2 Astronomical Data (Mini Catalog) ---
+         * Coordinates: RA in hours, Dec in degrees. Mag = Magnitude
+         */
+        const STARS = [
+            { id: "siri", nameEn: "Sirius", nameZh: "天狼星", ra: 6.752, dec: -16.716, mag: -1.46, color: "#fff" },
+            { id: "cano", nameEn: "Canopus", nameZh: "老人星", ra: 6.399, dec: -52.695, mag: -0.74, color: "#fff" },
+            { id: "arct", nameEn: "Arcturus", nameZh: "大角星", ra: 14.261, dec: 19.182, mag: -0.05, color: "#ffd27f" },
+            { id: "vega", nameEn: "Vega", nameZh: "織女一", ra: 18.615, dec: 38.783, mag: 0.03, color: "#fff" },
+            { id: "cape", nameEn: "Capella", nameZh: "五車二", ra: 5.278, dec: 45.998, mag: 0.08, color: "#fff" },
+            { id: "rige", nameEn: "Rigel", nameZh: "參宿七", ra: 5.242, dec: -8.201, mag: 0.18, color: "#c8d9ff" },
+            { id: "proc", nameEn: "Procyon", nameZh: "南河三", ra: 7.655, dec: 5.224, mag: 0.40, color: "#fff" },
+            { id: "bete", nameEn: "Betelgeuse", nameZh: "參宿四", ra: 5.919, dec: 7.407, mag: 0.42, color: "#ffb459" },
+            { id: "alta", nameEn: "Altair", nameZh: "河鼓二", ra: 19.846, dec: 8.868, mag: 0.76, color: "#fff" },
+            { id: "alde", nameEn: "Aldebaran", nameZh: "畢宿五", ra: 4.598, dec: 16.509, mag: 0.87, color: "#ffb459" },
+            { id: "spic", nameEn: "Spica", nameZh: "角宿一", ra: 13.419, dec: -11.161, mag: 0.98, color: "#c8d9ff" },
+            { id: "anta", nameEn: "Antares", nameZh: "心宿二", ra: 16.490, dec: -26.432, mag: 1.06, color: "#ff7f59" },
+            { id: "poll", nameEn: "Pollux", nameZh: "北河三", ra: 7.755, dec: 28.026, mag: 1.16, color: "#ffb459" },
+            { id: "foma", nameEn: "Fomalhaut", nameZh: "北落師門", ra: 22.960, dec: -29.622, mag: 1.17, color: "#fff" },
+            { id: "dene", nameEn: "Deneb", nameZh: "天津四", ra: 20.690, dec: 45.280, mag: 1.25, color: "#fff" },
+            { id: "regu", nameEn: "Regulus", nameZh: "軒轅十四", ra: 10.139, dec: 11.967, mag: 1.36, color: "#c8d9ff" },
+            { id: "cast", nameEn: "Castor", nameZh: "北河二", ra: 7.576, dec: 31.888, mag: 1.58, color: "#fff" },
+            { id: "pola", nameEn: "Polaris", nameZh: "北極星", ra: 2.530, dec: 89.264, mag: 1.97, color: "#fff" },
+            
+            // Orion Constellation specific
+            { id: "bell", nameEn: "Bellatrix", nameZh: "參宿五", ra: 5.418, dec: 6.349, mag: 1.64, color: "#c8d9ff" },
+            { id: "mint", nameEn: "Mintaka", nameZh: "參宿三", ra: 5.533, dec: -0.299, mag: 2.25, color: "#c8d9ff" },
+            { id: "alni", nameEn: "Alnilam", nameZh: "參宿二", ra: 5.603, dec: -1.201, mag: 1.69, color: "#c8d9ff" },
+            { id: "alnt", nameEn: "Alnitak", nameZh: "參宿一", ra: 5.679, dec: -1.942, mag: 1.88, color: "#c8d9ff" },
+            { id: "saip", nameEn: "Saiph", nameZh: "參宿六", ra: 5.795, dec: -9.669, mag: 2.07, color: "#c8d9ff" },
+            
+            // Ursa Major (Big Dipper)
+            { id: "dubh", nameEn: "Dubhe", nameZh: "天樞", ra: 11.062, dec: 61.751, mag: 1.81, color: "#ffb459" },
+            { id: "mera", nameEn: "Merak", nameZh: "天璇", ra: 11.030, dec: 56.382, mag: 2.34, color: "#fff" },
+            { id: "phec", nameEn: "Phecda", nameZh: "天璣", ra: 11.896, dec: 53.694, mag: 2.41, color: "#fff" },
+            { id: "megr", nameEn: "Megrez", nameZh: "天權", ra: 12.257, dec: 57.032, mag: 3.32, color: "#fff" },
+            { id: "alio", nameEn: "Alioth", nameZh: "玉衡", ra: 12.900, dec: 55.959, mag: 1.76, color: "#fff" },
+            { id: "miza", nameEn: "Mizar", nameZh: "開陽", ra: 13.398, dec: 54.925, mag: 2.23, color: "#fff" },
+            { id: "alka", nameEn: "Alkaid", nameZh: "搖光", ra: 13.792, dec: 49.313, mag: 1.85, color: "#c8d9ff" },
+            
+            // Crux (Southern Cross)
+            { id: "acru", nameEn: "Acrux", nameZh: "十字架二", ra: 12.443, dec: -63.099, mag: 0.77, color: "#c8d9ff" },
+            { id: "mimc", nameEn: "Mimosa", nameZh: "十字架三", ra: 12.795, dec: -59.688, mag: 1.25, color: "#c8d9ff" },
+            { id: "gacr", nameEn: "Gacrux", nameZh: "十字架一", ra: 12.519, dec: -57.113, mag: 1.59, color: "#ff7f59" },
+            { id: "delc", nameEn: "Delta Cru", nameZh: "十字架四", ra: 12.250, dec: -58.749, mag: 2.77, color: "#c8d9ff" }
+        ];
+
+        // Background generated stars (Dimmer, to fill the sky realistically)
+        const bgStars = [];
+        for(let i=0; i<400; i++) {
+            bgStars.push({
+                ra: Math.random() * 24,
+                dec: Math.asin(Math.random() * 2 - 1) * (180 / Math.PI), // Uniform distribution on sphere
+                mag: 3 + Math.random() * 3, // Mag 3 to 6
+                color: Math.random() > 0.8 ? "#ffb459" : (Math.random() > 0.6 ? "#c8d9ff" : "#ffffff")
+            });
+        }
+
+        const CONSTELLATION_LINES = [
+            // Orion
+            ["bete", "bell"], ["bell", "mint"], ["mint", "alni"], ["alni", "alnt"], 
+            ["alnt", "bete"], ["mint", "rige"], ["alnt", "saip"], ["rige", "saip"],
+            // Big Dipper
+            ["dubh", "mera"], ["mera", "phec"], ["phec", "megr"], ["megr", "dubh"],
+            ["megr", "alio"], ["alio", "miza"], ["miza", "alka"],
+            // Crux
+            ["gacr", "acru"], ["mimc", "delc"],
+            // Summer Triangle
+            ["vega", "alta"], ["alta", "dene"], ["dene", "vega"]
+        ];
+
+        /**
+         * --- 3.3 Astronomical Math Logic ---
+         */
+        const DEG2RAD = Math.PI / 180;
+        const RAD2DEG = 180 / Math.PI;
+
+        // Calculate Greenwich Mean Sidereal Time (GMST) in hours
+        function getGMST(timeMs) {
+            const jd = (timeMs / 86400000.0) + 2440587.5;
+            const d = jd - 2451545.0; // Days since J2000.0
+            let gmst = 18.697374558 + 24.06570982441908 * d;
+            gmst = gmst % 24;
+            if (gmst < 0) gmst += 24;
+            return gmst;
+        }
+
+        // Convert Equatorial (RA, Dec) to Horizontal (Alt, Az)
+        function eqToHz(raHours, decDeg, latDeg, gmstHours, lonDeg) {
+            // Prevent singularities at exact poles (90 or -90)
+            latDeg = Math.max(-89.999, Math.min(89.999, latDeg));
+
+            const lst = (gmstHours + lonDeg / 15.0) % 24;
+            let haDeg = (lst - raHours) * 15.0;
+            
+            const dec = decDeg * DEG2RAD;
+            const lat = latDeg * DEG2RAD;
+            const ha = haDeg * DEG2RAD;
+
+            // Altitude
+            const sinAlt = Math.sin(dec) * Math.sin(lat) + Math.cos(dec) * Math.cos(lat) * Math.cos(ha);
+            const alt = Math.asin(Math.max(-1, Math.min(1, sinAlt)));
+
+            // Azimuth
+            let cosAz;
+            const denom = Math.cos(alt) * Math.cos(lat);
+            
+            // Prevent division by zero at zenith or poles
+            if (Math.abs(denom) < 1e-6) {
+                cosAz = 1; 
+            } else {
+                cosAz = (Math.sin(dec) - Math.sin(alt) * Math.sin(lat)) / denom;
+            }
+            
+            let az = Math.acos(Math.max(-1, Math.min(1, cosAz))); // clamp to prevent NaN
+            
+            if (Math.sin(ha) > 0) {
+                az = 2 * Math.PI - az;
+            }
+
+            return {
+                alt: alt * RAD2DEG,
+                az: az * RAD2DEG
+            };
+        }
+
+        /**
+         * --- 3.4 Canvas Engine & Rendering ---
+         */
+        const canvas = document.getElementById('sky-canvas');
+        const ctx = canvas.getContext('2d', { alpha: false });
+        let width = 0;
+        let height = 0;
+        let cx = 0;
+        let cy = 0;
+        let radius = 0;
+
+        function resizeCanvas() {
+            const container = document.getElementById('canvas-container');
+            const rect = container.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            
+            width = rect.width;
+            height = rect.height;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            ctx.scale(dpr, dpr);
+            
+            cx = width / 2;
+            cy = height / 2;
+            // Radius fits within the container with dynamic padding for N/E/S/W labels
+            radius = Math.min(width, height) / 2 - 45; 
+            if (radius < 10) radius = 10;
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            render();
+        });
+
+        // Map Alt/Az to Screen X/Y (Azimuthal Equidistant Projection)
+        function project(alt, az) {
+            if (alt < 0) return null; // Below horizon
+            const r = radius * (90 - alt) / 90;
+            const azRad = az * DEG2RAD;
+            // N is Up (y=-r), E is Left (x=-r) for looking UP at the sky
+            const x = cx - r * Math.sin(azRad);
+            const y = cy - r * Math.cos(azRad);
+            return { x, y, r };
+        }
+
+        function render() {
+            // 1. Clear background (Light Grid from CSS shows around, we draw the dark sky dome)
+            ctx.fillStyle = '#f8fafc'; // Match external background to clear artifact
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw Sky Circle Base
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#0b132b'; // Deep night sky
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#1e3c72';
+            ctx.stroke();
+
+            // Setup Math bounds
+            const gmst = getGMST(STATE.timeMs);
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+            ctx.clip(); // Only draw inside the dome
+
+            // 2. Grids
+            if (STATE.options.grid) {
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.lineWidth = 1;
+                // Alt circles (30, 60)
+                for (let a = 30; a <= 60; a += 30) {
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, radius * (90 - a) / 90, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+                // Az lines
+                for (let z = 0; z < 360; z += 30) {
+                    const zRad = z * DEG2RAD;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.lineTo(cx - radius * Math.sin(zRad), cy - radius * Math.cos(zRad));
+                    ctx.stroke();
+                }
+            }
+
+            // Celestial Equator (Dec = 0)
+            if (STATE.options.equator) {
+                ctx.strokeStyle = 'rgba(20, 184, 166, 0.6)'; // vector-teal
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                let first = true;
+                for (let ra = 0; ra <= 24; ra += 0.2) {
+                    const pos = eqToHz(ra, 0, STATE.lat, gmst, STATE.lon);
+                    const pt = project(pos.alt, pos.az);
+                    if (pt) {
+                        if (first) { ctx.moveTo(pt.x, pt.y); first = false; }
+                        else ctx.lineTo(pt.x, pt.y);
+                    } else { first = true; } // Break line if it goes below horizon
+                }
+                ctx.stroke();
+            }
+
+            // Ecliptic (Approximate)
+            if (STATE.options.ecliptic) {
+                ctx.strokeStyle = 'rgba(245, 158, 11, 0.6)'; // vector-amber
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                let first = true;
+                const obl = 23.44 * DEG2RAD;
+                for (let lambda = 0; lambda <= 360; lambda += 2) {
+                    const lRad = lambda * DEG2RAD;
+                    let raRad = Math.atan2(Math.cos(obl) * Math.sin(lRad), Math.cos(lRad));
+                    let decRad = Math.asin(Math.sin(obl) * Math.sin(lRad));
+                    let ra = (raRad * RAD2DEG) / 15;
+                    if (ra < 0) ra += 24;
+                    const dec = decRad * RAD2DEG;
+                    
+                    const pos = eqToHz(ra, dec, STATE.lat, gmst, STATE.lon);
+                    const pt = project(pos.alt, pos.az);
+                    if (pt) {
+                        if (first) { ctx.moveTo(pt.x, pt.y); first = false; }
+                        else ctx.lineTo(pt.x, pt.y);
+                    } else { first = true; }
+                }
+                ctx.stroke();
+            }
+
+            // 3. Stars (Background)
+            bgStars.forEach(star => {
+                if (star.mag > STATE.options.magLimit) return;
+                const pos = eqToHz(star.ra, star.dec, STATE.lat, gmst, STATE.lon);
+                const pt = project(pos.alt, pos.az);
+                if (pt) {
+                    const r = Math.max(0.2, 2 - star.mag * 0.3);
+                    ctx.fillStyle = star.color;
+                    ctx.globalAlpha = 0.5 + Math.random() * 0.2; // slight twinkle fake
+                    ctx.beginPath(); ctx.arc(pt.x, pt.y, r, 0, Math.PI*2); ctx.fill();
+                }
+            });
+            ctx.globalAlpha = 1.0;
+
+            // 4. Pre-calculate primary star positions
+            const drawnStars = new Map();
+            STARS.forEach(star => {
+                if (star.mag > STATE.options.magLimit) return;
+                const pos = eqToHz(star.ra, star.dec, STATE.lat, gmst, STATE.lon);
+                const pt = project(pos.alt, pos.az);
+                if (pt) {
+                    drawnStars.set(star.id, { ...star, x: pt.x, y: pt.y, alt: pos.alt, az: pos.az });
+                }
+            });
+
+            // 5. Constellation Lines
+            if (STATE.options.constellations) {
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = 1;
+                CONSTELLATION_LINES.forEach(line => {
+                    const s1 = drawnStars.get(line[0]);
+                    const s2 = drawnStars.get(line[1]);
+                    if (s1 && s2) {
+                        ctx.beginPath();
+                        ctx.moveTo(s1.x, s1.y);
+                        ctx.lineTo(s2.x, s2.y);
+                        ctx.stroke();
+                    }
+                });
+            }
+
+            // 6. Draw Primary Stars & Labels
+            drawnStars.forEach(star => {
+                const size = Math.max(1, 4 - star.mag * 0.8);
+                
+                // Glow
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = star.color;
+                ctx.fillStyle = star.color;
+                ctx.beginPath(); ctx.arc(star.x, star.y, size, 0, Math.PI*2); ctx.fill();
+                ctx.shadowBlur = 0; // Reset
+
+                // Label
+                if (STATE.options.names) {
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                    ctx.font = "10px sans-serif";
+                    ctx.textAlign = "left";
+                    ctx.textBaseline = "middle";
+                    const name = STATE.lang === 'en' ? star.nameEn : star.nameZh;
+                    ctx.fillText(name, star.x + size + 3, star.y);
+                }
+            });
+
+            ctx.restore();
+
+            // 7. Compass directions (N, E, S, W) on edge
+            ctx.fillStyle = '#1e3c72';
+            ctx.font = "bold 14px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("N", cx, cy - radius - 20);
+            ctx.fillText("S", cx, cy + radius + 20);
+            ctx.fillText("E", cx - radius - 20, cy);
+            ctx.fillText("W", cx + radius + 20, cy);
+        }
+
+        /**
+         * --- 3.5 Animation Loop ---
+         */
+        function animate(now) {
+            const dt = now - STATE.lastFrameTime;
+            STATE.lastFrameTime = now;
+
+            if (STATE.playing) {
+                // Calculate time step based on speed multiplier
+                // speedExp ranges -3 to 5. 
+                // e.g., 0 = 1x real time. 2 = 100x. 5 = 100,000x
+                STATE.realSpeed = Math.sign(STATE.speedExp) * Math.pow(10, Math.abs(STATE.speedExp));
+                if (STATE.speedExp == 0) STATE.realSpeed = 1;
+                
+                // Add dt * realSpeed directly to timeMs to prevent float truncation stutter
+                STATE.timeMs += dt * STATE.realSpeed;
+                updateUIOutputs();
+            }
+
+            render();
+            requestAnimationFrame(animate);
+        }
+
+        /**
+         * --- 3.6 Interactions & Event Listeners ---
+         */
+        
+        // Input Binding Helpers
+        const el = id => document.getElementById(id);
+        
+        function updateUIOutputs() {
+            // Latitude
+            el('val-lat').textContent = `${Math.abs(STATE.lat).toFixed(1)}° ${STATE.lat >= 0 ? 'N' : 'S'}`;
+            // Longitude
+            el('val-lon').textContent = `${Math.abs(STATE.lon).toFixed(1)}° ${STATE.lon >= 0 ? 'E' : 'W'}`;
+            
+            // Time formatting
+            const dateObj = new Date(STATE.timeMs);
+            const iso = dateObj.toISOString().replace('T', ' ').substring(0, 19);
+            const dStr = iso.split(' ')[0];
+            const tStr = iso.split(' ')[1] + " UTC";
+            el('display-date').textContent = dStr;
+            el('display-time').textContent = tStr;
+
+            // Speed & Mag formatting
+            let spdTxt = STATE.realSpeed >= 1 || STATE.realSpeed <= -1 ? Math.round(STATE.realSpeed) : STATE.realSpeed.toFixed(2);
+            el('val-speed').textContent = `x${spdTxt}`;
+            el('val-mag').textContent = STATE.options.magLimit.toFixed(1);
+        }
+
+        // Translation Engine
+        function updateLanguage() {
+            const t = DICT[STATE.lang];
+            el('ui-title').textContent = t.title;
+            el('ui-help-btn').textContent = t.helpBtn;
+            el('ui-loc-title').innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>${t.locTitle}`;
+            el('ui-lat').textContent = t.lat;
+            el('ui-lon').textContent = t.lon;
+            el('ui-time-title').innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>${t.timeTitle}`;
+            el('ui-play').textContent = STATE.playing ? t.pause : t.play;
+            el('ui-speed').textContent = t.speed;
+            el('ui-disp-title').innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>${t.dispTitle}`;
+            el('ui-mag-limit').textContent = t.magLimit;
+            el('ui-chk-const').textContent = t.chkConst;
+            el('ui-chk-names').textContent = t.chkNames;
+            el('ui-chk-grid').textContent = t.chkGrid;
+            el('ui-chk-equ').textContent = t.chkEqu;
+            el('ui-chk-ecl').textContent = t.chkEcl;
+            el('ui-drag-hint').textContent = t.dragHint;
+            el('ui-footer').textContent = t.footer;
+            el('ui-modal-title').textContent = t.modalTitle;
+            el('ui-m-s1t').textContent = t.m_s1t;
+            el('ui-m-s1p').textContent = t.m_s1p;
+            el('ui-m-s2t').textContent = t.m_s2t;
+            el('ui-m-s2p').textContent = t.m_s2p;
+            el('ui-m-s3t').textContent = t.m_s3t;
+            el('ui-m-s3p').textContent = t.m_s3p;
+        }
+
+        // Listeners: UI Controls
+        el('btn-lang').addEventListener('click', () => {
+            STATE.lang = STATE.lang === 'en' ? 'zh' : 'en';
+            updateLanguage();
+        });
+
+        el('input-lat').addEventListener('input', e => { STATE.lat = parseFloat(e.target.value); updateUIOutputs(); render(); });
+        el('input-lon').addEventListener('input', e => { STATE.lon = parseFloat(e.target.value); updateUIOutputs(); render(); });
+        el('input-speed').addEventListener('input', e => { STATE.speedExp = parseFloat(e.target.value); updateUIOutputs(); });
+        el('input-mag').addEventListener('input', e => { STATE.options.magLimit = parseFloat(e.target.value); updateUIOutputs(); render(); });
+        
+        el('btn-play').addEventListener('click', () => {
+            STATE.playing = !STATE.playing;
+            const t = DICT[STATE.lang];
+            el('ui-play').textContent = STATE.playing ? t.pause : t.play;
+            
+            // Toggle icon
+            if (STATE.playing) {
+                el('btn-play').innerHTML = `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg><span id="ui-play">${t.pause}</span>`;
+            } else {
+                el('btn-play').innerHTML = `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg><span id="ui-play">${t.play}</span>`;
+            }
+            el('btn-play').classList.toggle('bg-vector-red', STATE.playing);
+            el('btn-play').classList.toggle('bg-primary', !STATE.playing);
+            el('btn-play').classList.toggle('hover:bg-red-800', STATE.playing);
+            el('btn-play').classList.toggle('hover:bg-blue-800', !STATE.playing);
+        });
+
+        el('btn-now').addEventListener('click', () => {
+            STATE.timeMs = Date.now();
+            updateUIOutputs();
+            if (!STATE.playing) render();
+        });
+
+        // Listeners: Checkboxes
+        ['constellations', 'names', 'grid', 'equator', 'ecliptic'].forEach(key => {
+            el(`chk-${key === 'equator' ? 'equator' : key === 'ecliptic' ? 'ecliptic' : key === 'names' ? 'names' : key === 'grid' ? 'grid' : 'constellations'}`).addEventListener('change', e => {
+                STATE.options[key] = e.target.checked;
+                if (!STATE.playing) render();
+            });
+        });
+
+        // Modals
+        el('btn-help').addEventListener('click', () => {
+            const modal = el('modal-help');
+            modal.classList.remove('hidden');
+            // small delay to allow display:block to apply before animating opacity
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.children[0].classList.remove('scale-95');
+            }, 10);
+        });
+        el('btn-close-help').addEventListener('click', () => {
+            const modal = el('modal-help');
+            modal.classList.add('opacity-0');
+            modal.children[0].classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        });
+
+        // Canvas Tooltip Interaction
+        const container = el('canvas-container');
+        const tooltip = el('tooltip');
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            // Get mouse position relative to canvas coordinate space
+            const mouseX = (e.clientX - rect.left) * (canvas.width / rect.width) / (window.devicePixelRatio || 1);
+            const mouseY = (e.clientY - rect.top) * (canvas.height / rect.height) / (window.devicePixelRatio || 1);
+
+            let found = null;
+            const gmst = getGMST(STATE.timeMs);
+
+            // Simple distance check against primary stars
+            for (let star of STARS) {
+                const pos = eqToHz(star.ra, star.dec, STATE.lat, gmst, STATE.lon);
+                const pt = project(pos.alt, pos.az);
+                if (pt) {
+                    const dist = Math.sqrt((pt.x - mouseX)**2 + (pt.y - mouseY)**2);
+                    if (dist < 10) { // Hover radius
+                        found = { ...star, alt: pos.alt, az: pos.az };
+                        break;
+                    }
+                }
+            }
+
+            if (found) {
+                tooltip.classList.remove('hidden');
+                // Position tooltip near mouse (using client coordinates relative to container)
+                tooltip.style.left = `${e.clientX - rect.left}px`;
+                tooltip.style.top = `${e.clientY - rect.top - 10}px`;
+                
+                el('tt-name').textContent = STATE.lang === 'en' ? found.nameEn : found.nameZh;
+                
+                // Format RA
+                const h = Math.floor(found.ra);
+                const m = Math.floor((found.ra - h) * 60);
+                // Format Dec
+                const dSign = found.dec >= 0 ? '+' : '-';
+                const dD = Math.floor(Math.abs(found.dec));
+                const dM = Math.floor((Math.abs(found.dec) - dD) * 60);
+
+                el('tt-coords').textContent = `RA: ${h}h${m}m  Dec: ${dSign}${dD}°${dM}'`;
+                el('tt-altaz').textContent = `Alt: ${found.alt.toFixed(1)}°  Az: ${found.az.toFixed(1)}°`;
+                
+                canvas.style.cursor = 'pointer';
+            } else {
+                tooltip.classList.add('hidden');
+                canvas.style.cursor = 'crosshair';
+            }
+        });
+        
+        container.addEventListener('mouseleave', () => {
+            tooltip.classList.add('hidden');
+        });
+
+        // Init
+        resizeCanvas();
+        updateUIOutputs();
+        updateLanguage();
+        requestAnimationFrame(animate);
+
+    </script>
+</body>
+</html>
