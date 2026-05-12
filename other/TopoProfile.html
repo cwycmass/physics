@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地形剖面圖 | Topographic Profile</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body { margin: 0; padding: 0; background-color: #f8fafc; color: #0f172a; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        #map { width: 100%; height: 100%; z-index: 10; cursor: crosshair; }
+        
+        /* Custom map markers */
+        .custom-marker-a, .custom-marker-b {
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            border: 2px solid white;
+            text-align: center;
+            font-weight: bold;
+            line-height: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .custom-marker-b { background-color: #ef4444; }
+        .hover-marker {
+            background-color: #eab308;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 10px rgba(234, 179, 8, 0.8);
+        }
+        
+        /* Hide scrollbar for a cleaner look */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm z-20">
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div class="bg-blue-600 p-2 rounded-lg text-white hidden sm:block">
+                <i data-lucide="mountain"></i>
+            </div>
+            <div class="mr-2">
+                <h1 class="text-xl font-bold text-slate-800 leading-tight whitespace-nowrap" data-i18n="title">地形剖面圖</h1>
+                <p class="text-xs text-slate-500 font-medium hidden md:block whitespace-nowrap" data-i18n="subtitle">橫切面高程地圖工具</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 sm:gap-4">
+            <select id="locationSelect" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block p-2 max-w-[130px] sm:max-w-xs cursor-pointer shadow-sm">
+                <option value="22.275,114.145,13">Hong Kong (Victoria Peak)</option>
+                <option value="36.101,-112.112,12">Grand Canyon, USA</option>
+                <option value="27.988,86.925,11">Mount Everest, Himalayas</option>
+                <option value="35.360,138.727,12">Mount Fuji, Japan</option>
+                <option value="45.976,7.658,13">Matterhorn, Alps</option>
+                <option value="-33.957,18.403,13">Table Mountain, SA</option>
+            </select>
+            <button id="btnReset" class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors">
+                <i data-lucide="rotate-ccw" class="w-4 h-4"></i> <span data-i18n="resetMap">清除路線</span>
+            </button>
+            <button id="btnInfo" class="text-blue-600 hover:text-blue-800 p-1.5 bg-blue-50 hover:bg-blue-100 rounded transition-colors border border-blue-200 shadow-sm shrink-0">
+                <i data-lucide="info" class="w-5 h-5"></i>
+            </button>
+            <button id="btnLang" class="text-sm font-bold text-slate-600 hover:text-slate-900 px-2 py-1.5 bg-slate-100 hover:bg-slate-200 rounded transition-colors border border-slate-200 shadow-sm shrink-0">
+                EN
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col lg:flex-row min-h-0">
+        
+        <!-- Map Container -->
+        <div class="flex-1 relative border-r border-slate-200 flex flex-col">
+            <!-- Instruction Toast -->
+            <div id="instructionToast" class="absolute top-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur shadow-lg rounded-full px-6 py-3 z-[1000] border border-slate-200 flex items-center gap-3 transition-all duration-300 pointer-events-none">
+                <span class="flex h-3 w-3 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                </span>
+                <span id="instructionText" class="font-medium text-slate-700 text-sm">點擊地圖以放置起點 (A)</span>
+            </div>
+
+            <div id="map" class="flex-1 bg-slate-100"></div>
+            
+            <!-- Mobile Reset (Visible only on small screens) -->
+            <button id="btnResetMobile" class="sm:hidden absolute bottom-6 right-4 z-[1000] bg-white p-3 rounded-full shadow-lg border border-slate-200 text-slate-700">
+                <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Right Panel (Graph & Stats) -->
+        <div class="w-full lg:w-[450px] xl:w-[550px] bg-white flex flex-col h-[40vh] lg:h-auto z-20 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1)] lg:shadow-none">
+            
+            <div class="p-6 border-b border-slate-100 flex-none">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-bold text-slate-800" data-i18n="elevationProfile">高程剖面圖</h2>
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="scale11" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer">
+                        <label for="scale11" class="text-sm font-medium text-slate-600 cursor-pointer select-none" data-i18n="scale11">1:1 比例</label>
+                    </div>
+                </div>
+                
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-2 gap-4 mb-2">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1" data-i18n="totalDistance">總距離</p>
+                        <p id="statDistance" class="text-2xl font-bold text-blue-600">-- <span class="text-sm font-medium text-slate-400">km</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1" data-i18n="elevationChange">高程變化</p>
+                        <p id="statElevation" class="text-2xl font-bold text-emerald-600">-- <span class="text-sm font-medium text-slate-400">m</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Container -->
+            <div class="flex-1 relative p-4 lg:p-6 min-h-0 flex flex-col">
+                <div id="chartLoading" class="hidden absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
+                    <i data-lucide="loader-2" class="w-8 h-8 text-blue-500 animate-spin mb-3"></i>
+                    <p class="text-sm font-medium text-slate-600" data-i18n="fetching">正在獲取地形資料...</p>
+                </div>
+                
+                <div id="chartEmptyState" class="absolute inset-0 flex flex-col items-center justify-center text-center p-8 text-slate-400 z-0">
+                    <i data-lucide="map-pin" class="w-12 h-12 mb-3 text-slate-300"></i>
+                    <p class="font-medium text-slate-600" data-i18n="noProfile">尚未生成剖面圖</p>
+                    <p class="text-sm mt-1" data-i18n="drawInstruction">在地圖上畫一條線以檢視橫切面地形。</p>
+                </div>
+
+                <div class="relative flex-1 w-full h-full">
+                    <canvas id="elevationChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Status/Message Bar -->
+            <div id="messageBar" class="hidden p-4 bg-red-50 border-t border-red-100 text-red-600 text-sm font-medium"></div>
+        </div>
+
+    </main>
+
+    <!-- Info Modal -->
+    <div id="infoModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[2000] flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                    <i data-lucide="graduation-cap" class="text-blue-600"></i>
+                    <span data-i18n="infoTitle">DSE 地理知識</span>
+                </h2>
+                <button id="btnCloseInfo" class="text-slate-400 hover:text-slate-700 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-5 text-slate-600 text-sm leading-relaxed">
+                <div>
+                    <h3 class="font-bold text-blue-700 text-base mb-1" data-i18n="infoH1">1. 等高線 (Contour Lines)</h3>
+                    <p data-i18n="infoP1">連接海拔相同點的假想線。等高線越密集，代表坡度 (Gradient) 越陡峭；等高線越稀疏，坡度越平緩。</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-blue-700 text-base mb-1" data-i18n="infoH2">2. 地形剖面圖 (Cross-section)</h3>
+                    <p data-i18n="infoP2">沿地圖上特定直線繪製的側視圖，能直觀顯示地形的起伏 (Relief)。</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-blue-700 text-base mb-1" data-i18n="infoH3">3. 垂直誇張率 (Vertical Exaggeration, VE)</h3>
+                    <p data-i18n="infoP3">為了更明顯地突出地形起伏，剖面圖的垂直比例通常大於水平比例。公式：VE = 垂直比例 ÷ 水平比例。你可以取消勾選本工具的「1:1 比例」來感受這種誇張效果。</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-blue-700 text-base mb-1" data-i18n="infoH4">4. 可見度 (Intervisibility)</h3>
+                    <p data-i18n="infoP4">透過剖面圖，我們可以判斷兩點之間是否能互相看見。如果視線被中間的凸坡 (Convex slope) 或高地阻擋，則不可見；凹坡通常不阻擋視線。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-2 text-center text-xs text-slate-500 z-20 flex-none">
+        廠商會中學
+    </footer>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // i18n Translations
+        const i18n = {
+            'zh-TW': {
+                title: '地形剖面圖',
+                subtitle: '橫切面高程地圖工具',
+                resetMap: '清除路線',
+                elevationProfile: '高程剖面圖',
+                totalDistance: '總距離',
+                elevationChange: '高程變化',
+                fetching: '正在獲取地形資料...',
+                noProfile: '尚未生成剖面圖',
+                drawInstruction: '在地圖上畫一條線以檢視橫切面地形。',
+                step0: '點擊地圖以放置起點 (A)',
+                step1: '點擊地圖以放置終點 (B)',
+                step2: '正在生成剖面圖...',
+                stepDone: '剖面圖已完成。請清除路線以繪製新線條。',
+                stepError: '生成剖面圖時發生錯誤。請清除路線後重試。',
+                scale11: '1:1 比例',
+                chartDist: '距離起點 (km)',
+                chartElev: '高程 (m)',
+                locHK: '香港 (太平山)',
+                locGC: '大峽谷, 美國',
+                locME: '珠穆朗瑪峰, 喜馬拉雅山',
+                locMF: '富士山, 日本',
+                locMA: '馬特洪峰, 阿爾卑斯山',
+                locTM: '桌山, 南非',
+                infoTitle: 'DSE 地圖閱讀知識',
+                infoH1: '1. 等高線 (Contour Lines)',
+                infoP1: '連接海拔相同點的假想線。等高線越密集，代表坡度 (Gradient) 越陡峭；等高線越稀疏，坡度越平緩。',
+                infoH2: '2. 地形剖面圖 (Cross-section)',
+                infoP2: '沿地圖上特定直線繪製的側視圖，能直觀顯示地形的起伏 (Relief)。',
+                infoH3: '3. 垂直誇張率 (Vertical Exaggeration, VE)',
+                infoP3: '為了更明顯地突出地形起伏，剖面圖的垂直比例通常大於水平比例。公式：VE = 垂直比例 ÷ 水平比例。你可以取消勾選本工具的「1:1 比例」來感受這種誇張效果。',
+                infoH4: '4. 可見度 (Intervisibility)',
+                infoP4: '透過剖面圖，我們可以判斷兩點之間是否能互相看見。如果視線被中間的凸坡 (Convex slope) 或高地阻擋，則不可見；凹坡通常不阻擋視線。'
+            },
+            'en': {
+                title: 'TopoProfile',
+                subtitle: 'Cross-Section Elevation Mapper',
+                resetMap: 'Clear Route',
+                elevationProfile: 'Elevation Profile',
+                totalDistance: 'Total Distance',
+                elevationChange: 'Elevation Change',
+                fetching: 'Fetching Topography...',
+                noProfile: 'No profile generated yet',
+                drawInstruction: 'Draw a line on the map to view the cross-section relief.',
+                step0: 'Click on the map to place Point A (Start)',
+                step1: 'Click to place Point B (End)',
+                step2: 'Generating profile...',
+                stepDone: 'Profile complete. Draw a new line by clearing the route.',
+                stepError: 'Error generating profile. Clear route and try again.',
+                scale11: '1:1 Scale',
+                chartDist: 'Distance from Start (km)',
+                chartElev: 'Elevation (m)',
+                locHK: 'Hong Kong (Victoria Peak)',
+                locGC: 'Grand Canyon, USA',
+                locME: 'Mount Everest, Himalayas',
+                locMF: 'Mount Fuji, Japan',
+                locMA: 'Matterhorn, Alps',
+                locTM: 'Table Mountain, SA',
+                infoTitle: 'DSE Map Reading Notes',
+                infoH1: '1. Contour Lines',
+                infoP1: 'Lines joining places of the same height above sea level. Closer contour lines indicate a steeper gradient, while widely spaced lines indicate a gentle slope.',
+                infoH2: '2. Cross-section (Topographical Profile)',
+                infoP2: 'A side view drawn along a specific line on a map, providing a visual representation of the relief.',
+                infoH3: '3. Vertical Exaggeration (VE)',
+                infoP3: 'The vertical scale is often enlarged relative to the horizontal scale to emphasize relief features. Formula: VE = Vertical Scale / Horizontal Scale. Uncheck "1:1 Scale" to see this effect.',
+                infoH4: '4. Intervisibility',
+                infoP4: 'Profiles help determine if one point is visible from another. Convex slopes or intervening high grounds block visibility, while concave slopes usually allow it.'
+            }
+        };
+
+        // Application State
+        let currentLang = 'zh-TW';
+        let state = {
+            step: 0, // 0: Need Start, 1: Need End, 2: Done
+            startLatLng: null,
+            endLatLng: null,
+            sampledPoints: [], // Array of LatLng along the line
+            distances: [],     // Distance of each point from start (km)
+            elevations: []     // Elevation of each point (m)
+        };
+
+        // UI Elements
+        const instructionText = document.getElementById('instructionText');
+        const instructionToast = document.getElementById('instructionToast');
+        const statDistance = document.getElementById('statDistance');
+        const statElevation = document.getElementById('statElevation');
+        const chartLoading = document.getElementById('chartLoading');
+        const chartEmptyState = document.getElementById('chartEmptyState');
+        const messageBar = document.getElementById('messageBar');
+
+        function updateLangUI() {
+            // Update static texts
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang][key]) {
+                    el.innerText = i18n[currentLang][key];
+                }
+            });
+
+            // Update language toggle button
+            document.getElementById('btnLang').innerText = currentLang === 'zh-TW' ? 'EN' : '中文';
+
+            // Update select options
+            const select = document.getElementById('locationSelect');
+            select.options[0].text = i18n[currentLang].locHK;
+            select.options[1].text = i18n[currentLang].locGC;
+            select.options[2].text = i18n[currentLang].locME;
+            select.options[3].text = i18n[currentLang].locMF;
+            select.options[4].text = i18n[currentLang].locMA;
+            select.options[5].text = i18n[currentLang].locTM;
+
+            // Update chart axes
+            if (topoChart) {
+                topoChart.options.scales.x.title.text = i18n[currentLang].chartDist;
+                topoChart.options.scales.y.title.text = i18n[currentLang].chartElev;
+                topoChart.update();
+            }
+
+            // Update dynamic instruction text based on step
+            if (state.step === 0) updateInstructions(i18n[currentLang].step0, 'blue');
+            else if (state.step === 1) updateInstructions(i18n[currentLang].step1, 'blue');
+            else if (state.step === 2 && !chartLoading.classList.contains('hidden')) updateInstructions(i18n[currentLang].step2, 'emerald');
+            else if (state.step === 2) updateInstructions(i18n[currentLang].stepDone, 'slate');
+        }
+
+        // Map Setup
+        // Defaulting to Hong Kong
+        const map = L.map('map', {
+            center: [22.275, 114.145],
+            zoom: 13,
+            zoomControl: false // Move to bottom right
+        });
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        // Topographical Base Map (OpenTopoMap)
+        L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            maxZoom: 17,
+            attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)'
+        }).addTo(map);
+
+        // Map Layers
+        let markerStart = null;
+        let markerEnd = null;
+        let polylineMain = null;
+        let polylinePreview = L.polyline([], { color: '#3b82f6', dashArray: '5, 10', weight: 3 }).addTo(map);
+        
+        // Interactive Hover Marker (tied to Chart)
+        let markerHover = L.marker([0,0], {
+            icon: L.divIcon({ className: 'hover-marker', iconSize: [12, 12] }),
+            zIndexOffset: 1000
+        });
+
+        // Chart.js Setup
+        const ctx = document.getElementById('elevationChart').getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.4)'); // blue-500 with opacity
+        gradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+
+        const topoChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Elevation (m)',
+                    data: [],
+                    borderColor: '#3b82f6',
+                    backgroundColor: gradient,
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                    pointHoverBackgroundColor: '#eab308', // Yellow hover to match map marker
+                    pointHoverBorderColor: '#ffffff',
+                    pointHoverBorderWidth: 2,
+                    fill: true,
+                    tension: 0.3 // Smooth curves
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        titleFont: { size: 13 },
+                        bodyFont: { size: 14, weight: 'bold' },
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            title: (items) => `Distance: ${items[0].label} km`,
+                            label: (item) => `Elevation: ${item.raw} m`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            maxTicksLimit: 8,
+                            color: '#64748b'
+                        },
+                        title: { display: true, text: '距離起點 (km)', color: '#94a3b8', font: {size: 11} }
+                    },
+                    y: {
+                        grid: { color: '#f1f5f9' },
+                        ticks: { color: '#64748b' },
+                        title: { display: true, text: '高程 (m)', color: '#94a3b8', font: {size: 11} }
+                    }
+                },
+                onHover: (event, chartElement) => {
+                    // Sync Map Marker with Chart Hover
+                    if (chartElement.length > 0) {
+                        const index = chartElement[0].index;
+                        const latLng = state.sampledPoints[index];
+                        if (latLng) {
+                            markerHover.setLatLng(latLng);
+                            if (!map.hasLayer(markerHover)) markerHover.addTo(map);
+                        }
+                    } else {
+                        if (map.hasLayer(markerHover)) map.removeLayer(markerHover);
+                    }
+                }
+            }
+        });
+
+        // --- Core Interactions ---
+
+        map.on('mousemove', (e) => {
+            if (state.step === 1 && state.startLatLng) {
+                polylinePreview.setLatLngs([state.startLatLng, e.latlng]);
+            }
+        });
+
+        map.on('click', (e) => {
+            if (state.step === 0) {
+                // Set Start Point
+                state.startLatLng = e.latlng;
+                
+                const iconA = L.divIcon({ className: 'custom-marker-a', html: 'A', iconSize: [24, 24], iconAnchor: [12, 12] });
+                markerStart = L.marker(state.startLatLng, {icon: iconA}).addTo(map);
+                
+                state.step = 1;
+                updateInstructions(i18n[currentLang].step1, 'blue');
+            } 
+            else if (state.step === 1) {
+                // Set End Point
+                state.endLatLng = e.latlng;
+                
+                const iconB = L.divIcon({ className: 'custom-marker-b', html: 'B', iconSize: [24, 24], iconAnchor: [12, 12] });
+                markerEnd = L.marker(state.endLatLng, {icon: iconB}).addTo(map);
+                
+                // Finalize Line
+                polylinePreview.setLatLngs([]);
+                polylineMain = L.polyline([state.startLatLng, state.endLatLng], { color: '#ef4444', weight: 4 }).addTo(map);
+                
+                state.step = 2;
+                updateInstructions(i18n[currentLang].step2, 'emerald');
+                
+                // Fit map to bounds of line
+                map.fitBounds(polylineMain.getBounds(), { padding: [50, 50] });
+
+                // Process Data
+                generateProfile();
+            }
+        });
+
+        // --- Processing Logic ---
+
+        async function generateProfile() {
+            hideMessage();
+            chartEmptyState.classList.add('hidden');
+            chartLoading.classList.remove('hidden');
+
+            try {
+                const totalDistance = map.distance(state.startLatLng, state.endLatLng); // in meters
+                const totalDistanceKm = (totalDistance / 1000).toFixed(2);
+
+                // Dynamic Sample Rate for better resolution: roughly 1 point per 50 meters
+                // Bounded between 50 (min) and 200 (max to avoid overloading the API)
+                let NUM_POINTS = Math.floor(totalDistance / 50);
+                if (NUM_POINTS < 50) NUM_POINTS = 50;
+                if (NUM_POINTS > 200) NUM_POINTS = 200;
+
+                // 1. Calculate Distances and Coordinates
+                state.sampledPoints = [];
+                state.distances = [];
+
+                for (let i = 0; i <= NUM_POINTS; i++) {
+                    const fraction = i / NUM_POINTS;
+                    // Linear interpolation (fine for local topographical mapping)
+                    const lat = state.startLatLng.lat + (state.endLatLng.lat - state.startLatLng.lat) * fraction;
+                    const lng = state.startLatLng.lng + (state.endLatLng.lng - state.startLatLng.lng) * fraction;
+                    
+                    state.sampledPoints.push(L.latLng(lat, lng));
+                    state.distances.push(((totalDistance / 1000) * fraction).toFixed(2));
+                }
+
+                // 2. Fetch Elevations using Open-Meteo in chunks (API limits to 100 points per request)
+                state.elevations = [];
+                const CHUNK_SIZE = 90; // Increased chunk size to safely fit under the 100 limit while minimizing requests
+                
+                for (let i = 0; i < state.sampledPoints.length; i += CHUNK_SIZE) {
+                    if (i > 0) await new Promise(r => setTimeout(r, 400)); // Add a 400ms delay between chunks to prevent HTTP 429 (Rate Limiting)
+
+                    const chunk = state.sampledPoints.slice(i, i + CHUNK_SIZE);
+                    const lats = chunk.map(p => p.lat.toFixed(5)).join(',');
+                    const lngs = chunk.map(p => p.lng.toFixed(5)).join(',');
+                    
+                    const response = await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lats}&longitude=${lngs}`);
+                    
+                    if (!response.ok) {
+                        const errText = await response.text();
+                        throw new Error(`API Error (${response.status}): ${errText || 'Server busy. Please wait a moment and try again.'}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (!data.elevation || data.elevation.length === 0) {
+                         throw new Error('No elevation data found for this location.');
+                    }
+                    
+                    state.elevations.push(...data.elevation);
+                }
+
+                // 3. Update UI
+                statDistance.innerHTML = `${totalDistanceKm} <span class="text-sm font-medium text-slate-400">km</span>`;
+                
+                // Calculate Elevation Change (Min to Max on route)
+                const minElev = Math.min(...state.elevations);
+                const maxElev = Math.max(...state.elevations);
+                const elevChange = Math.round(maxElev - minElev);
+                statElevation.innerHTML = `${elevChange} <span class="text-sm font-medium text-slate-400">m</span>`;
+
+                // 4. Update Chart
+                updateChart();
+                updateInstructions(i18n[currentLang].stepDone, 'slate');
+
+            } catch (error) {
+                console.error(error);
+                showMessage(error.message);
+                updateInstructions(i18n[currentLang].stepError, 'red');
+            } finally {
+                chartLoading.classList.add('hidden');
+            }
+        }
+
+        function updateChart() {
+            if(state.elevations.length === 0) return;
+
+            const minE = Math.min(...state.elevations);
+            const maxE = Math.max(...state.elevations);
+            const is11Scale = document.getElementById('scale11').checked;
+
+            // Apply A and B labels on X axis
+            const labels = [...state.distances];
+            if (labels.length > 0) {
+                labels[0] = `A (${labels[0]})`;
+                labels[labels.length - 1] = `B (${labels[labels.length - 1]})`;
+            }
+
+            topoChart.data.labels = labels;
+            topoChart.data.datasets[0].data = state.elevations;
+
+            if (is11Scale) {
+                // To get accurate pixel mapping, update without forced min/max first to establish chartArea
+                topoChart.options.scales.y.min = undefined;
+                topoChart.options.scales.y.max = undefined;
+                topoChart.update();
+
+                const totalDistanceMeters = parseFloat(state.distances[state.distances.length-1]) * 1000;
+                const chartArea = topoChart.chartArea;
+                
+                if (chartArea) {
+                    const wPixels = chartArea.right - chartArea.left;
+                    const hPixels = chartArea.bottom - chartArea.top;
+                    
+                    const mPerPixel = totalDistanceMeters / wPixels;
+                    const yRangeMeters = hPixels * mPerPixel;
+                    
+                    const midE = (minE + maxE) / 2;
+                    topoChart.options.scales.y.min = midE - (yRangeMeters / 2);
+                    topoChart.options.scales.y.max = midE + (yRangeMeters / 2);
+                }
+            } else {
+                const padding = (maxE - minE) * 0.1 || 10; 
+                topoChart.options.scales.y.min = Math.max(0, Math.floor(minE - padding));
+                topoChart.options.scales.y.max = Math.ceil(maxE + padding);
+            }
+
+            topoChart.update();
+        }
+
+        // --- Utility Functions ---
+
+        function updateInstructions(text, colorClass) {
+            instructionText.innerText = text;
+            
+            // Adjust ping indicator color
+            const ping = instructionToast.querySelector('.animate-ping');
+            const dot = instructionToast.querySelector('.relative.inline-flex.rounded-full');
+            
+            // Reset colors
+            ping.className = `animate-ping absolute inline-flex h-full w-full rounded-full opacity-75`;
+            dot.className = `relative inline-flex rounded-full h-3 w-3`;
+            
+            if (colorClass === 'blue') {
+                ping.classList.add('bg-blue-400'); dot.classList.add('bg-blue-500');
+            } else if (colorClass === 'emerald') {
+                ping.classList.add('bg-emerald-400'); dot.classList.add('bg-emerald-500');
+            } else if (colorClass === 'red') {
+                ping.classList.add('bg-red-400'); dot.classList.add('bg-red-500');
+            } else {
+                // Slate (Hidden ping, just dot)
+                ping.classList.add('hidden'); dot.classList.add('bg-slate-400');
+            }
+        }
+
+        function showMessage(msg) {
+            messageBar.innerText = msg;
+            messageBar.classList.remove('hidden');
+        }
+        function hideMessage() {
+            messageBar.classList.add('hidden');
+            messageBar.innerText = '';
+        }
+
+        function resetApp() {
+            // Reset State
+            state.step = 0;
+            state.startLatLng = null;
+            state.endLatLng = null;
+            state.sampledPoints = [];
+            state.distances = [];
+            state.elevations = [];
+
+            // Clear Map
+            if (markerStart) map.removeLayer(markerStart);
+            if (markerEnd) map.removeLayer(markerEnd);
+            if (polylineMain) map.removeLayer(polylineMain);
+            if (map.hasLayer(markerHover)) map.removeLayer(markerHover);
+            polylinePreview.setLatLngs([]);
+
+            // Reset UI
+            statDistance.innerHTML = `-- <span class="text-sm font-medium text-slate-400">km</span>`;
+            statElevation.innerHTML = `-- <span class="text-sm font-medium text-slate-400">m</span>`;
+            updateInstructions(i18n[currentLang].step0, 'blue');
+            hideMessage();
+            chartEmptyState.classList.remove('hidden');
+
+            // Clear Chart
+            topoChart.data.labels = [];
+            topoChart.data.datasets[0].data = [];
+            topoChart.update();
+        }
+
+        // Event Listeners
+        document.getElementById('btnReset').addEventListener('click', resetApp);
+        document.getElementById('btnResetMobile').addEventListener('click', resetApp);
+
+        document.getElementById('btnLang').addEventListener('click', () => {
+            currentLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
+            updateLangUI();
+        });
+
+        // Info Modal Events
+        const infoModal = document.getElementById('infoModal');
+        document.getElementById('btnInfo').addEventListener('click', () => {
+            infoModal.classList.remove('hidden');
+        });
+        document.getElementById('btnCloseInfo').addEventListener('click', () => {
+            infoModal.classList.add('hidden');
+        });
+        infoModal.addEventListener('click', (e) => {
+            if (e.target === infoModal) infoModal.classList.add('hidden');
+        });
+
+        document.getElementById('scale11').addEventListener('change', updateChart);
+
+        document.getElementById('locationSelect').addEventListener('change', (e) => {
+            const [lat, lng, zoom] = e.target.value.split(',').map(Number);
+            map.setView([lat, lng], zoom);
+            resetApp();
+        });
+
+        // Remove Hover Marker if mouse leaves the chart entirely
+        document.getElementById('elevationChart').addEventListener('mouseleave', () => {
+             if (map.hasLayer(markerHover)) map.removeLayer(markerHover);
+        });
+
+        // Initialize UI Language
+        updateLangUI();
+
+    </script>
+</body>
+</html>
