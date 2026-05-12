@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>平面鏡成像 | Image formed by Plain Mirror</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax for LaTeX Rendering -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Phosphor Icons for elegant UI -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3c72',
+                        secondary: '#2a5298',
+                        resultant: '#DC2626',
+                        virtual: '#9CA3AF',
+                        grid: '#e2e8f0'
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.03)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            margin: 8px 0;
+        }
+        input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 6px; cursor: pointer;
+            background: #cbd5e1; border-radius: 4px; transition: all 0.2s;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 18px; width: 18px; border-radius: 50%;
+            background: #1e3c72; cursor: pointer; -webkit-appearance: none;
+            margin-top: -6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+        input[type=range]:disabled::-webkit-slider-thumb { background: #94a3b8; cursor: not-allowed; transform: none; }
+        
+        /* Toggle Switch Styling */
+        .toggle-checkbox:checked { right: 0; border-color: #1e3c72; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #1e3c72; }
+        
+        .snap-checkbox:checked { right: 0; border-color: #4f46e5; }
+        .snap-checkbox:checked + .snap-label { background-color: #4f46e5; }
+
+        canvas { user-select: none; -webkit-user-select: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 h-screen w-screen overflow-hidden flex flex-col md:flex-row font-sans relative">
+
+    <!-- --- Modal for Theory & Deep Dive --- -->
+    <div id="modal_info" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center transition-opacity">
+        <div class="bg-white rounded-2xl shadow-2xl w-11/12 max-w-2xl overflow-hidden transform scale-95 transition-transform duration-200" id="modal_content">
+            <div class="bg-gradient-to-r from-primary to-secondary p-4 flex justify-between items-center text-white">
+                <h3 class="font-bold text-base flex items-center gap-2" id="modal_title"><i class="ph ph-books"></i> 理論與說明</h3>
+                <button onclick="closeModal()" class="text-white hover:text-amber-300 transition-colors"><i class="ph ph-x text-lg"></i></button>
+            </div>
+            <div class="p-6 max-h-[75vh] overflow-y-auto space-y-6">
+                <div>
+                    <h4 class="font-bold text-slate-800 text-lg mb-2" id="theory_title">反射定律</h4>
+                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-2" id="theory_list">
+                        <li>入射角等於反射角 ($i = r$)。</li>
+                        <li>入射線、反射線與法線皆處於同一平面上。</li>
+                    </ul>
+                </div>
+                <hr class="border-slate-100">
+                <div class="bg-amber-50 rounded-xl p-5 border border-amber-100">
+                    <h4 class="font-bold text-amber-800 flex items-center gap-2 mb-2"><i class="ph-fill ph-lightbulb text-amber-500 text-lg"></i> <span id="dd_title">深入探討：橫向倒置</span></h4>
+                    <p class="text-sm text-amber-900 font-bold mb-2" id="dd_q">為何成像是「正立」但「橫向倒置」？</p>
+                    <p class="text-sm text-amber-800/90 leading-relaxed text-justify" id="dd_a">
+                        平面鏡實際上並沒有將左右對調，而是將<strong>「前後」</strong>（深度）倒置。物體上最靠近鏡面的部分，在影像中也最靠近鏡面。因為頂部和底部的方向沒有改變，所以影像是<strong>正立</strong>的。我們所覺得的「左右相反」其實是一種心理錯覺：我們習慣性地想像自己旋轉了180度去代替影像的位置！試著選擇「字母 F」來清楚觀察這種前後倒置的對應關係。
+                    </p>
+                </div>
+                <hr class="border-slate-100">
+                <div class="bg-blue-50 rounded-xl p-5 border border-blue-100 relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 text-blue-200 opacity-30">
+                        <i class="ph ph-magic-wand text-7xl"></i>
+                    </div>
+                    <h4 class="font-bold text-blue-800 flex items-center gap-2 mb-3 relative z-10">
+                        <i class="ph ph-list-checks text-lg"></i> <span id="label_properties">影像特性</span>
+                    </h4>
+                    <ul class="text-sm grid grid-cols-2 gap-y-3 relative z-10 text-blue-900 font-medium">
+                        <li class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-blue-500 text-base"></i> <span id="prop_1">虛像</span></li>
+                        <li class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-blue-500 text-base"></i> <span id="prop_2">正立</span></li>
+                        <li class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-blue-500 text-base"></i> <span id="prop_3">橫向倒置</span></li>
+                        <li class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-blue-500 text-base"></i> <span id="prop_4">大小相等</span></li>
+                        <li class="flex items-center gap-2 col-span-2"><i class="ph-fill ph-check-circle text-blue-500 text-base"></i> <span id="prop_5">距離相等 ($v = u$)</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- 1. UI: Control Sidebar --- -->
+    <aside class="w-full md:w-[240px] h-[50vh] md:h-full bg-white shadow-soft flex flex-col z-10 border-r border-slate-200 shrink-0">
+        
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-primary to-secondary p-3 text-white shadow-md flex flex-col gap-2 shrink-0">
+            <div class="flex justify-between items-center w-full">
+                <h1 class="text-[13px] font-bold tracking-wide leading-tight" id="title_text">平面鏡成像</h1>
+                <div class="flex items-center gap-1.5 shrink-0 ml-1">
+                    <button onclick="openModal()" class="px-1.5 py-1 text-[10px] font-semibold rounded bg-white/20 hover:bg-white/30 text-white border border-white/30 transition-all shadow-sm flex items-center gap-1" id="btn_info">
+                        <i class="ph ph-info font-bold"></i> <span id="btn_info_text">說明</span>
+                    </button>
+                    <button class="px-1.5 py-1 text-[10px] font-bold rounded bg-white/20 hover:bg-white/30 text-white border border-white/30 transition-all shadow-sm" onclick="toggleLanguage()">
+                        繁/Eng
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Controls Content -->
+        <div class="flex-1 p-3 space-y-3 flex flex-col justify-start overflow-y-auto">
+            
+            <!-- Parameters Card -->
+            <div class="bg-white border border-slate-100 rounded-lg p-2.5 shadow-sm">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                        <i class="ph ph-sliders text-base"></i> <span id="label_parameters">控制參數</span>
+                    </h2>
+                </div>
+                
+                <div class="space-y-3.5">
+                    <!-- Object Shape Toggle -->
+                    <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-md border border-slate-100">
+                        <span class="text-[11px] font-medium text-slate-700 w-10" id="label_shape">物體:</span>
+                        <label class="flex items-center gap-1 cursor-pointer">
+                            <input type="radio" name="shape" value="arrow" checked onchange="updateShape(this.value)" class="text-primary focus:ring-primary w-3 h-3">
+                            <span id="shape_arrow" class="text-[11px] font-medium text-slate-700">箭頭</span>
+                        </label>
+                        <label class="flex items-center gap-1 cursor-pointer">
+                            <input type="radio" name="shape" value="f" onchange="updateShape(this.value)" class="text-primary focus:ring-primary w-3 h-3">
+                            <span id="shape_f" class="text-[11px] font-medium text-slate-700">字母 'F'</span>
+                        </label>
+                    </div>
+
+                    <!-- Object Distance -->
+                    <div>
+                        <div class="flex justify-between text-[11px] mb-0.5">
+                            <span class="font-medium text-slate-700" id="label_obj_dist">物距 ($u$)</span>
+                            <span id="val_obj_dist" class="font-mono text-primary font-bold">150 cm</span>
+                        </div>
+                        <input type="range" id="slider_u" min="40" max="500" value="150" class="!m-0">
+                    </div>
+                    
+                    <!-- Object Height -->
+                    <div>
+                        <div class="flex justify-between text-[11px] mb-0.5">
+                            <span class="font-medium text-slate-700" id="label_obj_h">物高 ($h$)</span>
+                            <span id="val_obj_h" class="font-mono text-primary font-bold">120 cm</span>
+                        </div>
+                        <input type="range" id="slider_h" min="50" max="250" value="120" class="!m-0">
+                    </div>
+
+                    <!-- Mirror Angle -->
+                    <div class="pt-2 border-t border-slate-100">
+                        <div class="flex justify-between text-[11px] mb-0.5">
+                            <span class="font-medium text-slate-700" id="label_mir_angle">鏡面傾角 ($\theta$)</span>
+                            <span id="val_mir_angle" class="font-mono text-primary font-bold">0&deg;</span>
+                        </div>
+                        <input type="range" id="slider_theta" min="-45" max="45" value="0" class="!m-0">
+                    </div>
+                    
+                    <!-- Snap toggle -->
+                    <div class="flex items-center justify-between bg-indigo-50/70 p-2 rounded border border-indigo-100">
+                        <span class="text-[11px] font-bold text-indigo-800 leading-tight" id="label_snap">綁定觀察者</span>
+                        <div class="relative inline-block w-6 align-middle select-none transition duration-200 ease-in ml-1 shrink-0">
+                            <input type="checkbox" id="toggle_snap" checked class="snap-checkbox absolute block w-3 h-3 rounded-full bg-white border-2 appearance-none cursor-pointer transition-all border-indigo-300"/>
+                            <label for="toggle_snap" class="snap-label block overflow-hidden h-3 rounded-full bg-indigo-200 cursor-pointer transition-colors"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization Toggles -->
+            <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5 shadow-inner-soft flex flex-col gap-2.5">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-medium text-slate-700" id="label_show_rays">顯示光線</span>
+                    <div class="relative inline-block w-7 align-middle select-none transition duration-200 ease-in shrink-0">
+                        <input type="checkbox" id="toggle_rays" checked class="toggle-checkbox absolute block w-3.5 h-3.5 rounded-full bg-white border-2 appearance-none cursor-pointer transition-all border-slate-300"/>
+                        <label for="toggle_rays" class="toggle-label block overflow-hidden h-3.5 rounded-full bg-slate-300 cursor-pointer transition-colors"></label>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-medium text-slate-700 leading-tight" id="label_show_min_len">最少鏡面長度</span>
+                    <div class="relative inline-block w-7 align-middle select-none transition duration-200 ease-in shrink-0">
+                        <input type="checkbox" id="toggle_min_len" class="toggle-checkbox absolute block w-3.5 h-3.5 rounded-full bg-white border-2 appearance-none cursor-pointer transition-all border-slate-300"/>
+                        <label for="toggle_min_len" class="toggle-label block overflow-hidden h-3.5 rounded-full bg-slate-300 cursor-pointer transition-colors"></label>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-medium text-slate-700 leading-tight" id="label_show_dist">顯示物距與像距</span>
+                    <div class="relative inline-block w-7 align-middle select-none transition duration-200 ease-in shrink-0">
+                        <input type="checkbox" id="toggle_dist" class="toggle-checkbox absolute block w-3.5 h-3.5 rounded-full bg-white border-2 appearance-none cursor-pointer transition-all border-slate-300"/>
+                        <label for="toggle_dist" class="toggle-label block overflow-hidden h-3.5 rounded-full bg-slate-300 cursor-pointer transition-colors"></label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </aside>
+
+    <!-- --- 2. Canvas Area --- -->
+    <main class="flex-1 relative bg-white flex flex-col">
+        <!-- Canvas Container -->
+        <div id="canvas-container" class="flex-1 relative cursor-crosshair overflow-hidden">
+            <canvas id="simCanvas" class="absolute inset-0 w-full h-full"></canvas>
+            
+            <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow-md border border-slate-200 text-xs font-medium text-slate-500 pointer-events-none flex items-center gap-2 whitespace-nowrap">
+                <i class="ph ph-hand-pointing text-lg"></i> <span id="text_drag_hint">水平拖曳物體或垂直/水平拖曳觀察者（眼睛）來探索！</span>
+            </div>
+        </div>
+
+        <footer class="bg-white border-t border-slate-200 p-2 text-center text-xs font-semibold text-slate-500 shrink-0">
+            <span id="footer_text">廠商會中學．物理科</span>
+        </footer>
+    </main>
+
+    <!-- --- 3. Physics & Rendering Logic --- -->
+    <script>
+        /* --- State & Configuration --- */
+        const state = {
+            lang: 'zh',
+            shape: 'arrow',
+            u: 150,
+            eyeY: 113,
+            eyeX: -150,
+            objectHeight: 120,
+            mirrorAngle: 0,
+            snapToObj: true,
+            showRays: true,
+            showMinLen: false,
+            showDist: false,
+            isDragging: null
+        };
+
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvas-container');
+        
+        const sliderU = document.getElementById('slider_u');
+        const sliderH = document.getElementById('slider_h');
+        const sliderTheta = document.getElementById('slider_theta');
+        const toggleSnap = document.getElementById('toggle_snap');
+        
+        const valU = document.getElementById('val_obj_dist');
+        const valH = document.getElementById('val_obj_h');
+        const valTheta = document.getElementById('val_mir_angle');
+
+        const tRays = document.getElementById('toggle_rays');
+        const tMinLen = document.getElementById('toggle_min_len');
+        const tDist = document.getElementById('toggle_dist');
+
+        /* --- Localization Dictionary --- */
+        const dict = {
+            en: {
+                title: "Image formed by a Plain Mirror", 
+                btn_info: "Info", params: "Parameters",
+                shape: "Object:", shape_arrow: "Arrow", shape_f: "'F'",
+                obj_dist: "Object ($u$)", obj_h: "Height ($h$)", 
+                snap: "Snap Observer",
+                mir_angle: "Mirror Angle ($\\theta$)",
+                show_rays: "Show Rays",
+                show_min_len: "Min. Length", show_dist: "Show Distances",
+                props: "Image Properties", p1: "Virtual Image", p2: "Erect (Upright)",
+                p3: "Laterally Inverted", p4: "Same Size ($h_i = h_o$)", p5: "Equidistant ($v = u$)",
+                modal_title: "Theory & Explanation", theory_title: "Laws of Reflection",
+                theory_list: "<li>The angle of incidence is strictly equal to the angle of reflection ($i = r$).</li><li>The incident ray, the reflected ray, and the normal to the surface all lie in the same plane.</li>",
+                dd_label: "Deep Dive: Lateral Inversion", dd_q: "Why is the image Erect but Laterally Inverted?",
+                dd_a: "A plane mirror does not actually swap left and right; it inverts <strong>front and back</strong> (depth). The parts of the object closest to the mirror appear closest in the image. Since the top remains the top and the bottom remains the bottom, the image is <strong>Erect</strong>. The 'left-right' swap is a psychological illusion: we instinctively imagine ourselves rotating 180° to take the place of the image! Try selecting the 'F' shape to see this front-to-back inversion mapping clearly.",
+                drag: "Drag the object horizontally or the observer (eye) to explore!",
+                footer: "CMA Secondary School. Physics Department.",
+                obj_label: "Object", img_label: "Image"
+            },
+            zh: {
+                title: "平面鏡成像", 
+                btn_info: "說明", params: "控制參數",
+                shape: "物體:", shape_arrow: "箭頭", shape_f: "字母 'F'",
+                obj_dist: "物距 ($u$)", obj_h: "物高 ($h$)", 
+                snap: "綁定觀察者",
+                mir_angle: "鏡面傾角 ($\\theta$)",
+                show_rays: "顯示光線",
+                show_min_len: "最少鏡面長度", show_dist: "顯示物距與像距",
+                props: "影像特性", p1: "虛像", p2: "正立",
+                p3: "橫向倒置", p4: "大小相等", p5: "距離相等 ($v = u$)",
+                modal_title: "理論與說明", theory_title: "反射定律",
+                theory_list: "<li>入射角等於反射角 ($i = r$)。</li><li>入射線、反射線與法線皆處於同一平面上。</li>",
+                dd_label: "深入探討：橫向倒置", dd_q: "為何成像是「正立」但「橫向倒置」？",
+                dd_a: "平面鏡實際上並沒有將左右對調，而是將<strong>「前後」</strong>（深度）倒置。物體上最靠近鏡面的部分，在影像中也最靠近鏡面。因為頂部和底部的方向沒有改變，所以影像是<strong>正立</strong>的。我們所覺得的「左右相反」其實是一種心理錯覺：我們習慣性地想像自己旋轉了180度去代替影像的位置！試著選擇「字母 F」來清楚觀察這種前後倒置的對應關係。",
+                drag: "水平拖曳物體或垂直/水平拖曳觀察者（眼睛）來探索！",
+                footer: "廠商會中學．物理科",
+                obj_label: "物體", img_label: "影像"
+            }
+        };
+
+        function setLanguage(lang) {
+            state.lang = lang;
+            const t = dict[lang];
+            
+            document.getElementById('title_text').innerText = t.title;
+            document.getElementById('btn_info_text').innerText = t.btn_info;
+            document.getElementById('label_parameters').innerText = t.params;
+            document.getElementById('label_shape').innerText = t.shape;
+            document.getElementById('shape_arrow').innerText = t.shape_arrow;
+            document.getElementById('shape_f').innerText = t.shape_f;
+            document.getElementById('label_obj_dist').innerHTML = t.obj_dist;
+            document.getElementById('label_obj_h').innerHTML = t.obj_h;
+            document.getElementById('label_mir_angle').innerHTML = t.mir_angle;
+            document.getElementById('label_snap').innerText = t.snap;
+            
+            document.getElementById('label_show_rays').innerText = t.show_rays;
+            document.getElementById('label_show_min_len').innerText = t.show_min_len;
+            document.getElementById('label_show_dist').innerHTML = t.show_dist;
+            
+            document.getElementById('label_properties').innerText = t.props;
+            document.getElementById('prop_1').innerText = t.p1;
+            document.getElementById('prop_2').innerText = t.p2;
+            document.getElementById('prop_3').innerText = t.p3;
+            document.getElementById('prop_4').innerHTML = t.p4;
+            document.getElementById('prop_5').innerHTML = t.p5;
+
+            document.getElementById('modal_title').innerHTML = `<i class="ph ph-books"></i> ${t.modal_title}`;
+            document.getElementById('theory_title').innerText = t.theory_title;
+            document.getElementById('theory_list').innerHTML = t.theory_list;
+            document.getElementById('dd_title').innerText = t.dd_label;
+            document.getElementById('dd_q').innerText = t.dd_q;
+            document.getElementById('dd_a').innerHTML = t.dd_a;
+            
+            document.getElementById('text_drag_hint').innerText = t.drag;
+            document.getElementById('footer_text').innerText = t.footer;
+
+            if (window.MathJax && window.MathJax.typesetPromise) { MathJax.typesetPromise(); }
+            requestAnimationFrame(draw);
+        }
+
+        function toggleLanguage() {
+            setLanguage(state.lang === 'en' ? 'zh' : 'en');
+        }
+
+        function updateShape(val) { state.shape = val; requestAnimationFrame(draw); }
+        function openModal() {
+            const m = document.getElementById('modal_info'), c = document.getElementById('modal_content');
+            m.classList.remove('hidden'); setTimeout(() => { c.classList.remove('scale-95'); c.classList.add('scale-100'); }, 10);
+        }
+        function closeModal() {
+            const m = document.getElementById('modal_info'), c = document.getElementById('modal_content');
+            c.classList.remove('scale-100'); c.classList.add('scale-95'); setTimeout(() => { m.classList.add('hidden'); }, 200);
+        }
+
+        // Returns true if the object or eye has passed behind/into the mirror
+        function isColliding(u, h, ex, ey, theta) {
+            const rad = theta * Math.PI / 180;
+            const n_x = Math.cos(rad);
+            const n_y = Math.sin(rad);
+            
+            const objRightX = -u + 20;
+            const dTop = objRightX * n_x + h * n_y;
+            const dBot = objRightX * n_x + 0 * n_y;
+            
+            const dEye = (ex + 15) * n_x + ey * n_y;
+            
+            return (dTop > -5 || dBot > -5 || dEye > -5);
+        }
+
+        /* --- Event Listeners --- */
+        sliderU.addEventListener('input', (e) => { 
+            let newU = parseInt(e.target.value);
+            let newEx = state.snapToObj ? -newU : state.eyeX;
+            let newEy = state.snapToObj ? Math.round(state.objectHeight * (15/16)) : state.eyeY;
+
+            if (isColliding(newU, state.objectHeight, newEx, newEy, state.mirrorAngle)) {
+                sliderU.value = state.u;
+                return;
+            }
+            state.u = newU;
+            if (state.snapToObj) { state.eyeX = newEx; state.eyeY = newEy; }
+            valU.innerText = `${state.u} cm`; 
+            requestAnimationFrame(draw); 
+        });
+        
+        sliderH.addEventListener('input', (e) => { 
+            let newH = parseInt(e.target.value);
+            let newEx = state.eyeX;
+            let newEy = state.snapToObj ? Math.round(newH * (15/16)) : state.eyeY;
+
+            if (isColliding(state.u, newH, newEx, newEy, state.mirrorAngle)) {
+                sliderH.value = state.objectHeight;
+                return;
+            }
+            state.objectHeight = newH;
+            if (state.snapToObj) { state.eyeY = newEy; }
+            valH.innerText = `${state.objectHeight} cm`; 
+            requestAnimationFrame(draw); 
+        });
+        
+        sliderTheta.addEventListener('input', (e) => { 
+            let newTheta = parseInt(e.target.value);
+            if (isColliding(state.u, state.objectHeight, state.eyeX, state.eyeY, newTheta)) {
+                sliderTheta.value = state.mirrorAngle;
+                return;
+            }
+            state.mirrorAngle = newTheta; 
+            valTheta.innerHTML = `${state.mirrorAngle}&deg;`; 
+            requestAnimationFrame(draw); 
+        });
+
+        toggleSnap.addEventListener('change', (e) => {
+            state.snapToObj = e.target.checked;
+            if (state.snapToObj) {
+                let newEx = -state.u;
+                let newEy = Math.round(state.objectHeight * (15 / 16));
+                if (!isColliding(state.u, state.objectHeight, newEx, newEy, state.mirrorAngle)) {
+                    forceSnap();
+                } else {
+                    e.target.checked = false;
+                    state.snapToObj = false;
+                }
+            }
+            requestAnimationFrame(draw);
+        });
+
+        function forceSnap() {
+            state.eyeX = -state.u;
+            state.eyeY = Math.round(state.objectHeight * (15 / 16));
+        }
+
+        [tRays, tMinLen, tDist].forEach(toggle => {
+            toggle.addEventListener('change', () => {
+                state.showRays = tRays.checked;
+                state.showMinLen = tMinLen.checked; state.showDist = tDist.checked; requestAnimationFrame(draw);
+            });
+        });
+
+        /* --- Canvas Setup --- */
+        let width, height, scale = 1, originX, originY;
+
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = container.getBoundingClientRect();
+            width = rect.width; height = rect.height;
+            canvas.width = width * dpr; canvas.height = height * dpr;
+            ctx.scale(dpr, dpr);
+            canvas.style.width = `${width}px`; canvas.style.height = `${height}px`;
+
+            originX = width * 0.55; 
+            originY = height * 0.6; // shifted down slightly
+            scale = Math.min(width / 1400, height / 900); 
+            if(scale < 0.5) scale = 0.5;
+
+            requestAnimationFrame(draw);
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        /* --- Physics Coordinate Core --- */
+        const sx = (x) => originX + x * scale;
+        const sy = (y) => originY - y * scale;
+        const px = (screenX) => (screenX - originX) / scale;
+        const py = (screenY) => -(screenY - originY) / scale;
+
+        function getReflectionPoint(px, py, thetaRad) {
+            const nx = Math.cos(thetaRad);
+            const ny = Math.sin(thetaRad);
+            const d = px * nx + py * ny;
+            return { x: px - 2 * d * nx, y: py - 2 * d * ny };
+        }
+
+        function getIntersection(px, py, ex, ey, thetaRad) {
+            const nx = Math.cos(thetaRad);
+            const ny = Math.sin(thetaRad);
+            const dx = px - ex, dy = py - ey;
+            const num = -(ex * nx + ey * ny);
+            const den = dx * nx + dy * ny;
+            if (Math.abs(den) < 1e-6) return null; // parallel
+            const t = num / den;
+            return { x: ex + t * dx, y: ey + t * dy };
+        }
+
+        /* --- Pointer Interaction --- */
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return { x: (e.touches ? e.touches[0].clientX : e.clientX) - rect.left, y: (e.touches ? e.touches[0].clientY : e.clientY) - rect.top };
+        }
+
+        function handlePointerDown(e) {
+            const pos = getMousePos(e); const physX = px(pos.x), physY = py(pos.y);
+            const hitTol = 40 / scale;
+            if (!state.snapToObj && Math.abs(physX - state.eyeX) < hitTol && Math.abs(physY - state.eyeY) < hitTol) { 
+                state.isDragging = 'eye'; return; 
+            }
+            if (physX >= -state.u - 50 && physX <= -state.u + 50 && physY >= -10 && physY <= state.objectHeight + 30) { 
+                state.isDragging = 'object'; return; 
+            }
+        }
+
+        function handlePointerMove(e) {
+            if (!state.isDragging) {
+                const pos = getMousePos(e), physX = px(pos.x), physY = py(pos.y), hitTol = 40 / scale;
+                let isHover = false;
+                if (!state.snapToObj && Math.abs(physX - state.eyeX) < hitTol && Math.abs(physY - state.eyeY) < hitTol) isHover = true;
+                if (physX >= -state.u - 50 && physX <= -state.u + 50 && physY >= -10 && physY <= state.objectHeight + 30) isHover = true;
+                canvas.style.cursor = isHover ? 'grab' : 'crosshair'; return;
+            }
+            canvas.style.cursor = 'grabbing';
+            const pos = getMousePos(e), physX = px(pos.x), physY = py(pos.y);
+            if (state.isDragging === 'eye' && !state.snapToObj) {
+                let newEx = Math.round(Math.max(-600, Math.min(600, physX)));
+                let newEy = Math.round(Math.max(-400, Math.min(400, physY)));
+                if (!isColliding(state.u, state.objectHeight, newEx, newEy, state.mirrorAngle)) {
+                    state.eyeX = newEx;
+                    state.eyeY = newEy;
+                }
+            } else if (state.isDragging === 'object') {
+                let minU = parseInt(sliderU.min) || 20;
+                let newU = Math.round(Math.max(minU, Math.min(500, -physX)));
+                let newEx = state.snapToObj ? -newU : state.eyeX;
+                let newEy = state.snapToObj ? Math.round(state.objectHeight * (15/16)) : state.eyeY;
+                if (!isColliding(newU, state.objectHeight, newEx, newEy, state.mirrorAngle)) {
+                    state.u = newU;
+                    sliderU.value = state.u; valU.innerText = `${state.u} cm`;
+                    if (state.snapToObj) forceSnap();
+                }
+            }
+            requestAnimationFrame(draw);
+        }
+
+        function handlePointerUp() { state.isDragging = null; canvas.style.cursor = 'crosshair'; }
+        canvas.addEventListener('mousedown', handlePointerDown); window.addEventListener('mousemove', handlePointerMove); window.addEventListener('mouseup', handlePointerUp);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handlePointerDown(e); }, {passive: false});
+        window.addEventListener('touchmove', (e) => { if(state.isDragging) e.preventDefault(); handlePointerMove(e); }, {passive: false});
+        window.addEventListener('touchend', handlePointerUp);
+
+        /* --- Drawing Primitives --- */
+        function drawRay(x1, y1, x2, y2, color = '#1e3c72') {
+            ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+            ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            const midX = (x1 + x2) / 2, midY = (y1 + y2) / 2, headlen = 10;
+            ctx.beginPath();
+            ctx.moveTo(midX, midY);
+            ctx.lineTo(midX - headlen * Math.cos(angle - Math.PI / 6), midY - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.moveTo(midX, midY);
+            ctx.lineTo(midX - headlen * Math.cos(angle + Math.PI / 6), midY - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.stroke();
+        }
+
+        function drawVirtualRay(x1, y1, x2, y2, color) {
+            ctx.beginPath(); ctx.setLineDash([5, 5]);
+            ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+            ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke(); ctx.setLineDash([]);
+        }
+
+        function drawDimensionLine(x1, y1, x2, y2, color) {
+            ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+            ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.stroke();
+            const headlen = 8;
+            let angle1 = Math.atan2(y1 - y2, x1 - x2);
+            ctx.beginPath(); ctx.moveTo(x1, y1);
+            ctx.lineTo(x1 - headlen * Math.cos(angle1 - Math.PI/6), y1 - headlen * Math.sin(angle1 - Math.PI/6));
+            ctx.lineTo(x1 - headlen * Math.cos(angle1 + Math.PI/6), y1 - headlen * Math.sin(angle1 + Math.PI/6));
+            ctx.fillStyle = color; ctx.fill();
+
+            let angle2 = Math.atan2(y2 - y1, x2 - x1);
+            ctx.beginPath(); ctx.moveTo(x2, y2);
+            ctx.lineTo(x2 - headlen * Math.cos(angle2 - Math.PI/6), y2 - headlen * Math.sin(angle2 - Math.PI/6));
+            ctx.lineTo(x2 - headlen * Math.cos(angle2 + Math.PI/6), y2 - headlen * Math.sin(angle2 + Math.PI/6));
+            ctx.fill();
+        }
+
+        function drawDistTextRotated(symbol, val, cx, cy, color, thetaRad) {
+            ctx.save(); ctx.translate(cx, cy); ctx.rotate(-thetaRad);
+            const offset = -10; 
+            ctx.fillStyle = color; ctx.textAlign = 'center';
+            ctx.font = 'italic bold 16px serif'; const w1 = ctx.measureText(symbol).width;
+            ctx.font = 'bold 14px sans-serif'; const w2 = ctx.measureText(` = ${val} cm`).width;
+            const startX = - (w1 + w2) / 2; ctx.textAlign = 'left';
+            ctx.font = 'italic bold 16px serif'; ctx.fillText(symbol, startX, offset);
+            ctx.font = 'bold 14px sans-serif'; ctx.fillText(` = ${val} cm`, startX + w1, offset);
+            ctx.restore();
+        }
+
+        function drawTextRotated(text, cx, cy, color, thetaRad) {
+            ctx.save(); ctx.translate(cx, cy); ctx.rotate(-thetaRad);
+            const offset = -14; 
+            
+            ctx.font = 'bold 14px sans-serif'; 
+            ctx.textBaseline = 'middle';
+            const w = ctx.measureText(text).width + 16;
+            const h = 22;
+
+            // Pillbox background
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+            ctx.beginPath();
+            if (ctx.roundRect) {
+                ctx.roundRect(-w/2, offset - h/2, w, h, 8);
+            } else {
+                ctx.rect(-w/2, offset - h/2, w, h);
+            }
+            ctx.fill();
+
+            // Text
+            ctx.fillStyle = color; 
+            ctx.textAlign = 'center';
+            ctx.fillText(text, 0, offset + 1);
+            ctx.restore();
+        }
+
+        // Draw Shape at Origin (0,0) - Transformations handle placement
+        function drawShapeLocal(isVirtual) {
+            const h = state.objectHeight;
+            if (state.shape === 'arrow') {
+                const headH = Math.min(24, h * 0.3); // Ensure arrow head is contained within total height h
+                const stemW = 8;
+                const headW = 18;
+                
+                if (isVirtual) {
+                    ctx.beginPath();
+                    ctx.moveTo(-stemW*scale, 0); ctx.lineTo(-stemW*scale, -(h - headH)*scale);
+                    ctx.lineTo(-headW*scale, -(h - headH)*scale); ctx.lineTo(0, -h*scale);
+                    ctx.lineTo(headW*scale, -(h - headH)*scale); ctx.lineTo(stemW*scale, -(h - headH)*scale);
+                    ctx.lineTo(stemW*scale, 0); ctx.closePath();
+                    ctx.setLineDash([6, 6]);
+                    ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2; ctx.stroke();
+                    ctx.setLineDash([]);
+                } else {
+                    ctx.fillStyle = '#3b82f6'; ctx.strokeStyle = '#2563eb';
+                    ctx.fillRect(-stemW*scale, -(h - headH)*scale, (stemW*2)*scale, (h - headH)*scale);
+                    ctx.beginPath();
+                    ctx.moveTo(0, -h*scale); ctx.lineTo(-headW*scale, -(h - headH)*scale);
+                    ctx.lineTo(headW*scale, -(h - headH)*scale); ctx.closePath();
+                    ctx.fill(); ctx.lineWidth = 2; ctx.stroke();
+                }
+            } else {
+                const baseW = 40;
+                ctx.fillStyle = isVirtual ? 'rgba(59, 130, 246, 0.3)' : '#3b82f6';
+                ctx.fillRect(-10*scale, -h*scale, 20*scale, h*scale);
+                ctx.fillStyle = isVirtual ? 'rgba(239, 68, 68, 0.3)' : '#ef4444';
+                ctx.fillRect(10*scale, -h*scale, baseW*scale, 20*scale);
+                ctx.fillStyle = isVirtual ? 'rgba(16, 185, 129, 0.3)' : '#10b981';
+                ctx.fillRect(10*scale, -h*0.5*scale, baseW*0.7*scale, 20*scale);
+                
+                if (isVirtual) {
+                    ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2; ctx.setLineDash([5, 5]);
+                    ctx.strokeRect(-10*scale, -h*scale, 20*scale + baseW*scale, h*scale); ctx.setLineDash([]);
+                }
+            }
+        }
+
+        /* --- Main Render Loop --- */
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Grid Lines
+            ctx.strokeStyle = '#f1f5f9'; ctx.lineWidth = 1;
+            for (let x = originX % (50 * scale); x < width; x += 50 * scale) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); }
+            for (let y = originY % (50 * scale); y < height; y += 50 * scale) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+            ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 2; ctx.setLineDash([10, 5]);
+            ctx.beginPath(); ctx.moveTo(0, originY); ctx.lineTo(width, originY); ctx.stroke(); ctx.setLineDash([]);
+
+            const thetaRad = state.mirrorAngle * Math.PI / 180;
+            const n_x = Math.cos(thetaRad), n_y = Math.sin(thetaRad); // Physical Normal
+            const mx_dir = Math.sin(thetaRad), my_dir = -Math.cos(thetaRad); // Mirror Line Direction
+            
+            // 1. Draw Object
+            ctx.save(); ctx.translate(sx(-state.u), sy(0)); drawShapeLocal(false); ctx.restore();
+            
+            // Draw Image using exact Canvas Reflection Matrix across the Mirror Line
+            ctx.save();
+            ctx.translate(originX, originY);
+            const n_xs = n_x, n_ys = -n_y; // Screen space y is inverted
+            ctx.transform(1 - 2*n_xs*n_xs, -2*n_xs*n_ys, -2*n_xs*n_ys, 1 - 2*n_ys*n_ys, 0, 0);
+            ctx.translate(-state.u * scale, 0); // Object's physical coordinates
+            drawShapeLocal(true);
+            ctx.restore();
+
+            // Labels (Drawn outside transformation to prevent backward text)
+            const Bi = getReflectionPoint(-state.u, 0, thetaRad);
+            ctx.fillStyle = '#1e3c72'; ctx.font = `bold 16px sans-serif`; ctx.textAlign = 'center';
+            ctx.fillText(dict[state.lang].obj_label, sx(-state.u), sy(-15));
+            ctx.fillStyle = '#ef4444';
+            ctx.fillText(dict[state.lang].img_label, sx(Bi.x), sy(Bi.y - 15));
+
+            // Setup Nodes for Rays
+            let hTop = state.objectHeight; // Fixed: Now exactly equal to height h for all shapes
+            let hBot = 0;
+            const To = {x: -state.u, y: hTop}, Bo = {x: -state.u, y: hBot};
+            const Ti = getReflectionPoint(To.x, To.y, thetaRad);
+            const Mtop = getIntersection(Ti.x, Ti.y, state.eyeX, state.eyeY, thetaRad);
+            const Mbot = getIntersection(Bi.x, Bi.y, state.eyeX, state.eyeY, thetaRad);
+
+            // Infinite Mirror graphic
+            ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(sx(-2000*mx_dir), sy(-2000*my_dir)); ctx.lineTo(sx(2000*mx_dir), sy(2000*my_dir)); ctx.stroke();
+            ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1.5;
+            for(let i = -2000; i < 2000; i += 15) {
+                const px_m = i*mx_dir, py_m = i*my_dir;
+                ctx.beginPath(); ctx.moveTo(sx(px_m), sy(py_m)); ctx.lineTo(sx(px_m + 10*n_x), sy(py_m + 10*n_y)); ctx.stroke();
+            }
+
+            // 2. Rays & Minimum Mirror Highlight
+            if (Mtop && Mbot) {
+                if (state.showRays) {
+                    drawRay(sx(To.x), sy(To.y), sx(Mtop.x), sy(Mtop.y), '#fbbf24');
+                    drawRay(sx(Mtop.x), sy(Mtop.y), sx(state.eyeX), sy(state.eyeY), '#fbbf24');
+                    drawRay(sx(Bo.x), sy(Bo.y), sx(Mbot.x), sy(Mbot.y), '#38bdf8');
+                    drawRay(sx(Mbot.x), sy(Mbot.y), sx(state.eyeX), sy(state.eyeY), '#38bdf8');
+
+                    // 虛線與實線連動 (Virtual tied to Rays)
+                    drawVirtualRay(sx(Mtop.x), sy(Mtop.y), sx(Ti.x), sy(Ti.y), '#ef4444');
+                    drawVirtualRay(sx(Mbot.x), sy(Mbot.y), sx(Bi.x), sy(Bi.y), '#ef4444');
+                }
+
+                if (state.showMinLen) {
+                    // Minimum Mirror Length Highlight
+                    ctx.beginPath();
+                    ctx.moveTo(sx(Mtop.x), sy(Mtop.y)); ctx.lineTo(sx(Mbot.x), sy(Mbot.y));
+                    ctx.strokeStyle = '#10b981'; ctx.lineWidth = 6; ctx.stroke();
+
+                    const minLen = Math.hypot(Mtop.x - Mbot.x, Mtop.y - Mbot.y);
+                    const offDist = 30; const offX = -n_x * offDist, offY = -n_y * offDist;
+                    drawDimensionLine(sx(Mtop.x + offX), sy(Mtop.y + offY), sx(Mbot.x + offX), sy(Mbot.y + offY), '#10b981');
+                    
+                    // Show exactly h/2 when perfectly snapped and unrotated to prevent tiny floating point display issues
+                    let displayLen = Math.round(minLen);
+                    if (state.snapToObj && state.mirrorAngle === 0) displayLen = Math.round(state.objectHeight / 2);
+
+                    const lenText = `${displayLen} cm`;
+                    drawTextRotated(lenText, sx((Mtop.x + Mbot.x)/2 + offX), sy((Mtop.y + Mbot.y)/2 + offY), '#10b981', thetaRad);
+                }
+            }
+
+            // Eye
+            const ex = sx(state.eyeX), ey = sy(state.eyeY), rE = 12;
+            ctx.save(); ctx.translate(ex, ey);
+            // Draw eye as a perfect circle to ensure visual 1:1 ratio
+            ctx.beginPath(); ctx.arc(0, 0, rE, 0, Math.PI * 2);
+            ctx.fillStyle = 'white'; ctx.fill(); ctx.strokeStyle = '#334155'; ctx.lineWidth = 2; ctx.stroke();
+            ctx.beginPath(); ctx.arc(rE*0.3, 0, rE*0.4, 0, Math.PI * 2); ctx.fillStyle = '#0f172a'; ctx.fill();
+            ctx.restore();
+            ctx.fillStyle = '#334155'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
+            ctx.fillText(state.lang === 'en' ? "Observer" : "觀察者", ex, ey + rE + 15);
+
+            // Distances u and v
+            if (state.showDist) {
+                const off_x = 100 * mx_dir, off_y = 100 * my_dir;
+                const dBo = -state.u * n_x;
+                const Pmir_x = -state.u - dBo * n_x, Pmir_y = 0 - dBo * n_y;
+                
+                const Dobj = {x: -state.u + off_x, y: 0 + off_y};
+                const Dmir = {x: Pmir_x + off_x, y: Pmir_y + off_y};
+                const Dimg = {x: Bi.x + off_x, y: Bi.y + off_y};
+
+                ctx.strokeStyle = '#475569'; ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(sx(-state.u), sy(0)); ctx.lineTo(sx(Dobj.x + 15*mx_dir), sy(Dobj.y + 15*my_dir)); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(sx(Pmir_x), sy(Pmir_y)); ctx.lineTo(sx(Dmir.x + 15*mx_dir), sy(Dmir.y + 15*my_dir)); ctx.stroke();
+                
+                drawDimensionLine(sx(Dobj.x), sy(Dobj.y), sx(Dmir.x), sy(Dmir.y), '#475569');
+                drawDistTextRotated('u', Math.abs(Math.round(dBo)), sx((Dobj.x+Dmir.x)/2), sy((Dobj.y+Dmir.y)/2), '#1e3c72', thetaRad);
+
+                ctx.beginPath(); ctx.moveTo(sx(Bi.x), sy(Bi.y)); ctx.lineTo(sx(Dimg.x + 15*mx_dir), sy(Dimg.y + 15*my_dir)); ctx.stroke();
+                drawDimensionLine(sx(Dmir.x), sy(Dmir.y), sx(Dimg.x), sy(Dimg.y), '#ef4444');
+                drawDistTextRotated('v', Math.abs(Math.round(dBo)), sx((Dmir.x+Dimg.x)/2), sy((Dmir.y+Dimg.y)/2), '#ef4444', thetaRad);
+            }
+        }
+
+        window.onload = function() { setLanguage('zh'); resizeCanvas(); }
+    </script>
+</body>
+</html>
