@@ -1,973 +1,934 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>地心說 vs 日心說</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>雙星系統 | Binary Star</title>
+    <!-- 引入 Chart.js 用於繪製徑向速度折線圖 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* ==========================================
-           CSS 變數與全域設定 (Global Variables & Reset)
-           ========================================== */
+        /* 全域 CSS 變數：定義顏色與主題 */
         :root {
-            --bg-dark: #0f172a;       
-            --panel-bg: #1e293b;      
-            --accent: #38bdf8;        
-            --text-light: #f8fafc;    
-            --text-muted: #94a3b8;    
-            --earth-color: #3b82f6;   
-            --sun-color: #fbbf24;     
-            --venus-color: #fcd34d;   
+            --bg: #0b0e14;         /* 網頁背景色 */
+            --panel: #161b22;      /* 控制面板與卡片背景色 */
+            --text: #c9d1d9;       /* 主要文字顏色 */
+            --accent: #58a6ff;     /* 強調色 (藍色) */
+            --border: #30363d;     /* 邊框顏色 */
+            --star1: #ffffff;      /* 主星預設顏色 */
+            --star2: #ffd700;      /* 伴星預設顏色 */
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            height: 100%;
-            height: -webkit-fill-available; /* 修復 iOS Safari/Chrome 的視窗高度計算問題 */
-        }
-
+        /* 基礎佈局 */
         body {
-            font-family: 'Microsoft JhengHei', 'PingFang TC', 'Helvetica Neue', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            line-height: 1.5;
-            padding: 10px;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             display: flex;
             flex-direction: column;
             height: 100vh;
-            height: 100dvh; 
-            min-height: -webkit-fill-available;
-            overflow: hidden; /* 強制隱藏整個網頁的捲軸，確保頁尾不被推出去 */
-            width: 100%;
-        }
-
-        @media (min-width: 768px) {
-            body {
-                padding: 15px 20px;
-            }
-        }
-
-        /* ==========================================
-           頁首 (Header)
-           ========================================== */
-        header {
-            text-align: center;
-            margin-bottom: 10px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h1 {
-            color: var(--accent);
-            font-size: 1.5rem;
-            margin-bottom: 0;
-        }
-
-        .top-right-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        @media (min-width: 768px) {
-            .top-right-controls {
-                position: absolute;
-                top: 0;
-                right: 0;
-            }
-        }
-
-        /* ==========================================
-           主佈局 (Layout & Sidebar)
-           ========================================== */
-        .layout-wrapper {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            gap: 15px;
-            min-height: 0; 
-            overflow-y: auto; /* 在手機版允許中間內容捲動，但不影響頁首頁尾 */
-        }
-
-        @media (min-width: 768px) {
-            .layout-wrapper { 
-                flex-direction: row; 
-                overflow-y: hidden; /* 在電腦/平板版不需要捲動 */
-            }
-        }
-
-        .sidebar {
-            background: var(--panel-bg);
-            border-radius: 12px;
-            padding: 15px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-            flex-shrink: 0;
-            width: 100%;
-        }
-
-        @media (min-width: 768px) {
-            .sidebar { width: 160px; overflow-y: auto; }
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 5px;
-            width: 100%;
-        }
-
-        .control-group.row {
-            flex-direction: row;
-            align-items: center;
-        }
-
-        /* ==========================================
-           按鈕與 UI 元件 (Buttons & UI)
-           ========================================== */
-        .speed-controls {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            background: #0f172a;
-            border-radius: 6px;
-            padding: 4px;
-        }
-
-        .speed-btn {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        .speed-display {
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: var(--accent);
-        }
-
-        input[type="checkbox"] {
-            cursor: pointer;
-            width: 18px;
-            height: 18px;
-        }
-
-        .planet-btn {
-            background: #334155;
-            border: 1px solid #475569;
-            color: white;
-            padding: 8px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-
-        .planet-btn.active {
-            background: var(--earth-color);
-            border-color: var(--accent);
-            box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
-        }
-
-        /* ==========================================
-           模擬區與畫布 (Simulation & Canvas)
-           ========================================== */
-        .sim-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            flex: 1;
-            min-height: 0;
-        }
-
-        @media (min-width: 768px) {
-            .sim-container { flex-wrap: nowrap; }
-        }
-
-        .panel {
-            background: var(--panel-bg);
-            border-radius: 12px;
-            padding: 15px;
-            flex: 1;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-        }
-
-        .panel h2 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            text-align: center;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 5px;
-            flex-shrink: 0;
-        }
-
-        .canvas-wrapper {
-            position: relative;
-            flex: 1;
-            width: 100%;
-            min-height: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            height: 100dvh; /* 修復 iOS Safari/Chrome 底部工具列遮擋問題 */
             overflow: hidden;
-            background: transparent;
         }
 
-        canvas.main-sim {
-            background: #000;
-            border-radius: 50%;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
-            display: block;
-            max-width: 100%;  /* 確保 Canvas 畫布大小不會撐破面板 */
-            max-height: 100%;
-        }
-
-        .telescope-view {
+        /* 頂部導航欄 */
+        header {
+            background-color: var(--panel);
+            padding: 0.6rem 1.2rem;
+            border-bottom: 1px solid var(--border);
             display: flex;
-            flex-direction: row;
+            justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 10px 15px;
-            border-radius: 12px;
-            border: 1px solid #334155;
-            width: 100%;
-            gap: 15px;
             flex-shrink: 0;
-            margin-top: 10px;
         }
 
-        .tele-info {
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .header-right { display: flex; gap: 8px; }
+
+        /* 按鈕與下拉選單樣式 */
+        button, select {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        select { 
+            background: #30363d; 
+            border: 1px solid var(--border); 
+            appearance: none; 
+            padding-right: 25px; 
+            /* 自訂下拉箭頭圖示 */
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E"); 
+            background-repeat: no-repeat; 
+            background-position: right 10px top 50%; 
+            background-size: 10px auto; 
+        }
+        button:hover { filter: brightness(1.1); }
+        button#langToggle { background: #238636; }
+
+        /* 主體內容容器 (左側控制列 + 右側視覺區) */
+        .main-container {
+            display: flex;
+            flex: 1;
+            flex-direction: row;
+            overflow: hidden;
+        }
+
+        /* 左側控制面板 */
+        #controls {
+            width: 190px;
+            min-width: 180px;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            padding: 1rem 0.6rem;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            text-align: left;
-            flex: 1;
+            gap: 0.7rem;
         }
 
-        canvas.tele-sim {
-            background: #000;
-            border-radius: 50%;
-            border: 2px solid #475569;
-            flex-shrink: 0;
-            transition: border-radius 0.3s ease;
+        /* 單個控制元件組 (標籤 + 滑桿) */
+        .control-group { display: flex; flex-direction: column; gap: 4px; }
+        
+        .control-group label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #e6edf3;
+            align-items: center;
+        }
+
+        .val-display { color: var(--accent); font-weight: bold; font-size: 0.8rem; }
+        input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+
+        /* 自訂核取方塊樣式，強制靠左並排 */
+        .checkbox-label {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: flex-start !important;
+            align-items: flex-start !important;
+            gap: 8px !important;
+            cursor: pointer;
+            margin-bottom: 6px;
         }
         
-        /* 當切換為星空帶模式時變成圓角矩形 */
-        canvas.tele-sim.zodiac-mode {
-            border-radius: 8px;
+        .checkbox-label input[type="checkbox"] {
+            width: auto !important;
+            margin-top: 3px;
         }
 
-        .alert-text {
-            color: #f87171;
-            font-size: 0.85rem;
-            margin-top: 2px;
+        /* 右側視覺區 (包含動畫與圖表) */
+        #visuals {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0.8rem;
+            gap: 0.8rem;
+            overflow: hidden;
+            background: #0d1117;
+        }
+
+        /* 動畫區域 (並排兩個畫布) */
+        .view-row {
+            display: flex;
+            gap: 0.8rem;
+            flex: 1.4;
+            min-height: 0;
+        }
+
+        /* 單一畫布卡片 */
+        .canvas-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 卡片左上角標籤 */
+        .card-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8b949e;
+            z-index: 10;
+            pointer-events: none;
+            background: rgba(22, 27, 34, 0.8);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* 圖表右上角的週期顯示 */
+        #periodDisplay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.75rem;
+            color: var(--accent);
+            z-index: 10;
             font-weight: bold;
+            background: rgba(22, 27, 34, 0.8);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
         }
 
-        /* ==========================================
-           說明彈窗 (Modal)
-           ========================================== */
-        .modal-overlay {
-            position: fixed;
+        /* Canvas 容器，用於處理縮放與拖曳 */
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        canvas.orbit-canvas {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.75);
+            cursor: grab;
+            touch-action: none;
+        }
+
+        /* 徑向速度圖表容器 */
+        .chart-wrapper {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            padding: 30px 10px 10px 10px;
+            box-sizing: border-box;
+        }
+
+        /* 地球方向圖示 (卡片右下角或左側) */
+        .observer-icon {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent);
+            font-size: 0.65rem;
+            pointer-events: none;
+            background: rgba(22, 27, 34, 0.85);
+            padding: 3px 6px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        /* 底部註腳 */
+        footer {
+            background-color: var(--panel);
+            border-top: 1px solid var(--border);
+            text-align: center;
+            padding: 4px;
+            font-size: 0.75rem;
+            color: #8b949e;
+            flex-shrink: 0;
+        }
+
+        /* 說明對話框 (Help Modal) */
+        #helpModal {
             display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            padding: 1rem;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            padding: 20px;
         }
 
-        .modal-overlay.active { display: flex; }
-
-        .info-box {
-            background: #1e3a8a;
-            border-left: 5px solid var(--accent);
-            padding: 25px;
-            border-radius: 8px;
-            max-width: 800px;
-            width: 100%;
-            position: relative;
-            max-height: 85vh;
-            overflow-y: auto;
+        .modal-body {
+            background: var(--panel);
+            max-width: 500px;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            line-height: 1.5;
         }
 
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
+        /* 響應式佈局：在小螢幕設備上的呈現調整 */
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; overflow-y: auto; }
+            body { height: auto; overflow: auto; }
+            #controls { width: auto; border-right: none; border-bottom: 1px solid var(--border); }
+            #visuals { height: 800px; flex: none; }
+            .view-row { flex-direction: column; flex: 2; }
         }
 
-        /* ==========================================
-           頁尾 (Footer)
-           ========================================== */
-        footer {
-            text-align: center;
-            padding: 5px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            border-top: 1px solid #334155;
-            flex-shrink: 0; /* 確保頁尾永遠不會被擠壓而消失 */
-            margin-top: 5px;
-        }
+        /* 輔助標籤排版 */
+        sub { font-size: 0.7em; vertical-align: sub; }
+        i { font-style: italic; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1 data-i18n="title">地心說 vs 日心說</h1>
-        <div class="top-right-controls">
-            <button class="info-btn" style="background:#1e3a8a; color:white; border:1px solid #38bdf8; padding:5px 12px; border-radius:6px; cursor:pointer;" onclick="document.getElementById('infoModal').classList.add('active')" data-i18n="openInfo">說明</button>
-            <button class="lang-btn" style="background:#38bdf8; border:none; padding:5px 12px; border-radius:6px; cursor:pointer; font-weight:bold; color: #0f172a;" onclick="toggleLang()">繁/Eng</button>
-        </div>
-    </header>
-
-    <div class="layout-wrapper">
-        <aside class="sidebar">
-            <div class="control-group">
-                <label data-i18n="selectPlanet" style="color:var(--accent); font-size:0.8rem;">選擇觀察天體:</label>
-                <button class="planet-btn active" id="btn-venus" onclick="selectPlanet('venus')">♀ <span data-i18n="opt_venus">金星</span></button>
-                <button class="planet-btn" id="btn-moon" onclick="selectPlanet('moon')">☾ <span data-i18n="opt_moon">月球</span></button>
-                <button class="planet-btn" id="btn-mars" onclick="selectPlanet('mars')">♂ <span data-i18n="opt_mars">火星</span></button>
-            </div>
-            
-            <div class="control-group" style="margin-top: 5px;">
-                <label data-i18n="viewModeLabel" style="color:var(--accent); font-size:0.8rem;">分析模式:</label>
-                <div style="display: flex; gap: 5px; width: 100%;">
-                    <button class="planet-btn active" id="btn-mode-retro" onclick="setViewMode('retro')" style="justify-content: center; padding: 6px;"><span data-i18n="mode_retro">逆行</span></button>
-                    <button class="planet-btn" id="btn-mode-phase" onclick="setViewMode('phase')" style="justify-content: center; padding: 6px;"><span data-i18n="mode_phase">盈虧相</span></button>
-                </div>
-            </div>
-            
-            <div class="control-group row" style="justify-content: center; margin-top: 5px;">
-                <button id="playPauseBtn" style="background:var(--earth-color); color:white; border:none; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:1.2rem;">⏸</button>
-            </div>
-            
-            <div class="control-group">
-                <label data-i18n="speed">模擬速度:</label>
-                <div class="speed-controls">
-                    <button id="speedDownBtn" class="speed-btn">🐢</button>
-                    <span id="speedDisplay" class="speed-display">0.1x</span>
-                    <button id="speedUpBtn" class="speed-btn">🚀</button>
-                </div>
-            </div>
-            
-            <div class="control-group row"><input type="checkbox" id="showOrbits" checked><label for="showOrbits" data-i18n="orbits">顯示軌道</label></div>
-            <div class="control-group row"><input type="checkbox" id="showLOS" checked><label for="showLOS" data-i18n="los">顯示視線</label></div>
-            <div class="control-group row"><input type="checkbox" id="showLabels" checked><label for="showLabels" data-i18n="labels">顯示標籤</label></div>
-            <div class="control-group row"><input type="checkbox" id="showTrace" checked><label for="showTrace" data-i18n="trace">顯示軌跡</label></div>
-        </aside>
-
-        <main class="sim-container">
-            <div class="panel">
-                <h2 data-i18n="geoTitle">地心說</h2>
-                <div class="canvas-wrapper">
-                    <canvas id="geoMain" class="main-sim"></canvas>
-                </div>
-                <div class="telescope-view">
-                    <canvas id="geoTele" class="tele-sim zodiac-mode"></canvas>
-                    <div class="tele-info">
-                        <h3 id="geoTeleLabel" data-i18n="teleView_retro" style="font-size:0.9rem; color:var(--accent);">🌌 星空背景</h3>
-                        <div class="alert-text" id="geoAlert" data-i18n="geoAlert">注意：金星永遠無法呈現滿相！</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h2 data-i18n="helioTitle">日心說</h2>
-                <div class="canvas-wrapper">
-                    <canvas id="helioMain" class="main-sim"></canvas>
-                </div>
-                <div class="telescope-view">
-                    <canvas id="helioTele" class="tele-sim zodiac-mode"></canvas>
-                    <div class="tele-info">
-                        <h3 id="helioTeleLabel" data-i18n="teleView_retro" style="font-size:0.9rem; color:var(--accent);">🌌 星空背景</h3>
-                        <div class="alert-text" style="color:#4ade80;" id="helioAlert" data-i18n="helioAlert">觀察：滿相時最小，新相時最大！</div>
-                    </div>
-                </div>
-            </div>
-        </main>
+<!-- 頂部標題列 -->
+<header>
+    <div class="header-left">
+        <!-- 雙星系統的簡易向量圖標 -->
+        <svg width="20" height="20" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="#58a6ff" stroke-width="2" stroke-dasharray="10 5" />
+            <circle cx="50" cy="10" r="8" fill="#fff" />
+            <circle cx="50" cy="90" r="5" fill="#ffd700" />
+        </svg>
+        <h2 style="margin:0; font-size: 1rem;" data-i18n="appTitle">雙星系統</h2>
     </div>
-
-    <footer><span data-i18n="footerText">廠商會中學：物理科</span></footer>
-
-    <div id="infoModal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('active')">
-        <div class="info-box">
-            <button class="close-btn" onclick="document.getElementById('infoModal').classList.remove('active')">&times;</button>
-            <h3 data-i18n="infoTitle" style="color:white; margin-bottom:15px;">📖 伽利略的重大發現</h3>
-            <p data-i18n="infoP1" style="color:#e2e8f0; font-size:0.95rem; line-height:1.8;"></p>
-        </div>
+    <div class="header-right">
+        <button id="helpTrigger" data-i18n="helpBtn">說明</button>
+        <button id="langToggle">繁/Eng</button>
     </div>
+</header>
 
-    <script>
-        // ==========================================
-        // 多國語言字典 (i18n Dictionary)
-        // ==========================================
-        const i18n = {
-            'zh-TW': {
-                title: '地心說 vs 日心說',
-                selectPlanet: '選擇觀察天體:',
-                opt_venus: '金星', opt_mars: '火星', opt_moon: '月球',
-                viewModeLabel: '分析模式:',
-                mode_phase: '盈虧相', mode_retro: '逆行',
-                speed: '模擬速度:', orbits: '顯示軌道', los: '顯示視線', labels: '顯示標籤', trace: '顯示軌跡',
-                geoTitle_venus: '地心說 (托勒密)', helioTitle_venus: '日心說 (哥白尼)',
-                geoTitle_mars: '地心說 (托勒密)', helioTitle_mars: '日心說 (哥白尼)',
-                geoTitle_moon: '地心說 (月球繞地)', helioTitle_moon: '日心說 (月球繞地)',
-                teleView_phase: '🔭 望遠鏡視角',
-                teleView_retro: '🌌 星空背景',
-                
-                // 盈虧模式 Alerts
-                geoAlert_venus: '注意：金星永遠無法呈現滿相！',
-                helioAlert_venus: '觀察：滿相時最小，新相時最大！',
-                geoAlert_mars: '注意：火星始終以向光面朝向地球。',
-                helioAlert_mars: '觀察：火星在「衝」時體積最大！',
-                geoAlert_moon: '注意：月球在兩個模型中都繞著地球！',
-                helioAlert_moon: '觀察：月相與地心說預測一致！',
-                
-                // 逆行模式 Alerts
-                geoAlert_retro_venus: '注意：本輪運轉導致金星產生逆行。',
-                helioAlert_retro_venus: '觀察：內側行星超車產生視覺逆行。',
-                geoAlert_retro_mars: '注意：本輪運作導致火星產生逆行。',
-                helioAlert_retro_mars: '觀察：地球超車火星產生視覺逆行。',
-                geoAlert_retro_moon: '月球軌道單純，沒有逆行現象。',
-                helioAlert_retro_moon: '月球軌道單純，沒有逆行現象。',
+<!-- 應用程式主體區塊 -->
+<div class="main-container">
+    <!-- 左側控制面板 -->
+    <aside id="controls">
+        <div class="control-group">
+            <label data-i18n="presetLabel">真實案例預設</label>
+            <select id="systemPreset">
+                <!-- 選單內容會根據語言自動替換 -->
+                <option value="custom" data-i18n="pCustom">自定義參數</option>
+                <option value="sirius" data-i18n="pSirius">天狼星</option>
+                <option value="alphacen" data-i18n="pAlphaCen">南門二</option>
+                <option value="pulsar" data-i18n="pPulsar">脈衝雙星</option>
+            </select>
+        </div>
 
-                openInfo: '說明', footerText: '廠商會中學．物理科',
-                sun: '太陽', earth: '地球', planetLabel_venus: '金星', planetLabel_mars: '火星', planetLabel_moon: '月球', moon: '月球',
-                epicycle: '本輪', deferent: '均輪',
-                infoTitle: '📖 物理學歷史：伽利略的發現',
-                infoP1: '在 17 世紀初，伽利略利用望遠鏡觀察金星。他發現金星與月球一樣，具有完整的相位變化（從新相到滿相）。<br><br>這對「地心說」是一個致命的打擊。在地心說模型中（左圖），金星位於地球與太陽之間的本輪上，這意味著我們永遠只能看到金星的背光面或側面，因此金星絕不會出現「滿相」。<br><br>但在「日心說」中（右圖），金星繞太陽公轉。當金星運行到太陽的另一側時，我們可以看到完整的向光面（滿相），且此時距離最遠，看起來最小。當它靠近地球時，體積變大但呈現新相。伽利略的這一觀察，成為了支持日心說最有利的證據之一。'
-            },
-            'en': {
-                title: 'Geocentric vs Heliocentric',
-                selectPlanet: 'Select Target:',
-                opt_venus: 'Venus', opt_mars: 'Mars', opt_moon: 'Moon',
-                viewModeLabel: 'View Mode:',
-                mode_phase: 'Phases', mode_retro: 'Retrograde',
-                speed: 'Speed:', orbits: 'Orbits', los: 'Sight', labels: 'Labels', trace: 'Trace',
-                geoTitle_venus: 'Geocentric (Ptolemy)', helioTitle_venus: 'Heliocentric (Copernicus)',
-                geoTitle_mars: 'Geocentric', helioTitle_mars: 'Heliocentric',
-                geoTitle_moon: 'Geocentric', helioTitle_moon: 'Heliocentric',
-                teleView_phase: '🔭 Telescope View',
-                teleView_retro: '🌌 Star Background',
-                
-                // Phase Alerts
-                geoAlert_venus: 'Note: Venus can NEVER be full!',
-                helioAlert_venus: 'Full Phase when small, Crescent when large!',
-                geoAlert_mars: 'Note: Mars never shows a crescent.',
-                helioAlert_mars: 'Observe: Largest at Opposition!',
-                geoAlert_moon: 'Note: Moon orbits Earth in both.',
-                helioAlert_moon: 'Observe: Identical predictions!',
-                
-                // Retrograde Alerts
-                geoAlert_retro_venus: 'Note: Epicycle creates retrograde loop.',
-                helioAlert_retro_venus: 'Observe: Inner planet overtaking causes loop.',
-                geoAlert_retro_mars: 'Note: Epicycle forces retrograde loop.',
-                helioAlert_retro_mars: 'Observe: Earth overtaking creates loop.',
-                geoAlert_retro_moon: 'The Moon does not undergo retrograde motion.',
-                helioAlert_retro_moon: 'The Moon does not undergo retrograde motion.',
+        <div class="control-group">
+            <label><span><span data-i18n="mass1Label"><i>S</i><sub>1</sub> 質量</span></span> <span class="val-display"><span id="m1Label">1.0</span> M<sub>☉</sub></span></label>
+            <input type="range" id="mass1" min="0.1" max="50" step="0.1" value="1.0">
+        </div>
 
-                openInfo: 'Info', footerText: 'CMA Secondary School. Physics Department.',
-                sun: 'Sun', earth: 'Earth', planetLabel_venus: 'Venus', planetLabel_mars: 'Mars', planetLabel_moon: 'Moon', moon: 'Moon',
-                epicycle: 'Epicycle', deferent: 'Deferent',
-                infoTitle: '📖 History of Physics: Galileo\'s Discovery',
-                infoP1: 'In the early 17th century, Galileo observed Venus with his telescope and discovered that it goes through a full cycle of phases, much like the Moon.<br><br>This was a fatal blow to the Geocentric model (left). In Ptolemy\'s system, Venus was kept between Earth and the Sun on its epicycle, meaning it could only ever show a crescent or "new" phase to Earth. It could never be "full".<br><br>However, in the Heliocentric model (right), Venus orbits the Sun. When it is on the opposite side of the Sun, we see its full illuminated half (Full Phase), and it appears smallest due to the distance. When it is closest to Earth, it appears large but as a thin crescent. This evidence was crucial in proving the Copernican system.'
-            }
-        };
+        <div class="control-group">
+            <label><span><span data-i18n="mass2Label"><i>S</i><sub>2</sub> 質量</span></span> <span class="val-display"><span id="m2Label">1.0</span> M<sub>☉</sub></span></label>
+            <input type="range" id="mass2" min="0.1" max="50" step="0.1" value="1.0">
+        </div>
 
-        // ==========================================
-        // 系統狀態 (System State)
-        // ==========================================
-        let currentLang = 'zh-TW';
-        let time = 0;
-        let isPlaying = true;
-        let simSpeed = 0.1; 
-        let planetMode = 'venus';
-        let viewMode = 'retro'; // 'phase' or 'retro' (預設改為逆行)
-        const LOGICAL_SIZE = 400; 
+        <div class="control-group">
+            <label><span><span data-i18n="distanceLabel">軌道距離</span></span> <span class="val-display"><span id="distLabel">1.0</span> AU</span></label>
+            <input type="range" id="distance" min="0.1" max="100" step="0.1" value="1.0">
+        </div>
 
-        const ctxs = {};
-        const canvases = {};
+        <div class="control-group">
+            <label><span data-i18n="eccLabel">離心率</span> <span class="val-display" id="eccLabel">0.00</span></label>
+            <input type="range" id="eccentricity" min="0" max="0.95" step="0.01" value="0">
+        </div>
+
+        <div class="control-group">
+            <label><span data-i18n="incLabel">傾角</span> <span class="val-display" id="incLabel">90°</span></label>
+            <input type="range" id="inclination" min="0" max="90" step="1" value="90">
+        </div>
+
+        <div class="control-group">
+            <label><span data-i18n="azimuthLabel">方向</span> <span class="val-display" id="azimuthLabel">0°</span></label>
+            <input type="range" id="azimuth" min="0" max="360" step="1" value="0">
+        </div>
+
+        <div class="control-group">
+            <label><span data-i18n="speedLabel">模擬速度</span> <span class="val-display" id="speedLabel">1.0x</span></label>
+            <input type="range" id="simSpeed" min="0.1" max="5" step="0.1" value="1.0">
+        </div>
+
+        <div class="control-group">
+            <button id="playPauseBtn" style="width: 100%; padding: 6px; background: #238636; margin-top: 5px;" data-i18n="pauseBtn">暫停</button>
+        </div>
+
+        <div class="control-group" style="margin-top: 5px; padding-top: 8px; border-top: 1px solid var(--border);">
+            <label class="checkbox-label">
+                <input type="checkbox" id="showVectors">
+                <span data-i18n="showVectors" style="font-size: 0.75rem; line-height: 1.2;">顯示徑向速度向量</span>
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="exaggerateColor">
+                <span data-i18n="exaggerateColor" style="font-size: 0.75rem; line-height: 1.2;">誇張地顯示紅移或藍移</span>
+            </label>
+            <div id="colorWarning" style="display: none; font-size: 0.65rem; color: #ff7b72; margin-top: 5px; line-height: 1.4;" data-i18n="colorWarning">注意：此顏色變化為誇張化顯示。真實的恆星都卜勒效應極其微弱，肉眼無法察覺，需使用光柵或光譜儀測量波長變化。</div>
+        </div>
+    </aside>
+
+    <!-- 右側視覺區：包含兩個動畫畫布與一個圖表 -->
+    <section id="visuals">
+        <!-- 上半部：動畫視圖 (並排) -->
+        <div class="view-row">
+            <!-- 視圖 1: 地球視角 -->
+            <div class="canvas-card">
+                <span class="card-label" data-i18n="earthView">地球視角</span>
+                <div class="observer-icon">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="9" stroke-dasharray="4 4"></circle>
+                        <circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+                    </svg>
+                    <span data-i18n="earthOut">地球方向 (垂直穿出)</span>
+                </div>
+                <div class="canvas-container">
+                    <canvas id="orbitCanvas1" class="orbit-canvas"></canvas>
+                </div>
+            </div>
+            
+            <!-- 視圖 2: 側面視角 -->
+            <div class="canvas-card">
+                <span class="card-label" data-i18n="sideView">側面視角</span>
+                <!-- 左側平行箭頭，指示地球的方向 -->
+                <div style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 15px; pointer-events: none; z-index: 5;">
+                    <span style="color: var(--accent); font-size: 1.1rem; opacity: 0.3; margin-left: 10px;">⬅</span>
+                    <span style="color: var(--accent); font-size: 1.1rem; opacity: 0.6; margin-left: 10px;">⬅</span>
+                    <div class="observer-icon" style="position: static; transform: none; background: rgba(22, 27, 34, 0.9);">
+                        <span style="font-size: 0.8rem; line-height: 1;">⬅</span>
+                        <span data-i18n="earthLeft">地球方向</span>
+                    </div>
+                    <span style="color: var(--accent); font-size: 1.1rem; opacity: 0.6; margin-left: 10px;">⬅</span>
+                    <span style="color: var(--accent); font-size: 1.1rem; opacity: 0.3; margin-left: 10px;">⬅</span>
+                </div>
+                <div class="canvas-container">
+                    <canvas id="orbitCanvas2" class="orbit-canvas"></canvas>
+                </div>
+            </div>
+        </div>
         
-        // 逆行追蹤資料
-        const zodiacState = {
-            geo: { prev: 0, unwrap: 0, cam: 0, trace: [] },
-            helio: { prev: 0, unwrap: 0, cam: 0, trace: [] }
-        };
-        
-        // 軌跡紀錄 (Locus)
-        const mainViewTrace = { geo: [], helio: [] };
-        
-        const zodiacStars = [];
-        for(let i=0; i<40; i++) {
-            zodiacStars.push({
-                ang: Math.random() * Math.PI * 2,
-                y: (Math.random() - 0.5) * 120, // -60 to 60
-                r: Math.random() * 1.5 + 0.5
-            });
+        <!-- 下半部：徑向速度圖表 -->
+        <div class="canvas-card" style="flex: 0.8;">
+            <span class="card-label" data-i18n="rvCurve">徑向速度圖</span>
+            <div id="periodDisplay">--</div>
+            <div class="chart-wrapper">
+                <canvas id="rvChart"></canvas>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- 底部宣告 -->
+<footer data-i18n="footer">廠商會中學：物理科</footer>
+
+<!-- 說明視窗 (Help Modal) -->
+<div id="helpModal">
+    <div class="modal-body">
+        <h3 style="color: var(--accent); margin-top: 0;" data-i18n="helpTitle">關於雙星系統與徑向速度</h3>
+        <ul style="padding-left: 1.2rem; font-size: 0.85rem; line-height: 1.6;">
+            <li data-i18n="help1" style="margin-bottom: 8px;"><strong>都卜勒效應與光譜：</strong> 當恆星靠近地球時，光波被壓縮而變短（藍移）；遠離時波長變長（紅移）。</li>
+            <li data-i18n="help2" style="margin-bottom: 8px;"><strong>徑向速度的測量：</strong> 這些紅藍移在肉眼下無法察覺，天文學家利用光譜儀觀察恆星光譜中吸收線的微小位移，來計算其沿視線方向的速度（徑向速度）。</li>
+            <li data-i18n="help3" style="margin-bottom: 8px;"><strong>研究雙星系統：</strong> 即使伴星太暗無法直接看見，透過觀測主星徑向速度的週期性變化（如下方的正弦曲線），就能推算出伴星的質量與軌道特徵。</li>
+            <li data-i18n="help4"><strong>軌道傾角的影響：</strong> 若軌道面與視線垂直（傾角 0°），則沒有徑向運動，使得徑向速度法在此情況下失效。</li>
+        </ul>
+        <button id="closeHelp" style="width: 100%; margin-top: 15px;" data-i18n="helpClose">關閉</button>
+    </div>
+</div>
+
+<script>
+    // --- 國際化翻譯字典 (I18n Translations) ---
+    const translations = {
+        en: {
+            appTitle: "Binary Star Sim",
+            helpBtn: "Help",
+            presetLabel: "Presets",
+            pCustom: "Custom",
+            pSirius: "Sirius A & B",
+            pAlphaCen: "Alpha Centauri AB",
+            pPulsar: "Hulse-Taylor Pulsar",
+            earthView: "Earth View",
+            sideView: "Side View",
+            rvCurve: "RV Curve",
+            mass1Label: "<i>S</i><sub>1</sub> Mass",
+            mass2Label: "<i>S</i><sub>2</sub> Mass",
+            distanceLabel: "Distance (a)",
+            eccLabel: "Eccentricity",
+            incLabel: "Inclination",
+            azimuthLabel: "Orientation",
+            speedLabel: "Speed",
+            pauseBtn: "Pause",
+            playBtn: "Play",
+            periodLabel: "Period <i>T</i>: ",
+            years: " yrs",
+            showVectors: "Show RV Vectors",
+            exaggerateColor: "Exaggerate Redshift/Blueshift",
+            colorWarning: "Notice: Color shifts are highly exaggerated. Real Doppler shifts are invisible to the naked eye and require a diffraction grating or spectrometer to detect wavelength changes.",
+            footer: "CMA Secondary School: Physics",
+            helpTitle: "Binary Systems & Radial Velocity",
+            help1: "<strong>Doppler Effect:</strong> As a star moves toward Earth, its light waves compress (Blueshift); as it moves away, they stretch (Redshift).",
+            help2: "<strong>Measuring Radial Velocity:</strong> These color shifts are invisible to the naked eye. Astronomers use spectrometers to measure tiny shifts in spectral absorption lines, calculating the star's speed along our line of sight.",
+            help3: "<strong>Studying Binary Systems:</strong> Even if a companion star is too dim to see, its presence, mass, and orbit can be inferred by observing the periodic variations in the primary star's radial velocity (the sine wave).",
+            help4: "<strong>Role of Inclination:</strong> If the orbit is face-on (0° inclination), there is no motion toward or away from us, making the radial velocity method ineffective.",
+            helpClose: "Got it",
+            yAxis: "Radial Velocity (km/s)",
+            xAxis: "Time (Years)"
+        },
+        zh: {
+            appTitle: "雙星系統模擬",
+            helpBtn: "說明",
+            presetLabel: "預設案例",
+            pCustom: "自定義",
+            pSirius: "天狼星",       // 移除括號與英文描述
+            pAlphaCen: "南門二",     // 移除括號與英文描述
+            pPulsar: "脈衝雙星",     // 移除括號與英文描述
+            earthView: "地球視角",
+            sideView: "側面視角",
+            rvCurve: "徑向速度圖",
+            mass1Label: "<i>S</i><sub>1</sub> 質量",
+            mass2Label: "<i>S</i><sub>2</sub> 質量",
+            distanceLabel: "軌道距離",
+            eccLabel: "離心率",
+            incLabel: "軌道傾角",
+            azimuthLabel: "軌道方向",
+            speedLabel: "模擬速度",
+            pauseBtn: "暫停",
+            playBtn: "播放",
+            periodLabel: "軌道週期 <i>T</i>: ",
+            years: " 年",
+            showVectors: "顯示徑向速度向量",
+            exaggerateColor: "誇張地顯示紅移或藍移",
+            colorWarning: "注意：此顏色變化為誇張化顯示。真實的恆星都卜勒效應極其微弱，肉眼無法察覺，需使用光柵或光譜儀測量波長變化。",
+            footer: "廠商會中學：物理科",
+            helpTitle: "關於雙星系統與徑向速度",
+            help1: "<strong>都卜勒效應與光譜：</strong> 當恆星靠近地球時，光波被壓縮而變短（藍移）；遠離時波長變長（紅移）。",
+            help2: "<strong>徑向速度的測量：</strong> 這些紅藍移肉眼無法察覺，天文學家利用光譜儀觀察恆星光譜中吸收線的微小位移，來計算其沿視線方向的速度（徑向速度）。",
+            help3: "<strong>研究雙星系統：</strong> 即使伴星太暗無法直接看見，透過觀測主星徑向速度的週期性變化（如下方圖表），就能推算出伴星的質量與軌道特徵。",
+            help4: "<strong>軌道傾角的影響：</strong> 若軌道面與視線垂直（傾角 0°），則沒有徑向運動，使得徑向速度法無法測量到速度變化。",
+            helpClose: "關閉",
+            yAxis: "徑向速度 (km/s)",
+            xAxis: "時間 (年)"
         }
+    };
+    
+    // 預設語言
+    let currentLang = 'zh';
 
-        function resetZodiac() {
-            zodiacState.geo.trace = [];
-            zodiacState.geo.cam = 0;
-            zodiacState.helio.trace = [];
-            zodiacState.helio.cam = 0;
-            mainViewTrace.geo = [];
-            mainViewTrace.helio = [];
-        }
+    // --- 全域狀態 (Global State) ---
+    const state = {
+        m1: 1.0,               // S1 質量 (太陽質量)
+        m2: 1.0,               // S2 質量 (太陽質量)
+        a_phys: 1.0,           // 軌道半長軸 (天文單位 AU)
+        eccentricity: 0.0,     // 軌道離心率 (e)
+        inclination: 90,       // 軌道傾角 (0=正視, 90=側視)
+        azimuth: 0,            // 軌道方位角 (環繞 Z 軸旋轉)
+        speed: 1.0,            // 模擬播放速度倍率
+        exaggerateColor: false,// 顯示都卜勒顏色切換
+        showVectors: false,    // 顯示速度向量切換
+        currentMaxRV: 100,     // 目前系統的最大徑向速度（用於圖表與顏色縮放）
+        period: 1.0            // 系統軌道週期（由克卜勒第三定律計算）
+    };
 
-        // ==========================================
-        // HD 高解析度畫布設定 (High-DPI Setup)
-        // ==========================================
-        function setupHDCanvas(id, cssWidth, cssHeight, logicalBaseSize) {
-            const canvas = document.getElementById(id);
-            const ctx = canvas.getContext('2d', { alpha: false });
-            const dpr = window.devicePixelRatio || 1; 
-            
-            canvas.width = cssWidth * dpr;
-            canvas.height = cssHeight * dpr;
-            canvas.style.width = cssWidth + 'px';
-            canvas.style.height = cssHeight + 'px';
-            
-            const scale = (cssWidth * dpr) / logicalBaseSize;
-            ctx.scale(scale, scale);
-            
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = 'high';
-            
-            ctxs[id] = ctx;
-            canvases[id] = canvas;
-        }
+    // 真實雙星系統的預設數據
+    const presets = {
+        sirius: { m1: 2.06, m2: 1.02, a: 20, e: 0.59, i: 44 },
+        alphacen: { m1: 1.1, m2: 0.9, a: 23, e: 0.52, i: 79 },
+        pulsar: { m1: 1.44, m2: 1.38, a: 0.013, e: 0.617, i: 47 }
+    };
 
-        function initCanvases() {
-            const wrappers = document.querySelectorAll('.canvas-wrapper');
-            wrappers.forEach((w, i) => {
-                const id = i === 0 ? 'geoMain' : 'helioMain';
-                const size = Math.max(Math.min(w.clientWidth, w.clientHeight), 100);
-                setupHDCanvas(id, size, size, LOGICAL_SIZE);
-            });
+    // 取得 DOM 元素
+    const canvas1 = document.getElementById('orbitCanvas1');
+    const ctx1 = canvas1.getContext('2d');
+    const canvas2 = document.getElementById('orbitCanvas2');
+    const ctx2 = canvas2.getContext('2d');
+    const chartCanvas = document.getElementById('rvChart');
+    const presetSelect = document.getElementById('systemPreset');
+    
+    // 播放控制與視覺縮放係數
+    let time = 0;
+    let isPlaying = true;
+    let visualScale = 1;
 
-            setupHDCanvas('geoTele', 80, 80, 160);
-            setupHDCanvas('helioTele', 80, 80, 160);
-        }
+    // --- 畫布大小重置 (Resize Handler) ---
+    function resize() {
+        [canvas1, canvas2].forEach(c => {
+            const rect = c.parentElement.getBoundingClientRect();
+            c.width = rect.width;
+            c.height = rect.height;
+        });
+        // 根據畫布大小設定視覺縮放 (以短邊的 35% 為準)
+        visualScale = (Math.min(canvas1.width, canvas1.height) * 0.35) / 100;
+    }
 
-        window.addEventListener('resize', initCanvases);
-        initCanvases();
-
-        // ==========================================
-        // 物理參數 (Physics Parameters)
-        // ==========================================
-        let pHelioEarthRadius=140, pHelioPlanetRadius=100, pHelioEarthSpeed=0.5, pHelioPlanetSpeed=0.7;
-        let pGeoSunRadius=160, pGeoDefRadius=80, pGeoEpiRadius=60, pGeoSunSpeed=0.5, pGeoDefSpeed=0.5, pGeoEpiSpeed=0.7;
-        let pColor='#fcd34d', pColorDark='#92400e', rEarth=8, rSun=12, rPlanet=6, rMoon=2.5, rMoonOrbit=22;
-
-        function setPlanetParameters() {
-            if (planetMode === 'venus') {
-                pHelioEarthRadius = 140; pHelioPlanetRadius = 100; pHelioEarthSpeed = 0.5; pHelioPlanetSpeed = 0.83;
-                pGeoSunRadius = 160; pGeoDefRadius = 80; pGeoEpiRadius = 57; pGeoSunSpeed = 0.5; pGeoDefSpeed = 0.5; pGeoEpiSpeed = 0.83;
-                pColor = '#fcd34d'; pColorDark = '#92400e'; rEarth = 8; rSun = 12; rPlanet = 6;
-            } else if (planetMode === 'mars') {
-                pHelioEarthRadius = 75; pHelioPlanetRadius = 114; pHelioEarthSpeed = 0.5; pHelioPlanetSpeed = 0.27;
-                pGeoSunRadius = 24; pGeoDefRadius = 114; pGeoEpiRadius = 75; pGeoSunSpeed = 0.5; pGeoDefSpeed = 0.27; pGeoEpiSpeed = 0.5;
-                pColor = '#ef4444'; pColorDark = '#7f1d1d'; rEarth = 6; rSun = 8; rPlanet = 5;
-            } else if (planetMode === 'moon') {
-                pHelioEarthRadius = 140; pHelioEarthSpeed = 0.5; pHelioPlanetRadius = 140; pHelioPlanetSpeed = 0;
-                pGeoSunRadius = 160; pGeoSunSpeed = 0.5; pGeoDefRadius = 0; pGeoEpiRadius = 0;
-                pColor = '#cbd5e1'; pColorDark = '#475569'; rEarth = 10; rSun = 14; rPlanet = 0; rMoon = 6; rMoonOrbit = 40;
-            }
-        }
-
-        // ==========================================
-        // 互動控制 (Interaction Controls)
-        // ==========================================
-        function selectPlanet(mode) {
-            planetMode = mode;
-            document.querySelectorAll('.planet-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-' + mode).classList.add('active');
-            document.getElementById('btn-mode-' + viewMode).classList.add('active');
-            setPlanetParameters();
-            resetZodiac();
-            updateLabels();
-        }
-
-        function setViewMode(mode) {
-            viewMode = mode;
-            document.getElementById('btn-mode-phase').classList.remove('active');
-            document.getElementById('btn-mode-retro').classList.remove('active');
-            document.getElementById('btn-mode-' + mode).classList.add('active');
-            
-            // Toggle shape of the telescope view based on mode
-            if (mode === 'retro') {
-                document.getElementById('geoTele').classList.add('zodiac-mode');
-                document.getElementById('helioTele').classList.add('zodiac-mode');
-            } else {
-                document.getElementById('geoTele').classList.remove('zodiac-mode');
-                document.getElementById('helioTele').classList.remove('zodiac-mode');
-            }
-            
-            resetZodiac();
-            updateLabels();
-        }
-
-        function toggleLang() {
-            currentLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
-            updateLabels();
-        }
-
-        function updateLabels() {
-            // Update Base Labels
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                const suffixKey = key + '_' + planetMode;
-                if(i18n[currentLang][suffixKey]) {
-                    el.innerHTML = i18n[currentLang][suffixKey];
-                } else if(i18n[currentLang][key]) {
-                    el.innerHTML = i18n[currentLang][key];
+    // --- 初始化 Chart.js ---
+    const rvChart = new Chart(chartCanvas, {
+        type: 'line',
+        data: {
+            datasets: [
+                { label: 'S1', data: [], borderColor: '#ffffff', borderWidth: 2, pointRadius: 0, tension: 0.3 },
+                { label: 'S2', data: [], borderColor: '#ffd700', borderWidth: 2, pointRadius: 0, tension: 0.3 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false, animation: false,
+            scales: {
+                y: { 
+                    grid: { color: '#30363d' }, 
+                    title: { display: true, text: 'Velocity (km/s)', color: '#8b949e', font: { size: 10 } },
+                    ticks: { color: '#8b949e', font: { size: 9 } }
+                },
+                x: { 
+                    type: 'linear', min: 0, max: 2, 
+                    title: { display: true, text: 'Time (Years)', color: '#8b949e', font: { size: 10 } },
+                    ticks: { color: '#8b949e', font: { size: 9 } },
+                    grid: { color: '#30363d' }
                 }
-            });
-            
-            // Contextual dynamic updates
-            let teleKey = viewMode === 'phase' ? 'teleView_phase' : 'teleView_retro';
-            document.getElementById('geoTeleLabel').innerHTML = i18n[currentLang][teleKey];
-            document.getElementById('helioTeleLabel').innerHTML = i18n[currentLang][teleKey];
-            
-            let alertBase = viewMode === 'phase' ? 'Alert_' : 'Alert_retro_';
-            document.getElementById('geoAlert').innerHTML = i18n[currentLang]['geo' + alertBase + planetMode];
-            document.getElementById('helioAlert').innerHTML = i18n[currentLang]['helio' + alertBase + planetMode];
-            
-            document.getElementById('speedDisplay').innerText = simSpeed.toFixed(1) + 'x';
-        }
-
-        // ==========================================
-        // 核心繪圖函數 (Rendering Functions)
-        // ==========================================
-        
-        function drawBody(ctx, x, y, radius, colorBright, colorDark, label, sunX, sunY, isSun=false) {
-            ctx.save();
-            if (isSun) {
-                ctx.fillStyle = colorBright;
-                ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI*2); ctx.fill();
-                ctx.shadowBlur = 15; ctx.shadowColor = colorBright; ctx.fill(); 
-            } else {
-                ctx.fillStyle = colorDark;
-                ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI*2); ctx.fill();
-                let angle = Math.atan2(sunY - y, sunX - x);
-                ctx.fillStyle = colorBright;
-                ctx.beginPath(); ctx.arc(x, y, radius, angle - Math.PI/2, angle + Math.PI/2); ctx.fill();
-            }
-            ctx.restore();
-
-            if (document.getElementById('showLabels').checked) {
-                ctx.save();
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 13px "Microsoft JhengHei", sans-serif'; 
-                ctx.textAlign = 'left';
-                ctx.textBaseline = 'middle';
-                ctx.shadowColor = 'black'; 
-                ctx.shadowBlur = 3;
-                ctx.shadowOffsetX = 1;
-                ctx.shadowOffsetY = 1;
-                ctx.fillText(label, x + radius + 4, y + 1);
+            },
+            plugins: { legend: { display: false } }
+        },
+        plugins: [{
+            // 自訂插件：繪製掃掠圖表的時間軸 (Scrubber)
+            id: 'scrubber',
+            afterDraw: (chart) => {
+                const ctx = chart.ctx;
+                // 計算當前時間在週期中的相對位置 (跨度2個週期)
+                const pTime = ((time / (Math.PI * 2)) * state.period) % (2 * state.period);
+                const x = chart.scales.x.getPixelForValue(pTime);
+                ctx.save(); 
+                ctx.beginPath(); 
+                ctx.moveTo(x, chart.scales.y.top); 
+                ctx.lineTo(x, chart.scales.y.bottom);
+                ctx.lineWidth = 1.5; 
+                ctx.strokeStyle = 'rgba(88, 166, 255, 0.6)'; 
+                ctx.stroke(); 
                 ctx.restore();
             }
+        }]
+    });
+
+    // --- 物理引擎 (Physics Engine) ---
+
+    // 解克卜勒方程式 (Kepler's Equation: M = E - e*sinE) 取得偏近點角 E
+    function solveKepler(M, e) {
+        let E = M;
+        for(let i=0; i<6; i++) {
+            E = E - (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
         }
+        return E;
+    }
 
-        function drawTelescope(ctx, E, V, S, maxDist, pColor) {
-            ctx.save(); 
-            ctx.fillStyle = '#000000';
-            ctx.fillRect(0, 0, 160, 160); 
-            
-            let dx = E.x - V.x, dy = E.y - V.y;
-            let dist = Math.sqrt(dx*dx + dy*dy);
-            let appRad = Math.min(25 * (maxDist / dist), 70); 
-            
-            let nVE = { x: dx/dist, y: dy/dist };
-            let dsx = S.x - V.x, dsy = S.y - V.y;
-            let slen = Math.sqrt(dsx*dsx + dsy*dsy);
-            let nVS = { x: dsx/slen, y: dsy/slen };
-            
-            let dot = nVE.x * nVS.x + nVE.y * nVS.y;     
-            let cross = nVE.x * nVS.y - nVE.y * nVS.x;   
-            
-            ctx.translate(80, 80); 
-            
-            ctx.fillStyle = '#222';
-            ctx.beginPath(); ctx.arc(0, 0, appRad, 0, Math.PI*2); ctx.fill();
-            
-            ctx.fillStyle = pColor;
-            ctx.beginPath();
-            if (cross > 0) ctx.arc(0, 0, appRad, -Math.PI/2, Math.PI/2);
-            else ctx.arc(0, 0, appRad, Math.PI/2, -Math.PI/2);
-            ctx.fill();
-            
-            let ew = Math.max(0.1, appRad * Math.abs(dot));
-            ctx.beginPath(); ctx.ellipse(0, 0, ew, appRad, 0, 0, Math.PI*2);
-            ctx.fillStyle = (dot < 0) ? '#222' : pColor;
-            ctx.fill();
-            
-            ctx.restore(); 
+    // 計算系統週期 (克卜勒第三定律)
+    function calculatePeriod() {
+        state.period = Math.sqrt(Math.pow(state.a_phys, 3) / (state.m1 + state.m2));
+        const unit = translations[currentLang].years;
+        // 格式化為三位有效數字
+        document.getElementById('periodDisplay').innerHTML = translations[currentLang].periodLabel + state.period.toPrecision(3) + unit;
+    }
+
+    // 計算指定時間 t 時，兩顆星體的三維座標與徑向速度
+    function getPositions(t) {
+        const e = state.eccentricity;
+        const M = t % (Math.PI * 2); // 平近點角
+        const E = solveKepler(M, e);
+        
+        // 渲染用的基礎座標
+        const a_render = 100;
+        const x_p = a_render * (Math.cos(E) - e);
+        const y_p = a_render * Math.sqrt(1 - e*e) * Math.sin(E);
+
+        // 真實物理速度計算
+        const totalM = state.m1 + state.m2;
+        const v_unit = 29.8 * Math.sqrt(totalM / state.a_phys); // 基礎速度大小
+        const dE = 1 / (1 - e * Math.cos(E));
+        const vy_p = v_unit * Math.sqrt(1 - e*e) * Math.cos(E) * dE; // y軸方向的速度
+
+        const incRad = (state.inclination * Math.PI) / 180;
+        const azRad = (state.azimuth * Math.PI) / 180;
+        
+        // 計算視線徑向速度 (-Z 軸方向定義為正，即紅移)
+        const rv1 = vy_p * Math.sin(incRad) * (state.m2 / totalM);
+        const rv2 = -vy_p * Math.sin(incRad) * (state.m1 / totalM);
+
+        // 3D 空間轉換 (包含傾角與方位角旋轉)
+        const x_inc = x_p, y_inc = y_p * Math.cos(incRad), z_inc = y_p * Math.sin(incRad);
+        const x_final = x_inc * Math.cos(azRad) - y_inc * Math.sin(azRad);
+        const y_final = x_inc * Math.sin(azRad) + y_inc * Math.cos(azRad);
+        const z_final = z_inc;
+
+        // 計算質心偏移，回傳 S1 與 S2 最終座標與速度
+        return {
+            s1: { x: -x_final * (state.m2/totalM), y: -y_final * (state.m2/totalM), z: -z_final * (state.m2/totalM), rv: rv1 },
+            s2: { x: x_final * (state.m1/totalM), y: y_final * (state.m1/totalM), z: z_final * (state.m1/totalM), rv: rv2 }
+        };
+    }
+
+    // 計算都卜勒效應造成的誇張化顏色
+    function getColor(rv, baseC) {
+        if (!state.exaggerateColor || Math.abs(rv) < 0.001) return baseC;
+        const r = rv > 0 ? 255 : 80;
+        const g = rv > 0 ? 80 : 160;
+        const b = rv > 0 ? 80 : 255;
+        // 依據目前系統最大徑向速度調整色彩強度
+        let intensity = Math.pow(Math.min(Math.abs(rv)/state.currentMaxRV, 1), 0.7) * 0.85;
+        const bc = baseC === 'white' ? {r:255,g:255,b:255} : {r:255,g:215,b:0};
+        // 混合原色與藍/紅色
+        return `rgb(${Math.round(bc.r+(r-bc.r)*intensity)},${Math.round(bc.g+(g-bc.g)*intensity)},${Math.round(bc.b+(b-bc.b)*intensity)})`;
+    }
+
+    // --- 圖表數據生成與更新 ---
+    function generateChartData() {
+        calculatePeriod();
+        const d1 = [], d2 = [];
+        let maxFound = 0;
+        
+        // 預先計算並繪製未來兩個週期的數據點
+        for(let i=0; i<=200; i++) {
+            const f = i/100;
+            const pos = getPositions(f * Math.PI * 2);
+            const timeVal = f * state.period;
+            d1.push({x: timeVal, y: pos.s1.rv}); 
+            d2.push({x: timeVal, y: pos.s2.rv});
+            maxFound = Math.max(maxFound, Math.abs(pos.s1.rv), Math.abs(pos.s2.rv));
         }
+        state.currentMaxRV = maxFound || 10;
+        rvChart.data.datasets[0].data = d1;
+        rvChart.data.datasets[1].data = d2;
+        
+        // 自動調整座標軸刻度
+        rvChart.options.scales.x.max = 2 * state.period;
+        rvChart.options.scales.x.title.text = translations[currentLang].xAxis;
+        rvChart.options.scales.y.title.text = translations[currentLang].yAxis;
+        
+        const b = Math.max(state.currentMaxRV * 1.3, 10);
+        rvChart.options.scales.y.min = -b; rvChart.options.scales.y.max = b;
+        rvChart.update('none');
+    }
 
-        // 星空投影：逆行視覺化 (Zodiac Strip View)
-        function drawZodiac(ctx, E, Target, S, stateRef, pColor) {
-            ctx.save();
-            ctx.fillStyle = '#05070a';
-            ctx.fillRect(0, 0, 160, 160);
+    // 重設選單狀態為自定義
+    function resetToCustom() {
+        if (presetSelect.value !== 'custom') presetSelect.value = 'custom';
+    }
 
-            // 1. 計算天體在地球上的視角 (Apparent Longitude)
-            let ang = Math.atan2(Target.y - E.y, Target.x - E.x);
-            
-            if (stateRef.trace.length === 0) {
-                stateRef.prev = ang;
-                stateRef.unwrap = ang;
-                stateRef.cam = ang;
-            }
-            
-            // Unwrap 視角，確保跨越 180 度不會產生跳躍
-            let diff = ang - stateRef.prev;
-            if (diff > Math.PI) diff -= 2 * Math.PI;
-            if (diff < -Math.PI) diff += 2 * Math.PI;
-            stateRef.unwrap += diff;
-            stateRef.prev = ang;
+    // --- 主渲染迴圈 (Main Animation Loop) ---
+    function draw() {
+        ctx1.clearRect(0,0,canvas1.width,canvas1.height); 
+        ctx2.clearRect(0,0,canvas2.width,canvas2.height);
+        
+        const cx1 = canvas1.width/2, cy1 = canvas1.height/2;
+        const cx2 = canvas2.width/2 + 10, cy2 = canvas2.height/2;
+        
+        // 推進時間
+        if (isPlaying) time += 0.02 * state.speed;
+        const pos = getPositions(time);
 
-            // 2. 攝影機緩慢追蹤平均位置，讓逆行時能滑過螢幕
-            stateRef.cam += (stateRef.unwrap - stateRef.cam) * 0.02; // 稍微加快基礎追蹤速度
-            
-            // 限制攝影機與天體的最大視角差，防止天體飛出畫面 (畫面半寬 80px)
-            const maxDiff = 0.6; // 最大差距 0.6 弧度 (0.6 * 100 = 60 pixels)
-            if (stateRef.unwrap - stateRef.cam > maxDiff) {
-                stateRef.cam = stateRef.unwrap - maxDiff;
-            } else if (stateRef.cam - stateRef.unwrap > maxDiff) {
-                stateRef.cam = stateRef.unwrap + maxDiff;
-            }
+        // 1. 繪製質心 (Barycenter)
+        [ {ctx:ctx1,cx:cx1,cy:cy1}, {ctx:ctx2,cx:cx2,cy:cy2} ].forEach(v => {
+            v.ctx.strokeStyle = '#21262d'; v.ctx.setLineDash([4,4]);
+            v.ctx.beginPath(); v.ctx.arc(v.cx,v.cy,3,0,Math.PI*2); v.ctx.stroke(); v.ctx.setLineDash([]);
+        });
 
-            // 3. 虛擬緯度 (Fake Latitude)：用以在二維模擬中畫出逆行圓圈
-            // 使用距角 (Elongation) 計算，在衝/合時緯度剛好穿過黃道面
-            let elong = Math.atan2(Target.y - E.y, Target.x - E.x) - Math.atan2(S.y - E.y, S.x - E.x);
-            let lat = 25 * Math.sin(elong);
-
-            // 儲存軌跡
-            stateRef.trace.push({ x: stateRef.unwrap, y: lat });
-            if (stateRef.trace.length > 250) stateRef.trace.shift();
-
-            ctx.translate(80, 80);
-
-            // 畫黃道線 (Ecliptic line)
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.beginPath(); ctx.moveTo(-80, 0); ctx.lineTo(80, 0); ctx.stroke();
-
-            // 畫背景星空
-            ctx.fillStyle = '#fff';
-            zodiacStars.forEach(star => {
-                let wrap = Math.round((stateRef.cam - star.ang) / (2 * Math.PI));
-                let starUnwrap = star.ang + wrap * 2 * Math.PI;
-                // 角度增加代表向東移動(畫面左方)
-                let sx = -(starUnwrap - stateRef.cam) * 100; 
-                if (Math.abs(sx) < 100) {
-                    ctx.beginPath(); ctx.arc(sx, star.y, star.r, 0, Math.PI*2); ctx.fill();
+        // 2. 繪製軌道殘影 (Orbit Paths)
+        [ {ctx:ctx1,v1:true,cx:cx1,cy:cy1},{ctx:ctx2,v1:false,cx:cx2,cy:cy2} ].forEach(v => {
+            ['s1','s2'].forEach(sk => {
+                v.ctx.beginPath(); v.ctx.strokeStyle = sk==='s1' ? 'rgba(255,255,255,0.1)' : 'rgba(255,215,0,0.1)';
+                for(let i=0; i<=Math.PI*2; i+=0.1) {
+                    const p = getPositions(i);
+                    // 根據視角投影轉換座標 (地球視角 XY, 側面視角 ZY)
+                    const pt = v.v1 ? {x:v.cx+p[sk].x*visualScale, y:v.cy+p[sk].y*visualScale} : {x:v.cx-p[sk].z*visualScale, y:v.cy+p[sk].x*visualScale};
+                    if(i===0) v.ctx.moveTo(pt.x,pt.y); else v.ctx.lineTo(pt.x,pt.y);
                 }
+                v.ctx.stroke();
             });
+        });
 
-            // 畫軌跡線 (Retrograde Loop)
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            for (let i = 0; i < stateRef.trace.length; i++) {
-                let pt = stateRef.trace[i];
-                let tx = -(pt.x - stateRef.cam) * 100;
-                if (i === 0) ctx.moveTo(tx, pt.y);
-                else ctx.lineTo(tx, pt.y);
-            }
-            ctx.stroke();
+        // 3. 繪製星體 (Stars) 與向量 (Vectors)
+        const r1 = 8, r2 = 5 + (state.m2/state.m1)*3; // 半徑根據質量比稍微調整
+        [ {ctx:ctx1,v1:true,cx:cx1,cy:cy1},{ctx:ctx2,v1:false,cx:cx2,cy:cy2} ].forEach(v => {
+            [['s1','white',r1, 1],['s2','#ffd700',r2, 2]].forEach(([sk,bc,r, idx]) => {
+                const pt = v.v1 ? {x:v.cx+pos[sk].x*visualScale,y:v.cy+pos[sk].y*visualScale} : {x:v.cx-pos[sk].z*visualScale,y:v.cy+pos[sk].x*visualScale};
+                const finalColor = getColor(pos[sk].rv, bc);
+                
+                // 畫星星
+                v.ctx.shadowBlur = 10; v.ctx.shadowColor = finalColor;
+                v.ctx.fillStyle = finalColor;
+                v.ctx.beginPath(); v.ctx.arc(pt.x,pt.y,r,0,Math.PI*2); v.ctx.fill(); v.ctx.shadowBlur = 0;
 
-            // 畫天體目前位置
-            let px = -(stateRef.unwrap - stateRef.cam) * 100;
-            ctx.fillStyle = pColor;
-            ctx.beginPath(); ctx.arc(px, lat, 4, 0, Math.PI*2); ctx.fill();
-
-            ctx.restore();
-        }
-
-        function drawOrbits(ctx, orbits) {
-            if (!document.getElementById('showOrbits').checked) return;
-            ctx.strokeStyle = 'rgba(71, 85, 105, 0.6)';
-            ctx.lineWidth = 1;
-            ctx.setLineDash([5, 5]);
-            orbits.forEach(r => {
-                ctx.beginPath(); ctx.arc(LOGICAL_SIZE/2, LOGICAL_SIZE/2, r, 0, Math.PI*2); ctx.stroke();
-            });
-            ctx.setLineDash([]);
-        }
-
-        // ==========================================
-        // 主動畫迴圈 (Main Animation Loop)
-        // ==========================================
-        function animate() {
-            if (isPlaying) time += 0.02 * simSpeed;
-            
-            const cx = LOGICAL_SIZE / 2; 
-            const cy = LOGICAL_SIZE / 2; 
-            const labels = i18n[currentLang];
-
-            // ---------------------------
-            // 1. 日心說 (Heliocentric)
-            // ---------------------------
-            let hCtx = ctxs.helioMain;
-            hCtx.fillStyle = '#000000'; 
-            hCtx.fillRect(0, 0, LOGICAL_SIZE, LOGICAL_SIZE);
-            drawOrbits(hCtx, planetMode === 'moon' ? [pHelioEarthRadius] : [pHelioEarthRadius, pHelioPlanetRadius]);
-            
-            let hSun = {x:cx, y:cy};
-            let hEarth = {x:cx+pHelioEarthRadius*Math.cos(time*pHelioEarthSpeed), y:cy+pHelioEarthRadius*Math.sin(time*pHelioEarthSpeed)};
-            let hPlanet = {x:cx+pHelioPlanetRadius*Math.cos(time*pHelioPlanetSpeed), y:cy+pHelioPlanetRadius*Math.sin(time*pHelioPlanetSpeed)};
-            let hMoon = {x:hEarth.x+rMoonOrbit*Math.cos(time*6.5), y:hEarth.y+rMoonOrbit*Math.sin(time*6.5)};
-            
-            let hTarget = planetMode === 'moon' ? hMoon : hPlanet;
-            
-            if (document.getElementById('showLOS').checked) {
-                hCtx.strokeStyle = 'rgba(255,255,255,0.2)';
-                hCtx.beginPath(); hCtx.moveTo(hEarth.x, hEarth.y); hCtx.lineTo(hTarget.x, hTarget.y); hCtx.stroke();
-            }
-            
-            drawBody(hCtx, hSun.x, hSun.y, rSun, '#fbbf24', '#fbbf24', labels.sun, 0, 0, true);
-            drawBody(hCtx, hEarth.x, hEarth.y, rEarth, '#3b82f6', '#1e3a8a', labels.earth, hSun.x, hSun.y);
-            if (planetMode==='moon') drawBody(hCtx, hMoon.x, hMoon.y, rMoon, '#cbd5e1', '#475569', labels.moon, hSun.x, hSun.y);
-            else drawBody(hCtx, hPlanet.x, hPlanet.y, rPlanet, pColor, pColorDark, labels['planetLabel_'+planetMode], hSun.x, hSun.y);
-            
-            // 依據模式繪製附屬視圖
-            if (viewMode === 'phase') {
-                drawTelescope(ctxs.helioTele, hEarth, hTarget, hSun, 280, pColor);
-            } else {
-                drawZodiac(ctxs.helioTele, hEarth, hTarget, hSun, zodiacState.helio, pColor);
-            }
-
-            // ---------------------------
-            // 2. 地心說 (Geocentric)
-            // ---------------------------
-            let gCtx = ctxs.geoMain;
-            gCtx.fillStyle = '#000000'; 
-            gCtx.fillRect(0, 0, LOGICAL_SIZE, LOGICAL_SIZE);
-            
-            let geoOrbits = planetMode === 'moon' ? [pGeoSunRadius, rMoonOrbit] : [pGeoSunRadius, pGeoDefRadius];
-            drawOrbits(gCtx, geoOrbits);
-            
-            let gEarth = {x:cx, y:cy};
-            let gSun = {x:cx+pGeoSunRadius*Math.cos(time*pGeoSunSpeed), y:cy+pGeoSunRadius*Math.sin(time*pGeoSunSpeed)};
-            let defPos = {x:cx+pGeoDefRadius*Math.cos(time*pGeoDefSpeed), y:cy+pGeoDefRadius*Math.sin(time*pGeoDefSpeed)};
-            let gPlanet = {x:defPos.x+pGeoEpiRadius*Math.cos(time*pGeoEpiSpeed), y:defPos.y+pGeoEpiRadius*Math.sin(time*pGeoEpiSpeed)};
-            let gMoon = {x:cx+rMoonOrbit*Math.cos(time*6.5), y:cy+rMoonOrbit*Math.sin(time*6.5)};
-            
-            let gTarget = planetMode === 'moon' ? gMoon : gPlanet;
-            
-            // 繪製軌跡 (Locus) - 在地心說且為逆行模式時繪製行星真實移動軌跡
-            if (viewMode === 'retro' && planetMode !== 'moon') {
-                if (document.getElementById('showTrace').checked) {
-                    let lastPt = mainViewTrace.geo[mainViewTrace.geo.length - 1];
-                    if (!lastPt || Math.hypot(gTarget.x - lastPt.x, gTarget.y - lastPt.y) > 1.5) {
-                        mainViewTrace.geo.push({x: gTarget.x, y: gTarget.y});
-                        if (mainViewTrace.geo.length > 1500) mainViewTrace.geo.shift(); // 限制儲存長度避免效能問題
-                    }
+                // 畫 S1 / S2 科學標籤
+                v.ctx.fillStyle = "rgba(255,255,255,0.8)";
+                v.ctx.textAlign = "left";
+                const baseLabel = "S";
+                v.ctx.font = "italic bold 11px serif";
+                const baseWidth = v.ctx.measureText(baseLabel).width;
+                v.ctx.fillText(baseLabel, pt.x - (baseWidth/2 + 2), pt.y - r - 6);
+                v.ctx.font = "bold 8px sans-serif";
+                v.ctx.fillText(idx, pt.x - (baseWidth/2 + 2) + baseWidth, pt.y - r - 4);
+                
+                // 4. 繪製徑向速度向量 (RV Vectors)
+                if (state.showVectors && Math.abs(pos[sk].rv) > 0.5) {
+                    const rv = pos[sk].rv;
+                    const isBlueshift = rv < 0;
+                    const vecColor = isBlueshift ? '#58a6ff' : '#ff7b72'; // 靠近為藍色，遠離為紅色
+                    const arrowLen = (Math.abs(rv) / Math.max(state.currentMaxRV, 1)) * 40;
                     
-                    if (mainViewTrace.geo.length > 1) {
-                        gCtx.save();
-                        gCtx.strokeStyle = pColor;
-                        gCtx.globalAlpha = 0.5;
-                        gCtx.lineWidth = 1.5;
-                        gCtx.beginPath();
-                        for (let i = 0; i < mainViewTrace.geo.length; i++) {
-                            let pt = mainViewTrace.geo[i];
-                            if (i === 0) gCtx.moveTo(pt.x, pt.y);
-                            else gCtx.lineTo(pt.x, pt.y);
+                    if (arrowLen > 1.5) { 
+                        if (!v.v1) {
+                            // View 2 (側面視角): 水平箭頭
+                            const dir = isBlueshift ? -1 : 1;
+                            const startX = pt.x;
+                            const endX = startX + arrowLen * dir;
+                            
+                            // 畫箭頭線條
+                            v.ctx.beginPath();
+                            v.ctx.moveTo(startX, pt.y);
+                            v.ctx.lineTo(endX, pt.y);
+                            v.ctx.strokeStyle = vecColor;
+                            v.ctx.lineWidth = 1.5;
+                            v.ctx.stroke();
+                            
+                            // 畫箭頭頭部
+                            v.ctx.beginPath();
+                            v.ctx.moveTo(endX, pt.y);
+                            v.ctx.lineTo(endX - dir * 5, pt.y - 3);
+                            v.ctx.lineTo(endX - dir * 5, pt.y + 3);
+                            v.ctx.fillStyle = vecColor;
+                            v.ctx.fill();
+                        } else {
+                            // View 1 (地球視角): 使用物理符號 ⊙ 或 ⊗
+                            const symR = r + 3; 
+                            
+                            // 畫外圈
+                            v.ctx.beginPath();
+                            v.ctx.arc(pt.x, pt.y, symR, 0, Math.PI * 2);
+                            v.ctx.strokeStyle = vecColor;
+                            v.ctx.lineWidth = 1.2;
+                            v.ctx.stroke();
+                            
+                            if (isBlueshift) {
+                                // ⊙ 點 (朝向地球出紙面)
+                                v.ctx.beginPath();
+                                v.ctx.arc(pt.x, pt.y, 1.5, 0, Math.PI * 2);
+                                v.ctx.fillStyle = vecColor;
+                                v.ctx.fill();
+                            } else {
+                                // ⊗ 叉 (遠離地球入紙面)
+                                const crossSize = symR * 0.7;
+                                v.ctx.beginPath();
+                                v.ctx.moveTo(pt.x - crossSize, pt.y - crossSize);
+                                v.ctx.lineTo(pt.x + crossSize, pt.y + crossSize);
+                                v.ctx.moveTo(pt.x + crossSize, pt.y - crossSize);
+                                v.ctx.lineTo(pt.x - crossSize, pt.y + crossSize);
+                                v.ctx.stroke();
+                            }
                         }
-                        gCtx.stroke();
-                        gCtx.restore();
                     }
-                } else {
-                    mainViewTrace.geo = []; // 沒勾選時清除軌跡，避免重新勾選時產生突兀的直線
                 }
-            }
+            });
+        });
+        
+        // 呼叫圖表更新，推進時間線 (scrubber)
+        rvChart.update('none');
+        requestAnimationFrame(draw);
+    }
 
-            // 畫本輪與均輪 (Geocentric Specific)
-            if (document.getElementById('showOrbits').checked && planetMode !== 'moon') {
-                gCtx.strokeStyle = (planetMode === 'venus') ? 'rgba(252, 211, 77, 0.4)' : 'rgba(239, 68, 68, 0.4)';
-                gCtx.lineWidth = 1;
-                gCtx.setLineDash([4, 4]);
-                gCtx.beginPath();
-                gCtx.arc(defPos.x, defPos.y, pGeoEpiRadius, 0, Math.PI * 2);
-                gCtx.stroke();
-                gCtx.setLineDash([]);
-            }
+    // --- 事件綁定與輸入監聽 (Event Listeners) ---
+    const ids = ['mass1','mass2','distance','eccentricity','inclination','azimuth','simSpeed'];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        el.oninput = (e) => {
+            resetToCustom();
+            const val = parseFloat(e.target.value);
+            // 根據不同拉桿更新狀態與文字顯示
+            if(id==='mass1') { state.m1 = val; document.getElementById('m1Label').innerText = val.toFixed(1); }
+            if(id==='mass2') { state.m2 = val; document.getElementById('m2Label').innerText = val.toFixed(1); }
+            if(id==='distance') { state.a_phys = val; document.getElementById('distLabel').innerText = val.toFixed(1); }
+            if(id==='eccentricity') { state.eccentricity = val; document.getElementById('eccLabel').innerText = val.toFixed(2); }
+            if(id==='inclination') { state.inclination = val; document.getElementById('incLabel').innerText = val + "°"; }
+            if(id==='azimuth') { state.azimuth = val; document.getElementById('azimuthLabel').innerText = val + "°"; }
+            if(id==='simSpeed') { state.speed = val; document.getElementById('speedLabel').innerText = val.toFixed(1) + "x"; }
+            generateChartData(); // 重新計算圖表軌跡
+        };
+    });
 
-            if (document.getElementById('showLabels').checked && planetMode !== 'moon') {
-                gCtx.save();
-                gCtx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-                gCtx.font = 'bold 11px "Microsoft JhengHei", sans-serif';
-                gCtx.textAlign = 'center';
-                gCtx.fillText(labels.deferent, cx, cy - pGeoDefRadius - 6);
-                gCtx.fillText(labels.epicycle, defPos.x, defPos.y - pGeoEpiRadius - 6);
-                gCtx.restore();
-            }
-            
-            if (document.getElementById('showLOS').checked) {
-                gCtx.strokeStyle = 'rgba(255,255,255,0.2)';
-                gCtx.beginPath(); gCtx.moveTo(gEarth.x, gEarth.y); gCtx.lineTo(gTarget.x, gTarget.y); gCtx.stroke();
-            }
+    // 處理真實系統預設選項切換
+    presetSelect.onchange = e => {
+        const p = presets[e.target.value];
+        if(!p) return; // 如果選擇"自定義參數"
+        
+        state.m1 = p.m1; state.m2 = p.m2; state.a_phys = p.a; state.eccentricity = p.e; state.inclination = p.i;
+        
+        // 同步更新拉桿與標籤
+        ['mass1','mass2','distance','eccentricity','inclination'].forEach(id => {
+            const v = id==='distance'?p.a:(id==='mass1'?p.m1:(id==='mass2'?p.m2:(id==='eccentricity'?p.e:p.i)));
+            document.getElementById(id).value = v;
+        });
+        document.getElementById('m1Label').innerText = p.m1; 
+        document.getElementById('m2Label').innerText = p.m2;
+        document.getElementById('distLabel').innerText = p.a; 
+        document.getElementById('eccLabel').innerText = p.e;
+        document.getElementById('incLabel').innerText = p.i + "°";
+        generateChartData();
+    };
 
-            drawBody(gCtx, gEarth.x, gEarth.y, rEarth, '#3b82f6', '#1e3a8a', labels.earth, gSun.x, gSun.y);
-            drawBody(gCtx, gSun.x, gSun.y, rSun, '#fbbf24', '#fbbf24', labels.sun, 0,0,true);
-            if (planetMode==='moon') drawBody(gCtx, gMoon.x, gMoon.y, rMoon, '#cbd5e1', '#475569', labels.moon, gSun.x, gSun.y);
-            else drawBody(gCtx, gPlanet.x, gPlanet.y, rPlanet, pColor, pColorDark, labels['planetLabel_'+planetMode], gSun.x, gSun.y);
-            
-            // 依據模式繪製附屬視圖
-            if (viewMode === 'phase') {
-                drawTelescope(ctxs.geoTele, gEarth, gTarget, gSun, 280, pColor);
-            } else {
-                drawZodiac(ctxs.geoTele, gEarth, gTarget, gSun, zodiacState.geo, pColor);
-            }
+    // 選項勾選事件
+    document.getElementById('showVectors').onchange = e => state.showVectors = e.target.checked;
 
-            requestAnimationFrame(animate);
-        }
+    document.getElementById('exaggerateColor').onchange = e => {
+        state.exaggerateColor = e.target.checked;
+        document.getElementById('colorWarning').style.display = state.exaggerateColor ? 'block' : 'none';
+    };
 
-        // ==========================================
-        // 初始化執行 (Initialization)
-        // ==========================================
-        document.getElementById('playPauseBtn').onclick = () => { isPlaying = !isPlaying; document.getElementById('playPauseBtn').innerText = isPlaying?'⏸':'▶'; };
-        document.getElementById('speedUpBtn').onclick = () => { simSpeed = Math.min(3, simSpeed+0.1); updateLabels(); };
-        document.getElementById('speedDownBtn').onclick = () => { simSpeed = Math.max(0.1, simSpeed-0.1); updateLabels(); };
+    // 暫停/播放按鈕
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    playPauseBtn.onclick = () => {
+        isPlaying = !isPlaying;
+        playPauseBtn.innerText = isPlaying ? translations[currentLang].pauseBtn : translations[currentLang].playBtn;
+        playPauseBtn.style.background = isPlaying ? '#238636' : '#d73a49';
+    };
 
-        setPlanetParameters();
-        updateLabels();
-        animate();
-    </script>
+    // 滑鼠與觸控拖曳旋轉軌道 (3D Rotation Interaction)
+    let isDragging = false, lx, ly;
+    function start(e) { isDragging = true; lx = e.clientX || e.touches?.[0].clientX; ly = e.clientY || e.touches?.[0].clientY; }
+    function end() { isDragging = false; }
+    function move(e) {
+        if(!isDragging) return;
+        resetToCustom();
+        const cx = e.clientX || e.touches?.[0].clientX, cy = e.clientY || e.touches?.[0].clientY;
+        
+        // X 方向拖曳更改方位角 (Azimuth)
+        state.azimuth = (state.azimuth - (cx - lx)*0.4 + 360) % 360;
+        // Y 方向拖曳更改傾角 (Inclination)
+        state.inclination = Math.max(0, Math.min(90, state.inclination - (cy - ly)*0.4));
+        lx = cx; ly = cy;
+        
+        // 綁定回拉桿 UI
+        document.getElementById('azimuth').value = Math.round(state.azimuth);
+        document.getElementById('azimuthLabel').innerText = Math.round(state.azimuth) + "°";
+        document.getElementById('inclination').value = Math.round(state.inclination);
+        document.getElementById('incLabel').innerText = Math.round(state.inclination) + "°";
+        generateChartData();
+    }
+    
+    // 將拖曳事件綁定至兩個視角的畫布
+    [canvas1, canvas2].forEach(c => {
+        c.addEventListener('mousedown', start); c.addEventListener('touchstart', start);
+    });
+    window.addEventListener('mouseup', end); window.addEventListener('touchend', end);
+    window.addEventListener('mousemove', move); window.addEventListener('touchmove', move);
+
+    // 說明對話框控制
+    document.getElementById('helpTrigger').onclick = () => document.getElementById('helpModal').style.display = 'flex';
+    document.getElementById('closeHelp').onclick = () => document.getElementById('helpModal').style.display = 'none';
+    
+    // 語言切換邏輯
+    document.getElementById('langToggle').onclick = () => {
+        currentLang = currentLang === 'zh' ? 'en' : 'zh';
+        applyLang();
+    };
+
+    function applyLang() {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if(translations[currentLang][key]) el.innerHTML = translations[currentLang][key];
+        });
+        generateChartData();
+    }
+
+    // --- 程式入口點 (Boot) ---
+    window.addEventListener('resize', resize);
+    resize(); 
+    applyLang(); 
+    generateChartData(); 
+    draw();
+</script>
 </body>
 </html>
