@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>能量守恆 | Energy Conservation</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax 3 -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Tailwind Config for Custom Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3c72',
+                        secondary: '#2a5298',
+                        accent: '#DC2626',
+                        vectorV: '#10b981', // Emerald
+                        vectorT: '#3b82f6', // Blue
+                        vectorW: '#f59e0b', // Amber
+                        vectorNet: '#8b5cf6', // Purple
+                        vectorE: '#eab308'  // Yellow for Elastic
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- Global Styles & Custom Scrollbar --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8fafc;
+            overscroll-behavior-y: none; 
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; background: transparent; padding: 6px 0;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%;
+            background: #1e3c72; cursor: pointer; margin-top: -7px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3); border: 2px solid #fff;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px; cursor: pointer; background: #cbd5e1; border-radius: 2px;
+        }
+        input[type=range]:focus { outline: none; }
+        
+        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .accent-v { accent-color: #10b981; }
+        .accent-ind { accent-color: #3b82f6; }
+        .accent-net { accent-color: #8b5cf6; }
+        
+        /* Tab Transitions */
+        .tab-active { color: #1e3c72; border-bottom: 2px solid #1e3c72; font-weight: bold; background-color: #f8fafc; }
+        .tab-inactive { color: #94a3b8; font-weight: 600; border-bottom: 2px solid transparent; background-color: #f1f5f9; }
+        .tab-inactive:hover { color: #64748b; background-color: #f8fafc; }
+    </style>
+</head>
+<body class="h-[100dvh] w-screen overflow-hidden flex flex-col text-slate-800">
+
+    <!-- --- Header --- -->
+    <header class="bg-primary bg-gradient-to-r from-primary to-secondary text-white shadow-md z-20 flex-shrink-0">
+        <div class="px-3 md:px-4 py-2 md:py-3 flex justify-between items-center max-w-full">
+            <h1 class="text-lg md:text-xl font-bold tracking-wide flex items-center gap-2 truncate">
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <span data-i18n="appTitle" class="truncate">Energy Conservation</span>
+            </h1>
+            <div class="flex items-center gap-2 md:gap-3 flex-shrink-0">
+                <button onclick="toggleHelp()" class="bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full text-xs md:text-sm font-semibold transition-colors border border-white/30 whitespace-nowrap">
+                    <span data-i18n="btnHelp">說明</span>
+                </button>
+                <button onclick="toggleLanguage()" class="bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full text-xs md:text-sm font-semibold transition-colors border border-white/30 whitespace-nowrap">
+                    <span id="langToggleBtn">繁/Eng</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- --- Main Workspace --- -->
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden bg-slate-100 relative">
+        
+        <!-- Right/Top: Canvas Area -->
+        <section class="order-1 md:order-2 w-full h-[55%] md:h-full flex flex-col p-2 md:p-3 gap-2 md:gap-3 relative overflow-hidden">
+            <!-- Animation Canvas -->
+            <div class="flex-[3] md:flex-[5] glass-panel rounded-xl shadow-sm relative overflow-hidden flex flex-col" id="simContainer">
+                <div class="absolute top-1 md:top-2 left-2 md:left-4 text-xs md:text-sm font-semibold text-slate-400 z-10" data-i18n="lblSimulation">Simulation View</div>
+                <div class="absolute top-1 md:top-2 right-2 md:right-4 text-[10px] md:text-xs font-mono bg-white/80 px-2 py-1 rounded shadow-sm text-slate-600 z-10 border border-slate-200">
+                    <span data-i18n="lblTime">t</span>: <span id="timeDisplay">0.00</span> s
+                </div>
+                <canvas id="simCanvas" class="w-full h-full cursor-crosshair touch-none"></canvas>
+            </div>
+
+            <!-- Graph Canvas -->
+            <div class="flex-[2] md:flex-[3] glass-panel rounded-xl shadow-sm relative overflow-hidden flex flex-col" id="graphContainer">
+                <div class="absolute top-1 md:top-2 left-2 md:left-4 z-10 flex flex-col md:flex-row gap-1 md:gap-4 items-start md:items-center w-full pr-4">
+                    <span class="text-xs md:text-sm font-semibold text-slate-400" data-i18n="lblGraph">Data Graph</span>
+                    <div id="graphLegend" class="flex flex-wrap gap-2 md:gap-3 text-[10px] md:text-xs font-mono"></div>
+                </div>
+                <canvas id="graphCanvas" class="w-full h-full mt-7 md:mt-8 touch-none"></canvas>
+            </div>
+        </section>
+
+        <!-- Left/Bottom: Control Sidebar -->
+        <aside class="order-2 md:order-1 w-full h-[45%] md:h-full md:w-64 lg:w-72 flex-shrink-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] md:shadow-[2px_0_10px_rgba(0,0,0,0.05)] z-10 flex flex-col border-t md:border-t-0 md:border-r border-slate-200">
+            
+            <!-- 4-Tabs Navigation -->
+            <div class="grid grid-cols-4 w-full bg-slate-100 border-b border-slate-200 flex-shrink-0 text-center">
+                <button id="tabPend" onclick="setMode('pendulum')" class="py-2 text-[10px] md:text-xs transition-all tab-active" data-i18n="tabPendulum">Pendulum</button>
+                <button id="tabBounc" onclick="setMode('bouncing')" class="py-2 text-[10px] md:text-xs transition-all tab-inactive" data-i18n="tabBouncing">Bouncing</button>
+                <button id="tabTramp" onclick="setMode('trampoline')" class="py-2 text-[10px] md:text-xs transition-all tab-inactive" data-i18n="tabTrampoline">Trampoline</button>
+                <button id="tabBungee" onclick="setMode('bungee')" class="py-2 text-[10px] md:text-xs transition-all tab-inactive" data-i18n="tabBungee">Bungee</button>
+            </div>
+
+            <div class="p-2 md:p-3 space-y-3 overflow-y-auto flex-1">
+                
+                <!-- Playback & Speed Controls Grouped -->
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex flex-col gap-3 sticky top-0 z-20 shadow-sm">
+                    <div class="flex gap-2">
+                        <button onclick="playPause()" id="btnPlay" class="flex-[2] bg-primary hover:bg-secondary text-white py-1.5 px-2 rounded-lg shadow-sm transition-all font-semibold flex items-center justify-center gap-1.5 text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span data-i18n="btnPlay">Play</span>
+                        </button>
+                        <button onclick="resetSim()" class="flex-1 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 py-1.5 px-2 rounded-lg shadow-sm transition-all font-semibold flex items-center justify-center gap-1 text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        </button>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] md:text-xs mb-1">
+                            <label class="font-medium text-slate-600" data-i18n="paramSpeed">Sim Speed</label>
+                            <span id="valSpeed" class="font-mono text-primary font-bold">1.0x</span>
+                        </div>
+                        <input type="range" id="sliderSpeed" min="0.1" max="2.0" step="0.1" value="1.0" oninput="updateSpeed()">
+                    </div>
+                </div>
+
+                <!-- Parameters Card: PENDULUM -->
+                <div id="paramsPendulum" class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                    <h3 class="font-bold text-slate-700 mb-2 border-b pb-1 text-xs" data-i18n="sectionParams">Parameters</h3>
+                    <div class="grid grid-cols-2 gap-x-3 gap-y-2">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramLength">Length \(L\)</label>
+                                <span id="valL" class="font-mono text-primary font-bold">1.0 m</span>
+                            </div>
+                            <input type="range" id="sliderL" min="0.5" max="2.0" step="0.1" value="1.0" oninput="updateParams()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramMass">Mass \(m\)</label>
+                                <span id="valM" class="font-mono text-primary font-bold">0.5 kg</span>
+                            </div>
+                            <input type="range" id="sliderM" min="0.1" max="1.0" step="0.1" value="0.5" oninput="updateParams()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramAngle">Angle \(\theta_0\)</label>
+                                <span id="valAngle" class="font-mono text-primary font-bold">45°</span>
+                            </div>
+                            <input type="range" id="sliderAngle" min="5" max="90" step="1" value="45" oninput="updateParams()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramDamping">Air Resistance</label>
+                                <span id="valLossP" class="font-mono text-primary font-bold">0%</span>
+                            </div>
+                            <input type="range" id="sliderLossP" min="0" max="80" step="5" value="0" oninput="updateParams()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parameters Card: BOUNCING BALL -->
+                <div id="paramsBouncing" class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 hidden">
+                    <h3 class="font-bold text-slate-700 mb-2 border-b pb-1 text-xs" data-i18n="sectionParams">Parameters</h3>
+                    <div class="grid grid-cols-2 gap-x-3 gap-y-2">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramHeight">Height \(h_0\)</label>
+                                <span id="valH" class="font-mono text-primary font-bold">2.0 m</span>
+                            </div>
+                            <input type="range" id="sliderH" min="0.5" max="4.0" step="0.1" value="2.0" oninput="updateParams()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramMass">Mass \(m\)</label>
+                                <span id="valMB" class="font-mono text-primary font-bold">0.5 kg</span>
+                            </div>
+                            <input type="range" id="sliderMB" min="0.1" max="1.0" step="0.1" value="0.5" oninput="updateParams()">
+                        </div>
+                        <div class="col-span-2">
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramLoss">Energy Loss</label>
+                                <span id="valLossB" class="font-mono text-primary font-bold">0%</span>
+                            </div>
+                            <input type="range" id="sliderLossB" min="0" max="80" step="5" value="0" oninput="updateParams()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parameters Card: TRAMPOLINE -->
+                <div id="paramsTrampoline" class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 hidden">
+                    <h3 class="font-bold text-slate-700 mb-2 border-b pb-1 text-xs" data-i18n="sectionParams">Parameters</h3>
+                    <div class="grid grid-cols-2 gap-x-3 gap-y-2">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramHeight">Height \(h_0\)</label>
+                                <span id="valHT" class="font-mono text-primary font-bold">2.0 m</span>
+                            </div>
+                            <input type="range" id="sliderHT" min="0.5" max="4.0" step="0.1" value="2.0" oninput="updateParams()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramMass">Mass \(m\)</label>
+                                <span id="valMT" class="font-mono text-primary font-bold">50 kg</span>
+                            </div>
+                            <input type="range" id="sliderMT" min="20" max="100" step="5" value="50" oninput="updateParams()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramK">Stiffness \(k\)</label>
+                                <span id="valKT" class="font-mono text-primary font-bold">2000 N/m</span>
+                            </div>
+                            <input type="range" id="sliderKT" min="500" max="5000" step="100" value="2000" oninput="updateParams()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramDamping">Air Resistance</label>
+                                <span id="valLossT" class="font-mono text-primary font-bold">0%</span>
+                            </div>
+                            <input type="range" id="sliderLossT" min="0" max="80" step="5" value="0" oninput="updateParams()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parameters Card: BUNGEE -->
+                <div id="paramsBungee" class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 hidden">
+                    <h3 class="font-bold text-slate-700 mb-2 border-b pb-1 text-xs" data-i18n="sectionParams">Parameters</h3>
+                    <div class="grid grid-cols-2 gap-x-3 gap-y-2">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramHeight">Height \(h_0\)</label>
+                                <span id="valHBg" class="font-mono text-primary font-bold">50 m</span>
+                            </div>
+                            <input type="range" id="sliderHBg" min="20" max="100" step="5" value="50" oninput="updateParams()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramMass">Mass \(m\)</label>
+                                <span id="valMBg" class="font-mono text-primary font-bold">50 kg</span>
+                            </div>
+                            <input type="range" id="sliderMBg" min="30" max="100" step="5" value="50" oninput="updateParams()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramL0">Cord \(L_0\)</label>
+                                <span id="valL0Bg" class="font-mono text-primary font-bold">20 m</span>
+                            </div>
+                            <input type="range" id="sliderL0Bg" min="10" max="50" step="1" value="20" oninput="updateParams()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramK">Stiffness \(k\)</label>
+                                <span id="valKBg" class="font-mono text-primary font-bold">100 N/m</span>
+                            </div>
+                            <input type="range" id="sliderKBg" min="20" max="200" step="10" value="100" oninput="updateParams()">
+                        </div>
+                        <div class="col-span-2">
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <label class="font-medium text-slate-600" data-i18n="paramDamping">Air Resistance</label>
+                                <span id="valLossBg" class="font-mono text-primary font-bold">0%</span>
+                            </div>
+                            <input type="range" id="sliderLossBg" min="0" max="80" step="5" value="0" oninput="updateParams()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display Settings (Shared) -->
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                    <h3 class="font-bold text-slate-700 mb-2 border-b pb-1 text-xs" data-i18n="sectionDisplay">Display</h3>
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-semibold text-slate-500 w-10" data-i18n="lblVelocity">Vel <i>v</i>:</span>
+                            <label class="flex items-center gap-1 cursor-pointer">
+                                <input type="radio" name="velMode" value="none" class="w-3 h-3" onchange="updateDisplay()" checked>
+                                <span data-i18n="optHide" class="text-[10px] text-slate-600">Hide</span>
+                            </label>
+                            <label class="flex items-center gap-1 cursor-pointer">
+                                <input type="radio" name="velMode" value="show" class="accent-v w-3 h-3" onchange="updateDisplay()">
+                                <span data-i18n="optShow" class="text-[10px] text-slate-600">Show</span>
+                            </label>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-semibold text-slate-500 w-10" data-i18n="lblForces">Force:</span>
+                            <label class="flex items-center gap-1 cursor-pointer">
+                                <input type="radio" name="forceMode" value="none" class="w-3 h-3" onchange="updateDisplay()" checked>
+                                <span data-i18n="optHide" class="text-[10px] text-slate-600">Hide</span>
+                            </label>
+                            <label class="flex items-center gap-1 cursor-pointer">
+                                <input type="radio" name="forceMode" value="all" class="accent-ind w-3 h-3" onchange="updateDisplay()">
+                                <span data-i18n="optForceShow" class="text-[10px] text-slate-600">Draw All</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graph Setup Card -->
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                    <h3 class="font-bold text-slate-700 mb-2 border-b pb-1 text-xs" data-i18n="sectionGraph">Graph Settings</h3>
+                    <div class="grid grid-cols-2 gap-2 text-[11px]">
+                        <div>
+                            <label class="block text-slate-500 mb-0.5" data-i18n="lblXAxis">X-Axis</label>
+                            <select id="selX" class="w-full bg-white border border-slate-300 rounded p-1 focus:ring-1 focus:ring-primary outline-none" onchange="resetHistory()"></select>
+                        </div>
+                        <div>
+                            <label class="block text-slate-500 mb-0.5" data-i18n="lblYAxis">Y-Axis</label>
+                            <select id="selY" class="w-full bg-white border border-slate-300 rounded p-1 focus:ring-1 focus:ring-primary outline-none" onchange="resetHistory()"></select>
+                        </div>
+                        <div class="col-span-2 mt-2 pt-2 border-t border-slate-200">
+                            <div class="flex justify-between items-center text-[10px] mb-1">
+                                <div class="flex items-center gap-1.5">
+                                    <label class="font-medium text-slate-600" data-i18n="paramDatum"><i>h</i>=0 Ref Offset</label>
+                                    <button onclick="resetDatum()" class="p-0.5 text-slate-400 hover:text-accent rounded bg-slate-200/50 hover:bg-slate-200 transition-colors" title="Reset to 0">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                    </button>
+                                </div>
+                                <span id="valDatum" class="font-mono text-primary font-bold">0.000 m</span>
+                            </div>
+                            <input type="range" id="sliderDatum" min="-2.0" max="2.0" step="0.001" value="0.0" oninput="updateDatum()">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+    </main>
+
+    <!-- --- Footer --- -->
+    <footer class="bg-white border-t border-slate-200 py-1.5 text-center text-[10px] text-slate-500 font-medium z-20 flex-shrink-0">
+        <span id="footerText">CMA Secondary School. Physics Department.</span>
+    </footer>
+
+    <!-- --- Help / Instructions Modal --- -->
+    <div id="helpModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3 border-b pb-2">
+                    <h2 class="text-xl font-bold text-primary" data-i18n="helpTitle">Energy Conservation</h2>
+                    <button onclick="toggleHelp()" class="text-slate-400 hover:text-red-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                <div class="space-y-3 text-sm text-slate-700 leading-relaxed" id="helpContent"></div>
+                <div class="mt-5 pt-3 border-t text-center">
+                    <button onclick="toggleHelp()" class="bg-primary hover:bg-secondary text-white px-6 py-1.5 rounded-lg transition-colors font-medium text-sm" data-i18n="btnClose">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- Application Logic --- -->
+    <script>
+        /* --- 1. Bilingual Dictionary --- */
+        const dict = {
+            en: {
+                appTitle: "Energy Conservation",
+                btnHelp: "Info",
+                tabPendulum: "Pendulum",
+                tabBouncing: "Bouncing",
+                tabTrampoline: "Trampoline",
+                tabBungee: "Bungee",
+                btnPlay: "Play",
+                btnPause: "Pause",
+                btnReset: "Reset",
+                paramSpeed: "Sim Speed",
+                sectionParams: "Parameters",
+                paramLength: "Length \\(L\\)",
+                paramMass: "Mass \\(m\\)",
+                paramAngle: "Angle \\(\\theta_0\\)",
+                paramHeight: "Height \\(h_0\\)",
+                paramK: "Stiffness \\(k\\)",
+                paramL0: "Cord Length \\(L_0\\)",
+                paramLoss: "Energy Loss",
+                paramDamping: "Air Resistance",
+                paramDatum: "<i>h</i>=0 Ref Offset",
+                sectionDisplay: "Display Settings",
+                lblVelocity: "Velocity",
+                optHide: "Hide",
+                optShow: "Show",
+                lblForces: "Forces:",
+                optForceShow: "Draw All",
+                lblF_W: "Weight",
+                lblF_N: "Normal Reaction",
+                lblF_f: "Air Resistance",
+                lblF_T: "Tension",
+                lblF_E: "Elastic Force",
+                sectionGraph: "Graph Settings",
+                lblXAxis: "X-Axis",
+                lblYAxis: "Y-Axis",
+                optTime: "Time (𝑡)",
+                optAngle: "Angle (𝜃)",
+                optXPos: "Pos (𝑥)",
+                optHeight: "Height (ℎ)",
+                optEnergy: "Energies",
+                optVel: "Velocity (𝑣)",
+                optKE: "Kin Energy (KE)",
+                optPE: "Grav PE (GPE)",
+                optEPE: "Elastic PE (EPE)",
+                optTE: "Mech Energy (ME)",
+                lblSimulation: "Simulation View",
+                lblTime: "<i>t</i>",
+                lblGraph: "Data Graph",
+                footer: "CMA Secondary School. Physics Department.",
+                helpTitle: "Principle of Energy Conservation",
+                btnClose: "Close",
+                legKE: "<i>KE</i>", legPE: "<i>GPE</i>", legEPE: "<i>EPE</i>", legTE: "<i>ME</i>",
+                axis_t: "Time <i>t</i> (s)",
+                axis_thetaDeg: "Angle <i>θ</i> (°)",
+                axis_x: "Position <i>x</i> (m)",
+                axis_h: "Height <i>h</i> (m)",
+                axis_energy: "Energy <i>E</i> (J)",
+                axis_v: "Velocity <i>v</i> (m/s)",
+                axis_ke: "Kinetic Energy <i>KE</i> (J)",
+                axis_pe: "Gravitational PE <i>GPE</i> (J)",
+                axis_epe: "Elastic PE <i>EPE</i> (J)",
+                axis_te: "Mechanical Energy <i>ME</i> (J)",
+                helpBody: `
+                    <p>This simulation illustrates the <b>Law of Conservation of Mechanical Energy</b>.</p>
+                    <h3 class="font-bold text-primary mt-2">Energy Transformations</h3>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><b>Highest Point:</b> Velocity is zero. Kinetic Energy (<i>KE</i>) is 0. Gravitational Potential Energy (<i>GPE</i>) is at its maximum.</li>
+                        <li><b>Lowest Point (h=0):</b> Potential Energy is 0. The object moves fastest, so Kinetic Energy is at its maximum.</li>
+                        <li><b>Elastic Deformations:</b> In Trampoline and Bungee modes, as the surface/cord stretches, energy is stored as Elastic Potential Energy (<i>EPE</i>).</li>
+                    </ul>
+                    <h3 class="font-bold text-primary mt-2">Total Mechanical Energy (ME)</h3>
+                    <p>\\( ME = KE + GPE + EPE \\)</p>
+                    <p>In a closed system with no external non-conservative forces, <b>ME remains constant</b>. You can introduce Air Resistance or Collision Loss to demonstrate how Mechanical Energy is dissipated into heat and sound.</p>
+                `
+            },
+            zh: {
+                appTitle: "能量守恆",
+                btnHelp: "說明",
+                tabPendulum: "單擺",
+                tabBouncing: "彈跳球",
+                tabTrampoline: "跳彈床",
+                tabBungee: "笨豬跳",
+                btnPlay: "播放",
+                btnPause: "暫停",
+                btnReset: "重置",
+                paramSpeed: "模擬速度",
+                sectionParams: "參數設定",
+                paramLength: "擺長 \\(L\\)",
+                paramMass: "質量 \\(m\\)",
+                paramAngle: "初始角 \\(\\theta_0\\)",
+                paramHeight: "高度 \\(h_0\\)",
+                paramK: "彈簧常數 \\(k\\)",
+                paramL0: "原長 \\(L_0\\)",
+                paramLoss: "碰撞損耗",
+                paramDamping: "空氣阻力",
+                paramDatum: "<i>h</i>=0 基準偏移",
+                sectionDisplay: "顯示設定",
+                lblVelocity: "速度",
+                optHide: "隱藏",
+                optShow: "顯示",
+                lblForces: "受力:",
+                optForceShow: "顯示全部",
+                lblF_W: "重量",
+                lblF_N: "法向反作用力",
+                lblF_f: "空氣阻力",
+                lblF_T: "張力",
+                lblF_E: "彈力",
+                sectionGraph: "圖表設定",
+                lblXAxis: "X 軸",
+                lblYAxis: "Y 軸",
+                optTime: "時間 (𝑡)",
+                optAngle: "角度 (𝜃)",
+                optXPos: "位置 (𝑥)",
+                optHeight: "高度 (ℎ)",
+                optEnergy: "能量分析",
+                optVel: "速度 (𝑣)",
+                optKE: "動能 KE",
+                optPE: "重力勢能 GPE",
+                optEPE: "彈性勢能 (EPE)",
+                optTE: "機械能 ME",
+                lblSimulation: "模擬視圖",
+                lblTime: "<i>t</i>",
+                lblGraph: "數據圖表",
+                footer: "廠商會中學．物理科",
+                helpTitle: "能量守恆定律",
+                btnClose: "關閉",
+                legKE: "<i>KE</i>", legPE: "<i>GPE</i>", legEPE: "<i>EPE</i>", legTE: "<i>ME</i>",
+                axis_t: "時間 <i>t</i> (s)",
+                axis_thetaDeg: "角度 <i>θ</i> (°)",
+                axis_x: "位置 <i>x</i> (m)",
+                axis_h: "高度 <i>h</i> (m)",
+                axis_energy: "能量 <i>E</i> (J)",
+                axis_v: "速度 <i>v</i> (m/s)",
+                axis_ke: "動能 <i>KE</i> (J)",
+                axis_pe: "重力勢能 <i>GPE</i> (J)",
+                axis_epe: "彈性勢能 <i>EPE</i> (J)",
+                axis_te: "機械能 <i>ME</i> (J)",
+                helpBody: `
+                    <p>本模擬展示了<b>機械能守恆定律</b>的實際應用。</p>
+                    <h3 class="font-bold text-primary mt-2">能量的轉換</h3>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><b>最高點：</b> 瞬時速度為零，動能 (<i>KE</i>) 為 0。重力勢能 (<i>GPE</i>) 達到最大值。</li>
+                        <li><b>最低點：</b> 當重力勢能降至最低時，如果沒有彈性形變，物體的動能達到最大值。</li>
+                        <li><b>彈性形變：</b> 在「跳彈床」與「笨豬跳」模式中，當彈簧床或繩索被拉伸時，能量會儲存為彈性勢能 (<i>EPE</i>)。</li>
+                    </ul>
+                    <h3 class="font-bold text-primary mt-2">總機械能 (ME)</h3>
+                    <p>\\( ME = KE + GPE + EPE \\)</p>
+                    <p>在沒有空氣阻力等非保守力的封閉系統中，<b>總機械能 ME 保持不變</b>。您可以加入空氣阻力或碰撞損耗，觀察機械能如何轉化為內能及聲能而消散。</p>
+                `
+            }
+        };
+
+        /* --- 2. Global State --- */
+        const G = 9.81;
+        let state = {
+            lang: 'zh',
+            mode: 'pendulum', 
+            isRunning: false,
+            time: 0,
+            speed: 1.0,
+            stopTimer: 0, 
+            hOffset: 0.0, // Global dynamic h=0 offset
+            paramsP: { L: 1.0, m: 0.5, theta0: Math.PI / 4, loss: 0 },
+            currentP: { theta: Math.PI / 4, omega: 0 },
+            paramsB: { h0: 2.0, m: 0.5, loss: 0 },
+            currentB: { h: 2.0, v: 0 },
+            paramsT: { h0: 2.0, m: 50, k: 2000, loss: 0 }, 
+            currentT: { h: 2.0, v: 0 },
+            paramsBg: { h0: 50, m: 50, L0: 20, k: 100, loss: 0 }, 
+            currentBg: { h: 50, v: 0 },
+            display: { v: false, fMode: 'none' },
+            graph: { x: 'x', y: 'h' },
+            history: [], 
+            maxHistoryPoints: 5000 
+        };
+
+        const pCanvas = document.getElementById('simCanvas');
+        const pCtx = pCanvas.getContext('2d', { alpha: false }); 
+        const gCanvas = document.getElementById('graphCanvas');
+        const gCtx = gCanvas.getContext('2d', { alpha: false });
+
+        let animFrameId;
+        let lastTime = 0;
+
+        /* --- 3. Initialization & UI Logic --- */
+        function init() {
+            setMode('pendulum');
+            updateLanguageUI();
+            
+            setTimeout(() => {
+                setupCanvases();
+                updateParams(); 
+                draw();
+            }, 50);
+
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    setupCanvases();
+                    draw();
+                }, 100);
+            });
+
+            requestAnimationFrame(renderLoop);
+        }
+
+        function toggleLanguage() {
+            state.lang = state.lang === 'en' ? 'zh' : 'en';
+            updateLanguageUI();
+            updateGraphOptions();
+        }
+
+        function setMode(mode) {
+            state.mode = mode;
+            
+            // UI Tabs Reset
+            ['Pend', 'Bounc', 'Tramp', 'Bungee'].forEach(t => {
+                document.getElementById('tab' + t).className = 'py-2 text-[10px] md:text-xs transition-all tab-inactive';
+            });
+            document.getElementById('tab' + (mode === 'pendulum' ? 'Pend' : mode === 'bouncing' ? 'Bounc' : mode === 'trampoline' ? 'Tramp' : 'Bungee')).className = 'py-2 text-[10px] md:text-xs transition-all tab-active';
+            
+            // Panels
+            document.getElementById('paramsPendulum').classList.toggle('hidden', mode !== 'pendulum');
+            document.getElementById('paramsBouncing').classList.toggle('hidden', mode !== 'bouncing');
+            document.getElementById('paramsTrampoline').classList.toggle('hidden', mode !== 'trampoline');
+            document.getElementById('paramsBungee').classList.toggle('hidden', mode !== 'bungee');
+            
+            // Default Graphs
+            if (mode === 'pendulum') {
+                state.graph = { x: 'x', y: 'h' };
+            } else {
+                state.graph = { x: 't', y: 'h' };
+            }
+
+            updateGraphOptions();
+            updateLanguageUI();
+            updateParams();
+            updateDatumSlider();
+        }
+
+        function updateDatumSlider() {
+            const slider = document.getElementById('sliderDatum');
+            if (state.mode === 'pendulum') { slider.min = -2; slider.max = 2; slider.step = 0.001; }
+            else if (state.mode === 'bouncing' || state.mode === 'trampoline') { slider.min = -2; slider.max = 4; slider.step = 0.001; }
+            else if (state.mode === 'bungee') { slider.min = -10; slider.max = 100; slider.step = 0.001; }
+            
+            // Re-clamp value
+            let val = parseFloat(slider.value);
+            if (val > parseFloat(slider.max)) val = parseFloat(slider.max);
+            if (val < parseFloat(slider.min)) val = parseFloat(slider.min);
+            slider.value = val;
+            
+            updateDatum();
+        }
+
+        function updateDatum() {
+            state.hOffset = parseFloat(document.getElementById('sliderDatum').value);
+            document.getElementById('valDatum').innerText = state.hOffset.toFixed(3) + ' m';
+            resetHistory();
+            if(!state.isRunning) {
+                recordState();
+                draw();
+            }
+        }
+
+        function resetDatum() {
+            document.getElementById('sliderDatum').value = 0.0;
+            updateDatum();
+        }
+
+        function updateGraphOptions() {
+            const selX = document.getElementById('selX');
+            const selY = document.getElementById('selY');
+            const d = dict[state.lang];
+            
+            selX.innerHTML = '';
+            selY.innerHTML = '';
+
+            const addOpt = (sel, val, text, isSelected) => {
+                sel.options.add(new Option(text, val, false, isSelected));
+            };
+
+            if (state.mode === 'pendulum') {
+                addOpt(selX, 'x', d.optXPos, state.graph.x === 'x');
+                addOpt(selX, 'h', d.optHeight, state.graph.x === 'h');
+                addOpt(selX, 't', d.optTime, state.graph.x === 't');
+                addOpt(selX, 'thetaDeg', d.optAngle, state.graph.x === 'thetaDeg');
+            } else {
+                addOpt(selX, 't', d.optTime, state.graph.x === 't' || state.graph.x === 'x' || state.graph.x === 'thetaDeg');
+                addOpt(selX, 'h', d.optHeight, state.graph.x === 'h');
+            }
+
+            addOpt(selY, 'h', d.optHeight, state.graph.y === 'h');
+            addOpt(selY, 'v', d.optVel, state.graph.y === 'v');
+            addOpt(selY, 'ke', d.optKE, state.graph.y === 'ke');
+            addOpt(selY, 'pe', d.optPE, state.graph.y === 'pe');
+            if (state.mode === 'trampoline' || state.mode === 'bungee') {
+                addOpt(selY, 'epe', d.optEPE, state.graph.y === 'epe');
+            }
+            addOpt(selY, 'te', d.optTE, state.graph.y === 'te');
+            addOpt(selY, 'energy', d.optEnergy, state.graph.y === 'energy');
+
+            resetHistory();
+        }
+
+        function updateLanguageUI() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[state.lang][key]) el.innerHTML = dict[state.lang][key];
+            });
+            document.getElementById('footerText').innerText = dict[state.lang].footer;
+            document.getElementById('helpContent').innerHTML = dict[state.lang].helpBody;
+            
+            if (window.MathJax) MathJax.typesetPromise();
+            updateGraphLegend();
+            drawGraph();
+        }
+
+        function toggleHelp() { document.getElementById('helpModal').classList.toggle('hidden'); }
+
+        function updateParams() {
+            if (state.mode === 'pendulum') {
+                state.paramsP.L = parseFloat(document.getElementById('sliderL').value);
+                state.paramsP.m = parseFloat(document.getElementById('sliderM').value);
+                state.paramsP.loss = parseFloat(document.getElementById('sliderLossP').value);
+                const deg = parseFloat(document.getElementById('sliderAngle').value);
+                state.paramsP.theta0 = deg * Math.PI / 180;
+                document.getElementById('valL').innerText = state.paramsP.L.toFixed(1) + ' m';
+                document.getElementById('valM').innerText = state.paramsP.m.toFixed(1) + ' kg';
+                document.getElementById('valAngle').innerText = deg + '°';
+                document.getElementById('valLossP').innerText = state.paramsP.loss + '%';
+            } else if (state.mode === 'bouncing') {
+                state.paramsB.h0 = parseFloat(document.getElementById('sliderH').value);
+                state.paramsB.m = parseFloat(document.getElementById('sliderMB').value);
+                state.paramsB.loss = parseFloat(document.getElementById('sliderLossB').value);
+                document.getElementById('valH').innerText = state.paramsB.h0.toFixed(1) + ' m';
+                document.getElementById('valMB').innerText = state.paramsB.m.toFixed(1) + ' kg';
+                document.getElementById('valLossB').innerText = state.paramsB.loss + '%';
+            } else if (state.mode === 'trampoline') {
+                state.paramsT.h0 = parseFloat(document.getElementById('sliderHT').value);
+                state.paramsT.m = parseFloat(document.getElementById('sliderMT').value);
+                state.paramsT.k = parseFloat(document.getElementById('sliderKT').value);
+                state.paramsT.loss = parseFloat(document.getElementById('sliderLossT').value);
+                document.getElementById('valHT').innerText = state.paramsT.h0.toFixed(1) + ' m';
+                document.getElementById('valMT').innerText = state.paramsT.m.toFixed(0) + ' kg';
+                document.getElementById('valKT').innerText = state.paramsT.k.toFixed(0) + ' N/m';
+                document.getElementById('valLossT').innerText = state.paramsT.loss + '%';
+            } else if (state.mode === 'bungee') {
+                state.paramsBg.h0 = parseFloat(document.getElementById('sliderHBg').value);
+                state.paramsBg.m = parseFloat(document.getElementById('sliderMBg').value);
+                state.paramsBg.L0 = parseFloat(document.getElementById('sliderL0Bg').value);
+                state.paramsBg.k = parseFloat(document.getElementById('sliderKBg').value);
+                state.paramsBg.loss = parseFloat(document.getElementById('sliderLossBg').value);
+                document.getElementById('valHBg').innerText = state.paramsBg.h0.toFixed(0) + ' m';
+                document.getElementById('valMBg').innerText = state.paramsBg.m.toFixed(0) + ' kg';
+                document.getElementById('valL0Bg').innerText = state.paramsBg.L0.toFixed(0) + ' m';
+                document.getElementById('valKBg').innerText = state.paramsBg.k.toFixed(0) + ' N/m';
+                document.getElementById('valLossBg').innerText = state.paramsBg.loss + '%';
+            }
+            resetSim();
+        }
+
+        function updateSpeed() {
+            state.speed = parseFloat(document.getElementById('sliderSpeed').value);
+            document.getElementById('valSpeed').innerText = state.speed.toFixed(1) + 'x';
+        }
+
+        function updateDisplay() {
+            const velRadios = document.getElementsByName('velMode');
+            for(let i=0; i<velRadios.length; i++) if(velRadios[i].checked) state.display.v = (velRadios[i].value === 'show');
+            
+            const forceRadios = document.getElementsByName('forceMode');
+            for(let i=0; i<forceRadios.length; i++) if(forceRadios[i].checked) state.display.fMode = forceRadios[i].value;
+            draw();
+        }
+
+        function playPause() {
+            state.isRunning = !state.isRunning;
+            const btn = document.getElementById('btnPlay');
+            if (state.isRunning) {
+                btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span data-i18n="btnPause">${dict[state.lang].btnPause}</span>`;
+                lastTime = performance.now();
+            } else {
+                btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span data-i18n="btnPlay">${dict[state.lang].btnPlay}</span>`;
+            }
+        }
+
+        function resetSim() {
+            state.isRunning = false;
+            state.time = 0;
+            state.stopTimer = 0;
+            
+            state.currentP.theta = state.paramsP.theta0;
+            state.currentP.omega = 0;
+            state.currentB.h = state.paramsB.h0;
+            state.currentB.v = 0;
+            state.currentT.h = state.paramsT.h0;
+            state.currentT.v = 0;
+            state.currentBg.h = state.paramsBg.h0;
+            state.currentBg.v = 0;
+            
+            const btn = document.getElementById('btnPlay');
+            btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span data-i18n="btnPlay">${dict[state.lang].btnPlay}</span>`;
+            
+            resetHistory();
+            recordState();
+            draw();
+            document.getElementById('timeDisplay').innerText = "0.00";
+        }
+
+        function resetHistory() {
+            state.history = [];
+            state.graph.x = document.getElementById('selX').value;
+            state.graph.y = document.getElementById('selY').value;
+            updateGraphLegend();
+            drawGraph();
+        }
+
+        function updateGraphLegend() {
+            const leg = document.getElementById('graphLegend');
+            if (state.graph.y === 'energy') {
+                let html = `
+                    <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-vectorV"></span>${dict[state.lang].legKE}</div>
+                    <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-vectorT"></span>${dict[state.lang].legPE}</div>`;
+                if (state.mode === 'trampoline' || state.mode === 'bungee') {
+                    html += `<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-yellow-500"></span>${dict[state.lang].legEPE}</div>`;
+                }
+                html += `<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-accent"></span>${dict[state.lang].legTE}</div>`;
+                leg.innerHTML = html;
+            } else {
+                leg.innerHTML = '';
+            }
+        }
+
+        /* --- 4. Physics Engine --- */
+        function stepPhysics(dt) {
+            if (state.mode === 'pendulum') {
+                const L = state.paramsP.L;
+                const damping = state.paramsP.loss * 0.02; 
+                const evaluate = (th, om) => ({ dTh: om, dOm: -(G / L) * Math.sin(th) - damping * om });
+                
+                const t = state.currentP.theta;
+                const w = state.currentP.omega;
+                const k1 = evaluate(t, w);
+                const k2 = evaluate(t + 0.5 * dt * k1.dTh, w + 0.5 * dt * k1.dOm);
+                const k3 = evaluate(t + 0.5 * dt * k2.dTh, w + 0.5 * dt * k2.dOm);
+                const k4 = evaluate(t + dt * k3.dTh, w + dt * k3.dOm);
+
+                state.currentP.theta += (dt / 6) * (k1.dTh + 2 * k2.dTh + 2 * k3.dTh + k4.dTh);
+                state.currentP.omega += (dt / 6) * (k1.dOm + 2 * k2.dOm + 2 * k3.dOm + k4.dOm);
+            } 
+            else if (state.mode === 'bouncing') {
+                if (state.currentB.h === 0 && state.currentB.v === 0) return;
+                
+                // Use exact kinematic equations to prevent energy truncation error at the boundary
+                const oldH = state.currentB.h;
+                const oldV = state.currentB.v;
+                
+                let newH = oldH + oldV * dt - 0.5 * G * dt * dt;
+                let newV = oldV - G * dt;
+
+                if (newH <= 0) {
+                    // Calculate exact time of impact within this time step
+                    const discriminant = oldV * oldV + 2 * G * oldH;
+                    const tImpact = (oldV + Math.sqrt(Math.max(0, discriminant))) / G;
+                    let tRem = dt - tImpact;
+                    if (tRem < 0) tRem = 0;
+
+                    // Exact impact velocity (perfectly conserving energy)
+                    const vImpact = Math.sqrt(Math.max(0, discriminant));
+                    
+                    const energyRem = 1 - (state.paramsB.loss / 100);
+                    const vBounce = vImpact * Math.sqrt(energyRem);
+
+                    if (vBounce < 0.2 && state.paramsB.loss > 0) { 
+                        newH = 0;
+                        newV = 0;
+                    } else {
+                        // Advance the remaining time with the new upward velocity
+                        newH = vBounce * tRem - 0.5 * G * tRem * tRem;
+                        newV = vBounce - G * tRem;
+                        if (newH < 0) newH = 0; // Safeguard to prevent secondary clipping
+                    }
+                }
+                
+                state.currentB.h = newH;
+                state.currentB.v = newV;
+            }
+            else if (state.mode === 'trampoline') {
+                const evalT = (h, v) => {
+                    let F_e = 0, dampF = 0;
+                    if (h < 0) {
+                        F_e = -state.paramsT.k * h;
+                        dampF = -(state.paramsT.loss * 0.5) * v;
+                    } else {
+                        dampF = -(state.paramsT.loss * 0.1) * v;
+                    }
+                    return { dH: v, dV: -G + (F_e + dampF) / state.paramsT.m };
+                };
+                
+                const h = state.currentT.h;
+                const v = state.currentT.v;
+                
+                const k1 = evalT(h, v);
+                const k2 = evalT(h + 0.5 * dt * k1.dH, v + 0.5 * dt * k1.dV);
+                const k3 = evalT(h + 0.5 * dt * k2.dH, v + 0.5 * dt * k2.dV);
+                const k4 = evalT(h + dt * k3.dH, v + dt * k3.dV);
+
+                state.currentT.h += (dt / 6) * (k1.dH + 2 * k2.dH + 2 * k3.dH + k4.dH);
+                state.currentT.v += (dt / 6) * (k1.dV + 2 * k2.dV + 2 * k3.dV + k4.dV);
+            }
+            else if (state.mode === 'bungee') {
+                const evalBg = (h, v) => {
+                    let F_e = 0;
+                    const stretch = Math.max(0, (state.paramsBg.h0 - state.paramsBg.L0) - h);
+                    if (stretch > 0) {
+                        F_e = state.paramsBg.k * stretch;
+                    }
+                    const dampF = -(state.paramsBg.loss * 0.2) * v;
+                    return { dH: v, dV: -G + (F_e + dampF) / state.paramsBg.m };
+                };
+                
+                const h = state.currentBg.h;
+                const v = state.currentBg.v;
+                
+                const k1 = evalBg(h, v);
+                const k2 = evalBg(h + 0.5 * dt * k1.dH, v + 0.5 * dt * k1.dV);
+                const k3 = evalBg(h + 0.5 * dt * k2.dH, v + 0.5 * dt * k2.dV);
+                const k4 = evalBg(h + dt * k3.dH, v + dt * k3.dV);
+
+                state.currentBg.h += (dt / 6) * (k1.dH + 2 * k2.dH + 2 * k3.dH + k4.dH);
+                state.currentBg.v += (dt / 6) * (k1.dV + 2 * k2.dV + 2 * k3.dV + k4.dV);
+                
+                if (state.currentBg.h < 0) { // Hit absolute ground
+                    state.currentBg.h = 0;
+                    state.currentBg.v = 0;
+                }
+            }
+            state.time += dt;
+        }
+
+        function recordState() {
+            let record = { t: state.time, epe: 0 }; 
+            let baseH, m, v;
+            
+            if (state.mode === 'pendulum') {
+                m = state.paramsP.m;
+                const { L } = state.paramsP;
+                const { theta, omega } = state.currentP;
+                baseH = L * (1 - Math.cos(theta));
+                v = L * omega;
+                record.x = L * Math.sin(theta);
+                record.thetaDeg = theta * 180 / Math.PI;
+            } else if (state.mode === 'bouncing') {
+                m = state.paramsB.m;
+                baseH = state.currentB.h;
+                v = state.currentB.v;
+                record.x = 0; 
+            } else if (state.mode === 'trampoline') {
+                m = state.paramsT.m;
+                baseH = state.currentT.h;
+                v = state.currentT.v;
+                record.x = 0;
+                if (baseH < 0) record.epe = 0.5 * state.paramsT.k * baseH * baseH;
+            } else if (state.mode === 'bungee') {
+                m = state.paramsBg.m;
+                baseH = state.currentBg.h;
+                v = state.currentBg.v;
+                record.x = 0;
+                const stretch = Math.max(0, (state.paramsBg.h0 - state.paramsBg.L0) - baseH);
+                if (stretch > 0) record.epe = 0.5 * state.paramsBg.k * stretch * stretch;
+            }
+
+            // Apply the global h=0 offset to true height before energy calculations
+            record.h = baseH - state.hOffset;
+            record.v = v;
+            
+            record.pe = m * G * record.h;
+            record.ke = 0.5 * m * v * v;
+            record.te = record.pe + record.ke + record.epe;
+            
+            state.history.push(record);
+            if (state.history.length > state.maxHistoryPoints) state.history.shift();
+        }
+
+        /* --- 5. Canvas Rendering --- */
+        function setupCanvases() {
+            const dpr = window.devicePixelRatio || 1;
+            [pCanvas, gCanvas].forEach(c => {
+                const rect = c.parentElement.getBoundingClientRect();
+                if(rect.width === 0 || rect.height === 0) return; 
+                const paddingY = c === pCanvas ? 0 : 30; 
+                c.width = rect.width * dpr;
+                c.height = (rect.height - paddingY) * dpr;
+                c.style.width = `${rect.width}px`;
+                c.style.height = `${rect.height - paddingY}px`;
+                const ctx = c.getContext('2d');
+                ctx.setTransform(1, 0, 0, 1, 0, 0); 
+                ctx.scale(dpr, dpr);
+            });
+        }
+
+        function renderLoop(timestamp) {
+            if (!lastTime) lastTime = timestamp;
+            const realDt = (timestamp - lastTime) / 1000;
+            lastTime = timestamp;
+
+            if (state.isRunning) {
+                const dt = Math.min(realDt, 0.05); 
+                const scaledDt = dt * state.speed; 
+                const substeps = state.mode === 'pendulum' ? 5 : 20; 
+                const internalDt = scaledDt / substeps;
+                for(let i=0; i<substeps; i++) stepPhysics(internalDt);
+                recordState();
+
+                // --- Intelligent Auto-Stop Logic ---
+                let isStopped = false;
+                if (state.mode === 'pendulum') {
+                    if (state.paramsP.loss > 0 && Math.abs(state.currentP.theta) < 0.005 && Math.abs(state.currentP.omega) < 0.01) {
+                        state.currentP.theta = 0; state.currentP.omega = 0; isStopped = true;
+                    }
+                } else if (state.mode === 'bouncing') {
+                    if (state.currentB.h === 0 && state.currentB.v === 0) isStopped = true;
+                } else if (state.mode === 'trampoline') {
+                    if (state.paramsT.loss > 0 && Math.abs(state.currentT.v) < 0.01 && Math.abs(state.currentT.h + (state.paramsT.m*G)/state.paramsT.k) < 0.01) {
+                        isStopped = true; // Settled at equilibrium
+                    }
+                } else if (state.mode === 'bungee') {
+                    // Equilibrium point
+                    const s_eq = (state.paramsBg.m * G) / state.paramsBg.k;
+                    const h_eq = (state.paramsBg.h0 - state.paramsBg.L0) - s_eq;
+                    if (state.paramsBg.loss > 0 && Math.abs(state.currentBg.v) < 0.01 && Math.abs(state.currentBg.h - h_eq) < 0.05) {
+                        isStopped = true;
+                    }
+                }
+
+                if (isStopped) {
+                    state.stopTimer += realDt; 
+                    if (state.stopTimer > 0.8) { playPause(); state.stopTimer = 0; }
+                } else {
+                    state.stopTimer = 0;
+                }
+
+                document.getElementById('timeDisplay').innerText = state.time.toFixed(2);
+                draw(); 
+            }
+            animFrameId = requestAnimationFrame(renderLoop);
+        }
+
+        function draw() {
+            if (state.mode === 'pendulum') drawPendulum();
+            else if (state.mode === 'bouncing') drawBouncingBall();
+            else if (state.mode === 'trampoline') drawTrampoline();
+            else if (state.mode === 'bungee') drawBungee();
+            drawGraph();
+        }
+
+        /* --- Drawing Helpers --- */
+        function drawGrid(w, h, originX, originY, gridSpacing) {
+            pCtx.strokeStyle = 'rgba(203, 213, 225, 0.5)'; 
+            pCtx.lineWidth = 1; pCtx.beginPath();
+            for(let x = originX; x < w; x += gridSpacing) { pCtx.moveTo(x, 0); pCtx.lineTo(x, h); }
+            for(let x = originX; x > 0; x -= gridSpacing) { pCtx.moveTo(x, 0); pCtx.lineTo(x, h); }
+            for(let y = originY; y < h; y += gridSpacing) { pCtx.moveTo(0, y); pCtx.lineTo(w, y); }
+            for(let y = originY; y > 0; y -= gridSpacing) { pCtx.moveTo(0, y); pCtx.lineTo(w, y); }
+            pCtx.stroke();
+        }
+
+        function drawBob(px, py, m, overrideRadius = null) {
+            // Adaptive radius mapping based on mass and screen, or explicit physical override
+            const radius = overrideRadius !== null ? overrideRadius : (pCanvas.getBoundingClientRect().width < 768 ? 6 : 8) + Math.sqrt(m) * 2.5; 
+            pCtx.beginPath(); pCtx.arc(px, py, radius, 0, Math.PI * 2);
+            const grad = pCtx.createRadialGradient(px - radius*0.3, py - radius*0.3, radius*0.1, px, py, radius);
+            grad.addColorStop(0, '#60a5fa'); grad.addColorStop(1, '#1e3c72');
+            pCtx.fillStyle = grad; pCtx.fill();
+            pCtx.lineWidth = 2; pCtx.strokeStyle = '#0f172a'; pCtx.stroke();
+            return radius;
+        }
+
+        function drawArrow(fromx, fromy, tox, toy, color, width, label = null, isSubscript = false) {
+            const headlen = 8; 
+            const dx = tox - fromx; const dy = toy - fromy;
+            const angle = Math.atan2(dy, dx);
+            if (dx*dx + dy*dy < 1) return;
+
+            pCtx.beginPath(); pCtx.strokeStyle = color; pCtx.fillStyle = color; pCtx.lineWidth = width;
+            pCtx.moveTo(fromx, fromy); pCtx.lineTo(tox, toy); pCtx.stroke();
+            
+            pCtx.beginPath(); pCtx.moveTo(tox, toy);
+            pCtx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            pCtx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+            pCtx.lineTo(tox, toy); pCtx.fill();
+
+            if (label) {
+                pCtx.save();
+                pCtx.translate(tox + 18 * Math.cos(angle), toy + 18 * Math.sin(angle));
+                pCtx.textAlign = 'center'; pCtx.textBaseline = 'middle';
+                pCtx.font = "14px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+                pCtx.fillStyle = color; pCtx.strokeStyle = 'rgba(255, 255, 255, 0.9)'; pCtx.lineWidth = 3;
+                pCtx.strokeText(label, 0, 0); pCtx.fillText(label, 0, 0);
+                pCtx.restore();
+            }
+        }
+
+        /* --- Individual Renderers --- */
+        function drawPendulum() {
+            const rect = pCanvas.getBoundingClientRect();
+            const w = rect.width, h = rect.height;
+            if(w === 0) return;
+            pCtx.fillStyle = '#ffffff'; pCtx.fillRect(0, 0, w, h);
+
+            const ppm = Math.min((h * 0.85) / 2.2, (w * 0.9) / 4.4); 
+            const originX = w / 2, originY = h * 0.1;
+            drawGrid(w, h, originX, originY, 0.5 * ppm);
+            pCtx.save(); pCtx.translate(originX, originY);
+
+            const { L, m } = state.paramsP;
+            const { theta, omega } = state.currentP;
+            const px = L * Math.sin(theta) * ppm, py = L * Math.cos(theta) * ppm;
+            
+            // X=0 dotted line
+            pCtx.beginPath(); pCtx.setLineDash([2, 4]); pCtx.moveTo(0, 0); pCtx.lineTo(0, h);
+            pCtx.strokeStyle = 'rgba(148, 163, 184, 0.5)'; pCtx.stroke(); pCtx.setLineDash([]);
+            
+            // +x arrow
+            const arrLen = w < 768 ? 30 : 40;
+            drawArrow(0, L*ppm + 25, arrLen, L*ppm + 25, '#64748b', 1.5, '+𝑥');
+            
+            // User-configured h=0 reference
+            const h0_y = (L - state.hOffset) * ppm;
+            pCtx.beginPath(); pCtx.setLineDash([4, 4]); pCtx.moveTo(-originX, h0_y); pCtx.lineTo(w - originX, h0_y);
+            pCtx.strokeStyle = 'rgba(100, 116, 139, 0.6)'; pCtx.lineWidth = 1.5; pCtx.stroke(); pCtx.setLineDash([]);
+            pCtx.fillStyle = '#64748b'; pCtx.font = "italic 14px 'Times New Roman', serif"; pCtx.textAlign = 'right'; pCtx.fillText("h = 0", w - originX - 15, h0_y - 5);
+
+            // Ceiling & String
+            pCtx.beginPath(); pCtx.moveTo(-40, 0); pCtx.lineTo(40, 0); pCtx.strokeStyle = '#64748b'; pCtx.lineWidth = 4; pCtx.lineCap = 'round'; pCtx.stroke();
+            pCtx.beginPath(); pCtx.moveTo(0, 0); pCtx.lineTo(px, py); pCtx.strokeStyle = '#475569'; pCtx.lineWidth = 2; pCtx.stroke();
+
+            const radius = drawBob(px, py, m);
+
+            // Vectors
+            if (state.display.fMode === 'all') {
+                const tensionMag = m * G * Math.cos(theta) + m * (L * omega)**2 / L;
+                const gravityMag = m * G;
+                const forceScale = ppm / 8; 
+
+                drawArrow(px, py, px - Math.sin(theta)*tensionMag*forceScale, py - Math.cos(theta)*tensionMag*forceScale, '#3b82f6', 3, dict[state.lang].lblF_T);
+                drawArrow(px, py, px, py + gravityMag*forceScale, '#f59e0b', 3, dict[state.lang].lblF_W);
+                
+                if (state.paramsP.loss > 0 && Math.abs(omega) > 0.01) {
+                    const damping = state.paramsP.loss * 0.02;
+                    const dragMag = m * damping * L * Math.abs(omega); 
+                    const signV = Math.sign(omega);
+                    drawArrow(px, py, px - Math.cos(theta)*signV*dragMag*forceScale, py + Math.sin(theta)*signV*dragMag*forceScale, '#ef4444', 3, dict[state.lang].lblF_f);
+                }
+            }
+
+            if (state.display.v) {
+                drawArrow(px, py, px + L*omega*Math.cos(theta)*(ppm/2.5), py - L*omega*Math.sin(theta)*(ppm/2.5), '#10b981', 3, 'v');
+            }
+            pCtx.restore();
+        }
+
+        function drawBouncingBall() {
+            const rect = pCanvas.getBoundingClientRect();
+            const w = rect.width, h = rect.height;
+            if(w === 0) return;
+            pCtx.fillStyle = '#ffffff'; pCtx.fillRect(0, 0, w, h);
+
+            const ppm = (h * 0.85) / 4.2; 
+            const originX = w / 2, originY = h * 0.88; 
+            drawGrid(w, h, originX, 0, 0.5 * ppm);
+            pCtx.save(); pCtx.translate(originX, originY);
+
+            const { m } = state.paramsB;
+            const { h: curH, v } = state.currentB;
+            const px = 0, py = -curH * ppm;
+            const radius = drawBob(px, py, m); 
+            const groundY = radius; 
+
+            // Ground Line
+            pCtx.beginPath(); pCtx.moveTo(-w/2, groundY); pCtx.lineTo(w/2, groundY); pCtx.strokeStyle = '#64748b'; pCtx.lineWidth = 4; pCtx.stroke();
+            pCtx.beginPath(); for(let x = -w/2; x < w/2; x += 15) { pCtx.moveTo(x, groundY); pCtx.lineTo(x-10, groundY + 10); }
+            pCtx.strokeStyle = '#94a3b8'; pCtx.lineWidth = 2; pCtx.stroke();
+
+            // User-configured h=0 reference
+            const h0_y = -state.hOffset * ppm;
+            pCtx.beginPath(); pCtx.setLineDash([4, 4]); pCtx.moveTo(-w/2, h0_y); pCtx.lineTo(w/2, h0_y);
+            pCtx.strokeStyle = 'rgba(100, 116, 139, 0.6)'; pCtx.lineWidth = 1.5; pCtx.stroke(); pCtx.setLineDash([]);
+            pCtx.fillStyle = '#64748b'; pCtx.font = "italic 14px 'Times New Roman', serif"; pCtx.textAlign = 'right'; pCtx.fillText("h = 0", w/2 - 15, h0_y - 5);
+
+            drawBob(px, py, m);
+
+            if (state.display.fMode === 'all') {
+                const gravityMag = m * G;
+                const forceScale = ppm / (G * m * 2); // Scale relative to weight
+                
+                drawArrow(px, py, px, py + gravityMag*forceScale, '#f59e0b', 3, dict[state.lang].lblF_W);
+                
+                if (curH <= 0.05) {
+                    let nMag = gravityMag; 
+                    if (Math.abs(v) > 0.05) nMag = gravityMag + Math.abs(v) * m * 15; 
+                    drawArrow(px, py, px, py - nMag*forceScale, '#8b5cf6', 3, dict[state.lang].lblF_N);
+                }
+            }
+
+            if (state.display.v && Math.abs(v) > 0.1) {
+                drawArrow(px, py, px, py - v*(ppm/2.5), '#10b981', 3, 'v');
+            }
+            pCtx.restore();
+        }
+
+        function drawTrampoline() {
+            const rect = pCanvas.getBoundingClientRect();
+            const w = rect.width, h = rect.height;
+            if(w === 0) return;
+            pCtx.fillStyle = '#ffffff'; pCtx.fillRect(0, 0, w, h);
+
+            const ppm = (h * 0.85) / 5.0; // scale for tramp
+            const originX = w / 2, originY = h * 0.75; // Mat is at h=0, slightly lower down
+            drawGrid(w, h, originX, originY, 0.5 * ppm);
+            pCtx.save(); pCtx.translate(originX, originY);
+
+            const { m } = state.paramsT;
+            const { h: curH, v } = state.currentT;
+            const px = 0, py = -curH * ppm;
+            const radius = drawBob(px, py, m); 
+
+            // Draw Trampoline Supports
+            pCtx.strokeStyle = '#475569'; pCtx.lineWidth = 6;
+            pCtx.beginPath(); pCtx.moveTo(-100, 0); pCtx.lineTo(-100, 100); pCtx.stroke();
+            pCtx.beginPath(); pCtx.moveTo(100, 0); pCtx.lineTo(100, 100); pCtx.stroke();
+            
+            // Draw Trampoline Mat
+            pCtx.strokeStyle = '#3b82f6'; pCtx.lineWidth = 4; pCtx.beginPath();
+            if (curH < 0) {
+                // Mat is stretched down
+                pCtx.moveTo(-100, 0);
+                pCtx.lineTo(0, py + radius); // stretches to bottom of ball
+                pCtx.lineTo(100, 0);
+            } else {
+                pCtx.moveTo(-100, 0); pCtx.lineTo(100, 0);
+            }
+            pCtx.stroke();
+
+            // User-configured h=0 reference
+            const h0_y = -state.hOffset * ppm;
+            pCtx.beginPath(); pCtx.setLineDash([4, 4]); pCtx.moveTo(-w/2, h0_y); pCtx.lineTo(w/2, h0_y);
+            pCtx.strokeStyle = 'rgba(100, 116, 139, 0.6)'; pCtx.lineWidth = 1.5; pCtx.stroke(); pCtx.setLineDash([]);
+            pCtx.fillStyle = '#64748b'; pCtx.font = "italic 14px 'Times New Roman', serif"; pCtx.textAlign = 'right'; pCtx.fillText("h = 0", w/2 - 15, h0_y - 5);
+
+            // Shrink bob to physical 1.5m diameter (0.75m radius) at 50kg
+            const bRadius = 0.75 * Math.sqrt(m / 50) * ppm;
+            drawBob(px, py, m, bRadius);
+
+            if (state.display.fMode === 'all') {
+                const gravityMag = m * G;
+                const forceScale = ppm / (G * m * 1.5); 
+                drawArrow(px, py, px, py + gravityMag*forceScale, '#f59e0b', 3, dict[state.lang].lblF_W);
+                
+                if (curH < 0) {
+                    const F_e = -state.paramsT.k * curH;
+                    drawArrow(px, py, px, py - F_e*forceScale, '#8b5cf6', 3, dict[state.lang].lblF_N); // Normal Reaction from mat
+                }
+                
+                if (state.paramsT.loss > 0 && Math.abs(v) > 0.01) {
+                    const dampF = state.paramsT.loss * 0.5 * Math.abs(v);
+                    drawArrow(px, py, px, py + Math.sign(v)*dampF*forceScale, '#ef4444', 3, dict[state.lang].lblF_f);
+                }
+            }
+
+            if (state.display.v && Math.abs(v) > 0.1) {
+                drawArrow(px, py, px, py - v*(ppm/2.5), '#10b981', 3, 'v');
+            }
+            pCtx.restore();
+        }
+
+        function drawBungee() {
+            const rect = pCanvas.getBoundingClientRect();
+            const w = rect.width, h = rect.height;
+            if(w === 0) return;
+            pCtx.fillStyle = '#ffffff'; pCtx.fillRect(0, 0, w, h);
+
+            const { h0, L0, m } = state.paramsBg;
+            const ppm = (h * 0.85) / (h0 + 5); 
+            const originX = w / 2, originY = h * 0.95; // Ground at bottom
+            drawGrid(w, h, originX, originY, 5 * ppm); // 5m grid
+            pCtx.save(); pCtx.translate(originX, originY);
+
+            const { h: curH, v } = state.currentBg;
+            const px = 0, py = -curH * ppm;
+            const platY = -h0 * ppm;
+
+            // Draw Ground
+            pCtx.beginPath(); pCtx.moveTo(-w/2, 0); pCtx.lineTo(w/2, 0); pCtx.strokeStyle = '#64748b'; pCtx.lineWidth = 4; pCtx.stroke();
+            
+            // Draw Platform
+            pCtx.fillStyle = '#475569'; pCtx.fillRect(-40, platY, 80, 10);
+            
+            // Draw L0 double arrow (Original cord length)
+            const l0X = -25;
+            const l0StartY = platY + 10;
+            const l0EndY = platY + 10 + L0 * ppm;
+            
+            pCtx.strokeStyle = '#94a3b8'; pCtx.fillStyle = '#94a3b8'; pCtx.lineWidth = 1.5;
+            pCtx.beginPath(); pCtx.moveTo(l0X, l0StartY); pCtx.lineTo(l0X, l0EndY); pCtx.stroke();
+            pCtx.beginPath(); pCtx.moveTo(l0X, l0StartY); pCtx.lineTo(l0X - 4, l0StartY + 6); pCtx.lineTo(l0X + 4, l0StartY + 6); pCtx.fill(); // Top arrow
+            pCtx.beginPath(); pCtx.moveTo(l0X, l0EndY); pCtx.lineTo(l0X - 4, l0EndY - 6); pCtx.lineTo(l0X + 4, l0EndY - 6); pCtx.fill(); // Bottom arrow
+            pCtx.beginPath(); pCtx.moveTo(l0X - 5, l0StartY); pCtx.lineTo(l0X + 5, l0StartY); pCtx.stroke(); // Top tick
+            pCtx.beginPath(); pCtx.moveTo(l0X - 5, l0EndY); pCtx.lineTo(l0X + 5, l0EndY); pCtx.stroke(); // Bottom tick
+            
+            pCtx.font = "italic 14px 'Times New Roman', serif"; pCtx.textAlign = 'right'; pCtx.textBaseline = 'middle';
+            pCtx.fillText("L₀", l0X - 5, (l0StartY + l0EndY)/2);
+
+            // Draw Bungee Cord
+            pCtx.strokeStyle = '#fbbf24'; // yellow cord
+            pCtx.lineWidth = 3;
+            pCtx.beginPath();
+            
+            const stretch = (h0 - L0) - curH;
+            if (stretch > 0) {
+                // Taut
+                pCtx.moveTo(0, platY + 10);
+                pCtx.lineTo(0, py);
+            } else {
+                // Slack (draw zigzag)
+                pCtx.moveTo(0, platY + 10);
+                const segments = 10;
+                const slackH = (h0 - curH) * ppm;
+                for(let i=1; i<=segments; i++) {
+                    pCtx.lineTo( (i%2===0 ? 10 : -10), platY + 10 + (slackH/segments)*i );
+                }
+            }
+            pCtx.stroke();
+
+            // h=0 Reference
+            pCtx.fillStyle = '#64748b'; pCtx.font = "italic 14px 'Times New Roman', serif"; pCtx.textAlign = 'right'; pCtx.fillText("h = 0", w/2 - 15, -5);
+
+            // Shrink bob to physical 1.5m diameter (0.75m radius) at 50kg
+            const bRadius = 0.75 * Math.sqrt(m / 50) * ppm;
+            drawBob(px, py, m, bRadius);
+
+            if (state.display.fMode === 'all') {
+                const gravityMag = m * G;
+                // For Bungee, decouple the force vector visual length from the massive spatial view scale. 
+                // Fix the Weight vector to exactly 40 pixels long for optimal visibility.
+                const forceScale = 40 / gravityMag; 
+                
+                drawArrow(px, py, px, py + gravityMag*forceScale, '#f59e0b', 3, dict[state.lang].lblF_W);
+                
+                if (stretch > 0) {
+                    const F_e = state.paramsBg.k * stretch;
+                    drawArrow(px, py, px, py - F_e*forceScale, '#3b82f6', 3, dict[state.lang].lblF_T); // Elastic Tension
+                }
+                
+                if (state.paramsBg.loss > 0 && Math.abs(v) > 0.1) {
+                    const dampF = state.paramsBg.loss * 0.2 * Math.abs(v);
+                    drawArrow(px, py, px, py + Math.sign(v)*dampF*forceScale, '#ef4444', 3, dict[state.lang].lblF_f);
+                }
+            }
+
+            if (state.display.v && Math.abs(v) > 0.1) {
+                drawArrow(px, py, px, py - v*(ppm/2.5), '#10b981', 3, 'v');
+            }
+            pCtx.restore();
+        }
+
+        /* --- Graphing --- */
+        function drawMixedText(ctx, text, x, y, align, baseline, baseFont) {
+            ctx.textBaseline = baseline;
+            const parts = text.split(/(<i>|<\/i>|<sub>|<\/sub>)/);
+            let totalWidth = 0, isItalic = false, isSub = false;
+            
+            // Measure pass
+            for(let p of parts) {
+                if(p === '<i>') { isItalic = true; continue; }
+                if(p === '</i>') { isItalic = false; continue; }
+                if(p === '<sub>') { isSub = true; continue; }
+                if(p === '</sub>') { isSub = false; continue; }
+                ctx.font = (isItalic ? "italic " : "") + (isSub ? "10px " : "") + baseFont;
+                totalWidth += ctx.measureText(p).width;
+            }
+            
+            let currentX = align === 'right' ? x - totalWidth : align === 'center' ? x - totalWidth/2 : x;
+            ctx.textAlign = 'left'; isItalic = false; isSub = false;
+            
+            // Draw pass
+            for(let p of parts) {
+                if(p === '<i>') { isItalic = true; continue; }
+                if(p === '</i>') { isItalic = false; continue; }
+                if(p === '<sub>') { isSub = true; continue; }
+                if(p === '</sub>') { isSub = false; continue; }
+                ctx.font = (isItalic ? "italic " : "") + (isSub ? "10px " : "") + baseFont;
+                ctx.fillText(p, currentX, y + (isSub ? 5 : 0));
+                currentX += ctx.measureText(p).width;
+            }
+        }
+
+        function drawGraph() {
+            const rect = gCanvas.getBoundingClientRect();
+            const w = rect.width, h = rect.height;
+            if(w === 0 || state.history.length === 0) return;
+            
+            gCtx.fillStyle = '#ffffff'; gCtx.fillRect(0, 0, w, h);
+
+            const padX = w < 400 ? 40 : 50;
+            const padY = 25; 
+            const graphW = w - padX * 2, graphH = h - padY * 2;
+            const xKey = state.graph.x, yKey = state.graph.y;
+
+            let minX, maxX, minY = 0, maxY = 0; 
+            let trueMinX, trueMaxX, trueMinY, trueMaxY;
+
+            // --- Robust Dynamic Bounding ---
+            // 1. Establish stable theoretical minimums/maximums based on physics settings
+            let maxH, minH = 0, maxV;
+            if (state.mode === 'pendulum') {
+                maxH = state.paramsP.L * (1 - Math.cos(Math.abs(state.paramsP.theta0)));
+                maxV = Math.sqrt(2 * G * maxH); 
+            } else if (state.mode === 'bouncing') {
+                maxH = state.paramsB.h0; 
+                maxV = Math.sqrt(2 * G * maxH); 
+            } else if (state.mode === 'trampoline') {
+                maxH = state.paramsT.h0;
+                const mg_k = (state.paramsT.m*G)/state.paramsT.k;
+                minH = -(mg_k + Math.sqrt(mg_k*mg_k + 2*mg_k*state.paramsT.h0));
+                maxV = Math.sqrt(2 * G * maxH); 
+            } else if (state.mode === 'bungee') {
+                maxH = state.paramsBg.h0; 
+                maxV = Math.sqrt(2 * G * state.paramsBg.L0); 
+            }
+
+            maxH -= state.hOffset;
+            minH -= state.hOffset;
+
+            // X-Axis Baseline
+            if (xKey === 't') {
+                trueMinX = state.history[0]?.t || 0;
+                trueMaxX = (state.history[state.history.length - 1]?.t || 0) + 1;
+            } else if (xKey === 'thetaDeg') {
+                trueMaxX = Math.abs(state.paramsP.theta0 * 180 / Math.PI); trueMinX = -trueMaxX;
+            } else if (xKey === 'x') {
+                trueMaxX = state.paramsP.L * Math.sin(Math.abs(state.paramsP.theta0)); trueMinX = -trueMaxX;
+            } else if (xKey === 'h') {
+                trueMaxX = maxH; trueMinX = minH;
+            }
+
+            // Y-Axis Baseline
+            if (['energy', 'ke', 'pe', 'epe', 'te'].includes(yKey)) {
+                let initialTE = 0, minPE = 0;
+                if (state.mode === 'pendulum') { initialTE = state.paramsP.m * G * maxH; minPE = state.paramsP.m * G * minH; }
+                else if (state.mode === 'bouncing') { initialTE = state.paramsB.m * G * maxH; minPE = state.paramsB.m * G * minH; }
+                else if (state.mode === 'trampoline') { initialTE = state.paramsT.m * G * maxH; minPE = state.paramsT.m * G * minH; }
+                else if (state.mode === 'bungee') { initialTE = state.paramsBg.m * G * maxH; minPE = state.paramsBg.m * G * minH; }
+                
+                trueMaxY = initialTE > 0 ? initialTE : 10; // Guarantees a decent visual ceiling
+                trueMinY = minPE < 0 ? minPE : 0; // Accommodate negative potential energy
+            } else if (yKey === 'h') {
+                trueMaxY = maxH; trueMinY = minH;
+            } else if (yKey === 'v') {
+                trueMaxY = maxV; trueMinY = -maxV;
+            }
+
+            // 2. Expand bounds dynamically based on actual simulation history to guarantee no trace is ever clipped
+            state.history.forEach(d => {
+                if (xKey !== 't') {
+                    trueMinX = Math.min(trueMinX, d[xKey]);
+                    trueMaxX = Math.max(trueMaxX, d[xKey]);
+                }
+                if (yKey === 'energy') {
+                    trueMinY = Math.min(trueMinY, d.ke, d.pe, d.epe ?? 0, d.te);
+                    trueMaxY = Math.max(trueMaxY, d.ke, d.pe, d.epe ?? 0, d.te);
+                } else {
+                    trueMinY = Math.min(trueMinY, d[yKey]);
+                    trueMaxY = Math.max(trueMaxY, d[yKey]);
+                }
+            });
+
+            // Fallback edge-case protections
+            if (Math.abs(trueMaxX - trueMinX) < 1e-4) { trueMaxX += 1; trueMinX -= 1; }
+            if (Math.abs(trueMaxY - trueMinY) < 1e-4) { trueMaxY += 1; trueMinY -= 1; }
+
+            // 3. Final padding
+            minX = trueMinX - Math.max(0.02, Math.abs(trueMaxX - trueMinX) * 0.1); 
+            maxX = trueMaxX + Math.max(0.02, Math.abs(trueMaxX - trueMinX) * 0.1);
+            minY = trueMinY - Math.max(0.02, Math.abs(trueMaxY - trueMinY) * 0.1); 
+            maxY = trueMaxY + Math.max(0.02, Math.abs(trueMaxY - trueMinY) * 0.1);
+
+            let zeroY = graphH; if (minY < 0 && maxY > 0) zeroY = graphH - ((0 - minY) / (maxY - minY)) * graphH;
+            let yAxisX = padX; if (minX < 0 && maxX > 0) yAxisX = padX + ((0 - minX) / (maxX - minX)) * graphW;
+
+            // --- Axes Drawing ---
+            gCtx.strokeStyle = '#94a3b8'; gCtx.fillStyle = '#94a3b8'; gCtx.lineWidth = 1;
+            gCtx.beginPath(); gCtx.moveTo(padX, padY + zeroY); gCtx.lineTo(padX + graphW + 10, padY + zeroY); 
+            gCtx.moveTo(yAxisX, padY + graphH); gCtx.lineTo(yAxisX, padY - 15); gCtx.stroke();
+
+            gCtx.beginPath(); gCtx.moveTo(padX + graphW + 15, padY + zeroY); gCtx.lineTo(padX + graphW + 5, padY + zeroY - 4); gCtx.lineTo(padX + graphW + 5, padY + zeroY + 4); gCtx.fill();
+            gCtx.beginPath(); gCtx.moveTo(yAxisX, padY - 20); gCtx.lineTo(yAxisX - 4, padY - 10); gCtx.lineTo(yAxisX + 4, padY - 10); gCtx.fill();
+
+            const fontBase = (w < 400 ? '10px' : '12px') + ' "Times New Roman", serif';
+            drawMixedText(gCtx, dict[state.lang]['axis_' + xKey], padX + graphW + 10, padY + zeroY - 6, 'right', 'bottom', fontBase);
+            drawMixedText(gCtx, dict[state.lang]['axis_' + yKey], yAxisX + 8, padY - 12, 'left', 'middle', fontBase);
+
+            // Ticks accurate to 3 significant figures
+            const formatVal = (val, key) => {
+                if (Math.abs(val) < 1e-6) return "0";
+                return parseFloat(val.toPrecision(3)).toString();
+            };
+            
+            const drawTickX = val => {
+                const cx = padX + ((val - minX) / (maxX - minX)) * graphW;
+                gCtx.fillStyle = '#64748b'; gCtx.font = (w < 400 ? '9px' : '10px') + ' sans-serif';
+                gCtx.textAlign = 'center'; gCtx.textBaseline = 'top'; gCtx.fillText(formatVal(val, xKey), cx, padY + zeroY + 6);
+                gCtx.strokeStyle = '#94a3b8'; gCtx.beginPath(); gCtx.moveTo(cx, padY+zeroY-3); gCtx.lineTo(cx, padY+zeroY+3); gCtx.stroke();
+            };
+            const drawTickY = val => {
+                const cy = padY + graphH - ((val - minY) / (maxY - minY)) * graphH;
+                gCtx.fillStyle = '#64748b'; gCtx.font = (w < 400 ? '9px' : '10px') + ' sans-serif';
+                gCtx.textAlign = 'right'; gCtx.textBaseline = 'middle'; gCtx.fillText(formatVal(val, yKey), yAxisX - 6, cy);
+                gCtx.strokeStyle = '#94a3b8'; gCtx.beginPath(); gCtx.moveTo(yAxisX-3, cy); gCtx.lineTo(yAxisX+3, cy); gCtx.stroke();
+                if (Math.abs(val) > 1e-6) {
+                    gCtx.save(); gCtx.setLineDash([2, 4]); gCtx.strokeStyle = 'rgba(203, 213, 225, 0.4)';
+                    gCtx.beginPath(); gCtx.moveTo(padX, cy); gCtx.lineTo(padX + graphW, cy); gCtx.stroke(); gCtx.restore();
+                }
+            };
+
+            if (xKey === 't') { drawTickX(trueMinX); drawTickX(trueMaxX); } else {
+                if (trueMinX < 0) { drawTickX(trueMinX); drawTickX(0); } else drawTickX(trueMinX);
+                if (trueMaxX > 0) drawTickX(trueMaxX);
+            }
+            if (trueMinY < 0) { drawTickY(trueMinY); drawTickY(0); } else drawTickY(trueMinY);
+            if (trueMaxY > 0) drawTickY(trueMaxY);
+
+            // Lines
+            const plotLine = (key, color, width=2) => {
+                gCtx.beginPath(); gCtx.strokeStyle = color; gCtx.lineWidth = width; gCtx.lineJoin = 'round';
+                state.history.forEach((d, i) => {
+                    const cx = padX + ((d[xKey] - minX) / (maxX - minX)) * graphW;
+                    const cy = padY + graphH - ((d[key] - minY) / (maxY - minY)) * graphH;
+                    if (i === 0) gCtx.moveTo(cx, cy); else gCtx.lineTo(cx, cy);
+                });
+                gCtx.stroke();
+            };
+
+            if (yKey === 'energy') {
+                plotLine('ke', '#10b981', w < 768 ? 1.5 : 2); 
+                plotLine('pe', '#3b82f6', w < 768 ? 1.5 : 2); 
+                if (state.mode === 'trampoline' || state.mode === 'bungee') plotLine('epe', '#eab308', w < 768 ? 1.5 : 2); 
+                plotLine('te', '#DC2626', w < 768 ? 2 : 3); 
+            } else {
+                let color = '#1e3c72', width = w < 768 ? 1.5 : 2;
+                if (yKey === 'ke') color = '#10b981'; 
+                else if (yKey === 'pe') color = '#3b82f6'; 
+                else if (yKey === 'epe') color = '#eab308'; 
+                else if (yKey === 'te') { color = '#DC2626'; width = w < 768 ? 2 : 3; }
+                plotLine(yKey, color, width);
+            }
+
+            // Tracker
+            const curr = state.history[state.history.length - 1];
+            if (curr) {
+                const cx = padX + ((curr[xKey] - minX) / (maxX - minX)) * graphW;
+                gCtx.beginPath(); gCtx.setLineDash([4, 4]); gCtx.strokeStyle = 'rgba(100, 116, 139, 0.4)';
+                gCtx.moveTo(cx, padY); gCtx.lineTo(cx, padY + graphH); gCtx.stroke(); gCtx.setLineDash([]);
+                const drawDot = (key, color) => {
+                    const cy = padY + graphH - ((curr[key] - minY) / (maxY - minY)) * graphH;
+                    gCtx.beginPath(); gCtx.fillStyle = color; gCtx.arc(cx, cy, w < 768 ? 3.5 : 4.5, 0, Math.PI * 2); gCtx.fill();
+                    gCtx.strokeStyle = '#fff'; gCtx.lineWidth = 1.5; gCtx.stroke();
+                };
+                if (yKey === 'energy') { 
+                    drawDot('ke', '#10b981'); drawDot('pe', '#3b82f6'); 
+                    if (state.mode === 'trampoline' || state.mode === 'bungee') drawDot('epe', '#eab308');
+                    drawDot('te', '#DC2626'); 
+                } else {
+                    let color = '#1e3c72';
+                    if (yKey === 'ke') color = '#10b981'; else if (yKey === 'pe') color = '#3b82f6'; else if (yKey === 'epe') color = '#eab308'; else if (yKey === 'te') color = '#DC2626';
+                    drawDot(yKey, color);
+                }
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
