@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>太陽系模擬 | Solar System Simulation</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cma: {
+                            blue: '#1e3c72',
+                            light: '#2a5298',
+                            dark: '#0f172a',
+                            accent: '#38bdf8'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- MathJax for LaTeX Rendering -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+
+    <style>
+        /* Custom Scrollbar for Sidebar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Canvas Space Background */
+        #sim-canvas {
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+            cursor: grab;
+            touch-action: none; /* Prevent default touch actions for custom pan/zoom */
+        }
+        #sim-canvas:active {
+            cursor: grabbing;
+        }
+
+        /* UI Enhancements */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Dark Glass Panel for Overlays */
+        .dark-glass {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 h-screen w-screen overflow-hidden flex font-sans selection:bg-cma-accent selection:text-white relative">
+
+    <!-- Modal: Instruction & Help -->
+    <div id="help-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col transform scale-95 transition-transform duration-300">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-cma-blue text-white rounded-t-2xl">
+                <h2 class="text-xl font-bold" data-i18n="helpTitle">Physics Principles</h2>
+                <button onclick="toggleHelp(false)" class="text-white hover:text-slate-200 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-6 text-slate-700">
+                <section>
+                    <h3 class="text-lg font-semibold text-cma-blue mb-2" data-i18n="helpSec1Title">1. Universal Gravitation</h3>
+                    <p data-i18n="helpSec1Text">The motion of planets is governed by Newton's Law of Universal Gravitation, providing the necessary centripetal force for orbit.</p>
+                    <div class="my-3 text-center overflow-x-auto">
+                        $$F = G \frac{m_1 m_2}{r^2}$$
+                    </div>
+                </section>
+                <section>
+                    <h3 class="text-lg font-semibold text-cma-blue mb-2" data-i18n="helpSec2Title">2. Kepler's Laws of Planetary Motion</h3>
+                    <p data-i18n="helpSec2Text">Planets follow elliptical orbits with the Sun at one focus. The square of the orbital period ($T$) is proportional to the cube of the semi-major axis ($a$).</p>
+                    <div class="my-3 text-center overflow-x-auto">
+                        $$T^2 = \left( \frac{4\pi^2}{GM} \right) a^3$$
+                    </div>
+                    <p class="text-sm bg-slate-100 p-3 rounded-lg border border-slate-200" data-i18n="helpSec2Sub">This simulation solves Kepler's Equation numerically using the Newton-Raphson method to accurately position objects over time: <br><br> $$M = E - e \sin(E)$$</p>
+                </section>
+                <section>
+                    <h3 class="text-lg font-semibold text-cma-blue mb-2" data-i18n="helpSec3Title">3. Astronomical Units (AU)</h3>
+                    <p data-i18n="helpSec3Text">Distances in this simulation are measured in Astronomical Units (AU), where 1 AU is the average distance from the Earth to the Sun ($\approx 1.496 \times 10^{11}$ m). Time is measured in Earth Years.</p>
+                </section>
+            </div>
+            <div class="p-4 border-t border-slate-100 bg-slate-50 rounded-b-2xl flex justify-end">
+                <button onclick="toggleHelp(false)" class="px-5 py-2 bg-cma-blue hover:bg-cma-light text-white rounded-lg transition-colors font-medium" data-i18n="closeBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Drawer Overlay Backdrop -->
+    <div id="sidebar-overlay" onclick="toggleSidebar(false)" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 hidden opacity-0 transition-opacity duration-300 md:hidden"></div>
+
+    <!-- Left/Top Control Sidebar (Fluid height on desktop, sliding drawer on mobile/iPad) -->
+    <aside class="fixed md:static inset-y-0 left-0 w-80 bg-white shadow-[2px_0_15px_rgba(0,0,0,0.05)] z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col border-r border-slate-200">
+        <!-- Header -->
+        <div class="p-4 bg-cma-blue text-white flex justify-between items-center shadow-md z-20">
+            <div>
+                <h1 class="font-bold text-lg leading-tight" data-i18n="appTitle">Solar System Simulation</h1>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="toggleHelp(true)" class="px-2 py-1 text-xs font-semibold bg-white/20 hover:bg-white/30 rounded border border-white/30 transition-colors backdrop-blur-sm" data-i18n="btnPhysics">
+                    說明
+                </button>
+                <button id="lang-toggle" onclick="toggleLanguage()" class="px-2 py-1 text-xs font-semibold bg-white/20 hover:bg-white/30 rounded border border-white/30 transition-colors backdrop-blur-sm">
+                    繁/Eng
+                </button>
+                <!-- Close Button on Mobile Sidebar -->
+                <button onclick="toggleSidebar(false)" class="md:hidden text-white/80 hover:text-white transition-colors ml-1 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Scrollable Controls -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-4">
+            
+            <!-- Time Controls -->
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl shadow-sm">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-semibold text-cma-blue flex items-center gap-1 text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span data-i18n="timeControl">Time Control</span>
+                    </h3>
+                    <span id="date-display" class="text-xs font-medium bg-white px-2 py-1 rounded border text-slate-600 font-mono">年份: 0.00</span>
+                </div>
+                
+                <div class="flex gap-2 mb-4">
+                    <button id="btn-play" onclick="togglePlay()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-1.5 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center justify-center gap-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                        <span data-i18n="btnPlay">Play</span>
+                    </button>
+                    <button onclick="resetTime()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        <span data-i18n="btnReset">Reset</span>
+                    </button>
+                </div>
+
+                <div class="space-y-1">
+                    <div class="flex justify-between text-xs text-slate-500 font-medium">
+                        <span data-i18n="speedLabel">Speed:</span>
+                        <span id="speed-val">0.05 Year / Sec</span>
+                    </div>
+                    <input type="range" id="time-speed" min="-2" max="2" step="0.1" value="-1.3" class="w-full accent-cma-blue">
+                    <div class="flex justify-between text-[10px] text-slate-400">
+                        <span>x0.01</span>
+                        <span>x100</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View Controls -->
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl shadow-sm">
+                <h3 class="font-semibold text-cma-blue mb-3 flex items-center gap-1 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                    <span data-i18n="viewControl">View Control</span>
+                </h3>
+                
+                <div class="mb-3">
+                    <label class="block text-xs text-slate-500 font-medium mb-1" data-i18n="focusTarget">Focus Target:</label>
+                    <select id="focus-select" class="w-full text-sm rounded-lg border-slate-300 border p-2 focus:ring-cma-blue focus:border-cma-blue outline-none bg-white">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+
+                <div class="space-y-1 mb-3">
+                    <div class="flex justify-between text-xs text-slate-500 font-medium">
+                        <span data-i18n="zoomLabel">Zoom:</span>
+                        <span id="zoom-val">100%</span>
+                    </div>
+                    <input type="range" id="zoom-slider" min="5" max="5000" value="100" class="w-full accent-cma-blue">
+                </div>
+                
+                <div class="pt-2 mt-2 border-t border-slate-200 space-y-3">
+                    <div class="flex justify-between text-xs text-slate-500 font-medium items-center">
+                        <span data-i18n="angleLabel">Angle (3D):</span>
+                    </div>
+                    <div class="space-y-1">
+                        <input type="range" id="pitch-slider" min="0" max="90" value="30" class="w-full accent-cma-blue">
+                    </div>
+                    
+                    <div class="flex items-center justify-between pt-1">
+                        <span class="text-xs text-slate-500 font-medium" data-i18n="showOrbits">Show Orbits:</span>
+                        <input type="checkbox" id="orbit-toggle" class="w-4 h-4 accent-cma-blue rounded border-slate-300">
+                    </div>
+
+                    <button onclick="resetView()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-1.5 rounded-lg text-xs font-medium transition-colors border border-slate-200 mt-2" data-i18n="btnResetView">Reset View</button>
+                </div>
+            </div>
+
+            <!-- Object Information -->
+            <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl shadow-sm">
+                <h3 class="font-semibold text-cma-blue mb-2 text-sm flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span data-i18n="objInfo">Object Info</span>
+                </h3>
+                <div id="info-panel" class="text-xs text-slate-600 space-y-1.5 font-medium">
+                    <p><span class="text-slate-400" data-i18n="infoName">Name:</span> <span id="info-name" class="text-slate-800 font-bold">-</span></p>
+                    <p><span class="text-slate-400" data-i18n="infoAxis">Semi-major axis (<i>a</i>):</span> <span id="info-a">-</span></p>
+                    <p><span class="text-slate-400" data-i18n="infoEcc">Eccentricity (<i>e</i>):</span> <span id="info-e">-</span></p>
+                    <p><span class="text-slate-400" data-i18n="infoPeriod">Period (<i>T</i>):</span> <span id="info-t">-</span></p>
+                    <p><span class="text-slate-400" data-i18n="infoSpeed">Orbital Speed (<i>v</i>):</span> <span id="info-v">-</span></p>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Mandatory Footer -->
+        <div class="mt-auto p-3 bg-slate-100 border-t border-slate-200 text-center z-10">
+            <p class="text-[11px] font-semibold text-slate-500 tracking-wide" data-i18n="footerText">廠商會中學．物理科</p>
+        </div>
+    </aside>
+
+    <!-- Right/Bottom Canvas Area (Adapts beautifully on iPad/iPhone) -->
+    <main class="flex-1 relative overflow-hidden bg-black flex flex-col h-full w-full">
+        <!-- Floating Config Button (Mobile & iPad Drawer Trigger) -->
+        <button id="mobile-menu-btn" onclick="toggleSidebar(true)" class="md:hidden absolute top-4 right-4 z-20 bg-cma-blue text-white p-3 rounded-full shadow-lg hover:bg-cma-light transition-colors focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+        </button>
+
+        <!-- Overlay hints (Refactored to .dark-glass with white text for perfect legibility) -->
+        <div class="absolute top-4 left-4 z-10 pointer-events-none dark-glass px-4 py-2 rounded-xl text-xs text-white shadow-lg hidden md:block">
+            <span data-i18n="canvasHint">Left Drag: Pan | Right Drag: Tilt | Scroll: Zoom</span>
+        </div>
+        
+        <canvas id="sim-canvas" class="w-full h-full block"></canvas>
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        /* --- 1. Global State & Internationalization --- */
+        let currentLang = 'tc'; // Default set to Traditional Chinese
+        
+        const i18n = {
+            'tc': {
+                appTitle: '太陽系模擬',
+                timeControl: '時間控制',
+                btnPlay: '播放',
+                btnPause: '暫停',
+                btnReset: '重置',
+                speedLabel: '模擬速度:',
+                viewControl: '視角控制',
+                focusTarget: '鎖定目標:',
+                zoomLabel: '縮放比例:',
+                objInfo: '星體數據',
+                infoName: '名稱:',
+                infoAxis: '半長軸 (<i>a</i>):',
+                infoEcc: '離心率 (<i>e</i>):',
+                infoPeriod: '公轉週期 (<i>T</i>):',
+                infoSpeed: '瞬時速度 (<i>v</i>):',
+                angleLabel: '視角 (3D 傾斜):',
+                showOrbits: '顯示軌道:',
+                btnResetView: '重置視角',
+                btnPhysics: '說明',
+                footerText: '廠商會中學．物理科',
+                canvasHint: '左鍵拖曳：平移 | 右鍵拖曳：傾斜 | 滾輪：縮放',
+                helpTitle: '物理原理',
+                helpSec1Title: '1. 萬有引力定律',
+                helpSec1Text: '行星的運動受牛頓萬有引力定律支配，引力提供了維持軌道所需的向心力。',
+                helpSec2Title: '2. 開普勒行星運動定律',
+                helpSec2Text: '行星沿橢圓軌道運行，太陽位於其中一個焦點。公轉週期的平方 ($T^2$) 與半長軸的立方 ($a^3$) 成正比。',
+                helpSec2Sub: '此模擬利用牛頓-拉弗森方法數值求解開普勒方程式，以準確計算星體隨時間變化的位置：<br><br> $$M = E - e \\sin(E)$$',
+                helpSec3Title: '3. 天文單位 (AU)',
+                helpSec3Text: '模擬中的距離以天文單位 (AU) 測量，1 AU 等於地球到太陽的平均距離（約 $1.496 \\times 10^{11}$ 米）。時間以地球年為單位。',
+                closeBtn: '關閉',
+                sun: '太陽', mercury: '水星', venus: '金星', earth: '地球', mars: '火星',
+                ceres: '穀神星 (矮行星)', jupiter: '木星', saturn: '土星', uranus: '天王星', neptune: '海王星',
+                pluto: '冥王星 (矮行星)', halley: '哈雷彗星', free: '自由視角'
+            },
+            'en': {
+                appTitle: 'Solar System Simulation',
+                timeControl: 'Time Control',
+                btnPlay: 'Play',
+                btnPause: 'Pause',
+                btnReset: 'Reset',
+                speedLabel: 'Sim Speed:',
+                viewControl: 'View Control',
+                focusTarget: 'Focus Target:',
+                zoomLabel: 'Zoom Level:',
+                objInfo: 'Object Info',
+                infoName: 'Name:',
+                infoAxis: 'Semi-major axis (<i>a</i>):',
+                infoEcc: 'Eccentricity (<i>e</i>):',
+                infoPeriod: 'Orbital Period (<i>T</i>):',
+                infoSpeed: 'Instant Speed (<i>v</i>):',
+                angleLabel: 'Angle (3D Pitch):',
+                showOrbits: 'Show Orbits:',
+                btnResetView: 'Reset View',
+                btnPhysics: 'Help',
+                footerText: 'CMA Secondary School. Physics Department.',
+                canvasHint: 'Left Drag: Pan | Right Drag: Tilt | Scroll: Zoom',
+                helpTitle: 'Physics Principles',
+                helpSec1Title: '1. Universal Gravitation',
+                helpSec1Text: 'The motion of planets is governed by Newton\'s Law of Universal Gravitation, providing the necessary centripetal force for orbit.',
+                helpSec2Title: '2. Kepler\'s Laws of Planetary Motion',
+                helpSec2Text: 'Planets follow elliptical orbits with the Sun at one focus. The square of the orbital period ($T$) is proportional to the cube of the semi-major axis ($a$).',
+                helpSec2Sub: 'This simulation solves Kepler\'s Equation numerically using the Newton-Raphson method to accurately position objects over time: <br><br> $$M = E - e \\sin(E)$$',
+                helpSec3Title: '3. Astronomical Units (AU)',
+                helpSec3Text: 'Distances in this simulation are measured in Astronomical Units (AU), where 1 AU is the average distance from the Earth to the Sun ($\\approx 1.496 \\times 10^{11}$ m). Time is measured in Earth Years.',
+                closeBtn: 'Close',
+                sun: 'Sun', mercury: 'Mercury', venus: 'Venus', earth: 'Earth', mars: 'Mars',
+                ceres: 'Ceres (Dwarf)', jupiter: 'Jupiter', saturn: 'Saturn', uranus: 'Uranus', neptune: 'Neptune',
+                pluto: 'Pluto (Dwarf)', halley: 'Halley\'s Comet', free: 'Free Camera'
+            }
+        };
+
+        // Astronomical Data (Precise Keplerian Elements)
+        const bodies = [
+            { id: 'sun', type: 'star', a: 0, e: 0, T: 1, inc: 0, color: '#fbbf24', radius: 12 },
+            { id: 'mercury', type: 'planet', a: 0.387098, e: 0.205630, T: 0.240846, inc: 7.005, color: '#94a3b8', radius: 3 },
+            { id: 'venus', type: 'planet', a: 0.723332, e: 0.006772, T: 0.615198, inc: 3.3945, color: '#fcd34d', radius: 4 },
+            { id: 'earth', type: 'planet', a: 1.000000, e: 0.016708, T: 1.000000, inc: 0.000, color: '#3b82f6', radius: 4.5 },
+            { id: 'mars', type: 'planet', a: 1.523679, e: 0.093400, T: 1.8808, inc: 1.850, color: '#ef4444', radius: 3.5 },
+            { id: 'ceres', type: 'dwarf', a: 2.768, e: 0.076, T: 4.60, inc: 10.59, color: '#a8a29e', radius: 2 },
+            { id: 'jupiter', type: 'planet', a: 5.2026, e: 0.048498, T: 11.862, inc: 1.303, color: '#d97706', radius: 8 },
+            { id: 'saturn', type: 'planet', a: 9.5549, e: 0.055546, T: 29.457, inc: 2.488, color: '#fde68a', radius: 7 },
+            { id: 'uranus', type: 'planet', a: 19.2184, e: 0.046381, T: 84.011, inc: 0.773, color: '#2dd4bf', radius: 5 },
+            { id: 'neptune', type: 'planet', a: 30.1103, e: 0.009456, T: 164.79, inc: 1.769, color: '#2563eb', radius: 5 },
+            { id: 'pluto', type: 'dwarf', a: 39.482, e: 0.2488, T: 247.94, inc: 17.16, color: '#e2e8f0', radius: 2 },
+            { id: 'halley', type: 'comet', a: 17.834, e: 0.96714, T: 75.32, inc: 162.26, color: '#f8fafc', radius: 1.5 }
+        ];
+
+        // Background Stars Data (Celestial coordinates)
+        const brightStarsRaw = [
+            {n:"Sirius", r:6.75, d:-16.7, m:-1.46}, {n:"Canopus", r:6.4, d:-52.7, m:-0.74},
+            {n:"Rigel Kentaurus", r:14.66, d:-60.8, m:-0.27}, {n:"Arcturus", r:14.26, d:19.1, m:-0.05},
+            {n:"Vega", r:18.61, d:38.78, m:0.03}, {n:"Capella", r:5.28, d:46.0, m:0.08},
+            {n:"Rigel", r:5.24, d:-8.2, m:0.13}, {n:"Procyon", r:7.65, d:5.2, m:0.34},
+            {n:"Achernar", r:1.63, d:-57.2, m:0.46}, {n:"Betelgeuse", r:5.92, d:7.4, m:0.50}
+        ];
+        // Generate stars
+        for(let i=0; i<400; i++) brightStarsRaw.push({r: Math.random()*24, d: (Math.random()-0.5)*180, m: 1.5 + Math.random()*4});
+        
+        const starMap = brightStarsRaw.map(s => {
+            const alpha = s.r * 15 * Math.PI / 180;
+            const delta = s.d * Math.PI / 180;
+            return {
+                x: Math.cos(delta) * Math.cos(alpha),
+                y: Math.cos(delta) * Math.sin(alpha),
+                z: Math.sin(delta),
+                mag: s.m
+            };
+        });
+
+        /* --- Engine State --- */
+        let isPlaying = false;
+        let simTime = 0; // Earth Years
+        let lastTimestamp = 0;
+        
+        const canvas = document.getElementById('sim-canvas');
+        const ctx = canvas.getContext('2d', { alpha: false });
+        let dpr = window.devicePixelRatio || 1;
+        
+        // Viewport config
+        const BASE_SCALE = 150; 
+        let currentZoom = 1.0; 
+        let panX = 0;
+        let panY = 0;
+        let pitch = 0.523; // ~30 degrees initial tilt
+        let targetId = 'earth';
+        let isDragging = false;
+        let dragMode = 'pan'; 
+        let dragStartX, dragStartY;
+
+        /* --- 2. Initialization & UI Sync --- */
+        function init() {
+            populateTargetSelect();
+            updateLabels();
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Canvas Interaction Listeners
+            canvas.addEventListener('mousedown', onPointerDown);
+            canvas.addEventListener('mousemove', onPointerMove);
+            window.addEventListener('mouseup', onPointerUp);
+            canvas.addEventListener('contextmenu', e => e.preventDefault()); 
+            canvas.addEventListener('touchstart', onPointerDown, {passive: false});
+            canvas.addEventListener('touchmove', onPointerMove, {passive: false});
+            window.addEventListener('touchend', onPointerUp);
+            canvas.addEventListener('wheel', onWheel, {passive: false});
+
+            // UI Control Listeners
+            document.getElementById('time-speed').addEventListener('input', updateSpeedLabel);
+            document.getElementById('zoom-slider').addEventListener('input', (e) => {
+                currentZoom = e.target.value / 100;
+                document.getElementById('zoom-val').innerText = `${e.target.value}%`;
+                if(!isPlaying) draw(); 
+            });
+            document.getElementById('pitch-slider').addEventListener('input', (e) => {
+                pitch = e.target.value * Math.PI / 180;
+                if(!isPlaying) draw();
+            });
+            document.getElementById('orbit-toggle').addEventListener('change', () => {
+                if(!isPlaying) draw();
+            });
+            document.getElementById('focus-select').addEventListener('change', (e) => {
+                targetId = e.target.value;
+                updateInfoPanel();
+                if(!isPlaying) draw();
+            });
+
+            // Set initial state
+            updateSpeedLabel();
+            updateInfoPanel();
+            updateDateDisplay();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function populateTargetSelect() {
+            const select = document.getElementById('focus-select');
+            select.innerHTML = `<option value="free" data-i18n="free">${i18n[currentLang]['free']}</option>`;
+            bodies.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.id;
+                opt.setAttribute('data-i18n', b.id);
+                opt.innerText = i18n[currentLang][b.id] || b.id;
+                select.appendChild(opt);
+            });
+            select.value = targetId;
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'tc' : 'en';
+            updateLabels();
+        }
+
+        function toggleSidebar(show) {
+            const sidebar = document.querySelector('aside');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (show) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                // trigger reflow
+                void overlay.offsetWidth;
+                overlay.classList.add('opacity-100');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.remove('opacity-100');
+                setTimeout(() => {
+                    if (!sidebar.classList.contains('-translate-x-full')) return;
+                    overlay.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function updateLabels() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang][key]) {
+                    if (el.tagName === 'OPTION') {
+                        el.innerText = i18n[currentLang][key];
+                    } else if (el.tagName === 'INPUT' && el.type === 'button') {
+                        el.value = i18n[currentLang][key];
+                    } else {
+                        el.innerHTML = i18n[currentLang][key];
+                    }
+                }
+            });
+            
+            const playBtn = document.getElementById('btn-play');
+            const playIcon = `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>`;
+            const pauseIcon = `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>`;
+            
+            if (isPlaying) {
+                playBtn.innerHTML = `${pauseIcon} <span data-i18n="btnPause">${i18n[currentLang]['btnPause']}</span>`;
+                playBtn.className = "flex-1 bg-amber-500 hover:bg-amber-600 text-white py-1.5 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center justify-center gap-1";
+            } else {
+                playBtn.innerHTML = `${playIcon} <span data-i18n="btnPlay">${i18n[currentLang]['btnPlay']}</span>`;
+                playBtn.className = "flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-1.5 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center justify-center gap-1";
+            }
+
+            updateSpeedLabel();
+            updateInfoPanel();
+            updateDateDisplay();
+            
+            if(window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function toggleHelp(show) {
+            const modal = document.getElementById('help-modal');
+            const content = modal.querySelector('div');
+            if (show) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth;
+                modal.classList.add('opacity-100');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+                if(window.MathJax && typeof window.MathJax.typesetPromise === 'function') MathJax.typesetPromise();
+            } else {
+                modal.classList.remove('opacity-100');
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        }
+
+        function resetView() {
+            panX = 0;
+            panY = 0;
+            pitch = 0.523;
+            currentZoom = 1.0;
+            document.getElementById('zoom-slider').value = 100;
+            document.getElementById('zoom-val').innerText = `100%`;
+            document.getElementById('pitch-slider').value = 30;
+            document.getElementById('orbit-toggle').checked = false;
+            targetId = 'earth';
+            document.getElementById('focus-select').value = 'earth';
+            updateInfoPanel();
+            if(!isPlaying) draw();
+        }
+
+        /* --- 3. Interaction & Viewport Logic --- */
+        function resizeCanvas() {
+            const rect = canvas.parentNode.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            if(!isPlaying) draw();
+        }
+
+        function getEventPos(e) {
+            if (e.touches && e.touches.length > 0) {
+                return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }
+            return { x: e.clientX, y: e.clientY };
+        }
+
+        function onPointerDown(e) {
+            if(e.type === 'mousedown') {
+                if(e.button === 2) dragMode = 'rotate'; 
+                else if(e.button === 0) dragMode = 'pan'; 
+                else return;
+            } else {
+                dragMode = 'pan'; 
+            }
+            
+            isDragging = true;
+            const pos = getEventPos(e);
+            dragStartX = pos.x;
+            dragStartY = pos.y;
+            
+            if(targetId !== 'free') {
+                targetId = 'free';
+                document.getElementById('focus-select').value = 'free';
+                updateInfoPanel();
+            }
+        }
+
+        function onPointerMove(e) {
+            if (!isDragging) return;
+            e.preventDefault(); 
+            const pos = getEventPos(e);
+            const dx = pos.x - dragStartX;
+            const dy = pos.y - dragStartY;
+            
+            if (dragMode === 'pan') {
+                panX += dx;
+                panY += dy;
+            } else if (dragMode === 'rotate') {
+                pitch -= dy * 0.005;
+                pitch = Math.max(0, Math.min(Math.PI/2, pitch)); 
+                document.getElementById('pitch-slider').value = pitch * 180 / Math.PI;
+            }
+            
+            dragStartX = pos.x;
+            dragStartY = pos.y;
+            if(!isPlaying) draw();
+        }
+
+        function onPointerUp() {
+            isDragging = false;
+        }
+
+        function onWheel(e) {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const zoomSensitivity = 0.001;
+            const delta = -e.deltaY * zoomSensitivity;
+            
+            let newZoom = currentZoom * Math.exp(delta);
+            newZoom = Math.max(0.05, Math.min(newZoom, 50.0)); 
+
+            const scaleChange = newZoom / currentZoom;
+            panX = mouseX - (mouseX - panX) * scaleChange;
+            panY = mouseY - (mouseY - panY) * scaleChange;
+
+            currentZoom = newZoom;
+            
+            document.getElementById('zoom-slider').value = Math.round(currentZoom * 100);
+            document.getElementById('zoom-val').innerText = `${Math.round(currentZoom * 100)}%`;
+
+            if(!isPlaying) draw();
+        }
+
+        /* --- 4. Physics & Math Logic --- */
+        function getTimeSpeedMultiplier() {
+            const val = parseFloat(document.getElementById('time-speed').value);
+            return Math.pow(10, val);
+        }
+
+        function updateSpeedLabel() {
+            const mult = getTimeSpeedMultiplier();
+            let text = "";
+            if (mult < 1) text = `${(mult).toFixed(2)} ${currentLang === 'en' ? 'Yr/s' : '年/秒'}`;
+            else text = `${mult.toFixed(1)} ${currentLang === 'en' ? 'Yr/s' : '年/秒'}`;
+            document.getElementById('speed-val').innerText = text;
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            if (isPlaying) lastTimestamp = performance.now();
+            updateLabels();
+        }
+
+        function updateDateDisplay() {
+            const yearPrefix = currentLang === 'en' ? 'Year:' : '年份:';
+            document.getElementById('date-display').innerText = `${yearPrefix} ${simTime.toFixed(2)}`;
+        }
+
+        function resetTime() {
+            simTime = 0;
+            if (!isPlaying) draw();
+            updateDateDisplay();
+        }
+
+        function solveKepler(M, e) {
+            let E = M; 
+            const tolerance = 1e-6;
+            for (let i = 0; i < 10; i++) {
+                let deltaE = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+                E -= deltaE;
+                if (Math.abs(deltaE) < tolerance) break;
+            }
+            return E;
+        }
+
+        function calculatePosition(body, time) {
+            if (body.a === 0) return { x: 0, y: 0, z: 0, v: 0 }; 
+
+            const M = (2 * Math.PI / body.T) * time;
+            const E = solveKepler(M, body.e);
+            
+            const x_orb = body.a * (Math.cos(E) - body.e);
+            const y_orb = body.a * Math.sqrt(1 - body.e * body.e) * Math.sin(E);
+
+            const incRad = (body.inc || 0) * Math.PI / 180;
+            const x = x_orb;
+            const y = y_orb * Math.cos(incRad);
+            const z = y_orb * Math.sin(incRad);
+
+            const r = Math.sqrt(x*x + y*y + z*z);
+            const GM = 4 * Math.PI * Math.PI;
+            const v2 = GM * (2/r - 1/body.a);
+            const v = Math.sqrt(Math.max(0, v2)) * 4.74; 
+
+            return { x, y, z, v };
+        }
+
+        function updateInfoPanel() {
+            const body = bodies.find(b => b.id === targetId);
+            if (!body || body.id === 'sun') {
+                document.getElementById('info-name').innerText = body ? i18n[currentLang][body.id] : i18n[currentLang]['free'];
+                document.getElementById('info-a').innerText = "-";
+                document.getElementById('info-e').innerText = "-";
+                document.getElementById('info-t').innerText = "-";
+                document.getElementById('info-v').innerText = "-";
+                return;
+            }
+
+            document.getElementById('info-name').innerText = i18n[currentLang][body.id];
+            document.getElementById('info-a').innerText = `${body.a.toFixed(3)} AU`;
+            document.getElementById('info-e').innerText = body.e.toFixed(3);
+            document.getElementById('info-t').innerText = `${body.T.toFixed(2)} ${currentLang==='en'?'Yrs':'年'}`;
+            
+            const pos = calculatePosition(body, simTime);
+            document.getElementById('info-v').innerText = `${pos.v.toFixed(1)} km/s`;
+        }
+
+        /* --- 5. Render Loop --- */
+        function gameLoop(timestamp) {
+            if (isPlaying) {
+                const dt = (timestamp - lastTimestamp) / 1000; 
+                simTime += dt * getTimeSpeedMultiplier();
+                lastTimestamp = timestamp;
+                
+                updateDateDisplay();
+                
+                if (targetId !== 'free') {
+                    updateInfoPanel(); 
+                }
+            }
+            
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function project3D(x, y, z) {
+            const x2 = x;
+            const y2 = y * Math.cos(pitch) - z * Math.sin(pitch);
+            const z2 = y * Math.sin(pitch) + z * Math.cos(pitch);
+            return { x: x2, y: -y2, z: z2 };
+        }
+
+        function drawStarfield(width, height) {
+            const radius = Math.max(width, height) * 0.7; 
+            
+            ctx.save();
+            ctx.translate(width/2, height/2); 
+            
+            starMap.forEach(star => {
+                const p = project3D(star.x, star.y, star.z);
+                
+                if (p.z > 0) { 
+                    const sx = p.x * radius;
+                    const sy = p.y * radius;
+                    
+                    const size = Math.max(0.2, (4 - star.mag) * 0.5);
+                    const alpha = Math.max(0.1, Math.min(1.0, (5 - star.mag) / 4));
+                    
+                    ctx.globalAlpha = alpha;
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+            
+            ctx.restore();
+            ctx.globalAlpha = 1.0;
+        }
+
+        function draw() {
+            const rect = canvas.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+
+            ctx.clearRect(0, 0, width, height);
+            
+            const grad = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width);
+            grad.addColorStop(0, '#0f172a');
+            grad.addColorStop(1, '#020617');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, width, height);
+
+            drawStarfield(width, height);
+
+            const scale = BASE_SCALE * currentZoom;
+            let cx = width / 2;
+            let cy = height / 2;
+
+            if (targetId !== 'free') {
+                const targetBody = bodies.find(b => b.id === targetId);
+                if (targetBody) {
+                    const tPos = calculatePosition(targetBody, simTime);
+                    const p3d = project3D(tPos.x, tPos.y, tPos.z);
+                    panX = cx - (p3d.x * scale);
+                    panY = cy - (p3d.y * scale);
+                }
+            } else {
+                cx = panX + width / 2;
+                cy = panY + height / 2;
+            }
+
+            ctx.save();
+            ctx.translate(panX + (targetId !== 'free' ? 0 : width/2), panY + (targetId !== 'free' ? 0 : height/2));
+
+            const showOrbits = document.getElementById('orbit-toggle').checked;
+
+            // 1. Draw Orbits (if enabled)
+            if (showOrbits) {
+                ctx.lineWidth = 1;
+                bodies.forEach(body => {
+                    if (body.a === 0) return;
+                    
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${body.id === targetId ? 0.4 : 0.15})`;
+                    if(body.type === 'comet' || body.type === 'dwarf') {
+                        ctx.setLineDash([4, 4]);
+                    } else {
+                        ctx.setLineDash([]);
+                    }
+
+                    ctx.beginPath();
+                    for (let E = 0; E <= Math.PI * 2.05; E += 0.05) {
+                        const x_orb = body.a * (Math.cos(E) - body.e);
+                        const y_orb = body.a * Math.sqrt(1 - body.e * body.e) * Math.sin(E);
+                        
+                        const incRad = (body.inc || 0) * Math.PI / 180;
+                        const x = x_orb;
+                        const y = y_orb * Math.cos(incRad);
+                        const z = y_orb * Math.sin(incRad);
+
+                        const p = project3D(x, y, z);
+                        
+                        if (E === 0) ctx.moveTo(p.x * scale, p.y * scale);
+                        else ctx.lineTo(p.x * scale, p.y * scale);
+                    }
+                    ctx.stroke();
+                });
+                ctx.setLineDash([]);
+            }
+
+            // 2. Prepare Bodies for Z-Sorting
+            const renderQueue = [];
+            bodies.forEach(body => {
+                const pos = calculatePosition(body, simTime);
+                const p3d = project3D(pos.x, pos.y, pos.z);
+                renderQueue.push({
+                    body: body,
+                    px: p3d.x * scale,
+                    py: p3d.y * scale,
+                    z: p3d.z 
+                });
+            });
+            
+            renderQueue.sort((a, b) => a.z - b.z);
+
+            // 3. Draw Bodies
+            renderQueue.forEach(item => {
+                const body = item.body;
+                const px = item.px;
+                const py = item.py;
+
+                if (body.id === 'sun') {
+                    const sunGlow = ctx.createRadialGradient(px, py, body.radius, px, py, body.radius * 4);
+                    sunGlow.addColorStop(0, 'rgba(251, 191, 36, 0.4)');
+                    sunGlow.addColorStop(1, 'rgba(251, 191, 36, 0)');
+                    ctx.fillStyle = sunGlow;
+                    ctx.beginPath();
+                    ctx.arc(px, py, body.radius * 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+
+                ctx.fillStyle = body.color;
+                ctx.beginPath();
+                ctx.arc(px, py, body.radius, 0, 2 * Math.PI);
+                ctx.fill();
+
+                if (body.id === targetId && body.id !== 'sun') {
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(px, py, body.radius + 6, 0, 2 * Math.PI);
+                    ctx.stroke();
+                }
+
+                const isMajor = body.type === 'planet' || body.type === 'star';
+                if (currentZoom > 0.3 || body.id === targetId || (isMajor && currentZoom > 0.05)) {
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                    ctx.font = '12px Inter, "Noto Sans TC", sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(i18n[currentLang][body.id] || body.id, px, py - body.radius - 8);
+                }
+            });
+
+            ctx.restore();
+            
+            drawScaleIndicator(width, height, scale);
+        }
+        
+        function drawScaleIndicator(w, h, scale) {
+            ctx.save();
+            
+            const targetWidth = 100;
+            const auTarget = targetWidth / scale;
+            
+            const exponent = Math.floor(Math.log10(auTarget));
+            const fraction = auTarget / Math.pow(10, exponent);
+            let niceFraction;
+            if (fraction <= 1) niceFraction = 1;
+            else if (fraction <= 2) niceFraction = 2;
+            else if (fraction <= 5) niceFraction = 5;
+            else niceFraction = 10;
+            
+            const auValue = niceFraction * Math.pow(10, exponent);
+            const barWidth = auValue * scale;
+            
+            const startX = w - barWidth - 20;
+            const startY = h - 30;
+            
+            if (barWidth > 0 && startX > 0) {
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.lineWidth = 2;
+                
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(startX + barWidth, startY);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(startX, startY - 4);
+                ctx.lineTo(startX, startY + 4);
+                ctx.moveTo(startX + barWidth, startY - 4);
+                ctx.lineTo(startX + barWidth, startY + 4);
+                ctx.stroke();
+                
+                ctx.font = '11px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(`${auValue} AU`, startX + barWidth/2, startY - 8);
+            }
+            ctx.restore();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+
+    </script>
+</body>
+</html>
