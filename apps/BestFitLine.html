@@ -70,10 +70,10 @@
         }
     </style>
 </head>
-<body class="flex flex-col h-screen text-slate-800 bg-slate-50 font-sans overflow-hidden">
+<body class="flex flex-col min-h-screen md:h-screen text-slate-800 bg-slate-50 font-sans md:overflow-hidden">
 
     <!-- Top Navigation Header -->
-    <header class="bg-primary text-white shadow-md z-20 flex justify-between items-center px-6 py-3">
+    <header class="bg-primary text-white shadow-md z-20 flex justify-between items-center px-6 py-3 shrink-0">
         <h1 class="text-xl font-bold tracking-wide" data-i18n="title">Best Fit Line Calculator</h1>
         <div class="flex items-center gap-4">
             <button onclick="toggleHelp()" class="hover:bg-secondary px-3 py-1 rounded-md transition" data-i18n="helpBtn">Help</button>
@@ -81,12 +81,12 @@
         </div>
     </header>
 
-    <!-- Main Layout: Sidebar on left, Canvas on right -->
-    <main class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+    <!-- Main Layout: Stacked on Mobile (scrollable), Side-by-side on Desktop -->
+    <main class="flex-1 flex flex-col md:flex-row w-full overflow-y-auto md:overflow-hidden relative">
         
-        <!-- Control Sidebar -->
-        <aside class="w-full md:w-80 lg:w-[420px] bg-white shadow-xl z-10 flex flex-col h-full overflow-y-auto">
-            <div class="p-5 flex-1 flex flex-col gap-5">
+        <!-- Control Sidebar (Top on Mobile, Left on Desktop) -->
+        <aside class="w-full md:w-80 lg:w-[420px] bg-white shadow-md md:shadow-xl z-10 flex flex-col shrink-0 md:h-full md:overflow-y-auto">
+            <div class="p-4 md:p-5 flex-1 flex flex-col gap-4 md:gap-5">
                 
                 <!-- Axis Settings (LaTeX) -->
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
@@ -142,32 +142,36 @@
                 <!-- Error Messages Box (Hidden by default) -->
                 <div id="errorBox" class="hidden bg-red-50 text-red-700 p-3 rounded-lg border border-red-200 text-sm"></div>
 
-                <!-- Export Utilities Section -->
-                <div class="flex gap-2 mt-4 w-full">
-                    <button onclick="downloadPNG()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg font-semibold shadow-sm border border-slate-300 transition-all flex items-center justify-center gap-2 text-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        <span data-i18n="downloadPNG">PNG</span>
-                    </button>
-                    <button onclick="downloadCSV()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg font-semibold shadow-sm border border-slate-300 transition-all flex items-center justify-center gap-2 text-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <span data-i18n="downloadCSV">CSV</span>
-                    </button>
-                </div>
-                
-                <!-- Draggable Reminder (Appears after simulation starts) -->
-                <div id="dragReminder" class="hidden text-xs text-slate-500 mt-2 text-center drop-shadow-sm transition-opacity duration-300">
-                    <span data-i18n="dragReminder">💡 Tip: You can drag the formula label on the graph before downloading.</span>
-                </div>
+                <!-- DESKTOP ONLY: Export Utilities & Footer -->
+                <!-- We hide this block on mobile so it can be moved below the graph instead -->
+                <div class="hidden md:flex flex-col mt-auto pt-4">
+                    <div class="flex gap-2 w-full">
+                        <button onclick="downloadPNG()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg font-semibold shadow-sm border border-slate-300 transition-all flex items-center justify-center gap-2 text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            <span data-i18n="downloadPNG">PNG</span>
+                        </button>
+                        <button onclick="downloadCSV()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg font-semibold shadow-sm border border-slate-300 transition-all flex items-center justify-center gap-2 text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <span data-i18n="downloadCSV">CSV</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Draggable Reminder -->
+                    <div class="dragReminder hidden text-xs text-slate-500 mt-2 text-center drop-shadow-sm transition-opacity duration-300">
+                        <span data-i18n="dragReminder">💡 Tip: You can drag the formula label on the graph before downloading.</span>
+                    </div>
 
-                <!-- Footer -->
-                <div class="mt-auto pt-4 text-center text-sm font-medium text-slate-400">
-                    <span data-i18n="footer">廠商會中學．物理科</span>
+                    <!-- Footer -->
+                    <div class="mt-4 pt-4 text-center text-sm font-medium text-slate-400 border-t border-slate-100">
+                        <span data-i18n="footer">廠商會中學．物理科</span>
+                    </div>
                 </div>
             </div>
         </aside>
 
-        <!-- Canvas Drawing Area -->
-        <section class="flex-1 relative bg-grid cursor-crosshair overflow-hidden" id="canvasWrapper">
+        <!-- Canvas Drawing Area (Middle on Mobile, Right on Desktop) -->
+        <!-- Responsive Height: uses 55dvh for portrait mobile, 75dvh for landscape mobile -->
+        <section class="w-full h-[55dvh] landscape:h-[75dvh] md:h-auto md:flex-1 relative bg-grid cursor-crosshair shrink-0 border-y border-slate-200 md:border-y-0 overflow-hidden" id="canvasWrapper">
             <!-- High-DPI Canvas for rendering points, axes, and lines -->
             <canvas id="simCanvas" class="absolute inset-0 w-full h-full"></canvas>
             
@@ -180,6 +184,31 @@
                 <!-- Formula dynamically injected here -->
             </div>
         </section>
+
+        <!-- MOBILE ONLY: Export Utilities & Footer (Placed Below the Graph) -->
+        <div class="w-full bg-white p-4 flex flex-col gap-3 md:hidden shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-10">
+            <div class="flex gap-2 w-full">
+                <button onclick="downloadPNG()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-lg font-semibold shadow-sm border border-slate-300 transition-all flex items-center justify-center gap-2 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <span data-i18n="downloadPNG">PNG</span>
+                </button>
+                <button onclick="downloadCSV()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-lg font-semibold shadow-sm border border-slate-300 transition-all flex items-center justify-center gap-2 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span data-i18n="downloadCSV">CSV</span>
+                </button>
+            </div>
+            
+            <!-- Draggable Reminder -->
+            <div class="dragReminder hidden text-xs text-slate-500 mt-1 text-center drop-shadow-sm transition-opacity duration-300">
+                <span data-i18n="dragReminder">💡 Tip: You can drag the formula label on the graph before downloading.</span>
+            </div>
+
+            <!-- Footer -->
+            <div class="mt-2 pt-3 text-center text-sm font-medium text-slate-400 border-t border-slate-100">
+                <span data-i18n="footer">廠商會中學．物理科</span>
+            </div>
+        </div>
+
     </main>
 
     <!-- Help / Educational Modal -->
@@ -479,7 +508,8 @@
         function clearResults() {
             state.results = null;
             document.getElementById('mathOverlay').classList.add('hidden');
-            document.getElementById('dragReminder').classList.add('hidden');
+            // Toggle all instances of dragReminder (mobile & desktop)
+            document.querySelectorAll('.dragReminder').forEach(el => el.classList.add('hidden'));
             hideError();
         }
 
@@ -555,6 +585,11 @@
             state.results = { m, c, r2, pts: validPts };
             calculateViewport(); // Re-adjust canvas boundaries
             replayAnimation();   // Trigger line drawing animation
+            
+            // Scroll to graph slightly on mobile for better UX
+            if (window.innerWidth < 768 && wrapper) {
+                 wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         // Generates the LaTeX equation string and updates the draggable overlay
@@ -584,7 +619,7 @@
             
             const positionOverlay = () => {
                 overlay.classList.remove('hidden');
-                document.getElementById('dragReminder').classList.remove('hidden');
+                document.querySelectorAll('.dragReminder').forEach(el => el.classList.remove('hidden'));
                 
                 if (!wrapper) wrapper = document.getElementById('canvasWrapper');
                 if (!wrapper) return;
