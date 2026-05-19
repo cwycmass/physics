@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>3D Wave Superposition & Interference | 3D水波疊加與干涉</title>
+    <title>水波干涉 | Water Wave Interference </title>
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS - 用於建構響應式且精美的雙欄 UI 佈局 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -14,9 +14,9 @@
                     colors: {
                         primary: '#1e3c72',
                         primaryLight: '#2a5298',
-                        wave1: '#3b82f6', // Blue
-                        wave2: '#10b981', // Emerald
-                        resultant: '#DC2626', // Red
+                        wave1: '#3b82f6', // 波源 1 代表色 (藍色)
+                        wave2: '#10b981', // 波源 2 代表色 (綠色)
+                        resultant: '#DC2626', // 合成波代表色 (紅色)
                         bgGrid: '#f8fafc',
                     },
                     fontFamily: {
@@ -27,7 +27,7 @@
         }
     </script>
 
-    <!-- MathJax for LaTeX Rendering (Used only in Help Modal) -->
+    <!-- MathJax - 用於高畫質渲染說明模態框中的 LaTeX 物理與數學公式 -->
     <script>
         MathJax = {
             tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
@@ -36,27 +36,27 @@
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
-    <!-- FontAwesome for Icons -->
+    <!-- FontAwesome - 用於按鈕、標題等 UI 的向量圖示 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Three.js and OrbitControls -->
+    <!-- Three.js 核心 3D 庫與軌道控制器 (OrbitControls) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <style>
-        /* Custom Scrollbar */
+        /* 網頁自訂精細滾動條 */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* Range Slider Styling */
+        /* 跨瀏覽器自訂 Range Slider 樣式 */
         input[type=range] {
             -webkit-appearance: none; width: 100%; background: transparent;
         }
         input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%;
-            background: #1e3c72; cursor: pointer; margin-top: -6px;
+            -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%;
+            background: #1e3c72; cursor: pointer; margin-top: -7px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
         input[type=range]::-webkit-slider-runnable-track {
@@ -68,125 +68,121 @@
             background-color: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px);
         }
 
-        /* Cursor hints for Draggable Point P */
+        /* 探針 P 點可拖曳時的游標回饋樣式 */
         .grab-cursor { cursor: grab !important; }
         .grabbing-cursor { cursor: grabbing !important; }
 
-        /* Lock touch actions solely on the 3D canvas so users can scroll elsewhere */
+        /* 鎖定 3D 畫布的手勢操作，防止移動端上操作 3D 視角時導致網頁意外滾動 */
         .touch-action-none { touch-action: none; }
         #canvas-container canvas { outline: none; }
 
-        /* SI formatting overrides for variables */
+        /* 符合國際物理 SI 規範之斜體物理量符號格式 (Times New Roman 加粗) */
         i { font-style: italic; font-family: 'Times New Roman', Times, serif; font-weight: bold; padding-right: 1px;}
     </style>
 </head>
-<body class="bg-slate-50 flex flex-col min-h-screen md:h-screen md:overflow-hidden text-slate-800 font-sans text-sm">
+<body class="bg-slate-50 flex flex-col min-h-screen md:h-screen md:overflow-hidden text-slate-800 font-sans text-base">
 
-    <!-- Top Navigation / Header (Symbols Removed) -->
-    <header class="bg-primary text-white shadow-md z-20 flex justify-between items-center px-4 py-2 shrink-0">
+    <!-- 頂部導航欄 (頂部標題、說明 Info 按鈕、固定繁/Eng切換按鈕) -->
+    <header class="bg-primary text-white shadow-md z-20 flex justify-between items-center px-5 py-3 shrink-0">
         <div class="flex items-center">
-            <i class="fa-solid fa-water mr-2 text-lg"></i>
-            <h1 class="text-base md:text-lg font-bold tracking-wide" id="app-title">3D Wave Superposition</h1>
+            <i class="fa-solid fa-water mr-2 text-xl"></i>
+            <h1 class="text-lg md:text-xl font-bold tracking-wide" id="app-title">3D Wave Superposition</h1>
         </div>
-        <div class="flex items-center gap-2">
-            <button id="btn-help" class="bg-primaryLight hover:bg-blue-600 transition px-3 py-1.5 rounded text-xs font-medium flex items-center shadow-sm">
-                <span id="label-help">Theory</span>
+        <div class="flex items-center gap-3">
+            <button id="btn-help" class="bg-primaryLight hover:bg-blue-600 transition px-4 py-2 rounded text-sm font-medium flex items-center shadow-sm">
+                <span id="label-help">Info</span>
             </button>
-            <button id="btn-lang" class="bg-white text-primary hover:bg-slate-100 transition px-3 py-1.5 rounded text-xs font-bold w-12 shadow-sm">
-                繁
+            <button id="btn-lang" class="bg-white text-primary hover:bg-slate-100 transition px-4 py-2 rounded text-sm font-bold w-24 shadow-sm">
+                繁/Eng
             </button>
         </div>
     </header>
 
-    <!-- Main Layout: Split Pane -->
+    <!-- 雙欄主佈局 -->
     <div class="flex-1 flex flex-col md:flex-row relative min-h-0">
         
-        <!-- Sidebar Controls -->
-        <aside class="w-full md:w-[320px] bg-white shadow-[4px_0_15px_-3px_rgba(0,0,0,0.1)] flex flex-col z-10 shrink-0 md:overflow-y-auto custom-scrollbar order-2 md:order-1 pb-6 md:pb-0">
-            <div class="p-3 md:p-4 flex flex-col gap-4">
+        <!-- 左側控制面板 (參數調節與實時 P 點物理分析) -->
+        <aside class="w-full md:w-[360px] bg-white shadow-[4px_0_15px_-3px_rgba(0,0,0,0.1)] flex flex-col z-10 shrink-0 md:overflow-y-auto custom-scrollbar order-2 md:order-1 pb-6 md:pb-0">
+            <div class="p-4 md:p-5 flex flex-col gap-5">
                 
-                <!-- Playback Controls -->
-                <div class="flex justify-center gap-4">
-                    <button id="btn-play" class="w-10 h-10 rounded-full bg-primary text-white flex justify-center items-center hover:bg-primaryLight shadow-md transition transform hover:scale-105">
-                        <i class="fa-solid fa-pause text-lg"></i>
+                <!-- 播放暫停與物理重置按鈕 -->
+                <div class="flex justify-center gap-5">
+                    <button id="btn-play" class="w-12 h-12 rounded-full bg-primary text-white flex justify-center items-center hover:bg-primaryLight shadow-md transition transform hover:scale-105">
+                        <i class="fa-solid fa-pause text-xl"></i>
                     </button>
-                    <button id="btn-reset" class="w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex justify-center items-center hover:bg-slate-300 shadow-sm transition transform hover:scale-105">
-                        <i class="fa-solid fa-rotate-left text-lg"></i>
+                    <button id="btn-reset" class="w-12 h-12 rounded-full bg-slate-200 text-slate-700 flex justify-center items-center hover:bg-slate-300 shadow-sm transition transform hover:scale-105">
+                        <i class="fa-solid fa-rotate-left text-xl"></i>
                     </button>
                 </div>
 
-                <!-- Parameters Card -->
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3">
-                    <div class="flex justify-between items-center border-b border-slate-200 pb-1">
-                        <h2 class="font-bold text-slate-700" id="label-params">Wave Parameters</h2>
+                <!-- 參數控制卡片 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3.5">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-1.5">
+                        <h2 class="font-bold text-slate-700 text-base" id="label-params">Wave Parameters</h2>
                     </div>
 
-                    <!-- Source On/Off Toggles -->
-                    <div class="flex gap-2 w-full">
-                        <button id="btn-s1" class="flex-1 py-1.5 rounded text-white bg-wave1 text-xs font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent">
-                            <i class="fa-solid fa-power-off"></i> <span id="label-s1-btn">S₁: ON</span>
+                    <!-- 波源振源開關 Toggles -->
+                    <div class="flex gap-3 w-full">
+                        <button id="btn-s1" class="flex-1 py-2 rounded text-white bg-wave1 text-sm font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent">
+                            <i class="fa-solid fa-power-off"></i> <span id="label-s1-btn"><i>S</i>₁</span>
                         </button>
-                        <button id="btn-s2" class="flex-1 py-1.5 rounded text-white bg-wave2 text-xs font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent">
-                            <i class="fa-solid fa-power-off"></i> <span id="label-s2-btn">S₂: ON</span>
+                        <button id="btn-s2" class="flex-1 py-2 rounded text-white bg-wave2 text-sm font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent">
+                            <i class="fa-solid fa-power-off"></i> <span id="label-s2-btn"><i>S</i>₂</span>
                         </button>
                     </div>
 
-                    <!-- Wave Speed Control (Water Depth) -->
-                    <div class="flex flex-col gap-1 border-t border-slate-200/60 pt-2">
-                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap">
+                    <!-- 水深控制 (Water Depth) -->
+                    <div class="flex flex-col gap-1.5 border-t border-slate-200/60 pt-2.5">
+                        <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap">
                             <label id="label-depth" class="text-slate-700 font-semibold">Water Depth</label>
                         </div>
                         <input type="range" id="slider-depth" min="1.0" max="10.0" step="0.1" value="5.0">
-                        <div class="text-[10px] text-slate-500 text-right mt-0.5">
-                            <span id="label-speed-text">Wave Speed (<i>v</i>): </span><span id="val-speed-info" class="font-mono font-bold text-slate-700 ml-1">2.20 m/s</span>
+                        <div class="text-xs text-slate-500 text-right mt-0.5">
+                            <span id="label-speed-text">波速率 (<i>v</i>): </span><span id="val-speed-info" class="font-mono font-bold text-slate-700 ml-1">2.20 m/s</span>
                         </div>
                     </div>
                     
-                    <!-- Frequency Control -->
-                    <div class="flex flex-col gap-1">
-                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap">
+                    <!-- 頻率控制 -->
+                    <div class="flex flex-col gap-1.5">
+                        <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap">
                             <label id="label-freq" class="text-slate-700 font-semibold">Frequency (<i>f</i>)</label>
                             <span id="val-freq" class="text-primary font-mono shrink-0 ml-2">1.0 Hz</span>
                         </div>
                         <input type="range" id="slider-freq" min="0.5" max="3.0" step="0.1" value="1.0">
-                        <div class="text-[10px] text-slate-500 text-right mt-0.5 whitespace-nowrap">
-                            <span id="label-lambda-text">Wavelength (λ): </span><span id="val-lambda-info" class="font-mono font-bold text-slate-700 ml-1">2.20 m</span>
-                        </div>
                     </div>
 
-                    <!-- Interactive Equation Display -->
-                    <div class="bg-blue-50/50 p-2.5 rounded-lg border border-blue-100 flex flex-col gap-1.5 mt-1">
-                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center" id="label-eq-title">Wavelength Relationship</div>
+                    <!-- 實時波長公式動態分數計算器 -->
+                    <div class="bg-blue-50/50 p-3 rounded-lg border border-blue-100 flex flex-col gap-2 mt-1">
+                        <div class="text-xs font-bold text-slate-500 uppercase tracking-wider text-center" id="label-eq-title">Wavelength</div>
                         <div class="flex items-center justify-center gap-3">
-                            <span class="text-slate-600 font-extrabold text-sm font-sans"><i>&lambda;</i> =</span>
+                            <span class="text-slate-600 font-extrabold text-base font-sans"><i>&lambda;</i> =</span>
                             
-                            <!-- Dynamic Fraction Visualizer -->
                             <div class="flex flex-col items-center justify-center">
-                                <span id="eq-val-v" class="text-blue-600 font-mono font-bold border-b-2 border-slate-400 px-1 text-xs">2.20 m/s</span>
-                                <span id="eq-val-f" class="text-emerald-600 font-mono font-bold px-1 text-xs">1.0 Hz</span>
+                                <span id="eq-val-v" class="text-blue-600 font-mono font-bold border-b-2 border-slate-400 px-1.5 text-sm">2.20 m/s</span>
+                                <span id="eq-val-f" class="text-emerald-600 font-mono font-bold px-1.5 text-sm">1.0 Hz</span>
                             </div>
                             
-                            <span class="text-slate-600 font-extrabold text-sm font-sans">=</span>
-                            <span id="val-lambda-info-eq" class="text-primary font-mono font-extrabold text-sm px-1 bg-white border border-slate-200 rounded shadow-sm">2.20 m</span>
+                            <span class="text-slate-600 font-extrabold text-base font-sans">=</span>
+                            <span id="val-lambda-info-eq" class="text-primary font-mono font-extrabold text-base px-2 py-0.5 bg-white border border-slate-200 rounded shadow-sm">2.20 m</span>
                         </div>
                     </div>
 
                     <!-- Source Amplitude & Attenuation -->
-                    <div class="flex flex-col gap-1 border-t border-slate-200/60 pt-2 mt-1">
-                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap">
+                    <div class="flex flex-col gap-1.5 border-t border-slate-200/60 pt-2.5 mt-1">
+                        <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap">
                             <label id="label-amp" class="text-slate-700">Source Amplitude (<i>A</i>₀)</label>
                             <span id="val-amp" class="text-primary font-mono shrink-0 ml-2">0.2</span>
                         </div>
                         <input type="range" id="slider-amp" min="0.2" max="3.0" step="0.1" value="0.2">
-                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap mt-1">
+                        <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap mt-1.5">
                             <label id="label-attenuation" class="text-slate-600">Simulate Attenuation</label>
                             <input type="checkbox" id="toggle-attenuation" class="w-4 h-4 cursor-pointer accent-primary shrink-0 ml-2">
                         </div>
                     </div>
 
-                    <!-- Source Separation -->
-                    <div class="flex flex-col gap-1 border-t border-slate-200/60 pt-2">
-                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap">
+                    <!-- Separation d -->
+                    <div class="flex flex-col gap-1.5 border-t border-slate-200/60 pt-2.5">
+                        <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap">
                             <label id="label-d" class="text-slate-700">Separation (<i>d</i>)</label>
                             <span id="val-d" class="text-primary font-mono shrink-0 ml-2">6.0 m</span>
                         </div>
@@ -194,60 +190,56 @@
                     </div>
 
                     <!-- Phase Difference -->
-                    <div class="flex flex-col gap-1 border-t border-slate-200/60 pt-2">
-                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap">
-                            <label id="label-phi" class="text-slate-700">Phase Difference (<i>&phi;</i>₀)</label>
+                    <div class="flex flex-col gap-1.5 border-t border-slate-200/60 pt-2.5">
+                        <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap">
+                            <label id="label-phi" class="text-slate-700">Phase Difference of <i>S</i>₁ and <i>S</i>₂</label>
                             <span id="val-phi" class="text-primary font-mono shrink-0 ml-2">0&deg;</span>
                         </div>
                         <input type="range" id="slider-phi" min="0" max="360" step="1" value="0">
-                        <div class="flex gap-2 mt-1.5">
-                            <button class="flex-1 bg-slate-200 hover:bg-slate-300 text-[11px] py-1 rounded transition font-medium" onclick="setPhase(0)" id="btn-inphase">In Phase</button>
-                            <button class="flex-1 bg-slate-200 hover:bg-slate-300 text-[11px] py-1 rounded transition font-medium" onclick="setPhase(180)" id="btn-antiphase">Anti-Phase</button>
+                        <div class="flex gap-1.5 mt-2">
+                            <!-- 相位控制按鈕 -->
+                            <button class="flex-1 text-[11px] py-1.5 rounded transition font-medium border" onclick="setPhase(0)" id="btn-inphase">In Phase</button>
+                            <button class="flex-1 text-[11px] py-1.5 rounded transition font-medium border" onclick="setPhase(180)" id="btn-antiphase">Anti-Phase</button>
+                            <button class="flex-1 text-[11px] py-1.5 rounded transition font-medium border cursor-default" id="btn-outofphase" disabled>Out of Phase</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Analysis Card -->
-                <div class="bg-blue-50 p-3 rounded-xl border border-blue-100 shadow-sm flex flex-col gap-2">
-                    <h2 class="font-bold text-primary border-b border-blue-200 pb-1" id="label-analysis">Point P Analysis</h2>
+                <!-- 點 P 實時分析數據面板 -->
+                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm flex flex-col gap-2.5">
+                    <h2 class="font-bold text-primary border-b border-blue-200 pb-1.5 text-base" id="label-analysis">Point <i>P</i> Analysis</h2>
                     
-                    <div class="text-xs grid grid-cols-[1fr_auto] gap-y-1 items-center mt-1">
-                        <span class="text-slate-600" id="label-d1">Distance <i>S</i>₁<i>P</i>:</span>
-                        <span class="font-mono font-medium" id="calc-d1">0.00 m</span>
-                        
-                        <span class="text-slate-600" id="label-d2">Distance <i>S</i>₂<i>P</i>:</span>
-                        <span class="font-mono font-medium" id="calc-d2">0.00 m</span>
-
-                        <div class="col-span-2 border-t border-blue-200 my-0.5"></div>
-
-                        <span class="text-slate-800 font-semibold" id="label-pathdiff">Path Difference (&Delta;<i>x</i>):</span>
-                        <span class="font-mono font-bold text-primary" id="calc-dx">0.00 m</span>
-                        
-                        <span class="text-slate-600 text-[10px] col-span-2 text-right -mt-1">&Delta;<i>x</i> ≈ <span id="calc-dx-lambda" class="font-mono">0.00</span> <i>&lambda;</i></span>
-
-                        <div class="col-span-2 border-t border-blue-200 my-0.5"></div>
-
-                        <span class="text-slate-800 font-semibold" id="label-totalphase">Steady Phase Diff (&Delta;&Phi;):</span>
-                        <span class="font-mono font-bold text-resultant" id="calc-phase">0&deg;</span>
+                    <!-- 數學推導公式區塊 (動態 Grid 佈局對齊) -->
+                    <div class="bg-white/80 p-3 rounded-lg border border-blue-100/50 shadow-inner flex flex-col justify-center min-h-[96px]" id="calc-math-equation">
+                        <!-- 由 JavaScript 動態生成方程式內容 -->
                     </div>
 
-                    <div class="mt-1 py-1.5 rounded bg-white text-center font-bold text-xs shadow-sm transition-colors duration-300" id="calc-result-box">
+                    <div class="border-t border-blue-200 my-0.5"></div>
+
+                    <!-- 穩態相位關係文字狀態 -->
+                    <div class="text-sm flex justify-between items-center px-1">
+                        <span class="text-slate-800 font-semibold" id="label-totalphase">Phase Relationship at <i>P</i>:</span>
+                        <span class="font-bold text-resultant text-sm md:text-base" id="calc-phase">In Phase</span>
+                    </div>
+
+                    <!-- 干涉性質評估結果 -->
+                    <div class="mt-1 py-2 rounded bg-white text-center font-bold text-sm shadow-sm transition-colors duration-300" id="calc-result-box">
                         <span id="calc-result-text">Constructive</span>
                     </div>
 
-                    <!-- Show Rulers Toggle -->
-                    <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap mt-1 pt-1.5 border-t border-blue-200">
+                    <!-- 程差輔助尺線開關 -->
+                    <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap mt-2 pt-2 border-t border-blue-200">
                         <label id="label-show-rulers" class="text-slate-700 font-bold">Show Path Lines</label>
                         <input type="checkbox" id="toggle-rulers" class="w-4 h-4 cursor-pointer accent-primary shrink-0 ml-2">
                     </div>
 
-                    <!-- Show Nodal/Antinodal Lines Toggle -->
-                    <div class="flex flex-col mt-1 pt-1.5 border-t border-blue-200">
-                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap">
+                    <!-- Nodal / Antinodal (節線及腹線) 干涉條紋疊加開關 -->
+                    <div class="flex flex-col mt-1.5 pt-2 border-t border-blue-200">
+                        <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap">
                             <label id="label-show-lines" class="text-slate-700 font-bold">Show Nodal/Antinodal</label>
                             <input type="checkbox" id="toggle-lines" class="w-4 h-4 cursor-pointer accent-primary shrink-0 ml-2">
                         </div>
-                        <div class="flex justify-between items-center text-[10px] text-slate-500 mt-1" id="label-lines-legend">
+                        <div class="flex justify-between items-center text-xs text-slate-500 mt-1.5" id="label-lines-legend">
                             <span class="text-red-500 font-bold">── Antinodal</span>
                             <span class="text-slate-500 font-bold">- - Nodal</span>
                         </div>
@@ -257,123 +249,120 @@
             </div>
         </aside>
 
-        <!-- Main Canvas Area -->
+        <!-- 右側主要 3D 動畫視窗及下方 1D 位移-時間波形圖 -->
         <main class="w-full flex flex-col relative bg-bgGrid order-1 md:order-2 md:flex-1 h-[70vh] md:h-full min-h-0">
-            <!-- 3D Three.js Container -->
+            <!-- 3D Three.js 水面渲染視窗 -->
             <div class="flex-[7] relative overflow-hidden touch-action-none min-h-0" id="canvas-container">
-                <div class="absolute top-3 left-3 bg-white/80 backdrop-blur px-2.5 py-1.5 rounded shadow-sm text-xs font-medium text-slate-700 pointer-events-none z-10 border border-slate-200" id="label-map-hint">
-                    Left-click & Drag P. Right-click to rotate.
-                </div>
-                <!-- Dynamic 3D-to-2D Ruler Labels -->
-                <div id="ruler-1" class="absolute hidden px-1.5 py-0.5 bg-wave1/90 text-white text-[11px] rounded font-mono transform -translate-x-1/2 -translate-y-1/2 pointer-events-none shadow z-10"></div>
-                <div id="ruler-2" class="absolute hidden px-1.5 py-0.5 bg-wave2/90 text-white text-[11px] rounded font-mono transform -translate-x-1/2 -translate-y-1/2 pointer-events-none shadow z-10"></div>
+                <div id="ruler-1" class="absolute hidden px-2 py-1 bg-wave1/90 text-white text-xs rounded font-mono transform -translate-x-1/2 -translate-y-1/2 pointer-events-none shadow z-10"></div>
+                <div id="ruler-2" class="absolute hidden px-2 py-1 bg-wave2/90 text-white text-xs rounded font-mono transform -translate-x-1/2 -translate-y-1/2 pointer-events-none shadow z-10"></div>
             </div>
 
-            <!-- 1D Time Graph Canvas -->
-            <div class="flex-[3] border-t-[3px] border-slate-300 bg-white relative flex flex-col shrink-0 min-h-[145px]">
-                <div class="px-3 py-1.5 bg-slate-50 border-b border-slate-200 flex justify-between items-center shrink-0">
-                    <span class="text-xs font-bold text-slate-700" id="label-graph-title">Displacement vs Time at P</span>
-                    <!-- Interactive Legend Checkboxes -->
-                    <div class="flex gap-3 text-[11px] font-semibold items-center">
-                        <label class="flex items-center gap-1 cursor-pointer select-none">
-                            <input type="checkbox" id="plot-s1" checked class="w-3 h-3 accent-wave1 cursor-pointer">
-                            <span class="w-2 h-2 rounded-full bg-wave1" id="legend-w1"></span> S₁
+            <!-- 下方 1D 示波器位移-時間關係圖 -->
+            <div class="flex-[3] border-t-[3px] border-slate-300 bg-white relative flex flex-col shrink-0 min-h-[160px]">
+                <div class="px-4 py-2 bg-slate-50 border-b border-slate-200 flex justify-between items-center shrink-0">
+                    <span class="text-sm font-bold text-slate-700" id="label-graph-title">Displacement vs Time at <i>P</i></span>
+                    
+                    <!-- 示波器圖線過濾器 -->
+                    <div class="flex gap-4 text-xs font-semibold items-center">
+                        <label class="flex items-center gap-1.5 cursor-pointer select-none">
+                            <input type="checkbox" id="plot-s1" checked class="w-3.5 h-3.5 accent-wave1 cursor-pointer">
+                            <span class="w-2.5 h-2.5 rounded-full bg-wave1" id="legend-w1"></span> <i>S</i>₁
                         </label>
-                        <label class="flex items-center gap-1 cursor-pointer select-none">
-                            <input type="checkbox" id="plot-s2" checked class="w-3 h-3 accent-wave2 cursor-pointer">
-                            <span class="w-2 h-2 rounded-full bg-wave2" id="legend-w2"></span> S₂
+                        <label class="flex items-center gap-1.5 cursor-pointer select-none">
+                            <input type="checkbox" id="plot-s2" checked class="w-3.5 h-3.5 accent-wave2 cursor-pointer">
+                            <span class="w-2.5 h-2.5 rounded-full bg-wave2" id="legend-w2"></span> <i>S</i>₂
                         </label>
-                        <label class="flex items-center gap-1 cursor-pointer select-none">
-                            <input type="checkbox" id="plot-resultant" checked class="w-3 h-3 accent-resultant cursor-pointer">
-                            <span class="w-2 h-2 rounded-full bg-resultant"></span> <span id="legend-resultant-text">Resultant</span>
+                        <label class="flex items-center gap-1.5 cursor-pointer select-none">
+                            <input type="checkbox" id="plot-resultant" checked class="w-3.5 h-3.5 accent-resultant cursor-pointer">
+                            <span class="w-2.5 h-2.5 rounded-full bg-resultant"></span> <span id="legend-resultant-text">Resultant</span>
                         </label>
                     </div>
                 </div>
                 <div class="flex-1 relative">
                     <canvas id="graphCanvas" class="absolute inset-0 w-full h-full block"></canvas>
                 </div>
-                <!-- Dynamic Explanatory Physics Note for HKDSE students -->
-                <div class="absolute bottom-1 right-2 pointer-events-none text-[9px] md:text-[10px] text-slate-400 font-semibold bg-white/95 px-1.5 py-0.5 rounded shadow-sm border border-slate-100" id="graph-physics-note">
+                <!-- 給香港 DSE 考生的物理註釋：理清時間軸方向 -->
+                <div class="absolute bottom-1 right-2 pointer-events-none text-[10px] md:text-xs text-slate-400 font-semibold bg-white/95 px-2 py-1 rounded shadow-sm border border-slate-100" id="graph-physics-note">
                     * 右側為「現在」；左側為「過去」。
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Mandatory Footer -->
-    <footer class="bg-slate-900 text-slate-300 text-center py-2 text-[11px] tracking-wider shrink-0 order-3" id="app-footer">
+    <!-- 底部資訊頁尾 -->
+    <footer class="bg-slate-900 text-slate-300 text-center py-2 text-xs tracking-wider shrink-0 order-3" id="app-footer">
         CMA Secondary School. Physics Department.
     </footer>
 
-    <!-- Instruction Modal -->
+    <!-- 理論與說明彈窗 -->
     <div id="help-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex justify-center items-center p-4 opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300" id="help-modal-content">
-            <div class="bg-primary px-5 py-3 flex justify-between items-center">
-                <h2 class="text-white text-lg font-bold" id="help-title">Theory & Formulas</h2>
-                <button id="btn-close-help" class="text-white hover:text-slate-200 text-2xl transition">&times;</button>
+            <div class="bg-primary px-5 py-4 flex justify-between items-center">
+                <h2 class="text-white text-xl font-bold" id="help-title">Theory & Formulas</h2>
+                <button id="btn-close-help" class="text-white hover:text-slate-200 text-3xl transition leading-none">&times;</button>
             </div>
-            <div class="p-5 overflow-y-auto text-slate-700 space-y-4 text-sm leading-relaxed custom-scrollbar">
-                <h3 class="font-bold border-b pb-1" id="help-h1">1. Path Difference ($\Delta x$)</h3>
+            <div class="p-6 overflow-y-auto text-slate-700 space-y-5 text-sm md:text-base leading-relaxed custom-scrollbar">
+                <h3 class="font-bold border-b pb-1.5 text-lg" id="help-h1">1. Path Difference ($\Delta$)</h3>
                 <p id="help-p1">The path difference is the difference in distance from the two sources ($S_1, S_2$) to a specific point ($P$).</p>
-                <div class="bg-slate-50 p-2 rounded text-center">$$\Delta x = |S_1P - S_2P| = |d_1 - d_2|$$</div>
-                <h3 class="font-bold border-b pb-1 mt-3" id="help-h2">2. Phase Difference ($\Delta \Phi$)</h3>
-                <p id="help-p2">The total phase difference depends on path difference and initial phase difference ($\phi_0$).</p>
-                <div class="bg-slate-50 p-2 rounded text-center">$$\Delta \Phi = \left( \frac{\Delta x}{\lambda} \times 360^\circ \right) + \phi_0 \pmod{360^\circ}$$</div>
-                <h3 class="font-bold border-b pb-1 mt-3" id="help-h3">3. Conditions for Interference</h3>
+                <div class="bg-slate-50 p-3 rounded text-center text-lg">$$\Delta = |S_1P - S_2P|$$</div>
+                <h3 class="font-bold border-b pb-1.5 mt-4 text-lg" id="help-h2">2. Phase Difference of waves arriving at a point</h3>
+                <p id="help-p2">The phase difference between waves arriving at a point depends on path difference and phase difference of the sources.</p>
+                <h3 class="font-bold border-b pb-1.5 mt-4 text-lg" id="help-h3">3. Conditions for Interference</h3>
                 <p id="help-p3">When sources are <strong>in phase</strong> ($\phi_0 = 0^\circ$):</p>
-                <ul class="list-disc pl-5 space-y-1 text-xs" id="help-list1">
-                    <li><strong>Constructive:</strong> $\Delta x = n\lambda \implies \Delta \Phi = 0^\circ$</li>
-                    <li><strong>Destructive:</strong> $\Delta x = (n + 0.5)\lambda \implies \Delta \Phi = 180^\circ$</li>
+                <ul class="list-disc pl-6 space-y-2 text-sm md:text-base" id="help-list1">
+                    <li><strong>Constructive:</strong> $\Delta = n\lambda$</li>
+                    <li><strong>Destructive:</strong> $\Delta = (n + 0.5)\lambda$</li>
                 </ul>
-                <div class="bg-blue-50 border-l-4 border-primary p-2 text-xs mt-3" id="help-note">
-                    <strong>Note:</strong> Amplitude attenuation ($1/\sqrt{r}$) is ignored to show mathematical superposition cleanly.
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- Application Script -->
+    <!-- 系統主程式 -->
     <script>
-        /* --- 1. Global State & History Buffers --- */
-        const MAX_HISTORY_TIME = 60; 
-        const TIME_STEP = 0.02; 
+        /* =========================================================================
+         * 1. 物理引擎全局狀態與波形快取 (State & Wave Buffers)
+         * ========================================================================= */
+        const MAX_HISTORY_TIME = 60; // 最高快取歷史秒數
+        const TIME_STEP = 0.02;      // 物理模擬固定步長
         const BUFFER_SIZE = Math.ceil(MAX_HISTORY_TIME / TIME_STEP); 
-        const buf_y1 = new Float32Array(BUFFER_SIZE);
-        const buf_y2 = new Float32Array(BUFFER_SIZE);
+        const buf_y1 = new Float32Array(BUFFER_SIZE); 
+        const buf_y2 = new Float32Array(BUFFER_SIZE); 
 
         const STATE = {
-            lang: 'zh', // Default language to Chinese
+            lang: 'zh', // 預設中文
             frequency: 1.0,   
             depth: 5.0,       
             v: 2.2,           
             lambda: 2.2,      
             d: 6.0,           
             phi0: 0,          
-            P: { x: 1, y: 3 },
+            P: { x: 1, y: 3 }, // 預設探針 P 坐標
             
             isPlaying: true,
             time: 0,          
             timeAccumulator: 0,
             currentPhase: 0,
-            step: 0, // sequential integer step counter to prevent floating-point buffer skip gaps!
-            amplitude: 0.2,   
-            attenuation: false, // Default Simulate Attenuation to false as requested
+            step: 0, // 【核心防抖修正】整數步長計數器，完全消除浮點數累加造成的 V 型跳動
+            amplitude: 0.2, // 預設振幅
+            attenuation: false, // 預設不啟用空間衰減
             showRulers: false,
             showLines: false,
             isDraggingP: false,
             s1Active: true,
             s2Active: true,
 
-            // Plot visibility states on the 1D graph
             plotS1: true,
             plotS2: true,
             plotResultant: true
         };
 
+        /* =========================================================================
+         * 2. 中英雙語翻譯字典 (Dictionary)
+         * ========================================================================= */
         const DICT = {
             'en': {
                 'app-title': 'Water Wave Interference',
-                'label-help': 'Theory',
+                'label-help': 'Info', 
                 'label-params': 'Wave Parameters',
                 'label-freq': 'Frequency (<i>f</i>)',
                 'label-amp': 'Source Amplitude (<i>A</i>₀)',
@@ -383,25 +372,27 @@
                 'label-lines-legend': '<span class="text-red-500 font-bold">── Antinodal</span><span class="text-slate-500 font-bold">- - Nodal</span>',
                 'label-depth': 'Water Depth',
                 'label-d': 'Separation (<i>d</i>)',
-                'label-phi': 'Phase Difference',
-                'label-lambda-text': 'Wavelength (λ): ',
-                'label-speed-text': 'Wave Speed (<i>v</i>): ',
-                'label-eq-title': 'Wavelength Relationship',
+                'label-phi': 'Phase Difference of <i>S</i>₁ and <i>S</i>₂',
+                'label-eq-title': 'Wavelength',
+                
                 'btn-inphase': 'In Phase',
                 'btn-antiphase': 'Anti-Phase',
+                'btn-outofphase': 'Out of Phase',
+                
                 'label-analysis': 'Point <i>P</i> Analysis',
-                'label-d1': 'Distance <i>S</i>₁<i>P</i>:',
-                'label-d2': 'Distance <i>S</i>₂<i>P</i>:',
-                'label-pathdiff': 'Path Difference (&Delta;):',
-                'label-totalphase': 'Phase Difference:',
+                'label-totalphase': 'Phase Relationship at <i>P</i>:',
+                
+                'phase-rel-in': 'In Phase',
+                'phase-rel-anti': 'Anti-Phase',
+                'phase-rel-out': 'Out of Phase',
+
                 'result-con': 'Constructive Interference',
                 'result-des': 'Destructive Interference',
                 'result-int': 'Neither Constructive nor Destructive',
                 'result-single': 'Single Wave',
                 'result-none': 'No Waves',
-                's1-on': '<i>S</i>₁: ON', 's1-off': '<i>S</i>₁: OFF',
-                's2-on': '<i>S</i>₂: ON', 's2-off': '<i>S</i>₂: OFF',
-                'label-map-hint': 'Left-click & Drag P. Right-click to rotate.',
+                's1-on': '<i>S</i>₁', 's1-off': '<i>S</i>₁',
+                's2-on': '<i>S</i>₂', 's2-off': '<i>S</i>₂',
                 'label-graph-title': 'Displacement vs Time at <i>P</i>',
                 'legend-resultant-text': 'Resultant',
                 'graph-physics-note': '* Right-side: Present; Left-side: Past',
@@ -409,16 +400,14 @@
                 'help-title': 'Theory & Formulas',
                 'help-h1': '1. Path Difference (Δ)',
                 'help-p1': 'The path difference is the difference in distance from the two sources to a specific point.',
-                'help-h2': '2. Phase Difference of waving arriving at the point',
-                'help-p2': 'The total phase difference depends on path difference and phase difference of the sources.',
+                'help-h2': '2. Phase Difference of waves arriving at a point',
+                'help-p2': 'The phase difference between waves arriving at a point depends on path difference and phase difference of the sources.',
                 'help-h3': '3. Conditions for Interference',
                 'help-p3': 'When sources are in phase:',
                 'help-list1': `
-                    <li><strong>Constructive:</strong> Δx = nλ $\\implies \\Delta \\Phi = 0^\\circ$</li>
-                    <li><strong>Destructive:</strong> Δx = (n + 0.5)λ $\\implies \\Delta \\Phi = 180^\\circ$</li>
-                `,
-                'help-note': '<strong>Note:</strong> Amplitude physically attenuates as $1/\\sqrt{r}$ to represent the realistic 2D spread of wave energy.'
-            },
+                    <li><strong>Constructive:</strong> Δ = <i>nλ</i></li>
+                    <li><strong>Destructive:</strong> Δ = (<i>n</i> + 0.5)<i>λ</i></li>
+                `            },
             'zh': {
                 'app-title': '水波干涉',
                 'label-help': '說明',
@@ -432,44 +421,46 @@
                 'label-depth': '水深',
                 'label-d': '波源間距 (<i>d</i>)',
                 'label-phi': '<i>S</i>₁和<i>S</i>₂的相位差',
-                'label-eq-title': '波長控制關係式',
-                'label-lambda-text': '波長 (λ): ',
-                'label-speed-text': '波速 (<i>v</i>): ',
+                'label-eq-title': '波長',
+                
                 'btn-inphase': '同相',
                 'btn-antiphase': '反相',
+                'btn-outofphase': '異相',
+
                 'label-analysis': '<i>P</i> 點數據分析',
-                'label-d1': '距離 <i>S</i>₁<i>P</i>:',
-                'label-d2': '距離 <i>S</i>₂<i>P</i>:',
-                'label-pathdiff': '程差 (&Delta;):',
-                'label-totalphase': '波到達時的相位差:',
+                'label-totalphase': '波到達時的相位關係:',
+
+                'phase-rel-in': '同相',
+                'phase-rel-anti': '反相',
+                'phase-rel-out': '異相',
+
                 'result-con': '相長干涉 (Constructive)',
                 'result-des': '相消干涉 (Destructive)',
                 'result-int': '非相長亦非相消干涉',
                 'result-single': '單一波源',
                 'result-none': '無水波',
-                's1-on': '<i>S</i>₁: 開', 's1-off': '<i>S</i>₁: 關',
-                's2-on': '<i>S</i>₂: 開', 's2-off': '<i>S</i>₂: 關',
-                'label-map-hint': '左鍵拖曳 P 點。右鍵旋轉。',
+                's1-on': '<i>S</i>₁', 's1-off': '<i>S</i>₁',
+                's2-on': '<i>S</i>₂', 's2-off': '<i>S</i>₂',
+                'label-map-title': '左鍵拖曳 P 點。右鍵旋轉。',
                 'label-graph-title': '<i>P</i> 點之位移 - 時間關係圖',
                 'legend-resultant-text': '合成波',
                 'graph-physics-note': '* 右側代表現在；左側代表過去',
                 'app-footer': '廠商會中學．物理科',
                 'help-title': '說明',
                 'help-h1': '1. 程差 (Δ)',
-                'help-p1': '行程差是指由兩個波源傳播至同一特定點的距離差。',
-                'help-h2': '2. 兩波到達時的相位差',
+                'help-p1': '程差是指由兩個波源傳播至同一特定點的距離差。',
+                'help-h2': '2. 波到達時的相位差',
                 'help-p2': '總相位差決定了波的干涉類型。它取決於程差以及兩個波源之間的相位差。',
                 'help-h3': '3. 干涉條件',
                 'help-p3': '當波源同相時:',
                 'help-list1': `
-                    <li><strong>相長干涉:</strong> Δx = nλ $\\implies \\Delta \\Phi = 0^\\circ$</li>
-                    <li><strong>相消干涉:</strong> Δx = (n + 0.5)λ $\\implies \\Delta \\Phi = 180^\\circ$</li>
-                `,
-                'help-note': '<strong>注意：</strong> 水波振幅會隨著距離 $1/\\sqrt{r}$ 物理衰減，反映二維水面波的能量擴散守恆效應。'
+                    <li><strong>相長干涉:</strong> Δ = <i>nλ</i></li>
+                    <li><strong>相消干涉:</strong> Δ = (<i>n</i> + 0.5)<i>λ</i></li>
+                `
             }
         };
 
-        /* --- 2. DOM Elements References --- */
+        /* --- 3. DOM Elements References (修正: 包含 labelS1Btn 等所有必要節點) --- */
         const els = {
             sliderFreq: document.getElementById('slider-freq'),
             sliderAmp: document.getElementById('slider-amp'),
@@ -492,10 +483,12 @@
             btnS2: document.getElementById('btn-s2'),
             labelS1Btn: document.getElementById('label-s1-btn'),
             labelS2Btn: document.getElementById('label-s2-btn'),
-            calcD1: document.getElementById('calc-d1'),
-            calcD2: document.getElementById('calc-d2'),
-            calcDx: document.getElementById('calc-dx'),
-            calcDxLambda: document.getElementById('calc-dx-lambda'),
+            
+            btnInphase: document.getElementById('btn-inphase'),
+            btnAntiphase: document.getElementById('btn-antiphase'),
+            btnOutofphase: document.getElementById('btn-outofphase'),
+
+            calcMathEquation: document.getElementById('calc-math-equation'), 
             calcPhase: document.getElementById('calc-phase'),
             calcResultBox: document.getElementById('calc-result-box'),
             calcResultText: document.getElementById('calc-result-text'),
@@ -510,7 +503,6 @@
             btnCloseHelp: document.getElementById('btn-close-help'),
             legendW1: document.getElementById('legend-w1'),
             legendW2: document.getElementById('legend-w2'),
-
             plotS1: document.getElementById('plot-s1'),
             plotS2: document.getElementById('plot-s2'),
             plotResultant: document.getElementById('plot-resultant')
@@ -519,17 +511,20 @@
         const ctxGraph = els.graphCanvas.getContext('2d', { alpha: false });
         let animationFrameId;
 
-        /* --- 3. Language & UI Logic --- */
+        /* =========================================================================
+         * 4. 語言切換與 UI 控制
+         * ========================================================================= */
         function toggleLanguage() {
             STATE.lang = STATE.lang === 'en' ? 'zh' : 'en';
-            els.btnLang.innerText = STATE.lang === 'en' ? '繁' : 'Eng';
             applyTranslations();
             updateSourceButtonsUI();
+            updatePhaseButtonsUI();
         }
 
         function applyTranslations() {
             const t = DICT[STATE.lang];
             for (const key in t) {
+                if (key === 'btn-lang') continue; // 保留切換按鈕本身文字
                 const el = document.getElementById(key);
                 if (el) el.innerHTML = t[key];
             }
@@ -540,10 +535,32 @@
             updateCalculationsPanel();
         }
 
+        // 動態高亮波源初始相位差的三個狀態按鈕 (同相、反相、異相)
+        function updatePhaseButtonsUI() {
+            const phi = STATE.phi0 % 360; // 統一轉換至 0~360
+            const activeOrange = "bg-orange-500 text-white border-orange-500 shadow-inner";
+            const activeLightOrange = "bg-orange-400 text-white border-orange-400 shadow-inner";
+            const inactiveClass = "bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200 cursor-pointer";
+            const disabledClass = "bg-slate-50 text-slate-400 border-slate-200 opacity-60";
+
+            if (els.btnInphase) {
+                els.btnInphase.className = `flex-1 text-[11px] py-1.5 rounded transition font-medium border ${phi === 0 ? activeOrange : inactiveClass}`;
+            }
+            if (els.btnAntiphase) {
+                els.btnAntiphase.className = `flex-1 text-[11px] py-1.5 rounded transition font-medium border ${phi === 180 ? activeOrange : inactiveClass}`;
+            }
+            if (els.btnOutofphase) {
+                // 只要不是 0 度，就是一種廣義上的 Out of Phase (包含 180 反相)
+                const isOut = (phi !== 0);
+                els.btnOutofphase.className = `flex-1 text-[11px] py-1.5 rounded transition font-medium border cursor-default ${isOut ? activeLightOrange : disabledClass}`;
+            }
+        }
+
         function setPhase(degrees) {
             STATE.phi0 = degrees;
             els.sliderPhi.value = degrees;
             els.valPhi.innerHTML = `${degrees}&deg;`;
+            updatePhaseButtonsUI();
             updateCalculationsPanel();
             if (typeof updateHyperbolas !== 'undefined') updateHyperbolas();
         }
@@ -551,21 +568,21 @@
         function updateSourceButtonsUI() {
             const t = DICT[STATE.lang];
             
-            els.labelS1Btn.innerHTML = STATE.s1Active ? t['s1-on'] : t['s1-off'];
+            if(els.labelS1Btn) els.labelS1Btn.innerHTML = STATE.s1Active ? t['s1-on'] : t['s1-off'];
             if (STATE.s1Active) {
-                els.btnS1.className = "flex-1 py-1.5 rounded text-white bg-wave1 text-xs font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent";
+                els.btnS1.className = "flex-1 py-2 rounded text-white bg-wave1 text-sm font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent";
                 els.legendW1.classList.remove('bg-slate-300'); els.legendW1.classList.add('bg-wave1');
             } else {
-                els.btnS1.className = "flex-1 py-1.5 rounded text-slate-500 bg-slate-100 text-xs font-bold shadow-sm transition opacity-80 flex justify-center items-center gap-1.5 border border-slate-300";
+                els.btnS1.className = "flex-1 py-2 rounded text-slate-500 bg-slate-100 text-sm font-bold shadow-sm transition opacity-80 flex justify-center items-center gap-1.5 border border-slate-300";
                 els.legendW1.classList.remove('bg-wave1'); els.legendW1.classList.add('bg-slate-300');
             }
 
-            els.labelS2Btn.innerHTML = STATE.s2Active ? t['s2-on'] : t['s2-off'];
+            if(els.labelS2Btn) els.labelS2Btn.innerHTML = STATE.s2Active ? t['s2-on'] : t['s2-off'];
             if (STATE.s2Active) {
-                els.btnS2.className = "flex-1 py-1.5 rounded text-white bg-wave2 text-xs font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent";
+                els.btnS2.className = "flex-1 py-2 rounded text-white bg-wave2 text-sm font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent";
                 els.legendW2.classList.remove('bg-slate-300'); els.legendW2.classList.add('bg-wave2');
             } else {
-                els.btnS2.className = "flex-1 py-1.5 rounded text-slate-500 bg-slate-100 text-xs font-bold shadow-sm transition opacity-80 flex justify-center items-center gap-1.5 border border-slate-300";
+                els.btnS2.className = "flex-1 py-2 rounded text-slate-500 bg-slate-100 text-sm font-bold shadow-sm transition opacity-80 flex justify-center items-center gap-1.5 border border-slate-300";
                 els.legendW2.classList.remove('bg-wave2'); els.legendW2.classList.add('bg-slate-300');
             }
             
@@ -579,7 +596,7 @@
         function toggleHelp() {
             if (els.modalHelp.classList.contains('hidden')) {
                 els.modalHelp.classList.remove('hidden');
-                void els.modalHelp.offsetWidth; // force reflow
+                void els.modalHelp.offsetWidth; // 強制瀏覽器重繪
                 els.modalHelp.classList.remove('opacity-0');
                 els.modalContent.classList.remove('scale-95');
             } else {
@@ -589,14 +606,16 @@
             }
         }
 
-        /* --- 4. Real-time Parameters & Calculations --- */
+        /* =========================================================================
+         * 5. 物理運算與參數推導模組 (Physics & Calculation Engine)
+         * ========================================================================= */
         function clearWaveHistory() {
             STATE.time = 0;
             STATE.currentPhase = 0;
-            STATE.step = 0; // Reset sequential step counter on wave restarts
+            STATE.step = 0; // 【防抖修復】重置整數步長，防止跳格！
             buf_y1.fill(0);
             buf_y2.fill(0);
-            lastTimestamp = 0; // Prevent huge frame jump skipping initial crests
+            lastTimestamp = 0; // 【動畫連貫修復】重置時鐘，保證初始波完美均勻產生！
         }
 
         function updateDerivedParams() {
@@ -613,17 +632,17 @@
         }
 
         function getWaveY(buf, r, queryTime) {
-            let t_emit = queryTime - r / STATE.v;
+            let t_emit = queryTime - r / STATE.v; 
             if (t_emit < 0) return 0; 
             if (queryTime - t_emit > MAX_HISTORY_TIME) return 0; 
             
             let exactIdx = t_emit / TIME_STEP;
-            let i1 = Math.floor(exactIdx) % BUFFER_SIZE;
-            let i2 = (i1 + 1) % BUFFER_SIZE;
-            let frac = exactIdx - Math.floor(exactIdx);
+            let idx_floor = Math.floor(exactIdx);
             
-            // Continuous interpolation with sequentially written non-empty array elements
-            let base_y = buf[i1] * (1 - frac) + buf[i2] * frac;
+            let i1 = (idx_floor % BUFFER_SIZE + BUFFER_SIZE) % BUFFER_SIZE; 
+            let i2 = (i1 + 1) % BUFFER_SIZE;
+            let frac = exactIdx - idx_floor;
+            let base_y = buf[i1] * (1 - frac) + buf[i2] * frac; 
 
             let attenFactor = 1.0;
             if (STATE.attenuation) {
@@ -640,7 +659,7 @@
             const { s1, s2 } = getSources();
             const d1 = Math.sqrt((STATE.P.x - s1.x)**2 + (STATE.P.y - s1.y)**2);
             const d2 = Math.sqrt((STATE.P.x - s2.x)**2 + (STATE.P.y - s2.y)**2);
-            const deltaX = Math.abs(d1 - d2);
+            const deltaX = Math.abs(d1 - d2); 
             
             const rawPhaseDiff = Math.abs( (d1 / STATE.lambda * 360) - ((d2 / STATE.lambda * 360) + STATE.phi0) );
             const displayPhase = (rawPhaseDiff % 360 > 180) ? 360 - (rawPhaseDiff % 360) : rawPhaseDiff % 360;
@@ -649,42 +668,70 @@
 
         function updateCalculationsPanel() {
             const analysis = analyzePointP();
-            
-            els.calcD1.innerText = STATE.s1Active ? `${analysis.d1.toFixed(2)} m` : `---`;
-            els.calcD2.innerText = STATE.s2Active ? `${analysis.d2.toFixed(2)} m` : `---`;
-            els.calcDx.innerText = (STATE.s1Active && STATE.s2Active) ? `${analysis.deltaX.toFixed(2)} m` : `---`;
-            els.calcDxLambda.innerText = (STATE.s1Active && STATE.s2Active) ? (analysis.deltaX / STATE.lambda).toFixed(2) : `---`;
-            
             const t = DICT[STATE.lang];
+
+            // 動態組裝極具物理連貫性、垂直對齊的數學等式排版
+            if (els.calcMathEquation) {
+                if (!STATE.s1Active && !STATE.s2Active) {
+                    els.calcMathEquation.innerHTML = `<div class="text-slate-400 font-sans text-sm py-4 text-center">---</div>`;
+                } else if (!STATE.s1Active) {
+                    els.calcMathEquation.innerHTML = `<div class="font-mono font-bold text-slate-600 text-[13px] md:text-sm py-4 text-center"><i>S</i>₂<i>P</i> = ${analysis.d2.toFixed(2)} m</div>`;
+                } else if (!STATE.s2Active) {
+                    els.calcMathEquation.innerHTML = `<div class="font-mono font-bold text-slate-600 text-[13px] md:text-sm py-4 text-center"><i>S</i>₁<i>P</i> = ${analysis.d1.toFixed(2)} m</div>`;
+                } else {
+                    const ratio = (analysis.deltaX / STATE.lambda).toFixed(2);
+                    // CSS Grid: 完美的定義 -> 代入 -> 答案 等號對齊公式排版
+                    els.calcMathEquation.innerHTML = `
+                        <div class="grid grid-cols-[auto_auto_1fr] gap-x-2 gap-y-1 text-left font-mono text-[13px] md:text-sm font-medium text-slate-700 w-fit mx-auto py-2">
+                            <div class="text-right text-primary font-bold">&Delta;</div>
+                            <div class="text-primary font-bold">=</div>
+                            <div class="text-primary font-bold">|<i>S</i>₁<i>P</i> &minus; <i>S</i>₂<i>P</i>|</div>
+                            
+                            <div class="text-right"></div>
+                            <div class="text-slate-400">=</div>
+                            <div>|${analysis.d1.toFixed(2)} &minus; ${analysis.d2.toFixed(2)}| m</div>
+                            
+                            <div class="text-right"></div>
+                            <div class="text-slate-400">=</div>
+                            <div><span class="text-slate-800 font-bold">${analysis.deltaX.toFixed(2)} m</span> &nbsp;=&nbsp; <span class="text-resultant font-bold">${ratio}<i>&lambda;</i></span></div>
+                        </div>
+                    `;
+                }
+            }
 
             if (!STATE.s1Active && !STATE.s2Active) {
                 els.calcPhase.innerHTML = `-`;
                 els.calcResultText.innerText = t['result-none'];
-                els.calcResultBox.className = `mt-2 py-2 rounded text-center font-bold text-[14px] shadow-sm transition-colors duration-300 bg-slate-200 text-slate-500`;
+                els.calcResultBox.className = `mt-2 py-2 rounded text-center font-bold text-sm shadow-sm transition-colors duration-300 bg-slate-200 text-slate-500`;
             } else if (!STATE.s1Active || !STATE.s2Active) {
                 els.calcPhase.innerHTML = `-`;
                 els.calcResultText.innerText = t['result-single'];
-                els.calcResultBox.className = `mt-2 py-2 rounded text-center font-bold text-[14px] shadow-sm transition-colors duration-300 bg-slate-100 text-slate-600`;
+                els.calcResultBox.className = `mt-2 py-2 rounded text-center font-bold text-sm shadow-sm transition-colors duration-300 bg-slate-100 text-slate-600`;
             } else {
-                els.calcPhase.innerHTML = `${analysis.totalPhaseDiff.toFixed(1)}&deg;`;
                 const roundedPhaseValue = Math.round(analysis.totalPhaseDiff);
-                let statusKey, bgColor, textColor;
+                let statusKey, bgColor, textColor, phaseRelKey;
                 
-                // Rigid thresholds: only true 0 or 180 when rounded
-                if (roundedPhaseValue === 0) { 
+                // 嚴格將相位角度對應為：同相(0/360) / 反相(180) / 異相(其他) 的狀態文字
+                if (roundedPhaseValue === 0 || roundedPhaseValue === 360) { 
                     statusKey = 'result-con'; bgColor = 'bg-red-100'; textColor = 'text-red-700'; 
+                    phaseRelKey = 'phase-rel-in';
                 } else if (roundedPhaseValue === 180) { 
                     statusKey = 'result-des'; bgColor = 'bg-blue-100'; textColor = 'text-blue-700'; 
+                    phaseRelKey = 'phase-rel-anti';
                 } else { 
                     statusKey = 'result-int'; bgColor = 'bg-slate-100'; textColor = 'text-slate-700'; 
+                    phaseRelKey = 'phase-rel-out';
                 }
 
+                els.calcPhase.innerHTML = t[phaseRelKey];
                 els.calcResultText.innerText = t[statusKey];
-                els.calcResultBox.className = `mt-2 py-2 rounded text-center font-bold text-[14px] shadow-sm transition-colors duration-300 ${bgColor} ${textColor}`;
+                els.calcResultBox.className = `mt-1 py-2 rounded bg-white text-center font-bold text-sm shadow-sm transition-colors duration-300 ${bgColor} ${textColor}`;
             }
         }
 
-        /* --- 5. Three.js Engine (3D Map) --- */
+        /* =========================================================================
+         * 6. Three.js 3D 渲染引擎模組 (3D Map Engine)
+         * ========================================================================= */
         let tScene, tCamera, tRenderer, tControls;
         let waveGeometry, waveMesh, markerS1, markerS2, markerP;
         let tLine1, tLine2;
@@ -710,7 +757,6 @@
             tRenderer.shadowMap.enabled = true;
             els.canvasContainer.appendChild(tRenderer.domElement);
 
-            // Setup OrbitControls with standard left-click rotation
             tControls = new THREE.OrbitControls(tCamera, tRenderer.domElement);
             tControls.enableDamping = true;
             tControls.dampingFactor = 0.05;
@@ -718,10 +764,21 @@
             tControls.mouseButtons = { LEFT: THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE };
             tControls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
 
-            tScene.add(new THREE.AmbientLight(0xffffff, 0.6));
-            const dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
-            dirLight.position.set(10, 20, 10);
+            // 雙層大氣散射環境光源架構 (解決深色水面顯示問題)
+            const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6); 
+            hemiLight.position.set(0, 20, 0);
+            tScene.add(hemiLight);
+
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(15, 25, 10);
             dirLight.castShadow = true;
+            dirLight.shadow.mapSize.width = 1024;
+            dirLight.shadow.mapSize.height = 1024;
+            dirLight.shadow.camera.left = -20;
+            dirLight.shadow.camera.right = 20;
+            dirLight.shadow.camera.top = 20;
+            dirLight.shadow.camera.bottom = -20;
+            dirLight.shadow.bias = -0.001;
             tScene.add(dirLight);
 
             const gridHelper = new THREE.GridHelper(WAVE_SIZE, 30, 0xcbd5e1, 0xe2e8f0);
@@ -731,10 +788,20 @@
             waveGeometry = new THREE.PlaneGeometry(WAVE_SIZE, WAVE_SIZE, WAVE_SEGMENTS, WAVE_SEGMENTS);
             waveGeometry.rotateX(-Math.PI / 2); 
 
-            waveMesh = new THREE.Mesh(waveGeometry, new THREE.MeshPhongMaterial({
-                color: 0x1e50a2, emissive: 0x051024, specular: 0x88ccff, shininess: 90, transparent: true, opacity: 0.85, side: THREE.DoubleSide
+            // 實體流體渲染物理材質 (MeshPhysicalMaterial)
+            waveMesh = new THREE.Mesh(waveGeometry, new THREE.MeshPhysicalMaterial({
+                color: 0x0c4a6e,      // 深海色
+                emissive: 0x021f38,   
+                roughness: 0.05,      
+                metalness: 0.15,      
+                clearcoat: 1.0,       // 水光折射漆層
+                clearcoatRoughness: 0.05, 
+                transparent: true, 
+                opacity: 0.85, 
+                side: THREE.DoubleSide
             }));
-            waveMesh.receiveShadow = true; waveMesh.castShadow = true;
+            waveMesh.receiveShadow = true; 
+            waveMesh.castShadow = false; 
             tScene.add(waveMesh);
 
             markerS1 = new THREE.Mesh(new THREE.SphereGeometry(0.35, 32, 32), new THREE.MeshPhongMaterial({ color: 0x3b82f6, emissive: 0x1e3a8a }));
@@ -819,7 +886,7 @@
                 } else {
                     mat = new THREE.LineDashedMaterial({ color: 0x475569, dashSize: 0.4, gapSize: 0.4, linewidth: 2 });
                     line = new THREE.Line(geo, mat);
-                    line.computeLineDistances();
+                    line.computeLineDistances(); 
                 }
                 linesGroup.add(line);
             };
@@ -916,8 +983,7 @@
             }
         }
 
-        /* --- 6. High-Performance Pointer Dragging Logic & Snapping --- */
-        // Snaps the probe directly onto Nodal/Antinodal curves when they are active
+        /* --- 7. High-Performance Pointer Dragging Logic & Snapping --- */
         function setupThreeJSInteraction() {
             const raycaster = new THREE.Raycaster();
             const mouse = new THREE.Vector2();
@@ -1001,7 +1067,7 @@
             window.addEventListener('pointerup', onPointerUp);
         }
 
-        /* --- 7. 1D Graph Canvas Engine --- */
+        /* --- 8. 1D Graph Canvas Engine --- */
         function resizeGraphCanvas() {
             const dpr = window.devicePixelRatio || 1;
             const graphRect = els.graphCanvas.parentElement.getBoundingClientRect();
@@ -1045,13 +1111,13 @@
             ctxGraph.beginPath(); ctxGraph.moveTo(startX - 10, midY); ctxGraph.lineTo(endX, midY); ctxGraph.stroke(); 
             ctxGraph.beginPath(); ctxGraph.moveTo(startX, h - 10); ctxGraph.lineTo(startX, 15); ctxGraph.stroke();    
 
-            // Time Ticks (Real-time oscilloscope sweep)
+            // Time Ticks (Real time sliding window sweep)
             const timeWindow = 4;
             let t_left = Math.max(0, STATE.time - timeWindow);
             let t_right = t_left + timeWindow;
             let pxPerTime = (endX - startX) / timeWindow;
 
-            ctxGraph.fillStyle = '#64748b'; ctxGraph.font = '10px sans-serif'; ctxGraph.textAlign = 'center'; ctxGraph.textBaseline = 'top';
+            ctxGraph.fillStyle = '#64748b'; ctxGraph.font = '11px sans-serif'; ctxGraph.textAlign = 'center'; ctxGraph.textBaseline = 'top';
             let firstTick = Math.ceil(t_left);
             for (let t_tick = firstTick; t_tick <= t_right; t_tick++) {
                 let px = startX + (t_tick - t_left) * pxPerTime;
@@ -1062,7 +1128,7 @@
             }
 
             // Y Axis Labels
-            ctxGraph.font = '10px monospace'; ctxGraph.fillStyle = '#64748b'; ctxGraph.textAlign = 'right'; ctxGraph.textBaseline = 'middle';
+            ctxGraph.font = '11px monospace'; ctxGraph.fillStyle = '#64748b'; ctxGraph.textAlign = 'right'; ctxGraph.textBaseline = 'middle';
             ctxGraph.fillText('+2A₀', startX - 6, midY - y_2A * ampScale);
             ctxGraph.fillText('-2A₀', startX - 6, midY + y_2A * ampScale);
             ctxGraph.fillText('+A₀', startX - 6, midY - y_A * ampScale);
@@ -1070,7 +1136,7 @@
             ctxGraph.fillText('0', startX - 6, midY);
             
             // Italicized SI Axis Labels
-            ctxGraph.font = 'italic 12px sans-serif'; ctxGraph.fillStyle = '#1e293b'; 
+            ctxGraph.font = 'italic 13px sans-serif'; ctxGraph.fillStyle = '#1e293b'; 
             ctxGraph.textAlign = 'left'; ctxGraph.fillText('t', endX + 6, midY);
             ctxGraph.textAlign = 'center'; ctxGraph.fillText('y', startX, 5);
 
@@ -1117,6 +1183,7 @@
 
         let lastTimestamp = 0;
         function animate(timestamp) {
+            // 【核心防抖】：起波初始幀重置時間差 dt 以防止巨大跳躍
             if (!lastTimestamp) lastTimestamp = timestamp;
             let dt = (timestamp - lastTimestamp) / 1000;
             lastTimestamp = timestamp;
@@ -1125,16 +1192,16 @@
             if (STATE.isPlaying) {
                 STATE.timeAccumulator += dt;
                 while (STATE.timeAccumulator >= TIME_STEP) {
-                    STATE.time += TIME_STEP;
+                    STATE.step++;
+                    // 【核心修復】：嚴格利用整數計數器乘固定步長計算 time，確保寫入與查表的歷史陣列索引連續不斷
+                    STATE.time = STATE.step * TIME_STEP;
                     STATE.timeAccumulator -= TIME_STEP;
                     
-                    STATE.currentPhase += 2 * Math.PI * STATE.frequency * TIME_STEP;
+                    STATE.currentPhase = 2 * Math.PI * STATE.frequency * STATE.time;
                     
-                    // Use a strict sequential integer step counter to read and write without floating-point division gaps!
                     let idx = STATE.step % BUFFER_SIZE;
                     buf_y1[idx] = STATE.s1Active ? Math.sin(STATE.currentPhase) : 0;
                     buf_y2[idx] = STATE.s2Active ? Math.sin(STATE.currentPhase + STATE.phi0 * Math.PI / 180) : 0;
-                    STATE.step++;
                 }
             }
             
@@ -1152,14 +1219,18 @@
             animationFrameId = requestAnimationFrame(animate);
         }
 
-        /* --- 8. Interactivity & Event Listeners --- */
+        /* --- 10. Interactivity & Event Listeners --- */
         els.sliderFreq.addEventListener('input', (e) => { 
             STATE.frequency = parseFloat(e.target.value); 
             els.valFreq.innerText = `${STATE.frequency.toFixed(1)} Hz`; 
             updateDerivedParams(); 
             updateCalculationsPanel(); 
         });
-        els.sliderAmp.addEventListener('input', (e) => { STATE.amplitude = parseFloat(e.target.value); els.valAmp.innerText = `${STATE.amplitude.toFixed(1)}`; clearWaveHistory(); });
+        els.sliderAmp.addEventListener('input', (e) => { 
+            STATE.amplitude = parseFloat(e.target.value); 
+            els.valAmp.innerText = `${STATE.amplitude.toFixed(1)}`; 
+            clearWaveHistory(); 
+        });
         els.toggleAttenuation.addEventListener('change', (e) => { STATE.attenuation = e.target.checked; });
         els.toggleRulers.addEventListener('change', (e) => { STATE.showRulers = e.target.checked; });
         els.toggleLines.addEventListener('change', (e) => { STATE.showLines = e.target.checked; updateHyperbolas(); });
@@ -1171,7 +1242,7 @@
         });
         els.sliderD.addEventListener('input', (e) => { 
             STATE.d = parseFloat(e.target.value); 
-            els.valD.innerText = `${STATE.d.toFixed(1)} m`; 
+            updateDerivedParams(); 
             updateCalculationsPanel(); 
             updateHyperbolas();
             clearWaveHistory(); 
@@ -1210,11 +1281,11 @@
             resizeGraphCanvas();
         });
 
-        /* --- 10. Initialization --- */
         function init() {
             updateDerivedParams();
             applyTranslations();
             updateSourceButtonsUI();
+            updatePhaseButtonsUI(); // 確保初始渲染時高亮狀態一致
             initThreeJS();
             resizeGraphCanvas();
             updateCalculationsPanel();
