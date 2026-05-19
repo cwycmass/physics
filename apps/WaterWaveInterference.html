@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>水波干涉 | Water Wave Interference </title>
+    <title>水波干涉 | Water Wave Interference | </title>
     
     <!-- Tailwind CSS - 用於建構響應式且精美的雙欄 UI 佈局 -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -101,27 +101,18 @@
     <!-- 雙欄主佈局 -->
     <div class="flex-1 flex flex-col md:flex-row relative min-h-0">
         
-        <!-- 左側控制面板 (參數調節與實時 P 點物理分析) -->
-        <aside class="w-full md:w-[360px] bg-white shadow-[4px_0_15px_-3px_rgba(0,0,0,0.1)] flex flex-col z-10 shrink-0 md:overflow-y-auto custom-scrollbar order-2 md:order-1 pb-6 md:pb-0">
-            <div class="p-4 md:p-5 flex flex-col gap-5">
+        <!-- 左側控制面板 (參數調節) -->
+        <!-- 移除 Playback 圓形按鈕與 Point P 數據卡片，高度大幅下降，桌面端基本無需滾動 -->
+        <aside class="w-full md:w-[350px] bg-white shadow-[4px_0_15px_-3px_rgba(0,0,0,0.1)] flex flex-col z-10 shrink-0 md:overflow-y-auto custom-scrollbar order-2 md:order-1 pb-6 md:pb-0">
+            <div class="p-4 md:p-5 flex flex-col gap-4">
                 
-                <!-- 播放暫停與物理重置按鈕 -->
-                <div class="flex justify-center gap-5">
-                    <button id="btn-play" class="w-12 h-12 rounded-full bg-primary text-white flex justify-center items-center hover:bg-primaryLight shadow-md transition transform hover:scale-105">
-                        <i class="fa-solid fa-pause text-xl"></i>
-                    </button>
-                    <button id="btn-reset" class="w-12 h-12 rounded-full bg-slate-200 text-slate-700 flex justify-center items-center hover:bg-slate-300 shadow-sm transition transform hover:scale-105">
-                        <i class="fa-solid fa-rotate-left text-xl"></i>
-                    </button>
-                </div>
-
                 <!-- 參數控制卡片 -->
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3.5">
                     <div class="flex justify-between items-center border-b border-slate-200 pb-1.5">
                         <h2 class="font-bold text-slate-700 text-base" id="label-params">Wave Parameters</h2>
                     </div>
 
-                    <!-- 波源振源開關 Toggles -->
+                    <!-- 波源振源開關 Toggles (斜體 S₁ 與 S₂) -->
                     <div class="flex gap-3 w-full">
                         <button id="btn-s1" class="flex-1 py-2 rounded text-white bg-wave1 text-sm font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent">
                             <i class="fa-solid fa-power-off"></i> <span id="label-s1-btn"><i>S</i>₁</span>
@@ -129,6 +120,21 @@
                         <button id="btn-s2" class="flex-1 py-2 rounded text-white bg-wave2 text-sm font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent">
                             <i class="fa-solid fa-power-off"></i> <span id="label-s2-btn"><i>S</i>₂</span>
                         </button>
+                    </div>
+
+                    <!-- Phase Difference (依用戶要求：移動到波源開關按鈕的正下方) -->
+                    <div class="flex flex-col gap-1.5 border-t border-slate-200/60 pt-2.5">
+                        <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap">
+                            <label id="label-phi" class="text-slate-700">Phase Difference of <i>S</i>₁ and <i>S</i>₂</label>
+                            <span id="val-phi" class="text-primary font-mono shrink-0 ml-2">0&deg;</span>
+                        </div>
+                        <input type="range" id="slider-phi" min="0" max="360" step="1" value="0">
+                        <div class="flex gap-1.5 mt-2">
+                            <!-- 相位控制按鈕：依用戶要求，同相/反相選中時亮亮橘色，異相時亮淺橘色 -->
+                            <button class="flex-1 text-[11px] py-1.5 rounded transition font-medium border" onclick="setPhase(0)" id="btn-inphase">In Phase</button>
+                            <button class="flex-1 text-[11px] py-1.5 rounded transition font-medium border" onclick="setPhase(180)" id="btn-antiphase">Anti-Phase</button>
+                            <button class="flex-1 text-[11px] py-1.5 rounded transition font-medium border cursor-default" id="btn-outofphase" disabled>Out of Phase</button>
+                        </div>
                     </div>
 
                     <!-- 水深控制 (Water Depth) -->
@@ -149,6 +155,9 @@
                             <span id="val-freq" class="text-primary font-mono shrink-0 ml-2">1.0 Hz</span>
                         </div>
                         <input type="range" id="slider-freq" min="0.5" max="3.0" step="0.1" value="1.0">
+                        <div class="text-[10px] text-slate-500 text-right mt-0.5 whitespace-nowrap">
+                            <span id="label-lambda-text">波長 (<i>&lambda;</i>): </span><span id="val-lambda-info" class="font-mono font-bold text-slate-700 ml-1">2.20 m</span>
+                        </div>
                     </div>
 
                     <!-- 實時波長公式動態分數計算器 -->
@@ -188,58 +197,20 @@
                         </div>
                         <input type="range" id="slider-d" min="2.0" max="15.0" step="0.2" value="6.0">
                     </div>
-
-                    <!-- Phase Difference -->
-                    <div class="flex flex-col gap-1.5 border-t border-slate-200/60 pt-2.5">
-                        <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap">
-                            <label id="label-phi" class="text-slate-700">Phase Difference of <i>S</i>₁ and <i>S</i>₂</label>
-                            <span id="val-phi" class="text-primary font-mono shrink-0 ml-2">0&deg;</span>
-                        </div>
-                        <input type="range" id="slider-phi" min="0" max="360" step="1" value="0">
-                        <div class="flex gap-1.5 mt-2">
-                            <!-- 相位控制按鈕 -->
-                            <button class="flex-1 text-[11px] py-1.5 rounded transition font-medium border" onclick="setPhase(0)" id="btn-inphase">In Phase</button>
-                            <button class="flex-1 text-[11px] py-1.5 rounded transition font-medium border" onclick="setPhase(180)" id="btn-antiphase">Anti-Phase</button>
-                            <button class="flex-1 text-[11px] py-1.5 rounded transition font-medium border cursor-default" id="btn-outofphase" disabled>Out of Phase</button>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- 點 P 實時分析數據面板 -->
-                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm flex flex-col gap-2.5">
-                    <h2 class="font-bold text-primary border-b border-blue-200 pb-1.5 text-base" id="label-analysis">Point <i>P</i> Analysis</h2>
-                    
-                    <!-- 數學推導公式區塊 (動態 Grid 佈局對齊) -->
-                    <div class="bg-white/80 p-3 rounded-lg border border-blue-100/50 shadow-inner flex flex-col justify-center min-h-[96px]" id="calc-math-equation">
-                        <!-- 由 JavaScript 動態生成方程式內容 -->
-                    </div>
-
-                    <div class="border-t border-blue-200 my-0.5"></div>
-
-                    <!-- 穩態相位關係文字狀態 -->
-                    <div class="text-sm flex justify-between items-center px-1">
-                        <span class="text-slate-800 font-semibold" id="label-totalphase">Phase Relationship at <i>P</i>:</span>
-                        <span class="font-bold text-resultant text-sm md:text-base" id="calc-phase">In Phase</span>
-                    </div>
-
-                    <!-- 干涉性質評估結果 -->
-                    <div class="mt-1 py-2 rounded bg-white text-center font-bold text-sm shadow-sm transition-colors duration-300" id="calc-result-box">
-                        <span id="calc-result-text">Constructive</span>
-                    </div>
-
-                    <!-- 程差輔助尺線開關 -->
-                    <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap mt-2 pt-2 border-t border-blue-200">
+                <!-- 輔助視覺線卡片 (緊湊排版) -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-2">
+                    <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap">
                         <label id="label-show-rulers" class="text-slate-700 font-bold">Show Path Lines</label>
                         <input type="checkbox" id="toggle-rulers" class="w-4 h-4 cursor-pointer accent-primary shrink-0 ml-2">
                     </div>
-
-                    <!-- Nodal / Antinodal (節線及腹線) 干涉條紋疊加開關 -->
-                    <div class="flex flex-col mt-1.5 pt-2 border-t border-blue-200">
+                    <div class="flex flex-col pt-1.5 border-t border-slate-200/60">
                         <div class="flex justify-between items-center text-sm font-medium whitespace-nowrap">
                             <label id="label-show-lines" class="text-slate-700 font-bold">Show Nodal/Antinodal</label>
                             <input type="checkbox" id="toggle-lines" class="w-4 h-4 cursor-pointer accent-primary shrink-0 ml-2">
                         </div>
-                        <div class="flex justify-between items-center text-xs text-slate-500 mt-1.5" id="label-lines-legend">
+                        <div class="flex justify-between items-center text-[10px] text-slate-500 mt-1" id="label-lines-legend">
                             <span class="text-red-500 font-bold">── Antinodal</span>
                             <span class="text-slate-500 font-bold">- - Nodal</span>
                         </div>
@@ -249,42 +220,86 @@
             </div>
         </aside>
 
-        <!-- 右側主要 3D 動畫視窗及下方 1D 位移-時間波形圖 -->
-        <main class="w-full flex flex-col relative bg-bgGrid order-1 md:order-2 md:flex-1 h-[70vh] md:h-full min-h-0">
-            <!-- 3D Three.js 水面渲染視窗 -->
-            <div class="flex-[7] relative overflow-hidden touch-action-none min-h-0" id="canvas-container">
+        <!-- 右側主要 3D 動畫視窗及下方二分區塊 (時域圖形 + 數據分析) -->
+        <main class="w-full flex flex-col relative bg-bgGrid order-1 md:order-2 md:flex-1 min-h-0">
+            
+            <!-- 3D Three.js 水面渲染視窗 (桌面及 iPad/iPhone 完美自適應) -->
+            <div class="flex-[6] md:flex-[7] relative overflow-hidden touch-action-none min-h-[300px]" id="canvas-container">
+                
+                <!-- 【播放與物理重置控制區】 (依用戶要求：改至 3D 動畫區域的左下方，磨砂玻璃高質感面板) -->
+                <div class="absolute bottom-4 left-4 z-10 bg-white/70 backdrop-blur-md px-3 py-2 rounded-full flex gap-3 shadow-lg border border-white/40 pointer-events-auto">
+                    <button id="btn-play" class="w-10 h-10 rounded-full bg-primary text-white flex justify-center items-center hover:bg-primaryLight shadow transition transform active:scale-95">
+                        <i class="fa-solid fa-pause text-base"></i>
+                    </button>
+                    <button id="btn-reset" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex justify-center items-center hover:bg-slate-200 shadow transition transform active:scale-95">
+                        <i class="fa-solid fa-rotate-left text-base"></i>
+                    </button>
+                </div>
+
+                <!-- 雙向 3D 到 2D 螢幕坐標的程差量尺標籤 -->
                 <div id="ruler-1" class="absolute hidden px-2 py-1 bg-wave1/90 text-white text-xs rounded font-mono transform -translate-x-1/2 -translate-y-1/2 pointer-events-none shadow z-10"></div>
                 <div id="ruler-2" class="absolute hidden px-2 py-1 bg-wave2/90 text-white text-xs rounded font-mono transform -translate-x-1/2 -translate-y-1/2 pointer-events-none shadow z-10"></div>
             </div>
 
-            <!-- 下方 1D 示波器位移-時間關係圖 -->
-            <div class="flex-[3] border-t-[3px] border-slate-300 bg-white relative flex flex-col shrink-0 min-h-[160px]">
-                <div class="px-4 py-2 bg-slate-50 border-b border-slate-200 flex justify-between items-center shrink-0">
-                    <span class="text-sm font-bold text-slate-700" id="label-graph-title">Displacement vs Time at <i>P</i></span>
-                    
-                    <!-- 示波器圖線過濾器 -->
-                    <div class="flex gap-4 text-xs font-semibold items-center">
-                        <label class="flex items-center gap-1.5 cursor-pointer select-none">
-                            <input type="checkbox" id="plot-s1" checked class="w-3.5 h-3.5 accent-wave1 cursor-pointer">
-                            <span class="w-2.5 h-2.5 rounded-full bg-wave1" id="legend-w1"></span> <i>S</i>₁
-                        </label>
-                        <label class="flex items-center gap-1.5 cursor-pointer select-none">
-                            <input type="checkbox" id="plot-s2" checked class="w-3.5 h-3.5 accent-wave2 cursor-pointer">
-                            <span class="w-2.5 h-2.5 rounded-full bg-wave2" id="legend-w2"></span> <i>S</i>₂
-                        </label>
-                        <label class="flex items-center gap-1.5 cursor-pointer select-none">
-                            <input type="checkbox" id="plot-resultant" checked class="w-3.5 h-3.5 accent-resultant cursor-pointer">
-                            <span class="w-2.5 h-2.5 rounded-full bg-resultant"></span> <span id="legend-resultant-text">Resultant</span>
-                        </label>
+            <!-- 下方區域：【左右二分法佈局】 (在 iPhone/iPad 直屏時自動轉為上下堆疊) -->
+            <!-- 完美的 DSE 教學對照體驗：左邊研究公式與程差，右邊對照 1D 位移關係圖 -->
+            <div class="flex-[4] md:flex-[3] border-t-[3px] border-slate-300 bg-white flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-slate-200 shrink-0 min-h-[185px]">
+                
+                <!-- 左側：Point P 實時物理數據分析面板 -->
+                <div class="flex-1 bg-blue-50/40 p-3 md:p-4 flex flex-col justify-center min-h-[110px] md:min-h-0">
+                    <div class="flex justify-between items-center border-b border-blue-100 pb-1.5 mb-1.5">
+                        <h2 class="font-bold text-primary text-sm md:text-base flex items-center gap-1.5" id="label-analysis">
+                            <i class="fa-solid fa-chart-line text-xs"></i> Point <i>P</i> Analysis
+                        </h2>
+                    </div>
+
+                    <!-- 動態數學等式區塊 (雙欄對齊) -->
+                    <div class="bg-white/85 p-2 rounded-lg border border-blue-100/40 shadow-sm flex flex-col justify-center flex-1 max-w-full overflow-x-auto" id="calc-math-equation">
+                        <!-- 由 JS 實時對齊渲染 -->
+                    </div>
+
+                    <!-- 位移相位差關係與干涉宣告 -->
+                    <div class="flex justify-between items-center mt-2 px-1 text-xs md:text-sm gap-2 shrink-0">
+                        <div class="flex items-center gap-1">
+                            <span class="text-slate-500 font-semibold" id="label-totalphase">Relationship at <i>P</i>:</span>
+                            <span class="font-bold text-resultant text-xs md:text-sm" id="calc-phase">In Phase</span>
+                        </div>
+                        <div class="px-2 py-0.5 rounded bg-white text-center font-extrabold text-[10px] md:text-xs shadow-sm border border-slate-100 transition-colors" id="calc-result-box">
+                            <span id="calc-result-text">Constructive</span>
+                        </div>
                     </div>
                 </div>
-                <div class="flex-1 relative">
-                    <canvas id="graphCanvas" class="absolute inset-0 w-full h-full block"></canvas>
+
+                <!-- 右側：1D 示波器時域關係圖 -->
+                <div class="flex-[1.2] relative flex flex-col bg-white min-h-[110px] md:min-h-0">
+                    <div class="px-4 py-2 bg-slate-50 border-b border-slate-200 flex justify-between items-center shrink-0 text-xs md:text-sm">
+                        <span class="font-bold text-slate-700" id="label-graph-title">Displacement vs Time at <i>P</i></span>
+                        
+                        <!-- 示波器圖線過濾器 -->
+                        <div class="flex gap-3 text-[10px] md:text-xs font-semibold items-center">
+                            <label class="flex items-center gap-1 cursor-pointer select-none">
+                                <input type="checkbox" id="plot-s1" checked class="w-3 h-3 accent-wave1 cursor-pointer">
+                                <span class="w-2 h-2 rounded-full bg-wave1" id="legend-w1"></span> <i>S</i>₁
+                            </label>
+                            <label class="flex items-center gap-1 cursor-pointer select-none">
+                                <input type="checkbox" id="plot-s2" checked class="w-3 h-3 accent-wave2 cursor-pointer">
+                                <span class="w-2 h-2 rounded-full bg-wave2" id="legend-w2"></span> <i>S</i>₂
+                            </label>
+                            <label class="flex items-center gap-1 cursor-pointer select-none">
+                                <input type="checkbox" id="plot-resultant" checked class="w-3.5 h-3.5 accent-resultant cursor-pointer">
+                                <span class="w-2.5 h-2.5 rounded-full bg-resultant"></span> <span id="legend-resultant-text">Resultant</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex-1 relative min-h-0">
+                        <canvas id="graphCanvas" class="absolute inset-0 w-full h-full block"></canvas>
+                    </div>
+                    <!-- 香港 DSE 物理時域備註 -->
+                    <div class="absolute bottom-1 right-2 pointer-events-none text-[9px] md:text-[10px] text-slate-400 font-semibold bg-white/95 px-1.5 py-0.5 rounded shadow-sm border border-slate-100" id="graph-physics-note">
+                        * 右側為「現在」；左側為「過去」。
+                    </div>
                 </div>
-                <!-- 給香港 DSE 考生的物理註釋：理清時間軸方向 -->
-                <div class="absolute bottom-1 right-2 pointer-events-none text-[10px] md:text-xs text-slate-400 font-semibold bg-white/95 px-2 py-1 rounded shadow-sm border border-slate-100" id="graph-physics-note">
-                    * 右側為「現在」；左側為「過去」。
-                </div>
+
             </div>
         </main>
     </div>
@@ -342,7 +357,7 @@
             time: 0,          
             timeAccumulator: 0,
             currentPhase: 0,
-            step: 0, // 【核心防抖修正】整數步長計數器，完全消除浮點數累加造成的 V 型跳動
+            step: 0, // 整數步長計數器，消除浮點數累加造成的 V 型跳動
             amplitude: 0.2, // 預設振幅
             attenuation: false, // 預設不啟用空間衰減
             showRulers: false,
@@ -380,7 +395,7 @@
                 'btn-outofphase': 'Out of Phase',
                 
                 'label-analysis': 'Point <i>P</i> Analysis',
-                'label-totalphase': 'Phase Relationship at <i>P</i>:',
+                'label-totalphase': 'Relationship at <i>P</i>:',
                 
                 'phase-rel-in': 'In Phase',
                 'phase-rel-anti': 'Anti-Phase',
@@ -441,7 +456,7 @@
                 'result-none': '無水波',
                 's1-on': '<i>S</i>₁', 's1-off': '<i>S</i>₁',
                 's2-on': '<i>S</i>₂', 's2-off': '<i>S</i>₂',
-                'label-map-title': '左鍵拖曳 P 點。右鍵旋轉。',
+                'label-map-hint': '左鍵拖曳 P 點。右鍵旋轉。',
                 'label-graph-title': '<i>P</i> 點之位移 - 時間關係圖',
                 'legend-resultant-text': '合成波',
                 'graph-physics-note': '* 右側代表現在；左側代表過去',
@@ -535,9 +550,8 @@
             updateCalculationsPanel();
         }
 
-        // 動態高亮波源初始相位差的三個狀態按鈕 (同相、反相、異相)
         function updatePhaseButtonsUI() {
-            const phi = STATE.phi0 % 360; // 統一轉換至 0~360
+            const phi = STATE.phi0 % 360; 
             const activeOrange = "bg-orange-500 text-white border-orange-500 shadow-inner";
             const activeLightOrange = "bg-orange-400 text-white border-orange-400 shadow-inner";
             const inactiveClass = "bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200 cursor-pointer";
@@ -550,7 +564,7 @@
                 els.btnAntiphase.className = `flex-1 text-[11px] py-1.5 rounded transition font-medium border ${phi === 180 ? activeOrange : inactiveClass}`;
             }
             if (els.btnOutofphase) {
-                // 只要不是 0 度，就是一種廣義上的 Out of Phase (包含 180 反相)
+                // 只要不是 0 度，就是一種廣義上的 Out of Phase (包含 180 反相也亮起淺橘色)
                 const isOut = (phi !== 0);
                 els.btnOutofphase.className = `flex-1 text-[11px] py-1.5 rounded transition font-medium border cursor-default ${isOut ? activeLightOrange : disabledClass}`;
             }
@@ -596,7 +610,7 @@
         function toggleHelp() {
             if (els.modalHelp.classList.contains('hidden')) {
                 els.modalHelp.classList.remove('hidden');
-                void els.modalHelp.offsetWidth; // 強制瀏覽器重繪
+                void els.modalHelp.offsetWidth; // force reflow
                 els.modalHelp.classList.remove('opacity-0');
                 els.modalContent.classList.remove('scale-95');
             } else {
@@ -612,10 +626,10 @@
         function clearWaveHistory() {
             STATE.time = 0;
             STATE.currentPhase = 0;
-            STATE.step = 0; // 【防抖修復】重置整數步長，防止跳格！
+            STATE.step = 0; // 重置整數步長，防止位移圖凹坑
             buf_y1.fill(0);
             buf_y2.fill(0);
-            lastTimestamp = 0; // 【動畫連貫修復】重置時鐘，保證初始波完美均勻產生！
+            lastTimestamp = 0; // 重置時鐘，防止首次起波破碎 Bug！
         }
 
         function updateDerivedParams() {
@@ -670,19 +684,18 @@
             const analysis = analyzePointP();
             const t = DICT[STATE.lang];
 
-            // 動態組裝極具物理連貫性、垂直對齊的數學等式排版
+            // 動態組裝極具物理連貫性、垂直等號對齊的數學等式排版
             if (els.calcMathEquation) {
                 if (!STATE.s1Active && !STATE.s2Active) {
                     els.calcMathEquation.innerHTML = `<div class="text-slate-400 font-sans text-sm py-4 text-center">---</div>`;
                 } else if (!STATE.s1Active) {
-                    els.calcMathEquation.innerHTML = `<div class="font-mono font-bold text-slate-600 text-[13px] md:text-sm py-4 text-center"><i>S</i>₂<i>P</i> = ${analysis.d2.toFixed(2)} m</div>`;
+                    els.calcMathEquation.innerHTML = `<div class="font-mono font-bold text-slate-600 text-xs md:text-sm py-4 text-center"><i>S</i>₂<i>P</i> = ${analysis.d2.toFixed(2)} m</div>`;
                 } else if (!STATE.s2Active) {
-                    els.calcMathEquation.innerHTML = `<div class="font-mono font-bold text-slate-600 text-[13px] md:text-sm py-4 text-center"><i>S</i>₁<i>P</i> = ${analysis.d1.toFixed(2)} m</div>`;
+                    els.calcMathEquation.innerHTML = `<div class="font-mono font-bold text-slate-600 text-xs md:text-sm py-4 text-center"><i>S</i>₁<i>P</i> = ${analysis.d1.toFixed(2)} m</div>`;
                 } else {
                     const ratio = (analysis.deltaX / STATE.lambda).toFixed(2);
-                    // CSS Grid: 完美的定義 -> 代入 -> 答案 等號對齊公式排版
                     els.calcMathEquation.innerHTML = `
-                        <div class="grid grid-cols-[auto_auto_1fr] gap-x-2 gap-y-1 text-left font-mono text-[13px] md:text-sm font-medium text-slate-700 w-fit mx-auto py-2">
+                        <div class="grid grid-cols-[auto_auto_1fr] gap-x-2 gap-y-0.5 text-left font-mono text-[12px] md:text-sm font-medium text-slate-700 w-fit mx-auto">
                             <div class="text-right text-primary font-bold">&Delta;</div>
                             <div class="text-primary font-bold">=</div>
                             <div class="text-primary font-bold">|<i>S</i>₁<i>P</i> &minus; <i>S</i>₂<i>P</i>|</div>
@@ -702,16 +715,15 @@
             if (!STATE.s1Active && !STATE.s2Active) {
                 els.calcPhase.innerHTML = `-`;
                 els.calcResultText.innerText = t['result-none'];
-                els.calcResultBox.className = `mt-2 py-2 rounded text-center font-bold text-sm shadow-sm transition-colors duration-300 bg-slate-200 text-slate-500`;
+                els.calcResultBox.className = `px-2 py-0.5 rounded bg-slate-200 text-slate-500 font-bold text-[10px] md:text-xs shadow-sm border border-slate-300`;
             } else if (!STATE.s1Active || !STATE.s2Active) {
                 els.calcPhase.innerHTML = `-`;
                 els.calcResultText.innerText = t['result-single'];
-                els.calcResultBox.className = `mt-2 py-2 rounded text-center font-bold text-sm shadow-sm transition-colors duration-300 bg-slate-100 text-slate-600`;
+                els.calcResultBox.className = `px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold text-[10px] md:text-xs shadow-sm border border-slate-200`;
             } else {
                 const roundedPhaseValue = Math.round(analysis.totalPhaseDiff);
                 let statusKey, bgColor, textColor, phaseRelKey;
                 
-                // 嚴格將相位角度對應為：同相(0/360) / 反相(180) / 異相(其他) 的狀態文字
                 if (roundedPhaseValue === 0 || roundedPhaseValue === 360) { 
                     statusKey = 'result-con'; bgColor = 'bg-red-100'; textColor = 'text-red-700'; 
                     phaseRelKey = 'phase-rel-in';
@@ -725,7 +737,7 @@
 
                 els.calcPhase.innerHTML = t[phaseRelKey];
                 els.calcResultText.innerText = t[statusKey];
-                els.calcResultBox.className = `mt-1 py-2 rounded bg-white text-center font-bold text-sm shadow-sm transition-colors duration-300 ${bgColor} ${textColor}`;
+                els.calcResultBox.className = `px-2 py-0.5 rounded font-extrabold text-[10px] md:text-xs shadow-sm border border-transparent ${bgColor} ${textColor}`;
             }
         }
 
@@ -764,7 +776,7 @@
             tControls.mouseButtons = { LEFT: THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE };
             tControls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
 
-            // 雙層大氣散射環境光源架構 (解決深色水面顯示問題)
+            // 雙層大氣散射環境光源架構
             const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6); 
             hemiLight.position.set(0, 20, 0);
             tScene.add(hemiLight);
@@ -788,13 +800,12 @@
             waveGeometry = new THREE.PlaneGeometry(WAVE_SIZE, WAVE_SIZE, WAVE_SEGMENTS, WAVE_SEGMENTS);
             waveGeometry.rotateX(-Math.PI / 2); 
 
-            // 實體流體渲染物理材質 (MeshPhysicalMaterial)
             waveMesh = new THREE.Mesh(waveGeometry, new THREE.MeshPhysicalMaterial({
-                color: 0x0c4a6e,      // 深海色
+                color: 0x0c4a6e,      
                 emissive: 0x021f38,   
                 roughness: 0.05,      
                 metalness: 0.15,      
-                clearcoat: 1.0,       // 水光折射漆層
+                clearcoat: 1.0,       
                 clearcoatRoughness: 0.05, 
                 transparent: true, 
                 opacity: 0.85, 
@@ -807,6 +818,7 @@
             markerS1 = new THREE.Mesh(new THREE.SphereGeometry(0.35, 32, 32), new THREE.MeshPhongMaterial({ color: 0x3b82f6, emissive: 0x1e3a8a }));
             markerS1.castShadow = true; tScene.add(markerS1);
 
+            // 【重大修正】：先前誤寫成 new Mesh(...) 造成 undefined 崩潰，現修正為 new THREE.Mesh(...)
             markerS2 = new THREE.Mesh(new THREE.SphereGeometry(0.35, 32, 32), new THREE.MeshPhongMaterial({ color: 0x10b981, emissive: 0x064e3b }));
             markerS2.castShadow = true; tScene.add(markerS2);
 
@@ -1046,7 +1058,8 @@
                             else x_snapped = sign * a * Math.sqrt(1 + (targetZ*targetZ)/(b*b));
 
                             const distToCurve = Math.abs(targetX - x_snapped);
-                            if (distToCurve < 1.4 && Math.abs(x_snapped) <= bound) targetX = x_snapped;
+                            // 減弱吸附距離為 0.6
+                            if (distToCurve < 0.6 && Math.abs(x_snapped) <= bound) targetX = x_snapped;
                         }
                     }
 
@@ -1183,7 +1196,6 @@
 
         let lastTimestamp = 0;
         function animate(timestamp) {
-            // 【核心防抖】：起波初始幀重置時間差 dt 以防止巨大跳躍
             if (!lastTimestamp) lastTimestamp = timestamp;
             let dt = (timestamp - lastTimestamp) / 1000;
             lastTimestamp = timestamp;
@@ -1193,7 +1205,6 @@
                 STATE.timeAccumulator += dt;
                 while (STATE.timeAccumulator >= TIME_STEP) {
                     STATE.step++;
-                    // 【核心修復】：嚴格利用整數計數器乘固定步長計算 time，確保寫入與查表的歷史陣列索引連續不斷
                     STATE.time = STATE.step * TIME_STEP;
                     STATE.timeAccumulator -= TIME_STEP;
                     
@@ -1242,7 +1253,7 @@
         });
         els.sliderD.addEventListener('input', (e) => { 
             STATE.d = parseFloat(e.target.value); 
-            updateDerivedParams(); 
+            els.valD.innerText = `${STATE.d.toFixed(1)} m`; 
             updateCalculationsPanel(); 
             updateHyperbolas();
             clearWaveHistory(); 
@@ -1285,7 +1296,7 @@
             updateDerivedParams();
             applyTranslations();
             updateSourceButtonsUI();
-            updatePhaseButtonsUI(); // 確保初始渲染時高亮狀態一致
+            updatePhaseButtonsUI(); 
             initThreeJS();
             resizeGraphCanvas();
             updateCalculationsPanel();
