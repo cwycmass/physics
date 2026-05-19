@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>直流電路構建器 | DC Circuit Builder</title>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -49,133 +50,133 @@
         .tool-btn.active { background-color: #1e3c72; color: white; border-color: #1e3c72; }
     </style>
 </head>
-<body class="bg-slate-50 flex flex-col h-screen text-slate-800">
+<body class="bg-slate-50 flex flex-col h-[100dvh] text-slate-800 overflow-hidden">
 
     <!-- --- 1. Top Navbar --- -->
-    <header class="bg-cmaBlue text-white shadow-md z-20 flex justify-between items-center px-6 py-3 flex-shrink-0">
+    <header class="bg-cmaBlue text-white shadow-md z-20 flex justify-between items-center px-4 py-1.5 flex-shrink-0">
         <div>
-            <h1 class="text-xl font-bold tracking-wide" id="ui-title">Circuit Simulator</h1>
-            <p class="text-xs text-slate-300" id="ui-subtitle">Nodal Analysis Engine</p>
+            <h1 class="text-base font-bold tracking-wide" id="ui-title">Circuit Simulator</h1>
+            <p class="text-[10px] text-slate-300" id="ui-subtitle">Nodal Analysis Engine</p>
         </div>
-        <div class="flex gap-4 items-center">
-            <button id="btn-help" class="hover:text-amber-300 transition-colors text-sm font-medium flex items-center gap-1">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <div class="flex gap-3 items-center">
+            <button id="btn-help" class="hover:text-amber-300 transition-colors text-xs font-medium flex items-center gap-1">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                 <span id="ui-help-btn">Help</span>
             </button>
-            <button id="btn-lang" class="bg-white/10 hover:bg-white/20 px-3 py-1 rounded text-sm font-bold border border-white/30 transition-colors">
+            <button id="btn-lang" class="bg-white/10 hover:bg-white/20 px-2 py-0.5 rounded text-xs font-bold border border-white/30 transition-colors">
                 繁/Eng
             </button>
         </div>
     </header>
 
     <!-- --- 2. Main Layout (Split Pane) --- -->
-    <main class="flex flex-col md:flex-row flex-1 overflow-hidden">
+    <main class="flex flex-col-reverse md:flex-row flex-1 overflow-hidden">
         
-        <!-- Sidebar Controls -->
-        <aside class="w-full md:w-80 bg-white border-r border-slate-200 shadow-lg flex flex-col z-10 flex-shrink-0 overflow-y-auto">
+        <!-- Sidebar Controls (Bottom on Portrait Mobile, Left on Landscape/Tablet/PC) -->
+        <aside class="w-full max-h-[50dvh] md:max-h-none md:w-64 lg:w-72 bg-white md:border-r border-t md:border-t-0 border-slate-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] md:shadow-lg flex flex-col z-20 flex-shrink-0 overflow-y-auto pb-4 md:pb-0">
             
             <!-- Tool Selection -->
-            <div class="p-3 border-b border-slate-100">
-                <h2 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2" id="ui-tools-hdr">Tools</h2>
+            <div class="p-2 border-b border-slate-100 flex-shrink-0">
+                <h2 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5" id="ui-tools-hdr">Tools</h2>
                 
                 <!-- Component Row -->
-                <div class="grid grid-cols-3 gap-1.5 mb-1.5">
-                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="wire">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7"></path><path d="M6 9v2a2 2 0 0 0 2 2h3"></path></svg>
-                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-wire">Wire</span>
+                <div class="grid grid-cols-3 gap-1 mb-1">
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50" data-tool="wire">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7"></path><path d="M6 9v2a2 2 0 0 0 2 2h3"></path></svg>
+                        <span class="text-[9px] mt-0.5 font-semibold" id="ui-tool-wire">Wire</span>
                     </button>
-                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="resistor">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="9" width="14" height="6" fill="white"></rect><line x1="1" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="23" y2="12"></line></svg>
-                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-resistor">Resistor</span>
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50" data-tool="resistor">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="9" width="14" height="6" fill="white"></rect><line x1="1" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="23" y2="12"></line></svg>
+                        <span class="text-[9px] mt-0.5 font-semibold" id="ui-tool-resistor">Resistor</span>
                     </button>
-                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="battery">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="10" y1="6" x2="10" y2="18"></line><line x1="14" y1="9" x2="14" y2="15" stroke-width="4"></line><line x1="2" y1="12" x2="10" y2="12"></line><line x1="14" y1="12" x2="22" y2="12"></line></svg>
-                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-cell">Cell</span>
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50" data-tool="battery">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="10" y1="6" x2="10" y2="18"></line><line x1="14" y1="9" x2="14" y2="15" stroke-width="4"></line><line x1="2" y1="12" x2="10" y2="12"></line><line x1="14" y1="12" x2="22" y2="12"></line></svg>
+                        <span class="text-[9px] mt-0.5 font-semibold" id="ui-tool-cell">Cell</span>
                     </button>
-                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="switch">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle><line x1="6" y1="11" x2="17" y2="6"></line></svg>
-                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-switch">Switch</span>
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50" data-tool="switch">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle><line x1="6" y1="11" x2="17" y2="6"></line></svg>
+                        <span class="text-[9px] mt-0.5 font-semibold" id="ui-tool-switch">Switch</span>
                     </button>
-                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="ammeter">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M10 16l2-8 2 8M10.5 13h3"></path></svg>
-                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-ammeter">Ammeter</span>
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50" data-tool="ammeter">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M10 16l2-8 2 8M10.5 13h3"></path></svg>
+                        <span class="text-[9px] mt-0.5 font-semibold" id="ui-tool-ammeter">Ammeter</span>
                     </button>
-                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="voltmeter">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M10 8l2 8 2-8"></path></svg>
-                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-voltmeter">Voltmeter</span>
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50" data-tool="voltmeter">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M10 8l2 8 2-8"></path></svg>
+                        <span class="text-[9px] mt-0.5 font-semibold" id="ui-tool-voltmeter">Voltmeter</span>
                     </button>
                 </div>
 
                 <!-- Action Row -->
-                <div class="grid grid-cols-3 gap-1.5">
-                    <button class="tool-btn active flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="select">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path><path d="M13 13l6 6"></path></svg>
-                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-select">Select</span>
+                <div class="grid grid-cols-3 gap-1">
+                    <button class="tool-btn active flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50" data-tool="select">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path><path d="M13 13l6 6"></path></svg>
+                        <span class="text-[9px] mt-0.5 font-semibold" id="ui-tool-select">Select</span>
                     </button>
-                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50" data-tool="erase">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 20H7L3 16C2.5 15.5 2.5 14.5 3 14L13 4C13.5 3.5 14.5 3.5 15 4L20 9C20.5 9.5 20.5 10.5 20 11L11 20H20V20Z"></path></svg>
-                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-erase">Erase</span>
+                    <button class="tool-btn flex flex-col items-center justify-center py-1.5 px-1 border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50" data-tool="erase">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 20H7L3 16C2.5 15.5 2.5 14.5 3 14L13 4C13.5 3.5 14.5 3.5 15 4L20 9C20.5 9.5 20.5 10.5 20 11L11 20H20V20Z"></path></svg>
+                        <span class="text-[9px] mt-0.5 font-semibold" id="ui-tool-erase">Erase</span>
                     </button>
-                    <button id="btn-clear" class="flex flex-col items-center justify-center py-1.5 px-1 border border-red-200 rounded-lg text-red-500 hover:bg-red-50 transition-colors">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
-                        <span class="text-[10px] mt-0.5 font-semibold" id="ui-tool-clear">Clear</span>
+                    <button id="btn-clear" class="flex flex-col items-center justify-center py-1.5 px-1 border border-red-200 rounded-md text-red-500 hover:bg-red-50 transition-colors">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                        <span class="text-[9px] mt-0.5 font-semibold" id="ui-tool-clear">Clear</span>
                     </button>
                 </div>
             </div>
 
             <!-- Properties Panel -->
-            <div class="p-3 flex-1 bg-slate-50 flex flex-col justify-center">
+            <div class="p-2 flex-1 bg-slate-50 flex flex-col justify-start md:overflow-y-auto min-h-[150px]">
                 <div class="flex-shrink-0">
-                    <h2 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2" id="ui-props-hdr">Properties</h2>
+                    <h2 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5" id="ui-props-hdr">Properties</h2>
                 </div>
                 
-                <div id="no-selection" class="flex flex-col items-center justify-center text-center text-slate-400 h-24 space-y-1.5 opacity-60">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                    <p class="text-[11px]" id="ui-no-sel-text">Select a component to edit.</p>
+                <div id="no-selection" class="flex flex-col items-center justify-center text-center text-slate-400 h-16 space-y-1 opacity-60">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    <p class="text-[10px]" id="ui-no-sel-text">Select a component to edit.</p>
                 </div>
 
-                <div id="selection-panel" class="hidden space-y-2">
-                    <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="font-bold text-cmaBlue uppercase tracking-wide text-xs" id="prop-type-label">Resistor</span>
+                <div id="selection-panel" class="hidden space-y-1.5">
+                    <div class="bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="font-bold text-cmaBlue uppercase tracking-wide text-[11px]" id="prop-type-label">Resistor</span>
                         </div>
                         
                         <div id="value-input-group">
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1" id="ui-val-label">Value</label>
-                            <div class="flex items-center gap-2">
-                                <input type="number" id="prop-value" class="flex-1 w-full px-2 py-1 border border-slate-300 rounded focus:ring-2 focus:ring-cmaBlue focus:border-cmaBlue outline-none text-sm font-mono">
-                                <span class="text-sm font-bold text-slate-600" id="prop-unit">Ω</span>
+                            <label class="block text-[9px] font-bold text-slate-500 uppercase mb-0.5" id="ui-val-label">Value</label>
+                            <div class="flex items-center gap-1.5">
+                                <input type="number" id="prop-value" class="flex-1 w-full px-1.5 py-0.5 border border-slate-300 rounded focus:ring-1 focus:ring-cmaBlue focus:border-cmaBlue outline-none text-xs font-mono">
+                                <span class="text-xs font-bold text-slate-600" id="prop-unit">Ω</span>
                             </div>
                             <!-- Battery Only Action -->
-                            <div id="battery-actions" class="hidden mt-2 pt-2 border-t border-slate-100">
-                                <button id="btn-reverse-polarity" class="w-full py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[11px] font-bold transition-colors border border-slate-200 flex items-center justify-center gap-1.5">
-                                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            <div id="battery-actions" class="hidden mt-1.5 pt-1.5 border-t border-slate-100">
+                                <button id="btn-reverse-polarity" class="w-full py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[10px] font-bold transition-colors border border-slate-200 flex items-center justify-center gap-1">
+                                    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                                     <span id="ui-reverse-btn">Reverse Polarity</span>
                                 </button>
                             </div>
                         </div>
                         <div id="switch-input-group" class="hidden">
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1" id="ui-switch-label">State</label>
-                            <button id="btn-toggle-switch" class="w-full py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded text-[11px] font-semibold transition-colors border border-slate-300">
+                            <label class="block text-[9px] font-bold text-slate-500 uppercase mb-0.5" id="ui-switch-label">State</label>
+                            <button id="btn-toggle-switch" class="w-full py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded text-[10px] font-semibold transition-colors border border-slate-300">
                                 Open
                             </button>
                         </div>
                     </div>
 
                     <!-- Live Meters -->
-                    <div class="bg-blue-50 p-2.5 rounded-xl border border-blue-100 shadow-sm">
-                        <h3 class="text-[10px] font-bold text-cmaBlue uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                    <div class="bg-blue-50 p-2 rounded-lg border border-blue-100 shadow-sm">
+                        <h3 class="text-[9px] font-bold text-cmaBlue uppercase tracking-wider mb-1 flex items-center gap-1">
+                            <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
                             <span id="ui-meters-hdr">Live Meters</span>
                         </h3>
-                        <div class="space-y-1.5">
-                            <div class="flex justify-between items-center bg-white p-1.5 rounded border border-blue-50">
-                                <span class="text-[11px] text-slate-500 font-medium" id="ui-current-lbl">Current (I)</span>
-                                <span class="font-mono font-bold text-blue-700 text-sm" id="meter-current">0.00 A</span>
+                        <div class="space-y-1">
+                            <div class="flex justify-between items-center bg-white p-1 rounded border border-blue-50">
+                                <span class="text-[10px] text-slate-500 font-medium" id="ui-current-lbl">Current (I)</span>
+                                <span class="font-mono font-bold text-blue-700 text-xs" id="meter-current">0.00 A</span>
                             </div>
-                            <div class="flex justify-between items-center bg-white p-1.5 rounded border border-blue-50">
-                                <span class="text-[11px] text-slate-500 font-medium" id="ui-voltage-lbl">Voltage Drop (V)</span>
-                                <span class="font-mono font-bold text-purple-700 text-sm" id="meter-voltage">0.00 V</span>
+                            <div class="flex justify-between items-center bg-white p-1 rounded border border-blue-50">
+                                <span class="text-[10px] text-slate-500 font-medium" id="ui-voltage-lbl">Voltage Drop (V)</span>
+                                <span class="font-mono font-bold text-purple-700 text-xs" id="meter-voltage">0.00 V</span>
                             </div>
                         </div>
                     </div>
@@ -183,24 +184,24 @@
             </div>
 
             <!-- View Options & Auto-fit control -->
-            <div class="p-3 border-t border-slate-200 space-y-1.5 bg-white">
-                <button id="btn-highlight" class="w-full py-1.5 bg-slate-100 hover:bg-yellow-100 text-slate-600 rounded text-[11px] font-semibold transition-colors flex items-center justify-center gap-1.5 border border-slate-200">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+            <div class="p-2 border-t border-slate-200 space-y-1 bg-white flex-shrink-0">
+                <button id="btn-highlight" class="w-full py-1 bg-slate-100 hover:bg-yellow-100 text-slate-600 rounded text-[10px] font-semibold transition-colors flex items-center justify-center gap-1 border border-slate-200">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                     <span id="ui-highlight-btn">Trace Current Flow</span>
                 </button>
-                <button id="btn-toggle-current" class="w-full py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[11px] font-semibold transition-colors flex items-center justify-center gap-1.5 border border-slate-200">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <button id="btn-toggle-current" class="w-full py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[10px] font-semibold transition-colors flex items-center justify-center gap-1 border border-slate-200">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     <span id="ui-toggle-current-btn">Hide Current Info</span>
                 </button>
-                <button id="btn-center" class="w-full py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[11px] font-semibold transition-colors flex items-center justify-center gap-1.5 border border-slate-200">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h4m14 0h-4M12 3v4m0 14v-4m-5.657-9.899l2.828 2.828m8.486 8.485l-2.828-2.828m0-11.314l2.828 2.828M6.343 17.657l2.828-2.828"></path></svg>
+                <button id="btn-center" class="w-full py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[10px] font-semibold transition-colors flex items-center justify-center gap-1 border border-slate-200">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h4m14 0h-4M12 3v4m0 14v-4m-5.657-9.899l2.828 2.828m8.486 8.485l-2.828-2.828m0-11.314l2.828 2.828M6.343 17.657l2.828-2.828"></path></svg>
                     <span id="ui-center-btn">Recenter & Reset Labels</span>
                 </button>
             </div>
         </aside>
 
         <!-- Canvas Area -->
-        <div class="flex-1 relative bg-[#f8fafc] overflow-hidden" id="canvas-container">
+        <div class="flex-1 relative bg-[#f8fafc] overflow-hidden z-10" id="canvas-container">
             <!-- Grid Background via CSS to perfectly align with origin -->
             <canvas id="circuit-canvas" class="absolute top-0 left-0 cursor-crosshair"></canvas>
             
@@ -214,7 +215,7 @@
     </main>
 
     <!-- --- 3. Mandatory Footer --- -->
-    <footer class="bg-cmaBlueDark text-slate-300 text-center py-2 text-xs font-medium tracking-wide z-20 flex-shrink-0" id="cma-footer">
+    <footer class="bg-cmaBlueDark text-slate-300 text-center py-1 text-[9px] font-medium tracking-wide z-20 flex-shrink-0" id="cma-footer">
         廠商會中學．物理科
     </footer>
 
@@ -334,9 +335,9 @@
 
                     <div class="bg-slate-100 p-4 rounded-lg my-4 overflow-x-auto text-center">
                         <p class="font-bold text-cmaBlue mb-2">Ohm's Law</p>
-                        $$ V = I R $$
+                        $$V = I R$$
                         <p class="font-bold text-cmaBlue mt-4 mb-2">Kirchhoff's Current Law (KCL)</p>
-                        $$ \\sum_{k=1}^{n} I_k = 0 $$
+                        $$\\sum_{k=1}^{n} I_k = 0$$
                     </div>
                     <ul class="list-disc pl-5 space-y-2 mt-4">
                         <li><strong>Standard Assumptions:</strong> To prevent mathematical errors, ideal wires are assigned a resistance of $10^{-6}\\,\\Omega$ and batteries have an internal resistance of $10^{-6}\\,\\Omega$.</li>
@@ -395,9 +396,9 @@
 
                     <div class="bg-slate-100 p-4 rounded-lg my-4 overflow-x-auto text-center">
                         <p class="font-bold text-cmaBlue mb-2">歐姆定律</p>
-                        $$ V = I R $$
+                        $$V = I R$$
                         <p class="font-bold text-cmaBlue mt-4 mb-2">基爾霍夫電流定律 (KCL)</p>
-                        $$ \\sum_{k=1}^{n} I_k = 0 $$
+                        $$\\sum_{k=1}^{n} I_k = 0$$
                     </div>
                     <ul class="list-disc pl-5 space-y-2 mt-4">
                         <li><strong>標準假設：</strong> 為防止數學錯誤，理想導線被賦予 $10^{-6}\\,\\Omega$ 的電阻，電池則設有 $10^{-6}\\,\\Omega$ 的內阻。</li>
