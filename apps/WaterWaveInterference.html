@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3D Wave Superposition & Interference | 3D水波疊加與干涉</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3c72',
+                        primaryLight: '#2a5298',
+                        wave1: '#3b82f6', // Blue
+                        wave2: '#10b981', // Emerald
+                        resultant: '#DC2626', // Red
+                        bgGrid: '#f8fafc',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- MathJax for LaTeX Rendering (Used only in Help Modal) -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Three.js and OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%;
+            background: #1e3c72; cursor: pointer; margin-top: -6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px; cursor: pointer; background: #cbd5e1; border-radius: 2px;
+        }
+        input[type=range]:focus { outline: none; }
+        
+        .modal-backdrop {
+            background-color: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px);
+        }
+
+        /* Cursor hints for Draggable Point P */
+        .grab-cursor { cursor: grab !important; }
+        .grabbing-cursor { cursor: grabbing !important; }
+
+        /* Lock touch actions solely on the 3D canvas so users can scroll elsewhere */
+        .touch-action-none { touch-action: none; }
+        #canvas-container canvas { outline: none; }
+
+        /* SI formatting overrides for variables */
+        i { font-style: italic; font-family: 'Times New Roman', Times, serif; font-weight: bold; padding-right: 1px;}
+    </style>
+</head>
+<body class="bg-slate-50 flex flex-col min-h-screen md:h-screen md:overflow-hidden text-slate-800 font-sans text-sm">
+
+    <!-- Top Navigation / Header (Symbols Removed) -->
+    <header class="bg-primary text-white shadow-md z-20 flex justify-between items-center px-4 py-2 shrink-0">
+        <div class="flex items-center">
+            <i class="fa-solid fa-water mr-2 text-lg"></i>
+            <h1 class="text-base md:text-lg font-bold tracking-wide" id="app-title">3D Wave Superposition</h1>
+        </div>
+        <div class="flex items-center gap-2">
+            <button id="btn-help" class="bg-primaryLight hover:bg-blue-600 transition px-3 py-1.5 rounded text-xs font-medium flex items-center shadow-sm">
+                <span id="label-help">Theory</span>
+            </button>
+            <button id="btn-lang" class="bg-white text-primary hover:bg-slate-100 transition px-3 py-1.5 rounded text-xs font-bold w-12 shadow-sm">
+                繁
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Layout: Split Pane -->
+    <div class="flex-1 flex flex-col md:flex-row relative min-h-0">
+        
+        <!-- Sidebar Controls -->
+        <aside class="w-full md:w-[320px] bg-white shadow-[4px_0_15px_-3px_rgba(0,0,0,0.1)] flex flex-col z-10 shrink-0 md:overflow-y-auto custom-scrollbar order-2 md:order-1 pb-6 md:pb-0">
+            <div class="p-3 md:p-4 flex flex-col gap-4">
+                
+                <!-- Playback Controls -->
+                <div class="flex justify-center gap-4">
+                    <button id="btn-play" class="w-10 h-10 rounded-full bg-primary text-white flex justify-center items-center hover:bg-primaryLight shadow-md transition transform hover:scale-105">
+                        <i class="fa-solid fa-pause text-lg"></i>
+                    </button>
+                    <button id="btn-reset" class="w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex justify-center items-center hover:bg-slate-300 shadow-sm transition transform hover:scale-105">
+                        <i class="fa-solid fa-rotate-left text-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Parameters Card -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-1">
+                        <h2 class="font-bold text-slate-700" id="label-params">Wave Parameters</h2>
+                    </div>
+
+                    <!-- Source On/Off Toggles -->
+                    <div class="flex gap-2 w-full">
+                        <button id="btn-s1" class="flex-1 py-1.5 rounded text-white bg-wave1 text-xs font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent">
+                            <i class="fa-solid fa-power-off"></i> <span id="label-s1-btn">S₁: ON</span>
+                        </button>
+                        <button id="btn-s2" class="flex-1 py-1.5 rounded text-white bg-wave2 text-xs font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent">
+                            <i class="fa-solid fa-power-off"></i> <span id="label-s2-btn">S₂: ON</span>
+                        </button>
+                    </div>
+
+                    <!-- Wave Speed Control (Water Depth) -->
+                    <div class="flex flex-col gap-1 border-t border-slate-200/60 pt-2">
+                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap">
+                            <label id="label-depth" class="text-slate-700 font-semibold">Water Depth</label>
+                        </div>
+                        <input type="range" id="slider-depth" min="1.0" max="10.0" step="0.1" value="5.0">
+                        <div class="text-[10px] text-slate-500 text-right mt-0.5">
+                            <span id="label-speed-text">Wave Speed (<i>v</i>): </span><span id="val-speed-info" class="font-mono font-bold text-slate-700 ml-1">2.20 m/s</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Frequency Control -->
+                    <div class="flex flex-col gap-1">
+                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap">
+                            <label id="label-freq" class="text-slate-700 font-semibold">Frequency (<i>f</i>)</label>
+                            <span id="val-freq" class="text-primary font-mono shrink-0 ml-2">1.0 Hz</span>
+                        </div>
+                        <input type="range" id="slider-freq" min="0.5" max="3.0" step="0.1" value="1.0">
+                        <div class="text-[10px] text-slate-500 text-right mt-0.5 whitespace-nowrap">
+                            <span id="label-lambda-text">Wavelength (λ): </span><span id="val-lambda-info" class="font-mono font-bold text-slate-700 ml-1">2.20 m</span>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Equation Display -->
+                    <div class="bg-blue-50/50 p-2.5 rounded-lg border border-blue-100 flex flex-col gap-1.5 mt-1">
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center" id="label-eq-title">Wavelength Relationship</div>
+                        <div class="flex items-center justify-center gap-3">
+                            <span class="text-slate-600 font-extrabold text-sm font-sans"><i>&lambda;</i> =</span>
+                            
+                            <!-- Dynamic Fraction Visualizer -->
+                            <div class="flex flex-col items-center justify-center">
+                                <span id="eq-val-v" class="text-blue-600 font-mono font-bold border-b-2 border-slate-400 px-1 text-xs">2.20 m/s</span>
+                                <span id="eq-val-f" class="text-emerald-600 font-mono font-bold px-1 text-xs">1.0 Hz</span>
+                            </div>
+                            
+                            <span class="text-slate-600 font-extrabold text-sm font-sans">=</span>
+                            <span id="val-lambda-info-eq" class="text-primary font-mono font-extrabold text-sm px-1 bg-white border border-slate-200 rounded shadow-sm">2.20 m</span>
+                        </div>
+                    </div>
+
+                    <!-- Source Amplitude & Attenuation -->
+                    <div class="flex flex-col gap-1 border-t border-slate-200/60 pt-2 mt-1">
+                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap">
+                            <label id="label-amp" class="text-slate-700">Source Amplitude (<i>A</i>₀)</label>
+                            <span id="val-amp" class="text-primary font-mono shrink-0 ml-2">0.2</span>
+                        </div>
+                        <input type="range" id="slider-amp" min="0.2" max="3.0" step="0.1" value="0.2">
+                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap mt-1">
+                            <label id="label-attenuation" class="text-slate-600">Simulate Attenuation</label>
+                            <input type="checkbox" id="toggle-attenuation" class="w-4 h-4 cursor-pointer accent-primary shrink-0 ml-2">
+                        </div>
+                    </div>
+
+                    <!-- Source Separation -->
+                    <div class="flex flex-col gap-1 border-t border-slate-200/60 pt-2">
+                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap">
+                            <label id="label-d" class="text-slate-700">Separation (<i>d</i>)</label>
+                            <span id="val-d" class="text-primary font-mono shrink-0 ml-2">6.0 m</span>
+                        </div>
+                        <input type="range" id="slider-d" min="2.0" max="15.0" step="0.2" value="6.0">
+                    </div>
+
+                    <!-- Phase Difference -->
+                    <div class="flex flex-col gap-1 border-t border-slate-200/60 pt-2">
+                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap">
+                            <label id="label-phi" class="text-slate-700">Phase Difference (<i>&phi;</i>₀)</label>
+                            <span id="val-phi" class="text-primary font-mono shrink-0 ml-2">0&deg;</span>
+                        </div>
+                        <input type="range" id="slider-phi" min="0" max="360" step="1" value="0">
+                        <div class="flex gap-2 mt-1.5">
+                            <button class="flex-1 bg-slate-200 hover:bg-slate-300 text-[11px] py-1 rounded transition font-medium" onclick="setPhase(0)" id="btn-inphase">In Phase</button>
+                            <button class="flex-1 bg-slate-200 hover:bg-slate-300 text-[11px] py-1 rounded transition font-medium" onclick="setPhase(180)" id="btn-antiphase">Anti-Phase</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis Card -->
+                <div class="bg-blue-50 p-3 rounded-xl border border-blue-100 shadow-sm flex flex-col gap-2">
+                    <h2 class="font-bold text-primary border-b border-blue-200 pb-1" id="label-analysis">Point P Analysis</h2>
+                    
+                    <div class="text-xs grid grid-cols-[1fr_auto] gap-y-1 items-center mt-1">
+                        <span class="text-slate-600" id="label-d1">Distance <i>S</i>₁<i>P</i>:</span>
+                        <span class="font-mono font-medium" id="calc-d1">0.00 m</span>
+                        
+                        <span class="text-slate-600" id="label-d2">Distance <i>S</i>₂<i>P</i>:</span>
+                        <span class="font-mono font-medium" id="calc-d2">0.00 m</span>
+
+                        <div class="col-span-2 border-t border-blue-200 my-0.5"></div>
+
+                        <span class="text-slate-800 font-semibold" id="label-pathdiff">Path Difference (&Delta;<i>x</i>):</span>
+                        <span class="font-mono font-bold text-primary" id="calc-dx">0.00 m</span>
+                        
+                        <span class="text-slate-600 text-[10px] col-span-2 text-right -mt-1">&Delta;<i>x</i> ≈ <span id="calc-dx-lambda" class="font-mono">0.00</span> <i>&lambda;</i></span>
+
+                        <div class="col-span-2 border-t border-blue-200 my-0.5"></div>
+
+                        <span class="text-slate-800 font-semibold" id="label-totalphase">Steady Phase Diff (&Delta;&Phi;):</span>
+                        <span class="font-mono font-bold text-resultant" id="calc-phase">0&deg;</span>
+                    </div>
+
+                    <div class="mt-1 py-1.5 rounded bg-white text-center font-bold text-xs shadow-sm transition-colors duration-300" id="calc-result-box">
+                        <span id="calc-result-text">Constructive</span>
+                    </div>
+
+                    <!-- Show Rulers Toggle -->
+                    <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap mt-1 pt-1.5 border-t border-blue-200">
+                        <label id="label-show-rulers" class="text-slate-700 font-bold">Show Path Lines</label>
+                        <input type="checkbox" id="toggle-rulers" class="w-4 h-4 cursor-pointer accent-primary shrink-0 ml-2">
+                    </div>
+
+                    <!-- Show Nodal/Antinodal Lines Toggle -->
+                    <div class="flex flex-col mt-1 pt-1.5 border-t border-blue-200">
+                        <div class="flex justify-between items-center text-xs font-medium whitespace-nowrap">
+                            <label id="label-show-lines" class="text-slate-700 font-bold">Show Nodal/Antinodal</label>
+                            <input type="checkbox" id="toggle-lines" class="w-4 h-4 cursor-pointer accent-primary shrink-0 ml-2">
+                        </div>
+                        <div class="flex justify-between items-center text-[10px] text-slate-500 mt-1" id="label-lines-legend">
+                            <span class="text-red-500 font-bold">── Antinodal</span>
+                            <span class="text-slate-500 font-bold">- - Nodal</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- Main Canvas Area -->
+        <main class="w-full flex flex-col relative bg-bgGrid order-1 md:order-2 md:flex-1 h-[70vh] md:h-full min-h-0">
+            <!-- 3D Three.js Container -->
+            <div class="flex-[7] relative overflow-hidden touch-action-none min-h-0" id="canvas-container">
+                <div class="absolute top-3 left-3 bg-white/80 backdrop-blur px-2.5 py-1.5 rounded shadow-sm text-xs font-medium text-slate-700 pointer-events-none z-10 border border-slate-200" id="label-map-hint">
+                    Left-click & Drag P. Right-click to rotate.
+                </div>
+                <!-- Dynamic 3D-to-2D Ruler Labels -->
+                <div id="ruler-1" class="absolute hidden px-1.5 py-0.5 bg-wave1/90 text-white text-[11px] rounded font-mono transform -translate-x-1/2 -translate-y-1/2 pointer-events-none shadow z-10"></div>
+                <div id="ruler-2" class="absolute hidden px-1.5 py-0.5 bg-wave2/90 text-white text-[11px] rounded font-mono transform -translate-x-1/2 -translate-y-1/2 pointer-events-none shadow z-10"></div>
+            </div>
+
+            <!-- 1D Time Graph Canvas -->
+            <div class="flex-[3] border-t-[3px] border-slate-300 bg-white relative flex flex-col shrink-0 min-h-[145px]">
+                <div class="px-3 py-1.5 bg-slate-50 border-b border-slate-200 flex justify-between items-center shrink-0">
+                    <span class="text-xs font-bold text-slate-700" id="label-graph-title">Displacement vs Time at P</span>
+                    <!-- Interactive Legend Checkboxes -->
+                    <div class="flex gap-3 text-[11px] font-semibold items-center">
+                        <label class="flex items-center gap-1 cursor-pointer select-none">
+                            <input type="checkbox" id="plot-s1" checked class="w-3 h-3 accent-wave1 cursor-pointer">
+                            <span class="w-2 h-2 rounded-full bg-wave1" id="legend-w1"></span> S₁
+                        </label>
+                        <label class="flex items-center gap-1 cursor-pointer select-none">
+                            <input type="checkbox" id="plot-s2" checked class="w-3 h-3 accent-wave2 cursor-pointer">
+                            <span class="w-2 h-2 rounded-full bg-wave2" id="legend-w2"></span> S₂
+                        </label>
+                        <label class="flex items-center gap-1 cursor-pointer select-none">
+                            <input type="checkbox" id="plot-resultant" checked class="w-3 h-3 accent-resultant cursor-pointer">
+                            <span class="w-2 h-2 rounded-full bg-resultant"></span> <span id="legend-resultant-text">Resultant</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="flex-1 relative">
+                    <canvas id="graphCanvas" class="absolute inset-0 w-full h-full block"></canvas>
+                </div>
+                <!-- Dynamic Explanatory Physics Note for HKDSE students -->
+                <div class="absolute bottom-1 right-2 pointer-events-none text-[9px] md:text-[10px] text-slate-400 font-semibold bg-white/95 px-1.5 py-0.5 rounded shadow-sm border border-slate-100" id="graph-physics-note">
+                    * 右側為「現在」；左側為「過去」。
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mandatory Footer -->
+    <footer class="bg-slate-900 text-slate-300 text-center py-2 text-[11px] tracking-wider shrink-0 order-3" id="app-footer">
+        CMA Secondary School. Physics Department.
+    </footer>
+
+    <!-- Instruction Modal -->
+    <div id="help-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex justify-center items-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300" id="help-modal-content">
+            <div class="bg-primary px-5 py-3 flex justify-between items-center">
+                <h2 class="text-white text-lg font-bold" id="help-title">Theory & Formulas</h2>
+                <button id="btn-close-help" class="text-white hover:text-slate-200 text-2xl transition">&times;</button>
+            </div>
+            <div class="p-5 overflow-y-auto text-slate-700 space-y-4 text-sm leading-relaxed custom-scrollbar">
+                <h3 class="font-bold border-b pb-1" id="help-h1">1. Path Difference ($\Delta x$)</h3>
+                <p id="help-p1">The path difference is the difference in distance from the two sources ($S_1, S_2$) to a specific point ($P$).</p>
+                <div class="bg-slate-50 p-2 rounded text-center">$$\Delta x = |S_1P - S_2P| = |d_1 - d_2|$$</div>
+                <h3 class="font-bold border-b pb-1 mt-3" id="help-h2">2. Phase Difference ($\Delta \Phi$)</h3>
+                <p id="help-p2">The total phase difference depends on path difference and initial phase difference ($\phi_0$).</p>
+                <div class="bg-slate-50 p-2 rounded text-center">$$\Delta \Phi = \left( \frac{\Delta x}{\lambda} \times 360^\circ \right) + \phi_0 \pmod{360^\circ}$$</div>
+                <h3 class="font-bold border-b pb-1 mt-3" id="help-h3">3. Conditions for Interference</h3>
+                <p id="help-p3">When sources are <strong>in phase</strong> ($\phi_0 = 0^\circ$):</p>
+                <ul class="list-disc pl-5 space-y-1 text-xs" id="help-list1">
+                    <li><strong>Constructive:</strong> $\Delta x = n\lambda \implies \Delta \Phi = 0^\circ$</li>
+                    <li><strong>Destructive:</strong> $\Delta x = (n + 0.5)\lambda \implies \Delta \Phi = 180^\circ$</li>
+                </ul>
+                <div class="bg-blue-50 border-l-4 border-primary p-2 text-xs mt-3" id="help-note">
+                    <strong>Note:</strong> Amplitude attenuation ($1/\sqrt{r}$) is ignored to show mathematical superposition cleanly.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        /* --- 1. Global State & History Buffers --- */
+        const MAX_HISTORY_TIME = 60; 
+        const TIME_STEP = 0.02; 
+        const BUFFER_SIZE = Math.ceil(MAX_HISTORY_TIME / TIME_STEP); 
+        const buf_y1 = new Float32Array(BUFFER_SIZE);
+        const buf_y2 = new Float32Array(BUFFER_SIZE);
+
+        const STATE = {
+            lang: 'zh', // Default language to Chinese
+            frequency: 1.0,   
+            depth: 5.0,       
+            v: 2.2,           
+            lambda: 2.2,      
+            d: 6.0,           
+            phi0: 0,          
+            P: { x: 1, y: 3 },
+            
+            isPlaying: true,
+            time: 0,          
+            timeAccumulator: 0,
+            currentPhase: 0,
+            step: 0, // sequential integer step counter to prevent floating-point buffer skip gaps!
+            amplitude: 0.2,   
+            attenuation: false, // Default Simulate Attenuation to false as requested
+            showRulers: false,
+            showLines: false,
+            isDraggingP: false,
+            s1Active: true,
+            s2Active: true,
+
+            // Plot visibility states on the 1D graph
+            plotS1: true,
+            plotS2: true,
+            plotResultant: true
+        };
+
+        const DICT = {
+            'en': {
+                'app-title': 'Water Wave Interference',
+                'label-help': 'Theory',
+                'label-params': 'Wave Parameters',
+                'label-freq': 'Frequency (<i>f</i>)',
+                'label-amp': 'Source Amplitude (<i>A</i>₀)',
+                'label-attenuation': 'Simulate Attenuation',
+                'label-show-rulers': 'Show Path Lines',
+                'label-show-lines': 'Show Nodal/Antinodal',
+                'label-lines-legend': '<span class="text-red-500 font-bold">── Antinodal</span><span class="text-slate-500 font-bold">- - Nodal</span>',
+                'label-depth': 'Water Depth',
+                'label-d': 'Separation (<i>d</i>)',
+                'label-phi': 'Phase Difference',
+                'label-lambda-text': 'Wavelength (λ): ',
+                'label-speed-text': 'Wave Speed (<i>v</i>): ',
+                'label-eq-title': 'Wavelength Relationship',
+                'btn-inphase': 'In Phase',
+                'btn-antiphase': 'Anti-Phase',
+                'label-analysis': 'Point <i>P</i> Analysis',
+                'label-d1': 'Distance <i>S</i>₁<i>P</i>:',
+                'label-d2': 'Distance <i>S</i>₂<i>P</i>:',
+                'label-pathdiff': 'Path Difference (&Delta;):',
+                'label-totalphase': 'Phase Difference:',
+                'result-con': 'Constructive Interference',
+                'result-des': 'Destructive Interference',
+                'result-int': 'Neither Constructive nor Destructive',
+                'result-single': 'Single Wave',
+                'result-none': 'No Waves',
+                's1-on': '<i>S</i>₁: ON', 's1-off': '<i>S</i>₁: OFF',
+                's2-on': '<i>S</i>₂: ON', 's2-off': '<i>S</i>₂: OFF',
+                'label-map-hint': 'Left-click & Drag P. Right-click to rotate.',
+                'label-graph-title': 'Displacement vs Time at <i>P</i>',
+                'legend-resultant-text': 'Resultant',
+                'graph-physics-note': '* Right-side: Present; Left-side: Past',
+                'app-footer': 'CMA Secondary School. Physics Department.',
+                'help-title': 'Theory & Formulas',
+                'help-h1': '1. Path Difference (Δ)',
+                'help-p1': 'The path difference is the difference in distance from the two sources to a specific point.',
+                'help-h2': '2. Phase Difference of waving arriving at the point',
+                'help-p2': 'The total phase difference depends on path difference and phase difference of the sources.',
+                'help-h3': '3. Conditions for Interference',
+                'help-p3': 'When sources are in phase:',
+                'help-list1': `
+                    <li><strong>Constructive:</strong> Δx = nλ $\\implies \\Delta \\Phi = 0^\\circ$</li>
+                    <li><strong>Destructive:</strong> Δx = (n + 0.5)λ $\\implies \\Delta \\Phi = 180^\\circ$</li>
+                `,
+                'help-note': '<strong>Note:</strong> Amplitude physically attenuates as $1/\\sqrt{r}$ to represent the realistic 2D spread of wave energy.'
+            },
+            'zh': {
+                'app-title': '水波干涉',
+                'label-help': '說明',
+                'label-params': '水波參數',
+                'label-freq': '頻率 (<i>f</i>)',
+                'label-amp': '波源振幅 (<i>A</i>₀)',
+                'label-attenuation': '模擬能量衰減',
+                'label-show-rulers': '顯示波程線',
+                'label-show-lines': '顯示節線及腹線',
+                'label-lines-legend': '<span class="text-red-500 font-bold">── 腹線</span><span class="text-slate-500 font-bold">- - 節線</span>',
+                'label-depth': '水深',
+                'label-d': '波源間距 (<i>d</i>)',
+                'label-phi': '<i>S</i>₁和<i>S</i>₂的相位差',
+                'label-eq-title': '波長控制關係式',
+                'label-lambda-text': '波長 (λ): ',
+                'label-speed-text': '波速 (<i>v</i>): ',
+                'btn-inphase': '同相',
+                'btn-antiphase': '反相',
+                'label-analysis': '<i>P</i> 點數據分析',
+                'label-d1': '距離 <i>S</i>₁<i>P</i>:',
+                'label-d2': '距離 <i>S</i>₂<i>P</i>:',
+                'label-pathdiff': '程差 (&Delta;):',
+                'label-totalphase': '波到達時的相位差:',
+                'result-con': '相長干涉 (Constructive)',
+                'result-des': '相消干涉 (Destructive)',
+                'result-int': '非相長亦非相消干涉',
+                'result-single': '單一波源',
+                'result-none': '無水波',
+                's1-on': '<i>S</i>₁: 開', 's1-off': '<i>S</i>₁: 關',
+                's2-on': '<i>S</i>₂: 開', 's2-off': '<i>S</i>₂: 關',
+                'label-map-hint': '左鍵拖曳 P 點。右鍵旋轉。',
+                'label-graph-title': '<i>P</i> 點之位移 - 時間關係圖',
+                'legend-resultant-text': '合成波',
+                'graph-physics-note': '* 右側代表現在；左側代表過去',
+                'app-footer': '廠商會中學．物理科',
+                'help-title': '說明',
+                'help-h1': '1. 程差 (Δ)',
+                'help-p1': '行程差是指由兩個波源傳播至同一特定點的距離差。',
+                'help-h2': '2. 兩波到達時的相位差',
+                'help-p2': '總相位差決定了波的干涉類型。它取決於程差以及兩個波源之間的相位差。',
+                'help-h3': '3. 干涉條件',
+                'help-p3': '當波源同相時:',
+                'help-list1': `
+                    <li><strong>相長干涉:</strong> Δx = nλ $\\implies \\Delta \\Phi = 0^\\circ$</li>
+                    <li><strong>相消干涉:</strong> Δx = (n + 0.5)λ $\\implies \\Delta \\Phi = 180^\\circ$</li>
+                `,
+                'help-note': '<strong>注意：</strong> 水波振幅會隨著距離 $1/\\sqrt{r}$ 物理衰減，反映二維水面波的能量擴散守恆效應。'
+            }
+        };
+
+        /* --- 2. DOM Elements References --- */
+        const els = {
+            sliderFreq: document.getElementById('slider-freq'),
+            sliderAmp: document.getElementById('slider-amp'),
+            toggleAttenuation: document.getElementById('toggle-attenuation'),
+            toggleRulers: document.getElementById('toggle-rulers'),
+            toggleLines: document.getElementById('toggle-lines'),
+            sliderDepth: document.getElementById('slider-depth'),
+            sliderD: document.getElementById('slider-d'),
+            sliderPhi: document.getElementById('slider-phi'),
+            valFreq: document.getElementById('val-freq'),
+            valAmp: document.getElementById('val-amp'),
+            valDepth: document.getElementById('val-depth'),
+            valLambdaInfo: document.getElementById('val-lambda-info'),
+            valSpeedInfo: document.getElementById('val-speed-info'),
+            valD: document.getElementById('val-d'),
+            valPhi: document.getElementById('val-phi'),
+            btnPlay: document.getElementById('btn-play'),
+            btnReset: document.getElementById('btn-reset'),
+            btnS1: document.getElementById('btn-s1'),
+            btnS2: document.getElementById('btn-s2'),
+            labelS1Btn: document.getElementById('label-s1-btn'),
+            labelS2Btn: document.getElementById('label-s2-btn'),
+            calcD1: document.getElementById('calc-d1'),
+            calcD2: document.getElementById('calc-d2'),
+            calcDx: document.getElementById('calc-dx'),
+            calcDxLambda: document.getElementById('calc-dx-lambda'),
+            calcPhase: document.getElementById('calc-phase'),
+            calcResultBox: document.getElementById('calc-result-box'),
+            calcResultText: document.getElementById('calc-result-text'),
+            canvasContainer: document.getElementById('canvas-container'),
+            graphCanvas: document.getElementById('graphCanvas'),
+            ruler1: document.getElementById('ruler-1'),
+            ruler2: document.getElementById('ruler-2'),
+            btnLang: document.getElementById('btn-lang'),
+            btnHelp: document.getElementById('btn-help'),
+            modalHelp: document.getElementById('help-modal'),
+            modalContent: document.getElementById('help-modal-content'),
+            btnCloseHelp: document.getElementById('btn-close-help'),
+            legendW1: document.getElementById('legend-w1'),
+            legendW2: document.getElementById('legend-w2'),
+
+            plotS1: document.getElementById('plot-s1'),
+            plotS2: document.getElementById('plot-s2'),
+            plotResultant: document.getElementById('plot-resultant')
+        };
+
+        const ctxGraph = els.graphCanvas.getContext('2d', { alpha: false });
+        let animationFrameId;
+
+        /* --- 3. Language & UI Logic --- */
+        function toggleLanguage() {
+            STATE.lang = STATE.lang === 'en' ? 'zh' : 'en';
+            els.btnLang.innerText = STATE.lang === 'en' ? '繁' : 'Eng';
+            applyTranslations();
+            updateSourceButtonsUI();
+        }
+
+        function applyTranslations() {
+            const t = DICT[STATE.lang];
+            for (const key in t) {
+                const el = document.getElementById(key);
+                if (el) el.innerHTML = t[key];
+            }
+            if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
+                MathJax.typesetPromise().catch(e => console.log(e));
+            }
+            updateDerivedParams();
+            updateCalculationsPanel();
+        }
+
+        function setPhase(degrees) {
+            STATE.phi0 = degrees;
+            els.sliderPhi.value = degrees;
+            els.valPhi.innerHTML = `${degrees}&deg;`;
+            updateCalculationsPanel();
+            if (typeof updateHyperbolas !== 'undefined') updateHyperbolas();
+        }
+
+        function updateSourceButtonsUI() {
+            const t = DICT[STATE.lang];
+            
+            els.labelS1Btn.innerHTML = STATE.s1Active ? t['s1-on'] : t['s1-off'];
+            if (STATE.s1Active) {
+                els.btnS1.className = "flex-1 py-1.5 rounded text-white bg-wave1 text-xs font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent";
+                els.legendW1.classList.remove('bg-slate-300'); els.legendW1.classList.add('bg-wave1');
+            } else {
+                els.btnS1.className = "flex-1 py-1.5 rounded text-slate-500 bg-slate-100 text-xs font-bold shadow-sm transition opacity-80 flex justify-center items-center gap-1.5 border border-slate-300";
+                els.legendW1.classList.remove('bg-wave1'); els.legendW1.classList.add('bg-slate-300');
+            }
+
+            els.labelS2Btn.innerHTML = STATE.s2Active ? t['s2-on'] : t['s2-off'];
+            if (STATE.s2Active) {
+                els.btnS2.className = "flex-1 py-1.5 rounded text-white bg-wave2 text-xs font-bold shadow-sm transition opacity-100 flex justify-center items-center gap-1.5 border border-transparent";
+                els.legendW2.classList.remove('bg-slate-300'); els.legendW2.classList.add('bg-wave2');
+            } else {
+                els.btnS2.className = "flex-1 py-1.5 rounded text-slate-500 bg-slate-100 text-xs font-bold shadow-sm transition opacity-80 flex justify-center items-center gap-1.5 border border-slate-300";
+                els.legendW2.classList.remove('bg-wave2'); els.legendW2.classList.add('bg-slate-300');
+            }
+            
+            if (typeof markerS1 !== 'undefined') markerS1.visible = STATE.s1Active;
+            if (typeof markerS2 !== 'undefined') markerS2.visible = STATE.s2Active;
+            
+            updateCalculationsPanel();
+            if (typeof updateHyperbolas !== 'undefined') updateHyperbolas();
+        }
+
+        function toggleHelp() {
+            if (els.modalHelp.classList.contains('hidden')) {
+                els.modalHelp.classList.remove('hidden');
+                void els.modalHelp.offsetWidth; // force reflow
+                els.modalHelp.classList.remove('opacity-0');
+                els.modalContent.classList.remove('scale-95');
+            } else {
+                els.modalHelp.classList.add('opacity-0');
+                els.modalContent.classList.add('scale-95');
+                setTimeout(() => els.modalHelp.classList.add('hidden'), 300);
+            }
+        }
+
+        /* --- 4. Real-time Parameters & Calculations --- */
+        function clearWaveHistory() {
+            STATE.time = 0;
+            STATE.currentPhase = 0;
+            STATE.step = 0; // Reset sequential step counter on wave restarts
+            buf_y1.fill(0);
+            buf_y2.fill(0);
+            lastTimestamp = 0; // Prevent huge frame jump skipping initial crests
+        }
+
+        function updateDerivedParams() {
+            STATE.v = 1.0 + (STATE.depth - 1) * 0.3;
+            STATE.lambda = STATE.v / STATE.frequency;
+            
+            if (els.valSpeedInfo) els.valSpeedInfo.innerText = STATE.v.toFixed(2) + ' m/s';
+            if (els.valLambdaInfo) els.valLambdaInfo.innerText = STATE.lambda.toFixed(2) + ' m';
+            if (document.getElementById('eq-val-v')) document.getElementById('eq-val-v').innerText = STATE.v.toFixed(2) + ' m/s';
+            if (document.getElementById('eq-val-f')) document.getElementById('eq-val-f').innerText = STATE.frequency.toFixed(1) + ' Hz';
+            if (document.getElementById('val-lambda-info-eq')) document.getElementById('val-lambda-info-eq').innerText = STATE.lambda.toFixed(2) + ' m';
+
+            if (typeof updateHyperbolas !== 'undefined') updateHyperbolas();
+        }
+
+        function getWaveY(buf, r, queryTime) {
+            let t_emit = queryTime - r / STATE.v;
+            if (t_emit < 0) return 0; 
+            if (queryTime - t_emit > MAX_HISTORY_TIME) return 0; 
+            
+            let exactIdx = t_emit / TIME_STEP;
+            let i1 = Math.floor(exactIdx) % BUFFER_SIZE;
+            let i2 = (i1 + 1) % BUFFER_SIZE;
+            let frac = exactIdx - Math.floor(exactIdx);
+            
+            // Continuous interpolation with sequentially written non-empty array elements
+            let base_y = buf[i1] * (1 - frac) + buf[i2] * frac;
+
+            let attenFactor = 1.0;
+            if (STATE.attenuation) {
+                attenFactor = 1 / Math.sqrt(Math.max(r, 0.1) + 0.5); 
+            }
+            return base_y * STATE.amplitude * attenFactor;
+        }
+
+        function getSources() {
+            return { s1: { x: -STATE.d / 2, y: 0 }, s2: { x: STATE.d / 2, y: 0 } };
+        }
+
+        function analyzePointP() {
+            const { s1, s2 } = getSources();
+            const d1 = Math.sqrt((STATE.P.x - s1.x)**2 + (STATE.P.y - s1.y)**2);
+            const d2 = Math.sqrt((STATE.P.x - s2.x)**2 + (STATE.P.y - s2.y)**2);
+            const deltaX = Math.abs(d1 - d2);
+            
+            const rawPhaseDiff = Math.abs( (d1 / STATE.lambda * 360) - ((d2 / STATE.lambda * 360) + STATE.phi0) );
+            const displayPhase = (rawPhaseDiff % 360 > 180) ? 360 - (rawPhaseDiff % 360) : rawPhaseDiff % 360;
+            return { d1, d2, deltaX, totalPhaseDiff: displayPhase };
+        }
+
+        function updateCalculationsPanel() {
+            const analysis = analyzePointP();
+            
+            els.calcD1.innerText = STATE.s1Active ? `${analysis.d1.toFixed(2)} m` : `---`;
+            els.calcD2.innerText = STATE.s2Active ? `${analysis.d2.toFixed(2)} m` : `---`;
+            els.calcDx.innerText = (STATE.s1Active && STATE.s2Active) ? `${analysis.deltaX.toFixed(2)} m` : `---`;
+            els.calcDxLambda.innerText = (STATE.s1Active && STATE.s2Active) ? (analysis.deltaX / STATE.lambda).toFixed(2) : `---`;
+            
+            const t = DICT[STATE.lang];
+
+            if (!STATE.s1Active && !STATE.s2Active) {
+                els.calcPhase.innerHTML = `-`;
+                els.calcResultText.innerText = t['result-none'];
+                els.calcResultBox.className = `mt-2 py-2 rounded text-center font-bold text-[14px] shadow-sm transition-colors duration-300 bg-slate-200 text-slate-500`;
+            } else if (!STATE.s1Active || !STATE.s2Active) {
+                els.calcPhase.innerHTML = `-`;
+                els.calcResultText.innerText = t['result-single'];
+                els.calcResultBox.className = `mt-2 py-2 rounded text-center font-bold text-[14px] shadow-sm transition-colors duration-300 bg-slate-100 text-slate-600`;
+            } else {
+                els.calcPhase.innerHTML = `${analysis.totalPhaseDiff.toFixed(1)}&deg;`;
+                const roundedPhaseValue = Math.round(analysis.totalPhaseDiff);
+                let statusKey, bgColor, textColor;
+                
+                // Rigid thresholds: only true 0 or 180 when rounded
+                if (roundedPhaseValue === 0) { 
+                    statusKey = 'result-con'; bgColor = 'bg-red-100'; textColor = 'text-red-700'; 
+                } else if (roundedPhaseValue === 180) { 
+                    statusKey = 'result-des'; bgColor = 'bg-blue-100'; textColor = 'text-blue-700'; 
+                } else { 
+                    statusKey = 'result-int'; bgColor = 'bg-slate-100'; textColor = 'text-slate-700'; 
+                }
+
+                els.calcResultText.innerText = t[statusKey];
+                els.calcResultBox.className = `mt-2 py-2 rounded text-center font-bold text-[14px] shadow-sm transition-colors duration-300 ${bgColor} ${textColor}`;
+            }
+        }
+
+        /* --- 5. Three.js Engine (3D Map) --- */
+        let tScene, tCamera, tRenderer, tControls;
+        let waveGeometry, waveMesh, markerS1, markerS2, markerP;
+        let tLine1, tLine2;
+        let tDropS1, tDropS2, tDropP; 
+        let linesGroup;
+        const WAVE_SIZE = 30; 
+        const WAVE_SEGMENTS = 180; 
+
+        function initThreeJS() {
+            const w = els.canvasContainer.clientWidth;
+            const h = els.canvasContainer.clientHeight;
+
+            tScene = new THREE.Scene();
+            tScene.background = new THREE.Color('#f8fafc'); 
+            tScene.fog = new THREE.FogExp2('#f8fafc', 0.03);
+
+            tCamera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+            tCamera.position.set(0, 15, 18); 
+
+            tRenderer = new THREE.WebGLRenderer({ antialias: true });
+            tRenderer.setSize(w, h);
+            tRenderer.setPixelRatio(window.devicePixelRatio || 1);
+            tRenderer.shadowMap.enabled = true;
+            els.canvasContainer.appendChild(tRenderer.domElement);
+
+            // Setup OrbitControls with standard left-click rotation
+            tControls = new THREE.OrbitControls(tCamera, tRenderer.domElement);
+            tControls.enableDamping = true;
+            tControls.dampingFactor = 0.05;
+            tControls.maxPolarAngle = Math.PI / 2 - 0.1; 
+            tControls.mouseButtons = { LEFT: THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE };
+            tControls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
+
+            tScene.add(new THREE.AmbientLight(0xffffff, 0.6));
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
+            dirLight.position.set(10, 20, 10);
+            dirLight.castShadow = true;
+            tScene.add(dirLight);
+
+            const gridHelper = new THREE.GridHelper(WAVE_SIZE, 30, 0xcbd5e1, 0xe2e8f0);
+            gridHelper.position.y = -2; 
+            tScene.add(gridHelper);
+
+            waveGeometry = new THREE.PlaneGeometry(WAVE_SIZE, WAVE_SIZE, WAVE_SEGMENTS, WAVE_SEGMENTS);
+            waveGeometry.rotateX(-Math.PI / 2); 
+
+            waveMesh = new THREE.Mesh(waveGeometry, new THREE.MeshPhongMaterial({
+                color: 0x1e50a2, emissive: 0x051024, specular: 0x88ccff, shininess: 90, transparent: true, opacity: 0.85, side: THREE.DoubleSide
+            }));
+            waveMesh.receiveShadow = true; waveMesh.castShadow = true;
+            tScene.add(waveMesh);
+
+            markerS1 = new THREE.Mesh(new THREE.SphereGeometry(0.35, 32, 32), new THREE.MeshPhongMaterial({ color: 0x3b82f6, emissive: 0x1e3a8a }));
+            markerS1.castShadow = true; tScene.add(markerS1);
+
+            markerS2 = new THREE.Mesh(new THREE.SphereGeometry(0.35, 32, 32), new THREE.MeshPhongMaterial({ color: 0x10b981, emissive: 0x064e3b }));
+            markerS2.castShadow = true; tScene.add(markerS2);
+
+            markerP = new THREE.Mesh(new THREE.SphereGeometry(0.45, 32, 32), new THREE.MeshPhongMaterial({ color: 0xDC2626, emissive: 0x7f1d1d }));
+            markerP.castShadow = true; tScene.add(markerP);
+
+            const ringMesh = new THREE.Mesh(new THREE.RingGeometry(0.55, 0.75, 32).rotateX(-Math.PI/2), new THREE.MeshBasicMaterial({ color: 0xDC2626, transparent: true, opacity: 0.6, side: THREE.DoubleSide }));
+            markerP.add(ringMesh);
+            
+            tLine1 = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), new THREE.LineDashedMaterial({ color: 0x3b82f6, dashSize: 0.5, gapSize: 0.3, linewidth: 2 }));
+            tLine1.visible = false;
+            tScene.add(tLine1);
+
+            tLine2 = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), new THREE.LineDashedMaterial({ color: 0x10b981, dashSize: 0.5, gapSize: 0.3, linewidth: 2 }));
+            tLine2.visible = false;
+            tScene.add(tLine2);
+
+            const dropMat = new THREE.LineBasicMaterial({ color: 0x475569, linewidth: 1.5 });
+            tDropS1 = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), dropMat);
+            tScene.add(tDropS1);
+            tDropS2 = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), dropMat);
+            tScene.add(tDropS2);
+            tDropP = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), dropMat);
+            tScene.add(tDropP);
+
+            linesGroup = new THREE.Group();
+            tScene.add(linesGroup);
+
+            tRenderer.domElement.style.touchAction = 'none';
+            setupThreeJSInteraction();
+        }
+
+        function updateHyperbolas() {
+            if (!linesGroup) return;
+            
+            while(linesGroup.children.length > 0){ 
+                const child = linesGroup.children[0];
+                linesGroup.remove(child); 
+                if(child.geometry) child.geometry.dispose();
+                if(child.material) child.material.dispose();
+            }
+
+            if (!STATE.showLines || !STATE.s1Active || !STATE.s2Active) return;
+
+            const c = STATE.d / 2;
+            const phi_offset = STATE.phi0 / 360;
+            const max_n = Math.ceil(STATE.d / STATE.lambda) + 2;
+
+            const drawCurve = (deltaX, isAntinodal) => {
+                if (Math.abs(deltaX) >= STATE.d - 0.001) return; 
+                
+                const points = [];
+                if (Math.abs(deltaX) < 0.001) {
+                    points.push(new THREE.Vector3(0, 0.06, -WAVE_SIZE/2));
+                    points.push(new THREE.Vector3(0, 0.06, WAVE_SIZE/2));
+                } else {
+                    const a = Math.abs(deltaX) / 2;
+                    const b = Math.sqrt(c*c - a*a);
+                    const sign = Math.sign(deltaX);
+
+                    for (let z = -WAVE_SIZE/2; z <= WAVE_SIZE/2; z += 0.5) {
+                        const x = sign * a * Math.sqrt(1 + (z*z)/(b*b));
+                        if(Math.abs(x) <= WAVE_SIZE) {
+                            points.push(new THREE.Vector3(x, 0.06, z));
+                        }
+                    }
+                }
+                
+                if(points.length < 2) return;
+
+                const geo = new THREE.BufferGeometry().setFromPoints(points);
+                let mat;
+                let line;
+                if (isAntinodal) {
+                    mat = new THREE.LineBasicMaterial({ color: 0xef4444, linewidth: 2 }); 
+                    line = new THREE.Line(geo, mat);
+                } else {
+                    mat = new THREE.LineDashedMaterial({ color: 0x475569, dashSize: 0.4, gapSize: 0.4, linewidth: 2 });
+                    line = new THREE.Line(geo, mat);
+                    line.computeLineDistances();
+                }
+                linesGroup.add(line);
+            };
+
+            for (let n = -max_n; n <= max_n; n++) {
+                drawCurve((n + phi_offset) * STATE.lambda, true); 
+                drawCurve((n + 0.5 + phi_offset) * STATE.lambda, false); 
+            }
+        }
+
+        function updateThreeJSWaves() {
+            if (!waveGeometry) return;
+            const positions = waveGeometry.attributes.position.array;
+            const { s1, s2 } = getSources();
+
+            for (let i = 0; i < positions.length; i += 3) {
+                const x = positions[i];
+                const z = positions[i + 2];
+                const d1 = Math.sqrt((x - s1.x)**2 + (z - s1.y)**2);
+                const d2 = Math.sqrt((x - s2.x)**2 + (z - s2.y)**2);
+                const y1 = getWaveY(buf_y1, d1, STATE.time);
+                const y2 = getWaveY(buf_y2, d2, STATE.time);
+                positions[i + 1] = y1 + y2; 
+            }
+
+            waveGeometry.attributes.position.needsUpdate = true;
+            waveGeometry.computeVertexNormals();
+
+            if (STATE.s1Active) markerS1.position.set(s1.x, getWaveY(buf_y1, 0, STATE.time) + getWaveY(buf_y2, Math.abs(s1.x-s2.x), STATE.time) + 0.35, s1.y);
+            if (STATE.s2Active) markerS2.position.set(s2.x, getWaveY(buf_y1, Math.abs(s1.x-s2.x), STATE.time) + getWaveY(buf_y2, 0, STATE.time) + 0.35, s2.y);
+
+            const dP1 = Math.sqrt((STATE.P.x - s1.x)**2 + (STATE.P.y - s1.y)**2);
+            const dP2 = Math.sqrt((STATE.P.x - s2.x)**2 + (STATE.P.y - s2.y)**2);
+            markerP.position.set(STATE.P.x, getWaveY(buf_y1, dP1, STATE.time) + getWaveY(buf_y2, dP2, STATE.time) + 0.45, STATE.P.y);
+
+            if (STATE.s1Active) {
+                const posS1 = tDropS1.geometry.attributes.position.array;
+                posS1[0] = s1.x; posS1[1] = markerS1.position.y; posS1[2] = s1.y;
+                posS1[3] = s1.x; posS1[4] = 0; posS1[5] = s1.y;
+                tDropS1.geometry.attributes.position.needsUpdate = true;
+                tDropS1.visible = true;
+            } else tDropS1.visible = false;
+
+            if (STATE.s2Active) {
+                const posS2 = tDropS2.geometry.attributes.position.array;
+                posS2[0] = s2.x; posS2[1] = markerS2.position.y; posS2[2] = s2.y;
+                posS2[3] = s2.x; posS2[4] = 0; posS2[5] = s2.y;
+                tDropS2.geometry.attributes.position.needsUpdate = true;
+                tDropS2.visible = true;
+            } else tDropS2.visible = false;
+
+            const posP = tDropP.geometry.attributes.position.array;
+            posP[0] = STATE.P.x; posP[1] = markerP.position.y; posP[2] = STATE.P.y;
+            posP[3] = STATE.P.x; posP[4] = 0; posP[5] = STATE.P.y;
+            tDropP.geometry.attributes.position.needsUpdate = true;
+            tDropP.visible = true;
+
+            if (STATE.showRulers) {
+                const w = els.canvasContainer.clientWidth;
+                const h = els.canvasContainer.clientHeight;
+                const projectToScreen = (vec3) => {
+                    const projected = vec3.clone().project(tCamera);
+                    return { x: (projected.x * 0.5 + 0.5) * w, y: (projected.y * -0.5 + 0.5) * h, z: projected.z };
+                };
+
+                if (STATE.s1Active) {
+                    tLine1.visible = true;
+                    const pos = tLine1.geometry.attributes.position.array;
+                    pos[0] = s1.x; pos[1] = 0.05; pos[2] = s1.y; pos[3] = STATE.P.x; pos[4] = 0.05; pos[5] = STATE.P.y;
+                    tLine1.geometry.attributes.position.needsUpdate = true; tLine1.computeLineDistances();
+                    const mid = new THREE.Vector3((s1.x + STATE.P.x) / 2, 0.05, (s1.y + STATE.P.y) / 2);
+                    const screenPos = projectToScreen(mid);
+                    if (screenPos.z < 1) { 
+                        els.ruler1.style.left = `${screenPos.x}px`; els.ruler1.style.top = `${screenPos.y}px`;
+                        els.ruler1.innerText = (dP1 / STATE.lambda).toFixed(2) + ' λ'; els.ruler1.classList.remove('hidden');
+                    } else els.ruler1.classList.add('hidden');
+                } else { tLine1.visible = false; els.ruler1.classList.add('hidden'); }
+
+                if (STATE.s2Active) {
+                    tLine2.visible = true;
+                    const pos = tLine2.geometry.attributes.position.array;
+                    pos[0] = s2.x; pos[1] = 0.05; pos[2] = s2.y; pos[3] = STATE.P.x; pos[4] = 0.05; pos[5] = STATE.P.y;
+                    tLine2.geometry.attributes.position.needsUpdate = true; tLine2.computeLineDistances();
+                    const mid = new THREE.Vector3((s2.x + STATE.P.x) / 2, 0.05, (s2.y + STATE.P.y) / 2);
+                    const screenPos = projectToScreen(mid);
+                    if (screenPos.z < 1) {
+                        els.ruler2.style.left = `${screenPos.x}px`; els.ruler2.style.top = `${screenPos.y}px`;
+                        els.ruler2.innerText = (dP2 / STATE.lambda).toFixed(2) + ' λ'; els.ruler2.classList.remove('hidden');
+                    } else els.ruler2.classList.add('hidden');
+                } else { tLine2.visible = false; els.ruler2.classList.add('hidden'); }
+            } else {
+                tLine1.visible = false; tLine2.visible = false;
+                els.ruler1.classList.add('hidden'); els.ruler2.classList.add('hidden');
+            }
+        }
+
+        /* --- 6. High-Performance Pointer Dragging Logic & Snapping --- */
+        // Snaps the probe directly onto Nodal/Antinodal curves when they are active
+        function setupThreeJSInteraction() {
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+            const mathPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0); 
+
+            function getIntersect(event) {
+                const rect = tRenderer.domElement.getBoundingClientRect();
+                mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+                raycaster.setFromCamera(mouse, tCamera);
+                const target = new THREE.Vector3();
+                raycaster.ray.intersectPlane(mathPlane, target);
+                return target;
+            }
+
+            function onPointerDown(e) {
+                if (e.button !== undefined && e.button !== 0) return; 
+                const pos = getIntersect(e);
+                if (pos) {
+                    const distToP = Math.sqrt((pos.x - STATE.P.x)**2 + (pos.z - STATE.P.y)**2);
+                    if (distToP < 2.0) { 
+                        STATE.isDraggingP = true; tControls.enabled = false; 
+                        tRenderer.domElement.classList.add('grabbing-cursor'); e.stopPropagation();
+                    }
+                }
+            }
+
+            function onPointerMove(e) {
+                const pos = getIntersect(e);
+                if (pos && !STATE.isDraggingP) {
+                    const distToP = Math.sqrt((pos.x - STATE.P.x)**2 + (pos.z - STATE.P.y)**2);
+                    if (distToP < 2.0) tRenderer.domElement.classList.add('grab-cursor');
+                    else tRenderer.domElement.classList.remove('grab-cursor');
+                }
+
+                if (!STATE.isDraggingP) return;
+                
+                if (pos) {
+                    const bound = WAVE_SIZE / 2 - 0.5;
+                    let targetX = Math.max(-bound, Math.min(bound, pos.x));
+                    let targetZ = Math.max(-bound, Math.min(bound, pos.z));
+
+                    if (STATE.showLines && STATE.s1Active && STATE.s2Active) {
+                        const { s1, s2 } = getSources();
+                        const d1 = Math.sqrt((targetX - s1.x)**2 + (targetZ - s1.y)**2);
+                        const d2 = Math.sqrt((targetX - s2.x)**2 + (targetZ - s2.y)**2);
+                        const deltaX_signed = d1 - d2;
+
+                        const m = Math.round((deltaX_signed - (STATE.phi0 / 360) * STATE.lambda) / (STATE.lambda / 2));
+                        const deltaX_target = m * (STATE.lambda / 2) + (STATE.phi0 / 360) * STATE.lambda;
+
+                        if (Math.abs(deltaX_target) < STATE.d - 0.005) {
+                            const a = Math.abs(deltaX_target) / 2;
+                            const c = STATE.d / 2;
+                            const b = Math.sqrt(c*c - a*a);
+                            const sign = Math.sign(deltaX_target);
+
+                            let x_snapped;
+                            if (a < 0.001) x_snapped = 0;
+                            else x_snapped = sign * a * Math.sqrt(1 + (targetZ*targetZ)/(b*b));
+
+                            const distToCurve = Math.abs(targetX - x_snapped);
+                            if (distToCurve < 1.4 && Math.abs(x_snapped) <= bound) targetX = x_snapped;
+                        }
+                    }
+
+                    STATE.P.x = targetX; STATE.P.y = targetZ;
+                    updateCalculationsPanel();
+                }
+            }
+
+            function onPointerUp() {
+                if (STATE.isDraggingP) {
+                    STATE.isDraggingP = false; tControls.enabled = true; 
+                    tRenderer.domElement.classList.remove('grabbing-cursor'); tRenderer.domElement.classList.remove('grab-cursor');
+                }
+            }
+
+            tRenderer.domElement.addEventListener('pointerdown', onPointerDown);
+            window.addEventListener('pointermove', onPointerMove); 
+            window.addEventListener('pointerup', onPointerUp);
+        }
+
+        /* --- 7. 1D Graph Canvas Engine --- */
+        function resizeGraphCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            const graphRect = els.graphCanvas.parentElement.getBoundingClientRect();
+            if (graphRect.width === 0 || graphRect.height === 0) return;
+            els.graphCanvas.width = graphRect.width * dpr;
+            els.graphCanvas.height = graphRect.height * dpr;
+            ctxGraph.scale(dpr, dpr);
+        }
+
+        function drawGraph() {
+            const w = els.graphCanvas.clientWidth;
+            const h = els.graphCanvas.clientHeight;
+            if (w === 0 || h === 0) return;
+            
+            ctxGraph.fillStyle = '#ffffff';
+            ctxGraph.fillRect(0, 0, w, h);
+
+            const midY = h / 2;
+            const startX = 55;      
+            const endX = w - 20;    
+            
+            const maxExpectedDisp = STATE.attenuation ? Math.max(1.0, STATE.amplitude * 1.5) : Math.max(1.5, STATE.amplitude * 2.2);
+            const ampScale = (h / 2) * 0.75 / maxExpectedDisp; 
+            const y_2A = STATE.amplitude * 2;
+            const y_A = STATE.amplitude;
+
+            // Guide lines
+            ctxGraph.strokeStyle = '#e2e8f0'; ctxGraph.lineWidth = 1;
+            [midY - y_2A * ampScale, midY + y_2A * ampScale].forEach(yPos => {
+                ctxGraph.beginPath(); ctxGraph.moveTo(startX, yPos); ctxGraph.lineTo(endX, yPos); ctxGraph.stroke();
+            });
+
+            ctxGraph.setLineDash([4, 4]);
+            [midY - y_A * ampScale, midY + y_A * ampScale].forEach(yPos => {
+                ctxGraph.beginPath(); ctxGraph.moveTo(startX, yPos); ctxGraph.lineTo(endX, yPos); ctxGraph.stroke();
+            });
+            ctxGraph.setLineDash([]);
+
+            // Main Axes
+            ctxGraph.strokeStyle = '#475569'; ctxGraph.lineWidth = 1.5;
+            ctxGraph.beginPath(); ctxGraph.moveTo(startX - 10, midY); ctxGraph.lineTo(endX, midY); ctxGraph.stroke(); 
+            ctxGraph.beginPath(); ctxGraph.moveTo(startX, h - 10); ctxGraph.lineTo(startX, 15); ctxGraph.stroke();    
+
+            // Time Ticks (Real-time oscilloscope sweep)
+            const timeWindow = 4;
+            let t_left = Math.max(0, STATE.time - timeWindow);
+            let t_right = t_left + timeWindow;
+            let pxPerTime = (endX - startX) / timeWindow;
+
+            ctxGraph.fillStyle = '#64748b'; ctxGraph.font = '10px sans-serif'; ctxGraph.textAlign = 'center'; ctxGraph.textBaseline = 'top';
+            let firstTick = Math.ceil(t_left);
+            for (let t_tick = firstTick; t_tick <= t_right; t_tick++) {
+                let px = startX + (t_tick - t_left) * pxPerTime;
+                if (px <= endX && px >= startX) {
+                    ctxGraph.beginPath(); ctxGraph.moveTo(px, midY - 3); ctxGraph.lineTo(px, midY + 3); ctxGraph.stroke();
+                    ctxGraph.fillText(t_tick + 's', px, midY + 5);
+                }
+            }
+
+            // Y Axis Labels
+            ctxGraph.font = '10px monospace'; ctxGraph.fillStyle = '#64748b'; ctxGraph.textAlign = 'right'; ctxGraph.textBaseline = 'middle';
+            ctxGraph.fillText('+2A₀', startX - 6, midY - y_2A * ampScale);
+            ctxGraph.fillText('-2A₀', startX - 6, midY + y_2A * ampScale);
+            ctxGraph.fillText('+A₀', startX - 6, midY - y_A * ampScale);
+            ctxGraph.fillText('-A₀', startX - 6, midY + y_A * ampScale);
+            ctxGraph.fillText('0', startX - 6, midY);
+            
+            // Italicized SI Axis Labels
+            ctxGraph.font = 'italic 12px sans-serif'; ctxGraph.fillStyle = '#1e293b'; 
+            ctxGraph.textAlign = 'left'; ctxGraph.fillText('t', endX + 6, midY);
+            ctxGraph.textAlign = 'center'; ctxGraph.fillText('y', startX, 5);
+
+            const analysis = analyzePointP();
+            const path1 = new Path2D(), path2 = new Path2D(), pathR = new Path2D();
+            let isFirst = true;
+
+            for (let px = startX; px <= endX; px += 2) {
+                const t_plot = t_left + (px - startX) / pxPerTime;
+                if (t_plot > STATE.time) break; 
+                
+                const y1 = STATE.s1Active ? getWaveY(buf_y1, analysis.d1, t_plot) : 0;
+                const y2 = STATE.s2Active ? getWaveY(buf_y2, analysis.d2, t_plot) : 0;
+                const yR = y1 + y2;
+
+                const py1 = midY - y1 * ampScale;
+                const py2 = midY - y2 * ampScale;
+                const pyR = midY - yR * ampScale;
+
+                if (isFirst) { path1.moveTo(px, py1); path2.moveTo(px, py2); pathR.moveTo(px, pyR); isFirst = false; } 
+                else { path1.lineTo(px, py1); path2.lineTo(px, py2); pathR.lineTo(px, pyR); }
+            }
+
+            ctxGraph.save(); ctxGraph.beginPath(); ctxGraph.rect(startX, 0, endX - startX, h); ctxGraph.clip();
+
+            ctxGraph.lineWidth = 1.8;
+            if (STATE.s1Active && STATE.plotS1) { ctxGraph.strokeStyle = '#3b82f6'; ctxGraph.stroke(path1); }
+            if (STATE.s2Active && STATE.plotS2) { ctxGraph.strokeStyle = '#10b981'; ctxGraph.stroke(path2); }
+            
+            if (STATE.plotResultant) {
+                ctxGraph.lineWidth = 2.5;
+                ctxGraph.strokeStyle = '#DC2626'; ctxGraph.stroke(pathR); 
+                
+                let currentPx = startX + (STATE.time - t_left) * pxPerTime;
+                if (currentPx > endX) currentPx = endX;
+                
+                ctxGraph.beginPath(); ctxGraph.fillStyle = '#DC2626';
+                const cy1 = STATE.s1Active ? getWaveY(buf_y1, analysis.d1, STATE.time) : 0;
+                const cy2 = STATE.s2Active ? getWaveY(buf_y2, analysis.d2, STATE.time) : 0;
+                ctxGraph.arc(currentPx, midY - (cy1 + cy2) * ampScale, 3.5, 0, Math.PI * 2); ctxGraph.fill();
+            }
+            ctxGraph.restore();
+        }
+
+        let lastTimestamp = 0;
+        function animate(timestamp) {
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            let dt = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+            if (dt > 0.1) dt = 0.1; 
+
+            if (STATE.isPlaying) {
+                STATE.timeAccumulator += dt;
+                while (STATE.timeAccumulator >= TIME_STEP) {
+                    STATE.time += TIME_STEP;
+                    STATE.timeAccumulator -= TIME_STEP;
+                    
+                    STATE.currentPhase += 2 * Math.PI * STATE.frequency * TIME_STEP;
+                    
+                    // Use a strict sequential integer step counter to read and write without floating-point division gaps!
+                    let idx = STATE.step % BUFFER_SIZE;
+                    buf_y1[idx] = STATE.s1Active ? Math.sin(STATE.currentPhase) : 0;
+                    buf_y2[idx] = STATE.s2Active ? Math.sin(STATE.currentPhase + STATE.phi0 * Math.PI / 180) : 0;
+                    STATE.step++;
+                }
+            }
+            
+            if (tRenderer && tScene && tCamera) {
+                if (tScene.fog && tControls) {
+                    const camDist = tCamera.position.distanceTo(tControls.target);
+                    tScene.fog.density = Math.max(0, 0.03 * (1 - (camDist - 20) / 20));
+                }
+
+                updateThreeJSWaves();
+                tControls.update();
+                tRenderer.render(tScene, tCamera);
+            }
+            drawGraph();
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        /* --- 8. Interactivity & Event Listeners --- */
+        els.sliderFreq.addEventListener('input', (e) => { 
+            STATE.frequency = parseFloat(e.target.value); 
+            els.valFreq.innerText = `${STATE.frequency.toFixed(1)} Hz`; 
+            updateDerivedParams(); 
+            updateCalculationsPanel(); 
+        });
+        els.sliderAmp.addEventListener('input', (e) => { STATE.amplitude = parseFloat(e.target.value); els.valAmp.innerText = `${STATE.amplitude.toFixed(1)}`; clearWaveHistory(); });
+        els.toggleAttenuation.addEventListener('change', (e) => { STATE.attenuation = e.target.checked; });
+        els.toggleRulers.addEventListener('change', (e) => { STATE.showRulers = e.target.checked; });
+        els.toggleLines.addEventListener('change', (e) => { STATE.showLines = e.target.checked; updateHyperbolas(); });
+        els.sliderDepth.addEventListener('input', (e) => { 
+            STATE.depth = parseFloat(e.target.value); 
+            updateDerivedParams(); 
+            updateCalculationsPanel(); 
+            clearWaveHistory(); 
+        });
+        els.sliderD.addEventListener('input', (e) => { 
+            STATE.d = parseFloat(e.target.value); 
+            els.valD.innerText = `${STATE.d.toFixed(1)} m`; 
+            updateCalculationsPanel(); 
+            updateHyperbolas();
+            clearWaveHistory(); 
+        });
+        els.sliderPhi.addEventListener('input', (e) => { setPhase(parseInt(e.target.value)); });
+
+        els.btnS1.addEventListener('click', () => { STATE.s1Active = !STATE.s1Active; updateSourceButtonsUI(); });
+        els.btnS2.addEventListener('click', () => { STATE.s2Active = !STATE.s2Active; updateSourceButtonsUI(); });
+
+        els.plotS1.addEventListener('change', (e) => { STATE.plotS1 = e.target.checked; });
+        els.plotS2.addEventListener('change', (e) => { STATE.plotS2 = e.target.checked; });
+        els.plotResultant.addEventListener('change', (e) => { STATE.plotResultant = e.target.checked; });
+
+        els.btnPlay.addEventListener('click', () => {
+            STATE.isPlaying = !STATE.isPlaying;
+            els.btnPlay.innerHTML = STATE.isPlaying ? '<i class="fa-solid fa-pause text-xl"></i>' : '<i class="fa-solid fa-play text-xl ml-0.5"></i>';
+            els.btnPlay.classList.toggle('bg-primary'); els.btnPlay.classList.toggle('bg-green-600');
+        });
+
+        els.btnReset.addEventListener('click', () => {
+            clearWaveHistory();
+            if(tCamera && tControls) { tCamera.position.set(0, 15, 18); tControls.target.set(0,0,0); }
+        });
+
+        els.btnLang.addEventListener('click', toggleLanguage);
+        els.btnHelp.addEventListener('click', toggleHelp);
+        els.btnCloseHelp.addEventListener('click', toggleHelp);
+        els.modalHelp.addEventListener('click', (e) => { if (e.target === els.modalHelp) toggleHelp(); });
+
+        window.addEventListener('resize', () => {
+            if (tRenderer && tCamera) {
+                const w = els.canvasContainer.clientWidth;
+                const h = els.canvasContainer.clientHeight;
+                tCamera.aspect = w / h; tCamera.updateProjectionMatrix(); tRenderer.setSize(w, h);
+            }
+            resizeGraphCanvas();
+        });
+
+        /* --- 10. Initialization --- */
+        function init() {
+            updateDerivedParams();
+            applyTranslations();
+            updateSourceButtonsUI();
+            initThreeJS();
+            resizeGraphCanvas();
+            updateCalculationsPanel();
+            animate(performance.now());
+        }
+        window.onload = () => { init(); };
+    </script>
+</body>
+</html>
