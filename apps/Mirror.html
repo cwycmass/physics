@@ -61,9 +61,9 @@
             background: #cbd5e1; border-radius: 4px; transition: all 0.2s;
         }
         input[type=range]::-webkit-slider-thumb {
-            height: 18px; width: 18px; border-radius: 50%;
+            height: 24px; width: 24px; border-radius: 50%;
             background: #1e3c72; cursor: pointer; -webkit-appearance: none;
-            margin-top: -6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            margin-top: -9px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             transition: transform 0.1s;
         }
         input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
@@ -79,7 +79,7 @@
         canvas { user-select: none; -webkit-user-select: none; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 h-screen w-screen overflow-hidden flex flex-col md:flex-row font-sans relative">
+<body class="bg-slate-50 text-slate-800 h-[100dvh] w-[100dvw] overflow-hidden flex flex-col md:flex-row font-sans relative">
 
     <!-- --- Modal for Theory & Deep Dive --- -->
     <div id="modal_info" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center transition-opacity">
@@ -101,7 +101,7 @@
                     <h4 class="font-bold text-amber-800 flex items-center gap-2 mb-2"><i class="ph-fill ph-lightbulb text-amber-500 text-lg"></i> <span id="dd_title">深入探討：橫向倒置</span></h4>
                     <p class="text-sm text-amber-900 font-bold mb-2" id="dd_q">為何成像是「正立」但「橫向倒置」？</p>
                     <p class="text-sm text-amber-800/90 leading-relaxed text-justify" id="dd_a">
-                        平面鏡實際上並沒有將左右對調，而是將<strong>「前後」</strong>（深度）倒置。物體上最靠近鏡面的部分，在影像中也最靠近鏡面。因為頂部和底部的方向沒有改變，所以影像是<strong>正立</strong>的。我們所覺得的「左右相反」其實是一種心理錯覺：我們習慣性地想像自己旋轉了180度去代替影像的位置！試著選擇「字母 F」來清楚觀察這種前後倒置的對應關係。
+                        平面鏡實際上並沒有將左右對調，而是將<strong>「前後」</strong>（深度）倒置。物體上最靠近鏡面的部分，在影像中也最靠近鏡面。因為頂部和底部的方向沒有改變，所以影像是<strong>正立</strong>的。我們所覺得的「左右相反}其實是一種心理錯覺：我們習慣性地想像自己旋轉了180度去代替影像的位置！試著選擇「字母 F」來清楚觀察這種前後倒置的對應關係。
                     </p>
                 </div>
                 <hr class="border-slate-100">
@@ -125,7 +125,7 @@
     </div>
 
     <!-- --- 1. UI: Control Sidebar --- -->
-    <aside class="w-full md:w-[240px] h-[50vh] md:h-full bg-white shadow-soft flex flex-col z-10 border-r border-slate-200 shrink-0">
+    <aside class="w-full md:w-[280px] h-[45%] md:h-full order-2 md:order-1 bg-white shadow-soft flex flex-col z-10 border-t md:border-t-0 md:border-r border-slate-200 shrink-0 overscroll-contain">
         
         <!-- Header -->
         <header class="bg-gradient-to-r from-primary to-secondary p-3 text-white shadow-md flex flex-col gap-2 shrink-0">
@@ -234,13 +234,13 @@
     </aside>
 
     <!-- --- 2. Canvas Area --- -->
-    <main class="flex-1 relative bg-white flex flex-col">
+    <main class="flex-1 order-1 md:order-2 relative bg-white flex flex-col min-h-[55%] md:min-h-full">
         <!-- Canvas Container -->
         <div id="canvas-container" class="flex-1 relative cursor-crosshair overflow-hidden">
             <canvas id="simCanvas" class="absolute inset-0 w-full h-full"></canvas>
             
-            <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow-md border border-slate-200 text-xs font-medium text-slate-500 pointer-events-none flex items-center gap-2 whitespace-nowrap">
-                <i class="ph ph-hand-pointing text-lg"></i> <span id="text_drag_hint">水平拖曳物體或垂直/水平拖曳觀察者（眼睛）來探索！</span>
+            <div class="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur px-3 md:px-4 py-1.5 md:py-2 rounded-full shadow-md border border-slate-200 text-[10px] md:text-xs font-medium text-slate-500 pointer-events-none flex items-center gap-1.5 md:gap-2 z-20 w-[90%] md:w-auto justify-center">
+                <i class="ph ph-hand-pointing text-base md:text-lg shrink-0"></i> <span id="text_drag_hint" class="truncate whitespace-normal text-center leading-tight">水平拖曳物體或垂直/水平拖曳觀察者（眼睛）來探索！</span>
             </div>
         </div>
 
@@ -475,10 +475,15 @@
             ctx.scale(dpr, dpr);
             canvas.style.width = `${width}px`; canvas.style.height = `${height}px`;
 
-            originX = width * 0.55; 
-            originY = height * 0.6; // shifted down slightly
-            scale = Math.min(width / 1400, height / 900); 
-            if(scale < 0.5) scale = 0.5;
+            // Adjust mapping and origin depending on orientation
+            const isPortrait = height > width;
+            originX = width * (isPortrait ? 0.65 : 0.55); 
+            originY = height * (isPortrait ? 0.75 : 0.6); 
+            
+            // Dynamic scaling tailored for both wide and tall viewports
+            scale = Math.min(width / (isPortrait ? 700 : 1400), height / (isPortrait ? 800 : 900)); 
+            if(scale < 0.4) scale = 0.4;
+            if(scale > 1.5) scale = 1.5;
 
             requestAnimationFrame(draw);
         }
@@ -602,7 +607,7 @@
         function drawDistTextRotated(symbol, val, cx, cy, color, thetaRad) {
             ctx.save(); ctx.translate(cx, cy); ctx.rotate(-thetaRad);
             const offset = -10; 
-            ctx.fillStyle = color; ctx.textAlign = 'center';
+            ctx.fillStyle = color; ctx.textBaseline = 'middle';
             ctx.font = 'italic bold 16px serif'; const w1 = ctx.measureText(symbol).width;
             ctx.font = 'bold 14px sans-serif'; const w2 = ctx.measureText(` = ${val} cm`).width;
             const startX = - (w1 + w2) / 2; ctx.textAlign = 'left';
