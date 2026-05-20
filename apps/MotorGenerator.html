@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Electromagnetic Induction & Motor Simulation</title>
+  <title>簡單電動機及發電機 | Simple Motor & Generator</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -41,11 +41,11 @@
     
     <div class="flex items-center gap-2">
       <!-- Info Trigger -->
-      <button id="btn-help" class="bg-white/10 hover:bg-white/20 text-[10px] sm:text-xs px-3 py-1.5 rounded-full font-semibold transition-all backdrop-blur-sm border border-white/20 flex items-center gap-1.5">
-        <i class="fa-solid fa-circle-info"></i> <span id="btn-theory-text">Info</span>
+      <button id="btn-help" class="bg-white/10 hover:bg-white/20 text-xs px-3 py-1.5 rounded-full font-semibold transition-all backdrop-blur-sm border border-white/20 flex items-center gap-1.5">
+        <i class="fa-solid fa-circle-info"></i> <span id="btn-theory-text">說明</span>
       </button>
       <!-- Language Toggle -->
-      <button id="lang-toggle" class="bg-white/10 hover:bg-white/20 text-[10px] sm:text-xs px-3 py-1.5 rounded-full font-semibold transition-all backdrop-blur-sm border border-white/20">
+      <button id="lang-toggle" class="bg-white/10 hover:bg-white/20 text-xs px-3 py-1.5 rounded-full font-semibold transition-all backdrop-blur-sm border border-white/20">
         繁 / ENG
       </button>
     </div>
@@ -56,15 +56,15 @@
     
     <!-- LEFT SIDEBAR: Physics Settings -->
     <aside class="order-2 md:order-1 w-full md:w-[280px] lg:w-[320px] h-[35vh] md:h-auto flex-shrink-0 bg-white border-t md:border-t-0 md:border-r border-slate-200 overflow-y-auto flex flex-col z-10 shadow-[0_0_15px_rgba(0,0,0,0.05)]">
-      <main class="flex-grow p-4 sm:p-5 space-y-5">
+      <main class="flex-grow p-4 sm:p-5 space-y-6">
         
         <!-- Consolidated 4-Mode Selector -->
         <section class="space-y-3">
-          <label class="block text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
-            <i class="fa-solid fa-microchip text-indigo-600"></i> <span id="lbl-op-mode">Operation Mode</span>
+          <label class="block text-sm font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-gear text-indigo-600"></i> <span id="lbl-op-mode">Operation Mode</span>
           </label>
           <div class="grid grid-cols-2 gap-2" id="mode-buttons-container">
-            <!-- Buttons dynamically generated in JS to handle active states effortlessly -->
+            <!-- Buttons dynamically generated in JS -->
           </div>
         </section>
 
@@ -72,12 +72,12 @@
 
         <!-- Physics Parameters -->
         <section class="space-y-4">
-          <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+          <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
             <i class="fa-solid fa-sliders text-indigo-600"></i> <span id="lbl-physics-params">Parameters</span>
           </h3>
 
           <div id="container-speed" class="space-y-1 hidden">
-            <div class="flex justify-between text-[10px] sm:text-xs">
+            <div class="flex justify-between text-xs">
               <span id="lbl-speed" class="font-semibold text-slate-600">Frequency ($f$)</span>
               <span id="val-speed" class="font-mono text-indigo-600 font-bold">1.0 Hz</span>
             </div>
@@ -85,7 +85,7 @@
           </div>
 
           <div id="container-current" class="space-y-1">
-            <div class="flex justify-between text-[10px] sm:text-xs">
+            <div class="flex justify-between text-xs">
               <span id="lbl-current" class="font-semibold text-slate-600">Current ($I$)</span>
               <span id="val-current" class="font-mono text-indigo-600 font-bold">3.0 A</span>
             </div>
@@ -93,7 +93,7 @@
           </div>
 
           <div class="space-y-1">
-            <div class="flex justify-between text-[10px] sm:text-xs">
+            <div class="flex justify-between text-xs">
               <span id="lbl-mag-field" class="font-semibold text-slate-600">Magnetic Field ($B$)</span>
               <span id="val-mag-field" class="font-mono text-indigo-600 font-bold">1.0 T</span>
             </div>
@@ -101,20 +101,39 @@
           </div>
 
           <div class="space-y-1">
-            <div class="flex justify-between text-[10px] sm:text-xs">
+            <div class="flex justify-between text-xs">
               <span id="lbl-turns" class="font-semibold text-slate-600">Turns ($N$)</span>
               <span id="val-turns" class="font-mono text-indigo-600 font-bold">50</span>
             </div>
             <input id="slider-turns" type="range" min="10" max="100" step="10" value="50" class="w-full accent-indigo-600">
           </div>
+
+          <div class="grid grid-cols-2 gap-3 pt-1">
+            <div class="space-y-1">
+              <div class="flex justify-between">
+                <span id="lbl-coil-w" class="text-[11px] font-semibold text-slate-500">Width (w)</span>
+                <span id="val-coil-w" class="text-[11px] font-mono text-indigo-600">0.8 m</span>
+              </div>
+              <input id="slider-coil-w" type="range" min="0.4" max="1.2" step="0.1" value="0.8" class="w-full accent-indigo-600">
+            </div>
+            <div class="space-y-1">
+              <div class="flex justify-between">
+                <span id="lbl-coil-l" class="text-[11px] font-semibold text-slate-500">Length (L)</span>
+                <span id="val-coil-l" class="text-[11px] font-mono text-indigo-600">1.0 m</span>
+              </div>
+              <input id="slider-coil-l" type="range" min="0.5" max="1.5" step="0.1" value="1.0" class="w-full accent-indigo-600">
+            </div>
+          </div>
         </section>
 
+        <hr class="border-slate-100">
+
         <!-- Visualization Toggles -->
-        <section class="space-y-3">
-          <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+        <section class="space-y-3 pb-4">
+          <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
             <i class="fa-solid fa-eye text-cyan-600"></i> <span id="lbl-vis-options">Toggle Indicators</span>
           </h3>
-          <div class="grid grid-cols-2 gap-2 text-[9px] sm:text-[10px]">
+          <div class="grid grid-cols-2 gap-2 text-xs">
             <label class="flex items-center gap-1.5 cursor-pointer bg-slate-50 hover:bg-slate-100 p-2 rounded-lg border border-slate-200 transition-colors">
               <input type="checkbox" id="chk-field-lines" checked class="accent-blue-600 w-3 h-3">
               <span id="lbl-chk-b-field" class="text-slate-700 font-semibold truncate">Field Lines ($B$)</span>
@@ -145,17 +164,17 @@
         
         <!-- Top HUD Data -->
         <div class="absolute top-3 left-3 right-3 flex justify-between items-start pointer-events-none">
-          <div class="bg-slate-950/80 backdrop-blur-md text-white text-[10px] sm:text-xs px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-slate-700 font-mono shadow-lg flex gap-3 sm:gap-6">
+          <div class="bg-slate-950/80 backdrop-blur-md text-white text-xs px-4 py-2.5 rounded-xl border border-slate-700 font-mono shadow-lg flex gap-4 sm:gap-6">
             <span class="flex items-center gap-1.5">
-              <span class="hidden sm:inline text-slate-400" id="hud-angle-lbl">Angle</span><span class="italic text-slate-500">&theta;:</span>
+              <span class="hidden sm:inline text-slate-400" id="hud-angle-lbl">Angle (n, B):</span>
               <span id="hud-angle" class="text-amber-400 font-bold w-12 text-right">0°</span>
             </span>
             <span class="flex items-center gap-1.5">
-              <span class="hidden sm:inline text-slate-400" id="hud-flux-lbl">Flux</span><span class="italic text-slate-500">&Phi;:</span>
+              <span class="hidden sm:inline text-slate-400" id="hud-flux-lbl">Flux &Phi;:</span>
               <span id="hud-flux" class="text-sky-300 font-bold w-12 text-right">0.00</span>
             </span>
             <span class="flex items-center gap-1.5">
-              <span class="hidden sm:inline text-slate-400" id="hud-emf-lbl">EMF</span><span class="italic text-slate-500">&epsilon;:</span>
+              <span class="hidden sm:inline text-slate-400" id="hud-emf-lbl">EMF &epsilon;:</span>
               <span id="hud-emf" class="text-red-400 font-bold w-12 text-right">0.00</span>
             </span>
           </div>
@@ -163,13 +182,13 @@
 
         <!-- Floating Pillbox: Animation Controls (Bottom Left) -->
         <div class="absolute bottom-4 left-3 flex items-center gap-1.5 bg-slate-950/90 backdrop-blur-md p-1.5 rounded-xl border border-slate-700 shadow-xl z-20">
-          <button id="btn-play-pause" class="bg-emerald-600 hover:bg-emerald-500 text-white w-9 h-9 rounded-lg flex items-center justify-center transition-all shadow-md">
+          <button id="btn-play-pause" class="bg-emerald-600 hover:bg-emerald-500 text-white w-10 h-10 rounded-lg flex items-center justify-center transition-all shadow-md">
             <i id="play-icon" class="fa-solid fa-pause"></i>
           </button>
-          <button id="btn-step" class="bg-slate-800 hover:bg-slate-700 text-slate-200 w-9 h-9 rounded-lg transition-all" title="Step Frame (Next Integer Degree)">
+          <button id="btn-step" class="bg-slate-800 hover:bg-slate-700 text-slate-200 w-10 h-10 rounded-lg transition-all" title="Step Frame (Next Integer Degree)">
             <i class="fa-solid fa-forward-step"></i>
           </button>
-          <button id="btn-reset" class="bg-slate-800 hover:bg-slate-700 text-red-400 w-9 h-9 rounded-lg transition-all" title="Reset Simulation">
+          <button id="btn-reset" class="bg-slate-800 hover:bg-slate-700 text-red-400 w-10 h-10 rounded-lg transition-all" title="Reset Simulation">
             <i class="fa-solid fa-arrow-rotate-left"></i>
           </button>
         </div>
@@ -178,16 +197,16 @@
         <div class="absolute bottom-4 right-3 flex flex-col gap-2 z-20 items-end pointer-events-none">
           
           <!-- Zoom Slider -->
-          <div class="bg-slate-950/90 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-700 shadow-xl flex items-center gap-2 pointer-events-auto">
-            <i class="fa-solid fa-magnifying-glass text-slate-400 text-[10px]"></i>
+          <div class="bg-slate-950/90 backdrop-blur-md px-3 py-2.5 rounded-xl border border-slate-700 shadow-xl flex items-center gap-2 pointer-events-auto">
+            <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs"></i>
             <input id="slider-zoom" type="range" min="0.4" max="2.5" step="0.1" value="1.0" class="w-20 sm:w-24 accent-amber-500">
           </div>
 
           <!-- Camera Views -->
           <div class="bg-slate-950/90 backdrop-blur-md p-1.5 rounded-xl border border-slate-700 shadow-xl flex gap-1 pointer-events-auto">
-            <button id="btn-cam-front" class="bg-slate-800 hover:bg-slate-700 text-white px-2 py-1.5 rounded-lg text-[9px] sm:text-[10px] font-bold transition-all">FRONT</button>
-            <button id="btn-cam-iso" class="bg-slate-800 hover:bg-slate-700 text-white px-2 py-1.5 rounded-lg text-[9px] sm:text-[10px] font-bold transition-all">ISO</button>
-            <button id="btn-cam-top" class="bg-slate-800 hover:bg-slate-700 text-white px-2 py-1.5 rounded-lg text-[9px] sm:text-[10px] font-bold transition-all">TOP</button>
+            <button id="btn-cam-front" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all">FRONT</button>
+            <button id="btn-cam-iso" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all">ISO</button>
+            <button id="btn-cam-top" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all">TOP</button>
           </div>
         </div>
 
@@ -196,22 +215,22 @@
       <!-- Bottom Half: Dual Analytical Graphing System -->
       <section class="h-32 sm:h-40 md:h-48 lg:h-56 shrink-0 bg-white grid grid-cols-2 p-1.5 sm:p-3 gap-1.5 sm:gap-3 border-t border-slate-300 z-30">
         <div class="relative bg-slate-50 rounded-lg border border-slate-200 p-1.5 flex flex-col">
-          <div class="flex items-center justify-between text-[9px] sm:text-[11px] px-1 font-bold text-slate-700 shrink-0">
+          <div class="flex items-center justify-between text-xs px-1 font-bold text-slate-700 shrink-0">
             <span class="flex items-center gap-1.5">
-              <span class="inline-block w-2 h-2 bg-blue-600 rounded-full"></span>
+              <span class="inline-block w-2.5 h-2.5 bg-blue-600 rounded-full"></span>
               <span id="lbl-plot-flux" class="truncate">Flux Linkage</span>
             </span>
-            <span class="text-[8px] sm:text-[9px] text-slate-400 font-mono" id="lbl-unit-l1">Wb</span>
+            <span class="text-[10px] text-slate-400 font-mono" id="lbl-unit-l1">Wb</span>
           </div>
           <div class="flex-grow relative mt-1"><canvas id="graph-flux-canvas" class="w-full h-full block"></canvas></div>
         </div>
         <div class="relative bg-slate-50 rounded-lg border border-slate-200 p-1.5 flex flex-col">
-          <div class="flex items-center justify-between text-[9px] sm:text-[11px] px-1 font-bold text-slate-700 shrink-0">
+          <div class="flex items-center justify-between text-xs px-1 font-bold text-slate-700 shrink-0">
             <span class="flex items-center gap-1.5">
-              <span class="inline-block w-2 h-2 bg-red-600 rounded-full"></span>
+              <span class="inline-block w-2.5 h-2.5 bg-red-600 rounded-full"></span>
               <span id="lbl-plot-emf" class="truncate">Induced EMF</span>
             </span>
-            <span class="text-[8px] sm:text-[9px] text-slate-400 font-mono" id="lbl-unit-l2">V</span>
+            <span class="text-[10px] text-slate-400 font-mono" id="lbl-unit-l2">V</span>
           </div>
           <div class="flex-grow relative mt-1"><canvas id="graph-emf-canvas" class="w-full h-full block"></canvas></div>
         </div>
@@ -244,6 +263,13 @@
             <li><strong>Universal Motor (AC Motor):</strong> The stator uses electromagnets powered by the same AC source in series with the armature. The magnetic field reverses in perfect sync with the armature current, ensuring the Lorentz Force ($\vec{F} = \vec{I} \times \vec{B}$) continues to push in the same direction!</li>
           </ul>
           
+          <div class="bg-blue-50 p-3 sm:p-4 rounded-lg border-l-4 border-blue-600 text-xs overflow-x-auto">
+            <strong class="text-blue-900 mb-2 block">Motor Dynamics (Constant Current):</strong>
+            $$I = I_{\text{applied}}$$
+            $$\tau = N I B A \sin(\theta)$$
+            $$\varepsilon_{\text{back}} = N B A \omega \sin(\theta)$$
+          </div>
+
           <h3 class="font-bold text-slate-900 text-sm border-b pb-1 text-blue-800">2. Commutator Mechanics</h3>
           <ul class="list-disc list-inside space-y-2">
             <li><strong>Split-Ring Commutator (DC):</strong> Reverses current polarity every half rotation ($180^\circ$). This mechanical switching guarantees the torque pushes in a single, unidirectional continuous rotation.</li>
@@ -264,7 +290,7 @@
             <strong class="text-blue-900 mb-2 block">電動機動力學公式 (恆定電流)：</strong>
             $$I = I_{\text{外加}}$$
             $$\tau = N I B A \sin(\theta)$$
-            $$\varepsilon_{\text{反}} = N B A \omega \cos(\theta)$$
+            $$\varepsilon_{\text{反}} = N B A \omega \sin(\theta)$$
           </div>
 
           <h3 class="font-bold text-slate-900 text-sm sm:text-base border-b pb-1 text-blue-800">2. 整流機制之別</h3>
@@ -297,7 +323,7 @@
       appliedCurrent: 3.0, 
       
       omega: 0.5,     
-      coilAngle: 0.5, 
+      coilAngle: 0.5, // theta in radians
       inertia: 0.15,  
       damping: 0.05,  
       resistance: 2.0,
@@ -341,17 +367,16 @@
         lblViewCtrl: "View Options",
         lblZoom: "Zoom",
         lblVisOptions: "Toggle Indicators",
-        lblChkBField: "Field Lines ($B$)",
+        lblChkBField: "Magnetic Field ($B$)",
         lblChkArea: "Normal",
         lblChkCurrent: "Current ($I$)",
         lblChkForce: "Force ($F_B$)",
         btnTheory: "Info",
         hudTitle: "Engine HUD",
-        hudAngle: "Angle",
+        hudAngle: "Angle bewteen normal and B-field:",
         hudFlux: "Flux",
         hudEmf: "EMF",
         hudCam: "Cam",
-        lblDragHint: "Drag to rotate / Scroll to zoom",
         lblPlotFlux: "Flux Linkage",
         lblPlotEmf: "Induced EMF",
         lblPlotCurrent: "Armature Current ($I$)",
@@ -364,7 +389,10 @@
         modeDCMotor: "DC Motor",
         modeACMotor: "AC Motor",
         modeDCGen: "DC Generator",
-        modeACGen: "AC Generator"
+        modeACGen: "AC Generator",
+        btnCamFront: "FRONT",
+        btnCamIso: "ISO",
+        btnCamTop: "TOP"
       },
       zh: {
         appTitle: "電磁學與電動機模擬",
@@ -382,21 +410,20 @@
         lblViewCtrl: "視角控制",
         lblZoom: "縮放",
         lblVisOptions: "顯示選項",
-        lblChkBField: "磁感線 ($B$)",
+        lblChkBField: "磁力線 ($B$)",
         lblChkArea: "線圈平面的法線",
         lblChkCurrent: "電流 ($I$)",
         lblChkForce: "磁力 ($F_B$)",
         btnTheory: "說明",
         hudTitle: "引擎數據",
-        hudAngle: "轉角",
+        hudAngle: "線圈平面法線與磁場間的夾角:",
         hudFlux: "磁通",
         hudEmf: "電動勢",
         hudCam: "視角",
-        lblDragHint: "拖拽旋轉視角，滾輪縮放",
         lblPlotFlux: "總磁通量匝鏈",
         lblPlotEmf: "感應電動勢",
         lblPlotCurrent: "電樞電流 ($I$)",
-        lblPlotTorque: "磁電轉矩 ($\\tau$)",
+        lblPlotTorque: "轉矩 ($\\tau$)",
         lblUnitWb: "Wb",
         lblUnitV: "V",
         lblUnitA: "A",
@@ -405,7 +432,10 @@
         modeDCMotor: "直流電動機",
         modeACMotor: "交流電動機",
         modeDCGen: "直流發電機",
-        modeACGen: "交流發電機"
+        modeACGen: "交流發電機",
+        btnCamFront: "正面",
+        btnCamIso: "等角",
+        btnCamTop: "俯視"
       }
     };
 
@@ -415,18 +445,20 @@
     function updateLanguage() {
       const dic = translations[state.lang];
       safeSetText('app-title', dic.appTitle);
-      safeSetHtml('lbl-op-mode', `<i class="fa-solid fa-microchip text-indigo-600"></i> ` + dic.lblOpMode);
+      safeSetText('lbl-op-mode', dic.lblOpMode);
       safeSetText('btn-play-text', state.isPlaying ? dic.btnPause : dic.btnPlay);
-      safeSetHtml('lbl-physics-params', `<i class="fa-solid fa-sliders text-indigo-600"></i> ` + dic.lblPhysicsParams);
-      safeSetHtml('lbl-view-ctrl', `<i class="fa-solid fa-magnifying-glass text-amber-600"></i> ` + dic.lblViewCtrl);
+      safeSetText('lbl-physics-params', dic.lblPhysicsParams);
+      safeSetText('lbl-view-ctrl', dic.lblViewCtrl);
       safeSetText('lbl-zoom', dic.lblZoom);
       
       safeSetHtml('lbl-speed', dic.lblSpeed);
       safeSetHtml('lbl-current', dic.lblCurrent);
       safeSetHtml('lbl-mag-field', dic.lblMagField);
       safeSetHtml('lbl-turns', dic.lblTurns);
+      safeSetHtml('lbl-coil-w', dic.lblCoilW);
+      safeSetHtml('lbl-coil-l', dic.lblCoilL);
       
-      safeSetHtml('lbl-vis-options', `<i class="fa-solid fa-eye text-cyan-600"></i> ` + dic.lblVisOptions);
+      safeSetText('lbl-vis-options', dic.lblVisOptions);
       safeSetHtml('lbl-chk-b-field', dic.lblChkBField);
       safeSetHtml('lbl-chk-area', dic.lblChkArea);
       safeSetHtml('lbl-chk-current', dic.lblChkCurrent);
@@ -440,6 +472,10 @@
       safeSetText('hud-cam-lbl', dic.hudCam);
       safeSetText('lbl-drag-hint', dic.lblDragHint);
       safeSetText('modal-title', dic.modalTitle);
+      
+      safeSetText('btn-cam-front', dic.btnCamFront);
+      safeSetText('btn-cam-iso', dic.btnCamIso);
+      safeSetText('btn-cam-top', dic.btnCamTop);
 
       renderModeButtons();
 
@@ -481,7 +517,7 @@
         const isActive = (state.opMode === m.op && state.outputMode === m.out);
         const activeClasses = "bg-blue-600 text-white shadow-sm border-blue-600";
         const inactiveClasses = "bg-white text-slate-700 hover:bg-slate-100 border-slate-300 shadow-sm";
-        return `<button onclick="switchMode('${m.op}', '${m.out}')" class="py-2 px-1 rounded-lg font-bold text-[10px] sm:text-xs transition-all border ${isActive ? activeClasses : inactiveClasses}">${m.text}</button>`;
+        return `<button onclick="switchMode('${m.op}', '${m.out}')" class="py-2 px-1 rounded-lg font-bold text-[11px] sm:text-xs transition-all border ${isActive ? activeClasses : inactiveClasses}">${m.text}</button>`;
       }).join('');
     }
 
@@ -658,6 +694,7 @@
     }, { passive: false });
 
     function project3D(point, w, h) {
+      if(!point) return { x: 0, y: 0, z: 0 };
       const cosY = Math.cos(state.cameraAngleY); const sinY = Math.sin(state.cameraAngleY);
       const cosX = Math.cos(state.cameraAngleX); const sinX = Math.sin(state.cameraAngleX);
       let x1 = point.x * cosY - point.z * sinY;
@@ -765,8 +802,8 @@
             const strokeInner = `rgb(${rgb.r*intensityInner*0.7}, ${rgb.g*intensityInner*0.7}, ${rgb.b*intensityInner*0.7})`;
             queuePoly([pi1, pi2, pi3, pi4], fillInner, strokeInner, 1);
 
-            if (c === lChunks - 1) queuePoly([po4, po3, pi3, pi4], fillOuter, strokeOuter, 1); // Front Endcap
-            if (c === 0) queuePoly([po1, po2, pi2, pi1], fillOuter, strokeOuter, 1); // Back Endcap
+            if (c === lChunks - 1) queuePoly([po4, po3, pi3, pi4], fillOuter, strokeOuter, 1);
+            if (c === 0) queuePoly([po1, po2, pi2, pi1], fillOuter, strokeOuter, 1);
           } else {
             let centerFront = (axis === 'z') ? {x: center.x, y: center.y, z: chunkCenter.z + chunkL/2} : {x: chunkCenter.x + chunkL/2, y: center.y, z: center.z};
             let centerBack = (axis === 'z') ? {x: center.x, y: center.y, z: chunkCenter.z - chunkL/2} : {x: chunkCenter.x - chunkL/2, y: center.y, z: center.z};
@@ -826,10 +863,12 @@
       let extI = state.appliedCurrent;
       if (state.outputMode === 'ac') extI = state.appliedCurrent * Math.sin(2 * Math.PI * t);
       
-      let armI = extI * Math.sign(Math.sin(theta));
-      if (armI === 0) armI = extI;
+      // Split-Ring commutates and reverses exactly at dead center (sin(theta) = 0)
+      let armI = extI * Math.sign(Math.sin(theta)); 
+      if (state.outputMode === 'ac') armI = extI; 
 
-      const torqueVal = -effTurns * armI * effectiveB * area * Math.sin(theta);
+      // Under the Left Hand Rule cross product, the CCW electromagnetic torque formula:
+      const torqueVal = effTurns * armI * effectiveB * area * Math.sin(theta);
       const dOmega = (torqueVal - state.damping * omega) / state.inertia;
       return { dTheta: omega, dOmega: dOmega };
     }
@@ -891,21 +930,21 @@
         
         state.currentNorm = baseFlux !== 0 ? Math.sin(state.coilAngle) : 0;
         
-        // Lenz's Law causes induced current to flow in the mathematically negative direction
+        // Lenz's Law causes induced current to flow in the negative direction
         let armI = -baseEMF / state.resistance;
         state.currentAmp = armI;
 
         if (state.outputMode === 'dc') {
-          state.extI = armI * Math.sign(Math.cos(state.coilAngle));
-          if (Math.cos(state.coilAngle) === 0) state.extI = Math.abs(armI); 
+          state.extI = armI * Math.sign(Math.sin(state.coilAngle));
+          if (Math.sin(state.coilAngle) === 0) state.extI = Math.abs(armI); 
           baseEMF = Math.abs(baseEMF);
         } else {
           state.extI = armI;
         }
         
         const effTurns = state.turns * 0.012;
-        // The resulting LHR force physically drags/opposes rotation (-torque)
-        state.torque = -effTurns * Math.abs(state.currentAmp) * state.B * area * Math.sin(state.coilAngle); 
+        // Electromagnetic breaking drag torque (opposing motion)
+        state.torque = -effTurns * armI * state.B * area * Math.sin(state.coilAngle); 
 
         if (hudAngle) hudAngle.textContent = `${((state.coilAngle * 180) / Math.PI).toFixed(1)}°`;
         if (hudFlux) hudFlux.textContent = `${totalFlux.toFixed(3)}`;
@@ -921,12 +960,13 @@
 
         let armI = state.extI;
         if (state.outputMode === 'dc') {
+          // Commutator switches polarity at dead center (sin(theta) = 0)
           armI = state.extI * Math.sign(Math.sin(state.coilAngle));
           if (Math.sin(state.coilAngle) === 0) armI = state.extI;
         }
         state.currentAmp = armI;
 
-        state.torque = -effTurns * armI * state.effectiveB * area * Math.sin(state.coilAngle);
+        state.torque = effTurns * armI * state.effectiveB * area * Math.sin(state.coilAngle);
         state.frequency = Math.abs(state.omega) / (2 * Math.PI);
 
         if (hudAngle) hudAngle.textContent = `${((state.coilAngle * 180) / Math.PI).toFixed(1)}°`;
@@ -993,7 +1033,7 @@
           // Strict 10 Degree limit for Cross/Dot (Cos(10deg) ~ 0.9848)
           if (Math.abs(item.dz) > 0.9848 && screenLen < 25) {
              ctx.beginPath(); ctx.arc(item.p1.x, item.p1.y, 8, 0, 2*Math.PI);
-             ctx.fillStyle = "#f8fafc"; ctx.fill(); // Whiteout background block
+             ctx.fillStyle = "#f8fafc"; ctx.fill(); 
              ctx.lineWidth = 1.5; ctx.strokeStyle = item.color; ctx.stroke();
              
              ctx.beginPath();
@@ -1008,6 +1048,7 @@
                 ctx.moveTo(item.p1.x + s, item.p1.y - s); ctx.lineTo(item.p1.x - s, item.p1.y + s);
                 ctx.stroke();
              }
+
              if (item.text) { 
                 ctx.fillStyle = item.color; 
                 let tX = item.p1.x + 14; let tY = item.p1.y + 14;
@@ -1049,13 +1090,14 @@
           ctx.fillText(item.text, proj.x + item.shift, proj.y);
         }
         else if (item.type === 'text_small') {
-          const proj = project3D(item.p, rect.width, rect.height);
+          if(!item.proj) continue; // Safety check
           ctx.fillStyle = item.color; ctx.font = "bold 10px sans-serif";
           ctx.textAlign = "center"; ctx.textBaseline = "middle";
-          ctx.fillText(item.text, proj.x, proj.y);
+          ctx.fillText(item.text, item.proj.x, item.proj.y);
         }
         else if (item.type === 'badge') {
           const p = item.proj;
+          if(!p) continue; // Safety check
           const isPos = item.sign === '+';
           if (item.sign) {
             ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, 2 * Math.PI);
@@ -1116,14 +1158,34 @@
     }
 
     function drawMagnets() {
-      let intensity = Math.max(0.1, Math.abs(state.effectiveB) / state.B); let op = 0.55 * intensity;
-      let nColor = {r: 220, g: 38, b: 38}; let sColor = {r: 30, g: 64, b: 175};
-      let leftInner = state.effectiveB >= 0 ? nColor : sColor; let rightInner = state.effectiveB >= 0 ? sColor : nColor;
+      let greyColor = {r: 156, g: 163, b: 175};
+      let nColor = {r: 220, g: 38, b: 38}; 
+      let sColor = {r: 30, g: 64, b: 175};
+      
+      let leftInner, rightInner, leftOuter, rightOuter, leftLabel, rightLabel, leftLabelCol, rightLabelCol, op;
 
-      queueBox({x: -1.9, y: 0, z: 0}, 0.5, 2.4, 2.8, leftInner, op, {text: state.effectiveB >= 0 ? 'N' : 'S', color: state.effectiveB >= 0 ? '#fca5a5' : '#93c5fd', shift: 12}); 
-      queueBox({x: -2.4, y: 0, z: 0}, 0.5, 2.4, 2.8, state.effectiveB >= 0 ? sColor : nColor, op);
-      queueBox({x: 1.9, y: 0, z: 0}, 0.5, 2.4, 2.8, rightInner, op, {text: state.effectiveB >= 0 ? 'S' : 'N', color: state.effectiveB >= 0 ? '#93c5fd' : '#fca5a5', shift: -12}); 
-      queueBox({x: 2.4, y: 0, z: 0}, 0.5, 2.4, 2.8, state.effectiveB >= 0 ? nColor : sColor, op);
+      if (Math.abs(state.effectiveB) < 0.05) {
+        leftInner = greyColor; rightInner = greyColor; leftOuter = greyColor; rightOuter = greyColor;
+        leftLabel = ''; rightLabel = ''; op = 0.3;
+      } else if (state.effectiveB >= 0) {
+        let intensity = Math.max(0.1, Math.abs(state.effectiveB) / 2.0); op = 0.55 * intensity;
+        leftInner = nColor; rightInner = sColor; leftOuter = sColor; rightOuter = nColor;
+        leftLabel = 'N'; leftLabelCol = '#fca5a5'; rightLabel = 'S'; rightLabelCol = '#93c5fd';
+      } else {
+        let intensity = Math.max(0.1, Math.abs(state.effectiveB) / 2.0); op = 0.55 * intensity;
+        leftInner = sColor; rightInner = nColor; leftOuter = nColor; rightOuter = sColor;
+        leftLabel = 'S'; leftLabelCol = '#93c5fd'; rightLabel = 'N'; rightLabelCol = '#fca5a5';
+      }
+
+      if(leftLabel) queueBox({x: -1.9, y: 0, z: 0}, 0.5, 2.4, 2.8, leftInner, op, {text: leftLabel, color: leftLabelCol, shift: 12}); 
+      else queueBox({x: -1.9, y: 0, z: 0}, 0.5, 2.4, 2.8, leftInner, op);
+      
+      queueBox({x: -2.4, y: 0, z: 0}, 0.5, 2.4, 2.8, leftOuter, op);
+      
+      if(rightLabel) queueBox({x: 1.9, y: 0, z: 0}, 0.5, 2.4, 2.8, rightInner, op, {text: rightLabel, color: rightLabelCol, shift: -12}); 
+      else queueBox({x: 1.9, y: 0, z: 0}, 0.5, 2.4, 2.8, rightInner, op);
+      
+      queueBox({x: 2.4, y: 0, z: 0}, 0.5, 2.4, 2.8, rightOuter, op);
 
       if (state.opMode === 'motor' && state.outputMode === 'ac') {
         const ringRadius = 0.45; const brushWidth = 0.20; const brushX = ringRadius + brushWidth / 2;
@@ -1135,19 +1197,26 @@
     }
 
     function drawFieldLines() {
-      if (!state.showB || Math.abs(state.effectiveB)/state.B < 0.05) return;
-      let intensity = Math.max(0.1, Math.abs(state.effectiveB) / state.B); 
-      for (let yOffset = -0.7; yOffset <= 0.7; yOffset += 0.4) {
-        for (let zOffset = -0.8; zOffset <= 0.8; zOffset += 0.4) {
+      if (!state.showB || Math.abs(state.effectiveB) < 0.05) return;
+      let absB = Math.abs(state.effectiveB);
+      let intensity = Math.max(0.1, absB / 2.0); 
+      let isPos = state.effectiveB >= 0;
+
+      // Make lines dense at any field strength
+      let step = 0.45 / Math.max(0.7, absB);
+      step = Math.max(0.12, Math.min(0.4, step));
+
+      for (let yOffset = -0.7; yOffset <= 0.7; yOffset += step) {
+        for (let zOffset = -0.8; zOffset <= 0.8; zOffset += step) {
           queueLine({ x: -1.65, y: yOffset, z: zOffset }, { x: 1.65, y: yOffset, z: zOffset }, `rgba(96, 165, 250, ${0.15 * intensity})`, 1);
-          queueVector({ x: state.effectiveB >= 0 ? -1.65 : 1.65, y: yOffset, z: zOffset }, { x: state.effectiveB >= 0 ? 1 : -1, y: 0, z: 0 }, 3.3, `rgba(59, 130, 246, ${0.5 * intensity})`, "");
+          queueVector({ x: isPos ? -1.65 : 1.65, y: yOffset, z: zOffset }, { x: isPos ? 1 : -1, y: 0, z: 0 }, 3.3, `rgba(59, 130, 246, ${0.5 * intensity})`, "");
         }
       }
     }
 
     function drawCoilSystem(angle) {
       const halfW = state.coilW / 2; const halfL = state.coilL / 2;
-      const visAngle = angle; 
+      const visAngle = angle - Math.PI / 2; 
       const path = []; const totalVertices = 12; 
       
       for (let v = 0; v < totalVertices; v++) {
@@ -1179,21 +1248,16 @@
 
       drawFlowingCurrent(path, state.currentAmp);
 
-      // Force Vectors calculated strictly via Fleming's Left-Hand Rule (F = I * L x B)
-      // Visual magnitude physically depends on N, I, and B
+      // Force Vectors calculated strictly via Fleming's Left-Hand Rule (F = I L x B)
       if (state.showForce && Math.abs(state.currentAmp) > 0.05 && Math.abs(state.effectiveB) > 0.01) {
-        // Base Force = N * I * B
-        const rawForce = state.turns * Math.abs(state.currentAmp) * Math.abs(state.effectiveB);
-        // Map raw physical force to visual magnitude arrow length, capped at 1.8 units
+        // Base Force = N * I * B * Length
+        const rawForce = state.turns * Math.abs(state.currentAmp) * Math.abs(state.effectiveB) * state.coilL;
         const forceMag = Math.min(1.8, 0.005 * rawForce + 0.2); 
         
         const midBC = { x: halfW * Math.cos(visAngle), y: halfW * Math.sin(visAngle), z: 0 };
         const midAD = { x: -halfW * Math.cos(visAngle), y: -halfW * Math.sin(visAngle), z: 0 };
         
         let isCurrentForward = state.currentAmp > 0; 
-        
-        // Right wire is at +X relative to coil plane. Current goes +Z.
-        // F = I (+Z) x B (+X) = +Y (UP)
         let forceY_BC = (isCurrentForward ? 1 : -1) * (state.effectiveB >= 0 ? 1 : -1);
         
         queueVector(midBC, { x: 0, y: forceY_BC, z: 0 }, forceMag, "#a855f7", "F_B");
@@ -1238,19 +1302,9 @@
       const wireLStart = state.wireStartL; const wireRStart = state.wireStartR; const halfL = state.coilL / 2;
       
       const isSlipRing = (state.opMode === 'generator' && state.outputMode === 'ac');
-      const visAngle = angle;
+      const visAngle = angle - Math.PI / 2;
       const ringRadius = 0.45; const brushWidth = 0.20; const brushX = ringRadius + brushWidth / 2;
       const ringInnerRadius = ringRadius - 0.075; 
-
-      let signL = ''; let signR = '';
-      if (state.opMode === 'generator') {
-        let isPositive = state.extI >= 0;
-        if (isSlipRing) { signL = isPositive ? '+' : '-'; signR = isPositive ? '-' : '+'; } 
-        else { signL = '+'; signR = '-'; }
-      } else {
-        if (state.appliedCurrent > 0) { signL = '+'; signR = '-'; } 
-        else if (state.appliedCurrent < 0) { signL = '-'; signR = '+'; }
-      }
 
       if (isSlipRing) {
         queueCylinder({ x: 0, y: 0, z: ringZ1 }, ringRadius, 0.25, brassColor, visAngle, false, ringInnerRadius);
@@ -1275,9 +1329,6 @@
 
         queueBox({ x: -brushX, y: 0, z: ringZ1 }, brushWidth, 0.16, 0.25, brushColor);
         queueBox({ x:  brushX, y: 0, z: ringZ2 }, brushWidth, 0.16, 0.25, brushColor);
-
-        queuePolarityBadge({ x: -(brushX + 0.11), y: 0.18, z: ringZ1 }, signL);
-        queuePolarityBadge({ x:  (brushX + 0.11), y: 0.18, z: ringZ2 }, signR);
       } else {
         queueCylinder({ x: 0, y: 0, z: ringZ1 }, ringRadius, 0.55, brassColor, visAngle, true, ringInnerRadius);
 
@@ -1297,9 +1348,6 @@
 
         queueBox({ x: -brushX, y: 0, z: ringZ1 }, brushWidth, 0.16, 0.55, brushColor);
         queueBox({ x:  brushX, y: 0, z: ringZ1 }, brushWidth, 0.16, 0.55, brushColor);
-
-        queuePolarityBadge({ x: -(brushX + 0.11), y: 0.18, z: ringZ1 }, signL);
-        queuePolarityBadge({ x:  (brushX + 0.11), y: 0.18, z: ringZ1 }, signR);
       }
     }
 
@@ -1307,20 +1355,25 @@
       const ringZ1 = -1.3, ringZ2 = -1.7;
       const isUniversalMotor = (state.opMode === 'motor' && state.outputMode === 'ac');
       const isSlipRing = (state.opMode === 'generator' && state.outputMode === 'ac');
-      const brushX = 0.45 + 0.20 / 2;
+      const brushColor = {r: 51, g: 65, b: 85};
+      const ringRadius = 0.45;
+      const brushWidth = 0.20;
+      const brushX = ringRadius + brushWidth / 2;
       const wCol = "#334155";
       
       if (state.opMode === 'motor' && state.outputMode === 'dc') {
         const batCenter = {x: 0, y: -2.3, z: -2.3};
+        const isPosRight = state.appliedCurrent < 0;
         
         // Photorealistic 3D Battery components directly embedded in Z-sorted Queue
         queueCylinder(batCenter, 0.2, 1.0, {r: 30, g: 30, b: 30}, 0, false, 0, 'x'); // Body
-        queueCylinder({x: -0.55, y: -2.3, z: -2.3}, 0.08, 0.1, {r: 200, g: 200, b: 200}, 0, false, 0, 'x'); // + Nub
+        const nubX = isPosRight ? 0.55 : -0.55;
+        queueCylinder({x: nubX, y: -2.3, z: -2.3}, 0.08, 0.1, {r: 200, g: 200, b: 200}, 0, false, 0, 'x'); // + Nub
         
         // UI overlay markers
         const rect = canvas.getBoundingClientRect();
-        const pPlus = project3D({x: -0.65, y: -2.3, z: -2.0}, rect.width, rect.height);
-        const pMinus = project3D({x: 0.55, y: -2.3, z: -2.0}, rect.width, rect.height);
+        const pPlus = project3D({x: isPosRight ? 0.65 : -0.65, y: -2.3, z: -2.0}, rect.width, rect.height);
+        const pMinus = project3D({x: isPosRight ? -0.55 : 0.55, y: -2.3, z: -2.0}, rect.width, rect.height);
         renderQueue.push({ type: 'text_small', proj: pPlus, text: "+", color: "#ef4444", z: pPlus.z });
         renderQueue.push({ type: 'text_small', proj: pMinus, text: "-", color: "#3b82f6", z: pMinus.z });
 
@@ -1347,6 +1400,7 @@
       const loadCenter = { x: 0, y: -2.0, z: -2.3 };
       if (!isUniversalMotor) {
           const zR = isSlipRing ? ringZ2 : ringZ1;
+          
           queueLine({x: -brushX, y: 0, z: ringZ1}, {x: -(brushX + 0.14), y: 0, z: ringZ1}, wCol, 2.5);
           queueLine({x: -(brushX + 0.14), y: 0, z: ringZ1}, {x: -(brushX + 0.14), y: -2.0, z: ringZ1}, wCol, 2.5);
           queueLine({x: -(brushX + 0.14), y: -2.0, z: ringZ1}, {x: -0.2, y: -2.0, z: -2.3}, wCol, 2.5);
@@ -1392,6 +1446,24 @@
       ctx.strokeStyle = brightness > 0.1 ? "#f59e0b" : "#94a3b8"; ctx.lineWidth = 2; ctx.stroke();
     }
 
+    function renderPowerSourceUI(bX, bY) {
+      const rect = canvas.getBoundingClientRect();
+      const pL = project3D({x: -0.2, y: -2.0, z: -2.3}, rect.width, rect.height);
+      const pR = project3D({x: 0.2, y: -2.0, z: -2.3}, rect.width, rect.height);
+
+      ctx.strokeStyle = "#334155"; ctx.lineWidth = 2.5; ctx.beginPath();
+      ctx.moveTo(pL.x, pL.y); ctx.lineTo(bX - 14, bY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(pR.x, pR.y); ctx.lineTo(bX + 14, bY); ctx.stroke();
+
+      ctx.fillStyle = "#1e293b"; ctx.strokeStyle = "#475569"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(bX, bY, 14, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
+
+      ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2; ctx.beginPath();
+      ctx.moveTo(bX - 7, bY); ctx.bezierCurveTo(bX - 3.5, bY - 8, bX + 3.5, bY + 8, bX + 7, bY); ctx.stroke();
+      
+      ctx.fillStyle = "#64748b"; ctx.font = "bold 9px sans-serif";
+      ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("AC", bX, bY - 22);
+    }
 
     /* ==========================================================
        6. HIGH-PERFORMANCE ANALYTICAL GRAPHING ENGINES
@@ -1470,9 +1542,6 @@
       gCtx.textAlign = "center"; gCtx.fillText("Time (Scroll)", margin.left + plotW / 2, rect.height - 4);
     }
 
-    /* ==========================================================
-       7. INITIALIZATION GATEWAY
-       ========================================================== */
     window.onload = function() {
       setupEventListeners();
       updateLanguage();
