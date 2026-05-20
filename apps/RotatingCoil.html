@@ -40,6 +40,10 @@
     </div>
     
     <div class="flex items-center gap-2">
+      <!-- Mobile Menu Trigger -->
+      <button id="btn-mobile-menu" class="md:hidden bg-white/10 hover:bg-white/20 text-xs w-8 h-8 rounded-full font-semibold transition-all border border-white/20 flex items-center justify-center">
+        <i class="fa-solid fa-cog"></i>
+      </button>
       <!-- Info Trigger -->
       <button id="btn-help" class="bg-white/10 hover:bg-white/20 text-xs px-3 py-1.5 rounded-full font-semibold transition-all backdrop-blur-sm border border-white/20 flex items-center gap-1.5">
         <i class="fa-solid fa-circle-info"></i> <span id="btn-theory-text">說明</span>
@@ -51,11 +55,26 @@
     </div>
   </header>
 
+  <!-- Mobile Overlay Backdrop -->
+  <div id="sidebar-overlay" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-30 hidden md:hidden"></div>
+
   <!-- Main Application Wrapper -->
-  <div class="flex-1 flex flex-col md:flex-row overflow-hidden w-full">
+  <div class="flex-1 flex flex-col md:flex-row overflow-hidden w-full relative h-full">
     
     <!-- LEFT SIDEBAR: Physics Settings -->
-    <aside class="order-2 md:order-1 w-full md:w-[280px] lg:w-[320px] h-[35vh] md:h-auto flex-shrink-0 bg-white border-t md:border-t-0 md:border-r border-slate-200 overflow-y-auto flex flex-col z-10 shadow-[0_0_15px_rgba(0,0,0,0.05)]">
+    <aside id="sidebar" class="hidden md:flex md:w-[280px] lg:w-[320px] md:h-full flex-shrink-0 bg-white md:border-r border-slate-200 overflow-y-auto flex-col z-40 shadow-[0_0_15px_rgba(0,0,0,0.05)] transition-all duration-300 transform md:translate-x-0">
+      
+      <!-- Mobile Sidebar Close Header -->
+      <div class="flex justify-between items-center p-4 border-b md:hidden shrink-0 bg-slate-50">
+        <span class="font-bold text-slate-800 text-sm flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-indigo-600"></i>
+          <span id="lbl-mobile-sidebar-title">參數設定 / Parameters</span>
+        </span>
+        <button id="btn-close-sidebar" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-200 transition-all">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
       <main class="flex-grow p-4 sm:p-5 space-y-6">
         
         <!-- Consolidated 5-Mode Selector -->
@@ -182,15 +201,22 @@
 
         <!-- Floating Pillbox: Animation Controls (Bottom Left) -->
         <div class="absolute bottom-4 left-3 flex items-center gap-1.5 bg-slate-950/90 backdrop-blur-md p-1.5 rounded-xl border border-slate-700 shadow-xl z-20">
-          <button id="btn-play-pause" class="bg-emerald-600 hover:bg-emerald-500 text-white w-10 h-10 rounded-lg flex items-center justify-center transition-all shadow-md">
+          <button id="btn-play-pause" class="bg-emerald-600 hover:bg-emerald-500 text-white w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center transition-all shadow-md shrink-0">
             <i id="play-icon" class="fa-solid fa-pause"></i>
           </button>
-          <button id="btn-step" class="bg-slate-800 hover:bg-slate-700 text-slate-200 w-10 h-10 rounded-lg transition-all" title="Step Frame (Next Integer Degree)">
+          <button id="btn-step" class="bg-slate-800 hover:bg-slate-700 text-slate-200 w-9 h-9 sm:w-10 sm:h-10 rounded-lg transition-all shrink-0" title="Step Frame (Next Integer Degree)">
             <i class="fa-solid fa-forward-step"></i>
           </button>
-          <button id="btn-reset" class="bg-slate-800 hover:bg-slate-700 text-red-400 w-10 h-10 rounded-lg transition-all" title="Reset Simulation">
+          <button id="btn-reset" class="bg-slate-800 hover:bg-slate-700 text-red-400 w-9 h-9 sm:w-10 sm:h-10 rounded-lg transition-all shrink-0" title="Reset Simulation">
             <i class="fa-solid fa-arrow-rotate-left"></i>
           </button>
+          
+          <!-- Sim Speed Slider -->
+          <div class="flex items-center gap-1 sm:gap-1.5 border-l border-slate-700 pl-2 text-white">
+            <i class="fa-solid fa-gauge-high text-slate-400 text-[10px] sm:text-xs"></i>
+            <input id="slider-sim-speed" type="range" min="0.1" max="2.0" step="0.1" value="1.0" class="w-14 sm:w-20 accent-emerald-500" title="Simulation Speed">
+            <span id="val-sim-speed" class="font-mono text-[9px] sm:text-xs text-emerald-400 font-bold w-7 text-right">1.0x</span>
+          </div>
         </div>
 
         <!-- Floating Pillbox: Camera & Zoom (Bottom Right) -->
@@ -380,7 +406,7 @@
         lblChkForce: "Force ($F_B$)",
         btnTheory: "Info",
         hudTitle: "Engine HUD",
-        hudAngle: "Angle between normal to coil and magnetic field:",
+        hudAngle: "Angle between normal and magnetic field:",
         hudFlux: "Magnetic Flux /Wb",
         hudEmf: "EMF",
         hudCam: "Cam",
@@ -588,6 +614,32 @@
         state.cameraAngleX = 0.35; state.cameraAngleY = 0.0; state.zoom = 1.0;
         const s = document.getElementById('slider-zoom'); if(s) s.value = 1.0;
         clearGraphHistory();
+      });
+
+      // Mobile drawer bindings
+      const toggleMobileSidebar = () => {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        if (sidebar && overlay) {
+          const isOpen = sidebar.classList.contains('fixed');
+          if (isOpen) {
+            sidebar.classList.remove('fixed', 'inset-y-0', 'left-0', 'z-40', 'shadow-2xl', 'border-r', 'w-[280px]', 'sm:w-[320px]', 'flex');
+            sidebar.classList.add('hidden', 'md:flex');
+            overlay.classList.add('hidden');
+          } else {
+            sidebar.classList.remove('hidden', 'md:flex');
+            sidebar.classList.add('fixed', 'inset-y-0', 'left-0', 'z-40', 'shadow-2xl', 'border-r', 'w-[280px]', 'sm:w-[320px]', 'flex');
+            overlay.classList.remove('hidden');
+          }
+        }
+      };
+      document.getElementById('btn-mobile-menu')?.addEventListener('click', toggleMobileSidebar);
+      document.getElementById('btn-close-sidebar')?.addEventListener('click', toggleMobileSidebar);
+      document.getElementById('sidebar-overlay')?.addEventListener('click', toggleMobileSidebar);
+
+      document.getElementById('slider-sim-speed')?.addEventListener('input', (e) => {
+         const val = parseFloat(e.target.value);
+         const s = document.getElementById('val-sim-speed'); if(s) s.textContent = `${val.toFixed(1)}x`;
       });
 
       document.getElementById('btn-cam-front')?.addEventListener('click', () => { state.cameraAngleX = 0.0; state.cameraAngleY = 0.0; });
@@ -910,9 +962,14 @@
       if (deltaTime > 0.1) deltaTime = 0.1; 
 
       if (state.isPlaying) {
+        // Integrate Simulation Speed Slider multiplier
+        const speedSlider = document.getElementById('slider-sim-speed');
+        const speedFactor = speedSlider ? parseFloat(speedSlider.value) : 1.0;
+        const adjustedDelta = deltaTime * speedFactor;
+        
         for (let step = 0; step < 10; step++) {
-          state.time += deltaTime / 10;
-          updatePhysicsAndPlots(deltaTime / 10);
+          state.time += adjustedDelta / 10;
+          updatePhysicsAndPlots(adjustedDelta / 10);
         }
       }
 
