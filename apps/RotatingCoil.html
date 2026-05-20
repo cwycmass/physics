@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>簡單電動機及發電機 | Simple Motor & Generator</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    canvas { touch-action: none; outline: none; -webkit-tap-highlight-color: transparent; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans h-screen w-full flex flex-col overflow-hidden">
+
+  <!-- Global Header -->
+  <header class="bg-gradient-to-r from-blue-950 to-indigo-900 text-white px-3 py-2 sm:px-5 sm:py-3 flex items-center justify-between shadow-md z-20 flex-shrink-0">
+    <div class="flex items-center gap-2 sm:gap-3">
+      <i class="fa-solid fa-bolt text-amber-400 text-lg sm:text-xl animate-pulse"></i>
+      <div class="flex flex-col">
+        <h1 id="app-title" class="text-sm sm:text-base font-bold tracking-tight leading-tight">Electromagnetic Simulation</h1>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-2">
+      <!-- Info Trigger -->
+      <button id="btn-help" class="bg-white/10 hover:bg-white/20 text-xs px-3 py-1.5 rounded-full font-semibold transition-all backdrop-blur-sm border border-white/20 flex items-center gap-1.5">
+        <i class="fa-solid fa-circle-info"></i> <span id="btn-theory-text">說明</span>
+      </button>
+      <!-- Language Toggle -->
+      <button id="lang-toggle" class="bg-white/10 hover:bg-white/20 text-xs px-3 py-1.5 rounded-full font-semibold transition-all backdrop-blur-sm border border-white/20">
+        繁 / ENG
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Application Wrapper -->
+  <div class="flex-1 flex flex-col md:flex-row overflow-hidden w-full">
+    
+    <!-- LEFT SIDEBAR: Physics Settings -->
+    <aside class="order-2 md:order-1 w-full md:w-[280px] lg:w-[320px] h-[35vh] md:h-auto flex-shrink-0 bg-white border-t md:border-t-0 md:border-r border-slate-200 overflow-y-auto flex flex-col z-10 shadow-[0_0_15px_rgba(0,0,0,0.05)]">
+      <main class="flex-grow p-4 sm:p-5 space-y-6">
+        
+        <!-- Consolidated 5-Mode Selector -->
+        <section class="space-y-3">
+          <label class="block text-sm font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-gear text-indigo-600"></i> <span id="lbl-op-mode">Operation Mode</span>
+          </label>
+          <div class="grid grid-cols-1 gap-1.5" id="mode-buttons-container">
+            <!-- Buttons dynamically generated in JS to cleanly support 5 modes -->
+          </div>
+        </section>
+
+        <hr class="border-slate-100">
+
+        <!-- Physics Parameters -->
+        <section class="space-y-4">
+          <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-indigo-600"></i> <span id="lbl-physics-params">Parameters</span>
+          </h3>
+
+          <div id="container-speed" class="space-y-1 hidden">
+            <div class="flex justify-between text-xs">
+              <span id="lbl-speed" class="font-semibold text-slate-600">Frequency ($f$)</span>
+              <span id="val-speed" class="font-mono text-indigo-600 font-bold">1.0 Hz</span>
+            </div>
+            <input id="slider-speed" type="range" min="0" max="2" step="0.1" value="1.0" class="w-full accent-indigo-600">
+          </div>
+
+          <div id="container-current" class="space-y-1">
+            <div class="flex justify-between text-xs">
+              <span id="lbl-current" class="font-semibold text-slate-600">Current ($I$)</span>
+              <span id="val-current" class="font-mono text-indigo-600 font-bold">3.0 A</span>
+            </div>
+            <input id="slider-current" type="range" min="-10" max="10" step="0.1" value="3.0" class="w-full accent-indigo-600">
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs">
+              <span id="lbl-mag-field" class="font-semibold text-slate-600">Magnetic Field ($B$)</span>
+              <span id="val-mag-field" class="font-mono text-indigo-600 font-bold">1.0 T</span>
+            </div>
+            <input id="slider-mag-field" type="range" min="-2.0" max="2.0" step="0.1" value="1.0" class="w-full accent-indigo-600">
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs">
+              <span id="lbl-turns" class="font-semibold text-slate-600">Turns ($N$)</span>
+              <span id="val-turns" class="font-mono text-indigo-600 font-bold">50</span>
+            </div>
+            <input id="slider-turns" type="range" min="10" max="100" step="10" value="50" class="w-full accent-indigo-600">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 pt-1">
+            <div class="space-y-1">
+              <div class="flex justify-between">
+                <span id="lbl-coil-w" class="text-[11px] font-semibold text-slate-500">Width (w)</span>
+                <span id="val-coil-w" class="text-[11px] font-mono text-indigo-600">0.8 m</span>
+              </div>
+              <input id="slider-coil-w" type="range" min="0.4" max="1.2" step="0.1" value="0.8" class="w-full accent-indigo-600">
+            </div>
+            <div class="space-y-1">
+              <div class="flex justify-between">
+                <span id="lbl-coil-l" class="text-[11px] font-semibold text-slate-500">Length (L)</span>
+                <span id="val-coil-l" class="text-[11px] font-mono text-indigo-600">1.0 m</span>
+              </div>
+              <input id="slider-coil-l" type="range" min="0.5" max="1.5" step="0.1" value="1.0" class="w-full accent-indigo-600">
+            </div>
+          </div>
+        </section>
+
+        <hr class="border-slate-100">
+
+        <!-- Visualization Toggles -->
+        <section class="space-y-3 pb-4">
+          <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-eye text-cyan-600"></i> <span id="lbl-vis-options">Toggle Indicators</span>
+          </h3>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <label class="flex items-center gap-1.5 cursor-pointer bg-slate-50 hover:bg-slate-100 p-2 rounded-lg border border-slate-200 transition-colors">
+              <input type="checkbox" id="chk-field-lines" checked class="accent-blue-600 w-3 h-3">
+              <span id="lbl-chk-b-field" class="text-slate-700 font-semibold truncate">Field Lines ($B$)</span>
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer bg-slate-50 hover:bg-slate-100 p-2 rounded-lg border border-slate-200 transition-colors">
+              <input type="checkbox" id="chk-area-vector" checked class="accent-emerald-600 w-3 h-3">
+              <span id="lbl-chk-area" class="text-slate-700 font-semibold truncate">Normal</span>
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer bg-slate-50 hover:bg-slate-100 p-2 rounded-lg border border-slate-200 transition-colors">
+              <input type="checkbox" id="chk-current-vector" checked class="accent-amber-500 w-3 h-3">
+              <span id="lbl-chk-current" class="text-slate-700 font-semibold truncate">Current ($I$)</span>
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer bg-slate-50 hover:bg-slate-100 p-2 rounded-lg border border-slate-200 transition-colors">
+              <input type="checkbox" id="chk-force-vector" checked class="accent-purple-600 w-3 h-3">
+              <span id="lbl-chk-force" class="text-slate-700 font-semibold truncate">Force ($F_B$)</span>
+            </label>
+          </div>
+        </section>
+      </main>
+    </aside>
+
+    <!-- MAIN INTERACTIVE WORKSPACE (Sized beautifully to prevent desktop scrolling) -->
+    <main class="order-1 md:order-2 flex-1 flex flex-col min-w-0 bg-slate-900 overflow-hidden relative h-full">
+      
+      <!-- 3D Render Canvas (Takes up 58% of vertical viewport) -->
+      <section class="h-[58%] min-h-[220px] relative cursor-grab active:cursor-grabbing border-b border-slate-800 flex-shrink-0">
+        <canvas id="physics-canvas" class="w-full h-full block"></canvas>
+        
+        <!-- Top HUD Data -->
+        <div class="absolute top-3 left-3 right-3 flex justify-between items-start pointer-events-none">
+          <div class="bg-slate-950/80 backdrop-blur-md text-white text-xs px-4 py-2.5 rounded-xl border border-slate-700 font-mono shadow-lg flex gap-4 sm:gap-6">
+            <span class="flex items-center gap-1.5">
+              <span class="hidden sm:inline text-slate-400" id="hud-angle-lbl">Angle (n, B):</span>
+              <span id="hud-angle" class="text-amber-400 font-bold w-12 text-right">0°</span>
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="hidden sm:inline text-slate-400" id="hud-flux-lbl">Flux &Phi;:</span>
+              <span id="hud-flux" class="text-sky-300 font-bold w-12 text-right">0.00</span>
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="hidden sm:inline text-slate-400" id="hud-emf-lbl">EMF &epsilon;:</span>
+              <span id="hud-emf" class="text-red-400 font-bold w-12 text-right">0.00</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Floating Pillbox: Animation Controls (Bottom Left) -->
+        <div class="absolute bottom-4 left-3 flex items-center gap-1.5 bg-slate-950/90 backdrop-blur-md p-1.5 rounded-xl border border-slate-700 shadow-xl z-20">
+          <button id="btn-play-pause" class="bg-emerald-600 hover:bg-emerald-500 text-white w-10 h-10 rounded-lg flex items-center justify-center transition-all shadow-md">
+            <i id="play-icon" class="fa-solid fa-pause"></i>
+          </button>
+          <button id="btn-step" class="bg-slate-800 hover:bg-slate-700 text-slate-200 w-10 h-10 rounded-lg transition-all" title="Step Frame (Next Integer Degree)">
+            <i class="fa-solid fa-forward-step"></i>
+          </button>
+          <button id="btn-reset" class="bg-slate-800 hover:bg-slate-700 text-red-400 w-10 h-10 rounded-lg transition-all" title="Reset Simulation">
+            <i class="fa-solid fa-arrow-rotate-left"></i>
+          </button>
+        </div>
+
+        <!-- Floating Pillbox: Camera & Zoom (Bottom Right) -->
+        <div class="absolute bottom-4 right-3 flex flex-col gap-2 z-20 items-end pointer-events-none">
+          
+          <!-- Zoom Slider -->
+          <div class="bg-slate-950/90 backdrop-blur-md px-3 py-2.5 rounded-xl border border-slate-700 shadow-xl flex items-center gap-2 pointer-events-auto">
+            <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs"></i>
+            <input id="slider-zoom" type="range" min="0.4" max="2.5" step="0.1" value="1.0" class="w-20 sm:w-24 accent-amber-500">
+          </div>
+
+          <!-- Camera Views -->
+          <div class="bg-slate-950/90 backdrop-blur-md p-1.5 rounded-xl border border-slate-700 shadow-xl flex gap-1 pointer-events-auto">
+            <button id="btn-cam-front" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all">FRONT</button>
+            <button id="btn-cam-iso" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all">ISO</button>
+            <button id="btn-cam-top" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all">TOP</button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Bottom Half: Dual Analytical Graphing System (Takes up 42% of viewport, leaving zero scroll necessity on desktop) -->
+      <section class="h-[42%] shrink-0 bg-white grid grid-cols-2 p-2 gap-2 relative">
+        <div class="relative bg-slate-50 rounded-lg border border-slate-200 p-1.5 flex flex-col h-full overflow-hidden">
+          <div class="flex items-center justify-between text-xs px-1 font-bold text-slate-700 shrink-0">
+            <span class="flex items-center gap-1.5">
+              <span class="inline-block w-2.5 h-2.5 bg-blue-600 rounded-full"></span>
+              <span id="lbl-plot-flux" class="truncate">Flux Linkage</span>
+            </span>
+            <span class="text-[10px] text-slate-400 font-mono" id="lbl-unit-l1">Wb</span>
+          </div>
+          <div class="flex-grow relative h-0 mt-1"><canvas id="graph-flux-canvas" class="w-full h-full block"></canvas></div>
+        </div>
+        
+        <div class="relative bg-slate-50 rounded-lg border border-slate-200 p-1.5 flex flex-col h-full overflow-hidden">
+          <div class="flex items-center justify-between text-xs px-1 font-bold text-slate-700 shrink-0">
+            <span class="flex items-center gap-1.5">
+              <span class="inline-block w-2.5 h-2.5 bg-red-600 rounded-full"></span>
+              <span id="lbl-plot-emf" class="truncate">Induced EMF</span>
+            </span>
+            <span class="text-[10px] text-slate-400 font-mono" id="lbl-unit-l2">V</span>
+          </div>
+          <div class="flex-grow relative h-0 mt-1"><canvas id="graph-emf-canvas" class="w-full h-full block"></canvas></div>
+        </div>
+      </section>
+    </main>
+
+  </div>
+
+  <!-- BILINGUAL THEORY MODAL -->
+  <dialog id="theory-modal" class="backdrop:bg-slate-900/60 p-0 rounded-2xl border border-slate-200 w-11/12 max-w-2xl shadow-2xl overflow-hidden focus-visible:outline-none z-50">
+    <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-4 sm:p-5 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-graduation-cap text-amber-400 text-lg"></i>
+        <h2 id="modal-title" class="text-sm sm:text-base font-bold">Theory of Electromagnetic Induction</h2>
+      </div>
+      <button id="btn-close-modal" class="hover:bg-white/20 p-1.5 rounded-full transition-all text-white">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+    
+    <div class="p-4 sm:p-6 space-y-4 sm:space-y-6 max-h-[70vh] overflow-y-auto leading-relaxed text-xs sm:text-sm text-slate-700">
+      
+      <div class="space-y-4">
+        <!-- English Section -->
+        <article id="modal-body-en" class="space-y-4">
+          <h3 class="font-bold text-slate-900 text-sm border-b pb-1 text-blue-800">1. Generator vs Motor Operation</h3>
+          <ul class="list-disc list-inside space-y-1.5">
+            <li><strong>Motor Mode:</strong> An external constant current source feeds current into the coil. The magnetic field exerts Lorentz forces on the wire loop, creating torque ($\tau = N I B A \sin\theta$) which drives rotation. As the motor speeds up, it generates an opposing <strong>Back EMF</strong>.</li>
+            <li><strong>Generator Mode:</strong> Mechanical energy rotates the coil. By Faraday's Law, changing flux induces an EMF ($\varepsilon = -d\Phi/dt$). The induced current flows backwards (Lenz's Law) and interacts with the magnetic field to produce an opposing magnetic drag force (Fleming's Left-Hand Rule).</li>
+            <li><strong>Universal Motor (AC Motor):</strong> The stator uses electromagnets powered by the same AC source in series with the armature. The magnetic field reverses in perfect sync with the armature current, ensuring the Lorentz Force ($\vec{F} = \vec{I} \times \vec{B}$) continues to push in the same direction!</li>
+          </ul>
+          
+          <div class="bg-blue-50 p-3 sm:p-4 rounded-lg border-l-4 border-blue-600 text-xs overflow-x-auto">
+            <strong class="text-blue-900 mb-2 block">Motor Dynamics (Constant Current):</strong>
+            $$I = I_{\text{applied}}$$
+            $$P_m = \tau \cdot \omega$$
+            $$\tau = N I B A \sin(\theta)$$
+            $$\varepsilon_{\text{back}} = N B A \omega \sin(\theta)$$
+          </div>
+
+          <h3 class="font-bold text-slate-900 text-sm border-b pb-1 text-blue-800">2. Commutator Mechanics</h3>
+          <ul class="list-disc list-inside space-y-2">
+            <li><strong>Split-Ring Commutator (DC):</strong> Reverses current polarity every half rotation ($180^\circ$). This mechanical switching guarantees the torque pushes in a single, unidirectional continuous rotation.</li>
+            <li><strong>Slip Rings (AC):</strong> Maintains continuous contacts. In a generator, it directly outputs the raw alternating sinusoidal current.</li>
+          </ul>
+        </article>
+
+        <!-- Traditional Chinese Section -->
+        <article id="modal-body-zh" class="space-y-4 hidden">
+          <h3 class="font-bold text-slate-900 text-sm sm:text-base border-b pb-1 text-blue-800">1. 發電機與電動機原理</h3>
+          <ul class="list-disc list-inside space-y-1.5">
+            <li><strong>電動機模式：</strong> 外接電源為線圈注入電流。磁場對通電導線產生磁力，產生電磁轉矩 ($\tau = N I B A \sin\theta$) 驅動線圈旋轉。當線圈旋轉時，會產生<strong>反電動勢 (Back EMF)</strong>。</li>
+            <li><strong>發電機模式：</strong> 利用機械能旋轉線圈。根據法拉第定律，磁通量變化產生感應電動勢 ($\varepsilon = -d\Phi/dt$)。根據楞次定律，感應電流將反向流動，並受到磁場作用產生阻礙線圈旋轉的磁阻力 (以弗萊明左手定律 $\vec{F} = \vec{I} \times \vec{B}$ 判斷)。</li>
+            <li><strong>通用電動機 (交流摩打)：</strong> 定子使用與交流電源串聯的電磁鐵。當交流電反向時，磁場與電樞電流同時反向，使洛倫茲力始終維持單向推進！</li>
+          </ul>
+          
+          <div class="bg-blue-50 p-3 sm:p-4 rounded-lg border-l-4 border-blue-600 text-[10px] sm:text-sm overflow-x-auto">
+            <strong class="text-blue-900 mb-2 block">電動機動力學公式 (恆定電流)：</strong>
+            $$I = I_{\text{外加}}$$
+            $$\tau = N I B A \sin(\theta)$$
+            $$\varepsilon_{\text{反}} = N B A \omega \sin(\theta)$$
+          </div>
+
+          <h3 class="font-bold text-slate-900 text-sm sm:text-base border-b pb-1 text-blue-800">2. 整流機制之別</h3>
+          <ul class="list-disc list-inside space-y-2">
+            <li><strong>換向器（兩個半環） (直流)：</strong> 每半轉 ($180^\circ$) 自動切換線圈電流極性。這確保線圈能持續獲得單向的推進轉矩，實現連續旋轉。</li>
+            <li><strong>匯電環 (交流)：</strong> 永久連接各端。在發電機中，它能將線圈內產生的原始交流電直接輸出。</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- MANDATORY FOOTER REQUIREMENT -->
+  <footer class="flex-shrink-0 bg-slate-950 text-slate-400 py-2 sm:py-2.5 px-4 sm:px-6 text-center text-[10px] sm:text-xs border-t border-slate-800 z-20 font-semibold tracking-wide">
+    <span id="footer-text">廠商會中學．物理科</span>
+  </footer>
+
+  <!-- Simulation Core Scripts -->
+  <script>
+    /* ==========================================================
+       1. GLOBAL STATE & TRANSLATIONS
+       ========================================================== */
+    const state = {
+      lang: 'zh', // Default language set to Chinese
+      opMode: 'motor', // Default mode set as Motor
+      outputMode: 'dc', // Default design set as DC (Split-Ring)
+      isPlaying: true,
+      
+      frequency: 1.0, 
+      B: 1.0,         
+      effectiveB: 1.0, 
+      turns: 50,      
+      coilW: 0.8,     
+      coilL: 1.0,     
+      appliedCurrent: 3.0, 
+      
+      omega: 0.5,     
+      coilAngle: 0.5, // theta in radians
+      inertia: 0.15,  
+      damping: 0.05,  
+      resistance: 2.0,
+      
+      zoom: 1.0,
+      cameraAngleX: 0.35, 
+      cameraAngleY: 0.0,  
+      isDragging: false,
+      lastMouseX: 0,
+      lastMouseY: 0,
+      
+      showB: true,
+      showArea: true,
+      showCurrent: true,
+      showForce: true,
+      
+      graphHistory: [],
+      maxHistorySize: 300,
+      
+      currentNorm: 0,
+      currentAmp: 0,
+      extI: 0, 
+      torque: 0,
+      time: 0
+    };
+
+    const translations = {
+      en: {
+        appTitle: "Electromagnetic Simulation",
+        lblOpMode: "Operation Mode",
+        lblAnimCtrl: "Simulation Controls",
+        btnPause: "Pause",
+        btnPlay: "Play",
+        lblPhysicsParams: "Physics Parameters",
+        lblSpeed: "Frequency ($f$)",
+        lblCurrent: "Applied Current ($I$)",
+        lblMagField: "Magnetic Field ($B$)",
+        lblTurns: "Coil Turns ($N$)",
+        lblCoilW: "Width (w)",
+        lblCoilL: "Length (L)",
+        lblViewCtrl: "View Options",
+        lblZoom: "Zoom",
+        lblVisOptions: "Toggle Indicators",
+        lblChkBField: "Magnetic Field ($B$)",
+        lblChkArea: "Normal ($n$)",
+        lblChkCurrent: "Current ($I$)",
+        lblChkForce: "Force ($F_B$)",
+        btnTheory: "Info",
+        hudTitle: "Engine HUD",
+        hudAngle: "Angle (n, B):",
+        hudFlux: "Flux",
+        hudEmf: "EMF",
+        hudCam: "Cam",
+        lblPlotFlux: "Flux Linkage",
+        lblPlotEmf: "Induced EMF",
+        lblPlotCurrent: "Armature Current ($I$)",
+        lblPlotTorque: "Torque ($\\tau$)",
+        lblUnitWb: "Wb",
+        lblUnitV: "V",
+        lblUnitA: "A",
+        lblUnitNm: "N·m",
+        modalTitle: "Theory of Electromagnetic Machines",
+        modeDCMotor: "DC Motor (Split-ring)",
+        modeDCMotorSlip: "DC Motor (Slip-ring demo)",
+        modeACMotor: "AC Motor",
+        modeDCGen: "DC Generator",
+        modeACGen: "AC Generator",
+        btnCamFront: "FRONT",
+        btnCamIso: "ISO",
+        btnCamTop: "TOP",
+        footer: "CMA Secondary School. Physics Department."
+      },
+      zh: {
+        appTitle: "電磁學與電動機模擬",
+        lblOpMode: "運作模式選擇",
+        lblAnimCtrl: "動畫控制",
+        btnPause: "暫停",
+        btnPlay: "播放",
+        lblPhysicsParams: "物理參數配置",
+        lblSpeed: "旋轉頻率 ($f$)",
+        lblCurrent: "外加電流 ($I$)",
+        lblMagField: "磁場強度 ($B$)",
+        lblTurns: "線圈匝數 ($N$)",
+        lblCoilW: "寬度 (w)",
+        lblCoilL: "長度 (L)",
+        lblViewCtrl: "視角控制",
+        lblZoom: "縮放",
+        lblVisOptions: "顯示選項",
+        lblChkBField: "磁力線 ($B$)",
+        lblChkArea: "線圈平面的法線 ($n$)",
+        lblChkCurrent: "電流 ($I$)",
+        lblChkForce: "磁力 ($F_B$)",
+        btnTheory: "說明",
+        hudTitle: "引擎數據",
+        hudAngle: "夾角 (n, B):",
+        hudFlux: "磁通",
+        hudEmf: "電動勢",
+        hudCam: "視角",
+        lblPlotFlux: "總磁通量匝鏈",
+        lblPlotEmf: "感應電動勢",
+        lblPlotCurrent: "電樞電流 ($I$)",
+        lblPlotTorque: "轉矩 ($\\tau$)",
+        lblUnitWb: "Wb",
+        lblUnitV: "V",
+        lblUnitA: "A",
+        lblUnitNm: "N·m",
+        modalTitle: "發電機與電動機理論說明",
+        modeDCMotor: "直流電動機 (換向器)",
+        modeDCMotorSlip: "直流摩打 (滑環演示)",
+        modeACMotor: "交流電動機",
+        modeDCGen: "直流發電機",
+        modeACGen: "交流發電機",
+        btnCamFront: "正面",
+        btnCamIso: "等角",
+        btnCamTop: "俯視",
+        footer: "廠商會中學．物理科"
+      }
+    };
+
+    function safeSetText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
+    function safeSetHtml(id, html) { const el = document.getElementById(id); if (el) el.innerHTML = html; }
+
+    function updateLanguage() {
+      const dic = translations[state.lang];
+      safeSetText('app-title', dic.appTitle);
+      safeSetText('lbl-op-mode', dic.lblOpMode);
+      safeSetText('btn-play-text', state.isPlaying ? dic.btnPause : dic.btnPlay);
+      safeSetText('lbl-physics-params', dic.lblPhysicsParams);
+      safeSetText('lbl-zoom', dic.lblZoom);
+      
+      safeSetHtml('lbl-speed', dic.lblSpeed);
+      safeSetHtml('lbl-current', dic.lblCurrent);
+      safeSetHtml('lbl-mag-field', dic.lblMagField);
+      safeSetHtml('lbl-turns', dic.lblTurns);
+      safeSetHtml('lbl-coil-w', dic.lblCoilW);
+      safeSetHtml('lbl-coil-l', dic.lblCoilL);
+      
+      safeSetText('lbl-vis-options', dic.lblVisOptions);
+      safeSetHtml('lbl-chk-b-field', dic.lblChkBField);
+      safeSetHtml('lbl-chk-area', dic.lblChkArea);
+      safeSetHtml('lbl-chk-current', dic.lblChkCurrent);
+      safeSetHtml('lbl-chk-force', dic.lblChkForce);
+      
+      safeSetText('btn-theory-text', dic.btnTheory);
+      safeSetText('hud-angle-lbl', dic.hudAngle);
+      safeSetText('hud-flux-lbl', dic.hudFlux);
+      safeSetText('hud-emf-lbl', state.opMode === 'generator' ? dic.hudEmf : (state.lang === 'zh' ? '反電動勢' : 'Back EMF'));
+      safeSetText('hud-cam-lbl', dic.hudCam);
+      safeSetText('lbl-drag-hint', dic.lblDragHint);
+      safeSetText('modal-title', dic.modalTitle);
+      safeSetText('footer-text', dic.footer);
+      
+      safeSetText('btn-cam-front', dic.btnCamFront);
+      safeSetText('btn-cam-iso', dic.btnCamIso);
+      safeSetText('btn-cam-top', dic.btnCamTop);
+
+      renderModeButtons();
+
+      if (state.opMode === 'generator') {
+        safeSetHtml('lbl-plot-flux', dic.lblPlotFlux);
+        safeSetHtml('lbl-plot-emf', dic.lblPlotEmf);
+        safeSetText('lbl-unit-l1', dic.lblUnitWb);
+        safeSetText('lbl-unit-l2', dic.lblUnitV);
+      } else {
+        safeSetHtml('lbl-plot-flux', dic.lblPlotCurrent);
+        safeSetHtml('lbl-plot-emf', dic.lblPlotTorque);
+        safeSetText('lbl-unit-l1', dic.lblUnitA);
+        safeSetText('lbl-unit-l2', dic.lblUnitNm);
+      }
+
+      if (state.lang === 'en') {
+        document.getElementById('modal-body-en')?.classList.remove('hidden');
+        document.getElementById('modal-body-zh')?.classList.add('hidden');
+      } else {
+        document.getElementById('modal-body-en')?.classList.add('hidden');
+        document.getElementById('modal-body-zh')?.classList.remove('hidden');
+      }
+
+      if (window.MathJax && window.MathJax.typeset) window.MathJax.typesetPromise();
+    }
+
+    function renderModeButtons() {
+      const dic = translations[state.lang];
+      const container = document.getElementById('mode-buttons-container');
+      if(!container) return;
+      
+      // Dynamic list with 5 detailed operation modes
+      const modes = [
+        { id: 'dc-motor', text: dic.modeDCMotor, op: 'motor', out: 'dc' },
+        { id: 'dc-motor-slip', text: dic.modeDCMotorSlip, op: 'motor', out: 'dc-slip' },
+        { id: 'ac-motor', text: dic.modeACMotor, op: 'motor', out: 'ac' },
+        { id: 'dc-gen', text: dic.modeDCGen, op: 'generator', out: 'dc' },
+        { id: 'ac-gen', text: dic.modeACGen, op: 'generator', out: 'ac' }
+      ];
+
+      container.innerHTML = modes.map(m => {
+        const isActive = (state.opMode === m.op && state.outputMode === m.out);
+        const activeClasses = "bg-blue-600 text-white shadow-sm border-blue-600";
+        const inactiveClasses = "bg-white text-slate-700 hover:bg-slate-100 border-slate-300 shadow-sm";
+        return `<button onclick="switchMode('${m.op}', '${m.out}')" class="w-full text-left py-2 px-2.5 rounded-lg font-bold text-[11px] sm:text-xs transition-all border ${isActive ? activeClasses : inactiveClasses}">${m.text}</button>`;
+      }).join('');
+    }
+
+    window.switchMode = function(op, out) {
+      state.opMode = op;
+      state.outputMode = out;
+      
+      const containerSpeed = document.getElementById('container-speed');
+      const containerCurrent = document.getElementById('container-current');
+      
+      if (op === 'generator') {
+        containerSpeed?.classList.remove('hidden');
+        containerCurrent?.classList.add('hidden');
+      } else {
+        containerSpeed?.classList.add('hidden');
+        containerCurrent?.classList.remove('hidden');
+        state.coilAngle = 0.5;
+        state.omega = 0.5;
+      }
+      clearGraphHistory();
+      updateLanguage();
+    }
+
+    function setupEventListeners() {
+      document.getElementById('lang-toggle')?.addEventListener('click', () => {
+        state.lang = state.lang === 'en' ? 'zh' : 'en';
+        updateLanguage();
+      });
+
+      document.getElementById('btn-play-pause')?.addEventListener('click', () => {
+        state.isPlaying = !state.isPlaying;
+        updatePlayPauseButton();
+      });
+
+      document.getElementById('btn-step')?.addEventListener('click', () => {
+        state.isPlaying = false;
+        updatePlayPauseButton();
+        
+        let currentDeg = Math.round(state.coilAngle * 180 / Math.PI);
+        let nextDeg = currentDeg + 1;
+        state.coilAngle = (nextDeg * Math.PI / 180) % (2 * Math.PI);
+        if (state.coilAngle < 0) state.coilAngle += 2 * Math.PI;
+        
+        let dTheta = 1 * Math.PI / 180;
+        let dtStep = Math.abs(state.omega) > 0.001 ? dTheta / Math.abs(state.omega) : 0.016;
+        if (state.opMode === 'generator') state.time = state.coilAngle / (2 * Math.PI * state.frequency);
+        else state.time += dtStep;
+        
+        updatePhysicsAndPlots(0); 
+      });
+
+      document.getElementById('btn-reset')?.addEventListener('click', () => {
+        state.time = 0; state.coilAngle = state.opMode === 'motor' ? 0.5 : 0;
+        state.omega = state.opMode === 'generator' ? 2 * Math.PI * state.frequency : 0.5;
+        state.cameraAngleX = 0.35; state.cameraAngleY = 0.0; state.zoom = 1.0;
+        const s = document.getElementById('slider-zoom'); if(s) s.value = 1.0;
+        clearGraphHistory();
+      });
+
+      document.getElementById('btn-cam-front')?.addEventListener('click', () => { state.cameraAngleX = 0.0; state.cameraAngleY = 0.0; });
+      document.getElementById('btn-cam-iso')?.addEventListener('click', () => { state.cameraAngleX = 0.35; state.cameraAngleY = 0.65; });
+      document.getElementById('btn-cam-top')?.addEventListener('click', () => { state.cameraAngleX = Math.PI / 2; state.cameraAngleY = 0.0; });
+
+      document.getElementById('slider-speed')?.addEventListener('input', (e) => {
+        state.frequency = parseFloat(e.target.value);
+        const v = document.getElementById('val-speed'); if(v) v.textContent = `${state.frequency.toFixed(1)} Hz`;
+        clearGraphHistory();
+      });
+
+      document.getElementById('slider-current')?.addEventListener('input', (e) => {
+        state.appliedCurrent = parseFloat(e.target.value);
+        const v = document.getElementById('val-current'); if(v) v.textContent = `${state.appliedCurrent.toFixed(1)} A`;
+        clearGraphHistory();
+      });
+
+      document.getElementById('slider-mag-field')?.addEventListener('input', (e) => {
+        state.B = parseFloat(e.target.value);
+        const v = document.getElementById('val-mag-field'); if(v) v.textContent = `${state.B.toFixed(1)} T`;
+        clearGraphHistory();
+      });
+
+      document.getElementById('slider-turns')?.addEventListener('input', (e) => {
+        state.turns = parseInt(e.target.value);
+        const v = document.getElementById('val-turns'); if(v) v.textContent = state.turns;
+        clearGraphHistory();
+      });
+
+      document.getElementById('slider-coil-w')?.addEventListener('input', (e) => {
+        state.coilW = parseFloat(e.target.value);
+        const v = document.getElementById('val-coil-w'); if(v) v.textContent = `${state.coilW.toFixed(1)} m`;
+        clearGraphHistory();
+      });
+
+      document.getElementById('slider-coil-l')?.addEventListener('input', (e) => {
+        state.coilL = parseFloat(e.target.value);
+        const v = document.getElementById('val-coil-l'); if(v) v.textContent = `${state.coilL.toFixed(1)} m`;
+        clearGraphHistory();
+      });
+
+      document.getElementById('slider-zoom')?.addEventListener('input', (e) => {
+        state.zoom = parseFloat(e.target.value);
+      });
+
+      const canvasContainer = document.getElementById('physics-canvas')?.parentElement;
+      canvasContainer?.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        state.zoom = Math.max(0.4, Math.min(2.5, state.zoom - e.deltaY * 0.001));
+        const s = document.getElementById('slider-zoom'); if(s) s.value = state.zoom;
+      }, { passive: false });
+
+      document.getElementById('chk-field-lines')?.addEventListener('change', (e) => { state.showB = e.target.checked; });
+      document.getElementById('chk-area-vector')?.addEventListener('change', (e) => { state.showArea = e.target.checked; });
+      document.getElementById('chk-current-vector')?.addEventListener('change', (e) => { state.showCurrent = e.target.checked; });
+      document.getElementById('chk-force-vector')?.addEventListener('change', (e) => { state.showForce = e.target.checked; });
+
+      const theoryModal = document.getElementById('theory-modal');
+      document.getElementById('btn-help')?.addEventListener('click', () => { theoryModal?.showModal(); });
+      document.getElementById('btn-close-modal')?.addEventListener('click', () => { theoryModal?.close(); });
+      
+      if (theoryModal) {
+        theoryModal.addEventListener('click', (e) => {
+          if (e.target === theoryModal) theoryModal.close();
+        });
+      }
+    }
+
+    function updatePlayPauseButton() {
+      const dic = translations[state.lang];
+      const btnPlayText = document.getElementById('btn-play-text');
+      const playIcon = document.getElementById('play-icon');
+      if (btnPlayText) btnPlayText.textContent = state.isPlaying ? dic.btnPause : dic.btnPlay;
+      if (playIcon) playIcon.className = state.isPlaying ? "fa-solid fa-pause" : "fa-solid fa-play";
+    }
+
+    function clearGraphHistory() { state.graphHistory = []; }
+
+    let renderQueue = [];
+
+    /* ==========================================================
+       3. 3D RENDER ENGINE
+       ========================================================== */
+    const canvas = document.getElementById('physics-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      if(!canvas || !canvas.parentElement) return;
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    setTimeout(resizeCanvas, 50);
+
+    canvas?.addEventListener('mousedown', (e) => { state.isDragging = true; state.lastMouseX = e.clientX; state.lastMouseY = e.clientY; });
+    window.addEventListener('mouseup', () => { state.isDragging = false; });
+    canvas?.addEventListener('mousemove', (e) => {
+      if (!state.isDragging) return;
+      state.cameraAngleY += (e.clientX - state.lastMouseX) * 0.007;
+      state.cameraAngleX = Math.max(-Math.PI/2, Math.min(Math.PI/2, state.cameraAngleX + (e.clientY - state.lastMouseY) * 0.007));
+      state.lastMouseX = e.clientX; state.lastMouseY = e.clientY;
+    });
+
+    canvas?.addEventListener('touchstart', (e) => { if (e.touches.length === 1) { state.isDragging = true; state.lastMouseX = e.touches[0].clientX; state.lastMouseY = e.touches[0].clientY; } });
+    window.addEventListener('touchend', () => { state.isDragging = false; });
+    canvas?.addEventListener('touchmove', (e) => {
+      if (state.isDragging && e.touches.length === 1) {
+        state.cameraAngleY += (e.touches[0].clientX - state.lastMouseX) * 0.007;
+        state.cameraAngleX = Math.max(-Math.PI/2, Math.min(Math.PI/2, state.cameraAngleX + (e.touches[0].clientY - state.lastMouseY) * 0.007));
+        state.lastMouseX = e.touches[0].clientX; state.lastMouseY = e.touches[0].clientY;
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    function project3D(point, w, h) {
+      if(!point) return { x: 0, y: 0, z: 0 };
+      const cosY = Math.cos(state.cameraAngleY); const sinY = Math.sin(state.cameraAngleY);
+      const cosX = Math.cos(state.cameraAngleX); const sinX = Math.sin(state.cameraAngleX);
+      let x1 = point.x * cosY - point.z * sinY;
+      let z1 = point.x * sinY + point.z * cosY;
+      let y2 = point.y * cosX - z1 * sinX;
+      let z2 = point.y * sinX + z1 * cosX;
+      const scale = Math.min(w, h) * 0.24 * state.zoom; 
+      return { x: w / 2 + x1 * scale, y: h / 2 - y2 * scale, z: z2 };
+    }
+
+    // Advanced 3D Subdivider to kill Painter's Algorithm overlapping bugs completely
+    function queueLine(p1, p2, color, width = 1.5, isDash = false) {
+      const dx = p2.x - p1.x; const dy = p2.y - p1.y; const dz = p2.z - p1.z;
+      const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      const chunks = Math.max(1, Math.ceil(len / 0.05)); // 5cm precise fragments
+      
+      const rect = canvas.getBoundingClientRect();
+      for (let i = 0; i < chunks; i++) {
+        const cp1 = { x: p1.x + dx*(i/chunks), y: p1.y + dy*(i/chunks), z: p1.z + dz*(i/chunks) };
+        const cp2 = { x: p1.x + dx*((i+1)/chunks), y: p1.y + dy*((i+1)/chunks), z: p1.z + dz*((i+1)/chunks) };
+        const pr1 = project3D(cp1, rect.width, rect.height);
+        const pr2 = project3D(cp2, rect.width, rect.height);
+        renderQueue.push({ type: 'line', p1: pr1, p2: pr2, z: (pr1.z + pr2.z)/2, color, width, isDash });
+      }
+    }
+
+    function queuePoly(points, fill, stroke, width = 1) {
+      const rect = canvas.getBoundingClientRect();
+      const projs = points.map(p => project3D(p, rect.width, rect.height));
+      renderQueue.push({ type: 'poly', projs, z: projs.reduce((sum, p) => sum + p.z, 0) / projs.length, fill, stroke, width });
+    }
+
+    function queueVector(start, direction, length, color, text = "") {
+      const end = { x: start.x + direction.x * length, y: start.y + direction.y * length, z: start.z + direction.z * length };
+      const rect = canvas.getBoundingClientRect();
+      const pr1 = project3D(start, rect.width, rect.height);
+      const pr2 = project3D(end, rect.width, rect.height);
+      
+      let dz1 = direction.x * Math.sin(state.cameraAngleY) + direction.z * Math.cos(state.cameraAngleY);
+      let dzCamera = direction.y * Math.sin(state.cameraAngleX) + dz1 * Math.cos(state.cameraAngleX);
+
+      // Force vectors completely to the front Z layer (+50 bump) so they NEVER get blocked by wires
+      const z = Math.max(pr1.z, pr2.z) + 50.0;
+      renderQueue.push({ type: 'vector', p1: pr1, p2: pr2, z, color, text, dz: dzCamera, len3D: length });
+    }
+
+    function queueCylinder(center, radius, length, rgb, rotationAngle = 0, isSplitRing = false, innerRadius = 0, axis = 'z') {
+      const segments = 24; const halfL = length / 2; const gap = 0.15; 
+      const lChunks = Math.max(1, Math.ceil(length / 0.05));
+      const chunkL = length / lChunks;
+
+      for (let c = 0; c < lChunks; c++) {
+        let chunkCenter = {x: center.x, y: center.y, z: center.z};
+        if (axis === 'z') chunkCenter.z = center.z - halfL + chunkL/2 + c*chunkL;
+        else chunkCenter.x = center.x - halfL + chunkL/2 + c*chunkL;
+
+        for (let i = 0; i < segments; i++) {
+          const a1 = (i / segments) * 2 * Math.PI + rotationAngle;
+          const a2 = ((i + 1) / segments) * 2 * Math.PI + rotationAngle;
+          if (isSplitRing) {
+            let nA1 = (a1 - rotationAngle) % (2 * Math.PI); if (nA1 < 0) nA1 += 2 * Math.PI;
+            if ((nA1 > Math.PI / 2 - gap && nA1 < Math.PI / 2 + gap) || (nA1 > 3 * Math.PI / 2 - gap && nA1 < 3 * Math.PI / 2 + gap)) continue;
+          }
+          
+          let po1, po2, po3, po4, nX, nY, nZ;
+          const midA = (a1 + a2)/2;
+
+          if (axis === 'z') {
+            po1 = { x: chunkCenter.x + Math.cos(a1)*radius, y: chunkCenter.y + Math.sin(a1)*radius, z: chunkCenter.z - chunkL/2 };
+            po2 = { x: chunkCenter.x + Math.cos(a2)*radius, y: chunkCenter.y + Math.sin(a2)*radius, z: chunkCenter.z - chunkL/2 };
+            po3 = { x: chunkCenter.x + Math.cos(a2)*radius, y: chunkCenter.y + Math.sin(a2)*radius, z: chunkCenter.z + chunkL/2 };
+            po4 = { x: chunkCenter.x + Math.cos(a1)*radius, y: chunkCenter.y + Math.sin(a1)*radius, z: chunkCenter.z + chunkL/2 };
+            nX = Math.cos(midA); nY = Math.sin(midA); nZ = 0;
+          } else {
+            po1 = { x: chunkCenter.x - chunkL/2, y: chunkCenter.y + Math.cos(a1)*radius, z: chunkCenter.z + Math.sin(a1)*radius };
+            po2 = { x: chunkCenter.x - chunkL/2, y: chunkCenter.y + Math.cos(a2)*radius, z: chunkCenter.z + Math.sin(a2)*radius };
+            po3 = { x: chunkCenter.x + chunkL/2, y: chunkCenter.y + Math.cos(a2)*radius, z: chunkCenter.z + Math.sin(a2)*radius };
+            po4 = { x: chunkCenter.x + chunkL/2, y: chunkCenter.y + Math.cos(a1)*radius, z: chunkCenter.z + Math.sin(a1)*radius };
+            nX = 0; nY = Math.cos(midA); nZ = Math.sin(midA);
+          }
+          
+          let dot = nX*(-0.5) + nY*0.7 + nZ*(-0.5);
+          let intensity = 0.35 + 0.65 * Math.max(0, dot);
+          const fillOuter = `rgb(${rgb.r*intensity}, ${rgb.g*intensity}, ${rgb.b*intensity})`;
+          const strokeOuter = `rgb(${rgb.r*intensity*0.7}, ${rgb.g*intensity*0.7}, ${rgb.b*intensity*0.7})`;
+          
+          queuePoly([po1, po2, po3, po4], fillOuter, strokeOuter, 1);
+
+          if (innerRadius > 0) {
+            let pi1, pi2, pi3, pi4;
+            if (axis === 'z') {
+              pi1 = { x: chunkCenter.x + Math.cos(a1)*innerRadius, y: chunkCenter.y + Math.sin(a1)*innerRadius, z: chunkCenter.z - chunkL/2 };
+              pi2 = { x: chunkCenter.x + Math.cos(a2)*innerRadius, y: chunkCenter.y + Math.sin(a2)*innerRadius, z: chunkCenter.z - chunkL/2 };
+              pi3 = { x: chunkCenter.x + Math.cos(a2)*innerRadius, y: chunkCenter.y + Math.sin(a2)*innerRadius, z: chunkCenter.z + chunkL/2 };
+              pi4 = { x: chunkCenter.x + Math.cos(a1)*innerRadius, y: chunkCenter.y + Math.sin(a1)*innerRadius, z: chunkCenter.z + chunkL/2 };
+            } else {
+              pi1 = { x: chunkCenter.x - chunkL/2, y: chunkCenter.y + Math.cos(a1)*innerRadius, z: chunkCenter.z + Math.sin(a1)*innerRadius };
+              pi2 = { x: chunkCenter.x - chunkL/2, y: chunkCenter.y + Math.cos(a2)*innerRadius, z: chunkCenter.z + Math.sin(a2)*innerRadius };
+              pi3 = { x: chunkCenter.x + chunkL/2, y: chunkCenter.y + Math.cos(a2)*innerRadius, z: chunkCenter.z + Math.sin(a2)*innerRadius };
+              pi4 = { x: chunkCenter.x + chunkL/2, y: chunkCenter.y + Math.cos(a1)*innerRadius, z: chunkCenter.z + Math.sin(a1)*innerRadius };
+            }
+            let intensityInner = intensity * 0.6;
+            const fillInner = `rgb(${rgb.r*intensityInner}, ${rgb.g*intensityInner}, ${rgb.b*intensityInner})`;
+            const strokeInner = `rgb(${rgb.r*intensityInner*0.7}, ${rgb.g*intensityInner*0.7}, ${rgb.b*intensityInner*0.7})`;
+            queuePoly([pi1, pi2, pi3, pi4], fillInner, strokeInner, 1);
+
+            if (c === lChunks - 1) queuePoly([po4, po3, pi3, pi4], fillOuter, strokeOuter, 1);
+            if (c === 0) queuePoly([po1, po2, pi2, pi1], fillOuter, strokeOuter, 1);
+          } else {
+            let centerFront = (axis === 'z') ? {x: center.x, y: center.y, z: chunkCenter.z + chunkL/2} : {x: chunkCenter.x + chunkL/2, y: center.y, z: center.z};
+            let centerBack = (axis === 'z') ? {x: center.x, y: center.y, z: chunkCenter.z - chunkL/2} : {x: chunkCenter.x - chunkL/2, y: center.y, z: center.z};
+            if (c === lChunks - 1) queuePoly([po4, po3, centerFront], fillOuter, strokeOuter, 1);
+            if (c === 0) queuePoly([po1, po2, centerBack], fillOuter, strokeOuter, 1);
+          }
+        }
+      }
+    }
+
+    function queueBox(center, sizeX, sizeY, sizeZ, rgb, opacity = 1.0, label = null) {
+      const hX = sizeX/2, hY = sizeY/2, hZ = sizeZ/2;
+      const corners = [
+        {x: center.x-hX, y: center.y-hY, z: center.z-hZ}, {x: center.x+hX, y: center.y-hY, z: center.z-hZ},
+        {x: center.x+hX, y: center.y+hY, z: center.z-hZ}, {x: center.x-hX, y: center.y+hY, z: center.z-hZ},
+        {x: center.x-hX, y: center.y-hY, z: center.z+hZ}, {x: center.x+hX, y: center.y-hY, z: center.z+hZ},
+        {x: center.x+hX, y: center.y+hY, z: center.z+hZ}, {x: center.x-hX, y: center.y+hY, z: center.z+hZ}
+      ];
+      const faces = [
+        [0, 1, 2, 3, {x:0, y:0, z:-1}], [5, 4, 7, 6, {x:0, y:0, z:1}], [4, 5, 1, 0, {x:0, y:-1, z:0}], 
+        [3, 2, 6, 7, {x:0, y:1, z:0}], [4, 0, 3, 7, {x:-1, y:0, z:0}], [1, 5, 6, 2, {x:1, y:0, z:0}]   
+      ];
+      
+      for(let face of faces) {
+        const n = face[4];
+        let dot = n.x*(-0.5) + n.y*0.7 + n.z*(-0.5);
+        let intensity = 0.4 + 0.6 * Math.max(0, dot);
+        const fill = `rgba(${rgb.r*intensity}, ${rgb.g*intensity}, ${rgb.b*intensity}, ${opacity})`;
+        const stroke = `rgba(${rgb.r*0.8}, ${rgb.g*0.8}, ${rgb.b*0.8}, ${opacity === 1 ? 1 : 0.8})`;
+        queuePoly([corners[face[0]], corners[face[1]], corners[face[2]], corners[face[3]]], fill, stroke, 1);
+      }
+      if (label) renderQueue.push({ type: 'text', p: center, text: label.text, color: label.color, shift: label.shift });
+    }
+
+    function queuePolarityBadge(center, sign) {
+      const rect = canvas.getBoundingClientRect();
+      const proj = project3D(center, rect.width, rect.height);
+      renderQueue.push({
+        type: 'badge',
+        proj,
+        sign,
+        z: proj.z + 0.1 
+      });
+    }
+
+    /* ==========================================================
+       4. MAIN PHYSICS SIMULATION TIMELINE LOOP (RK4)
+       ========================================================== */
+    let lastTime = 0;
+
+    function getDerivatives(theta, omega, t) {
+      const area = state.coilW * state.coilL;
+      const effTurns = state.turns * 0.012; 
+      let effectiveB = state.B;
+      if (state.opMode === 'motor' && state.outputMode === 'ac') effectiveB = state.B * Math.sin(2 * Math.PI * t);
+      
+      let extI = state.appliedCurrent;
+      if (state.outputMode === 'ac') extI = state.appliedCurrent * Math.sin(2 * Math.PI * t);
+      
+      let armI = extI; 
+      if (state.outputMode === 'dc') {
+        // DC Split-Ring commutates at dead center (sin(theta) = 0)
+        armI = extI * Math.sign(Math.sin(theta)); 
+      } else if (state.outputMode === 'dc-slip') {
+        // Demo slip-ring mode: constant polarity feeds armature continuously, no commutation!
+        armI = extI; 
+      }
+
+      // F = I x B dictates CCW torque for positive inputs.
+      const torqueVal = effTurns * armI * effectiveB * area * Math.sin(theta);
+      const dOmega = (torqueVal - state.damping * omega) / state.inertia;
+      return { dTheta: omega, dOmega: dOmega };
+    }
+
+    function solveRK4(dt) {
+      let t = state.time; let theta = state.coilAngle; let omega = state.omega;
+      let k1 = getDerivatives(theta, omega, t);
+      let k2 = getDerivatives(theta + 0.5 * dt * k1.dTheta, omega + 0.5 * dt * k1.dOmega, t + 0.5 * dt);
+      let k3 = getDerivatives(theta + 0.5 * dt * k2.dTheta, omega + 0.5 * dt * k2.dOmega, t + 0.5 * dt);
+      let k4 = getDerivatives(theta + dt * k3.dTheta, omega + dt * k3.dOmega, t + dt);
+
+      state.coilAngle = (theta + (dt / 6) * (k1.dTheta + 2 * k2.dTheta + 2 * k3.dTheta + k4.dTheta)) % (2 * Math.PI);
+      if (state.coilAngle < 0) state.coilAngle += 2 * Math.PI;
+      state.omega = omega + (dt / 6) * (k1.dOmega + 2 * k2.dOmega + 2 * k3.dOmega + k4.dOmega);
+      state.omega = Math.max(-15, Math.min(15, state.omega)); 
+    }
+
+    function gameLoop(timestamp) {
+      if (!lastTime) lastTime = timestamp;
+      let deltaTime = (timestamp - lastTime) / 1000.0;
+      lastTime = timestamp;
+      if (deltaTime > 0.1) deltaTime = 0.1; 
+
+      if (state.isPlaying) {
+        for (let step = 0; step < 10; step++) {
+          state.time += deltaTime / 10;
+          updatePhysicsAndPlots(deltaTime / 10);
+        }
+      }
+
+      renderScene();
+      requestAnimationFrame(gameLoop);
+    }
+
+    function updatePhysicsAndPlots(dt) {
+      const area = state.coilW * state.coilL;
+
+      state.effectiveB = state.B;
+      state.extI = state.appliedCurrent;
+      if (state.outputMode === 'ac') {
+        let acFactor = Math.sin(2 * Math.PI * state.time);
+        state.extI = state.appliedCurrent * acFactor;
+        if (state.opMode === 'motor') state.effectiveB = state.B * acFactor;
+      }
+      
+      const hudAngle = document.getElementById('hud-angle');
+      const hudFlux = document.getElementById('hud-flux');
+      const hudEmf = document.getElementById('hud-emf');
+
+      if (state.opMode === 'generator') {
+        if (dt > 0) {
+          state.omega = 2 * Math.PI * state.frequency;
+          state.coilAngle = (state.coilAngle + state.omega * dt) % (2 * Math.PI);
+        }
+        
+        const baseFlux = state.B * area * Math.cos(state.coilAngle);
+        const totalFlux = state.turns * baseFlux;
+        let baseEMF = state.turns * state.B * area * state.omega * Math.sin(state.coilAngle);
+        
+        state.currentNorm = baseFlux !== 0 ? Math.sin(state.coilAngle) : 0;
+        
+        let armI = -baseEMF / state.resistance;
+        state.currentAmp = armI;
+
+        if (state.outputMode === 'dc') {
+          state.extI = armI * Math.sign(Math.sin(state.coilAngle));
+          if (Math.sin(state.coilAngle) === 0) state.extI = Math.abs(armI); 
+          baseEMF = Math.abs(baseEMF);
+        } else {
+          state.extI = armI;
+        }
+        
+        const effTurns = state.turns * 0.012;
+        state.torque = -effTurns * armI * state.B * area * Math.sin(state.coilAngle); 
+
+        if (hudAngle) hudAngle.textContent = `${((state.coilAngle * 180) / Math.PI).toFixed(1)}°`;
+        if (hudFlux) hudFlux.textContent = `${totalFlux.toFixed(3)}`;
+        if (hudEmf) hudEmf.textContent = `${baseEMF.toFixed(2)}`;
+        
+        if (dt > 0 || !state.isPlaying) state.graphHistory.push({ angle: state.coilAngle, time: state.time, flux: totalFlux, emf: baseEMF });
+
+      } else {
+        if (dt > 0) solveRK4(dt);
+
+        const effTurns = state.turns * 0.012;
+        const backEMF = effTurns * state.effectiveB * area * state.omega * Math.sin(state.coilAngle);
+
+        let armI = state.extI;
+        if (state.outputMode === 'dc') {
+          armI = state.extI * Math.sign(Math.sin(state.coilAngle));
+          if (Math.sin(state.coilAngle) === 0) armI = state.extI;
+        } // In dc-slip demo mode, armI remains equal to extI continuously
+        state.currentAmp = armI;
+
+        state.torque = effTurns * armI * state.effectiveB * area * Math.sin(state.coilAngle);
+        state.frequency = Math.abs(state.omega) / (2 * Math.PI);
+
+        if (hudAngle) hudAngle.textContent = `${((state.coilAngle * 180) / Math.PI).toFixed(1)}°`;
+        if (hudFlux) hudFlux.textContent = `${(state.turns * state.effectiveB * area * Math.cos(state.coilAngle)).toFixed(3)}`;
+        if (hudEmf) hudEmf.textContent = `${backEMF.toFixed(2)}`;
+
+        if (dt > 0 || !state.isPlaying) state.graphHistory.push({ angle: state.coilAngle, time: state.time, flux: state.currentAmp, emf: state.torque });
+      }
+
+      const hudCamera = document.getElementById('hud-camera');
+      if (hudCamera) hudCamera.textContent = `${Math.round((state.cameraAngleY * 180) / Math.PI)}°/${Math.round((state.cameraAngleX * 180) / Math.PI)}°`;
+
+      if (state.graphHistory.length > state.maxHistorySize) {
+        state.graphHistory.shift();
+      }
+    }
+
+    /* ==========================================================
+       5. ADVANCED 3D SCENE RENDERING PIPELINE
+       ========================================================== */
+    function renderScene() {
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      renderQueue = []; 
+
+      ctx.fillStyle = "rgba(30, 41, 59, 0.4)"; ctx.fillRect(0, 0, rect.width, rect.height);
+      ctx.strokeStyle = "rgba(71, 85, 105, 0.08)"; ctx.lineWidth = 1;
+      for (let x = 0; x < rect.width; x += 30) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, rect.height); ctx.stroke(); }
+      for (let y = 0; y < rect.height; y += 30) { ctx.beginPath(); moveTo(0, y); ctx.lineTo(rect.width, y); ctx.stroke(); }
+
+      drawMagnets();
+      drawFieldLines();
+      
+      queueCylinder({ x: 0, y: 0, z: -0.1 }, 0.04, 4.2, { r: 148, g: 163, b: 184 }); // Main shaft
+      drawCoilSystem(state.coilAngle);
+      drawCommutatorSystem(state.coilAngle, state.currentNorm);
+      
+      drawExternalCircuitAndBulb(state.currentNorm);
+
+      renderQueue.sort((a, b) => a.z - b.z);
+
+      for (let item of renderQueue) {
+        if (item.type === 'poly') {
+          ctx.beginPath();
+          ctx.moveTo(item.projs[0].x, item.projs[0].y);
+          for(let i=1; i<item.projs.length; i++) ctx.lineTo(item.projs[i].x, item.projs[i].y);
+          ctx.closePath();
+          if (item.fill !== 'transparent') { ctx.fillStyle = item.fill; ctx.fill(); }
+          if (item.width > 0) { ctx.lineJoin = "round"; ctx.strokeStyle = item.stroke; ctx.lineWidth = item.width; ctx.stroke(); }
+        } 
+        else if (item.type === 'line') {
+          ctx.beginPath();
+          if (item.isDash) ctx.setLineDash([5, 5]); else ctx.setLineDash([]);
+          ctx.moveTo(item.p1.x, item.p1.y); ctx.lineTo(item.p2.x, item.p2.y);
+          ctx.strokeStyle = item.color; ctx.lineWidth = item.width; ctx.stroke();
+          ctx.setLineDash([]);
+        } 
+        else if (item.type === 'vector') {
+          ctx.beginPath(); ctx.moveTo(item.p1.x, item.p1.y); ctx.lineTo(item.p2.x, item.p2.y);
+          let dxScreen = item.p2.x - item.p1.x; let dyScreen = item.p2.y - item.p1.y;
+          let screenLen = Math.sqrt(dxScreen*dxScreen + dyScreen*dyScreen);
+          
+          if (Math.abs(item.dz) > 0.9848 && screenLen < 25) {
+             ctx.beginPath(); ctx.arc(item.p1.x, item.p1.y, 8, 0, 2*Math.PI);
+             ctx.fillStyle = "#f8fafc"; ctx.fill(); 
+             ctx.lineWidth = 1.5; ctx.strokeStyle = item.color; ctx.stroke();
+             
+             ctx.beginPath();
+             if (item.dz > 0) {
+                ctx.arc(item.p1.x, item.p1.y, 2.5, 0, 2*Math.PI);
+                ctx.fillStyle = item.color; ctx.fill();
+             } else {
+                const s = 4.5;
+                ctx.moveTo(item.p1.x - s, item.p1.y - s); ctx.lineTo(item.p1.x + s, item.p1.y + s);
+                ctx.moveTo(item.p1.x + s, item.p1.y - s); ctx.lineTo(item.p1.x - s, item.p1.y + s);
+                ctx.stroke();
+             }
+
+             if (item.text) { 
+                ctx.fillStyle = item.color; 
+                let tX = item.p1.x + 14; let tY = item.p1.y + 14;
+                if (item.text === "F_B") {
+                   ctx.font = "italic bold 13px sans-serif"; ctx.fillText("F", tX, tY);
+                   let fw = ctx.measureText("F").width;
+                   ctx.font = "bold 10px sans-serif"; ctx.fillText("B", tX + fw, tY + 4);
+                } else {
+                   ctx.font = "bold 13px sans-serif"; ctx.fillText(item.text, tX, tY); 
+                }
+             }
+          } else {
+             ctx.strokeStyle = item.color; ctx.lineWidth = 2.5; ctx.stroke();
+             const angle2D = Math.atan2(dyScreen, dxScreen);
+             ctx.beginPath();
+             ctx.moveTo(item.p2.x, item.p2.y);
+             ctx.lineTo(item.p2.x - 10 * Math.cos(angle2D - Math.PI/6), item.p2.y - 10 * Math.sin(angle2D - Math.PI/6));
+             ctx.lineTo(item.p2.x - 10 * Math.cos(angle2D + Math.PI/6), item.p2.y - 10 * Math.sin(angle2D + Math.PI/6));
+             ctx.closePath(); ctx.fillStyle = item.color; ctx.fill();
+             
+             if (item.text) { 
+                ctx.fillStyle = item.color; 
+                let tX = item.p2.x + 8 * Math.cos(angle2D); let tY = item.p2.y + 8 * Math.sin(angle2D);
+                if (item.text === "F_B") {
+                   ctx.font = "italic bold 12px sans-serif"; ctx.fillText("F", tX, tY);
+                   let fw = ctx.measureText("F").width;
+                   ctx.font = "bold 9px sans-serif"; ctx.fillText("B", tX + fw, tY + 4);
+                } else {
+                   ctx.font = "bold 12px sans-serif"; ctx.fillText(item.text, tX, tY); 
+                }
+             }
+          }
+        } 
+        else if (item.type === 'text') {
+          const proj = project3D(item.p, rect.width, rect.height);
+          ctx.fillStyle = item.color; ctx.font = "bold 22px sans-serif";
+          ctx.textAlign = "center"; ctx.textBaseline = "middle";
+          ctx.fillText(item.text, proj.x + item.shift, proj.y);
+        }
+        else if (item.type === 'text_small') {
+          if(!item.proj) continue; 
+          ctx.fillStyle = item.color; ctx.font = "bold 10px sans-serif";
+          ctx.textAlign = "center"; ctx.textBaseline = "middle";
+          ctx.fillText(item.text, item.proj.x, item.proj.y);
+        }
+        else if (item.type === 'badge') {
+          const p = item.proj;
+          if(!p) continue; 
+          const isPos = item.sign === '+';
+          if (item.sign) {
+            ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, 2 * Math.PI);
+            ctx.fillStyle = isPos ? "#ef4444" : "#3b82f6"; 
+            ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1.5; ctx.fill(); ctx.stroke();
+            ctx.fillStyle = "#ffffff"; ctx.font = "bold 10px sans-serif";
+            ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(item.sign, p.x, p.y);
+          }
+        }
+      }
+
+      // Render fixed UI elements post-sort
+      const bX = rect.width / 2; const bY = rect.height - 45; 
+      if (state.opMode === 'generator') {
+        const brightness = Math.min(1.0, Math.pow(state.currentAmp, 2) * 0.15);
+        renderBulb(bX, bY, brightness);
+      } else if (state.outputMode === 'ac') {
+        renderPowerSourceUI(bX, bY);
+      }
+    }
+
+    function drawWinding(startX, endX, isLeft, brushPos, sourcePos3D) {
+      let pts = []; const turns = 8; const stepsPerTurn = 16; const totalSteps = turns * stepsPerTurn;
+      
+      for(let i=0; i<=totalSteps; i++) {
+          let frac = i / totalSteps; let x = startX + (endX - startX) * frac; let phase = (i % stepsPerTurn) / stepsPerTurn * 4;
+          let y = 0, z = 0; const yMax = 1.3, zMax = 1.5;
+          if (phase <= 1)      { y = -yMax; z = zMax - (phase)*zMax*2; }
+          else if (phase <= 2) { z = -zMax; y = -yMax + (phase-1)*yMax*2; }
+          else if (phase <= 3) { y = yMax;  z = -zMax + (phase-2)*zMax*2; }
+          else                 { z = zMax;  y = yMax - (phase-3)*yMax*2; }
+          pts.push({x, y, z});
+      }
+
+      for(let i=0; i<pts.length-1; i++) { queueLine(pts[i], pts[i+1], "#b45309", 4.0); queueLine(pts[i], pts[i+1], "#f59e0b", 2.0); }
+      
+      let innerEnd = pts[pts.length-1]; let outerEnd = pts[0]; let wCol = "#334155";
+      
+      queueLine(innerEnd, {x: innerEnd.x, y: brushPos.y, z: innerEnd.z}, wCol, 2.5);
+      queueLine({x: innerEnd.x, y: brushPos.y, z: innerEnd.z}, {x: innerEnd.x, y: brushPos.y, z: brushPos.z}, wCol, 2.5);
+      queueLine({x: innerEnd.x, y: brushPos.y, z: brushPos.z}, brushPos, wCol, 2.5);
+      
+      queueLine(outerEnd, {x: outerEnd.x, y: sourcePos3D.y, z: outerEnd.z}, wCol, 2.5);
+      queueLine({x: outerEnd.x, y: sourcePos3D.y, z: outerEnd.z}, {x: outerEnd.x, y: sourcePos3D.y, z: sourcePos3D.z}, wCol, 2.5);
+      queueLine({x: outerEnd.x, y: sourcePos3D.y, z: sourcePos3D.z}, sourcePos3D, wCol, 2.5);
+
+      let fullPath = [];
+      if (isLeft) {
+         fullPath.push(sourcePos3D, {x: outerEnd.x, y: sourcePos3D.y, z: sourcePos3D.z}, {x: outerEnd.x, y: sourcePos3D.y, z: outerEnd.z}, outerEnd);
+         fullPath.push(...pts);
+         fullPath.push(innerEnd, {x: innerEnd.x, y: brushPos.y, z: innerEnd.z}, {x: innerEnd.x, y: brushPos.y, z: brushPos.z}, brushPos);
+      } else {
+         fullPath.push(brushPos, {x: innerEnd.x, y: brushPos.y, z: brushPos.z}, {x: innerEnd.x, y: brushPos.y, z: innerEnd.z}, innerEnd);
+         fullPath.push(...[...pts].reverse()); 
+         fullPath.push(outerEnd, {x: outerEnd.x, y: sourcePos3D.y, z: outerEnd.z}, {x: outerEnd.x, y: sourcePos3D.y, z: sourcePos3D.z}, sourcePos3D);
+      }
+      drawFlowingCurrent(fullPath, state.extI);
+    }
+
+    function drawMagnets() {
+      let greyColor = {r: 156, g: 163, b: 175};
+      let nColor = {r: 220, g: 38, b: 38}; 
+      let sColor = {r: 30, g: 64, b: 175};
+      
+      let leftInner, rightInner, leftOuter, rightOuter, leftLabel, rightLabel, leftLabelCol, rightLabelCol, op;
+
+      if (Math.abs(state.effectiveB) < 0.05) {
+        leftInner = greyColor; rightInner = greyColor; leftOuter = greyColor; rightOuter = greyColor;
+        leftLabel = ''; rightLabel = ''; op = 0.3;
+      } else if (state.effectiveB >= 0) {
+        let intensity = Math.max(0.1, Math.abs(state.effectiveB) / 2.0); op = 0.55 * intensity;
+        leftInner = nColor; rightInner = sColor; leftOuter = sColor; rightOuter = nColor;
+        leftLabel = 'N'; leftLabelCol = '#fca5a5'; rightLabel = 'S'; rightLabelCol = '#93c5fd';
+      } else {
+        let intensity = Math.max(0.1, Math.abs(state.effectiveB) / 2.0); op = 0.55 * intensity;
+        leftInner = sColor; rightInner = nColor; leftOuter = nColor; rightOuter = sColor;
+        leftLabel = 'S'; leftLabelCol = '#93c5fd'; rightLabel = 'N'; rightLabelCol = '#fca5a5';
+      }
+
+      if(leftLabel) queueBox({x: -1.9, y: 0, z: 0}, 0.5, 2.4, 2.8, leftInner, op, {text: leftLabel, color: leftLabelCol, shift: 12}); 
+      else queueBox({x: -1.9, y: 0, z: 0}, 0.5, 2.4, 2.8, leftInner, op);
+      
+      queueBox({x: -2.4, y: 0, z: 0}, 0.5, 2.4, 2.8, leftOuter, op);
+      
+      if(rightLabel) queueBox({x: 1.9, y: 0, z: 0}, 0.5, 2.4, 2.8, rightInner, op, {text: rightLabel, color: rightLabelCol, shift: -12}); 
+      else queueBox({x: 1.9, y: 0, z: 0}, 0.5, 2.4, 2.8, rightInner, op);
+      
+      queueBox({x: 2.4, y: 0, z: 0}, 0.5, 2.4, 2.8, rightOuter, op);
+
+      if (state.opMode === 'motor' && state.outputMode === 'ac') {
+        const ringRadius = 0.45; const brushWidth = 0.20; const brushX = ringRadius + brushWidth / 2;
+        let brushL = {x: -brushX, y: 0, z: -1.3}; let srcL = {x: -0.2, y: -2.0, z: -2.3}; 
+        drawWinding(-2.5, -1.8, true, brushL, srcL);
+        let brushR = {x: brushX, y: 0, z: -1.3}; let srcR = {x: 0.2, y: -2.0, z: -2.3};
+        drawWinding(2.5, 1.8, false, brushR, srcR);
+      }
+    }
+
+    function drawFieldLines() {
+      if (!state.showB || Math.abs(state.effectiveB) < 0.05) return;
+      let absB = Math.abs(state.effectiveB);
+      let intensity = Math.max(0.1, absB / 2.0); 
+      let isPos = state.effectiveB >= 0;
+
+      // Make lines dense at any field strength
+      let step = 0.45 / Math.max(0.7, absB);
+      step = Math.max(0.12, Math.min(0.4, step));
+
+      for (let yOffset = -0.7; yOffset <= 0.7; yOffset += step) {
+        for (let zOffset = -0.8; zOffset <= 0.8; zOffset += step) {
+          queueLine({ x: -1.65, y: yOffset, z: zOffset }, { x: 1.65, y: yOffset, z: zOffset }, `rgba(96, 165, 250, ${0.15 * intensity})`, 1);
+          queueVector({ x: isPos ? -1.65 : 1.65, y: yOffset, z: zOffset }, { x: isPos ? 1 : -1, y: 0, z: 0 }, 3.3, `rgba(59, 130, 246, ${0.5 * intensity})`, "");
+        }
+      }
+    }
+
+    function drawCoilSystem(angle) {
+      const halfW = state.coilW / 2; const halfL = state.coilL / 2;
+      const visAngle = angle - Math.PI / 2; 
+      const path = []; const totalVertices = 12; 
+      
+      for (let v = 0; v < totalVertices; v++) {
+        let cW = halfW - (v / Math.max(1, (totalVertices - 1))) * 0.15;
+        let cL = halfL - (v / Math.max(1, (totalVertices - 1))) * 0.15;
+        let corner = v % 4; let lx, lz;
+        if (corner === 0) { lx = -cW; lz = -cL; }        
+        else if (corner === 1) { lx = -cW; lz = cL; }  
+        else if (corner === 2) { lx = cW; lz = cL; }   
+        else if (corner === 3) { lx = cW; lz = -cL; }    
+        path.push({ x: lx * Math.cos(visAngle), y: lx * Math.sin(visAngle), z: lz });
+      }
+
+      for (let i = 0; i < path.length - 1; i++) {
+        queueLine(path[i], path[i+1], "#b45309", 4.5); queueLine(path[i], path[i+1], "#f59e0b", 1.5); 
+      }
+
+      state.wireStartL = path[0]; state.wireStartR = path[path.length - 1]; 
+
+      if (state.showArea) {
+        queuePoly([
+          { x: -halfW * Math.cos(visAngle), y: -halfW * Math.sin(visAngle), z: -halfL },
+          { x:  halfW * Math.cos(visAngle), y:  halfW * Math.sin(visAngle), z: -halfL },
+          { x:  halfW * Math.cos(visAngle), y:  halfW * Math.sin(visAngle), z:  halfL },
+          { x: -halfW * Math.cos(visAngle), y: -halfW * Math.sin(visAngle), z:  halfL }
+        ], "rgba(16, 185, 129, 0.12)", "transparent", 0);
+        queueVector({x:0, y:0, z:0}, { x: -Math.sin(visAngle), y: Math.cos(visAngle), z: 0 }, 1.2, "#10b981", translations[state.lang].lblChkArea);
+      }
+
+      drawFlowingCurrent(path, state.currentAmp);
+
+      // Force Vectors calculated strictly via Fleming's Left-Hand Rule (F = I L x B)
+      // Visual magnitude physically depends on N, I, B and coilL (Length)
+      if (state.showForce && Math.abs(state.currentAmp) > 0.05 && Math.abs(state.effectiveB) > 0.01) {
+        // Base Force = N * I * B * Length
+        const rawForce = state.turns * Math.abs(state.currentAmp) * Math.abs(state.effectiveB) * state.coilL;
+        // Map raw physical force to visual magnitude arrow length, capped at 1.8 units
+        const forceMag = Math.min(1.8, 0.005 * rawForce + 0.2); 
+        
+        const midBC = { x: halfW * Math.cos(visAngle), y: halfW * Math.sin(visAngle), z: 0 };
+        const midAD = { x: -halfW * Math.cos(visAngle), y: -halfW * Math.sin(visAngle), z: 0 };
+        
+        let isCurrentForward = state.currentAmp > 0; 
+        
+        // Right wire is at +X relative to coil plane. Current goes +Z.
+        // F = I (+Z) x B (+X) = +Y (UP)
+        let forceY_BC = (isCurrentForward ? 1 : -1) * (state.effectiveB >= 0 ? 1 : -1);
+        
+        queueVector(midBC, { x: 0, y: forceY_BC, z: 0 }, forceMag, "#a855f7", "F_B");
+        queueVector(midAD, { x: 0, y: -forceY_BC, z: 0 }, forceMag, "#a855f7", "F_B");
+      }
+    }
+
+    function drawFlowingCurrent(path, currentVal) {
+      if (!state.showCurrent || Math.abs(currentVal) < 0.02) return;
+      let lengths = []; let totalLength = 0;
+      for (let i = 0; i < path.length - 1; i++) {
+        let dx = path[i+1].x - path[i].x; let dy = path[i+1].y - path[i].y; let dz = path[i+1].z - path[i].z;
+        let len = Math.sqrt(dx*dx + dy*dy + dz*dz); lengths.push(len); totalLength += len;
+      }
+
+      const numArrows = 8;
+      const flowSpeed = 0.08 * currentVal; 
+      let phase = (state.time * flowSpeed) % 1.0; if (phase < 0) phase += 1.0;
+
+      for (let j = 0; j < numArrows; j++) {
+        let frac = (j / numArrows + phase) % 1.0; let targetDist = frac * totalLength;
+        let accum = 0; let segmentIndex = 0; let segFrac = 0;
+        for (let i = 0; i < lengths.length; i++) {
+          if (accum + lengths[i] >= targetDist) { segmentIndex = i; segFrac = (targetDist - accum) / lengths[i]; break; }
+          accum += lengths[i];
+        }
+
+        let pA = path[segmentIndex]; let pB = path[segmentIndex + 1];
+        let pArrow = { x: pA.x + (pB.x - pA.x) * segFrac, y: pA.y + (pB.y - pA.y) * segFrac, z: pA.z + (pB.z - pA.z) * segFrac };
+        let dir = { x: (pB.x - pA.x) / lengths[segmentIndex], y: (pB.y - pA.y) / lengths[segmentIndex], z: (pB.z - pA.z) / lengths[segmentIndex] };
+        if (currentVal < 0) { dir.x = -dir.x; dir.y = -dir.y; dir.z = -dir.z; }
+
+        const arrowLength = 0.16;
+        const startPt = { x: pArrow.x - dir.x * (arrowLength / 2), y: pArrow.y - dir.y * (arrowLength / 2), z: pArrow.z - dir.z * (arrowLength / 2) };
+        queueVector(startPt, dir, arrowLength, "#f59e0b");
+      }
+    }
+
+    function drawCommutatorSystem(angle, currentNorm) {
+      const ringZ1 = -1.3; const ringZ2 = -1.7;
+      const brassColor = {r: 234, g: 179, b: 8}; const brushColor = {r: 51, g: 65, b: 85};
+      const wireLStart = state.wireStartL; const wireRStart = state.wireStartR; const halfL = state.coilL / 2;
+      
+      const isSplitRing = (state.outputMode === 'dc');
+      const isSlipRing = (state.opMode === 'generator' && state.outputMode === 'ac') || (state.opMode === 'motor' && (state.outputMode === 'ac' || state.outputMode === 'dc-slip'));
+      const visAngle = angle - Math.PI / 2;
+      const ringRadius = 0.45; const brushWidth = 0.20; const brushX = ringRadius + brushWidth / 2;
+      const ringInnerRadius = ringRadius - 0.075; 
+
+      if (isSlipRing) {
+        queueCylinder({ x: 0, y: 0, z: ringZ1 }, ringRadius, 0.25, brassColor, visAngle, false, ringInnerRadius);
+        queueCylinder({ x: 0, y: 0, z: ringZ2 }, ringRadius, 0.25, brassColor, visAngle, false, ringInnerRadius);
+
+        const midL = { x: -ringInnerRadius * Math.cos(visAngle), y: -ringInnerRadius * Math.sin(visAngle), z: -halfL - 0.15 };
+        const connL_front = { x: -ringInnerRadius * Math.cos(visAngle), y: -ringInnerRadius * Math.sin(visAngle), z: ringZ1 + 0.10 };
+        const connL_back = { x: -ringInnerRadius * Math.cos(visAngle), y: -ringInnerRadius * Math.sin(visAngle), z: ringZ1 - 0.10 };
+        queueLine(wireLStart, midL, "#b45309", 3.5); queueLine(wireLStart, midL, "#f59e0b", 1.2);
+        queueLine(midL, connL_front, "#b45309", 3.5); queueLine(midL, connL_front, "#f59e0b", 1.2);
+        queueLine(connL_front, connL_back, "#b45309", 5.0); queueLine(connL_front, connL_back, "#f59e0b", 2.0); 
+
+        const midR1 = { x: 0.12 * Math.cos(visAngle), y: 0.12 * Math.sin(visAngle), z: -halfL - 0.15 };
+        const midR2 = { x: 0.12 * Math.cos(visAngle), y: 0.12 * Math.sin(visAngle), z: ringZ2 + 0.10 };
+        const connR_front = { x: ringInnerRadius * Math.cos(visAngle), y: ringInnerRadius * Math.sin(visAngle), z: ringZ2 + 0.10 };
+        const connR_back = { x: ringInnerRadius * Math.cos(visAngle), y: ringInnerRadius * Math.sin(visAngle), z: ringZ2 - 0.10 };
+        
+        queueLine(wireRStart, midR1, "#b45309", 3.5); queueLine(wireRStart, midR1, "#f59e0b", 1.2);
+        queueLine(midR1, midR2, "#b45309", 3.5); queueLine(midR1, midR2, "#f59e0b", 1.2); 
+        queueLine(midR2, connR_front, "#b45309", 3.5); queueLine(midR2, connR_front, "#f59e0b", 1.2); 
+        queueLine(connR_front, connR_back, "#b45309", 5.0); queueLine(connR_front, connR_back, "#f59e0b", 2.0); 
+
+        queueBox({ x: -brushX, y: 0, z: ringZ1 }, brushWidth, 0.16, 0.25, brushColor);
+        queueBox({ x:  brushX, y: 0, z: ringZ2 }, brushWidth, 0.16, 0.25, brushColor);
+      } else {
+        queueCylinder({ x: 0, y: 0, z: ringZ1 }, ringRadius, 0.55, brassColor, visAngle, true, ringInnerRadius);
+
+        const midL = { x: -ringInnerRadius * Math.cos(visAngle), y: -ringInnerRadius * Math.sin(visAngle), z: -halfL - 0.15 };
+        const connL_front = { x: -ringInnerRadius * Math.cos(visAngle), y: -ringInnerRadius * Math.sin(visAngle), z: ringZ1 + 0.22 };
+        const connL_back = { x: -ringInnerRadius * Math.cos(visAngle), y: -ringInnerRadius * Math.sin(visAngle), z: ringZ1 - 0.22 };
+        queueLine(wireLStart, midL, "#b45309", 3.5); queueLine(wireLStart, midL, "#f59e0b", 1.2);
+        queueLine(midL, connL_front, "#b45309", 3.5); queueLine(midL, connL_front, "#f59e0b", 1.2);
+        queueLine(connL_front, connL_back, "#b45309", 5.0); queueLine(connL_front, connL_back, "#f59e0b", 2.0); 
+        
+        const midR = { x: ringInnerRadius * Math.cos(visAngle), y: ringInnerRadius * Math.sin(visAngle), z: -halfL - 0.15 };
+        const connR_front = { x: ringInnerRadius * Math.cos(visAngle), y: ringInnerRadius * Math.sin(visAngle), z: ringZ1 + 0.22 };
+        const connR_back = { x: ringInnerRadius * Math.cos(visAngle), y: ringInnerRadius * Math.sin(visAngle), z: ringZ1 - 0.22 };
+        queueLine(wireRStart, midR, "#b45309", 3.5); queueLine(wireRStart, midR, "#f59e0b", 1.2);
+        queueLine(midR, connR_front, "#b45309", 3.5); queueLine(midR, connR_front, "#f59e0b", 1.2);
+        queueLine(connR_front, connR_back, "#b45309", 5.0); queueLine(connR_front, connR_back, "#f59e0b", 2.0); 
+
+        queueBox({ x: -brushX, y: 0, z: ringZ1 }, brushWidth, 0.16, 0.55, brushColor);
+        queueBox({ x:  brushX, y: 0, z: ringZ1 }, brushWidth, 0.16, 0.55, brushColor);
+      }
+    }
+
+    function drawExternalCircuitAndBulb(currentNorm) {
+      const ringZ1 = -1.3, ringZ2 = -1.7;
+      const isUniversalMotor = (state.opMode === 'motor' && state.outputMode === 'ac');
+      const isSlipRing = (state.opMode === 'generator' && state.outputMode === 'ac') || (state.opMode === 'motor' && (state.outputMode === 'ac' || state.outputMode === 'dc-slip'));
+      const brushColor = {r: 51, g: 65, b: 85};
+      const ringRadius = 0.45;
+      const brushWidth = 0.20;
+      const brushX = ringRadius + brushWidth / 2;
+      const wCol = "#334155";
+      
+      if (state.opMode === 'motor' && (state.outputMode === 'dc' || state.outputMode === 'dc-slip')) {
+        const batCenter = {x: 0, y: -2.3, z: -2.3};
+        const isPosRight = state.appliedCurrent < 0;
+        const targetRingZ = (state.outputMode === 'dc-slip') ? ringZ1 : ringZ1;
+        
+        // Photorealistic 3D Battery components directly embedded in Z-sorted Queue
+        queueCylinder(batCenter, 0.2, 1.0, {r: 30, g: 30, b: 30}, 0, false, 0, 'x'); // Body
+        const nubX = isPosRight ? 0.55 : -0.55;
+        queueCylinder({x: nubX, y: -2.3, z: -2.3}, 0.08, 0.1, {r: 200, g: 200, b: 200}, 0, false, 0, 'x'); // + Nub
+        
+        // UI overlay markers
+        const rect = canvas.getBoundingClientRect();
+        const pPlus = project3D({x: isPosRight ? 0.65 : -0.65, y: -2.3, z: -2.0}, rect.width, rect.height);
+        const pMinus = project3D({x: isPosRight ? -0.55 : 0.55, y: -2.3, z: -2.0}, rect.width, rect.height);
+        renderQueue.push({ type: 'text_small', proj: pPlus, text: "+", color: "#ef4444", z: pPlus.z });
+        renderQueue.push({ type: 'text_small', proj: pMinus, text: "-", color: "#3b82f6", z: pMinus.z });
+
+        const termL = {x: -0.6, y: -2.3, z: -2.3};
+        const termR = {x: 0.5, y: -2.3, z: -2.3};
+        
+        // Draw brushes based on split/slip commutator design
+        if (state.outputMode === 'dc-slip') {
+           queueBox({ x: -brushX, y: 0, z: ringZ1 }, brushWidth, 0.16, 0.25, brushColor);
+           queueBox({ x:  brushX, y: 0, z: ringZ2 }, brushWidth, 0.16, 0.25, brushColor);
+           
+           queueLine({x: -brushX, y: 0, z: ringZ1}, {x: -(brushX + 0.14), y: 0, z: ringZ1}, wCol, 2.5);
+           queueLine({x: -(brushX + 0.14), y: 0, z: ringZ1}, {x: -(brushX + 0.14), y: -2.3, z: ringZ1}, wCol, 2.5);
+           queueLine({x: -(brushX + 0.14), y: -2.3, z: ringZ1}, termL, wCol, 2.5);
+
+           queueLine({x: brushX, y: 0, z: ringZ2}, {x: (brushX + 0.14), y: 0, z: ringZ2}, wCol, 2.5);
+           queueLine({x: (brushX + 0.14), y: 0, z: ringZ2}, {x: (brushX + 0.14), y: -2.3, z: ringZ2}, wCol, 2.5);
+           queueLine({x: (brushX + 0.14), y: -2.3, z: ringZ2}, termR, wCol, 2.5);
+
+           const pathExtL = [ termL, {x: -(brushX + 0.14), y: -2.3, z: ringZ1}, {x: -(brushX + 0.14), y: 0, z: ringZ1}, {x: -brushX, y: 0, z: ringZ1} ];
+           const pathExtR = [ {x: brushX, y: 0, z: ringZ2}, {x: (brushX + 0.14), y: 0, z: ringZ2}, {x: (brushX + 0.14), y: -2.3, z: ringZ2}, termR ];
+           drawFlowingCurrent(pathExtL, state.extI);
+           drawFlowingCurrent(pathExtR, state.extI);
+        } else {
+           queueBox({ x: -brushX, y: 0, z: ringZ1 }, brushWidth, 0.16, 0.55, brushColor);
+           queueBox({ x:  brushX, y: 0, z: ringZ1 }, brushWidth, 0.16, 0.55, brushColor);
+           
+           queueLine({x: -brushX, y: 0, z: ringZ1}, {x: -(brushX + 0.14), y: 0, z: ringZ1}, wCol, 2.5);
+           queueLine({x: -(brushX + 0.14), y: 0, z: ringZ1}, {x: -(brushX + 0.14), y: -2.3, z: ringZ1}, wCol, 2.5);
+           queueLine({x: -(brushX + 0.14), y: -2.3, z: ringZ1}, termL, wCol, 2.5);
+
+           queueLine({x: brushX, y: 0, z: ringZ1}, {x: (brushX + 0.14), y: 0, z: ringZ1}, wCol, 2.5);
+           queueLine({x: (brushX + 0.14), y: 0, z: ringZ1}, {x: (brushX + 0.14), y: -2.3, z: ringZ1}, wCol, 2.5);
+           queueLine({x: (brushX + 0.14), y: -2.3, z: ringZ1}, termR, wCol, 2.5);
+
+           const pathExtL = [ termL, {x: -(brushX + 0.14), y: -2.3, z: ringZ1}, {x: -(brushX + 0.14), y: 0, z: ringZ1}, {x: -brushX, y: 0, z: ringZ1} ];
+           const pathExtR = [ {x: brushX, y: 0, z: ringZ1}, {x: (brushX + 0.14), y: 0, z: ringZ1}, {x: (brushX + 0.14), y: -2.3, z: ringZ1}, termR ];
+           drawFlowingCurrent(pathExtL, state.extI);
+           drawFlowingCurrent(pathExtR, state.extI);
+        }
+        return; 
+      }
+
+      if (isUniversalMotor) return; 
+
+      const loadCenter = { x: 0, y: -2.0, z: -2.3 };
+      if (!isUniversalMotor) {
+          const zR = isSlipRing ? ringZ2 : ringZ1;
+          
+          queueLine({x: -brushX, y: 0, z: ringZ1}, {x: -(brushX + 0.14), y: 0, z: ringZ1}, wCol, 2.5);
+          queueLine({x: -(brushX + 0.14), y: 0, z: ringZ1}, {x: -(brushX + 0.14), y: -2.0, z: ringZ1}, wCol, 2.5);
+          queueLine({x: -(brushX + 0.14), y: -2.0, z: ringZ1}, {x: -0.2, y: -2.0, z: -2.3}, wCol, 2.5);
+          
+          queueLine({x: brushX, y: 0, z: zR}, {x: (brushX + 0.14), y: 0, z: zR}, wCol, 2.5);
+          queueLine({x: (brushX + 0.14), y: 0, z: zR}, {x: (brushX + 0.14), y: -2.0, z: zR}, wCol, 2.5);
+          queueLine({x: (brushX + 0.14), y: -2.0, z: zR}, {x: 0.2, y: -2.0, z: -2.3}, wCol, 2.5);
+
+          const pathExtL = [ {x: -brushX, y: 0, z: ringZ1}, {x: -(brushX + 0.14), y: 0, z: ringZ1}, {x: -(brushX + 0.14), y: -2.0, z: ringZ1}, {x: -0.2, y: -2.0, z: -2.3} ];
+          const pathExtR = [ {x: 0.2, y: -2.0, z: -2.3}, {x: (brushX + 0.14), y: -2.0, z: zR}, {x: (brushX + 0.14), y: 0, z: zR}, {x: brushX, y: 0, z: zR} ];
+          drawFlowingCurrent(pathExtL, state.extI);
+          drawFlowingCurrent(pathExtR, state.extI);
+      }
+
+      const rect = canvas.getBoundingClientRect();
+      const proj = project3D(loadCenter, rect.width, rect.height);
+      const brightness = Math.min(1.0, Math.pow(state.currentAmp, 2) * 0.15);
+      renderQueue.push({ type: 'bulb', center: loadCenter, proj, brightness, z: proj.z });
+    }
+
+    function renderBulb(bX, bY, brightness) {
+      const rect = canvas.getBoundingClientRect();
+      const pL = project3D({x: -0.2, y: -2.0, z: -2.3}, rect.width, rect.height);
+      const pR = project3D({x: 0.2, y: -2.0, z: -2.3}, rect.width, rect.height);
+      
+      ctx.strokeStyle = "#334155"; ctx.lineWidth = 2.5; ctx.beginPath();
+      ctx.moveTo(pL.x, pL.y); ctx.lineTo(bX - 10, bY + 15); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(pR.x, pR.y); ctx.lineTo(bX + 10, bY + 15); ctx.stroke();
+
+      ctx.beginPath(); ctx.arc(bX, bY + 15, 12, 0, Math.PI, false); ctx.fillStyle = "#334155"; ctx.fill();
+
+      if (brightness > 0.02) {
+        const gradient = ctx.createRadialGradient(bX, bY+5, 2, bX, bY+5, 35 * brightness);
+        gradient.addColorStop(0, `rgba(253, 224, 71, ${0.9 * brightness})`);
+        gradient.addColorStop(1, 'rgba(253, 224, 71, 0)');
+        ctx.beginPath(); ctx.arc(bX, bY+5, 40 * brightness, 0, 2 * Math.PI); ctx.fillStyle = gradient; ctx.fill();
+      }
+
+      ctx.beginPath(); ctx.arc(bX, bY+5, 10, 0, 2 * Math.PI);
+      ctx.fillStyle = brightness > 0.1 ? `rgba(253, 224, 71, ${0.4 + 0.6 * brightness})` : "rgba(241, 245, 249, 0.5)";
+      ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 1.5; ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(bX - 4, bY + 8); ctx.lineTo(bX - 2, bY + 2); ctx.lineTo(bX + 2, bY + 2); ctx.lineTo(bX + 4, bY + 8);
+      ctx.strokeStyle = brightness > 0.1 ? "#f59e0b" : "#94a3b8"; ctx.lineWidth = 2; ctx.stroke();
+    }
+
+    function renderPowerSourceUI(bX, bY) {
+      const rect = canvas.getBoundingClientRect();
+      const pL = project3D({x: -0.2, y: -2.0, z: -2.3}, rect.width, rect.height);
+      const pR = project3D({x: 0.2, y: -2.0, z: -2.3}, rect.width, rect.height);
+
+      ctx.strokeStyle = "#334155"; ctx.lineWidth = 2.5; ctx.beginPath();
+      ctx.moveTo(pL.x, pL.y); ctx.lineTo(bX - 14, bY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(pR.x, pR.y); ctx.lineTo(bX + 14, bY); ctx.stroke();
+
+      ctx.fillStyle = "#1e293b"; ctx.strokeStyle = "#475569"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(bX, bY, 14, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
+
+      ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2; ctx.beginPath();
+      ctx.moveTo(bX - 7, bY); ctx.bezierCurveTo(bX - 3.5, bY - 8, bX + 3.5, bY + 8, bX + 7, bY); ctx.stroke();
+      
+      ctx.fillStyle = "#64748b"; ctx.font = "bold 9px sans-serif";
+      ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("AC", bX, bY - 22);
+    }
+
+    /* ==========================================================
+       6. HIGH-PERFORMANCE ANALYTICAL GRAPHING ENGINES
+       ========================================================== */
+    const fluxCanvas = document.getElementById('graph-flux-canvas');
+    const fluxCtx = fluxCanvas.getContext('2d');
+    const emfCanvas = document.getElementById('graph-emf-canvas');
+    const emfCtx = emfCanvas.getContext('2d');
+
+    function resizeGraphs() {
+      [fluxCanvas, emfCanvas].forEach(gCanvas => {
+        const rect = gCanvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        gCanvas.width = rect.width * dpr;
+        gCanvas.height = rect.height * dpr;
+        gCanvas.getContext('2d').scale(dpr, dpr);
+      });
+    }
+    window.addEventListener('resize', resizeGraphs);
+    resizeGraphs();
+
+    function renderGraphs() {
+      if (state.opMode === 'generator') {
+        drawAnalyticalPlot(fluxCanvas, fluxCtx, 'flux', '#2563eb', state.B * state.coilW * state.coilL * state.turns);
+        drawAnalyticalPlot(emfCanvas, emfCtx, 'emf', '#dc2626', state.turns * state.B * (state.coilW * state.coilL) * (2 * Math.PI * state.frequency));
+      } else {
+        const area = state.coilW * state.coilL;
+        const maxCurrent = Math.abs(state.appliedCurrent) + 0.5;
+        const maxTorque = state.turns * maxCurrent * state.B * area * 0.012; 
+        drawAnalyticalPlot(fluxCanvas, fluxCtx, 'flux', '#d97706', Math.max(1.0, maxCurrent));
+        drawAnalyticalPlot(emfCanvas, emfCtx, 'emf', '#8b5cf6', Math.max(0.5, maxTorque));
+      }
+      requestAnimationFrame(renderGraphs);
+    }
+
+    function drawAnalyticalPlot(gCanvas, gCtx, dataKey, color, maxValScale) {
+      const rect = gCanvas.getBoundingClientRect();
+      gCtx.clearRect(0, 0, rect.width, rect.height);
+      const margin = { top: 15, right: 15, bottom: 20, left: 45 };
+      const plotW = rect.width - margin.left - margin.right; const plotH = rect.height - margin.top - margin.bottom;
+
+      gCtx.fillStyle = "#fafafa"; gCtx.fillRect(margin.left, margin.top, plotW, plotH);
+      gCtx.strokeStyle = "#f1f5f9"; gCtx.lineWidth = 1;
+      for (let i = 1; i <= 4; i++) { const y = margin.top + (plotH / 5) * i; gCtx.beginPath(); gCtx.moveTo(margin.left, y); gCtx.lineTo(margin.left + plotW, y); gCtx.stroke(); }
+
+      const zeroY = margin.top + plotH / 2;
+      gCtx.strokeStyle = "#cbd5e1"; gCtx.lineWidth = 1.2;
+      gCtx.beginPath(); gCtx.moveTo(margin.left, zeroY); gCtx.lineTo(margin.left + plotW, zeroY); gCtx.stroke();
+
+      if (state.graphHistory.length < 2) return;
+
+      gCtx.beginPath(); gCtx.lineWidth = 2.5; gCtx.strokeStyle = color;
+      const dynamicMax = maxValScale > 0 ? maxValScale : 1.0;
+
+      for (let i = 0; i < state.graphHistory.length; i++) {
+        const pt = state.graphHistory[i];
+        const x = margin.left + (i / state.maxHistorySize) * plotW;
+        const ratio = pt[dataKey] / dynamicMax; 
+        const y = zeroY - ratio * (plotH / 2.2);
+        if (i === 0) gCtx.moveTo(x, y); else gCtx.lineTo(x, y);
+      }
+      gCtx.stroke();
+
+      const lastIndex = state.graphHistory.length - 1;
+      const latestPt = state.graphHistory[lastIndex];
+      const activeX = margin.left + (lastIndex / state.maxHistorySize) * plotW;
+      const activeY = zeroY - (latestPt[dataKey] / dynamicMax) * (plotH / 2.2);
+
+      gCtx.beginPath(); gCtx.arc(activeX, activeY, 5, 0, 2 * Math.PI); gCtx.fillStyle = color; gCtx.fill();
+      gCtx.strokeStyle = "#ffffff"; gCtx.lineWidth = 1.5; gCtx.stroke();
+
+      gCtx.fillStyle = "#475569"; gCtx.font = "9px monospace"; gCtx.textAlign = "right";
+      gCtx.fillText(`+${dynamicMax.toFixed(2)}`, margin.left - 6, margin.top + 8);
+      gCtx.fillText("0", margin.left - 6, zeroY + 3);
+      gCtx.fillText(`-${dynamicMax.toFixed(2)}`, margin.left - 6, margin.top + plotH - 3);
+      gCtx.textAlign = "center"; gCtx.fillText("Time (Scroll)", margin.left + plotW / 2, rect.height - 4);
+    }
+
+    window.onload = function() {
+      setupEventListeners();
+      updateLanguage();
+      requestAnimationFrame(gameLoop);
+      requestAnimationFrame(renderGraphs);
+    };
+
+  </script>
+</body>
+</html>
