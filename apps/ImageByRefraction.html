@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>折射與視深 Refraction & Apparent Depth</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax 3 -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        /* --- 1. Global CSS & Custom Styles --- */
+        :root {
+            --primary-deep-blue: #1e3c72;
+            --primary-light: #2a5298;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+        }
+
+        /* Custom Scrollbar for Sidebar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: var(--primary-deep-blue);
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden text-slate-800">
+
+    <!-- Global Header Bar -->
+    <header class="w-full bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white flex justify-between items-center p-3 shadow-md z-50 shrink-0">
+        <div class="flex items-center pl-2 sm:pl-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mr-2.5 opacity-90"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <h1 id="ui-title" class="text-lg font-bold truncate">折射與視深</h1>
+        </div>
+        
+        <div class="flex items-center gap-1 sm:gap-3 pr-2 sm:pr-4">
+            <!-- Mobile Menu Gear (Visible only on smaller screens) -->
+            <button id="mobileMenuBtn" class="lg:hidden flex items-center p-2 hover:bg-white/20 rounded transition-colors focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+
+            <!-- Help Button -->
+            <button id="btnHelp" class="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 hover:bg-white/20 rounded transition-colors text-sm font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <span id="ui-help-btn">說明</span>
+            </button>
+
+            <!-- Lang Toggle -->
+            <button id="langToggle" class="px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded text-sm font-medium transition-colors whitespace-nowrap">
+                Eng/繁
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Wrapper -->
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <!-- Sidebar Controls -->
+        <aside id="sidebar" class="w-full lg:w-auto lg:min-w-[320px] shrink-0 bg-white shadow-2xl flex flex-col h-full absolute lg:relative z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+            <div class="flex-1 overflow-y-auto p-5 space-y-6">
+                
+                <!-- Drag Instruction Alert -->
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 flex gap-3 items-start">
+                    <span class="text-emerald-600 mt-0.5">💡</span>
+                    <p id="ui-drag-tip" class="text-xs text-emerald-800 leading-relaxed font-medium">
+                        你可以在畫布上直接拖曳物體（魚/麻雀）以及觀察者的眼睛，即時觀察光路的變化！
+                    </p>
+                </div>
+
+                <!-- Visibility Options -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                    <label id="ui-vis-options" class="block text-sm font-semibold text-[#1e3c72]">顯示選項</label>
+                    <div class="space-y-2.5 text-xs font-medium">
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" id="chkRealObj" class="w-4 h-4 rounded border-slate-300 text-[#1e3c72] focus:ring-[#1e3c72] transition-colors" checked>
+                            <span id="ui-opt-real-obj">顯示實物 (魚)</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" id="chkVirtImg" class="w-4 h-4 rounded border-slate-300 text-[#1e3c72] focus:ring-[#1e3c72] transition-colors" checked>
+                            <span id="ui-opt-virt-img">顯示虛像</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" id="chkPrimaryRays" class="w-4 h-4 rounded border-slate-300 text-[#1e3c72] focus:ring-[#1e3c72] transition-colors" checked>
+                            <span id="ui-opt-primary-rays">顯示主要光線</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" id="chkFadedRays" class="w-4 h-4 rounded border-slate-300 text-[#1e3c72] focus:ring-[#1e3c72] transition-colors" checked>
+                            <span id="ui-opt-faded-rays">顯示環境光線 (360°)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Parameters -->
+                <div class="space-y-5">
+                    <div class="space-y-1">
+                        <div class="flex justify-between">
+                            <label id="ui-n-water" class="text-sm font-medium">水的折射率</label>
+                            <span id="valN" class="text-sm font-bold text-[#1e3c72]">1.33</span>
+                        </div>
+                        <input type="range" id="sliderN" min="1.1" max="2.0" step="0.01" value="1.33">
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex justify-between">
+                            <label id="ui-obj-dist" class="text-sm font-medium">物體實際深度</label>
+                            <span id="valObjDist" class="text-sm font-bold text-[#1e3c72]">3.00 m</span>
+                        </div>
+                        <input type="range" id="sliderObjDist" min="0.1" max="10.0" step="0.1" value="3.0">
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex justify-between">
+                            <label id="ui-eye-x" class="text-sm font-medium">觀察者水平距離</label>
+                            <span id="valEyeX" class="text-sm font-bold text-[#1e3c72]">4.00 m</span>
+                        </div>
+                        <input type="range" id="sliderEyeX" min="-5.0" max="15.0" step="0.1" value="4.0">
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex justify-between">
+                            <label id="ui-eye-y" class="text-sm font-medium">觀察者垂直距離</label>
+                            <span id="valEyeY" class="text-sm font-bold text-[#1e3c72]">2.00 m</span>
+                        </div>
+                        <input type="range" id="sliderEyeY" min="0.1" max="10.0" step="0.1" value="2.0">
+                    </div>
+                </div>
+
+                <!-- Results Panel -->
+                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 mt-6">
+                    <h3 id="ui-results" class="font-bold text-[#1e3c72] mb-3 border-b border-blue-200 pb-2">計算結果</h3>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div class="text-slate-600" id="ui-real-depth">實際深度:</div>
+                        <div class="text-right font-bold" id="resReal">3.00 m</div>
+                        
+                        <div class="text-slate-600" id="ui-app-depth">視深:</div>
+                        <div class="text-right font-bold text-red-600" id="resApp">2.26 m</div>
+
+                        <div class="text-slate-600" id="ui-horiz-shift">水平位移:</div>
+                        <div class="text-right font-bold text-red-600" id="resShift">1.25 m</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="p-3 bg-slate-100 text-center text-xs text-slate-500 font-medium border-t border-slate-200 shrink-0">
+                <span id="ui-footer">廠商會中學．物理科</span>
+            </div>
+        </aside>
+
+        <!-- Main Canvas Area -->
+        <main class="flex-1 relative bg-[#f8fafc] overflow-hidden">
+            <canvas id="simCanvas" class="absolute top-0 left-0 w-full h-full cursor-grab touch-none"></canvas>
+
+            <!-- Floating Controls on the Canvas -->
+            <div class="absolute top-4 right-4 flex flex-col items-end gap-3 z-20 pointer-events-none">
+                
+                <!-- Scenario Toggle -->
+                <div class="flex bg-white/90 backdrop-blur-md rounded-lg p-1 shadow-lg border border-slate-200 pointer-events-auto">
+                    <button id="btnAir" class="px-4 py-2 rounded-md bg-white shadow text-[#1e3c72] text-sm font-bold transition-all">從水外觀察</button>
+                    <button id="btnWater" class="px-4 py-2 rounded-md text-sm font-bold text-slate-500 hover:text-slate-700 transition-all">從水中觀察</button>
+                </div>
+                
+                <!-- Replay Button -->
+                <button id="btnReplay" class="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2.5 rounded-lg shadow-lg font-bold transition-colors flex items-center justify-center gap-2 pointer-events-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                    <span id="ui-replay">重播動畫</span>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Overlay to close sidebar -->
+    <div id="mobileOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-4 bg-[#1e3c72] text-white flex justify-between items-center">
+                <h2 id="ui-help-title" class="text-xl font-bold">物理原理</h2>
+                <button id="btnCloseHelp" class="text-white hover:text-red-300 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4 text-slate-700 leading-relaxed" id="helpContent">
+                <!-- Content injected via JS based on language -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- 1. Global State & Dictionary --- */
+        const state = {
+            lang: 'zh', // Chinese Default
+            observerMedium: 'air', // 'air' or 'water'
+            nWater: 1.33,
+            nAir: 1.0,
+            objDepth: 3.0,
+            objX: 0.0, // Dragged Horizontal position
+            eyeX: 4.0,
+            eyeY: 2.0,
+            animProgress: 1.0, // 0 to 1
+            isAnimating: false,
+            isDragging: false,
+            draggedElement: null, // 'fish' or 'eye'
+            
+            // Visibility Options States
+            showRealObj: true,
+            showVirtImg: true,
+            showPrimaryRays: true,
+            showFadedRays: true
+        };
+
+        const dict = {
+            en: {
+                title: 'Refraction & Apparent Depth',
+                btnAir: 'View from Air',
+                btnWater: 'View from Water',
+                dragTip: "You can drag both the object and the observer's eye directly on the canvas to experiment!",
+                nWater: 'Refractive Index of Water',
+                objDistAir: 'Object Depth',
+                objDistWater: 'Object Height',
+                eyeX: 'Observer Horiz. Distance',
+                eyeY: 'Observer Vert. Distance',
+                results: 'Results',
+                realDepth: 'Real Depth:',
+                realHeight: 'Real Height:',
+                appDepth: 'Apparent Depth:',
+                appHeight: 'Apparent Height:',
+                horizShift: 'Horizontal Shift:',
+                replay: 'Replay',
+                footer: 'CMA Secondary School. Physics Department.',
+                helpBtn: 'Help',
+                helpTitle: 'Physics Principles',
+                visOptions: 'Visibility Options',
+                optRealObjFish: 'Show Real Object (Fish)',
+                optRealObjBird: 'Show Real Object (Sparrow)',
+                optVirtImg: 'Show Virtual Image',
+                optPrimaryRays: 'Show Primary Rays',
+                optFadedRays: 'Show Ambient Rays',
+                helpContent: `
+                    <h3 class="font-bold text-lg text-[#1e3c72]">Snell's Law</h3>
+                    <p>When light travels across a boundary between two media, it changes direction. This is governed by Snell's Law:</p>
+                    <div class="my-2 p-3 bg-blue-50 rounded-lg text-center">
+                        $$n_1 \\sin\\theta_1 = n_2 \\sin\\theta_2$$
+                    </div>
+                    <h3 class="font-bold text-lg text-[#1e3c72] mt-4">Apparent Depth/Height</h3>
+                    <p>Because the rays bend, an observer tracing the rays back in a straight line will perceive the object at a different position (a virtual image).</p>
+                    <ul class="list-disc pl-5 space-y-2 mt-2">
+                        <li><strong>Observer in Air (Looking at Fish):</strong> Light from underwater bends <em>away</em> from the normal. The virtual image appears <strong>shallower</strong> and shifted horizontally towards the observer.</li>
+                        <li><strong>Observer in Water (Looking at Sparrow):</strong> Light from the air bends <em>towards</em> the normal. The virtual image appears <strong>higher</strong> and shifted horizontally away from the observer.</li>
+                    </ul>
+                    <p class="mt-2">For an observer looking almost straight down (small viewing angle), the apparent depth is approximately:</p>
+                    <div class="my-2 p-3 bg-blue-50 rounded-lg text-center">
+                        $$d' = d \\left( \\frac{n_\\text{observer}}{n_\\text{object}} \\right)$$
+                    </div>
+                `
+            },
+            zh: {
+                title: '折射與視深',
+                btnAir: '從水外觀察',
+                btnWater: '從水中觀察',
+                dragTip: '你可以在畫布上直接拖曳物體（魚/麻雀）以及觀察者的眼睛，即時觀察光路的變化！',
+                nWater: '水的折射率',
+                objDistAir: '物體實際深度',
+                objDistWater: '物體實際高度',
+                eyeX: '觀察者水平距離',
+                eyeY: '觀察者垂直距離',
+                results: '計算結果',
+                realDepth: '實際深度:',
+                realHeight: '實際高度:',
+                appDepth: '視深:',
+                appHeight: '視高:',
+                horizShift: '水平位移:',
+                replay: '重播動畫',
+                footer: '廠商會中學．物理科',
+                helpBtn: '說明',
+                helpTitle: '物理原理',
+                visOptions: '顯示選項',
+                optRealObjFish: '顯示實物 (魚)',
+                optRealObjBird: '顯示實物 (麻雀)',
+                optVirtImg: '顯示虛像',
+                optPrimaryRays: '顯示主要光線',
+                optFadedRays: '顯示環境光線 (360°)',
+                helpContent: `
+                    <h3 class="font-bold text-lg text-[#1e3c72]">斯涅爾定律 (Snell's Law)</h3>
+                    <p>當光線穿過兩種不同介質的邊界時，其傳播方向會發生改變。這由斯涅爾定律描述：</p>
+                    <div class="my-2 p-3 bg-blue-50 rounded-lg text-center">
+                        $$n_1 \\sin\\theta_1 = n_2 \\sin\\theta_2$$
+                    </div>
+                    <h3 class="font-bold text-lg text-[#1e3c72] mt-4">視深與視高</h3>
+                    <p>由於光線發生折射，觀察者的大腦會沿著進入眼睛的光線直線往回推，從而看到一個位於錯誤位置的「虛像」。</p>
+                    <ul class="list-disc pl-5 space-y-2 mt-2">
+                        <li><strong>觀察者在空氣中 (看水中的魚)：</strong> 水中的光線進入空氣時會<strong>偏離</strong>法線。虛像看起來會比實物<strong>更淺</strong>，且在水平方向上向觀察者偏移。</li>
+                        <li><strong>觀察者在水中 (看空氣中的麻雀)：</strong> 空氣中的光線進入水中時會<strong>偏向</strong>法線。虛像看起來會比實物<strong>更高</strong>，且在水平方向上遠離觀察者。</li>
+                    </ul>                `
+            }
+        };
+
+        /* --- 2. DOM Elements & UI Logic --- */
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const uiTitle = document.getElementById('ui-title');
+        const btnLang = document.getElementById('langToggle');
+        const btnAir = document.getElementById('btnAir');
+        const btnWater = document.getElementById('btnWater');
+        
+        const sliderN = document.getElementById('sliderN');
+        const sliderObjDist = document.getElementById('sliderObjDist');
+        const sliderEyeX = document.getElementById('sliderEyeX');
+        const sliderEyeY = document.getElementById('sliderEyeY');
+        
+        const valN = document.getElementById('valN');
+        const valObjDist = document.getElementById('valObjDist');
+        const valEyeX = document.getElementById('valEyeX');
+        const valEyeY = document.getElementById('valEyeY');
+        
+        const resReal = document.getElementById('resReal');
+        const resApp = document.getElementById('resApp');
+        const resShift = document.getElementById('resShift');
+
+        // Checkboxes
+        const chkRealObj = document.getElementById('chkRealObj');
+        const chkVirtImg = document.getElementById('chkVirtImg');
+        const chkPrimaryRays = document.getElementById('chkPrimaryRays');
+        const chkFadedRays = document.getElementById('chkFadedRays');
+
+        // Update UI Text based on language
+        function updateUIText() {
+            const t = dict[state.lang];
+            const isAir = state.observerMedium === 'air';
+
+            uiTitle.innerText = t.title;
+            document.getElementById('ui-drag-tip').innerText = t.dragTip;
+            btnAir.innerText = t.btnAir;
+            btnWater.innerText = t.btnWater;
+            document.getElementById('ui-n-water').innerHTML = t.nWater;
+            
+            document.getElementById('ui-obj-dist').innerHTML = isAir ? t.objDistAir : t.objDistWater;
+            document.getElementById('ui-eye-x').innerHTML = t.eyeX;
+            document.getElementById('ui-eye-y').innerHTML = t.eyeY;
+            document.getElementById('ui-results').innerText = t.results;
+            
+            // Visibility Options
+            document.getElementById('ui-vis-options').innerText = t.visOptions;
+            document.getElementById('ui-opt-real-obj').innerText = isAir ? t.optRealObjFish : t.optRealObjBird;
+            document.getElementById('ui-opt-virt-img').innerText = t.optVirtImg;
+            document.getElementById('ui-opt-primary-rays').innerText = t.optPrimaryRays;
+            document.getElementById('ui-opt-faded-rays').innerText = t.optFadedRays;
+            
+            document.getElementById('ui-real-depth').innerHTML = isAir ? t.realDepth : t.realHeight;
+            document.getElementById('ui-app-depth').innerHTML = isAir ? t.appDepth : t.appHeight;
+            document.getElementById('ui-horiz-shift').innerHTML = t.horizShift;
+            
+            document.getElementById('ui-replay').innerText = t.replay;
+            document.getElementById('ui-footer').innerText = t.footer;
+            document.getElementById('ui-help-btn').innerText = t.helpBtn;
+            document.getElementById('ui-help-title').innerText = t.helpTitle;
+            document.getElementById('helpContent').innerHTML = t.helpContent;
+
+            // Trigger MathJax typeset safely
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                // Clear and re-process the UI sections dynamically
+                MathJax.typesetClear([document.getElementById('sidebar'), document.getElementById('helpModal')]);
+                MathJax.typesetPromise([document.getElementById('sidebar'), document.getElementById('helpModal')]).catch((err) => console.log(err.message));
+            }
+        }
+
+        btnLang.addEventListener('click', () => {
+            state.lang = state.lang === 'en' ? 'zh' : 'en';
+            updateUIText();
+            drawCanvas();
+        });
+
+        function setObserverMedium(medium) {
+            state.observerMedium = medium;
+            if (medium === 'air') {
+                btnAir.className = 'px-4 py-2 rounded-md bg-white shadow text-[#1e3c72] text-sm font-bold transition-all';
+                btnWater.className = 'px-4 py-2 rounded-md text-sm font-bold text-slate-500 hover:text-slate-700 transition-all';
+            } else {
+                btnWater.className = 'px-4 py-2 rounded-md bg-white shadow text-[#1e3c72] text-sm font-bold transition-all';
+                btnAir.className = 'px-4 py-2 rounded-md text-sm font-bold text-slate-500 hover:text-slate-700 transition-all';
+            }
+            updateUIText();
+            updateSliderLimits();
+            
+            // Adjust values if current state values exceed updated slider boundaries
+            state.objDepth = Math.max(parseFloat(sliderObjDist.min), Math.min(parseFloat(sliderObjDist.max), state.objDepth));
+            state.eyeY = Math.max(parseFloat(sliderEyeY.min), Math.min(parseFloat(sliderEyeY.max), state.eyeY));
+            state.eyeX = Math.max(parseFloat(sliderEyeX.min), Math.min(parseFloat(sliderEyeX.max), state.eyeX));
+            
+            sliderObjDist.value = state.objDepth.toFixed(1);
+            valObjDist.innerText = state.objDepth.toFixed(2) + ' m';
+            sliderEyeY.value = state.eyeY.toFixed(1);
+            valEyeY.innerText = state.eyeY.toFixed(2) + ' m';
+            sliderEyeX.value = state.eyeX.toFixed(1);
+            valEyeX.innerText = state.eyeX.toFixed(2) + ' m';
+
+            startAnimation();
+        }
+
+        btnAir.addEventListener('click', () => setObserverMedium('air'));
+        btnWater.addEventListener('click', () => setObserverMedium('water'));
+
+        // Sliders
+        function setupSlider(slider, stateKey, valElem, formatStr) {
+            slider.addEventListener('input', (e) => {
+                state[stateKey] = parseFloat(e.target.value);
+                valElem.innerText = e.target.value + formatStr;
+                drawCanvas(); // Real-time update
+            });
+        }
+        setupSlider(sliderN, 'nWater', valN, '');
+        setupSlider(sliderObjDist, 'objDepth', valObjDist, ' m');
+        setupSlider(sliderEyeX, 'eyeX', valEyeX, ' m');
+        setupSlider(sliderEyeY, 'eyeY', valEyeY, ' m');
+
+        // Checkbox Bindings
+        function setupCheckbox(chk, stateKey) {
+            chk.addEventListener('change', (e) => {
+                state[stateKey] = e.target.checked;
+                drawCanvas();
+            });
+        }
+        setupCheckbox(chkRealObj, 'showRealObj');
+        setupCheckbox(chkVirtImg, 'showVirtImg');
+        setupCheckbox(chkPrimaryRays, 'showPrimaryRays');
+        setupCheckbox(chkFadedRays, 'showFadedRays');
+
+        // Mobile Menu Logic
+        const sidebar = document.getElementById('sidebar');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+        function toggleMobileMenu() {
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                mobileOverlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                mobileOverlay.classList.add('hidden');
+            }
+        }
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        mobileOverlay.addEventListener('click', toggleMobileMenu);
+
+        // Help Modal Logic
+        const helpModal = document.getElementById('helpModal');
+        document.getElementById('btnHelp').addEventListener('click', () => helpModal.classList.remove('hidden'));
+        document.getElementById('btnCloseHelp').addEventListener('click', () => helpModal.classList.add('hidden'));
+        helpModal.addEventListener('click', (e) => {
+            if(e.target === helpModal) helpModal.classList.add('hidden');
+        });
+
+        // Replay Button
+        document.getElementById('btnReplay').addEventListener('click', startAnimation);
+
+
+        /* --- 3. Physics Engine --- */
+
+        function findRefractionPoint(xO, yO, xE, yE, nO, nE) {
+            if (Math.abs(xE - xO) < 1e-4) return xO; 
+            
+            let low = Math.min(xO, xE);
+            let high = Math.max(xO, xE);
+
+            for (let i = 0; i < 50; i++) {
+                let mid = (low + high) / 2;
+                let sin1 = Math.abs(mid - xO) / Math.hypot(mid - xO, yO);
+                let sin2 = (nO / nE) * sin1;
+
+                if (sin2 >= 1.0) {
+                    if (xE > xO) high = mid; else low = mid;
+                    continue;
+                }
+
+                let tan2 = sin2 / Math.sqrt(1 - sin2 * sin2);
+                let calcXE = xO < xE ? mid + Math.abs(yE) * tan2 : mid - Math.abs(yE) * tan2;
+
+                if (xO < xE) {
+                    if (calcXE > xE) high = mid; else low = mid;
+                } else {
+                    if (calcXE < xE) low = mid; else high = mid;
+                }
+            }
+            return (low + high) / 2;
+        }
+
+        function calculatePhysics() {
+            const nO = state.observerMedium === 'air' ? state.nWater : state.nAir;
+            const nE = state.observerMedium === 'air' ? state.nAir : state.nWater;
+
+            const yO = state.observerMedium === 'air' ? -state.objDepth : state.objDepth;
+            const yE = state.observerMedium === 'air' ? state.eyeY : -state.eyeY;
+            const xE = state.eyeX;
+
+            function calcPoint(xObj) {
+                const dY = 0.1 * Math.sign(yE); // pupil half-size
+                const xPc = findRefractionPoint(xObj, yO, xE, yE, nO, nE);
+                const xPt = findRefractionPoint(xObj, yO, xE, yE + dY, nO, nE);
+                const xPb = findRefractionPoint(xObj, yO, xE, yE - dY, nO, nE);
+
+                const mTop = (yE + dY - 0) / (xE - xPt);
+                const mBot = (yE - dY - 0) / (xE - xPb);
+
+                let xI = xObj, yI = yO * (nE / nO); 
+                if (Math.abs(mTop - mBot) > 1e-5) {
+                    xI = (mTop * xPt - mBot * xPb) / (mTop - mBot);
+                    yI = mTop * (xI - xPt);
+                }
+                return { xO: xObj, yO, xPc, xI, yI };
+            }
+
+            const objLength = 1.2;
+            return {
+                yO, yE, xE, nO, nE,
+                head: calcPoint(state.objX + objLength / 2),
+                tail: calcPoint(state.objX - objLength / 2),
+                center: calcPoint(state.objX)
+            };
+        }
+
+
+        /* --- 4. Canvas Engine --- */
+        let resizeObserver;
+        let logicalWidth = 14; // Viewport logical width in meters
+        let scale = 1; // Pixels per meter
+        let offsetX = 0; // Pixel offset for x=0
+        let offsetY = 0; // Pixel offset for y=0
+
+        function initCanvas() {
+            resizeObserver = new ResizeObserver(() => {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+                canvas.style.width = `${rect.width}px`;
+                canvas.style.height = `${rect.height}px`;
+                ctx.scale(dpr, dpr);
+                
+                // Update mapping
+                scale = rect.width / logicalWidth;
+                offsetX = rect.width * 0.25; 
+                offsetY = rect.height * 0.5; 
+
+                updateSliderLimits();
+                drawCanvas();
+            });
+            resizeObserver.observe(canvas.parentElement);
+            setupDragEvents();
+        }
+
+        function updateSliderLimits() {
+            if (!scale) return;
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.width / dpr;
+            const h = canvas.height / dpr;
+
+            const minX = -offsetX / scale;
+            const maxX = (w - offsetX) / scale;
+            const maxY = offsetY / scale;
+            const minYVal = (h - offsetY) / scale; 
+
+            sliderEyeX.min = minX.toFixed(1);
+            sliderEyeX.max = maxX.toFixed(1);
+
+            const maxObj = state.observerMedium === 'air' ? minYVal : maxY;
+            sliderObjDist.min = "0.1";
+            sliderObjDist.max = maxObj.toFixed(1);
+
+            const maxEyeY = state.observerMedium === 'air' ? maxY : minYVal;
+            sliderEyeY.min = "0.1";
+            sliderEyeY.max = maxEyeY.toFixed(1);
+        }
+
+        function pX(lx) { return offsetX + lx * scale; }
+        function pY(ly) { return offsetY - ly * scale; } 
+
+        function drawBackground() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            
+            // Sky
+            const skyGrad = ctx.createLinearGradient(0, 0, 0, offsetY);
+            skyGrad.addColorStop(0, '#e0f2fe'); 
+            skyGrad.addColorStop(1, '#ffffff');
+            ctx.fillStyle = skyGrad;
+            ctx.fillRect(0, 0, w, offsetY);
+            
+            // Water
+            const waterGrad = ctx.createLinearGradient(0, offsetY, 0, h);
+            waterGrad.addColorStop(0, '#bae6fd'); 
+            waterGrad.addColorStop(1, '#3b82f6'); 
+            ctx.fillStyle = waterGrad;
+            ctx.fillRect(0, offsetY, w, h - offsetY);
+
+            // Grid Lines
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let lx = -Math.floor(offsetX/scale); lx < (w-offsetX)/scale; lx++) {
+                ctx.moveTo(pX(lx), 0);
+                ctx.lineTo(pX(lx), h);
+            }
+            for (let ly = -Math.floor((h-offsetY)/scale); ly < offsetY/scale; ly++) {
+                ctx.moveTo(0, pY(ly));
+                ctx.lineTo(w, pY(ly));
+            }
+            ctx.stroke();
+
+            // Boundary Line
+            ctx.strokeStyle = '#1e3c72';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, offsetY);
+            ctx.lineTo(w, offsetY);
+            ctx.stroke();
+        }
+
+        function drawEye(px, py, angle) {
+            ctx.save();
+            ctx.translate(px, py);
+            ctx.rotate(angle);
+
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = '#000000'; 
+
+            // Base Fill (White)
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.moveTo(-14, -11); 
+            ctx.quadraticCurveTo(5, -12, 26, 0);   
+            ctx.quadraticCurveTo(5, 12, -14, 11);  
+            ctx.quadraticCurveTo(-22, 0, -14, -11); 
+            ctx.fill();
+
+            // Pupil (Black)
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.moveTo(-14, -11);
+            ctx.quadraticCurveTo(-22, 0, -14, 11); 
+            ctx.quadraticCurveTo(-8, 0, -14, -11);  
+            ctx.fill();
+
+            // Reflection Highlight
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.ellipse(-16, -2, 2.5, 5, -0.1, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Outline strokes
+            ctx.beginPath();
+            ctx.moveTo(-24, -20);
+            ctx.quadraticCurveTo(-10, -15, 26, 0);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(-24, 20);
+            ctx.quadraticCurveTo(-10, 15, 26, 0);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(-14, -11);
+            ctx.quadraticCurveTo(-22, 0, -14, 11);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        function drawFish(cx, cy, lengthPx, angle, isVirtual) {
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(angle);
+            
+            const w = lengthPx / 2;
+            const h = lengthPx / 3.5;
+            
+            if (isVirtual) {
+                ctx.strokeStyle = '#dc2626'; 
+                ctx.fillStyle = 'rgba(220, 38, 38, 0.15)';
+                ctx.setLineDash([4, 4]);
+            } else {
+                ctx.strokeStyle = '#047857'; 
+                ctx.fillStyle = '#10b981';
+                ctx.setLineDash([]);
+            }
+            ctx.lineWidth = 2.5;
+            
+            ctx.beginPath(); ctx.ellipse(0, 0, w, h, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(-w + h/2, 0); ctx.lineTo(-w - h, -h); ctx.lineTo(-w - h, h); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(-w/2, -h + 2); ctx.quadraticCurveTo(-w/4, -h - h, 0, -h + 2); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(-w/2, h - 2); ctx.quadraticCurveTo(-w/4, h + h, 0, h - 2); ctx.stroke();
+            
+            ctx.beginPath(); const eyeX = w - h; const eyeY = -h/3; ctx.arc(eyeX, eyeY, h/4, 0, Math.PI*2); ctx.fillStyle = isVirtual ? 'rgba(220, 38, 38, 0.5)' : 'white'; ctx.fill(); ctx.stroke();
+            if (!isVirtual) { ctx.beginPath(); ctx.arc(eyeX + h/8, eyeY, h/8, 0, Math.PI*2); ctx.fillStyle = '#064e3b'; ctx.fill(); }
+            
+            ctx.rotate(-angle); 
+            ctx.fillStyle = isVirtual ? '#dc2626' : 'white';
+            ctx.font = 'italic bold 16px "Times New Roman", Times, serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(isVirtual ? 'I' : 'O', 0, 0);
+            
+            ctx.restore();
+        }
+
+        function drawBird(cx, cy, lengthPx, angle, isVirtual) {
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(angle);
+            
+            const w = lengthPx / 2;
+            const h = lengthPx / 3.5;
+            
+            let colOutline, colBody, colBack, colWingBg, colWingFg, colBeak, colBlackMark, colWhiteCheek;
+
+            if (isVirtual) {
+                colOutline = '#dc2626';
+                colBody = 'rgba(220, 38, 38, 0.12)'; colBack = 'rgba(220, 38, 38, 0.12)';
+                colWingBg = 'rgba(220, 38, 38, 0.1)'; colWingFg = 'rgba(220, 38, 38, 0.15)';
+                colBeak = 'rgba(220, 38, 38, 0.2)'; colBlackMark = 'rgba(220, 38, 38, 0.3)'; colWhiteCheek = 'rgba(255, 255, 255, 0.2)';
+                ctx.setLineDash([4, 4]);
+            } else {
+                colOutline = '#331b03'; colBody = '#f1f5f9'; colBack = '#78350f';
+                colWingBg = '#451a03'; colWingFg = '#a16207'; colBeak = '#292524';
+                colBlackMark = '#0f172a'; colWhiteCheek = '#ffffff';
+                ctx.setLineDash([]);
+            }
+            ctx.lineWidth = 2.5;
+
+            ctx.save(); ctx.fillStyle = colWingBg; ctx.beginPath(); ctx.moveTo(w * 0.1, -h * 0.3); ctx.bezierCurveTo(w * 0.2, -h * 2.0, -w * 0.3, -h * 2.2, -w * 0.5, -h * 1.6); ctx.bezierCurveTo(-w * 0.3, -h * 0.8, -w * 0.1, -h * 0.4, w * 0.1, -h * 0.3); ctx.fill(); ctx.stroke(); ctx.restore();
+            
+            ctx.fillStyle = colBody; ctx.beginPath(); ctx.ellipse(0, 0, w, h, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            
+            ctx.save(); ctx.fillStyle = colBack; ctx.beginPath(); ctx.ellipse(0, 0, w, h, 0, Math.PI, Math.PI * 2); ctx.lineTo(w, 0); ctx.lineTo(-w, 0); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+
+            ctx.fillStyle = colBlackMark; ctx.beginPath(); ctx.moveTo(w * 0.45, 0); ctx.quadraticCurveTo(w * 0.75, h * 0.5, w * 0.35, h * 0.75); ctx.quadraticCurveTo(w * 0.25, h * 0.2, w * 0.45, 0); ctx.closePath(); ctx.fill();
+            if (!isVirtual) { ctx.strokeStyle = colOutline; ctx.stroke(); }
+
+            ctx.fillStyle = colWhiteCheek; ctx.beginPath(); ctx.ellipse(w * 0.38, h * 0.12, w * 0.22, h * 0.38, Math.PI/6, 0, Math.PI * 2); ctx.fill();
+            if (!isVirtual) { ctx.strokeStyle = colOutline; ctx.stroke(); }
+
+            ctx.fillStyle = colBlackMark; ctx.beginPath(); ctx.arc(w * 0.41, h * 0.18, w * 0.08, 0, Math.PI * 2); ctx.fill();
+            
+            ctx.save(); ctx.fillStyle = colBack; ctx.beginPath(); ctx.moveTo(-w + 2, 0); ctx.quadraticCurveTo(-w - h * 1.2, -h * 0.8, -w - h * 1.5, -h * 0.5); ctx.quadraticCurveTo(-w - h * 0.8, 0, -w - h * 1.5, h * 0.5); ctx.quadraticCurveTo(-w - h * 1.2, h * 0.8, -w + 2, 0); ctx.fill(); ctx.stroke(); ctx.restore();
+
+            ctx.fillStyle = colWingFg; ctx.beginPath(); ctx.moveTo(-w * 0.1, -h * 0.2); ctx.bezierCurveTo(-w * 0.1, -h * 2.5, -w * 0.6, -h * 2.8, -w * 0.8, -h * 2.0); ctx.bezierCurveTo(-w * 0.5, -h * 1.0, -w * 0.3, -h * 0.3, -w * 0.1, -h * 0.2); ctx.fill(); ctx.stroke();
+
+            if (!isVirtual) {
+                ctx.save(); ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(-w * 0.3, -h * 1.2); ctx.quadraticCurveTo(-w * 0.45, -h * 1.7, -w * 0.6, -h * 1.4); ctx.stroke();
+                ctx.lineWidth = 2; ctx.strokeStyle = '#000000'; ctx.beginPath(); ctx.moveTo(-w * 0.25, -h * 1.0); ctx.quadraticCurveTo(-w * 0.4, -h * 1.5, -w * 0.55, -h * 1.2); ctx.stroke(); ctx.restore();
+            }
+
+            ctx.save(); ctx.fillStyle = colBeak; ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(w - 2, -h/4); ctx.lineTo(w + h * 0.6, 0); ctx.lineTo(w - 2, h/4); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+            
+            ctx.beginPath(); const eyeX = w - h * 1.2; const eyeY = -h/3; ctx.arc(eyeX, eyeY, h/4, 0, Math.PI*2); ctx.fillStyle = isVirtual ? 'rgba(220, 38, 38, 0.5)' : '#000000'; ctx.fill(); ctx.strokeStyle = isVirtual ? '#dc2626' : '#ffffff'; ctx.lineWidth = 1; ctx.stroke();
+            if (!isVirtual) { ctx.beginPath(); ctx.arc(eyeX + h/8, eyeY - h/8, h/10, 0, Math.PI*2); ctx.fillStyle = '#ffffff'; ctx.fill(); }
+            
+            ctx.rotate(-angle);
+            ctx.fillStyle = isVirtual ? '#dc2626' : 'white';
+            ctx.font = 'italic bold 16px "Times New Roman", Times, serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(isVirtual ? 'I' : 'O', 0, 0);
+            
+            ctx.restore();
+        }
+
+        function drawArrowLine(x1, y1, x2, y2, color, dashed = false, arrowAlpha = 1.0) {
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            if (dashed) ctx.setLineDash([5, 5]); else ctx.setLineDash([]);
+            
+            ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+            
+            if (!dashed) {
+                const midX = (x1 + x2) / 2; const midY = (y1 + y2) / 2;
+                const angle = Math.atan2(y2 - y1, x2 - x1); const len = 10;
+                
+                ctx.save(); ctx.globalAlpha = arrowAlpha; ctx.lineWidth = 2; ctx.setLineDash([]); ctx.strokeStyle = color;
+                ctx.beginPath(); ctx.moveTo(midX, midY); ctx.lineTo(midX - len * Math.cos(angle - Math.PI/6), midY - len * Math.sin(angle - Math.PI/6)); ctx.moveTo(midX, midY); ctx.lineTo(midX - len * Math.cos(angle + Math.PI/6), midY - len * Math.sin(angle + Math.PI/6)); ctx.stroke();
+                ctx.restore();
+            }
+            ctx.restore();
+        }
+
+        function drawAngleArc(ctx, cx, cy, angle1, angle2, radius, labelBase, labelSub, color) {
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([]); // ALWAYS solid line for angle arcs
+            ctx.beginPath();
+            
+            let startAngle = Math.min(angle1, angle2);
+            let endAngle = Math.max(angle1, angle2);
+
+            ctx.arc(cx, cy, radius, startAngle, endAngle);
+            ctx.stroke();
+
+            let a_mid = (startAngle + endAngle) / 2;
+            let textR = radius + 15; 
+            let tx = cx + textR * Math.cos(a_mid);
+            let ty = cy + textR * Math.sin(a_mid);
+
+            ctx.fillStyle = color;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            ctx.font = 'italic 16px "Times New Roman", Times, serif';
+            let baseMetrics = ctx.measureText(labelBase);
+            let bx = tx - 4; 
+            ctx.fillText(labelBase, bx, ty);
+            
+            ctx.font = '11px "Times New Roman", Times, serif';
+            ctx.fillText(labelSub, bx + baseMetrics.width / 2 + 4, ty + 6);
+
+            ctx.restore();
+        }
+
+        function drawFadedRayAngle(xO, yO, dx, dy, nO, nE, ySign, ap) {
+            const pxO = pX(xO); const pyO = pY(yO);
+            const t = -yO / dy;
+            const hitsSurface = ((yO < 0 && dy > 0) || (yO > 0 && dy < 0)) && (Math.abs(t) < 30);
+            const rayLen = 7.0; 
+            
+            if (hitsSurface) {
+                const xS = xO + dx * t; const pxS = pX(xS); const pyS = pY(0);
+                
+                if (ap > 0.1) {
+                    const progressIncident = Math.min(1, (ap - 0.1) / 0.2);
+                    const drawX = pxO + (pxS - pxO) * progressIncident; const drawY = pyO + (pyS - pyO) * progressIncident;
+                    drawArrowLine(pxO, pyO, drawX, drawY, 'rgba(217, 119, 6, 0.18)', false, 0.45);
+                }
+                
+                if (ap > 0.3) {
+                    const progressSecond = Math.min(1, (ap - 0.3) / 0.3);
+                    const sin1 = Math.abs(dx); const sin2 = (nO / nE) * sin1;
+                    
+                    let endX, endY; let colorRay = 'rgba(217, 119, 6, 0.14)'; 
+                    
+                    if (sin2 < 1.0) {
+                        const cos2 = Math.sqrt(1 - sin2 * sin2); const sx2 = Math.sign(dx) || 1; const sy2 = ySign; 
+                        endX = xS + sx2 * sin2 * rayLen; endY = 0 + sy2 * cos2 * rayLen;
+                    } else {
+                        const cos1 = Math.abs(dy); const sx2 = Math.sign(dx) || 1; const sy2 = -ySign; 
+                        endX = xS + sx2 * sin1 * rayLen; endY = 0 + sy2 * cos1 * rayLen;
+                        colorRay = 'rgba(16, 185, 129, 0.16)'; 
+                    }
+                    
+                    const pxE = pX(endX); const pyE = pY(endY);
+                    const drawX2 = pxS + (pxE - pxS) * progressSecond; const drawY2 = pyS + (pyE - pyS) * progressSecond;
+                    drawArrowLine(pxS, pyS, drawX2, drawY2, colorRay, false, 0.45);
+                }
+            } else {
+                if (ap > 0.1) {
+                    const progressIncident = Math.min(1, (ap - 0.1) / 0.3);
+                    const endX = xO + dx * rayLen; const endY = yO + dy * rayLen;
+                    const pxE = pX(endX); const pyE = pY(endY);
+                    const drawX = pxO + (pxE - pxO) * progressIncident; const drawY = pyO + (pyE - pyO) * progressIncident;
+                    drawArrowLine(pxO, pyO, drawX, drawY, 'rgba(217, 119, 6, 0.18)', false, 0.45);
+                }
+            }
+        }
+
+        function drawCanvas() {
+            if (!scale) return; 
+            const phys = calculatePhysics();
+            
+            resReal.innerText = Math.abs(phys.yO).toFixed(2) + ' m';
+            resApp.innerText = Math.abs(phys.center.yI).toFixed(2) + ' m';
+            resShift.innerText = Math.abs(phys.center.xI - phys.center.xO).toFixed(2) + ' m';
+
+            drawBackground();
+
+            const p_xE = pX(phys.xE); const p_yE = pY(phys.yE); const surfaceY = pY(0);
+            const ap = state.animProgress;
+            
+            if (state.showRealObj && ap > 0.05) {
+                const length = pX(phys.head.xO) - pX(phys.tail.xO);
+                if (state.observerMedium === 'air') drawFish(pX(phys.center.xO), pY(phys.center.yO), length, 0, false);
+                else drawBird(pX(phys.center.xO), pY(phys.center.yO), length, 0, false);
+            }
+
+            if (state.showFadedRays) {
+                const ySign = Math.sign(phys.yE); 
+                for (let angleDeg = 0; angleDeg < 360; angleDeg += 5) {
+                    const rad = angleDeg * Math.PI / 180;
+                    drawFadedRayAngle(phys.center.xO, phys.yO, Math.cos(rad), Math.sin(rad), phys.nO, phys.nE, ySign, ap);
+                }
+            }
+
+            if (state.showPrimaryRays && ap > 0.1) {
+                let r1 = Math.min(1, (ap - 0.1) / 0.2);
+                drawArrowLine(pX(phys.tail.xO), pY(phys.tail.yO), pX(phys.tail.xO) + (pX(phys.tail.xPc) - pX(phys.tail.xO))*r1, pY(phys.tail.yO) + (surfaceY - pY(phys.tail.yO))*r1, '#d97706'); 
+                drawArrowLine(pX(phys.head.xO), pY(phys.head.yO), pX(phys.head.xO) + (pX(phys.head.xPc) - pX(phys.head.xO))*r1, pY(phys.head.yO) + (surfaceY - pY(phys.head.yO))*r1, '#d97706'); 
+            }
+
+            if (state.showPrimaryRays && ap > 0.3) {
+                let r2 = Math.min(1, (ap - 0.3) / 0.3);
+                drawArrowLine(pX(phys.tail.xPc), surfaceY, pX(phys.tail.xPc) + (p_xE - pX(phys.tail.xPc))*r2, surfaceY + (p_yE - surfaceY)*r2, '#d97706');
+                drawArrowLine(pX(phys.head.xPc), surfaceY, pX(phys.head.xPc) + (p_xE - pX(phys.head.xPc))*r2, surfaceY + (p_yE - surfaceY)*r2, '#d97706');
+            }
+
+            if (ap > 0.4) {
+                const lookAngle = Math.atan2(p_yE - surfaceY, p_xE - pX(phys.center.xPc));
+                drawEye(p_xE, p_yE, lookAngle);
+            }
+
+            if (state.showPrimaryRays && ap > 0.6) {
+                let r3 = Math.min(1, (ap - 0.6) / 0.3);
+                drawArrowLine(pX(phys.tail.xPc), surfaceY, pX(phys.tail.xPc) + (pX(phys.tail.xI) - pX(phys.tail.xPc))*r3, surfaceY + (pY(phys.tail.yI) - surfaceY)*r3, '#ef4444', true);
+                drawArrowLine(pX(phys.head.xPc), surfaceY, pX(phys.head.xPc) + (pX(phys.head.xI) - pX(phys.head.xPc))*r3, surfaceY + (pY(phys.head.yI) - surfaceY)*r3, '#ef4444', true);
+            }
+
+            if (state.showVirtImg && ap > 0.8) {
+                ctx.globalAlpha = Math.min(1, (ap - 0.8) / 0.2);
+                const vAngle = Math.atan2(pY(phys.head.yI) - pY(phys.tail.yI), pX(phys.head.xI) - pX(phys.tail.xI));
+                const vLen = Math.hypot(pX(phys.head.xI) - pX(phys.tail.xI), pY(phys.head.yI) - pY(phys.tail.yI));
+                
+                if (state.observerMedium === 'air') drawFish(pX(phys.center.xI), pY(phys.center.yI), vLen, vAngle, true);
+                else drawBird(pX(phys.center.xI), pY(phys.center.yI), vLen, vAngle, true);
+                ctx.globalAlpha = 1.0;
+            }
+
+            // Normal Lines & Angle Label Annotations
+            if (state.showPrimaryRays && ap > 0.9) {
+                ctx.save();
+                
+                const drawAnglesForRay = (objX, objY, pcX, eyeX, eyeY, subscript) => {
+                    let pxPc = pX(pcX);
+                    let pxO = pX(objX);
+                    let pyO = pY(objY);
+                    
+                    // Draw Normal Line
+                    ctx.strokeStyle = 'rgba(30, 60, 114, 0.4)';
+                    ctx.setLineDash([5, 5]);
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.moveTo(pxPc, pY(-2.5));
+                    ctx.lineTo(pxPc, pY(2.5));
+                    ctx.stroke();
+
+                    // Calculate Angles
+                    let a_O = Math.atan2(pyO - surfaceY, pxO - pxPc);
+                    let a_n_O = pyO > surfaceY ? Math.PI/2 : -Math.PI/2;
+                    let a_E = Math.atan2(p_yE - surfaceY, p_xE - pxPc);
+                    let a_n_E = p_yE > surfaceY ? Math.PI/2 : -Math.PI/2;
+                    
+                    // Arc labels
+                    drawAngleArc(ctx, pxPc, surfaceY, a_n_O, a_O, 28, 'i', subscript, '#ea580c');
+                    drawAngleArc(ctx, pxPc, surfaceY, a_n_E, a_E, 32, 'r', subscript, '#ea580c');
+                };
+
+                // Annotate Ray 1 (Tail) and Ray 2 (Head)
+                drawAnglesForRay(phys.tail.xO, phys.yO, phys.tail.xPc, phys.xE, phys.yE, '1');
+                drawAnglesForRay(phys.head.xO, phys.yO, phys.head.xPc, phys.xE, phys.yE, '2');
+
+                ctx.restore();
+            }
+        }
+
+        /* --- 5. Drag-to-Move Interactions --- */
+        function getPointerPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: clientX - rect.left, y: clientY - rect.top };
+        }
+
+        function checkPointerOverFish(pos) {
+            if (!state.showRealObj) return false;
+            const phys = calculatePhysics();
+            const distance = Math.hypot(pos.x - pX(phys.center.xO), pos.y - pY(phys.center.yO));
+            return distance < 45;
+        }
+
+        function checkPointerOverEye(pos) {
+            const phys = calculatePhysics();
+            const distance = Math.hypot(pos.x - pX(phys.xE), pos.y - pY(phys.yE));
+            return distance < 45;
+        }
+
+        function setupDragEvents() {
+            const handleStart = (e) => {
+                const pos = getPointerPos(e);
+                if (checkPointerOverFish(pos)) {
+                    state.isDragging = true; state.draggedElement = 'fish';
+                    canvas.classList.remove('cursor-grab'); canvas.classList.add('cursor-grabbing'); e.preventDefault();
+                } else if (checkPointerOverEye(pos)) {
+                    state.isDragging = true; state.draggedElement = 'eye';
+                    canvas.classList.remove('cursor-grab'); canvas.classList.add('cursor-grabbing'); e.preventDefault();
+                }
+            };
+
+            const handleMove = (e) => {
+                const pos = getPointerPos(e);
+                if (state.isDragging) {
+                    const logicalX = (pos.x - offsetX) / scale; const logicalY = (offsetY - pos.y) / scale;
+                    const dpr = window.devicePixelRatio || 1; const w = canvas.width / dpr; const h = canvas.height / dpr;
+                    const minX = -offsetX / scale; const maxX = (w - offsetX) / scale;
+                    const maxY = offsetY / scale; const minYVal = (h - offsetY) / scale;
+
+                    if (state.draggedElement === 'fish') {
+                        state.objX = Math.max(minX, Math.min(maxX, logicalX));
+                        state.objDepth = state.observerMedium === 'air' ? Math.max(0.1, Math.min(minYVal, -logicalY)) : Math.max(0.1, Math.min(maxY, logicalY));
+                        sliderObjDist.value = state.objDepth.toFixed(1); valObjDist.innerText = state.objDepth.toFixed(2) + ' m';
+                    } else if (state.draggedElement === 'eye') {
+                        state.eyeX = Math.max(minX, Math.min(maxX, logicalX));
+                        state.eyeY = state.observerMedium === 'air' ? Math.max(0.1, Math.min(maxY, logicalY)) : Math.max(0.1, Math.min(minYVal, -logicalY));
+                        sliderEyeX.value = state.eyeX.toFixed(1); valEyeX.innerText = state.eyeX.toFixed(2) + ' m';
+                        sliderEyeY.value = state.eyeY.toFixed(1); valEyeY.innerText = state.eyeY.toFixed(2) + ' m';
+                    }
+                    drawCanvas(); e.preventDefault();
+                } else {
+                    if (checkPointerOverFish(pos) || checkPointerOverEye(pos)) {
+                        canvas.classList.remove('cursor-grab'); canvas.classList.add('cursor-pointer');
+                    } else {
+                        canvas.classList.remove('cursor-pointer'); canvas.classList.add('cursor-grab');
+                    }
+                }
+            };
+
+            const handleEnd = () => {
+                if (state.isDragging) {
+                    state.isDragging = false; state.draggedElement = null;
+                    canvas.classList.remove('cursor-grabbing'); canvas.classList.add('cursor-grab');
+                }
+            };
+
+            canvas.addEventListener('mousedown', handleStart); window.addEventListener('mousemove', handleMove); window.addEventListener('mouseup', handleEnd);
+            canvas.addEventListener('touchstart', handleStart, { passive: false }); window.addEventListener('touchmove', handleMove, { passive: false }); window.addEventListener('touchend', handleEnd);
+        }
+
+        /* --- 6. Animation Controller & Init --- */
+        let lastTime = 0;
+        function animLoop(time) {
+            if (!lastTime) lastTime = time;
+            const dt = time - lastTime; lastTime = time;
+            if (state.isAnimating) {
+                state.animProgress += dt / 2500; 
+                if (state.animProgress >= 1.0) { state.animProgress = 1.0; state.isAnimating = false; }
+                drawCanvas(); requestAnimationFrame(animLoop);
+            }
+        }
+        function startAnimation() {
+            state.animProgress = 0.0; state.isAnimating = true; lastTime = performance.now(); requestAnimationFrame(animLoop);
+        }
+
+        // Initialize App
+        updateUIText(); initCanvas(); setTimeout(startAnimation, 300); 
+
+    </script>
+</body>
+</html>
