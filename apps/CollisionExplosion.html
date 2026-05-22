@@ -93,7 +93,7 @@
     </header>
 
     <!-- --- 2. Main Layout --- -->
-    <main class="flex-1 flex overflow-hidden relative">
+    <main class="flex-1 flex overflow-hidden relative min-h-0">
         
         <!-- Mobile Overlay -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/60 z-40 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
@@ -228,10 +228,10 @@
         </aside>
 
         <!-- Main Display Area (Canvas + Graphs) -->
-        <section class="flex-1 relative bg-[#f8fafc] flex flex-col min-w-0">
+        <section class="flex-1 relative bg-[#f8fafc] flex flex-col min-w-0 min-h-0 overflow-hidden">
             
             <!-- Physics Simulation Area -->
-            <div class="flex-1 relative min-h-[40%] flex flex-col min-w-0">
+            <div class="flex-1 relative min-h-[40%] flex flex-col min-w-0 overflow-hidden">
                 <!-- Data HUD Overlay -->
                 <div class="absolute top-4 right-4 glass-panel rounded-xl shadow-lg border border-slate-200 p-4 z-10 w-[280px] pointer-events-none">
                     <h4 class="text-sm font-bold text-slate-800 mb-2 border-b pb-1" id="lbl-data">實時數據</h4>
@@ -264,7 +264,7 @@
                 </div>
 
                 <!-- The Physics Canvas -->
-                <canvas id="physicsCanvas" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
+                <canvas id="physicsCanvas" class="absolute inset-0 w-full h-full block cursor-grab active:cursor-grabbing z-0"></canvas>
                 
                 <!-- Floating Animation Controls at bottom center -->
                 <div class="absolute bottom-4 left-1/2 -translate-x-1/2 glass-panel rounded-full shadow-xl border border-slate-200/80 p-2 z-10 flex gap-2 items-center w-[90%] md:w-auto max-w-[600px]">
@@ -313,14 +313,14 @@
             <!-- Graphs Area -->
             <div class="h-44 md:h-56 bg-white border-t border-slate-200 grid grid-cols-1 md:grid-cols-2 shrink-0 z-10 relative">
                 <!-- Total Momentum Graph -->
-                <div class="relative w-full h-full border-b md:border-b-0 md:border-r border-slate-200 p-2 flex flex-col">
-                    <span class="absolute top-2 left-4 text-xs font-bold text-slate-600 z-10 bg-white/80 px-1 rounded" id="lbl-graph-p">總動量 - 時間圖 (<em>p</em>-<em>t</em>)</span>
-                    <canvas id="graphP" class="w-full h-full block flex-1"></canvas>
+                <div class="relative w-full h-full border-b md:border-b-0 md:border-r border-slate-200 overflow-hidden">
+                    <span class="absolute top-1.5 left-3 text-xs font-bold text-slate-600 z-10 bg-white/90 px-1.5 py-0.5 rounded" id="lbl-graph-p">總動量 - 時間圖 (<em>p</em>-<em>t</em>)</span>
+                    <canvas id="graphP" class="absolute inset-0 w-full h-full block"></canvas>
                 </div>
                 <!-- Total KE Graph -->
-                <div class="relative w-full h-full p-2 flex flex-col">
-                    <span class="absolute top-2 left-4 text-xs font-bold text-slate-600 z-10 bg-white/80 px-1 rounded" id="lbl-graph-ke">總動能 - 時間圖 (KE-<em>t</em>)</span>
-                    <canvas id="graphKE" class="w-full h-full block flex-1"></canvas>
+                <div class="relative w-full h-full overflow-hidden">
+                    <span class="absolute top-1.5 left-3 text-xs font-bold text-slate-600 z-10 bg-white/90 px-1.5 py-0.5 rounded" id="lbl-graph-ke">總動能 - 時間圖 (KE-<em>t</em>)</span>
+                    <canvas id="graphKE" class="absolute inset-0 w-full h-full block"></canvas>
                 </div>
             </div>
 
@@ -568,7 +568,7 @@
             ],
             hasCollided: false,
             history: [], 
-            timeAtRest: 0 // Added to track rest time
+            timeAtRest: 0 
         };
 
         const camera = {
@@ -1425,7 +1425,7 @@
 
             const padX = 45 * dpr;
             const padY = 25 * dpr;
-            const padTop = 40 * dpr; 
+            const padTop = 55 * dpr; // 增加頂部邊距以避免與 HTML 標題重疊
             const padRight = 25 * dpr; 
 
             const drawW = w - padX - padRight;
@@ -1519,10 +1519,10 @@
             cctx.textAlign = 'left';
             cctx.textBaseline = 'middle';
             cctx.font = labelVar === 'KE' ? `normal ${10 * dpr}px sans-serif` : `italic ${10 * dpr}px sans-serif`;
-            cctx.fillText(labelVar, padX + 8 * dpr, padTop - 15 * dpr);
+            cctx.fillText(labelVar, padX + 12 * dpr, padTop - 15 * dpr);
             let varWidth = cctx.measureText(labelVar).width;
             cctx.font = `normal ${10 * dpr}px sans-serif`;
-            cctx.fillText(labelUnit, padX + 8 * dpr + varWidth, padTop - 15 * dpr);
+            cctx.fillText(labelUnit, padX + 12 * dpr + varWidth, padTop - 15 * dpr);
 
             cctx.font = `normal ${10 * dpr}px sans-serif`;
             cctx.textAlign = 'right';
