@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>質譜儀 | Mass Spectrometer</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cma: {
+                            blue: '#1e3c72',
+                            dark: '#152a51',
+                            light: '#2a5298'
+                        },
+                        vector: {
+                            blue: '#3b82f6',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            purple: '#8b5cf6',
+                            teal: '#14b8a6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- MathJax 3 -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* 側邊欄簡潔滾動條 */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8fafc;
+            overflow: hidden; 
+        }
+
+        /* 控制面板的輸入條樣式優化，更加緊湊 */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 14px;
+            width: 14px;
+            border-radius: 50%;
+            background: #1e3c72;
+            cursor: pointer;
+            margin-top: -5px;
+            box-shadow: 0 0 2px rgba(0,0,0,0.5);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen text-slate-800">
+
+    <!-- 頂部導航欄 -->
+    <header class="bg-cma-blue text-white shadow-md z-10 flex justify-between items-center px-4 md:px-6 py-2.5 shrink-0">
+        <div class="flex items-center gap-3">
+            <!-- 原子圖示 -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-400">
+                <circle cx="12" cy="12" r="3"></circle>
+                <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(45 12 12)"></ellipse>
+                <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-45 12 12)"></ellipse>
+            </svg>
+            <h1 class="text-lg md:text-xl font-bold tracking-wide" id="lbl-title">質譜儀模擬實驗</h1>
+        </div>
+        <div class="flex gap-2 md:gap-4 items-center">
+            <button id="btn-help" class="text-xs md:text-sm bg-white/20 hover:bg-white/30 px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <span id="lbl-help" class="hidden sm:inline">說明</span>
+            </button>
+            <button id="btn-lang" class="text-xs md:text-sm font-semibold bg-amber-500 hover:bg-amber-400 text-cma-dark px-2.5 py-1.5 rounded-lg transition-colors font-mono">
+                繁/Eng
+            </button>
+            <!-- 手機版選單齒輪按鈕 (加入過渡與排序動畫支援) -->
+            <button id="btn-mobile-menu" class="md:hidden text-white bg-white/20 hover:bg-white/30 p-1.5 rounded-lg transition-all ml-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- 主要互動區 -->
+    <main class="flex flex-col md:flex-row flex-1 overflow-hidden h-full relative">
+        
+        <!-- 手機版選單遮罩 -->
+        <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/40 z-40 hidden md:hidden transition-opacity"></div>
+
+        <!-- 設定面板 (桌機：固定寬度無滾動; 手機：側邊滑出) -->
+        <aside id="sidebar" class="fixed md:relative top-0 left-0 h-full w-[280px] md:w-[320px] bg-white shadow-2xl md:shadow-lg flex flex-col border-r border-slate-200 z-50 md:z-10 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shrink-0">
+            
+            <!-- 手機版側邊欄標題 -->
+            <div class="flex justify-between items-center px-4 py-3 border-b border-slate-200 bg-slate-50 md:hidden shrink-0">
+                <h2 class="font-bold text-slate-700 text-sm flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                    控制面板
+                </h2>
+                <button id="btn-close-sidebar" class="text-slate-400 hover:text-red-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+
+            <!-- 控制區內容 (高度緊湊以防桌機滾動) -->
+            <div class="p-3 md:p-3 overflow-y-auto flex flex-col gap-2.5 h-full">
+                
+                <!-- 粒子選擇 -->
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 shadow-sm shrink-0">
+                    <h2 class="font-bold text-cma-blue mb-2 text-[13px]" id="lbl-particle-select">粒子與同位素選擇</h2>
+                    <div class="grid grid-cols-2 gap-1.5 mb-1.5">
+                        <button id="preset-proton" class="preset-btn bg-cma-blue text-white border border-cma-blue text-[10px] md:text-xs font-semibold py-1 rounded-md transition-all">
+                            質子 (\({}^{1}_{1}\mathrm{H}^+\))
+                        </button>
+                        <button id="preset-alpha" class="preset-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-semibold py-1 rounded-md transition-all">
+                            氦-4 (\({}^{4}_{2}\mathrm{He}^{2+}\))
+                        </button>
+                        <button id="preset-c12" class="preset-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-semibold py-1 rounded-md transition-all">
+                            碳-12 (\({}^{12}_{6}\mathrm{C}^+\))
+                        </button>
+                        <button id="preset-c14" class="preset-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-semibold py-1 rounded-md transition-all">
+                            碳-14 (\({}^{14}_{6}\mathrm{C}^+\))
+                        </button>
+                        <button id="preset-ne20" class="preset-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-semibold py-1 rounded-md transition-all">
+                            氖-20 (\({}^{20}_{10}\mathrm{Ne}^+\))
+                        </button>
+                        <button id="preset-ne22" class="preset-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-semibold py-1 rounded-md transition-all">
+                            氖-22 (\({}^{22}_{10}\mathrm{Ne}^+\))
+                        </button>
+                        <button id="preset-na23" class="preset-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-semibold py-1 rounded-md transition-all">
+                            鈉-23 (\({}^{23}_{11}\mathrm{Na}^+\))
+                        </button>
+                        <button id="preset-cl35" class="preset-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-semibold py-1 rounded-md transition-all">
+                            氯-35 (\({}^{35}_{17}\mathrm{Cl}^+\))
+                        </button>
+                        <button id="preset-cl37" class="preset-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-semibold py-1 rounded-md transition-all">
+                            氯-37 (\({}^{37}_{17}\mathrm{Cl}^+\))
+                        </button>
+                        <button id="preset-custom" class="preset-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-semibold py-1 rounded-md transition-all">
+                            自訂離子
+                        </button>
+                    </div>
+                    <!-- 自訂質量/電荷 -->
+                    <div id="custom-params" class="hidden space-y-2 pt-1 border-t border-slate-200 mt-2">
+                        <div>
+                            <div class="flex justify-between text-[11px] mb-0.5">
+                                <label class="font-medium text-slate-600" id="lbl-custom-mass">質量 (\(m\))</label>
+                                <span id="val-custom-mass" class="font-mono text-[11px] font-bold text-slate-700">12 u</span>
+                            </div>
+                            <input type="range" id="slider-mass" min="1" max="1000" step="1" value="12" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[11px] mb-0.5">
+                                <label class="font-medium text-slate-600" id="lbl-custom-charge">電荷量 (\(q\))</label>
+                                <span id="val-custom-charge" class="font-mono text-[11px] font-bold text-slate-700">+1 e</span>
+                            </div>
+                            <input type="range" id="slider-charge" min="-10" max="10" step="1" value="1" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 速度選擇器參數 -->
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 shadow-sm shrink-0">
+                    <h2 class="font-bold text-cma-blue mb-2 text-[13px]" id="lbl-fields">第一階段: 速度選擇器</h2>
+                    <div class="mb-2.5">
+                        <div class="flex justify-between text-[11px] mb-0.5 items-center">
+                            <div class="flex items-center gap-1">
+                                <label class="font-medium text-slate-700" id="lbl-efield">電場 (\(E\))</label>
+                                <button id="reset-E" class="text-slate-400 hover:text-cma-blue transition-colors focus:outline-none" title="Reset">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                                </button>
+                            </div>
+                            <span id="val-efield" class="text-cma-blue font-mono font-bold">-40 kV m<sup>-1</sup></span>
+                        </div>
+                        <input type="range" id="slider-efield" min="-80" max="80" step="2" value="-40" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
+                        <div class="flex justify-between text-[9px] text-slate-400 leading-none mt-0.5">
+                            <span id="lbl-e-down">(向下)</span><span id="lbl-e-up">(向上)</span>
+                        </div>
+                    </div>
+                    <div class="mb-2.5">
+                        <div class="flex justify-between text-[11px] mb-0.5 items-center">
+                            <div class="flex items-center gap-1">
+                                <label class="font-medium text-slate-700" id="lbl-bfield">選擇器磁場 (\(B_1\))</label>
+                                <button id="reset-B1" class="text-slate-400 hover:text-cma-blue transition-colors focus:outline-none" title="Reset">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                                </button>
+                            </div>
+                            <span id="val-bfield" class="text-cma-blue font-mono font-bold">-100 mT</span>
+                        </div>
+                        <input type="range" id="slider-bfield" min="-250" max="250" step="10" value="-100" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
+                        <div class="flex justify-between text-[9px] text-slate-400 leading-none mt-0.5">
+                            <span id="lbl-b1-into">(入紙)</span><span id="lbl-b1-out">(出紙)</span>
+                        </div>
+                    </div>
+                    <div class="mb-1.5">
+                        <div class="flex justify-between text-[11px] mb-0.5 items-center">
+                            <div class="flex items-center gap-1">
+                                <label class="font-medium text-slate-700" id="lbl-velocity">入射速度 (\(v_0\))</label>
+                                <button id="reset-V" class="text-slate-400 hover:text-cma-blue transition-colors focus:outline-none" title="Reset">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                                </button>
+                            </div>
+                            <span id="val-velocity" class="text-cma-blue font-mono font-bold">4.0 &times; 10⁵ m s<sup>-1</sup></span>
+                        </div>
+                        <input type="range" id="slider-velocity" min="0.5" max="8.0" step="0.1" value="4.0" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
+                    </div>
+                    <div class="p-2 bg-slate-800 border border-slate-900 shadow-inner rounded-md text-[11px] mt-2 flex justify-between items-center text-slate-200">
+                        <span id="lbl-target-v" class="font-medium text-slate-300">平衡速度 (\(E/B_1\)):</span>
+                        <span id="val-target-v" class="font-bold text-amber-400 font-mono tracking-wide">4.00 &times; 10⁵ m s<sup>-1</sup></span>
+                    </div>
+                </div>
+
+                <!-- 分析室參數 -->
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 shadow-sm shrink-0">
+                    <h2 class="font-bold text-cma-blue mb-1 text-[13px]" id="lbl-fields-stage2">第二階段: 質量分析室</h2>
+                    <div class="mt-1">
+                        <div class="flex justify-between text-[11px] mb-0.5 items-center">
+                            <div class="flex items-center gap-1">
+                                <label class="font-medium text-slate-700" id="lbl-bfield2">偏轉磁場 (\(B_2\))</label>
+                                <button id="reset-B2" class="text-slate-400 hover:text-cma-blue transition-colors focus:outline-none" title="Reset">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                                </button>
+                            </div>
+                            <span id="val-bfield2" class="text-cma-blue font-mono font-bold">-100 mT</span>
+                        </div>
+                        <input type="range" id="slider-bfield2" min="-250" max="250" step="10" value="-100" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
+                        <div class="flex justify-between text-[9px] text-slate-400 leading-none mt-0.5">
+                            <span id="lbl-b2-into">(入紙)</span><span id="lbl-b2-out">(出紙)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 顯示控制 -->
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 shadow-sm shrink-0">
+                    <h2 class="font-bold text-cma-blue mb-2 text-[13px]" id="lbl-display-options">模擬顯示設定</h2>
+                    <div class="flex flex-col gap-1">
+                        <label class="inline-flex items-center text-[11px] cursor-pointer select-none">
+                            <input type="checkbox" id="chk-show-forces" class="w-3.5 h-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-600" checked>
+                            <span class="ml-1.5 font-medium text-slate-700" id="lbl-show-forces">受力向量 (\(\vec{F}_{\text{E}}, \vec{F}_{\text{B}}\))</span>
+                        </label>
+                        <label class="inline-flex items-center text-[11px] cursor-pointer select-none">
+                            <input type="checkbox" id="chk-show-v" class="w-3.5 h-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-600" checked>
+                            <span class="ml-1.5 font-medium text-slate-700" id="lbl-show-v">速度向量 (\(\vec{v}\))</span>
+                        </label>
+                        <label class="inline-flex items-center text-[11px] cursor-pointer select-none">
+                            <input type="checkbox" id="chk-show-a" class="w-3.5 h-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-600">
+                            <span class="ml-1.5 font-medium text-slate-700" id="lbl-show-a">加速度向量 (\(\vec{a}\))</span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- 畫布區 (自由平移與滾輪縮放) -->
+        <section class="w-full h-full flex-1 relative bg-[#f8fafc] overflow-hidden" id="canvas-container">
+            <canvas id="sim-canvas" class="absolute top-0 left-0 w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+            
+            <!-- 視角縮放控制元件 -->
+            <div class="absolute top-4 right-4 flex flex-col gap-0 z-20 pointer-events-auto shadow bg-white rounded-lg border border-slate-200">
+                <button id="btn-zoom-in" class="text-slate-600 hover:text-cma-blue hover:bg-slate-50 w-7 h-7 rounded-t-lg flex items-center justify-center transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+                <div class="h-[1px] bg-slate-200 w-full"></div>
+                <button id="btn-zoom-out" class="text-slate-600 hover:text-cma-blue hover:bg-slate-50 w-7 h-7 flex items-center justify-center transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+                <div class="h-[1px] bg-slate-200 w-full"></div>
+                <button id="btn-reset-view" class="text-slate-600 hover:text-cma-blue hover:bg-slate-50 w-7 h-7 rounded-b-lg flex items-center justify-center transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                </button>
+            </div>
+
+            <!-- 測量結果橫幅 (可拖曳) -->
+            <div id="panel-measurements" class="absolute bottom-20 left-5 bg-white/95 backdrop-blur-md p-3 rounded-xl shadow-lg border border-slate-200 text-xs md:text-sm z-10 cursor-move pointer-events-auto touch-none select-none">
+                <h3 class="font-bold text-cma-blue mb-1 pointer-events-none" id="lbl-overlay-title">測量結果</h3>
+                <div class="space-y-1 text-xs font-mono text-slate-700 pointer-events-none">
+                    <div class="flex justify-between gap-4"><span id="lbl-time">總飛行時間 (\(t\)):</span> <span id="val-time" class="text-vector-blue font-bold">0.000 μs</span></div>
+                    <div class="flex justify-between gap-4"><span id="lbl-measured-landing">實際著陸位置 (\(y\)):</span> <span id="val-measured-landing" class="text-red-600 font-bold">--</span></div>
+                </div>
+            </div>
+
+            <!-- 浮動動畫控制面板 (可拖曳) -->
+            <div id="panel-controls" class="absolute bottom-5 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-md px-5 py-2.5 rounded-full shadow-xl border border-slate-200 flex items-center gap-4 z-20 pointer-events-auto cursor-move touch-none select-none">
+                <button id="btn-play" class="text-emerald-500 hover:text-emerald-600 transition-transform active:scale-95 focus:outline-none cursor-pointer" title="開始">
+                    <svg id="icon-play" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <svg id="icon-pause" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="hidden"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                </button>
+                <button id="btn-reset" class="text-slate-500 hover:text-cma-blue transition-transform active:scale-95 focus:outline-none cursor-pointer" title="重設">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                </button>
+                <div class="h-6 w-px bg-slate-300 mx-1 pointer-events-none"></div>
+                <div class="flex items-center gap-2 cursor-auto" title="動畫速度">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 pointer-events-none"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <input type="range" id="slider-speed" min="0.1" max="3.0" step="0.1" value="1.0" class="w-20 md:w-28 bg-slate-200 appearance-none cursor-pointer accent-blue-600">
+                    <span id="val-speed" class="text-slate-600 font-mono font-bold text-[11px] w-8 text-right pointer-events-none">1.0x</span>
+                </div>
+            </div>
+
+            <!-- 碰撞狀態橫幅 -->
+            <div id="result-badge" class="absolute top-5 left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-1.5 rounded-full font-bold shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none text-[13px] tracking-wide z-20">
+                粒子受阻擋！
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 頁腳 (廠商會中學) -->
+    <footer class="bg-slate-800 text-slate-300 text-center py-2 text-xs shrink-0 font-medium tracking-wide">
+        <span id="lbl-footer">廠商會中學．物理科</span>
+    </footer>
+
+    <!-- 物理原理說明彈窗 -->
+    <div id="modal-help" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden opacity-0 transition-opacity duration-300 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden transform scale-95 transition-transform duration-300" id="modal-content">
+            <div class="bg-cma-blue text-white px-5 py-3.5 flex justify-between items-center">
+                <h3 class="text-base font-bold tracking-wide" id="lbl-modal-title">物理原理</h3>
+                <button id="btn-close-modal" class="hover:text-amber-400 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="p-5 text-slate-700 space-y-3 max-h-[70vh] overflow-y-auto leading-relaxed text-sm" id="modal-body">
+                <!-- 雙語內容動態注入 -->
+            </div>
+            <div class="bg-slate-50 px-5 py-3 border-t border-slate-100 flex justify-end">
+                <button id="btn-modal-ok" class="bg-cma-blue hover:bg-cma-dark text-white px-5 py-1.5 rounded-lg font-medium transition-colors shadow-sm text-sm">已掌握</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 應用程序核心程式碼 -->
+    <script>
+        /* --- 1. 全局狀態與嚴謹的 SI 物理常數 --- */
+        
+        const e_charge = 1.60217663e-19; // C
+        const u_mass = 1.66053906e-27;   // kg
+
+        // 空間幾何尺寸 (m) (擴展至無窮遠視野)
+        const selector_length = 0.80;     // 80 cm
+        const selector_gap = 0.40;        // 40 cm
+        const slit_width = 0.05;          // 狹縫寬 (5 cm)
+        const start_x = -0.05;            
+        const workspace_height = 100.0;   // 模擬無限高的物理空間 (100 m)
+        const ms_limit_x = 100.0;         // 模擬無限遠的水平空間 (100 m)
+
+        // 模擬狀態
+        let state = {
+            lang: 'zh',
+            particleType: 'proton',
+            customMass: 12,
+            customCharge: 1,
+            
+            q: 1 * e_charge, 
+            m: 1 * u_mass,
+            
+            E_y: -40,  
+            B_1: -100, 
+            B_2: -100, 
+            v_0: 4.0,  
+            simSpeed: 1.0, 
+            
+            t: 0,
+            x: start_x,
+            y: 0,
+            vx: 4.0e5,
+            vy: 0,
+            path: [],
+            pastLandings: [],
+            pastPaths: [],
+            
+            showForceVectors: true, 
+            showVelocityVector: true,
+            showAccelerationVector: false, 
+            
+            isRunning: false,
+            isFinished: false,
+            hitPlate: false,
+            blockedAtSlit: false,
+            landedOnDetector: false,
+            landingY: 0
+        };
+
+        let viewState = {
+            offsetX: 0,
+            offsetY: 0,
+            zoom: 1,
+            isDragging: false,
+            lastMouseX: 0,
+            lastMouseY: 0,
+            initialPinchDistance: null,
+            initialPinchZoom: 1
+        };
+
+        // DOM Elements
+        const canvas = document.getElementById('sim-canvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvas-container');
+        
+        const sliderE = document.getElementById('slider-efield');
+        const sliderB = document.getElementById('slider-bfield');
+        const sliderB2 = document.getElementById('slider-bfield2');
+        const sliderV = document.getElementById('slider-velocity');
+        const sliderMass = document.getElementById('slider-mass');
+        const sliderCharge = document.getElementById('slider-charge');
+        const sliderSpeed = document.getElementById('slider-speed');
+        
+        const valE = document.getElementById('val-efield');
+        const valB = document.getElementById('val-bfield');
+        const valB2 = document.getElementById('val-bfield2');
+        const valV = document.getElementById('val-velocity');
+        const valTargetV = document.getElementById('val-target-v');
+        const valSpeed = document.getElementById('val-speed');
+        
+        const valCustomMass = document.getElementById('val-custom-mass');
+        const valCustomCharge = document.getElementById('val-custom-charge');
+        const customParamsGroup = document.getElementById('custom-params');
+        
+        const valTime = document.getElementById('val-time');
+        const lblTime = document.getElementById('lbl-time');
+        const valMeasuredLanding = document.getElementById('val-measured-landing');
+        
+        const btnPlay = document.getElementById('btn-play');
+        const iconPlay = document.getElementById('icon-play');
+        const iconPause = document.getElementById('icon-pause');
+        const btnReset = document.getElementById('btn-reset');
+        const resultBadge = document.getElementById('result-badge');
+
+        const btnZoomIn = document.getElementById('btn-zoom-in');
+        const btnZoomOut = document.getElementById('btn-zoom-out');
+        const btnResetView = document.getElementById('btn-reset-view');
+
+        const chkShowForces = document.getElementById('chk-show-forces');
+        const chkShowV = document.getElementById('chk-show-v');
+        const chkShowA = document.getElementById('chk-show-a');
+
+        // 手機版側欄切換
+        const sidebar = document.getElementById('sidebar');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+        const btnMobileMenu = document.getElementById('btn-mobile-menu');
+        const btnCloseSidebar = document.getElementById('btn-close-sidebar');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            mobileOverlay.classList.toggle('hidden');
+            // 動態調整齒輪按鈕的順序：如果開啟選單，將其移到 "說明" (Info) 按鈕的左側
+            btnMobileMenu.classList.toggle('order-first');
+        }
+
+        btnMobileMenu.addEventListener('click', toggleSidebar);
+        btnCloseSidebar.addEventListener('click', toggleSidebar);
+        mobileOverlay.addEventListener('click', toggleSidebar);
+
+        /* --- 2. 雙語翻譯字典與排版 --- */
+        const i18n = {
+            en: {
+                title: "Mass Spectrometer",
+                help: "Help",
+                fields: "Stage 1: Velocity Selector",
+                efield: "Electric Field (\\(E\\))",
+                bfield: "Selector Field (\\(B_1\\))",
+                bfield2: "Analyzer Field (\\(B_2\\))",
+                particleSelect: "Particle / Isotope Preset",
+                velocity: "Initial Velocity (\\(v_0\\))",
+                targetV: "Equilibrium Vel. (\\(E/B_1\\)):",
+                displayOptions: "Simulation Settings",
+                showForces: "Forces (\\(\\vec{F}_{\\text{E}}, \\vec{F}_{\\text{B}}\\))",
+                showV: "Velocity (\\(\\vec{v}\\))",
+                showA: "Acceleration (\\(\\vec{a}\\))",
+                start: "Start",
+                pause: "Pause",
+                reset: "Reset",
+                footer: "CMA Secondary School. Physics Department.",
+                modalTitle: "Principles of Mass Spectrometry",
+                understood: "Understood",
+                blockedSelector: "Blocked: Hit Selector Plates!",
+                blockedSlit: "Blocked: Failed Slit Selection!",
+                passedMS: "Landed on Detector Plate!",
+                infinite: "Infinite",
+                mismatch: "Direction Mismatch",
+                customMass: "Mass (\\(m\\))",
+                customCharge: "Charge (\\(q\\))",
+                analysisTitle: "Measurement Results",
+                measuredLanding: "Actual Landing Position (\\(y\\)):",
+                time: "Time of Flight (\\(t\\)):",
+                eDown: "(Downward)",
+                eUp: "(Upward)",
+                b1Into: "(Into Page)",
+                b1Out: "(Out of Page)",
+                b2Into: "(Into Page)",
+                b2Out: "(Out of Page)",
+                speed: "Animation Speed",
+                modalBody: `
+                    <p>A <strong>Mass Spectrometer</strong> is an analytical tool used to measure the mass-to-charge ratio (\\(m/q\\)) of ions. It typically operates in two stages:</p>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-cma-blue mb-2 text-base">1. Velocity Selector</h4>
+                        <p class="text-sm">Ions pass through crossed uniform electric (\\(E\\)) and magnetic (\\(B_1\\)) fields. The fields are tuned so that only ions with a specific velocity experience zero net force:</p>
+                        <p class="text-center my-3 font-semibold text-lg">\\(F_{\\text{E}} = F_{\\text{B}} \\implies qE = qvB_1 \\implies v = \\frac{E}{B_1}\\)</p>
+                        <p class="text-sm text-slate-500">Ions with incorrect velocities deflect and hit the plates.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-cma-blue mb-2 text-base">2. Mass Deflection Chamber</h4>
+                        <p class="text-sm">Selected ions enter a uniform magnetic field (\\(B_2\\)). The magnetic force provides centripetal acceleration, causing circular motion:</p>
+                        <p class="text-center my-3 font-semibold text-lg">\\(q v B_2 = \\frac{m v^2}{R} \\implies R = \\frac{m v}{q B_2}\\)</p>
+                        <p class="text-sm text-slate-500">By measuring the impact diameter (\\(2R\\)) on the detector, the ion's mass can be calculated: \\(m = \\frac{q B_2 R}{v}\\).</p>
+                    </div>
+                `
+            },
+            zh: {
+                title: "質譜儀模擬實驗",
+                help: "說明",
+                fields: "第一階段: 速度選擇器",
+                efield: "電場 (\\(E\\))",
+                bfield: "選擇器磁場 (\\(B_1\\))",
+                bfield2: "分析室磁場 (\\(B_2\\))",
+                particleSelect: "粒子與同位素選擇",
+                velocity: "入射速度 (\\(v_0\\))",
+                targetV: "平衡速度 (\\(E/B_1\\)):",
+                displayOptions: "模擬顯示設定",
+                showForces: "受力向量 (\\(\\vec{F}_{\\text{E}}, \\vec{F}_{\\text{B}}\\))",
+                showV: "速度向量 (\\(\\vec{v}\\))",
+                showA: "加速度向量 (\\(\\vec{a}\\))",
+                start: "開始",
+                pause: "暫停",
+                reset: "重設",
+                footer: "廠商會中學．物理科",
+                modalTitle: "質譜儀運作原理",
+                understood: "已掌握",
+                blockedSelector: "阻截：撞擊電極板！",
+                blockedSlit: "阻截：無法通過狹縫！",
+                passedMS: "成功到達探測板！",
+                infinite: "無限大",
+                mismatch: "力方向不符",
+                customMass: "質量 (\\(m\\))",
+                customCharge: "電荷量 (\\(q\\))",
+                analysisTitle: "測量結果",
+                measuredLanding: "實際著陸位置 (\\(y\\)):",
+                time: "總飛行時間 (\\(t\\)):",
+                eDown: "(向下)",
+                eUp: "(向上)",
+                b1Into: "(入紙)",
+                b1Out: "(出紙)",
+                b2Into: "(入紙)",
+                b2Out: "(出紙)",
+                speed: "動畫速度",
+                modalBody: `
+                    <p><strong>質譜儀 (Mass Spectrometer)</strong> 是一種高精度的分析儀器，常用於分析陽離子以分離及檢測同位素。主要包含兩個核心階段：</p>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-cma-blue mb-2 text-base">1. 速度選擇器</h4>
+                        <p class="text-sm">帶正電的離子進入互相垂直的均勻電場 (\\(E\\)) 和磁場 (\\(B_1\\)) 區域。此時離子同時承受電場力與勞侖茲磁場力。只有當兩力完全抵消（即淨力為零）時，離子才可不受偏轉地直線前進：</p>
+                        <p class="text-center my-3 font-semibold text-lg">\\(F_{\\text{E}} = F_{\\text{B}} \\implies qE = qvB_1 \\implies v = \\frac{E}{B_1}\\)</p>
+                        <p class="text-sm text-slate-500">其餘速度不符合條件的離子會向上或向下偏轉，被阻擋在出射狹縫外面。</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-cma-blue mb-2 text-base">2. 質量分析室</h4>
+                        <p class="text-sm">直線穿過狹縫的選定離子，進入只有均勻磁場 (\\(B_2\\)) 的偏轉區域。此時勞侖茲力充當向心力，迫使離子做勻速圓周運動：</p>
+                        <p class="text-center my-3 font-semibold text-lg">\\(q v B_2 = \\frac{m v^2}{R} \\implies R = \\frac{m v}{q B_2}\\)</p>
+                        <p class="text-sm text-slate-500">探測板（底片）位於入口處。藉由測量離子打擊著陸點與狹縫的距離直徑 (\\(2R\\))，即可反推出離子的精確荷質比與質量：\\(m = \\frac{q B_2 R}{v}\\)。</p>
+                    </div>
+                `
+            }
+        };
+
+        function updateLanguage() {
+            const t = i18n[state.lang];
+            
+            document.getElementById('lbl-title').textContent = t.title;
+            document.getElementById('lbl-help').textContent = t.help;
+            document.getElementById('lbl-particle-select').textContent = t.particleSelect;
+            document.getElementById('lbl-fields').textContent = t.fields;
+            document.getElementById('lbl-efield').innerHTML = t.efield;
+            document.getElementById('lbl-bfield').innerHTML = t.bfield;
+            document.getElementById('lbl-fields-stage2').textContent = t.bfield2.includes('B2') ? t.fields.replace('1', '2').replace('Selector', 'Analyzer').replace('速度選擇器', '質量分析室') : t.bfield2;
+            document.getElementById('lbl-fields-stage2').textContent = state.lang === 'zh' ? '第二階段: 質量分析室' : 'Stage 2: Mass Analyzer';
+            document.getElementById('lbl-bfield2').innerHTML = t.bfield2;
+            document.getElementById('lbl-velocity').innerHTML = t.velocity;
+            document.getElementById('lbl-target-v').innerHTML = t.targetV;
+            document.getElementById('lbl-custom-mass').innerHTML = t.customMass;
+            document.getElementById('lbl-custom-charge').innerHTML = t.customCharge;
+            document.getElementById('lbl-overlay-title').textContent = t.analysisTitle;
+            document.getElementById('lbl-time').innerHTML = t.time;
+            document.getElementById('lbl-measured-landing').innerHTML = t.measuredLanding;
+            
+            document.getElementById('lbl-display-options').textContent = t.displayOptions;
+            document.getElementById('lbl-show-forces').innerHTML = t.showForces;
+            document.getElementById('lbl-show-v').innerHTML = t.showV;
+            document.getElementById('lbl-show-a').innerHTML = t.showA;
+            
+            document.getElementById('btn-play').title = state.isRunning ? t.pause : t.start;
+            document.getElementById('btn-reset').title = t.reset;
+            document.getElementById('slider-speed').parentElement.title = t.speed;
+            
+            document.getElementById('lbl-e-down').textContent = t.eDown;
+            document.getElementById('lbl-e-up').textContent = t.eUp;
+            document.getElementById('lbl-b1-into').textContent = t.b1Into;
+            document.getElementById('lbl-b1-out').textContent = t.b1Out;
+            document.getElementById('lbl-b2-into').textContent = t.b2Into;
+            document.getElementById('lbl-b2-out').textContent = t.b2Out;
+
+            document.getElementById('preset-proton').innerHTML = state.lang === 'zh' ? '質子 (\\({}^{1}_{1}\\mathrm{H}^+\\))' : 'Proton (\\({}^{1}_{1}\\mathrm{H}^+\\))';
+            document.getElementById('preset-alpha').innerHTML = state.lang === 'zh' ? '氦-4 (\\({}^{4}_{2}\\mathrm{He}^{2+}\\))' : 'Helium-4 (\\({}^{4}_{2}\\mathrm{He}^{2+}\\))';
+            document.getElementById('preset-c12').innerHTML = state.lang === 'zh' ? '碳-12 (\\({}^{12}_{6}\\mathrm{C}^+\\))' : 'Carbon-12 (\\({}^{12}_{6}\\mathrm{C}^+\\))';
+            document.getElementById('preset-c14').innerHTML = state.lang === 'zh' ? '碳-14 (\\({}^{14}_{6}\\mathrm{C}^+\\))' : 'Carbon-14 (\\({}^{14}_{6}\\mathrm{C}^+\\))';
+            document.getElementById('preset-ne20').innerHTML = state.lang === 'zh' ? '氖-20 (\\({}^{20}_{10}\\mathrm{Ne}^+\\))' : 'Neon-20 (\\({}^{20}_{10}\\mathrm{Ne}^+\\))';
+            document.getElementById('preset-ne22').innerHTML = state.lang === 'zh' ? '氖-22 (\\({}^{22}_{10}\\mathrm{Ne}^+\\))' : 'Neon-22 (\\({}^{22}_{10}\\mathrm{Ne}^+\\))';
+            document.getElementById('preset-na23').innerHTML = state.lang === 'zh' ? '鈉-23 (\\({}^{23}_{11}\\mathrm{Na}^+\\))' : 'Sodium-23 (\\({}^{23}_{11}\\mathrm{Na}^+\\))';
+            document.getElementById('preset-cl35').innerHTML = state.lang === 'zh' ? '氯-35 (\\({}^{35}_{17}\\mathrm{Cl}^+\\))' : 'Chlorine-35 (\\({}^{35}_{17}\\mathrm{Cl}^+\\))';
+            document.getElementById('preset-cl37').innerHTML = state.lang === 'zh' ? '氯-37 (\\({}^{37}_{17}\\mathrm{Cl}^+\\))' : 'Chlorine-37 (\\({}^{37}_{17}\\mathrm{Cl}^+\\))';
+            document.getElementById('preset-custom').innerHTML = state.lang === 'zh' ? '自訂離子' : 'Custom Ion';
+
+            document.getElementById('lbl-footer').textContent = t.footer;
+            
+            document.getElementById('lbl-modal-title').textContent = t.modalTitle;
+            document.getElementById('modal-body').innerHTML = t.modalBody;
+            document.getElementById('btn-modal-ok').textContent = t.understood;
+
+            if (state.isFinished) showResultBadge();
+
+            if (window.MathJax) {
+                if (window.MathJax.typesetClear) {
+                    window.MathJax.typesetClear();
+                }
+                MathJax.typesetPromise().catch((err) => console.log('MathJax error: ', err));
+            }
+        }
+
+        document.getElementById('btn-lang').addEventListener('click', () => {
+            state.lang = state.lang === 'en' ? 'zh' : 'en';
+            updateLanguage();
+        });
+
+        /* --- 3. UI 與數值同步處理 --- */
+        
+        function selectPreset(type) {
+            state.particleType = type;
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.className = "preset-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-semibold py-1 rounded-md transition-all";
+            });
+
+            const activeClass = "preset-btn bg-cma-blue text-white border border-cma-blue text-[10px] md:text-xs font-semibold py-1 rounded-md transition-all shadow-md";
+
+            if (type === 'proton') {
+                document.getElementById('preset-proton').className = activeClass;
+                state.m = 1 * u_mass; state.q = e_charge;
+                customParamsGroup.classList.add('hidden');
+            } else if (type === 'alpha') {
+                document.getElementById('preset-alpha').className = activeClass;
+                state.m = 4 * u_mass; state.q = 2 * e_charge;
+                customParamsGroup.classList.add('hidden');
+            } else if (type === 'c12') {
+                document.getElementById('preset-c12').className = activeClass;
+                state.m = 12 * u_mass; state.q = e_charge;
+                customParamsGroup.classList.add('hidden');
+            } else if (type === 'c14') {
+                document.getElementById('preset-c14').className = activeClass;
+                state.m = 14 * u_mass; state.q = e_charge;
+                customParamsGroup.classList.add('hidden');
+            } else if (type === 'ne20') {
+                document.getElementById('preset-ne20').className = activeClass;
+                state.m = 20 * u_mass; state.q = e_charge; 
+                customParamsGroup.classList.add('hidden');
+            } else if (type === 'ne22') {
+                document.getElementById('preset-ne22').className = activeClass;
+                state.m = 22 * u_mass; state.q = e_charge; 
+                customParamsGroup.classList.add('hidden');
+            } else if (type === 'na23') {
+                document.getElementById('preset-na23').className = activeClass;
+                state.m = 23 * u_mass; state.q = e_charge;
+                customParamsGroup.classList.add('hidden');
+            } else if (type === 'cl35') {
+                document.getElementById('preset-cl35').className = activeClass;
+                state.m = 35 * u_mass; state.q = e_charge;
+                customParamsGroup.classList.add('hidden');
+            } else if (type === 'cl37') {
+                document.getElementById('preset-cl37').className = activeClass;
+                state.m = 37 * u_mass; state.q = e_charge;
+                customParamsGroup.classList.add('hidden');
+            } else if (type === 'custom') {
+                document.getElementById('preset-custom').className = activeClass;
+                customParamsGroup.classList.remove('hidden');
+                syncCustomValues();
+            }
+            
+            resetSimulation(false);
+            syncUI();
+        }
+
+        function syncCustomValues() {
+            state.customMass = parseInt(sliderMass.value);
+            state.customCharge = parseInt(sliderCharge.value);
+            valCustomMass.textContent = `${state.customMass} u`;
+            valCustomCharge.textContent = `${state.customCharge > 0 ? '+' : ''}${state.customCharge} e`;
+            if (state.particleType === 'custom') {
+                state.m = state.customMass * u_mass;
+                state.q = state.customCharge * e_charge;
+            }
+        }
+
+        document.getElementById('preset-proton').addEventListener('click', () => selectPreset('proton'));
+        document.getElementById('preset-alpha').addEventListener('click', () => selectPreset('alpha'));
+        document.getElementById('preset-c12').addEventListener('click', () => selectPreset('c12'));
+        document.getElementById('preset-c14').addEventListener('click', () => selectPreset('c14'));
+        document.getElementById('preset-ne20').addEventListener('click', () => selectPreset('ne20'));
+        document.getElementById('preset-ne22').addEventListener('click', () => selectPreset('ne22'));
+        document.getElementById('preset-na23').addEventListener('click', () => selectPreset('na23'));
+        document.getElementById('preset-cl35').addEventListener('click', () => selectPreset('cl35'));
+        document.getElementById('preset-cl37').addEventListener('click', () => selectPreset('cl37'));
+        document.getElementById('preset-custom').addEventListener('click', () => selectPreset('custom'));
+        
+        sliderMass.addEventListener('input', () => { syncCustomValues(); resetSimulation(false); syncUI(); });
+        sliderCharge.addEventListener('input', () => { syncCustomValues(); resetSimulation(false); syncUI(); });
+
+        document.getElementById('reset-E').addEventListener('click', () => { sliderE.value = -40; syncUI(); });
+        document.getElementById('reset-B1').addEventListener('click', () => { sliderB.value = -100; syncUI(); });
+        document.getElementById('reset-V').addEventListener('click', () => { sliderV.value = 4.0; syncUI(); });
+        document.getElementById('reset-B2').addEventListener('click', () => { sliderB2.value = -100; syncUI(); });
+
+        chkShowForces.addEventListener('change', () => { state.showForceVectors = chkShowForces.checked; if(!state.isRunning) draw(); });
+        chkShowV.addEventListener('change', () => { state.showVelocityVector = chkShowV.checked; if(!state.isRunning) draw(); });
+        chkShowA.addEventListener('change', () => { state.showAccelerationVector = chkShowA.checked; if(!state.isRunning) draw(); });
+        sliderSpeed.addEventListener('input', () => {
+            state.simSpeed = parseFloat(sliderSpeed.value);
+            valSpeed.textContent = `${state.simSpeed.toFixed(1)}x`;
+        });
+
+        function formatScientific(val, exponent) {
+            return `${val.toFixed(2)} &times; 10<sup>${exponent}</sup>`;
+        }
+
+        function syncUI() {
+            state.E_y = parseFloat(sliderE.value);
+            state.B_1 = parseFloat(sliderB.value);
+            state.B_2 = parseFloat(sliderB2.value);
+            state.v_0 = parseFloat(sliderV.value);
+            state.simSpeed = parseFloat(sliderSpeed.value);
+            
+            // 嚴謹 SI 格式：數值與單位間補空格
+            valE.innerHTML = `${state.E_y > 0 ? '+' : ''}${state.E_y} kV m<sup>-1</sup>`;
+            valB.innerHTML = `${state.B_1 > 0 ? '+' : ''}${state.B_1} mT`;
+            valB2.innerHTML = `${state.B_2 > 0 ? '+' : ''}${state.B_2} mT`;
+            valV.innerHTML = `${formatScientific(state.v_0, 5)} m s<sup>-1</sup>`;
+            valSpeed.textContent = `${state.simSpeed.toFixed(1)}x`;
+            
+            const E = Math.abs(state.E_y * 1e3); 
+            const B1 = Math.abs(state.B_1 * 1e-3); 
+            const t = i18n[state.lang];
+
+            if (B1 === 0) {
+                valTargetV.innerHTML = E === 0 ? "Any" : t.infinite;
+                valTargetV.className = 'font-bold text-red-400 font-mono text-[11px] tracking-wide';
+            } else if (state.E_y * state.B_1 < 0) {
+                // 如果電場力和磁場力方向相同，永遠無法平衡
+                valTargetV.innerHTML = t.mismatch;
+                valTargetV.className = 'font-bold text-red-400 font-mono text-[11px] tracking-wide';
+            } else {
+                let v = Math.abs(E) / Math.abs(B1); 
+                let coeff = v / 1e5;
+                valTargetV.innerHTML = `${formatScientific(coeff, 5)} m s<sup>-1</sup>`;
+                valTargetV.className = Math.abs(coeff - state.v_0) < 0.05 ? 'font-bold text-emerald-400 font-mono text-[11px] tracking-wide' : 'font-bold text-amber-400 font-mono text-[11px] tracking-wide';
+            }
+            
+            if(!state.isRunning && !state.isFinished) {
+                resetSimulation(false);
+                draw();
+            }
+        }
+
+        sliderE.addEventListener('input', syncUI);
+        sliderB.addEventListener('input', syncUI);
+        sliderB2.addEventListener('input', syncUI);
+        sliderV.addEventListener('input', syncUI);
+
+
+        /* --- 4. 數值積分核心引擎 --- */
+        
+        function getDerivatives(x, y, vx, vy) {
+            let E = 0;
+            let B = 0;
+
+            if (x >= 0 && x <= selector_length) {
+                E = state.E_y * 1e3;
+                B = state.B_1 * 1e-3;
+            } else if (x > selector_length) {
+                E = 0;
+                B = state.B_2 * 1e-3;
+            }
+
+            const q_over_m = state.q / state.m;
+            const ax = q_over_m * (vy * B);
+            const ay = q_over_m * (E - vx * B);
+            
+            return [vx, vy, ax, ay];
+        }
+
+        function stepRK4(dt) {
+            let x = state.x; let y = state.y; let vx = state.vx; let vy = state.vy;
+
+            let k1 = getDerivatives(x, y, vx, vy);
+            let x2 = x + 0.5 * dt * k1[0]; let y2 = y + 0.5 * dt * k1[1];
+            let k2 = getDerivatives(x2, y2, vx + 0.5 * dt * k1[2], vy + 0.5 * dt * k1[3]);
+            let x3 = x + 0.5 * dt * k2[0]; let y3 = y + 0.5 * dt * k2[1];
+            let k3 = getDerivatives(x3, y3, vx + 0.5 * dt * k2[2], vy + 0.5 * dt * k2[3]);
+            let x4 = x + dt * k3[0]; let y4 = y + dt * k3[1];
+            let k4 = getDerivatives(x4, y4, vx + dt * k3[2], vy + dt * k3[3]);
+
+            state.x += (dt / 6) * (k1[0] + 2*k2[0] + 2*k3[0] + k4[0]);
+            state.y += (dt / 6) * (k1[1] + 2*k2[1] + 2*k3[1] + k4[1]);
+            state.vx += (dt / 6) * (k1[2] + 2*k2[2] + 2*k3[2] + k4[2]);
+            state.vy += (dt / 6) * (k1[3] + 2*k2[3] + 2*k3[3] + k4[3]);
+            state.t += dt;
+            
+            state.path.push({x: state.x, y: state.y});
+            
+            if(state.x >= 0 && state.x <= selector_length) {
+                if (state.y >= selector_gap / 2 || state.y <= -selector_gap / 2) {
+                    state.isFinished = true; state.hitPlate = true;
+                }
+            }
+            
+            if (state.x >= selector_length && (state.x - state.vx * dt) < selector_length) {
+                if (Math.abs(state.y) > slit_width / 2) {
+                    state.isFinished = true; state.blockedAtSlit = true;
+                }
+            }
+
+            if (state.x > selector_length) {
+                if (state.x <= selector_length + 0.001 && state.vx < 0) {
+                    state.isFinished = true;
+                    state.landedOnDetector = true;
+                    state.landingY = state.y;
+                    cacheLanding(state.landingY);
+                }
+                
+                // 動態無窮視野極限保護：以 100m 作為實際物理邊界
+                if (state.x > ms_limit_x || Math.abs(state.y) > workspace_height) {
+                    state.isFinished = true;
+                    state.landedOnDetector = false;
+                }
+            }
+        }
+
+        function cacheLanding(y) {
+            let label = "";
+            if (state.particleType === 'proton') label = "¹₁H⁺";
+            else if (state.particleType === 'alpha') label = "⁴₂He²⁺";
+            else if (state.particleType === 'c12') label = "¹²₆C⁺";
+            else if (state.particleType === 'c14') label = "¹⁴₆C⁺";
+            else if (state.particleType === 'ne20') label = "²⁰₁₀Ne⁺";
+            else if (state.particleType === 'ne22') label = "²²₁₀Ne⁺";
+            else if (state.particleType === 'na23') label = "²³₁₁Na⁺";
+            else if (state.particleType === 'cl35') label = "³⁵₁₇Cl⁺";
+            else if (state.particleType === 'cl37') label = "³⁷₁₇Cl⁺";
+            else label = `(${state.customMass}u)`;
+
+            state.pastLandings.push({
+                y: y, label: label,
+                color: getParticleColor(state.particleType)
+            });
+        }
+
+        function cachePath() {
+            state.pastPaths.push({
+                points: [...state.path],
+                color: getParticleColor(state.particleType)
+            });
+            if (state.pastPaths.length > 5) {
+                state.pastPaths.shift();
+            }
+        }
+
+        function getParticleColor(type) {
+            if (type === 'proton') return '#ef4444'; 
+            if (type === 'alpha') return '#f97316';  
+            if (type === 'c12') return '#3b82f6';  
+            if (type === 'c14') return '#8b5cf6';  
+            if (type === 'ne20') return '#10b981'; 
+            if (type === 'ne22') return '#14b8a6'; 
+            if (type === 'na23') return '#eab308'; 
+            if (type === 'cl35') return '#ec4899'; 
+            if (type === 'cl37') return '#be185d'; 
+            return '#64748b'; 
+        }
+
+        /* --- 5. 畫布渲染與 High-DPI 適配 --- */
+        
+        let canvasScale = 1;
+        let originX = 0; let originY = 0;
+
+        function resizeCanvas() {
+            const rect = container.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) {
+                requestAnimationFrame(resizeCanvas); return;
+            }
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            canvas.style.width = `${rect.width}px`; canvas.style.height = `${rect.height}px`;
+            
+            // 物理坐標空間適配
+            const pWidth = 2.4;  const pHeight = 3.2; 
+            canvasScale = Math.min((rect.width * 0.95) / pWidth, (rect.height * 0.95) / pHeight);
+            originX = rect.width * 0.15; // 靠左放置
+            originY = rect.height / 2;
+            
+            if(!state.isRunning) draw();
+        }
+
+        const toX = (m) => originX + viewState.offsetX + m * canvasScale * viewState.zoom;
+        const toY = (m) => originY + viewState.offsetY - m * canvasScale * viewState.zoom;
+
+        function drawGrid() {
+            ctx.strokeStyle = '#f1f5f9'; ctx.lineWidth = 1;
+            
+            // 視角範圍效能優化 (剔除螢幕外網格)
+            const minPx = - (originX + viewState.offsetX) / (canvasScale * viewState.zoom);
+            const maxPx = (canvas.width / (window.devicePixelRatio || 1) - originX - viewState.offsetX) / (canvasScale * viewState.zoom);
+            const maxPy = (originY + viewState.offsetY) / (canvasScale * viewState.zoom);
+            const minPy = - (canvas.height / (window.devicePixelRatio || 1) - originY - viewState.offsetY) / (canvasScale * viewState.zoom);
+
+            ctx.beginPath();
+            for(let px = Math.floor(minPx / 0.05) * 0.05; px <= Math.ceil(maxPx / 0.05) * 0.05; px += 0.05) {
+                let x = toX(px); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height);
+            }
+            for(let py = Math.floor(minPy / 0.05) * 0.05; py <= Math.ceil(maxPy / 0.05) * 0.05; py += 0.05) {
+                let y = toY(py); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y);
+            }
+            ctx.stroke();
+
+            ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1.5; ctx.beginPath();
+            ctx.moveTo(toX(0), 0); ctx.lineTo(toX(0), canvas.height);
+            ctx.moveTo(0, toY(0)); ctx.lineTo(canvas.width, toY(0)); ctx.stroke();
+        }
+
+        function drawDetectorScale() {
+            const detectorX = toX(selector_length);
+            ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+            
+            const minPy = - (canvas.height / (window.devicePixelRatio || 1) - originY - viewState.offsetY) / (canvasScale * viewState.zoom);
+            const maxPy = (originY + viewState.offsetY) / (canvasScale * viewState.zoom);
+            
+            const startY = Math.max(-workspace_height, Math.floor(minPy / 0.05) * 0.05);
+            const endY = Math.min(workspace_height, Math.ceil(maxPy / 0.05) * 0.05);
+            
+            // 螢幕外剔除優化
+            if (detectorX < -20 || detectorX > canvas.width / (window.devicePixelRatio || 1) + 20) return;
+
+            ctx.beginPath();
+            ctx.moveTo(detectorX, toY(endY));
+            ctx.lineTo(detectorX, toY(startY));
+            ctx.stroke();
+
+            ctx.fillStyle = '#94a3b8'; ctx.font = '10px monospace'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+
+            for (let d = startY; d <= endY; d += 0.05) {
+                d = Math.round(d * 100) / 100; if(Math.abs(d) < 0.01) continue; 
+                const tickY = toY(d);
+                ctx.beginPath(); ctx.moveTo(detectorX - 5, tickY); ctx.lineTo(detectorX + 5, tickY); ctx.stroke();
+                if (Math.round(d * 100) % 10 === 0) {
+                    ctx.fillText(`${(d * 100).toFixed(0) > 0 ? '+' : ''}${(d * 100).toFixed(0)} cm`, detectorX - 8, tickY);
+                }
+            }
+        }
+
+        function drawPlatesAndFields() {
+            const x0 = toX(0); const x1 = toX(selector_length);
+            const yTop = toY(selector_gap / 2); const yBot = toY(-selector_gap / 2);
+            const E = state.E_y; const B1 = state.B_1; const B2 = state.B_2;
+
+            ctx.fillStyle = 'rgba(241, 245, 249, 0.4)'; ctx.fillRect(x0, yTop, x1 - x0, yBot - yTop);
+
+            // 繪製均勻電場線 (E-field lines)
+            if (E !== 0) {
+                const eMag = Math.abs(E);
+                const spacingE = Math.max(0.04, 0.15 - (eMag / 80) * 0.10);
+                ctx.strokeStyle = `rgba(148, 163, 184, ${0.1 + (eMag/80)*0.25})`; // 高透明度
+                ctx.fillStyle = ctx.strokeStyle;
+                ctx.lineWidth = Math.max(1, 1.5 * viewState.zoom);
+                
+                for (let px = spacingE/2; px < selector_length; px += spacingE) {
+                    let cx = toX(px);
+                    ctx.beginPath();
+                    ctx.moveTo(cx, yTop);
+                    ctx.lineTo(cx, yBot);
+                    ctx.stroke();
+
+                    // 電場線箭頭
+                    const arrowSize = 4 * viewState.zoom;
+                    const midY = (yTop + yBot) / 2;
+                    ctx.beginPath();
+                    if (E > 0) { // E > 0 對正電荷受力向上，即電場向上
+                        ctx.moveTo(cx, midY - arrowSize * 1.5);
+                        ctx.lineTo(cx - arrowSize, midY + arrowSize);
+                        ctx.lineTo(cx + arrowSize, midY + arrowSize);
+                    } else { // E < 0 電場向下
+                        ctx.moveTo(cx, midY + arrowSize * 1.5);
+                        ctx.lineTo(cx - arrowSize, midY - arrowSize);
+                        ctx.lineTo(cx + arrowSize, midY - arrowSize);
+                    }
+                    ctx.fill();
+                }
+            }
+
+            if (B1 !== 0) {
+                const b1Mag = Math.abs(state.B_1);
+                const spacing1 = Math.max(0.04, 0.12 - (b1Mag / 250) * 0.08); // 降低密度
+                ctx.strokeStyle = `rgba(59, 130, 246, ${0.1 + (b1Mag/250)*0.25})`; // 增加透明度
+                ctx.fillStyle = `rgba(59, 130, 246, ${0.1 + (b1Mag/250)*0.25})`;
+                ctx.lineWidth = 1.5;
+                const sizeB1 = 3 * Math.max(0.5, viewState.zoom); 
+                
+                for (let px = spacing1/2; px < selector_length; px += spacing1) {
+                    for (let py = -selector_gap/2 + spacing1/2; py < selector_gap/2; py += spacing1) {
+                        let cx = toX(px); let cy = toY(py);
+                        ctx.beginPath();
+                        if (B1 < 0) {
+                            ctx.moveTo(cx-sizeB1, cy-sizeB1); ctx.lineTo(cx+sizeB1, cy+sizeB1);
+                            ctx.moveTo(cx+sizeB1, cy-sizeB1); ctx.lineTo(cx-sizeB1, cy+sizeB1);
+                        } else {
+                            ctx.arc(cx, cy, sizeB1*0.7, 0, Math.PI*2); ctx.fill();
+                        }
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            ctx.lineWidth = 5 * viewState.zoom; ctx.lineCap = 'square';
+            const topColor = E < 0 ? '#ef4444' : (E > 0 ? '#3b82f6' : '#94a3b8');
+            const botColor = E < 0 ? '#3b82f6' : (E > 0 ? '#ef4444' : '#94a3b8');
+
+            ctx.strokeStyle = topColor; ctx.beginPath(); ctx.moveTo(x0, yTop); ctx.lineTo(x1, yTop); ctx.stroke(); 
+            ctx.strokeStyle = botColor; ctx.beginPath(); ctx.moveTo(x0, yBot); ctx.lineTo(x1, yBot); ctx.stroke(); 
+
+            ctx.font = `${Math.max(10, 14 * viewState.zoom)}px sans-serif`; ctx.textAlign = 'center';
+            if (E !== 0) {
+                ctx.fillStyle = topColor; ctx.fillText(E < 0 ? '+' : '−', x0 - 15 * viewState.zoom, yTop + 4 * viewState.zoom);
+                ctx.fillStyle = botColor; ctx.fillText(E < 0 ? '−' : '+', x0 - 15 * viewState.zoom, yBot + 4 * viewState.zoom);
+            }
+
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 6 * Math.max(0.5, viewState.zoom);
+            ctx.lineCap = 'butt'; // 確保端點平整，不會因為線條粗細而視覺填滿狹縫
+            ctx.beginPath(); ctx.moveTo(x1, yTop); ctx.lineTo(x1, toY(slit_width / 2));
+            ctx.moveTo(x1, toY(-slit_width / 2)); ctx.lineTo(x1, yBot); ctx.stroke();
+
+            // 智能剪裁分析室繪製 (支持無窮遠磁場)
+            const minPhysicalX = - (originX + viewState.offsetX) / (canvasScale * viewState.zoom);
+            const maxPhysicalX = (canvas.width / (window.devicePixelRatio || 1) - originX - viewState.offsetX) / (canvasScale * viewState.zoom);
+            const minPhysicalY = - (canvas.height / (window.devicePixelRatio || 1) - originY - viewState.offsetY) / (canvasScale * viewState.zoom);
+            const maxPhysicalY = (originY + viewState.offsetY) / (canvasScale * viewState.zoom);
+            
+            const fillStartX = Math.max(selector_length, minPhysicalX);
+            const fillEndX = Math.min(ms_limit_x, maxPhysicalX);
+            const fillStartY = Math.max(-workspace_height, minPhysicalY);
+            const fillEndY = Math.min(workspace_height, maxPhysicalY);
+
+            if (fillEndX > fillStartX && fillEndY > fillStartY) {
+                ctx.fillStyle = 'rgba(230, 242, 255, 0.15)'; 
+                ctx.fillRect(toX(fillStartX), toY(fillEndY), toX(fillEndX) - toX(fillStartX), toY(fillStartY) - toY(fillEndY));
+            }
+
+            if (B2 !== 0) {
+                const b2Mag = Math.abs(state.B_2);
+                const spacing2 = Math.max(0.04, 0.12 - (b2Mag / 250) * 0.08); // 降低密度
+                ctx.fillStyle = `rgba(139, 92, 246, ${0.1 + (b2Mag/250)*0.25})`; // 增加透明度
+                ctx.strokeStyle = `rgba(139, 92, 246, ${0.1 + (b2Mag/250)*0.25})`; 
+                ctx.lineWidth = 1.5;
+                const sizeB2 = 4 * Math.max(0.5, viewState.zoom);
+                
+                const startX = Math.max(selector_length + spacing2/2, Math.floor(minPhysicalX / spacing2) * spacing2);
+                const endX = Math.min(ms_limit_x, Math.ceil(maxPhysicalX / spacing2) * spacing2);
+                const startY = Math.max(-workspace_height, Math.floor(minPhysicalY / spacing2) * spacing2);
+                const endY = Math.min(workspace_height, Math.ceil(maxPhysicalY / spacing2) * spacing2);
+
+                for (let px = startX; px <= endX; px += spacing2) {
+                    for (let py = startY; py <= endY; py += spacing2) {
+                        if (px < selector_length) continue;
+                        let cx = toX(px); let cy = toY(py);
+                        
+                        // 螢幕外剔除優化效能
+                        const screenW = canvas.width / (window.devicePixelRatio || 1);
+                        const screenH = canvas.height / (window.devicePixelRatio || 1);
+                        if (cx < -20 || cx > screenW + 20 || cy < -20 || cy > screenH + 20) continue;
+
+                        ctx.beginPath();
+                        if (B2 < 0) {
+                            ctx.moveTo(cx-sizeB2, cy-sizeB2); ctx.lineTo(cx+sizeB2, cy+sizeB2);
+                            ctx.moveTo(cx+sizeB2, cy-sizeB2); ctx.lineTo(cx-sizeB2, cy+sizeB2);
+                        } else {
+                            ctx.arc(cx, cy, sizeB2*0.6, 0, Math.PI*2); ctx.fill();
+                        }
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            ctx.fillStyle = '#64748b'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'left';
+            ctx.fillText(state.lang === 'en' ? "Stage 1: Velocity Selector" : "第一階段: 速度選擇器", toX(0.01), toY(selector_gap / 2) - 15);
+            ctx.fillText(state.lang === 'en' ? "Stage 2: Mass Analyzer (E=0)" : "第二階段: 質量分析室 (E=0)", toX(selector_length) + 15, toY(0.45));
+        }
+
+        function drawForceVectors() {
+            if (!state.showForceVectors || state.x < start_x || state.isFinished) return;
+            const px = toX(state.x); const py = toY(state.y);
+            
+            let E = 0; let B = 0;
+            if (state.x >= 0 && state.x <= selector_length) { E = state.E_y * 1e3; B = state.B_1 * 1e-3; } 
+            else if (state.x > selector_length) { E = 0; B = state.B_2 * 1e-3; }
+            
+            const Fe_y = state.q * E; 
+            const Fb_x = state.q * state.vy * B; 
+            const Fb_y = -state.q * state.vx * B; 
+
+            // 絕對物理長度映射：讓 Fe_y = 6.4e-15 N 呈現為 0.3 米 (30 cm) 的絕對長度
+            const refForce = e_charge * 40e3; 
+            const forceVisualScale = 0.30 / refForce; 
+
+            if (Math.abs(Fe_y) > 0) {
+                const tox = toX(state.x);
+                const toy = toY(state.y + Fe_y * forceVisualScale);
+                drawArrow(px, py, tox, toy, '#f43f5e', 'F_E');
+            }
+
+            if (Math.hypot(Fb_x, Fb_y) > 0) {
+                const tox = toX(state.x + Fb_x * forceVisualScale);
+                const toy = toY(state.y + Fb_y * forceVisualScale);
+                drawArrow(px, py, tox, toy, '#0284c7', 'F_B');
+            }
+        }
+
+        function drawMotionVectors() {
+            if (state.isFinished || state.x < start_x) return;
+            const px = toX(state.x); const py = toY(state.y);
+
+            if (state.showVelocityVector) {
+                const v_mag = Math.hypot(state.vx, state.vy);
+                if (v_mag > 0) {
+                    // 絕對比例映射：v = 4.0e5 m/s 呈現為 0.3 米 (30 cm)
+                    const vVisualScale = 0.30 / 4.0e5; 
+                    const endX = toX(state.x + state.vx * vVisualScale);
+                    const endY = toY(state.y + state.vy * vVisualScale);
+                    drawArrow(px, py, endX, endY, '#f59e0b', 'v');
+                }
+            }
+
+            if (state.showAccelerationVector) {
+                const derivs = getDerivatives(state.x, state.y, state.vx, state.vy);
+                const ax = derivs[2]; const ay = derivs[3];
+                const a_mag = Math.hypot(ax, ay);
+                if (a_mag > 0) {
+                    // 絕對比例映射：a = 8.0e12 m/s^2 呈現為 0.3 米 (30 cm)
+                    const aVisualScale = 0.30 / 8.0e12;
+                    const endX = toX(state.x + ax * aVisualScale);
+                    const endY = toY(state.y + ay * aVisualScale);
+                    drawArrow(px, py, endX, endY, '#8b5cf6', 'a');
+                }
+            }
+        }
+
+        function drawArrow(fromx, fromy, tox, toy, color, label) {
+            ctx.strokeStyle = color; ctx.fillStyle = color; 
+            
+            // 螢幕絕對尺寸，不隨物理坐標縮放
+            ctx.lineWidth = 2.5; 
+            const headSize = 10; 
+            
+            const angle = Math.atan2(toy - fromy, tox - fromx);
+            const lineEndX = tox - headSize * Math.cos(angle) * 0.5;
+            const lineEndY = toy - headSize * Math.sin(angle) * 0.5;
+            
+            ctx.beginPath(); ctx.moveTo(fromx, fromy); ctx.lineTo(lineEndX, lineEndY); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(tox, toy); 
+            ctx.lineTo(tox - headSize * Math.cos(angle - Math.PI/6), toy - headSize * Math.sin(angle - Math.PI/6));
+            ctx.lineTo(tox - headSize * Math.cos(angle + Math.PI/6), toy - headSize * Math.sin(angle + Math.PI/6));
+            ctx.closePath(); ctx.fill();
+
+            // 解析標籤如 F_E 產生下標與斜體
+            const textX = tox + headSize * Math.cos(angle) + 4; 
+            const textY = toy + headSize * Math.sin(angle) + 4;
+
+            if (label.includes('_')) {
+                const parts = label.split('_');
+                const mainText = parts[0];
+                const subText = parts[1];
+                
+                ctx.font = `italic 16px "Times New Roman", serif`;
+                ctx.fillText(mainText, textX, textY);
+                const mainWidth = ctx.measureText(mainText).width;
+                
+                // 下標採用正體字 (Upright)
+                ctx.font = `normal 11px "Times New Roman", serif`;
+                ctx.fillText(subText, textX + mainWidth, textY + 4);
+            } else {
+                ctx.font = `italic 16px "Times New Roman", serif`;
+                ctx.fillText(label, textX, textY);
+            }
+        }
+
+        function drawPastLandings() {
+            const detectorX = toX(selector_length);
+            state.pastLandings.forEach(landing => {
+                const py = toY(landing.y);
+                const screenH = canvas.height / (window.devicePixelRatio || 1);
+                if (py < -20 || py > screenH + 20) return;
+
+                ctx.beginPath(); ctx.arc(detectorX, py, 6 * Math.max(0.8, viewState.zoom), 0, Math.PI * 2);
+                ctx.fillStyle = landing.color; ctx.fill();
+                ctx.strokeStyle = 'white'; ctx.lineWidth = 1.5; ctx.stroke();
+                ctx.fillStyle = '#1e293b'; ctx.font = '10px monospace'; ctx.textAlign = 'left';
+                ctx.fillText(` ${landing.label} (${(landing.y * 100).toFixed(1)} cm)`, detectorX + 8, py + 3);
+            });
+        }
+
+        function drawPastPaths() {
+            const count = state.pastPaths.length;
+            state.pastPaths.forEach((pastPath, index) => {
+                const alpha = 0.15 + (index / Math.max(count, 1)) * 0.35;
+                ctx.globalAlpha = alpha;
+                
+                ctx.beginPath();
+                ctx.strokeStyle = pastPath.color; 
+                ctx.lineWidth = 2.5 * Math.max(0.5, viewState.zoom);
+                ctx.moveTo(toX(pastPath.points[0].x), toY(pastPath.points[0].y));
+                for(let i = 1; i < pastPath.points.length; i++) {
+                    ctx.lineTo(toX(pastPath.points[i].x), toY(pastPath.points[i].y));
+                }
+                ctx.stroke();
+            });
+            ctx.globalAlpha = 1.0; 
+        }
+
+        function drawParticle() {
+            const pColor = getParticleColor(state.particleType);
+
+            if (state.path.length > 1) {
+                ctx.beginPath();
+                ctx.strokeStyle = pColor; 
+                ctx.lineWidth = 2.5 * Math.max(0.5, viewState.zoom);
+                ctx.moveTo(toX(state.path[0].x), toY(state.path[0].y));
+                for(let i=1; i<state.path.length; i++) {
+                    ctx.lineTo(toX(state.path[i].x), toY(state.path[i].y));
+                }
+                ctx.stroke();
+            }
+
+            const px = toX(state.x);
+            const py = toY(state.y);
+            const r = 7 * Math.max(0.5, viewState.zoom);
+
+            ctx.shadowBlur = 12 * viewState.zoom;
+            ctx.shadowColor = pColor;
+            
+            ctx.beginPath();
+            ctx.arc(px, py, r, 0, Math.PI * 2);
+            ctx.fillStyle = pColor;
+            ctx.fill();
+            
+            ctx.shadowBlur = 0; 
+
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2 * Math.max(0.5, viewState.zoom);
+            ctx.beginPath();
+            ctx.moveTo(px - r/2, py); ctx.lineTo(px + r/2, py);
+            ctx.moveTo(px, py - r/2); ctx.lineTo(px, py + r/2);
+            ctx.stroke();
+        }
+
+        function updateStatsPanel() {
+            const t_us = state.t * 1e6; 
+            valTime.textContent = `${t_us.toFixed(3)} μs`;
+            
+            if (state.landedOnDetector) {
+                valMeasuredLanding.textContent = `${(state.landingY * 100).toFixed(2)} cm`;
+            } else {
+                valMeasuredLanding.textContent = '--';
+            }
+        }
+
+        function draw() {
+            const rect = canvas.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
+            
+            drawGrid();
+            drawPlatesAndFields();
+            drawPastLandings();
+            drawDetectorScale();
+            drawPastPaths(); 
+            drawParticle();
+            drawForceVectors();
+            drawMotionVectors(); 
+            updateStatsPanel();
+        }
+
+        /* --- 6. 畫布拖曳平移與縮放控制作業 --- */
+        function updateZoom(newZoom, mouseX = null, mouseY = null) {
+            newZoom = Math.max(0.2, Math.min(newZoom, 10));
+            
+            if (mouseX === null || mouseY === null) {
+                const rect = canvas.getBoundingClientRect();
+                mouseX = rect.width / 2;
+                mouseY = rect.height / 2;
+            }
+
+            const physicalX = (mouseX - originX - viewState.offsetX) / (canvasScale * viewState.zoom);
+            const physicalY = -(mouseY - originY - viewState.offsetY) / (canvasScale * viewState.zoom);
+
+            viewState.zoom = newZoom;
+
+            viewState.offsetX = mouseX - originX - physicalX * canvasScale * viewState.zoom;
+            viewState.offsetY = mouseY - originY + physicalY * canvasScale * viewState.zoom;
+
+            if (!state.isRunning) draw();
+        }
+
+        function resetViewport() {
+            viewState.offsetX = 0;
+            viewState.offsetY = 0;
+            viewState.zoom = 1;
+            if (!state.isRunning) draw();
+        }
+
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomSensitivity = 0.001;
+            const zoomDelta = 1 - e.deltaY * zoomSensitivity;
+            const rect = canvas.getBoundingClientRect();
+            updateZoom(viewState.zoom * zoomDelta, e.clientX - rect.left, e.clientY - rect.top);
+        }, {passive: false});
+
+        const startDrag = (x, y) => {
+            viewState.isDragging = true;
+            viewState.lastMouseX = x;
+            viewState.lastMouseY = y;
+            canvas.style.cursor = 'grabbing';
+        };
+
+        const doDrag = (x, y) => {
+            if (!viewState.isDragging) return;
+            viewState.offsetX += x - viewState.lastMouseX;
+            viewState.offsetY += y - viewState.lastMouseY;
+            viewState.lastMouseX = x;
+            viewState.lastMouseY = y;
+            if (!state.isRunning) draw();
+        };
+
+        const endDrag = () => {
+            viewState.isDragging = false;
+            canvas.style.cursor = 'grab';
+            viewState.initialPinchDistance = null;
+        };
+
+        canvas.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+        window.addEventListener('mousemove', (e) => doDrag(e.clientX, e.clientY));
+        window.addEventListener('mouseup', endDrag);
+
+        canvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                startDrag(e.touches[0].clientX, e.touches[0].clientY);
+            } else if (e.touches.length === 2) {
+                viewState.isDragging = false; 
+                viewState.initialPinchDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                viewState.initialPinchZoom = viewState.zoom;
+            }
+        }, {passive: false});
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (viewState.isDragging && e.touches.length === 1) {
+                e.preventDefault(); 
+                doDrag(e.touches[0].clientX, e.touches[0].clientY);
+            } else if (e.touches.length === 2 && viewState.initialPinchDistance) {
+                e.preventDefault();
+                const currentDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                const zoomFactor = currentDistance / viewState.initialPinchDistance;
+                const rect = canvas.getBoundingClientRect();
+                const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+                const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+                updateZoom(viewState.initialPinchZoom * zoomFactor, centerX, centerY);
+            }
+        }, {passive: false});
+
+        canvas.addEventListener('touchend', endDrag);
+        canvas.addEventListener('touchcancel', endDrag);
+
+        btnZoomIn.addEventListener('click', () => updateZoom(viewState.zoom * 1.3));
+        btnZoomOut.addEventListener('click', () => updateZoom(viewState.zoom / 1.3));
+        btnResetView.addEventListener('click', resetViewport);
+
+
+        /* --- 實作面板自由拖曳 (Draggable UI) --- */
+        function makeDraggable(elmnt) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            let isFirstDrag = true;
+
+            elmnt.addEventListener('mousedown', dragMouseDown);
+            elmnt.addEventListener('touchstart', dragTouchStart, {passive: false});
+
+            function initDrag(startX, startY) {
+                // 首次拖拉時，將原先利用 bottom/translate 定位的樣式，無縫轉換為 absolute top/left 像素定位
+                if (isFirstDrag) {
+                    const rect = elmnt.getBoundingClientRect();
+                    const parentRect = elmnt.parentElement.getBoundingClientRect();
+                    elmnt.style.bottom = 'auto';
+                    elmnt.style.right = 'auto';
+                    elmnt.style.transform = 'none'; // 解除 tailwind 的 -translate-x-1/2 居中效果
+                    elmnt.style.top = (rect.top - parentRect.top) + 'px';
+                    elmnt.style.left = (rect.left - parentRect.left) + 'px';
+                    isFirstDrag = false;
+                }
+                pos3 = startX;
+                pos4 = startY;
+            }
+
+            function dragMouseDown(e) {
+                // 忽略按鈕與滑動條上的點擊拖曳事件
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+                e.preventDefault();
+                initDrag(e.clientX, e.clientY);
+                document.addEventListener('mouseup', closeDragElement);
+                document.addEventListener('mousemove', elementDrag);
+            }
+
+            function dragTouchStart(e) {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+                initDrag(e.touches[0].clientX, e.touches[0].clientY);
+                document.addEventListener('touchend', closeDragElement);
+                document.addEventListener('touchmove', elementDragTouch, {passive: false});
+            }
+
+            function elementDrag(e) {
+                e.preventDefault();
+                updatePosition(e.clientX, e.clientY);
+            }
+
+            function elementDragTouch(e) {
+                if (e.touches.length > 0) {
+                    e.preventDefault(); // 阻止手機版畫面跟隨滾動
+                    updatePosition(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }
+
+            function updatePosition(clientX, clientY) {
+                pos1 = pos3 - clientX;
+                pos2 = pos4 - clientY;
+                pos3 = clientX;
+                pos4 = clientY;
+
+                let newTop = elmnt.offsetTop - pos2;
+                let newLeft = elmnt.offsetLeft - pos1;
+
+                // 防溢出螢幕邊界檢查
+                const parent = elmnt.parentElement;
+                if (newTop < 0) newTop = 0;
+                if (newLeft < 0) newLeft = 0;
+                if (newTop + elmnt.offsetHeight > parent.clientHeight) newTop = parent.clientHeight - elmnt.offsetHeight;
+                if (newLeft + elmnt.offsetWidth > parent.clientWidth) newLeft = parent.clientWidth - elmnt.offsetWidth;
+
+                elmnt.style.top = newTop + "px";
+                elmnt.style.left = newLeft + "px";
+            }
+
+            function closeDragElement() {
+                document.removeEventListener('mouseup', closeDragElement);
+                document.removeEventListener('mousemove', elementDrag);
+                document.removeEventListener('touchend', closeDragElement);
+                document.removeEventListener('touchmove', elementDragTouch);
+            }
+        }
+
+        // 綁定拖曳功能至兩個浮動面板
+        makeDraggable(document.getElementById('panel-measurements'));
+        makeDraggable(document.getElementById('panel-controls'));
+
+
+        /* --- 7. 動畫引擎 --- */
+        let animationFrameId;
+
+        function updatePlayIcon(isPlaying) {
+            const t = i18n[state.lang];
+            if (isPlaying) {
+                iconPlay.classList.add('hidden');
+                iconPause.classList.remove('hidden');
+                btnPlay.classList.replace('text-emerald-500', 'text-amber-500');
+                btnPlay.classList.replace('hover:text-emerald-600', 'hover:text-amber-600');
+                btnPlay.title = t.pause;
+            } else {
+                iconPlay.classList.remove('hidden');
+                iconPause.classList.add('hidden');
+                btnPlay.classList.replace('text-amber-500', 'text-emerald-500');
+                btnPlay.classList.replace('hover:text-amber-600', 'hover:text-emerald-600');
+                btnPlay.title = t.start;
+            }
+        }
+
+        function step() {
+            if (!state.isRunning) return;
+            const dt = (1.2e-8 * state.simSpeed) / 12;
+            for (let i = 0; i < 12; i++) { if(!state.isFinished) stepRK4(dt); }
+            draw();
+
+            if (state.isFinished) {
+                state.isRunning = false;
+                updatePlayIcon(false);
+                showResultBadge();
+            } else animationFrameId = requestAnimationFrame(step);
+        }
+
+        function showResultBadge() {
+            const t = i18n[state.lang];
+            const cls = "absolute top-5 left-1/2 -translate-x-1/2 text-white px-6 py-1.5 rounded-full font-bold shadow-lg transition-opacity duration-300 pointer-events-none text-[13px] tracking-wide opacity-100 z-20";
+            if (state.hitPlate) { resultBadge.textContent = t.blockedSelector; resultBadge.className = `bg-red-600 ${cls}`; }
+            else if (state.blockedAtSlit) { resultBadge.textContent = t.blockedSlit; resultBadge.className = `bg-amber-600 ${cls}`; }
+            else if (state.landedOnDetector) { resultBadge.textContent = t.passedMS; resultBadge.className = `bg-emerald-600 ${cls}`; }
+        }
+
+        function togglePlay() {
+            if (state.isFinished) resetSimulation(true);
+            state.isRunning = !state.isRunning;
+            updatePlayIcon(state.isRunning);
+            
+            if (state.isRunning) {
+                animationFrameId = requestAnimationFrame(step);
+            } else {
+                cancelAnimationFrame(animationFrameId);
+            }
+        }
+
+        function resetSimulation(keepPlaying = false) {
+            if (state.t > 0 && state.path.length > 1) {
+                cachePath();
+            }
+
+            state.t = 0; state.x = start_x; state.y = 0; state.vx = state.v_0 * 1e5; state.vy = 0; state.path = [{x: state.x, y: state.y}];
+            state.isFinished = false; state.hitPlate = false; state.blockedAtSlit = false; state.landedOnDetector = false;
+            resultBadge.className = "absolute top-5 left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-1.5 rounded-full font-bold shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none text-[13px] tracking-wide z-20";
+
+            if (!keepPlaying) {
+                state.isRunning = false;
+                updatePlayIcon(false);
+                cancelAnimationFrame(animationFrameId);
+            } draw();
+        }
+
+        btnPlay.addEventListener('click', togglePlay);
+        btnReset.addEventListener('click', () => { 
+            state.pastLandings = []; 
+            state.pastPaths = []; 
+            resetSimulation(false); 
+        });
+
+        /* --- 8. Modal 處理與初始化 --- */
+        const modal = document.getElementById('modal-help'); const modalContent = document.getElementById('modal-content');
+        const openModal = () => { modal.classList.remove('hidden'); void modal.offsetWidth; modal.classList.add('opacity-100'); modalContent.classList.remove('scale-95'); };
+        const closeModal = () => { modal.classList.remove('opacity-100'); modalContent.classList.add('scale-95'); setTimeout(() => modal.classList.add('hidden'), 300); };
+        document.getElementById('btn-help').addEventListener('click', openModal); document.getElementById('btn-close-modal').addEventListener('click', closeModal); document.getElementById('btn-modal-ok').addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+
+        window.addEventListener('resize', resizeCanvas);
+        selectPreset('proton'); syncUI(); updateLanguage(); resizeCanvas(); resetSimulation(false);
+    </script>
+</body>
+</html>
