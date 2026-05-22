@@ -83,7 +83,7 @@
         }
     </style>
 </head>
-<body class="flex flex-col h-screen text-slate-800">
+<body class="flex flex-col h-[100dvh] text-slate-800">
 
     <!-- 頂部導航欄 -->
     <header class="bg-cma-blue text-white shadow-md z-10 flex justify-between items-center px-4 md:px-6 py-2.5 shrink-0">
@@ -170,35 +170,43 @@
                         </button>
                     </div>
                     <!-- 自訂質量/電荷 -->
-                    <div id="custom-params" class="hidden space-y-2 pt-1 border-t border-slate-200 mt-2">
+                    <div id="custom-params" class="hidden space-y-3 pt-2 border-t border-slate-200 mt-2">
                         <div>
-                            <div class="flex justify-between text-[11px] mb-0.5">
+                            <div class="flex justify-between text-[11px] mb-1">
                                 <label class="font-medium text-slate-600" id="lbl-custom-mass">質量 (\(m\))</label>
                                 <span id="val-custom-mass" class="font-mono text-[11px] font-bold text-slate-700">12 u</span>
                             </div>
-                            <input type="range" id="slider-mass" min="1" max="1000" step="1" value="12" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
+                            <div class="flex items-center gap-2">
+                                <button id="btn-mass-minus" class="text-slate-400 hover:text-cma-blue focus:outline-none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+                                <input type="range" id="slider-mass" min="1" max="1000" step="1" value="12" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
+                                <button id="btn-mass-plus" class="text-slate-400 hover:text-cma-blue focus:outline-none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+                            </div>
                         </div>
                         <div>
-                            <div class="flex justify-between text-[11px] mb-0.5">
+                            <div class="flex justify-between text-[11px] mb-1">
                                 <label class="font-medium text-slate-600" id="lbl-custom-charge">電荷量 (\(q\))</label>
                                 <span id="val-custom-charge" class="font-mono text-[11px] font-bold text-slate-700">+1 e</span>
                             </div>
-                            <input type="range" id="slider-charge" min="-10" max="10" step="1" value="1" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
+                            <div class="flex items-center gap-2">
+                                <button id="btn-charge-minus" class="text-slate-400 hover:text-cma-blue focus:outline-none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+                                <input type="range" id="slider-charge" min="-10" max="10" step="1" value="1" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
+                                <button id="btn-charge-plus" class="text-slate-400 hover:text-cma-blue focus:outline-none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- 速度選擇器參數 -->
                 <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 shadow-sm shrink-0">
-                    <h2 class="font-bold text-cma-blue mb-2 text-[13px]" id="lbl-fields">第一階段: 速度選擇器</h2>
+                    <div class="flex justify-between items-center mb-2">
+                        <h2 class="font-bold text-cma-blue text-[13px]" id="lbl-fields">第一階段: 速度選擇器</h2>
+                        <button id="reset-stage1" class="text-slate-400 hover:text-cma-blue transition-colors focus:outline-none" title="Reset Stage 1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                        </button>
+                    </div>
                     <div class="mb-2.5">
                         <div class="flex justify-between text-[11px] mb-0.5 items-center">
-                            <div class="flex items-center gap-1">
-                                <label class="font-medium text-slate-700" id="lbl-efield">電場 (\(E\))</label>
-                                <button id="reset-E" class="text-slate-400 hover:text-cma-blue transition-colors focus:outline-none" title="Reset">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
-                                </button>
-                            </div>
+                            <label class="font-medium text-slate-700" id="lbl-efield">電場 (\(E\))</label>
                             <span id="val-efield" class="text-cma-blue font-mono font-bold">-40 kV m<sup>-1</sup></span>
                         </div>
                         <input type="range" id="slider-efield" min="-80" max="80" step="2" value="-40" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
@@ -208,12 +216,7 @@
                     </div>
                     <div class="mb-2.5">
                         <div class="flex justify-between text-[11px] mb-0.5 items-center">
-                            <div class="flex items-center gap-1">
-                                <label class="font-medium text-slate-700" id="lbl-bfield">選擇器磁場 (\(B_1\))</label>
-                                <button id="reset-B1" class="text-slate-400 hover:text-cma-blue transition-colors focus:outline-none" title="Reset">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
-                                </button>
-                            </div>
+                            <label class="font-medium text-slate-700" id="lbl-bfield">選擇器磁場 (\(B_1\))</label>
                             <span id="val-bfield" class="text-cma-blue font-mono font-bold">-100 mT</span>
                         </div>
                         <input type="range" id="slider-bfield" min="-250" max="250" step="10" value="-100" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
@@ -223,12 +226,7 @@
                     </div>
                     <div class="mb-1.5">
                         <div class="flex justify-between text-[11px] mb-0.5 items-center">
-                            <div class="flex items-center gap-1">
-                                <label class="font-medium text-slate-700" id="lbl-velocity">入射速度 (\(v_0\))</label>
-                                <button id="reset-V" class="text-slate-400 hover:text-cma-blue transition-colors focus:outline-none" title="Reset">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
-                                </button>
-                            </div>
+                            <label class="font-medium text-slate-700" id="lbl-velocity">入射速度 (\(v_0\))</label>
                             <span id="val-velocity" class="text-cma-blue font-mono font-bold">4.0 &times; 10⁵ m s<sup>-1</sup></span>
                         </div>
                         <input type="range" id="slider-velocity" min="0.5" max="8.0" step="0.1" value="4.0" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
@@ -241,15 +239,15 @@
 
                 <!-- 分析室參數 -->
                 <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 shadow-sm shrink-0">
-                    <h2 class="font-bold text-cma-blue mb-1 text-[13px]" id="lbl-fields-stage2">第二階段: 質量分析室</h2>
+                    <div class="flex justify-between items-center mb-1">
+                        <h2 class="font-bold text-cma-blue text-[13px]" id="lbl-fields-stage2">第二階段: 質量分析室</h2>
+                        <button id="reset-stage2" class="text-slate-400 hover:text-cma-blue transition-colors focus:outline-none" title="Reset Stage 2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                        </button>
+                    </div>
                     <div class="mt-1">
                         <div class="flex justify-between text-[11px] mb-0.5 items-center">
-                            <div class="flex items-center gap-1">
-                                <label class="font-medium text-slate-700" id="lbl-bfield2">偏轉磁場 (\(B_2\))</label>
-                                <button id="reset-B2" class="text-slate-400 hover:text-cma-blue transition-colors focus:outline-none" title="Reset">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
-                                </button>
-                            </div>
+                            <label class="font-medium text-slate-700" id="lbl-bfield2">偏轉磁場 (\(B_2\))</label>
                             <span id="val-bfield2" class="text-cma-blue font-mono font-bold">-100 mT</span>
                         </div>
                         <input type="range" id="slider-bfield2" min="-250" max="250" step="10" value="-100" class="w-full bg-slate-200 appearance-none cursor-pointer accent-blue-600">
@@ -738,10 +736,13 @@
         sliderMass.addEventListener('input', () => { syncCustomValues(); resetSimulation(false); syncUI(); });
         sliderCharge.addEventListener('input', () => { syncCustomValues(); resetSimulation(false); syncUI(); });
 
-        document.getElementById('reset-E').addEventListener('click', () => { sliderE.value = -40; syncUI(); });
-        document.getElementById('reset-B1').addEventListener('click', () => { sliderB.value = -100; syncUI(); });
-        document.getElementById('reset-V').addEventListener('click', () => { sliderV.value = 4.0; syncUI(); });
-        document.getElementById('reset-B2').addEventListener('click', () => { sliderB2.value = -100; syncUI(); });
+        document.getElementById('btn-mass-minus').addEventListener('click', () => { sliderMass.value = Math.max(1, parseInt(sliderMass.value) - 1); syncCustomValues(); resetSimulation(false); syncUI(); });
+        document.getElementById('btn-mass-plus').addEventListener('click', () => { sliderMass.value = Math.min(1000, parseInt(sliderMass.value) + 1); syncCustomValues(); resetSimulation(false); syncUI(); });
+        document.getElementById('btn-charge-minus').addEventListener('click', () => { sliderCharge.value = Math.max(-10, parseInt(sliderCharge.value) - 1); syncCustomValues(); resetSimulation(false); syncUI(); });
+        document.getElementById('btn-charge-plus').addEventListener('click', () => { sliderCharge.value = Math.min(10, parseInt(sliderCharge.value) + 1); syncCustomValues(); resetSimulation(false); syncUI(); });
+
+        document.getElementById('reset-stage1').addEventListener('click', () => { sliderE.value = -40; sliderB.value = -100; sliderV.value = 4.0; syncUI(); });
+        document.getElementById('reset-stage2').addEventListener('click', () => { sliderB2.value = -100; syncUI(); });
 
         chkShowForces.addEventListener('change', () => { state.showForceVectors = chkShowForces.checked; if(!state.isRunning) draw(); });
         chkShowV.addEventListener('change', () => { state.showVelocityVector = chkShowV.checked; if(!state.isRunning) draw(); });
@@ -984,7 +985,7 @@
                 d = Math.round(d * 100) / 100; if(Math.abs(d) < 0.01) continue; 
                 const tickY = toY(d);
                 ctx.beginPath(); ctx.moveTo(detectorX - 5, tickY); ctx.lineTo(detectorX + 5, tickY); ctx.stroke();
-                if (Math.round(d * 100) % 10 === 0) {
+                if (Math.round(d * 100) % 50 === 0) { // 改為每 50cm 標示一次數值
                     ctx.fillText(`${(d * 100).toFixed(0) > 0 ? '+' : ''}${(d * 100).toFixed(0)} cm`, detectorX - 8, tickY);
                 }
             }
