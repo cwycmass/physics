@@ -17,17 +17,6 @@
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-    <!-- Dynamic Viewport Height Fix for Mobile -->
-    <script>
-        function setViewportHeight() {
-            let vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        }
-        window.addEventListener('resize', setViewportHeight);
-        window.addEventListener('orientationchange', setViewportHeight);
-        setViewportHeight(); // Initial call
-    </script>
-
     <style>
         /* --- Custom Styles & Scrollbar --- */
         :root {
@@ -38,10 +27,6 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             -webkit-font-smoothing: antialiased;
-            /* Exact Mobile Viewport Height Constraint */
-            height: 100vh; /* Fallback */
-            height: 100dvh; /* Modern CSS */
-            height: calc(var(--vh, 1vh) * 100); /* JS Exact Calculation */
         }
 
         /* Custom Scrollbar */
@@ -81,7 +66,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 w-screen overflow-hidden flex flex-col text-slate-800">
+<body class="bg-slate-50 fixed inset-0 overflow-hidden flex flex-col text-slate-800">
 
     <!-- --- 1. Header (Desktop Only) --- -->
     <header class="hidden md:flex bg-[#1e3c72] text-white px-6 py-3 justify-between items-center shadow-md z-20 shrink-0">
