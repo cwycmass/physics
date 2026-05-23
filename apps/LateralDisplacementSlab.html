@@ -1,920 +1,1242 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>側向位移模擬器 | Lateral Displacement Simulator</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>透鏡成像 | Image formed by Lens</title>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- MathJax 3 for Physics Formulas -->
+    
+    <!-- MathJax 3 for LaTeX Rendering -->
     <script>
         MathJax = {
             tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-            svg: { fontCache: 'global' },
-            startup: { typeset: false } // We will trigger it manually
+            svg: { fontCache: 'global' }
         };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-
-    <!-- Custom Configuration and Styling -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        cma: {
-                            blue: '#1e3c72',
-                            light: '#2a5298',
-                            dark: '#112240',
-                        },
-                        vector: {
-                            blue: '#3b82f6',
-                            emerald: '#10b981',
-                            amber: '#f59e0b',
-                            purple: '#8b5cf6',
-                            teal: '#14b8a6',
-                            red: '#DC2626',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    }
-                }
-            }
-        };
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
     </script>
 
+    <!-- Custom CSS for Range Sliders and Scrollbars -->
     <style>
-        /* --- CSS Custom Variables & Utilities --- */
-        :root {
-            --grid-size: 50px;
-            --grid-x: 0px;
-            --grid-y: 0px;
-        }
+        /* Modern Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* Responsive Grid Background tied to mathematical origin */
-        .bg-grid {
-            background-color: #f8fafc;
-            background-image:
-                linear-gradient(to right, rgba(148, 163, 184, 0.25) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(148, 163, 184, 0.25) 1px, transparent 1px);
-            background-size: var(--grid-size) var(--grid-size);
-            background-position: var(--grid-x) var(--grid-y);
-        }
-
-        /* Custom Scrollbar for Sidebar */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        /* Slider Styling */
+        /* Custom Range Slider */
         input[type=range] {
-            accent-color: #1e3c72;
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #1e3c72;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+        input[type=range]:focus { outline: none; }
+        
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Canvas Grid Background (Fallback/Context) */
+        .canvas-container {
+            background-color: #f8fafc;
+            background-image: 
+                linear-gradient(rgba(203, 213, 225, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(203, 213, 225, 0.3) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
     </style>
 </head>
+<body class="bg-slate-100 text-slate-800 font-sans fixed inset-0 flex flex-col overflow-hidden">
 
-<!-- Body set to fixed inset-0 to prevent 100vh iOS Safari layout bugs -->
-<body class="bg-slate-50 font-sans text-slate-800 antialiased fixed inset-0 overflow-hidden">
-    
-    <!-- Main App Container -->
-    <div id="app" class="absolute inset-0 flex flex-col overflow-hidden">
+    <!-- Top Navigation Bar -->
+    <header class="bg-[#1e3c72] text-white shadow-md z-20 hidden md:flex justify-between items-center px-6 py-3 shrink-0">
+        <div class="flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            <h1 id="ui-title" class="text-xl font-bold tracking-wide">透鏡成像</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <button id="btn-help" class="hover:text-amber-400 transition-colors flex items-center gap-1 text-sm font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                </svg>
+                <span id="ui-help-btn">說明</span>
+            </button>
+            <button id="btn-lang" class="bg-white/20 hover:bg-white/30 px-3 py-1 rounded-md text-sm font-semibold transition-colors">
+                繁 / Eng
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Floating Menu Button (Top-Left aligned for Left menu) -->
+    <button id="btn-mobile-menu" class="md:hidden fixed top-3 left-3 z-40 bg-[#1e3c72] text-white p-2 rounded-md shadow-lg hover:bg-[#2a4d8c] transition-colors border border-white/20">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Main Content Area (Split Pane) -->
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
         
-        <!-- Header: Now visible on both desktop and mobile -->
-        <header class="flex shrink-0 h-16 bg-cma-blue text-white items-center justify-between px-4 md:px-6 shadow-md z-20">
-            <div class="flex items-center gap-2 md:gap-3">
-                <!-- Mobile Menu Button (Hamburger) -->
-                <button id="mobile-menu-btn" class="md:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-colors active:scale-95">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        <!-- Mobile Overlay -->
+        <div id="mobile-overlay" class="fixed inset-0 modal-backdrop z-40 hidden opacity-0 transition-opacity duration-300 md:hidden"></div>
+
+        <!-- Unified Sidebar Controls (Sliding from Left inset-x to Left-0) -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-[85vw] max-w-[340px] bg-white transform -translate-x-full transition-transform duration-300 flex flex-col shadow-2xl md:static md:translate-x-0 md:w-64 lg:w-[260px] md:shadow-xl md:z-10 shrink-0">
+            
+            <!-- Mobile Header (Hidden on Desktop) -->
+            <div class="bg-[#1e3c72] text-white p-4 flex justify-between items-center shrink-0 md:hidden">
+                <h2 id="ui-title-mobile" class="font-bold text-lg">透鏡成像</h2>
+                <button id="btn-close-menu" class="text-white/70 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
-
-                <!-- Optical Prism Logo Icon (hidden on very small mobile) -->
-                <svg class="hidden sm:block w-8 h-8 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="12,3 2,21 22,21" stroke-linejoin="round" class="text-white"></polygon>
-                    <line x1="1" y1="14" x2="8.5" y2="12.5" stroke="#f59e0b" stroke-width="2.5"></line>
-                    <line x1="8.5" y1="12.5" x2="14.5" y2="15.5" stroke="#10b981" stroke-width="2.5"></line>
-                    <line x1="14.5" y1="15.5" x2="23" y2="13.5" stroke="#f59e0b" stroke-width="2.5"></line>
-                </svg>
-                <h1 class="text-sm sm:text-lg md:text-xl font-bold tracking-wide select-none" data-i18n="title">側向位移模擬器</h1>
             </div>
-            
-            <div class="flex items-center gap-2 md:gap-4">
-                <!-- Help & Language Buttons: Fully integrated and responsive -->
-                <button class="btn-help px-2.5 sm:px-3 py-1 sm:py-1.5 bg-vector-amber hover:bg-yellow-500 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium shadow-sm flex items-center gap-1.5 active:scale-95">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span data-i18n="help_btn">說明</span>
+
+            <!-- Mobile Action Buttons (Hidden on Desktop) -->
+            <div class="p-4 flex gap-3 md:hidden border-b border-slate-200 bg-slate-50 shrink-0">
+                <button id="btn-help-mobile" class="flex-1 flex items-center justify-center gap-1.5 text-slate-700 font-semibold py-1.5 bg-white border border-slate-200 shadow-sm rounded-lg hover:bg-slate-100 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                    </svg>
+                    <span id="ui-help-btn-mobile">說明</span>
                 </button>
-                <button class="btn-lang px-2.5 sm:px-3 py-1 sm:py-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-xs sm:text-sm font-medium active:scale-95">
+                <button id="btn-lang-mobile" class="flex-1 bg-[#1e3c72] hover:bg-[#2a4d8c] text-white py-1.5 rounded-lg text-sm font-semibold transition-colors text-center shadow-sm">
                     繁 / Eng
                 </button>
             </div>
-        </header>
 
-        <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col md:flex-row relative min-h-0">
-            
-            <!-- Control Sidebar (Visible only on Desktop) -->
-            <aside class="hidden md:flex w-full md:w-80 lg:w-96 shrink-0 bg-white shadow-[2px_0_12px_rgba(0,0,0,0.05)] border-r border-slate-200 flex-col z-10">
+            <div class="p-4 space-y-5 overflow-y-auto flex-1">
                 
-                <!-- Controls Card (1:1 Ratio with independent scrolling) -->
-                <div class="flex-1 min-h-0 overflow-y-auto p-5 custom-scrollbar space-y-6">
-                    
-                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 shadow-sm space-y-5">
-                        <h2 class="font-bold text-cma-blue mb-2 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-vector-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                            <span data-i18n="controls">控制面板</span>
-                        </h2>
-
-                        <!-- Parameter: Incidence Angle -->
-                        <div class="space-y-1">
-                            <div class="flex justify-between text-sm font-medium text-slate-700">
-                                <label for="slider-i" data-i18n="param_i">入射角 (<i>i</i>)</label>
-                                <span id="val-i" class="text-cma-blue font-bold"><i>i</i> = 45°</span>
-                            </div>
-                            <input type="range" id="slider-i" min="0" max="80" step="1" value="45" class="w-full">
-                        </div>
-
-                        <!-- Parameter: Refractive Index -->
-                        <div class="space-y-1">
-                            <div class="flex justify-between text-sm font-medium text-slate-700">
-                                <label for="slider-n" data-i18n="param_n">折射率 (<i>n</i>)</label>
-                                <span id="val-n" class="text-cma-blue font-bold"><i>n</i> = 1.50</span>
-                            </div>
-                            <input type="range" id="slider-n" min="1.0" max="2.5" step="0.01" value="1.50" class="w-full">
-                        </div>
-
-                        <!-- Parameter: Thickness -->
-                        <div class="space-y-1">
-                            <div class="flex justify-between text-sm font-medium text-slate-700">
-                                <label for="slider-t" data-i18n="param_t">玻璃磚厚度 (<i>t</i>)</label>
-                                <span id="val-t" class="text-cma-blue font-bold"><i>t</i> = 5.0 cm</span>
-                            </div>
-                            <input type="range" id="slider-t" min="1" max="10" step="0.1" value="5.0" class="w-full">
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Math Output Area (1:1 Ratio with independent scrolling) -->
-                <div class="flex-1 min-h-0 p-5 bg-blue-50/50 border-t border-blue-100 overflow-y-auto custom-scrollbar flex flex-col">
-                    <h3 class="text-sm font-bold text-cma-blue mb-2" data-i18n="calc_result">數學推導與結果</h3>
-                    <div id="math-output" class="text-sm text-slate-700 overflow-x-auto custom-scrollbar flex-1">
-                        <!-- LaTeX will be injected here -->
+                <!-- Lens Type Selection -->
+                <div class="space-y-2">
+                    <label id="ui-lens-type" class="block text-sm font-bold text-[#1e3c72]">透鏡種類</label>
+                    <div class="flex bg-slate-100 p-1 rounded-lg">
+                        <button id="btn-convex" class="flex-1 py-1.5 text-sm font-semibold rounded-md bg-white shadow text-[#1e3c72] transition-all">
+                            凸透鏡
+                        </button>
+                        <button id="btn-concave" class="flex-1 py-1.5 text-sm font-semibold rounded-md text-slate-500 hover:text-slate-700 transition-all">
+                            凹透鏡
+                        </button>
                     </div>
                 </div>
-            </aside>
 
-            <!-- Canvas Area (Fully expands to take the remaining area) -->
-            <main id="canvas-container" class="flex-1 relative bg-grid overflow-hidden min-h-0">
-                <canvas id="sim-canvas" class="absolute inset-0 w-full h-full cursor-crosshair"></canvas>
-                
-                <!-- Floating Action Buttons on Canvas -->
-                <button id="btn-replay" class="absolute bottom-6 right-6 px-4 py-2 bg-white/95 backdrop-blur-md rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.1)] text-cma-blue font-semibold hover:bg-slate-50 transition-all flex items-center gap-2 border border-slate-200/50 z-10 active:scale-95 select-none">
-                    <svg class="w-5 h-5 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                    <span data-i18n="replay">重新播放</span>
-                </button>
-            </main>
-        </div>
+                <!-- Parameters Card -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <!-- Lock Viewport Checkbox & Reset Button -->
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="chk-lock-view" checked class="rounded text-[#1e3c72] focus:ring-[#1e3c72] w-4 h-4 cursor-pointer">
+                            <label for="chk-lock-view" class="text-sm font-semibold text-slate-700 cursor-pointer" id="ui-lock-view">視圖鎖定</label>
+                        </div>
+                        <button id="btn-reset" class="text-slate-500 hover:text-[#1e3c72] hover:bg-slate-200 p-1.5 rounded-md transition-colors" title="Reset">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
 
-        <!-- Desktop Footer -->
-        <footer class="hidden md:flex shrink-0 h-10 bg-slate-200 items-center justify-center text-sm font-medium text-slate-600 z-20">
-            <span data-i18n="footer">廠商會中學．物理科</span>
-        </footer>
-    </div>
+                    <!-- Focal Length -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center">
+                            <label class="text-sm font-semibold text-slate-700 flex items-center gap-1">
+                                <span id="ui-focal">焦距</span> ($f$)
+                            </label>
+                            <span class="text-sm font-mono bg-blue-100 text-blue-800 px-2 py-0.5 rounded"><span id="val-f">15.0</span> cm</span>
+                        </div>
+                        <input type="range" id="slider-f" min="10" max="50" step="0.1" value="15.0">
+                    </div>
 
-    <!-- Off-Canvas Mobile Sidebar (Occupies 80% screen width) -->
-    <div id="mobile-sidebar" class="fixed inset-0 z-[100] hidden">
-        <!-- Semi-transparent Overlay Background -->
-        <div id="mobile-overlay" class="absolute inset-0 bg-black/50 transition-opacity opacity-0"></div>
-        
-        <!-- Drawer Container: Changed width dynamically to 80% of screen -->
-        <div id="mobile-sidebar-content" class="absolute top-0 left-0 bottom-0 w-[80%] bg-white shadow-2xl transform -translate-x-full transition-transform duration-300 flex flex-col">
-            <!-- Sidebar Header -->
-            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-                <h2 class="text-md font-bold text-cma-blue flex items-center gap-2 select-none">
-                    <svg class="w-5 h-5 text-vector-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="12,3 2,21 22,21" class="text-cma-blue"></polygon>
+                    <!-- Object Distance -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center">
+                            <label class="text-sm font-semibold text-slate-700 flex items-center gap-1">
+                                <span id="ui-obj-dist">物距</span> ($u$)
+                            </label>
+                            <span class="text-sm font-mono bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded"><span id="val-u">30.0</span> cm</span>
+                        </div>
+                        <input type="range" id="slider-u" min="5" max="100" step="0.1" value="30.0">
+                    </div>
+
+                    <!-- Object Height -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center">
+                            <label class="text-sm font-semibold text-slate-700 flex items-center gap-1">
+                                <span id="ui-obj-height">物高</span> ($h_o$)
+                            </label>
+                            <span class="text-sm font-mono bg-amber-100 text-amber-800 px-2 py-0.5 rounded"><span id="val-ho">20.0</span> cm</span>
+                        </div>
+                        <input type="range" id="slider-ho" min="5" max="30" step="0.1" value="20.0">
+                    </div>
+                </div>
+
+                <!-- Animation Controls -->
+                <div class="flex gap-2">
+                    <button id="btn-play" class="flex-1 bg-[#1e3c72] hover:bg-[#2a4d8c] text-white py-2 rounded-lg text-sm font-semibold flex justify-center items-center gap-1 transition-colors shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                        </svg>
+                        <span id="ui-play">主要光線</span>
+                    </button>
+                    <button id="btn-trace-all" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg text-sm font-semibold flex justify-center items-center gap-1 transition-colors shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
+                        </svg>
+                        <span id="ui-trace-all">全部光線</span>
+                    </button>
+                </div>
+
+                <!-- Results / Properties Card -->
+                <div class="bg-red-50 border border-red-200 rounded-xl p-4 shadow-sm">
+                    <h3 id="ui-img-props" class="text-red-700 font-bold mb-3 flex items-center gap-2 border-b border-red-200 pb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+                        </svg>
+                        成像性質
+                    </h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between items-center border-b border-red-200/50 pb-2">
+                            <span class="text-slate-600 font-semibold flex items-center gap-1"><span id="ui-res-v">像距</span> ($v$)</span>
+                            <span id="res-v-val" class="font-mono font-bold text-red-600 bg-white px-2 py-0.5 rounded shadow-sm">40.0 cm</span>
+                        </div>
+                        
+                        <!-- 3-Column Tick Box Properties -->
+                        <div class="grid grid-cols-3 gap-1 pt-1 text-[11px] leading-tight">
+                            <!-- Col 1: Real / Virtual -->
+                            <div class="flex flex-col gap-2">
+                                <div class="flex items-start gap-1.5 text-slate-700 font-semibold">
+                                    <input type="checkbox" id="chk-real" onclick="return false;" class="mt-0.5 pointer-events-none rounded-sm text-red-600 focus:ring-0 w-3 h-3 bg-white border-slate-300"> 
+                                    <span id="ui-prop-real" class="truncate">實像</span>
+                                </div>
+                                <div class="flex items-start gap-1.5 text-slate-700 font-semibold">
+                                    <input type="checkbox" id="chk-virtual" onclick="return false;" class="mt-0.5 pointer-events-none rounded-sm text-red-600 focus:ring-0 w-3 h-3 bg-white border-slate-300"> 
+                                    <span id="ui-prop-virtual" class="truncate">虛像</span>
+                                </div>
+                            </div>
+                            <!-- Col 2: Erect / Inverted -->
+                            <div class="flex flex-col gap-2 border-l border-red-200/60 pl-2">
+                                <div class="flex items-start gap-1.5 text-slate-700 font-semibold">
+                                    <input type="checkbox" id="chk-erect" onclick="return false;" class="mt-0.5 pointer-events-none rounded-sm text-red-600 focus:ring-0 w-3 h-3 bg-white border-slate-300"> 
+                                    <span id="ui-prop-erect" class="truncate">直立</span>
+                                </div>
+                                <div class="flex items-start gap-1.5 text-slate-700 font-semibold">
+                                    <input type="checkbox" id="chk-inverted" onclick="return false;" class="mt-0.5 pointer-events-none rounded-sm text-red-600 focus:ring-0 w-3 h-3 bg-white border-slate-300"> 
+                                    <span id="ui-prop-inverted" class="truncate">倒立</span>
+                                </div>
+                            </div>
+                            <!-- Col 3: Size -->
+                            <div class="flex flex-col gap-2 border-l border-red-200/60 pl-2">
+                                <div class="flex items-start gap-1.5 text-slate-700 font-semibold">
+                                    <input type="checkbox" id="chk-diminished" onclick="return false;" class="mt-0.5 pointer-events-none rounded-sm text-red-600 focus:ring-0 w-3 h-3 bg-white border-slate-300"> 
+                                    <span id="ui-prop-diminished" class="truncate">縮小</span>
+                                </div>
+                                <div class="flex items-start gap-1.5 text-slate-700 font-semibold">
+                                    <input type="checkbox" id="chk-same" onclick="return false;" class="mt-0.5 pointer-events-none rounded-sm text-red-600 focus:ring-0 w-3 h-3 bg-white border-slate-300"> 
+                                    <span id="ui-prop-same" class="truncate">等大</span>
+                                </div>
+                                <div class="flex items-start gap-1.5 text-slate-700 font-semibold">
+                                    <input type="checkbox" id="chk-magnified" onclick="return false;" class="mt-0.5 pointer-events-none rounded-sm text-red-600 focus:ring-0 w-3 h-3 bg-white border-slate-300"> 
+                                    <span id="ui-prop-magnified" class="truncate">放大</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Mandatory Footer (Shared) -->
+            <div class="mt-auto p-4 bg-slate-50 border-t border-slate-200 text-center text-xs font-medium text-slate-500 shrink-0">
+                <span id="ui-footer">廠商會中學．物理科</span>
+            </div>
+        </aside>
+
+        <!-- Canvas Area -->
+        <section class="flex-1 relative canvas-container" id="canvas-wrapper">
+            <canvas id="optics-canvas" class="absolute inset-0 w-full h-full cursor-crosshair block"></canvas>
+        </section>
+
+    </main>
+
+    <!-- Instruction / Help Modal -->
+    <div id="help-modal" class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden transform scale-95 transition-transform duration-300" id="help-modal-content">
+            <div class="bg-[#1e3c72] px-6 py-4 flex justify-between items-center">
+                <h2 class="text-white font-bold text-lg flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span data-i18n="controls">控制面板</span>
+                    <span id="ui-modal-title">使用說明與光線法則</span>
                 </h2>
-                <button id="close-sidebar-btn" class="p-1.5 text-slate-400 hover:text-slate-600 bg-white rounded-full shadow-sm border border-slate-100 active:scale-95 transition-all">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <button id="btn-close-help" class="text-white/70 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
-            
-            <!-- Sidebar Scrollable Body -->
-            <div class="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-5">
-                
-                <!-- Controls Group -->
-                <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 shadow-sm space-y-4">
-                    <!-- Parameter: Incidence Angle -->
-                    <div class="space-y-1">
-                        <div class="flex justify-between text-xs font-medium text-slate-700">
-                            <label for="slider-i-mob" data-i18n="param_i">入射角 (<i>i</i>)</label>
-                            <span id="val-i-mob" class="text-cma-blue font-bold"><i>i</i> = 45°</span>
-                        </div>
-                        <input type="range" id="slider-i-mob" min="0" max="80" step="1" value="45" class="w-full">
-                    </div>
-
-                    <!-- Parameter: Refractive Index -->
-                    <div class="space-y-1">
-                        <div class="flex justify-between text-xs font-medium text-slate-700">
-                            <label for="slider-n-mob" data-i18n="param_n">折射率 (<i>n</i>)</label>
-                            <span id="val-n-mob" class="text-cma-blue font-bold"><i>n</i> = 1.50</span>
-                        </div>
-                        <input type="range" id="slider-n-mob" min="1.0" max="2.5" step="0.01" value="1.50" class="w-full">
-                    </div>
-
-                    <!-- Parameter: Thickness -->
-                    <div class="space-y-1">
-                        <div class="flex justify-between text-xs font-medium text-slate-700">
-                            <label for="slider-t-mob" data-i18n="param_t">玻璃磚厚度 (<i>t</i>)</label>
-                            <span id="val-t-mob" class="text-cma-blue font-bold"><i>t</i> = 5.0 cm</span>
-                        </div>
-                        <input type="range" id="slider-t-mob" min="1" max="10" step="0.1" value="5.0" class="w-full">
-                    </div>
+            <div class="p-6 space-y-4 text-slate-700 text-sm">
+                <p id="ui-help-p1">本模擬器採用標準的「實正虛負」薄透鏡符號慣例。</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong class="text-emerald-600" id="ui-help-r1t">光線 1 (平行光):</strong> <span id="ui-help-r1d">平行於主光軸的光線，折射後會通過 (或看似從) 主焦點 F 射出。</span></li>
+                    <li><strong class="text-purple-600" id="ui-help-r2t">光線 2 (中心光):</strong> <span id="ui-help-r2d">通過光心的光線，方向不變。</span></li>
+                    <li><strong class="text-amber-500" id="ui-help-r3t">光線 3 (焦點光):</strong> <span id="ui-help-r3d">通過 (或指向) 焦點的光線，折射後平行於主光軸射出。</span></li>
+                </ul>
+                <div class="bg-slate-100 p-3 rounded-lg mt-4 border border-slate-200">
+                    <p class="font-semibold mb-1" id="ui-help-sign">符號慣例 (實正虛負):</p>
+                    <ul class="list-disc pl-5">
+                        <li id="ui-help-s1">u 恆為正值 (實物)。</li>
+                        <li id="ui-help-s2">v > 0 為實像，v < 0 為虛像。</li>
+                        <li id="ui-help-s3">f > 0 為凸透鏡，f < 0 為凹透鏡。</li>
+                    </ul>
                 </div>
-
-                <!-- Calculations Group -->
-                <div class="bg-blue-50/50 rounded-xl p-4 border border-blue-100 shadow-sm space-y-2">
-                    <h3 class="text-xs font-bold text-cma-blue select-none" data-i18n="calc_result">數學推導與結果</h3>
-                    <div id="math-output-mob" class="text-xs text-slate-700 overflow-x-auto custom-scrollbar">
-                        <!-- MathJax Formula Injected Here -->
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Sidebar Footer -->
-            <div class="p-4 border-t border-slate-100 bg-slate-50 text-center text-xs font-medium text-slate-500">
-                <span data-i18n="footer">廠商會中學．物理科</span>
             </div>
         </div>
     </div>
 
-    <!-- Help / Instruction Modal -->
-    <div id="help-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center p-4">
-        <div id="help-overlay" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden transform scale-95 opacity-0 transition-all duration-300" id="help-panel">
-            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <h2 class="text-xl font-bold text-cma-blue flex items-center gap-2 select-none">
-                    <svg class="w-6 h-6 text-vector-amber" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    <span data-i18n="help_title">物理原理解析</span>
-                </h2>
-                <button id="close-help-btn" class="text-slate-400 hover:text-slate-600 bg-white p-1.5 rounded-full shadow-sm">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <div class="p-6 overflow-y-auto custom-scrollbar text-slate-700 space-y-4 leading-relaxed text-sm md:text-base">
-                <p data-i18n="help_p1">當光線斜射進入兩面平行的玻璃磚時，會發生兩次折射。由於兩次折射的介質邊界平行，出射光線與入射光線將保持平行，但會產生一段垂直距離的偏移，稱為<strong>側向位移 (<i>d</i>)</strong>。</p>
-                <div id="derivation-block" data-i18n="help_derivation">
-                    <!-- Derivation formulas populated dynamically based on language -->
-                </div>
-                <p data-i18n="help_p2">從公式中可以看出，側向位移 \( d \) 與玻璃磚厚度 \( t \)成正比；入射角 \( i \) 越大，或折射率 \( n \) 越大，位移也會隨之增加。</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Application Logic -->
     <script>
-        /* --- 1. Global State & i18n --- */
-        const DICT = {
-            zh: {
-                title: '側向位移模擬器',
-                controls: '控制面板',
-                param_i: '入射角 (<i>i</i>)',
-                param_n: '折射率 (<i>n</i>)',
-                param_t: '玻璃磚厚度 (<i>t</i>)',
-                calc_result: '數學推導與結果',
-                replay: '重新播放',
-                help_btn: '說明',
-                footer: '廠商會中學．物理科',
-                help_title: '物理原理解析',
-                help_p1: '當光線斜射進入兩面平行的玻璃磚時，會發生兩次折射。由於兩次折射的介質邊界平行，出射光線與入射光線將保持平行，但會產生一段垂直距離的偏移，稱為<strong>側向位移 (<i>d</i>)</strong>。',
-                help_derivation: `<div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                    <h3 class="font-bold text-cma-blue mb-2">數學推導：</h3>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>根據斯涅爾定律 (Snell's Law)：\\( 1 \\cdot \\sin(i) = n \\cdot \\sin(r) \\)</li>
-                        <li>在玻璃磚內部，光線走過的距離為 \\( AB = \\frac{t}{\\cos(r)} \\)</li>
-                        <li>位移 \\( d \\) 是直角三角形中的對邊：\\( d = AB \\cdot \\sin(i - r) \\)</li>
-                        <li>代入合併得到公式：\\( d = \\frac{t \\cdot \\sin(i - r)}{\\cos(r)} \\)</li>
-                    </ul>
-                </div>`,
-                help_p2: '從公式中可以看出，側向位移 \\( d \\) 與玻璃磚厚度 \\( t \\) 成正比；入射角 \\( i \\) 越大，或折射率 \\( n \\) 越大，位移也會隨之增加。'
-            },
-            en: {
-                title: 'Lateral Displacement Simulator',
-                controls: 'Control Panel',
-                param_i: 'Angle of Incidence (<i>i</i>)',
-                param_n: 'Refractive Index (<i>n</i>)',
-                param_t: 'Slab Thickness (<i>t</i>)',
-                calc_result: 'Calculations & Results',
-                replay: 'Replay Animation',
-                help_btn: 'Help',
-                footer: 'CMA Secondary School. Physics Department.',
-                help_title: 'Physics Principles',
-                help_p1: 'When light passes obliquely through a parallel-sided glass slab, it refracts twice. Because the boundaries are parallel, the emergent ray is parallel to the incident ray but shifted by a perpendicular distance known as <strong>Lateral Displacement (<i>d</i>)</strong>.',
-                help_derivation: `<div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                    <h3 class="font-bold text-cma-blue mb-2">Mathematical Derivation:</h3>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>From Snell's Law: \\( 1 \\cdot \\sin(i) = n \\cdot \\sin(r) \\)</li>
-                        <li>Distance traveled inside the slab: \\( AB = \\frac{t}{\\cos(r)} \\)</li>
-                        <li>Displacement \\( d \\) in the right triangle: \\( d = AB \\cdot \\sin(i - r) \\)</li>
-                        <li>Substituting to get the formula: \\( d = \\frac{t \\cdot \\sin(i - r)}{\\cos(r)} \\)</li>
-                    </ul>
-                </div>`,
-                help_p2: 'From the formula, lateral displacement \\( d \\) is directly proportional to thickness \\( t \\). It also increases as the angle of incidence \\( i \\) or refractive index \\( n \\) increases.'
-            }
-        };
-
+        /* --- 1. Global State & Translations --- */
+        
         const state = {
-            lang: 'zh',
-            i: 45,       // degrees
-            n: 1.5,      // dimensionless
-            t: 5.0,      // cm
+            lang: 'zh', // 'en' or 'zh'
+            lens: 'convex', // 'convex' or 'concave'
+            f: 15.0, // magnitude
+            u: 30.0,
+            ho: 20.0,
+            // Calculated values
+            v: 0,
+            hi: 0,
+            isReal: true,
+            isInverted: true,
+            // Animation & Trace Mode
+            animating: false,
+            animProgress: 1, // 0 to 1
+            lastTime: 0,
+            traceMode: 'principal', // 'principal' or 'all'
+            lockViewport: true,
             
-            // Viewport & Scale
-            scale: 50,   // px per cm
-            cx: 0,       // center x in canvas
-            cy: 0,       // center y in canvas
-            
-            // Animation
-            progress: 1.0, 
-            animId: null,
-            startTime: null,
-            duration: 2500 // ms
+            // Touch/Drag State
+            dragging: false,
+            dragStartPos: { x: 0, y: 0 },
+            dragStartU: 30.0,
+            dragStartHo: 20.0,
+            dragAxis: null // 'h' (horizontal/u), 'v' (vertical/ho), or null
         };
 
-        // DOM Elements
-        const els = {
-            canvas: document.getElementById('sim-canvas'),
-            ctx: document.getElementById('sim-canvas').getContext('2d'),
-            container: document.getElementById('canvas-container'),
-            mathOutput: document.getElementById('math-output'),
-            mathOutputMob: document.getElementById('math-output-mob'),
-            
-            // Sliders & Values (Desktop)
-            sliderI: document.getElementById('slider-i'),
-            sliderN: document.getElementById('slider-n'),
-            sliderT: document.getElementById('slider-t'),
-            valI: document.getElementById('val-i'),
-            valN: document.getElementById('val-n'),
-            valT: document.getElementById('val-t'),
-
-            // Sliders & Values (Mobile Drawer)
-            sliderIMob: document.getElementById('slider-i-mob'),
-            sliderNMob: document.getElementById('slider-n-mob'),
-            sliderTMob: document.getElementById('slider-t-mob'),
-            valIMob: document.getElementById('val-i-mob'),
-            valNMob: document.getElementById('val-n-mob'),
-            valTMob: document.getElementById('val-t-mob'),
-            
-            // Mobile Sidebar
-            sidebar: document.getElementById('mobile-sidebar'),
-            sidebarOverlay: document.getElementById('mobile-overlay'),
-            sidebarContent: document.getElementById('mobile-sidebar-content'),
-            btnMenuOpen: document.getElementById('mobile-menu-btn'),
-            btnMenuClose: document.getElementById('close-sidebar-btn'),
-
-            // Help Modal
-            modalHelp: document.getElementById('help-modal'),
-            helpOverlay: document.getElementById('help-overlay'),
-            helpPanel: document.getElementById('help-panel'),
-            btnHelpClose: document.getElementById('close-help-btn'),
-            
-            // Actions
-            btnReplay: document.getElementById('btn-replay'),
-            btnsLang: document.querySelectorAll('.btn-lang'),
-            btnsHelp: document.querySelectorAll('.btn-help'),
+        const dict = {
+            en: {
+                title: "Image formed by Lens",
+                helpBtn: "Help",
+                lensType: "Lens Type",
+                convex: "Convex",
+                concave: "Concave",
+                focal: "Focal Length",
+                objDist: "Object Distance",
+                objHeight: "Object Height",
+                play: "Trace Rays",
+                traceAll: "Trace All",
+                imgProps: "Image Properties",
+                resV: "Image Dist.",
+                nature: "Nature",
+                orient: "Orientation",
+                mag: "Magnification",
+                real: "Real",
+                virtual: "Virtual",
+                inverted: "Inverted",
+                erect: "Erect",
+                magnified: "Magnified",
+                diminished: "Diminished",
+                sameSize: "Same Size",
+                infinity: "At Infinity",
+                lockView: "View Lock",
+                footer: "CMA Secondary School. Physics Department.",
+                modalTitle: "Instructions & Rules",
+                helpP1: "This simulator follows the standard 'Real-is-Positive' convention for thin lenses.",
+                helpR1T: "Ray 1 (Parallel):",
+                helpR1D: "A ray parallel to the principal axis passes through (or appears to diverge from) the principal focus F.",
+                helpR2T: "Ray 2 (Center):",
+                helpR2D: "A ray passing through the optical centre continues undeviated.",
+                helpR3T: "Ray 3 (Focus):",
+                helpR3D: "A ray passing through (or pointing towards) the focus emerges parallel to the principal axis.",
+                helpSign: "Sign Convention (Real-is-Positive):",
+                helpS1: "u is always positive (real object).",
+                helpS2: "v > 0 for Real image, v < 0 for Virtual image.",
+                helpS3: "f > 0 for Convex lens, f < 0 for Concave lens."
+            },
+            zh: {
+                title: "透鏡成像",
+                helpBtn: "說明",
+                lensType: "透鏡種類",
+                convex: "凸透鏡",
+                concave: "凹透鏡",
+                focal: "焦距",
+                objDist: "物距",
+                objHeight: "物高",
+                play: "主要光線",
+                traceAll: "全部光線",
+                imgProps: "成像性質",
+                resV: "像距",
+                nature: "性質",
+                orient: "方向",
+                mag: "放大率",
+                real: "實像",
+                virtual: "虛像",
+                inverted: "倒立",
+                erect: "直立",
+                magnified: "放大",
+                diminished: "縮小",
+                sameSize: "等大",
+                infinity: "位於無限遠",
+                lockView: "視圖鎖定",
+                footer: "廠商會中學．物理科",
+                modalTitle: "使用說明與光線法則",
+                helpP1: "本模擬器採用標準的「實正虛負」薄透鏡符號慣例。",
+                helpR1T: "光線 1 (平行光):",
+                helpR1D: "平行於主光軸的光線，折射後會通過 (或看似從) 主焦點 F 射出。",
+                helpR2T: "光線 2 (中心光):",
+                helpR2D: "通過光心的光線，方向不變。",
+                helpR3T: "光線 3 (焦點光):",
+                helpR3D: "通過 (或指向) 焦點的光線，折射後平行於主光軸射出。",
+                helpSign: "符號慣例 (實正虛負):",
+                helpS1: "u 恆為正值 (實物)。",
+                helpS2: "v > 0 為實像，v < 0 為虛像。",
+                helpS3: "f > 0 為凸透鏡，f < 0 為凹透鏡。"
+            }
         };
 
-        let mathJaxTimeout = null;
-
-        /* --- 2. Localization (i18n) --- */
-        // Safely check and render LaTeX formulas across multiple MathJax 3 contexts
-        function toggleLanguage() {
-            state.lang = state.lang === 'zh' ? 'en' : 'zh';
-            applyLanguage();
-            updateMathDisplay();
-        }
-
-        function applyLanguage() {
-            const dict = DICT[state.lang];
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (dict[key]) el.innerHTML = dict[key];
-            });
-
-            // Re-render LaTeX for static math safely
-            if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise === 'function') {
-                if (typeof MathJax.typesetClear === 'function') {
-                    MathJax.typesetClear();
-                }
-                MathJax.typesetPromise().catch(err => console.error(err));
-            }
-        }
-
-        /* --- 3. UI Interactions & Modals --- */
-        function setMobileSidebar(open) {
-            if (open) {
-                els.sidebar.classList.remove('hidden');
-                void els.sidebar.offsetWidth; 
-                els.sidebarOverlay.classList.remove('opacity-0');
-                els.sidebarContent.classList.remove('-translate-x-full');
-            } else {
-                els.sidebarOverlay.classList.add('opacity-0');
-                els.sidebarContent.classList.add('-translate-x-full');
-                setTimeout(() => els.sidebar.classList.add('hidden'), 300);
-            }
-        }
-
-        function setHelpModal(open) {
-            if (open) {
-                els.modalHelp.classList.remove('hidden');
-                void els.modalHelp.offsetWidth;
-                els.helpPanel.classList.remove('scale-95', 'opacity-0');
-            } else {
-                els.helpPanel.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => els.modalHelp.classList.add('hidden'), 300);
-            }
-        }
-
-        /* --- 4. Physics & Math Logic --- */
-        function getPhysicsData() {
-            const i_rad = state.i * Math.PI / 180;
-            const r_rad = Math.asin(Math.sin(i_rad) / state.n);
-            const r_deg = r_rad * 180 / Math.PI;
-            
-            let d = 0;
-            if (state.i > 0) {
-                d = state.t * Math.sin(i_rad - r_rad) / Math.cos(r_rad);
-            }
-
-            return { i_rad, r_rad, r_deg, d };
-        }
-
-        function updateMathDisplay() {
-            clearTimeout(mathJaxTimeout);
-            
-            const { r_deg, d } = getPhysicsData();
-            const label_r = state.lang === 'zh' ? '折射角' : 'Refraction Angle';
-            const label_d = state.lang === 'zh' ? '側向位移' : 'Lateral Displacement';
-
-            const latex = `
-                \\begin{align*}
-                &\\text{${label_r} } (r):\\\\[1ex]
-                r &= \\sin^{-1}\\left(\\frac{\\sin(${state.i}^\\circ)}{${state.n.toFixed(2)}}\\right) = ${r_deg.toFixed(2)}^\\circ \\\\[2ex]
-                &\\text{${label_d} } (d):\\\\[1ex]
-                d &= \\frac{${state.t.toFixed(1)}\\text{ cm} \\cdot \\sin(${state.i}^\\circ - ${r_deg.toFixed(2)}^\\circ)}{\\cos(${r_deg.toFixed(2)}^\\circ)} = \\mathbf{${d.toFixed(2)}\\text{ cm}}
-                \\end{align*}
-            `;
-
-            mathJaxTimeout = setTimeout(() => {
-                if (els.mathOutput) els.mathOutput.innerHTML = `\\( ${latex} \\)`;
-                if (els.mathOutputMob) els.mathOutputMob.innerHTML = `\\( ${latex} \\)`;
-                
-                if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise === 'function') {
-                    MathJax.typesetPromise([els.mathOutput, els.mathOutputMob].filter(Boolean)).catch(err => console.error(err));
-                }
-            }, 150);
-        }
-
-        function updateUIValues() {
-            // Update Desktop Panel Labels
-            if (els.valI) els.valI.innerHTML = `<i>i</i> = ${state.i}&deg;`;
-            if (els.valN) els.valN.innerHTML = `<i>n</i> = ${state.n.toFixed(2)}`;
-            if (els.valT) els.valT.innerHTML = `<i>t</i> = ${state.t.toFixed(1)} cm`;
-
-            // Update Mobile Drawer Panel Labels
-            if (els.valIMob) els.valIMob.innerHTML = `<i>i</i> = ${state.i}&deg;`;
-            if (els.valNMob) els.valNMob.innerHTML = `<i>n</i> = ${state.n.toFixed(2)}`;
-            if (els.valTMob) els.valTMob.innerHTML = `<i>t</i> = ${state.t.toFixed(1)} cm`;
-        }
-
-        /* --- 5. Viewport & Canvas Transforms --- */
-        function resizeAndFitViewport() {
-            const rect = els.container.getBoundingClientRect();
-            const dpr = window.devicePixelRatio || 1;
-            
-            els.canvas.width = rect.width * dpr;
-            els.canvas.height = rect.height * dpr;
-            
-            els.ctx.setTransform(1, 0, 0, 1, 0, 0);
-            els.ctx.scale(dpr, dpr);
-
-            const padding = 60; 
-            const maxW_cm = 22; 
-            const maxH_cm = 16; 
-            
-            const scaleX = (rect.width - padding * 2) / maxW_cm;
-            const scaleY = (rect.height - padding * 2) / maxH_cm;
-            
-            state.scale = Math.min(scaleX, scaleY);
-            
-            state.cx = rect.width / 2;
-            state.cy = rect.height * 0.35; 
-
-            document.documentElement.style.setProperty('--grid-size', `${state.scale}px`);
-            document.documentElement.style.setProperty('--grid-x', `${state.cx}px`);
-            document.documentElement.style.setProperty('--grid-y', `${state.cy}px`);
-
-            drawCanvas();
-        }
-
-        function toPx(x, y) {
-            return {
-                x: state.cx + x * state.scale,
-                y: state.cy - y * state.scale 
-            };
-        }
-
-        function drawPillbox(ctx, x, y, text, bgColor, borderColor, textColor) {
-            ctx.font = 'italic bold 15px Inter, sans-serif';
-            const textWidth = ctx.measureText(text).width;
-            
-            const padX = 12;
-            const padY = 6;
-            const h = 26;
-            const w = textWidth + padX * 2;
-            
-            const rx = x - w / 2;
-            const ry = y - h / 2;
-            const r = h / 2;
-
-            ctx.save();
-            ctx.beginPath();
-            ctx.moveTo(rx + r, ry);
-            ctx.lineTo(rx + w - r, ry);
-            ctx.quadraticCurveTo(rx + w, ry, rx + w, ry + r);
-            ctx.quadraticCurveTo(rx + w, ry + h, rx + w - r, ry + h);
-            ctx.lineTo(rx + r, ry + h);
-            ctx.quadraticCurveTo(rx, ry + h, rx, ry + r);
-            ctx.quadraticCurveTo(rx, ry, rx + r, ry);
-            ctx.closePath();
-
-            ctx.fillStyle = bgColor;
-            ctx.fill();
-
-            if (borderColor && borderColor !== 'transparent') {
-                ctx.strokeStyle = borderColor;
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-            }
-
-            ctx.fillStyle = textColor;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(text, x, y);
-            ctx.restore();
-        }
-
-        /* --- 6. Drawing & Animation System --- */
-        function drawCanvas() {
-            const ctx = els.ctx;
-            const rect = els.container.getBoundingClientRect();
-            ctx.clearRect(0, 0, rect.width, rect.height);
-
-            const { i_rad, r_rad, d } = getPhysicsData();
-            const p = state.progress;
-
-            const O = { x: 0, y: 0 }; 
-            const E = { x: state.t * Math.tan(r_rad), y: -state.t }; 
-            
-            const L_in = 8; 
-            const L_out = 8;
-            
-            const In_Start = { x: -L_in * Math.sin(i_rad), y: L_in * Math.cos(i_rad) };
-            const Ext_E = { x: state.t * Math.tan(i_rad), y: -state.t };
-            const Ext_End = { x: Ext_E.x + L_out * Math.sin(i_rad), y: Ext_E.y - L_out * Math.cos(i_rad) };
-            const Out_End = { x: E.x + L_out * Math.sin(i_rad), y: E.y - L_out * Math.cos(i_rad) };
-
-            // Draw Slab
-            ctx.fillStyle = 'rgba(30, 60, 114, 0.04)'; 
-            ctx.strokeStyle = 'rgba(30, 60, 114, 0.3)';
-            ctx.lineWidth = 2;
-            
-            const slabTopLeft = toPx(-15, 0);
-            const slabSize = { w: 30 * state.scale, h: state.t * state.scale };
-            
-            ctx.fillRect(slabTopLeft.x, slabTopLeft.y, slabSize.w, slabSize.h);
-            ctx.beginPath();
-            ctx.moveTo(slabTopLeft.x, slabTopLeft.y);
-            ctx.lineTo(slabTopLeft.x + slabSize.w, slabTopLeft.y);
-            ctx.moveTo(slabTopLeft.x, slabTopLeft.y + slabSize.h);
-            ctx.lineTo(slabTopLeft.x + slabSize.w, slabTopLeft.y + slabSize.h);
-            ctx.stroke();
-
-            // Display Refractive Index of Upper Air Side
-            const upperAirLabelPx = toPx(-12, 1.5);
-            ctx.save();
-            ctx.fillStyle = 'rgba(71, 85, 105, 0.65)'; 
-            ctx.font = 'italic 16px Inter, sans-serif';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('n', upperAirLabelPx.x, upperAirLabelPx.y);
-            ctx.font = '16px Inter, sans-serif';
-            ctx.fillText(' = 1.00', upperAirLabelPx.x + 12, upperAirLabelPx.y);
-            ctx.restore();
-
-            // Display Refractive Index inside Glass Slab
-            const slabLabelPx = toPx(-12, -state.t/2);
-            ctx.save();
-            ctx.fillStyle = 'rgba(30, 60, 114, 0.65)';
-            ctx.font = 'italic 16px Inter, sans-serif';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('n', slabLabelPx.x, slabLabelPx.y);
-            ctx.font = '16px Inter, sans-serif';
-            ctx.fillText(` = ${state.n.toFixed(2)}`, slabLabelPx.x + 12, slabLabelPx.y);
-            ctx.restore();
-
-            // Display Refractive Index of Lower Air Side
-            const lowerAirLabelPx = toPx(-12, -state.t - 1.5);
-            ctx.save();
-            ctx.fillStyle = 'rgba(71, 85, 105, 0.65)'; 
-            ctx.font = 'italic 16px Inter, sans-serif';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('n', lowerAirLabelPx.x, lowerAirLabelPx.y);
-            ctx.font = '16px Inter, sans-serif';
-            ctx.fillText(' = 1.00', lowerAirLabelPx.x + 12, lowerAirLabelPx.y);
-            ctx.restore();
-
-            // Draw Normals
-            ctx.setLineDash([5, 5]);
-            ctx.strokeStyle = '#94a3b8'; 
-            ctx.lineWidth = 1.5;
-            
-            const n1_top = toPx(0, 3);
-            const n1_bot = toPx(0, -state.t - 1);
-            ctx.beginPath(); ctx.moveTo(n1_top.x, n1_top.y); ctx.lineTo(n1_bot.x, n1_bot.y); ctx.stroke();
-
-            const n2_top = toPx(E.x, 1);
-            const n2_bot = toPx(E.x, -state.t - 3);
-            ctx.beginPath(); ctx.moveTo(n2_top.x, n2_top.y); ctx.lineTo(n2_bot.x, n2_bot.y); ctx.stroke();
-            ctx.setLineDash([]);
-
-            // Draw Angles arcs
-            if (p > 0) {
-                ctx.beginPath();
-                ctx.arc(state.cx, state.cy, 30, -Math.PI/2 - i_rad, -Math.PI/2);
-                ctx.strokeStyle = '#1e3c72';
-                ctx.stroke();
-                const i_text = toPx(-1.5 * Math.sin(i_rad/2), 1.5 * Math.cos(i_rad/2));
-                ctx.fillStyle = '#1e3c72';
-                ctx.font = 'italic 14px Inter, sans-serif';
-                ctx.fillText('i', i_text.x - 4, i_text.y);
-            }
-
-            if (p > 0.33) {
-                const r_px = toPx(0,0);
-                ctx.beginPath();
-                ctx.arc(r_px.x, r_px.y, 35, Math.PI/2 - r_rad, Math.PI/2);
-                ctx.strokeStyle = '#10b981';
-                ctx.stroke();
-                const r_text = toPx(1.8 * Math.sin(r_rad/2), -1.8 * Math.cos(r_rad/2));
-                ctx.fillStyle = '#10b981';
-                ctx.fillText('r', r_text.x, r_text.y + 4);
-            }
-
-            ctx.lineWidth = 3;
-            ctx.lineCap = 'round';
-
-            const p1 = Math.min(1, p / 0.33);                   
-            const p2 = Math.max(0, Math.min(1, (p - 0.33) / 0.33)); 
-            const p3 = Math.max(0, Math.min(1, (p - 0.66) / 0.34)); 
-
-            const drawRay = (start, end, color, fraction) => {
-                if (fraction <= 0) return;
-                const currentEnd = {
-                    x: start.x + (end.x - start.x) * fraction,
-                    y: start.y + (end.y - start.y) * fraction
-                };
-                const pxStart = toPx(start.x, start.y);
-                const pxEnd = toPx(currentEnd.x, currentEnd.y);
-                
-                ctx.beginPath();
-                ctx.moveTo(pxStart.x, pxStart.y);
-                ctx.lineTo(pxEnd.x, pxEnd.y);
-                ctx.strokeStyle = color;
-                ctx.stroke();
-
-                if (fraction >= 0.50) {
-                    const midX = start.x + (end.x - start.x) * 0.5;
-                    const midY = start.y + (end.y - start.y) * 0.5;
-                    const pxMid = toPx(midX, midY);
-
-                    const angle = Math.atan2(pxEnd.y - pxStart.y, pxEnd.x - pxStart.x);
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.moveTo(pxMid.x, pxMid.y);
-                    ctx.lineTo(pxMid.x - 10 * Math.cos(angle - Math.PI/6), pxMid.y - 10 * Math.sin(angle - Math.PI/6));
-                    ctx.lineTo(pxMid.x - 10 * Math.cos(angle + Math.PI/6), pxMid.y - 10 * Math.sin(angle + Math.PI/6));
-                    ctx.fillStyle = color;
-                    ctx.fill();
-                    ctx.restore();
-                }
-            };
-
-            // 1. Incident Ray (Amber)
-            drawRay(In_Start, O, '#f59e0b', p1);
-
-            // 2. Refracted Ray (Emerald)
-            drawRay(O, E, '#10b981', p2);
-
-            // 3. Emergent Ray (Amber)
-            drawRay(E, Out_End, '#f59e0b', p3);
-
-            // 4. Extended Original Ray & Displacement
-            if (p > 0.95 && state.i > 0) {
-                const pxO = toPx(O.x, O.y);
-                const pxExt = toPx(Ext_End.x, Ext_End.y);
-                ctx.beginPath();
-                ctx.moveTo(pxO.x, pxO.y);
-                ctx.lineTo(pxExt.x, pxExt.y);
-                ctx.setLineDash([4, 4]);
-                ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-                ctx.setLineDash([]);
-
-                const u = { x: Math.sin(i_rad), y: -Math.cos(i_rad) };
-                const dot = E.x * u.x + E.y * u.y;
-                const P = { x: dot * u.x, y: dot * u.y };
-
-                const pxE = toPx(E.x, E.y);
-                const pxP = toPx(P.x, P.y);
-
-                ctx.beginPath();
-                ctx.moveTo(pxE.x, pxE.y);
-                ctx.lineTo(pxP.x, pxP.y);
-                ctx.strokeStyle = '#DC2626'; 
-                ctx.lineWidth = 2.5;
-                ctx.stroke();
-
-                const arrowLength = 8;
-                const arrowAngle = Math.PI / 6;
-                const angleD = Math.atan2(pxE.y - pxP.y, pxE.x - pxP.x); 
-
-                ctx.save();
-                ctx.fillStyle = '#DC2626';
-
-                ctx.beginPath();
-                ctx.moveTo(pxE.x, pxE.y);
-                ctx.lineTo(pxE.x - arrowLength * Math.cos(angleD - arrowAngle), pxE.y - arrowLength * Math.sin(angleD - arrowAngle));
-                ctx.lineTo(pxE.x - arrowLength * Math.cos(angleD + arrowAngle), pxE.y - arrowLength * Math.sin(angleD + arrowAngle));
-                ctx.closePath();
-                ctx.fill();
-
-                const oppAngle = angleD + Math.PI;
-                ctx.beginPath();
-                ctx.moveTo(pxP.x, pxP.y);
-                ctx.lineTo(pxP.x - arrowLength * Math.cos(oppAngle - arrowAngle), pxP.y - arrowLength * Math.sin(oppAngle - arrowAngle));
-                ctx.lineTo(pxP.x - arrowLength * Math.cos(oppAngle + arrowAngle), pxP.y - arrowLength * Math.sin(oppAngle + arrowAngle));
-                ctx.closePath();
-                ctx.fill();
-
-                ctx.restore();
-
-                const size = 8; 
-                const nE = { x: pxE.x - pxP.x, y: pxE.y - pxP.y };
-                const len_nE = Math.hypot(nE.x, nE.y);
-                if (len_nE > 0) {
-                    nE.x /= len_nE; nE.y /= len_nE;
-                    const dirU = { x: pxExt.x - pxO.x, y: pxExt.y - pxO.y };
-                    const lenU = Math.hypot(dirU.x, dirU.y);
-                    dirU.x /= lenU; dirU.y /= lenU;
-                    
-                    const r_p1 = { x: pxP.x - dirU.x * size, y: pxP.y - dirU.y * size };
-                    const r_p2 = { x: r_p1.x + nE.x * size, y: r_p1.y + nE.y * size };
-                    const r_p3 = { x: pxP.x + nE.x * size, y: pxP.y + nE.y * size };
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(r_p1.x, r_p1.y);
-                    ctx.lineTo(r_p2.x, r_p2.y);
-                    ctx.lineTo(r_p3.x, r_p3.y);
-                    ctx.strokeStyle = '#DC2626';
-                    ctx.lineWidth = 1.5;
-                    ctx.stroke();
-                }
-
-                const d_mid = {
-                    x: (pxE.x + pxP.x) / 2,
-                    y: (pxE.y + pxP.y) / 2
-                };
-                
-                const offsetDistance = 16;
-                const offsetDir = { x: -nE.y, y: nE.x }; 
-                const finalLabelPos = {
-                    x: d_mid.x + offsetDir.x * offsetDistance,
-                    y: d_mid.y + offsetDir.y * offsetDistance
-                };
-
-                drawPillbox(ctx, finalLabelPos.x, finalLabelPos.y, 'd', 'rgba(255, 255, 255, 0.7)', null, '#DC2626');
-            }
-        }
-
-        function animate(time) {
-            if (!state.startTime) state.startTime = time;
-            const elapsed = time - state.startTime;
-            
-            state.progress = Math.min(1.0, elapsed / state.duration);
-            drawCanvas();
-
-            if (state.progress < 1.0) {
-                state.animId = requestAnimationFrame(animate);
-            }
-        }
-
-        function startAnimation() {
-            if (state.animId) cancelAnimationFrame(state.animId);
-            state.progress = 0;
-            state.startTime = null;
-            state.animId = requestAnimationFrame(animate);
-        }
-
-        function interruptAnimation() {
-            if (state.animId) cancelAnimationFrame(state.animId);
-            state.progress = 1.0;
-            drawCanvas();
-        }
-
-        /* --- 7. Event Listeners & Initialization --- */
+        /* --- 2. DOM Elements & Initialization --- */
         
-        window.addEventListener('resize', resizeAndFitViewport);
+        const canvas = document.getElementById('optics-canvas');
+        const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('canvas-wrapper');
 
-        // UI Language Actions
-        els.btnsLang.forEach(btn => btn.addEventListener('click', toggleLanguage));
-        
-        // Modal & Drawer bindings
-        els.btnsHelp.forEach(btn => btn.addEventListener('click', () => {
-            setMobileSidebar(false); 
-            setHelpModal(true);
-        }));
-        
-        els.btnHelpClose.addEventListener('click', () => setHelpModal(false));
-        els.helpOverlay.addEventListener('click', () => setHelpModal(false));
+        // Inputs
+        const sliderF = document.getElementById('slider-f');
+        const sliderU = document.getElementById('slider-u');
+        const sliderHo = document.getElementById('slider-ho');
+        const valF = document.getElementById('val-f');
+        const valU = document.getElementById('val-u');
+        const valHo = document.getElementById('val-ho');
 
-        els.btnMenuOpen.addEventListener('click', () => setMobileSidebar(true));
-        els.btnMenuClose.addEventListener('click', () => setMobileSidebar(false));
-        els.sidebarOverlay.addEventListener('click', () => setMobileSidebar(false));
+        // Buttons
+        const btnConvex = document.getElementById('btn-convex');
+        const btnConcave = document.getElementById('btn-concave');
+        const btnPlay = document.getElementById('btn-play');
+        const btnTraceAll = document.getElementById('btn-trace-all');
+        const btnReset = document.getElementById('btn-reset');
+        const btnLang = document.getElementById('btn-lang');
+        const btnHelp = document.getElementById('btn-help');
+        const btnCloseHelp = document.getElementById('btn-close-help');
+        const helpModal = document.getElementById('help-modal');
+        const helpModalContent = document.getElementById('help-modal-content');
+        const chkLockView = document.getElementById('chk-lock-view');
 
-        els.btnReplay.addEventListener('click', startAnimation);
+        // Mobile Sidebar Elements
+        const btnMobileMenu = document.getElementById('btn-mobile-menu');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+        const sidebar = document.getElementById('sidebar');
+        const btnCloseMenu = document.getElementById('btn-close-menu');
+        const btnHelpMobile = document.getElementById('btn-help-mobile');
+        const btnLangMobile = document.getElementById('btn-lang-mobile');
 
-        // Unified Sliders Sync Handler (supports both mobile and desktop controls)
-        const handleSliderChange = (e) => {
-            const key = e.target.id.split('-')[1]; // i, n, or t
-            const val = parseFloat(e.target.value);
-            state[key] = val;
-            
-            // Mirror setting to counterpart controls
-            const desktopSlider = document.getElementById(`slider-${key}`);
-            const mobileSlider = document.getElementById(`slider-${key}-mob`);
-            if (desktopSlider) desktopSlider.value = val;
-            if (mobileSlider) mobileSlider.value = val;
-
-            updateUIValues();
-            interruptAnimation(); 
-            updateMathDisplay();
-        };
-
-        els.sliderI.addEventListener('input', handleSliderChange);
-        els.sliderN.addEventListener('input', handleSliderChange);
-        els.sliderT.addEventListener('input', handleSliderChange);
-
-        if (els.sliderIMob) els.sliderIMob.addEventListener('input', handleSliderChange);
-        if (els.sliderNMob) els.sliderNMob.addEventListener('input', handleSliderChange);
-        if (els.sliderTMob) els.sliderTMob.addEventListener('input', handleSliderChange);
+        // Output Display
+        const resVVal = document.getElementById('res-v-val');
+        const chkReal = document.getElementById('chk-real');
+        const chkVirtual = document.getElementById('chk-virtual');
+        const chkErect = document.getElementById('chk-erect');
+        const chkInverted = document.getElementById('chk-inverted');
+        const chkDiminished = document.getElementById('chk-diminished');
+        const chkSame = document.getElementById('chk-same');
+        const chkMagnified = document.getElementById('chk-magnified');
 
         function init() {
-            // Check if MathJax logic is fully initialized
-            if(typeof MathJax === 'undefined' || typeof MathJax.typesetPromise !== 'function') {
-                setTimeout(init, 100);
-                return;
-            }
-            applyLanguage();
-            updateUIValues();
-            updateMathDisplay();
-            resizeAndFitViewport();
-            
-            setTimeout(startAnimation, 300);
+            attachEventListeners();
+            attachDragEventListeners();
+            updateLensButtons();
+            calcPhysics();
+            resizeCanvas();
+            updateUI();
+            requestAnimationFrame(animationLoop);
         }
 
-        document.addEventListener('DOMContentLoaded', init);
+        /* --- 3. UI & Event Logic --- */
+
+        function attachEventListeners() {
+            sliderF.addEventListener('input', (e) => { state.f = parseFloat(e.target.value); state.animProgress = 1; onInputUpdate(); });
+            sliderU.addEventListener('input', (e) => { state.u = parseFloat(e.target.value); state.animProgress = 1; onInputUpdate(); });
+            sliderHo.addEventListener('input', (e) => { state.ho = parseFloat(e.target.value); state.animProgress = 1; onInputUpdate(); });
+
+            btnConvex.addEventListener('click', () => { state.lens = 'convex'; state.animProgress = 1; updateLensButtons(); onInputUpdate(); });
+            btnConcave.addEventListener('click', () => { state.lens = 'concave'; state.animProgress = 1; updateLensButtons(); onInputUpdate(); });
+
+            chkLockView.addEventListener('change', (e) => { state.lockViewport = e.target.checked; draw(); });
+
+            btnPlay.addEventListener('click', () => { state.traceMode = 'principal'; startAnimation(); });
+            btnTraceAll.addEventListener('click', () => { state.traceMode = 'all'; startAnimation(); });
+            
+            btnReset.addEventListener('click', () => {
+                state.f = 15.0; sliderF.value = 15.0;
+                state.u = 30.0; sliderU.value = 30.0;
+                state.ho = 20.0; sliderHo.value = 20.0;
+                state.lens = 'convex';
+                state.traceMode = 'principal';
+                state.animProgress = 1;
+                updateLensButtons();
+                onInputUpdate();
+            });
+
+            btnLang.addEventListener('click', () => {
+                state.lang = state.lang === 'en' ? 'zh' : 'en';
+                applyTranslations();
+                updateUI();
+            });
+
+            // Mobile Sidebar Listeners (Sliding from Left-0 to -translate-x-full)
+            btnMobileMenu.addEventListener('click', () => {
+                mobileOverlay.classList.remove('hidden');
+                void mobileOverlay.offsetWidth; // Force reflow
+                mobileOverlay.classList.remove('opacity-0');
+                sidebar.classList.remove('-translate-x-full');
+            });
+
+            const closeMobileMenu = () => {
+                mobileOverlay.classList.add('opacity-0');
+                sidebar.classList.add('-translate-x-full');
+                setTimeout(() => mobileOverlay.classList.add('hidden'), 300);
+            };
+
+            btnCloseMenu.addEventListener('click', closeMobileMenu);
+            mobileOverlay.addEventListener('click', closeMobileMenu);
+
+            btnHelpMobile.addEventListener('click', () => {
+                closeMobileMenu();
+                helpModal.classList.remove('opacity-0', 'pointer-events-none');
+                helpModalContent.classList.remove('scale-95');
+                helpModalContent.classList.add('scale-100');
+            });
+
+            btnLangMobile.addEventListener('click', () => {
+                state.lang = state.lang === 'en' ? 'zh' : 'en';
+                applyTranslations();
+                updateUI();
+            });
+
+            btnHelp.addEventListener('click', () => {
+                helpModal.classList.remove('opacity-0', 'pointer-events-none');
+                helpModalContent.classList.remove('scale-95');
+                helpModalContent.classList.add('scale-100');
+            });
+            btnCloseHelp.addEventListener('click', () => {
+                helpModal.classList.add('opacity-0', 'pointer-events-none');
+                helpModalContent.classList.remove('scale-100');
+                helpModalContent.classList.add('scale-95');
+            });
+
+            window.addEventListener('resize', resizeCanvas);
+        }
+
+        /* --- 3.1 Touch & Mouse Drag Logic with Axis Lock --- */
+        function attachDragEventListeners() {
+            const getEventCoords = (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: clientX - rect.left,
+                    y: clientY - rect.top
+                };
+            };
+
+            const isOverObjectArrow = (coords) => {
+                const arrowX = sx(-state.u);
+                const baseSignY = sy(0);
+                const tipSignY = sy(state.ho);
+                
+                // Allow a generous 20px bounding box horizontally around the arrow
+                const toleranceX = 20; 
+                const isWithinX = Math.abs(coords.x - arrowX) < toleranceX;
+                
+                // Check if Y coordinate lies within the arrow span
+                const minY = Math.min(baseSignY, tipSignY) - 10;
+                const maxY = Math.max(baseSignY, tipSignY) + 10;
+                const isWithinY = coords.y >= minY && coords.y <= maxY;
+                
+                return isWithinX && isWithinY;
+            };
+
+            const handleStart = (e) => {
+                const coords = getEventCoords(e);
+                if (isOverObjectArrow(coords)) {
+                    state.dragging = true;
+                    state.animProgress = 1; // Instant ray rendering
+                    state.dragStartPos = coords;
+                    state.dragStartU = state.u;
+                    state.dragStartHo = state.ho;
+                    state.dragAxis = null; // No axis lock initially
+                    if (e.cancelable) e.preventDefault();
+                }
+            };
+
+            const handleMove = (e) => {
+                const coords = getEventCoords(e);
+                
+                // Change cursor appearance based on status
+                if (state.dragging) {
+                    if (state.dragAxis === 'h') canvas.style.cursor = 'ew-resize';
+                    else if (state.dragAxis === 'v') canvas.style.cursor = 'ns-resize';
+                    else canvas.style.cursor = 'move';
+                } else if (isOverObjectArrow(coords)) {
+                    canvas.style.cursor = 'grab';
+                } else {
+                    canvas.style.cursor = 'crosshair';
+                }
+
+                if (!state.dragging) return;
+
+                // Determine the dragging vector from starting click point in pixels
+                const deltaX = coords.x - state.dragStartPos.x;
+                const deltaY = coords.y - state.dragStartPos.y;
+
+                // Lock axis if threshold of 10 pixels is breached
+                const lockThreshold = 10;
+                if (!state.dragAxis) {
+                    if (Math.abs(deltaX) > lockThreshold || Math.abs(deltaY) > lockThreshold) {
+                        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                            state.dragAxis = 'h'; // Locked horizontally
+                        } else {
+                            state.dragAxis = 'v'; // Locked vertically
+                        }
+                    }
+                }
+
+                // If locked, calculate movement along that axis only
+                if (state.dragAxis === 'h') {
+                    // Horizontal calculation (adjusting object distance u)
+                    const deltaXPhys = deltaX / scale;
+                    // Object position x_u is negative, so moving right (positive delta) decreases u (gets closer to lens)
+                    let newU = state.dragStartU - deltaXPhys;
+                    newU = Math.max(5.0, Math.min(100.0, newU));
+                    // Format to one decimal place
+                    state.u = Math.round(newU * 10) / 10;
+                    sliderU.value = state.u;
+                } else if (state.dragAxis === 'v') {
+                    // Vertical calculation (adjusting height ho)
+                    const deltaYPhys = deltaY / scale;
+                    // Screen Y is inverted, so moving up (negative delta) increases physics Y (object height ho)
+                    let newHo = state.dragStartHo - deltaYPhys;
+                    newHo = Math.max(5.0, Math.min(30.0, newHo));
+                    // Format to one decimal place
+                    state.ho = Math.round(newHo * 10) / 10;
+                    sliderHo.value = state.ho;
+                }
+
+                onInputUpdate();
+                if (e.cancelable) e.preventDefault();
+            };
+
+            const handleEnd = () => {
+                if (state.dragging) {
+                    state.dragging = false;
+                    state.dragAxis = null;
+                    canvas.style.cursor = 'crosshair';
+                }
+            };
+
+            // Mouse Event hooks
+            canvas.addEventListener('mousedown', handleStart);
+            window.addEventListener('mousemove', handleMove);
+            window.addEventListener('mouseup', handleEnd);
+
+            // Touch Event hooks for iOS/Android
+            canvas.addEventListener('touchstart', handleStart, { passive: false });
+            window.addEventListener('touchmove', handleMove, { passive: false });
+            window.addEventListener('touchend', handleEnd);
+        }
+
+        function onInputUpdate() {
+            valF.textContent = state.f.toFixed(1);
+            valU.textContent = state.u.toFixed(1);
+            valHo.textContent = state.ho.toFixed(1);
+            calcPhysics();
+            updateUI();
+            draw();
+        }
+
+        function updateLensButtons() {
+            if (state.lens === 'convex') {
+                btnConvex.className = "flex-1 py-1.5 text-sm font-semibold rounded-md bg-white shadow text-[#1e3c72] transition-all";
+                btnConcave.className = "flex-1 py-1.5 text-sm font-semibold rounded-md text-slate-500 hover:text-slate-700 transition-all";
+            } else {
+                btnConcave.className = "flex-1 py-1.5 text-sm font-semibold rounded-md bg-white shadow text-[#1e3c72] transition-all";
+                btnConvex.className = "flex-1 py-1.5 text-sm font-semibold rounded-md text-slate-500 hover:text-slate-700 transition-all";
+            }
+        }
+
+        function applyTranslations() {
+            const d = dict[state.lang];
+            document.getElementById('ui-title').innerText = d.title;
+            document.getElementById('ui-help-btn').innerText = d.helpBtn;
+            document.getElementById('ui-lens-type').innerText = d.lensType;
+            btnConvex.innerText = d.convex;
+            btnConcave.innerText = d.concave;
+            document.getElementById('ui-focal').innerText = d.focal;
+            document.getElementById('ui-obj-dist').innerText = d.objDist;
+            document.getElementById('ui-obj-height').innerText = d.objHeight;
+            document.getElementById('ui-play').innerText = d.play;
+            document.getElementById('ui-trace-all').innerText = d.traceAll;
+            document.getElementById('ui-img-props').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>${d.imgProps}`;
+            document.getElementById('ui-res-v').innerText = d.resV;
+            document.getElementById('ui-prop-real').innerText = d.real;
+            document.getElementById('ui-prop-virtual').innerText = d.virtual;
+            document.getElementById('ui-prop-erect').innerText = d.erect;
+            document.getElementById('ui-prop-inverted').innerText = d.inverted;
+            document.getElementById('ui-prop-diminished').innerText = d.diminished;
+            document.getElementById('ui-prop-same').innerText = d.sameSize;
+            document.getElementById('ui-prop-magnified').innerText = d.magnified;
+            document.getElementById('ui-lock-view').innerText = d.lockView;
+            document.getElementById('ui-footer').innerText = d.footer;
+            
+            // Mobile Menu Update
+            document.getElementById('ui-title-mobile').innerText = d.title;
+            document.getElementById('ui-help-btn-mobile').innerText = d.helpBtn;
+
+            // Modal
+            document.getElementById('ui-modal-title').innerText = d.modalTitle;
+            document.getElementById('ui-help-p1').innerText = d.helpP1;
+            document.getElementById('ui-help-r1t').innerText = d.helpR1T;
+            document.getElementById('ui-help-r1d').innerText = d.helpR1D;
+            document.getElementById('ui-help-r2t').innerText = d.helpR2T;
+            document.getElementById('ui-help-r2d').innerText = d.helpR2D;
+            document.getElementById('ui-help-r3t').innerText = d.helpR3T;
+            document.getElementById('ui-help-r3d').innerText = d.helpR3D;
+            document.getElementById('ui-help-sign').innerText = d.helpSign;
+            document.getElementById('ui-help-s1').innerText = d.helpS1;
+            document.getElementById('ui-help-s2').innerText = d.helpS2;
+            document.getElementById('ui-help-s3').innerText = d.helpS3;
+        }
+
+        /* --- 4. Physics Engine --- */
+
+        function calcPhysics() {
+            const f_val = state.lens === 'convex' ? state.f : -state.f;
+            
+            // Handling object at principal focus
+            if (state.lens === 'convex' && Math.abs(state.u - state.f) < 0.05) {
+                state.v = Infinity;
+                state.hi = Infinity;
+                state.isReal = true; // Technically parallel rays
+                state.isInverted = false;
+            } else {
+                // Lens formula: 1/u + 1/v = 1/f  =>  v = uf / (u - f)
+                state.v = (state.u * f_val) / (state.u - f_val);
+                
+                // Y-coordinate logic: y_image = - ho * (v / u)
+                state.hi = -state.ho * (state.v / state.u);
+                
+                state.isReal = state.v > 0;
+                state.isInverted = state.hi < 0;
+            }
+        }
+
+        function updateUI() {
+            const d = dict[state.lang];
+            
+            if (state.v === Infinity) {
+                resVVal.textContent = `∞ cm`;
+                chkReal.checked = false;
+                chkVirtual.checked = false;
+                chkErect.checked = false;
+                chkInverted.checked = false;
+                chkDiminished.checked = false;
+                chkSame.checked = false;
+                chkMagnified.checked = false;
+            } else {
+                resVVal.textContent = `${Math.abs(state.v).toFixed(1)} cm`;
+                
+                // Nature
+                chkReal.checked = state.isReal;
+                chkVirtual.checked = !state.isReal;
+
+                // Orientation
+                chkInverted.checked = state.isInverted;
+                chkErect.checked = !state.isInverted;
+
+                // Magnification
+                const mag = Math.abs(state.v / state.u);
+                chkSame.checked = Math.abs(mag - 1) < 0.01;
+                chkMagnified.checked = mag > 1.01;
+                chkDiminished.checked = mag < 0.99;
+            }
+        }
+
+        /* --- 5. Canvas & Graphics Engine --- */
+
+        let originX = 0, originY = 0, scale = 1;
+
+        // Convert physics coordinates (cm) to screen coordinates (pixels)
+        const sx = (x) => originX + x * scale;
+        const sy = (y) => originY - y * scale; // Y is inverted in canvas
+
+        function resizeCanvas() {
+            const rect = wrapper.getBoundingClientRect();
+            // High-DPI support
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            draw();
+        }
+
+        function draw() {
+            const width = canvas.width / (window.devicePixelRatio || 1);
+            const height = canvas.height / (window.devicePixelRatio || 1);
+            ctx.clearRect(0, 0, width, height);
+
+            // 1. Calculate Viewport Boundaries
+            if (state.lockViewport) {
+                // Lock height to exactly 6 object heights (3 up, 3 down)
+                scale = height / (6 * state.ho);
+                originX = width / 2; // Center lens
+                originY = height / 2;
+            } else {
+                let minX = -state.u - 20; // Object
+                let maxX = Math.max(state.f * 2.5, 20); // Focus points
+                
+                if (state.v !== Infinity) {
+                    if (state.v > 0) maxX = Math.max(maxX, state.v + 20); // Real Image
+                    if (state.v < 0) minX = Math.min(minX, state.v - 20); // Virtual Image
+                }
+
+                let maxY = state.ho + 10;
+                if (state.v !== Infinity) {
+                    const absHi = Math.abs(state.hi);
+                    maxY = Math.max(maxY, absHi + 10);
+                }
+                let minY = -maxY; // Force symmetry vertically
+
+                // Calculate scale factor (pixels per cm)
+                const availableW = width * 0.9;
+                const availableH = height * 0.9;
+                
+                const scaleX = availableW / (maxX - minX);
+                const scaleY = availableH / (maxY - minY);
+                scale = Math.min(scaleX, scaleY);
+                if (scale < 1) scale = 1;
+                if (scale > 15) scale = 15;
+
+                // Center the origin
+                originX = width / 2 - ((maxX + minX) / 2) * scale;
+                originY = height / 2;
+            }
+
+            // 2. Draw Elements
+            drawGrid(width, height);
+            drawPrincipalAxis(width);
+            drawLens();
+            drawFocusPoints();
+            
+            // Rays and Object/Image
+            drawObject();
+            if (state.animProgress > 0) {
+                drawRays(width);
+            }
+            
+            // Only draw image if animation is finished or not running
+            if (state.animProgress === 1 && state.v !== Infinity) {
+                drawImage();
+            }
+        }
+
+        function drawGrid(w, h) {
+            ctx.lineWidth = 1;
+            
+            // Step units in cm
+            const step1Cm = scale;
+            const step5Cm = 5 * scale;
+            
+            // Draw 1cm Grid (light)
+            ctx.strokeStyle = 'rgba(203, 213, 225, 0.2)';
+            ctx.beginPath();
+            let xOff1 = originX % step1Cm;
+            for (let x = xOff1; x < w; x += step1Cm) {
+                ctx.moveTo(Math.floor(x) + 0.5, 0); ctx.lineTo(Math.floor(x) + 0.5, h);
+            }
+            let yOff1 = originY % step1Cm;
+            for (let y = yOff1; y < h; y += step1Cm) {
+                ctx.moveTo(0, Math.floor(y) + 0.5); ctx.lineTo(w, Math.floor(y) + 0.5);
+            }
+            ctx.stroke();
+
+            // Draw 5cm Grid (darker)
+            ctx.strokeStyle = 'rgba(203, 213, 225, 0.6)';
+            ctx.beginPath();
+            let xOff5 = originX % step5Cm;
+            for (let x = xOff5; x < w; x += step5Cm) {
+                ctx.moveTo(Math.floor(x) + 0.5, 0); ctx.lineTo(Math.floor(x) + 0.5, h);
+            }
+            let yOff5 = originY % step5Cm;
+            for (let y = yOff5; y < h; y += step5Cm) {
+                ctx.moveTo(0, Math.floor(y) + 0.5); ctx.lineTo(w, Math.floor(y) + 0.5);
+            }
+            ctx.stroke();
+
+            // Draw Y-Axis (aligned with Lens)
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.5)';
+            ctx.beginPath();
+            ctx.moveTo(Math.floor(originX) + 0.5, 0);
+            ctx.lineTo(Math.floor(originX) + 0.5, h);
+            ctx.stroke();
+        }
+
+        function drawPrincipalAxis(w) {
+            ctx.beginPath();
+            ctx.strokeStyle = '#94a3b8'; // slate-400
+            ctx.lineWidth = 2;
+            ctx.setLineDash([]);
+            ctx.moveTo(0, originY);
+            ctx.lineTo(w, originY);
+            ctx.stroke();
+
+            // Optical Center Label
+            ctx.fillStyle = '#64748b';
+            ctx.font = 'italic 12px serif';
+            ctx.fillText('C', sx(1), sy(-2));
+        }
+
+        function drawLens() {
+            ctx.beginPath();
+            ctx.strokeStyle = '#1e3c72';
+            ctx.lineWidth = 3;
+            ctx.moveTo(sx(0), sy(state.ho + 5));
+            ctx.lineTo(sx(0), sy(-state.ho - 5));
+            ctx.stroke();
+
+            // Draw Lens Arrows (Standard notation)
+            ctx.fillStyle = '#1e3c72';
+            const yTop = sy(state.ho + 5);
+            const yBot = sy(-state.ho - 5);
+            const arrSize = 6;
+
+            if (state.lens === 'convex') {
+                // Outward arrows
+                ctx.beginPath(); ctx.moveTo(sx(0), yTop - arrSize); ctx.lineTo(sx(0)-arrSize, yTop+arrSize); ctx.lineTo(sx(0)+arrSize, yTop+arrSize); ctx.fill();
+                ctx.beginPath(); ctx.moveTo(sx(0), yBot + arrSize); ctx.lineTo(sx(0)-arrSize, yBot-arrSize); ctx.lineTo(sx(0)+arrSize, yBot-arrSize); ctx.fill();
+            } else {
+                // Inward arrows (Concave notation)
+                ctx.beginPath(); ctx.moveTo(sx(0), yTop + arrSize); ctx.lineTo(sx(0)-arrSize, yTop-arrSize); ctx.lineTo(sx(0)+arrSize, yTop-arrSize); ctx.fill();
+                ctx.beginPath(); ctx.moveTo(sx(0), yBot - arrSize); ctx.lineTo(sx(0)-arrSize, yBot+arrSize); ctx.lineTo(sx(0)+arrSize, yBot+arrSize); ctx.fill();
+            }
+        }
+
+        function drawFocusPoints() {
+            ctx.fillStyle = '#ef4444'; // red-500
+            ctx.font = 'italic 14px serif';
+            ctx.textAlign = 'center';
+            
+            const points = [-state.f, state.f, -state.f*2, state.f*2];
+            const labels = ['F', 'F\'', '2F', '2F\''];
+            
+            points.forEach((p, i) => {
+                ctx.beginPath();
+                ctx.arc(sx(p), sy(0), 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillText(labels[i], sx(p), sy(-3));
+            });
+        }
+
+        function drawArrow(x, h, color, label, isVirtual = false) {
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 3;
+            
+            if (isVirtual) {
+                ctx.setLineDash([5, 5]);
+            } else {
+                ctx.setLineDash([]);
+            }
+            
+            const startY = sy(0);
+            const endY = sy(h);
+            
+            ctx.beginPath();
+            ctx.moveTo(sx(x), startY);
+            ctx.lineTo(sx(x), endY);
+            ctx.stroke();
+
+            // Arrow head
+            ctx.setLineDash([]); // Always solid arrowhead
+            const dir = h > 0 ? 1 : -1;
+            const arrSize = 8;
+            ctx.beginPath();
+            ctx.moveTo(sx(x), endY);
+            ctx.lineTo(sx(x) - arrSize/2, endY + dir*arrSize);
+            ctx.lineTo(sx(x) + arrSize/2, endY + dir*arrSize);
+            ctx.fill();
+
+            // Label dynamically positioned clear of the arrow head
+            ctx.font = 'italic 16px serif';
+            ctx.textAlign = 'center';
+            const labelY = endY + (h > 0 ? -12 : 24);
+            ctx.fillText(label, sx(x), labelY);
+        }
+
+        function drawObject() {
+            // Draw clean blue object arrow (draggable over entire shaft)
+            drawArrow(-state.u, state.ho, '#3b82f6', 'O', false); // blue-500
+        }
+
+        function drawImage() {
+            drawArrow(state.v, state.hi, '#dc2626', 'I', !state.isReal); // red-600
+        }
+
+        function drawRays(w) {
+            const t = state.animProgress; // 0 to 1
+            const O = { x: -state.u, y: state.ho };
+            const C = { x: 0, y: 0 };
+            
+            // Extrapolation max X distance (well beyond screen)
+            const maxX = (w - originX) / scale + 50;
+            const minX = -originX / scale - 50;
+
+            // Helper to interpolate points
+            const lerp = (p1, p2, f) => ({ x: p1.x + (p2.x - p1.x)*f, y: p1.y + (p2.y - p1.y)*f });
+
+            // Common Drawing Helpers
+            const drawLine = (p1, p2, color, dashed = false) => {
+                ctx.beginPath();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.setLineDash(dashed ? [5, 5] : []);
+                ctx.moveTo(sx(p1.x), sy(p1.y));
+                ctx.lineTo(sx(p2.x), sy(p2.y));
+                ctx.stroke();
+                ctx.setLineDash([]); // reset
+            };
+
+            const drawRayArrowMarkerAtX = (p1, p2, targetX, color) => {
+                // Only draw if ray segment has reached the target X coordinate
+                if (p2.x < targetX || p1.x > targetX) return;
+                
+                const f = (targetX - p1.x) / (p2.x - p1.x);
+                const mx = p1.x + f * (p2.x - p1.x);
+                const my = p1.y + f * (p2.y - p1.y);
+                
+                const angle = Math.atan2(sy(p2.y) - sy(p1.y), sx(p2.x) - sx(p1.x));
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                const size = 7;
+                ctx.translate(sx(mx), sy(my));
+                ctx.rotate(angle);
+                ctx.moveTo(0, 0);
+                ctx.lineTo(-size, -size * 0.6);
+                ctx.lineTo(-size, size * 0.6);
+                ctx.fill();
+                ctx.rotate(-angle);
+                ctx.translate(-sx(mx), -sy(my));
+            };
+
+            const t1 = Math.min(t * 2, 1); // Phase 1 progress
+            const t2 = Math.max(t * 2 - 1, 0); // Phase 2 progress
+
+            if (state.traceMode === 'principal') {
+                const L1 = { x: 0, y: state.ho };
+                
+                // Ray 1: Parallel -> Focus
+                let dy1, dx1;
+                if (state.lens === 'convex') {
+                    dx1 = state.f - 0;
+                    dy1 = 0 - state.ho;
+                } else {
+                    // Diverging: line from (-f, 0) through (0, ho)
+                    dx1 = 0 - (-state.f);
+                    dy1 = state.ho - 0;
+                }
+                const slope1 = dy1 / dx1;
+                const R1_end = { x: maxX, y: L1.y + slope1 * maxX };
+
+                // Ray 2: Optical Center -> Straight
+                const slope2 = (0 - state.ho) / (0 - (-state.u));
+                const R2_end = { x: maxX, y: C.y + slope2 * maxX };
+
+                // Ray 3: Focus -> Parallel
+                const hitsLens3 = Math.abs(state.hi) <= (state.ho + 5);
+                const drawRay3 = !(state.lens === 'convex' && Math.abs(state.u - state.f) < 0.05) && hitsLens3; 
+                let L3, R3_end;
+                if (drawRay3) {
+                    L3 = { x: 0, y: state.hi }; 
+                    R3_end = { x: maxX, y: state.hi };
+                }
+
+                // Draw Phase 1 (Object to Lens)
+                if (t1 > 0) {
+                    const currentL1 = lerp(O, L1, t1);
+                    const currentC = lerp(O, C, t1);
+                    drawLine(O, currentL1, '#10b981'); // Emerald
+                    drawLine(O, currentC, '#8b5cf6');  // Purple
+                    
+                    drawRayArrowMarkerAtX(O, currentL1, -state.u / 2, '#10b981');
+                    drawRayArrowMarkerAtX(O, currentC, -state.u / 2, '#8b5cf6');
+
+                    if (drawRay3) {
+                        const currentL3 = lerp(O, L3, t1);
+                        drawLine(O, currentL3, '#f59e0b'); // Amber
+                        drawRayArrowMarkerAtX(O, currentL3, -state.u / 2, '#f59e0b');
+                    }
+                }
+
+                // Draw Phase 2 (Lens outward)
+                if (t2 > 0) {
+                    const currentR1 = lerp(L1, R1_end, t2);
+                    const currentR2 = lerp(C, R2_end, t2);
+                    drawLine(L1, currentR1, '#10b981');
+                    drawLine(C, currentR2, '#8b5cf6');
+                    
+                    const rightArrowX = Math.max(10, state.f / 2);
+                    drawRayArrowMarkerAtX(L1, currentR1, rightArrowX, '#10b981');
+                    drawRayArrowMarkerAtX(C, currentR2, rightArrowX, '#8b5cf6');
+
+                    if (drawRay3) {
+                        const currentR3 = lerp(L3, R3_end, t2);
+                        drawLine(L3, currentR3, '#f59e0b');
+                        drawRayArrowMarkerAtX(L3, currentR3, rightArrowX, '#f59e0b');
+                    }
+                }
+
+                // Draw Virtual Extensions if fully animated
+                if (t === 1) {
+                    // Backward extensions for virtual images
+                    if (state.v < 0 && state.v !== -Infinity) {
+                        const I = { x: state.v, y: state.hi };
+                        drawLine(L1, I, '#10b981', true);
+                        drawLine(C, I, '#8b5cf6', true);
+                        if (drawRay3) drawLine(L3, I, '#f59e0b', true);
+                    } else if (state.lens === 'convex' && Math.abs(state.u - state.f) < 0.05) {
+                        // Parallel rays backwards to show infinity
+                        const R1_back = { x: minX, y: L1.y + slope1 * minX };
+                        const R2_back = { x: minX, y: C.y + slope2 * minX };
+                        drawLine(L1, R1_back, '#10b981', true);
+                        drawLine(C, R2_back, '#8b5cf6', true);
+                    }
+
+                    // Dotted alignment lines for Ray 3 showing its interaction with Focus
+                    if (drawRay3) {
+                        if (state.lens === 'concave') {
+                            drawLine(L3, { x: state.f, y: 0 }, '#f59e0b', true);
+                        } else if (state.lens === 'convex' && state.u < state.f) {
+                            drawLine({ x: -state.f, y: 0 }, O, '#f59e0b', true);
+                        }
+                    }
+                }
+            } else if (state.traceMode === 'all') {
+                const numRays = 8;
+                const lensTop = state.ho + 5;
+                const lensBottom = -state.ho - 5;
+                const slopeC = (0 - state.ho) / (0 - (-state.u));
+                const rayColor = '#0ea5e9'; // sky-500
+                
+                const rays = [];
+                for(let i = 0; i < numRays; i++) {
+                    const yHit = lensTop - i * (lensTop - lensBottom) / (numRays - 1);
+                    const L = { x: 0, y: yHit };
+                    
+                    let slope;
+                    if (state.v === Infinity) {
+                        slope = slopeC; // Parallel to central ray
+                    } else {
+                        slope = (state.hi - yHit) / (state.v - 0); // Converge/diverge from Image tip
+                    }
+                    const R_end = { x: maxX, y: yHit + slope * maxX };
+                    rays.push({ L, R_end, slope });
+                }
+
+                // Draw Phase 1
+                if (t1 > 0) {
+                    rays.forEach(ray => {
+                        const currentL = lerp(O, ray.L, t1);
+                        drawLine(O, currentL, rayColor);
+                        drawRayArrowMarkerAtX(O, currentL, -state.u / 2, rayColor);
+                    });
+                }
+
+                // Draw Phase 2
+                if (t2 > 0) {
+                    rays.forEach(ray => {
+                        const currentR = lerp(ray.L, ray.R_end, t2);
+                        drawLine(ray.L, currentR, rayColor);
+                        const rightArrowX = Math.max(10, state.f / 2);
+                        drawRayArrowMarkerAtX(ray.L, currentR, rightArrowX, rayColor);
+                    });
+                }
+
+                // Draw Virtual Extensions
+                if (t === 1) {
+                    if (state.v < 0 && state.v !== -Infinity) {
+                        const I = { x: state.v, y: state.hi };
+                        rays.forEach(ray => drawLine(ray.L, I, rayColor, true));
+                    } else if (state.lens === 'convex' && Math.abs(state.u - state.f) < 0.05) {
+                        rays.forEach(ray => {
+                            const R_back = { x: minX, y: ray.L.y + ray.slope * minX };
+                            drawLine(ray.L, R_back, rayColor, true);
+                        });
+                    }
+                }
+            }
+        }
+
+        /* --- 6. Animation System --- */
+
+        function startAnimation() {
+            if (state.animating) return;
+            state.animating = true;
+            state.animProgress = 0;
+            state.lastTime = performance.now();
+        }
+
+        function animationLoop(time) {
+            if (state.animating) {
+                const dt = time - state.lastTime;
+                state.lastTime = time;
+                
+                // Animation duration: 1.5 seconds
+                state.animProgress += dt / 1500;
+                if (state.animProgress >= 1) {
+                    state.animProgress = 1;
+                    state.animating = false;
+                }
+                draw();
+            }
+            requestAnimationFrame(animationLoop);
+        }
+
+        // Initialize application on load
+        window.onload = init;
 
     </script>
 </body>
