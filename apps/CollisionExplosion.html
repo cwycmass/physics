@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Collision and Explosion</title>
 
     <!-- Tailwind CSS -->
@@ -17,6 +17,17 @@
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
+    <!-- Dynamic Viewport Height Fix for Mobile -->
+    <script>
+        function setViewportHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        window.addEventListener('resize', setViewportHeight);
+        window.addEventListener('orientationchange', setViewportHeight);
+        setViewportHeight(); // Initial call
+    </script>
+
     <style>
         /* --- Custom Styles & Scrollbar --- */
         :root {
@@ -27,6 +38,10 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             -webkit-font-smoothing: antialiased;
+            /* Exact Mobile Viewport Height Constraint */
+            height: 100vh; /* Fallback */
+            height: 100dvh; /* Modern CSS */
+            height: calc(var(--vh, 1vh) * 100); /* JS Exact Calculation */
         }
 
         /* Custom Scrollbar */
@@ -66,7 +81,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 h-screen w-screen overflow-hidden flex flex-col text-slate-800">
+<body class="bg-slate-50 w-screen overflow-hidden flex flex-col text-slate-800">
 
     <!-- --- 1. Header (Desktop Only) --- -->
     <header class="hidden md:flex bg-[#1e3c72] text-white px-6 py-3 justify-between items-center shadow-md z-20 shrink-0">
@@ -254,8 +269,8 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
 
-            <!-- Physics Simulation Area -->
-            <div class="basis-[55%] md:basis-auto md:flex-1 relative min-h-0 flex flex-col min-w-0 overflow-hidden shrink-0 border-b border-slate-300">
+            <!-- EXACT SPLIT: Physics Simulation Area (55% height on Mobile, flexible on desktop) -->
+            <div class="h-[55%] md:h-auto md:flex-1 relative min-h-0 flex flex-col min-w-0 overflow-hidden shrink-0 border-b border-slate-300">
                 
                 <!-- Smart Data HUD Overlay (Collapsible on Mobile) -->
                 <div class="absolute top-4 right-4 z-20 w-auto min-w-[200px] md:w-[280px] max-w-[calc(100vw-4.5rem)] pointer-events-none">
@@ -342,16 +357,16 @@
                 </div>
             </div>
 
-            <!-- Graphs Area -->
-            <div class="basis-[45%] md:basis-auto md:h-60 bg-white grid grid-cols-2 shrink-0 z-10 relative">
+            <!-- EXACT SPLIT: Graphs Area (45% height on Mobile, fixed height on desktop, Side by Side) -->
+            <div class="h-[45%] md:h-60 bg-white grid grid-cols-2 shrink-0 z-10 relative min-h-0">
                 <!-- Total Momentum Graph -->
                 <div class="relative w-full h-full border-r border-slate-200 overflow-hidden">
-                    <span class="absolute top-1 left-2 text-[10px] md:text-xs font-bold text-slate-700 z-10 bg-white/90 px-1 py-0.5 rounded shadow-sm whitespace-nowrap" id="lbl-graph-p">總動量 - 時間圖 (<em>p</em>-<em>t</em>)</span>
+                    <span class="absolute top-1.5 left-1.5 md:left-3 text-[9px] md:text-xs font-bold text-slate-600 z-10 bg-white/90 px-1 md:px-1.5 py-0.5 rounded shadow-sm whitespace-nowrap" id="lbl-graph-p">總動量 - 時間圖 (<em>p</em>-<em>t</em>)</span>
                     <canvas id="graphP" class="absolute inset-0 w-full h-full block"></canvas>
                 </div>
                 <!-- Total KE Graph -->
                 <div class="relative w-full h-full overflow-hidden">
-                    <span class="absolute top-1 left-2 text-[10px] md:text-xs font-bold text-slate-700 z-10 bg-white/90 px-1 py-0.5 rounded shadow-sm whitespace-nowrap" id="lbl-graph-ke">總動能 - 時間圖 (KE-<em>t</em>)</span>
+                    <span class="absolute top-1.5 left-1.5 md:left-3 text-[9px] md:text-xs font-bold text-slate-600 z-10 bg-white/90 px-1 md:px-1.5 py-0.5 rounded shadow-sm whitespace-nowrap" id="lbl-graph-ke">總動能 - 時間圖 (KE-<em>t</em>)</span>
                     <canvas id="graphKE" class="absolute inset-0 w-full h-full block"></canvas>
                 </div>
             </div>
@@ -620,7 +635,6 @@
             startY: 0
         };
 
-        // DOM object will be populated strictly after the DOM has completely loaded inside init()
         let DOM = {};
 
         function initDOM() {
@@ -1523,6 +1537,7 @@
             const padX = isNarrow ? 35 * dpr : 45 * dpr;
             const padY = 25 * dpr;
             
+            // SIGNIFICANTLY increase top padding to avoid crushing with absolute HTML titles
             const padTop = isNarrow ? 55 * dpr : 65 * dpr; 
             const padRight = isNarrow ? 20 * dpr : 30 * dpr; 
 
@@ -1541,6 +1556,7 @@
             let forceZero = (key === 'ke');
             let isMomentum = (key === 'p');
 
+            // Force 0 inside the bounds based on chart type
             if (forceZero) {
                 if (minV > 0) minV = 0;
             } else if (isMomentum) {
@@ -1550,6 +1566,7 @@
 
             let range = maxV - minV;
             
+            // Add padding (breathing room) for lines so they don't stick to the absolute top/bottom
             if (range < 1e-3) {
                 if (forceZero) {
                     maxV = maxV > 0 ? maxV * 1.5 : 1.0; 
@@ -1575,29 +1592,35 @@
             let zeroY = padTop + drawH * (maxV - 0) / range;
             let hasZeroLine = (minV <= 0 && maxV >= 0);
 
+            // Draw Axes
             cctx.strokeStyle = '#94a3b8';
             cctx.lineWidth = 1 * dpr;
             cctx.beginPath();
             
+            // X axis
             const rightArrowTipX = w - padRight + 15 * dpr;
             cctx.moveTo(padX, zeroY);
             cctx.lineTo(rightArrowTipX, zeroY);
+            // X axis arrow
             cctx.lineTo(rightArrowTipX - 5 * dpr, zeroY - 3 * dpr);
             cctx.moveTo(rightArrowTipX, zeroY);
             cctx.lineTo(rightArrowTipX - 5 * dpr, zeroY + 3 * dpr);
             
+            // Y axis
             let bottomY = h - padY;
             if (zeroY > bottomY) bottomY = zeroY;
-            const arrowTipY = padTop - 25 * dpr; 
+            const arrowTipY = padTop - 25 * dpr; // Keep arrow well below the HTML title
             
             cctx.moveTo(padX, bottomY);
             cctx.lineTo(padX, arrowTipY);
+            // Y axis arrow
             cctx.lineTo(padX - 3 * dpr, arrowTipY + 5 * dpr);
             cctx.moveTo(padX, arrowTipY);
             cctx.lineTo(padX + 3 * dpr, arrowTipY + 5 * dpr);
             
             cctx.stroke();
 
+            // Draw Line Data
             cctx.strokeStyle = color;
             cctx.lineWidth = 2 * dpr;
             cctx.lineJoin = 'round';
@@ -1611,8 +1634,10 @@
             }
             cctx.stroke();
 
+            // Render Texts
             cctx.fillStyle = '#64748b';
             
+            // X axis unit
             cctx.textAlign = 'right';
             cctx.textBaseline = 'bottom';
             cctx.font = `normal ${fontSize * dpr}px sans-serif`;
@@ -1623,6 +1648,7 @@
             cctx.font = `italic ${fontSize * dpr}px sans-serif`;
             cctx.fillText('t', rightArrowTipX - xUnitWidth, zeroY - 8 * dpr);
 
+            // Y axis unit (placed below arrow tip but above the data line max)
             cctx.textAlign = 'left';
             cctx.textBaseline = 'bottom';
             const labelYPos = padTop - 10 * dpr;
@@ -1632,20 +1658,24 @@
             cctx.font = `normal ${fontSize * dpr}px sans-serif`;
             cctx.fillText(labelUnit, padX + 5 * dpr + varWidth, labelYPos);
 
+            // Y-tick max
             cctx.font = `normal ${fontSize * dpr}px sans-serif`;
             cctx.textAlign = 'right';
             cctx.textBaseline = 'middle';
             cctx.fillText(maxV.toFixed(1), padX - 6 * dpr, padTop);
             
+            // Y-tick min (Only draw if it's visually distinct from zero)
             if (minV < -1e-2) {
                 cctx.fillText(minV.toFixed(1), padX - 6 * dpr, h - padY);
             }
 
+            // Zero label (Ensure it gets drawn correctly)
             if (hasZeroLine) {
                 cctx.textBaseline = 'top';
                 cctx.fillText('0', padX - 6 * dpr, zeroY + 2 * dpr);
             }
 
+            // X-tick Max Time
             cctx.textAlign = 'center';
             cctx.fillText(maxT.toFixed(1), padX + drawW, zeroY + 8 * dpr);
         }
