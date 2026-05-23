@@ -64,7 +64,8 @@
         .hidden-pane { display: none !important; }
     </style>
 </head>
-<body class="h-screen w-screen overflow-hidden flex flex-col bg-bglight text-slate-800 font-sans">
+<!-- 移除 100vh 依賴，改用 fixed inset-0 強制貼合實際 viewport，避免 Safari 底欄遮擋 -->
+<body class="fixed inset-0 overflow-hidden flex flex-col bg-bglight text-slate-800 font-sans">
 
     <!-- --- 1. Header & Navigation --- -->
     <header class="bg-primary text-white shadow-md z-20 flex-none flex justify-between items-center px-4 py-3">
@@ -100,7 +101,7 @@
                     <div class="mb-4">
                         <div class="flex justify-between text-sm mb-1">
                             <label class="text-slate-600 font-medium"><span data-i18n="u">初速</span> ($u$)</label>
-                            <span class="font-bold text-primary"><span id="val-u">15.0</span> m s⁻¹</span>
+                            <span class="font-bold text-primary"><span id="val-u">15.0</span> $\mathrm{m\,s^{-1}}$</span>
                         </div>
                         <input type="range" id="input-u" min="0.1" max="100" step="0.1" value="15.0" class="w-full accent-primary">
                     </div>
@@ -109,7 +110,7 @@
                     <div class="mb-4">
                         <div class="flex justify-between text-sm mb-1">
                             <label class="text-slate-600 font-medium"><span data-i18n="theta">發射角</span> ($\theta$)</label>
-                            <span class="font-bold text-primary"><span id="val-theta">45.0</span>°</span>
+                            <span class="font-bold text-primary"><span id="val-theta">45.0</span>$^\circ$</span>
                         </div>
                         <input type="range" id="input-theta" min="0" max="90" step="0.1" value="45.0" class="w-full accent-primary">
                     </div>
@@ -118,7 +119,7 @@
                     <div class="mb-4">
                         <div class="flex justify-between text-sm mb-1">
                             <label class="text-slate-600 font-medium"><span data-i18n="h">初始高度</span> ($h$)</label>
-                            <span class="font-bold text-primary"><span id="val-h">0.0</span> m</span>
+                            <span class="font-bold text-primary"><span id="val-h">0.0</span> $\mathrm{m}$</span>
                         </div>
                         <input type="range" id="input-h" min="0" max="100" step="0.5" value="0.0" class="w-full accent-primary">
                     </div>
@@ -167,11 +168,11 @@
                 <!-- Live Diagnostics -->
                 <div class="bg-sky-50 border border-sky-200 rounded-xl p-3 shadow-sm text-xs font-mono text-slate-700">
                     <div class="grid grid-cols-2 gap-y-2">
-                        <div>$t$: <span id="stat-t" class="font-bold text-sky-700">0.00</span> s</div>
-                        <div>$x$: <span id="stat-x" class="font-bold text-sky-700">0.00</span> m</div>
-                        <div>$y$: <span id="stat-y" class="font-bold text-sky-700">0.00</span> m</div>
-                        <div>$v_x$: <span id="stat-vx" class="font-bold text-sky-700">0.00</span></div>
-                        <div>$v_y$: <span id="stat-vy" class="font-bold text-sky-700">0.00</span></div>
+                        <div>$t$: <span id="stat-t" class="font-bold text-sky-700">0.00</span> $\mathrm{s}$</div>
+                        <div>$x$: <span id="stat-x" class="font-bold text-sky-700">0.00</span> $\mathrm{m}$</div>
+                        <div>$y$: <span id="stat-y" class="font-bold text-sky-700">0.00</span> $\mathrm{m}$</div>
+                        <div>$v_x$: <span id="stat-vx" class="font-bold text-sky-700">0.00</span> $\mathrm{m\,s^{-1}}$</div>
+                        <div>$v_y$: <span id="stat-vy" class="font-bold text-sky-700">0.00</span> $\mathrm{m\,s^{-1}}$</div>
                     </div>
                 </div>
 
@@ -208,11 +209,11 @@
                 <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm border border-slate-200 rounded-lg p-3 shadow-md text-sm pointer-events-none">
                     <div class="grid grid-cols-2 gap-x-6 gap-y-1">
                         <div class="text-slate-500" data-i18n="lblMaxH">最大高度</div>
-                        <div class="font-bold text-right text-primary"><span id="lbl-max-h">0.00</span> m</div>
+                        <div class="font-bold text-right text-primary"><span id="lbl-max-h">0.00</span> $\mathrm{m}$</div>
                         <div class="text-slate-500" data-i18n="lblRange">水平射程</div>
-                        <div class="font-bold text-right text-primary"><span id="lbl-range">0.00</span> m</div>
+                        <div class="font-bold text-right text-primary"><span id="lbl-range">0.00</span> $\mathrm{m}$</div>
                         <div class="text-slate-500" data-i18n="lblTime">飛行時間</div>
-                        <div class="font-bold text-right text-primary"><span id="lbl-time">0.00</span> s</div>
+                        <div class="font-bold text-right text-primary"><span id="lbl-time">0.00</span> $\mathrm{s}$</div>
                     </div>
                 </div>
             </div>
@@ -240,13 +241,13 @@
                     <table class="w-full text-center text-sm" id="data-table">
                         <thead class="bg-slate-50 sticky top-0 border-b border-slate-200 shadow-sm z-10 text-primary font-medium">
                             <tr>
-                                <th class="py-2 px-1">$t$ (s)</th>
-                                <th class="py-2 px-1">$x$ (m)</th>
-                                <th class="py-2 px-1">$y$ (m)</th>
-                                <th class="py-2 px-1">$v_x$ (m s⁻¹)</th>
-                                <th class="py-2 px-1">$v_y$ (m s⁻¹)</th>
-                                <th class="py-2 px-1">$a_x$ (m s⁻²)</th>
-                                <th class="py-2 px-1">$a_y$ (m s⁻²)</th>
+                                <th class="py-2 px-1">$t \,/\, \mathrm{s}$</th>
+                                <th class="py-2 px-1">$x \,/\, \mathrm{m}$</th>
+                                <th class="py-2 px-1">$y \,/\, \mathrm{m}$</th>
+                                <th class="py-2 px-1">$v_x \,/\, \mathrm{m\,s^{-1}}$</th>
+                                <th class="py-2 px-1">$v_y \,/\, \mathrm{m\,s^{-1}}$</th>
+                                <th class="py-2 px-1">$a_x \,/\, \mathrm{m\,s^{-2}}$</th>
+                                <th class="py-2 px-1">$a_y \,/\, \mathrm{m\,s^{-2}}$</th>
                             </tr>
                         </thead>
                         <tbody class="text-slate-600 divide-y divide-slate-100 font-mono text-xs">
@@ -668,9 +669,20 @@
 
             ctx.textAlign = 'left';
             ctx.fillStyle = '#1e3c72'; 
+            
+            // X-axis label with SI styling (Italic variable, upright unit)
             ctx.font = 'italic 12px "Times New Roman", serif';
-            ctx.fillText('x / m', cw - 35, state.originY - 10);
-            ctx.fillText('y / m', state.originX + 10, 15);
+            ctx.fillText('x', cw - 40, state.originY - 10);
+            let xW = ctx.measureText('x').width;
+            ctx.font = '12px "Times New Roman", serif';
+            ctx.fillText(' / m', cw - 40 + xW, state.originY - 10);
+
+            // Y-axis label with SI styling
+            ctx.font = 'italic 12px "Times New Roman", serif';
+            ctx.fillText('y', state.originX + 10, 15);
+            let yW = ctx.measureText('y').width;
+            ctx.font = '12px "Times New Roman", serif';
+            ctx.fillText(' / m', state.originX + 10 + yW, 15);
 
             const p = getParams();
             if(p.h > 0) {
@@ -845,6 +857,7 @@
         }
 
         function initCharts() {
+            // Updated to SI styling format text strings natively matched to font
             charts.x = createChart('chart-x', 'x / m', '#0ea5e9'); 
             charts.y = createChart('chart-y', 'y / m', '#10b981'); 
             charts.vx = createChart('chart-vx', 'v_x / m s⁻¹', '#8b5cf6'); 
@@ -923,7 +936,8 @@
                 return;
             }
 
-            let csv = "data:text/csv;charset=utf-8,t (s),x (m),y (m),v_x (m/s),v_y (m/s),a_x (m/s^2),a_y (m/s^2)\n";
+            // CSV 匯出標題修改以匹配 SI style (variable / unit)
+            let csv = "data:text/csv;charset=utf-8,t / s,x / m,y / m,v_x / m s^-1,v_y / m s^-1,a_x / m s^-2,a_y / m s^-2\n";
             target.forEach(r => {
                 csv += `${r.t.toFixed(3)},${r.x.toFixed(3)},${r.y.toFixed(3)},${r.vx.toFixed(3)},${r.vy.toFixed(3)},${r.ax.toFixed(3)},${r.ay.toFixed(3)}\n`;
             });
