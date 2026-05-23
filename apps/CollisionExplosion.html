@@ -96,7 +96,7 @@
         <!-- Sidebar Controls -->
         <aside id="sidebar-container" class="fixed inset-y-0 left-0 z-50 w-80 max-w-[90%] bg-white shadow-2xl transform -translate-x-full transition-transform duration-300 md:relative md:translate-x-0 md:flex md:w-80 lg:w-[400px] md:shadow-[2px_0_10px_rgba(0,0,0,0.05)] flex-col shrink-0 overflow-hidden">
             
-            <!-- Mobile Sidebar Header (Integrated Header for Phone) -->
+            <!-- Mobile Sidebar Header -->
             <div class="md:hidden bg-[#1e3c72] text-white p-4 flex justify-between items-center shrink-0">
                 <div class="flex items-center gap-2 overflow-hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-400 shrink-0">
@@ -254,8 +254,8 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
 
-            <!-- Physics Simulation Area (60% on Mobile, flexible on desktop) -->
-            <div class="basis-[60%] md:basis-auto md:flex-1 relative min-h-0 flex flex-col min-w-0 overflow-hidden shrink-0">
+            <!-- Physics Simulation Area -->
+            <div class="basis-[55%] md:basis-auto md:flex-1 relative min-h-0 flex flex-col min-w-0 overflow-hidden shrink-0 border-b border-slate-300">
                 
                 <!-- Smart Data HUD Overlay (Collapsible on Mobile) -->
                 <div class="absolute top-4 right-4 z-20 w-auto min-w-[200px] md:w-[280px] max-w-[calc(100vw-4.5rem)] pointer-events-none">
@@ -342,16 +342,16 @@
                 </div>
             </div>
 
-            <!-- Graphs Area (40% on Mobile, fixed height on desktop, Side by Side) -->
-            <div class="basis-[40%] md:basis-auto md:h-56 bg-white border-t border-slate-200 grid grid-cols-2 shrink-0 z-10 relative">
+            <!-- Graphs Area -->
+            <div class="basis-[45%] md:basis-auto md:h-60 bg-white grid grid-cols-2 shrink-0 z-10 relative">
                 <!-- Total Momentum Graph -->
                 <div class="relative w-full h-full border-r border-slate-200 overflow-hidden">
-                    <span class="absolute top-1.5 left-1.5 md:left-3 text-[9px] md:text-xs font-bold text-slate-600 z-10 bg-white/90 px-1 md:px-1.5 py-0.5 rounded whitespace-nowrap" id="lbl-graph-p">總動量 - 時間圖 (<em>p</em>-<em>t</em>)</span>
+                    <span class="absolute top-1 left-2 text-[10px] md:text-xs font-bold text-slate-700 z-10 bg-white/90 px-1 py-0.5 rounded shadow-sm whitespace-nowrap" id="lbl-graph-p">總動量 - 時間圖 (<em>p</em>-<em>t</em>)</span>
                     <canvas id="graphP" class="absolute inset-0 w-full h-full block"></canvas>
                 </div>
                 <!-- Total KE Graph -->
                 <div class="relative w-full h-full overflow-hidden">
-                    <span class="absolute top-1.5 left-1.5 md:left-3 text-[9px] md:text-xs font-bold text-slate-600 z-10 bg-white/90 px-1 md:px-1.5 py-0.5 rounded whitespace-nowrap" id="lbl-graph-ke">總動能 - 時間圖 (KE-<em>t</em>)</span>
+                    <span class="absolute top-1 left-2 text-[10px] md:text-xs font-bold text-slate-700 z-10 bg-white/90 px-1 py-0.5 rounded shadow-sm whitespace-nowrap" id="lbl-graph-ke">總動能 - 時間圖 (KE-<em>t</em>)</span>
                     <canvas id="graphKE" class="absolute inset-0 w-full h-full block"></canvas>
                 </div>
             </div>
@@ -510,64 +510,69 @@
             applyLanguage();
         }
 
+        // Added safer helper functions for DOM operations
         function applyLanguage() {
             const t = dict[currentLang];
-            document.getElementById('app-title').textContent = t.title;
-            document.getElementById('app-title-mobile').textContent = t.title;
             
-            document.getElementById('lbl-play').textContent = state.isRunning ? t.pause : t.play;
+            const setText = (id, txt) => { const e = document.getElementById(id); if (e) e.textContent = txt; };
+            const setHTML = (id, html) => { const e = document.getElementById(id); if (e) e.innerHTML = html; };
+            const setAttr = (id, attr, val) => { const e = document.getElementById(id); if (e) e.setAttribute(attr, val); };
+
+            setText('app-title', t.title);
+            setText('app-title-mobile', t.title);
+            setText('lbl-play', state.isRunning ? t.pause : t.play);
             
-            document.getElementById('tab-col').textContent = t.tabCol;
-            document.getElementById('tab-exp').textContent = t.tabExp;
+            setText('tab-col', t.tabCol);
+            setText('tab-exp', t.tabExp);
             
-            document.getElementById('lbl-obj1').innerHTML = t.obj1;
-            document.getElementById('lbl-obj2').innerHTML = t.obj2;
-            document.getElementById('lbl-m1').innerHTML = t.mass1;
-            document.getElementById('lbl-u1').innerHTML = t.vel1;
-            document.getElementById('lbl-m2').innerHTML = t.mass2;
-            document.getElementById('lbl-u2').innerHTML = t.vel2;
+            setHTML('lbl-obj1', t.obj1);
+            setHTML('lbl-obj2', t.obj2);
+            setHTML('lbl-m1', t.mass1);
+            setHTML('lbl-u1', t.vel1);
+            setHTML('lbl-m2', t.mass2);
+            setHTML('lbl-u2', t.vel2);
             
-            document.getElementById('lbl-env').textContent = t.env;
-            document.getElementById('lbl-mu').innerHTML = t.friction;
-            document.getElementById('lbl-interaction').textContent = t.interaction;
-            document.getElementById('lbl-e').innerHTML = t.restitution;
-            document.getElementById('lbl-exp-e').innerHTML = t.expEnergy;
-            document.getElementById('lbl-exp-u').innerHTML = t.expVel;
-            document.getElementById('lbl-speed').textContent = t.speed;
+            setText('lbl-env', t.env);
+            setHTML('lbl-mu', t.friction);
+            setText('lbl-interaction', t.interaction);
+            setHTML('lbl-e', t.restitution);
+            setHTML('lbl-exp-e', t.expEnergy);
+            setHTML('lbl-exp-u', t.expVel);
+            setText('lbl-speed', t.speed);
             
-            document.getElementById('lbl-walls').textContent = t.walls;
-            document.getElementById('lbl-left-wall').textContent = t.leftWall;
-            document.getElementById('lbl-right-wall').textContent = t.rightWall;
+            setText('lbl-walls', t.walls);
+            setText('lbl-left-wall', t.leftWall);
+            setText('lbl-right-wall', t.rightWall);
             
-            document.getElementById('lbl-data').textContent = t.data;
-            document.getElementById('lbl-totalP').innerHTML = t.totalP;
-            document.getElementById('lbl-totalKE').innerHTML = t.totalKE;
-            document.getElementById('lbl-collisions').textContent = t.collisions;
-            document.getElementById('lbl-time').textContent = t.time;
+            setText('lbl-data', t.data);
+            setHTML('lbl-totalP', t.totalP);
+            setHTML('lbl-totalKE', t.totalKE);
+            setText('lbl-collisions', t.collisions);
+            setText('lbl-time', t.time);
             
-            document.getElementById('lbl-graph-p').innerHTML = t.graphP;
-            document.getElementById('lbl-graph-ke').innerHTML = t.graphKE;
+            setHTML('lbl-graph-p', t.graphP);
+            setHTML('lbl-graph-ke', t.graphKE);
             
-            document.getElementById('val-m1').title = t.clickMass;
-            document.getElementById('val-m2').title = t.clickMass;
-            document.getElementById('val-u1').title = t.clickVel;
-            document.getElementById('val-u2').title = t.clickVel;
-            document.getElementById('val-exp-u').title = t.clickVel;
-            document.getElementById('val-exp-e').title = t.clickEnergy;
+            setAttr('val-m1', 'title', t.clickMass);
+            setAttr('val-m2', 'title', t.clickMass);
+            setAttr('val-u1', 'title', t.clickVel);
+            setAttr('val-u2', 'title', t.clickVel);
+            setAttr('val-exp-u', 'title', t.clickVel);
+            setAttr('val-exp-e', 'title', t.clickEnergy);
             
-            document.getElementById('lbl-footer').textContent = t.footer;
-            document.getElementById('lbl-footer-mobile').textContent = t.footer;
+            setText('lbl-footer', t.footer);
+            setText('lbl-footer-mobile', t.footer);
             
-            document.getElementById('modal-title').textContent = t.modalTitle;
-            document.getElementById('modal-sec1').textContent = t.modalSec1;
-            document.getElementById('modal-desc1').textContent = t.modalDesc1;
-            document.getElementById('modal-sec2').textContent = t.modalSec2;
-            document.getElementById('modal-desc2').textContent = t.modalDesc2;
-            document.getElementById('lbl-desc-elastic').textContent = t.modalElastic;
-            document.getElementById('lbl-desc-inelastic').textContent = t.modalInelastic;
-            document.getElementById('lbl-desc-perfectly').textContent = t.modalPerfect;
-            document.getElementById('btn-close-help2').textContent = t.modalBtn;
-            document.getElementById('warning-msg').textContent = t.warning;
+            setText('modal-title', t.modalTitle);
+            setText('modal-sec1', t.modalSec1);
+            setText('modal-desc1', t.modalDesc1);
+            setText('modal-sec2', t.modalSec2);
+            setText('modal-desc2', t.modalDesc2);
+            setText('lbl-desc-elastic', t.modalElastic);
+            setText('lbl-desc-inelastic', t.modalInelastic);
+            setText('lbl-desc-perfectly', t.modalPerfect);
+            setText('btn-close-help2', t.modalBtn);
+            setText('warning-msg', t.warning);
 
             updateCollisionLabel();
             updateFrictionLabel();
@@ -615,47 +620,52 @@
             startY: 0
         };
 
-        const DOM = {
-            sliders: {
-                m1: document.getElementById('slider-m1'),
-                u1: document.getElementById('slider-u1'),
-                m2: document.getElementById('slider-m2'),
-                u2: document.getElementById('slider-u2'),
-                mu: document.getElementById('slider-mu'),
-                e:  document.getElementById('slider-e'),
-                speed: document.getElementById('slider-speed'),
-                expE: document.getElementById('slider-exp-e'),
-                expU: document.getElementById('slider-exp-u')
-            },
-            vals: {
-                m1: document.getElementById('val-m1'),
-                u1: document.getElementById('val-u1'),
-                m2: document.getElementById('val-m2'),
-                u2: document.getElementById('val-u2'),
-                mu: document.getElementById('val-mu'),
-                muDesc: document.getElementById('lbl-mu-desc'),
-                eDesc: document.getElementById('val-e-desc'),
-                speed: document.getElementById('val-speed'),
-                expE: document.getElementById('val-exp-e'),
-                expU: document.getElementById('val-exp-u')
-            },
-            toggles: {
-                leftWall: document.getElementById('toggle-left-wall'),
-                rightWall: document.getElementById('toggle-right-wall')
-            },
-            data: {
-                p: document.getElementById('data-p'),
-                ke: document.getElementById('data-ke'),
-                collisions: document.getElementById('data-collisions'),
-                time: document.getElementById('data-time')
-            },
-            colType: document.getElementById('lbl-colType'),
-            warning: document.getElementById('warning-msg'),
-            tabs: {
-                col: document.getElementById('tab-col'),
-                exp: document.getElementById('tab-exp')
-            }
-        };
+        // DOM object will be populated strictly after the DOM has completely loaded inside init()
+        let DOM = {};
+
+        function initDOM() {
+            DOM = {
+                sliders: {
+                    m1: document.getElementById('slider-m1'),
+                    u1: document.getElementById('slider-u1'),
+                    m2: document.getElementById('slider-m2'),
+                    u2: document.getElementById('slider-u2'),
+                    mu: document.getElementById('slider-mu'),
+                    e:  document.getElementById('slider-e'),
+                    speed: document.getElementById('slider-speed'),
+                    expE: document.getElementById('slider-exp-e'),
+                    expU: document.getElementById('slider-exp-u')
+                },
+                vals: {
+                    m1: document.getElementById('val-m1'),
+                    u1: document.getElementById('val-u1'),
+                    m2: document.getElementById('val-m2'),
+                    u2: document.getElementById('val-u2'),
+                    mu: document.getElementById('val-mu'),
+                    muDesc: document.getElementById('lbl-mu-desc'),
+                    eDesc: document.getElementById('val-e-desc'),
+                    speed: document.getElementById('val-speed'),
+                    expE: document.getElementById('val-exp-e'),
+                    expU: document.getElementById('val-exp-u')
+                },
+                toggles: {
+                    leftWall: document.getElementById('toggle-left-wall'),
+                    rightWall: document.getElementById('toggle-right-wall')
+                },
+                data: {
+                    p: document.getElementById('data-p'),
+                    ke: document.getElementById('data-ke'),
+                    collisions: document.getElementById('data-collisions'),
+                    time: document.getElementById('data-time')
+                },
+                colType: document.getElementById('lbl-colType'),
+                warning: document.getElementById('warning-msg'),
+                tabs: {
+                    col: document.getElementById('tab-col'),
+                    exp: document.getElementById('tab-exp')
+                }
+            };
+        }
 
         function getRadius(mass) {
             return Math.max(0.15, 0.2 + Math.log10(mass) * 0.12);
@@ -666,6 +676,7 @@
            ========================================== */
 
         function getEFromSlider() {
+            if (!DOM.sliders || !DOM.sliders.e) return 1.0;
             const sliderVal = parseFloat(DOM.sliders.e.value);
             return 1.0 - (sliderVal / 10.0);
         }
@@ -745,6 +756,8 @@
         }
 
         function checkOverlap() {
+            if (!DOM.warning) return; // Fail-safe
+            
             if (state.mode === 'explosion') {
                 DOM.warning.classList.add('hidden');
                 return;
@@ -1028,10 +1041,10 @@
             let pTotal = (o1.m * o1.v) + (o2.m * o2.v);
             let keTotal = (0.5 * o1.m * o1.v * o1.v) + (0.5 * o2.m * o2.v * o2.v);
 
-            DOM.data.p.textContent = pTotal.toFixed(2);
-            DOM.data.ke.textContent = keTotal.toFixed(2);
-            DOM.data.collisions.textContent = state.collisionCount;
-            DOM.data.time.textContent = state.time.toFixed(2);
+            if (DOM.data && DOM.data.p) DOM.data.p.textContent = pTotal.toFixed(2);
+            if (DOM.data && DOM.data.ke) DOM.data.ke.textContent = keTotal.toFixed(2);
+            if (DOM.data && DOM.data.collisions) DOM.data.collisions.textContent = state.collisionCount;
+            if (DOM.data && DOM.data.time) DOM.data.time.textContent = state.time.toFixed(2);
         }
 
         /* ==========================================
@@ -1050,6 +1063,7 @@
 
         function setupGenericEditableField(elementId, sliderId, stateKey, minVal, maxVal) {
             const textElement = document.getElementById(elementId);
+            if (!textElement) return;
             textElement.addEventListener('click', () => {
                 if (textElement.querySelector('input')) return;
 
@@ -1080,7 +1094,7 @@
 
                     state[stateKey] = val;
                     const slider = document.getElementById(sliderId);
-                    slider.value = Math.max(parseFloat(slider.min), Math.min(val, parseFloat(slider.max)));
+                    if (slider) slider.value = Math.max(parseFloat(slider.min), Math.min(val, parseFloat(slider.max)));
                     
                     textElement.innerHTML = val.toFixed(1);
                     if (!state.isRunning) resetSimulation();
@@ -1102,6 +1116,7 @@
 
         function setupEditableField(elementId, sliderId, objectIndex, propKey, minVal, maxVal) {
             const textElement = document.getElementById(elementId);
+            if (!textElement) return;
             textElement.addEventListener('click', () => {
                 if (textElement.querySelector('input')) return;
 
@@ -1133,7 +1148,7 @@
                     state.objects[objectIndex][propKey] = val;
                     
                     const slider = document.getElementById(sliderId);
-                    slider.value = Math.max(parseFloat(slider.min), Math.min(val, parseFloat(slider.max)));
+                    if (slider) slider.value = Math.max(parseFloat(slider.min), Math.min(val, parseFloat(slider.max)));
                     
                     textElement.innerHTML = val.toFixed(1);
 
@@ -1169,73 +1184,103 @@
             const overlay = document.getElementById('sidebar-overlay');
             
             const btnMenuFloating = document.getElementById('btn-menu-floating');
-            if (btnMenuFloating) {
+            if (btnMenuFloating && sidebar && overlay) {
                 btnMenuFloating.addEventListener('click', () => {
                     sidebar.classList.remove('-translate-x-full');
                     overlay.classList.remove('hidden');
                 });
             }
             
-            overlay.addEventListener('click', () => {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-            });
+            if (overlay && sidebar) {
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                });
+            }
 
-            document.getElementById('hud-header').addEventListener('click', () => {
-                if (window.innerWidth < 768) {
-                    const content = document.getElementById('hud-content');
-                    const chevron = document.getElementById('hud-chevron');
-                    content.classList.toggle('hidden');
-                    chevron.classList.toggle('rotate-180');
-                }
-            });
+            const hudHeader = document.getElementById('hud-header');
+            if (hudHeader) {
+                hudHeader.addEventListener('click', () => {
+                    if (window.innerWidth < 768) {
+                        const content = document.getElementById('hud-content');
+                        const chevron = document.getElementById('hud-chevron');
+                        if(content) content.classList.toggle('hidden');
+                        if(chevron) chevron.classList.toggle('rotate-180');
+                    }
+                });
+            }
 
-            document.getElementById('btn-lang').addEventListener('click', toggleLanguage);
-            document.getElementById('btn-lang-mobile').addEventListener('click', toggleLanguage);
-            document.getElementById('btn-help').addEventListener('click', () => document.getElementById('help-modal').classList.remove('hidden'));
-            document.getElementById('btn-help-mobile').addEventListener('click', () => document.getElementById('help-modal').classList.remove('hidden'));
-            document.getElementById('btn-close-help').addEventListener('click', () => document.getElementById('help-modal').classList.add('hidden'));
-            document.getElementById('btn-close-help2').addEventListener('click', () => document.getElementById('help-modal').classList.add('hidden'));
+            const btnLang = document.getElementById('btn-lang');
+            const btnLangMobile = document.getElementById('btn-lang-mobile');
+            if (btnLang) btnLang.addEventListener('click', toggleLanguage);
+            if (btnLangMobile) btnLangMobile.addEventListener('click', toggleLanguage);
 
-            DOM.tabs.col.addEventListener('click', () => setMode('collision'));
-            DOM.tabs.exp.addEventListener('click', () => setMode('explosion'));
+            const btnHelp = document.getElementById('btn-help');
+            const btnHelpMobile = document.getElementById('btn-help-mobile');
+            const helpModal = document.getElementById('help-modal');
+            const btnCloseHelp = document.getElementById('btn-close-help');
+            const btnCloseHelp2 = document.getElementById('btn-close-help2');
 
-            document.getElementById('btn-play').addEventListener('click', togglePlay);
-            document.getElementById('btn-reset').addEventListener('click', resetSimulation);
-            document.getElementById('btn-step').addEventListener('click', stepSimulation);
+            if (btnHelp && helpModal) btnHelp.addEventListener('click', () => helpModal.classList.remove('hidden'));
+            if (btnHelpMobile && helpModal) btnHelpMobile.addEventListener('click', () => helpModal.classList.remove('hidden'));
+            if (btnCloseHelp && helpModal) btnCloseHelp.addEventListener('click', () => helpModal.classList.add('hidden'));
+            if (btnCloseHelp2 && helpModal) btnCloseHelp2.addEventListener('click', () => helpModal.classList.add('hidden'));
 
-            DOM.toggles.leftWall.addEventListener('change', () => {
-                state.leftWallEnabled = DOM.toggles.leftWall.checked;
-                drawCanvas();
-            });
-            DOM.toggles.rightWall.addEventListener('change', () => {
-                state.rightWallEnabled = DOM.toggles.rightWall.checked;
-                drawCanvas();
-            });
+            if (DOM.tabs.col) DOM.tabs.col.addEventListener('click', () => setMode('collision'));
+            if (DOM.tabs.exp) DOM.tabs.exp.addEventListener('click', () => setMode('explosion'));
 
-            document.getElementById('btn-zoom-in').addEventListener('click', () => scaleCamera(1.2));
-            document.getElementById('btn-zoom-out').addEventListener('click', () => scaleCamera(1 / 1.2));
-            document.getElementById('btn-zoom-reset').addEventListener('click', fitCameraToObjects);
+            const btnPlay = document.getElementById('btn-play');
+            const btnReset = document.getElementById('btn-reset');
+            const btnStep = document.getElementById('btn-step');
 
-            DOM.sliders.speed.addEventListener('input', (ev) => {
-                const val = parseFloat(ev.target.value);
-                document.querySelectorAll('#slider-speed').forEach(s => s.value = val);
-                updateSpeedLabel();
-            });
+            if (btnPlay) btnPlay.addEventListener('click', togglePlay);
+            if (btnReset) btnReset.addEventListener('click', resetSimulation);
+            if (btnStep) btnStep.addEventListener('click', stepSimulation);
+
+            if (DOM.toggles.leftWall) {
+                DOM.toggles.leftWall.addEventListener('change', () => {
+                    state.leftWallEnabled = DOM.toggles.leftWall.checked;
+                    drawCanvas();
+                });
+            }
+            if (DOM.toggles.rightWall) {
+                DOM.toggles.rightWall.addEventListener('change', () => {
+                    state.rightWallEnabled = DOM.toggles.rightWall.checked;
+                    drawCanvas();
+                });
+            }
+
+            const btnZoomIn = document.getElementById('btn-zoom-in');
+            const btnZoomOut = document.getElementById('btn-zoom-out');
+            const btnZoomReset = document.getElementById('btn-zoom-reset');
+
+            if (btnZoomIn) btnZoomIn.addEventListener('click', () => scaleCamera(1.2));
+            if (btnZoomOut) btnZoomOut.addEventListener('click', () => scaleCamera(1 / 1.2));
+            if (btnZoomReset) btnZoomReset.addEventListener('click', fitCameraToObjects);
+
+            if (DOM.sliders.speed) {
+                DOM.sliders.speed.addEventListener('input', (ev) => {
+                    const val = parseFloat(ev.target.value);
+                    document.querySelectorAll('#slider-speed').forEach(s => s.value = val);
+                    updateSpeedLabel();
+                });
+            }
             
-            DOM.sliders.mu.addEventListener('input', (ev) => {
-                state.frictionMu = parseFloat(ev.target.value);
-                DOM.vals.mu.textContent = state.frictionMu.toFixed(2);
-                updateFrictionLabel();
-                if (!state.isRunning) drawCanvas();
-            });
+            if (DOM.sliders.mu) {
+                DOM.sliders.mu.addEventListener('input', (ev) => {
+                    state.frictionMu = parseFloat(ev.target.value);
+                    if (DOM.vals.mu) DOM.vals.mu.textContent = state.frictionMu.toFixed(2);
+                    updateFrictionLabel();
+                    if (!state.isRunning) drawCanvas();
+                });
+            }
 
             ['m1', 'u1', 'm2', 'u2', 'e', 'expE', 'expU'].forEach(key => {
-                if (!DOM.sliders[key]) return;
+                if (!DOM.sliders || !DOM.sliders[key]) return;
                 DOM.sliders[key].addEventListener('input', (ev) => {
                     let val = parseFloat(ev.target.value);
                     
-                    if (key !== 'e') DOM.vals[key].textContent = val.toFixed(1);
+                    if (key !== 'e' && DOM.vals && DOM.vals[key]) DOM.vals[key].textContent = val.toFixed(1);
                     
                     if (!state.isRunning) {
                         if(key === 'm1') state.objects[0].m = val;
@@ -1275,6 +1320,7 @@
         }
 
         function updateSpeedLabel() {
+            if (!DOM.sliders || !DOM.sliders.speed) return;
             let logVal = parseFloat(DOM.sliders.speed.value);
             state.animationSpeed = Math.pow(10, logVal);
             document.querySelectorAll('#val-speed').forEach(lbl => {
@@ -1283,6 +1329,7 @@
         }
 
         function setupCanvasInteraction() {
+            if (!canvas) return;
             canvas.addEventListener('mousedown', (ev) => {
                 camera.isDragging = true;
                 camera.startX = ev.clientX;
@@ -1384,6 +1431,7 @@
         }
 
         function updateFrictionLabel() {
+            if (!DOM.sliders || !DOM.sliders.mu || !DOM.vals || !DOM.vals.muDesc) return;
             const val = parseFloat(DOM.sliders.mu.value);
             const t = dict[currentLang];
             
@@ -1397,6 +1445,7 @@
         }
 
         function updateCollisionLabel() {
+            if (!DOM.sliders || !DOM.sliders.e || !DOM.vals || !DOM.colType) return;
             const val = parseInt(DOM.sliders.e.value, 10);
             const t = dict[currentLang];
             
@@ -1421,7 +1470,7 @@
            ========================================== */
         
         const canvas = document.getElementById('physicsCanvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas ? canvas.getContext('2d') : null;
         const gPCanvas = document.getElementById('graphP');
         const gKECanvas = document.getElementById('graphKE');
         
@@ -1430,6 +1479,7 @@
         let groundY;
 
         function resizeCanvases() {
+            if (!canvas || !gPCanvas || !gKECanvas) return;
             const dpr = window.devicePixelRatio || 1;
             
             const rect = canvas.parentElement.getBoundingClientRect();
@@ -1453,6 +1503,7 @@
         }
 
         function drawGraphs() {
+            if (!gPCanvas || !gKECanvas) return;
             drawSingleGraph(gPCanvas, 'p', '#3b82f6', 'p', ' / kg m s⁻¹'); 
             drawSingleGraph(gKECanvas, 'ke', '#f59e0b', 'KE', ' / J'); 
         }
@@ -1467,12 +1518,13 @@
 
             if (state.history.length === 0) return;
 
-            const isNarrow = w < 250 * dpr;
-            const fontSize = isNarrow ? 8 : 10;
-            const padX = isNarrow ? 30 * dpr : 45 * dpr;
-            const padY = 20 * dpr;
-            const padTop = isNarrow ? 45 * dpr : 55 * dpr; 
-            const padRight = isNarrow ? 12 * dpr : 25 * dpr; 
+            const isNarrow = w < 300 * dpr;
+            const fontSize = isNarrow ? 9 : 11;
+            const padX = isNarrow ? 35 * dpr : 45 * dpr;
+            const padY = 25 * dpr;
+            
+            const padTop = isNarrow ? 55 * dpr : 65 * dpr; 
+            const padRight = isNarrow ? 20 * dpr : 30 * dpr; 
 
             const drawW = w - padX - padRight;
             const drawH = h - padTop - padY;
@@ -1490,58 +1542,59 @@
             let isMomentum = (key === 'p');
 
             if (forceZero) {
-                minV = 0;
-                if (maxV === 0) maxV = 1.0;
+                if (minV > 0) minV = 0;
             } else if (isMomentum) {
                 if (minV > 0) minV = 0;
                 if (maxV < 0) maxV = 0;
             }
 
             let range = maxV - minV;
+            
             if (range < 1e-3) {
                 if (forceZero) {
-                    maxV = maxV + 2.0; 
+                    maxV = maxV > 0 ? maxV * 1.5 : 1.0; 
                 } else if (isMomentum && Math.abs(maxV) < 1e-3) {
                     minV = -2.0;
                     maxV = 2.0;
                 } else {
                     let center = (maxV + minV) / 2;
-                    let padding = Math.max(2.0, Math.abs(center) * 0.1);
+                    let padding = Math.max(1.0, Math.abs(center) * 0.5);
                     minV = center - padding;
                     maxV = center + padding;
                 }
                 range = maxV - minV;
             } else {
-                if (!forceZero) {
-                    minV -= range * 0.1;
+                let pad = range * 0.15;
+                maxV += pad;
+                if (!forceZero || minV < 0) {
+                    minV -= pad;
                 }
-                maxV += range * 0.1;
                 range = maxV - minV;
             }
 
-            let zeroY = h - padY;
-            let hasZeroLine = false;
-            if (minV <= 0 && maxV >= 0) {
-                zeroY = padTop + drawH * (maxV - 0) / range;
-                hasZeroLine = true;
-            }
+            let zeroY = padTop + drawH * (maxV - 0) / range;
+            let hasZeroLine = (minV <= 0 && maxV >= 0);
 
             cctx.strokeStyle = '#94a3b8';
             cctx.lineWidth = 1 * dpr;
             cctx.beginPath();
             
+            const rightArrowTipX = w - padRight + 15 * dpr;
             cctx.moveTo(padX, zeroY);
-            cctx.lineTo(w - padRight + 10 * dpr, zeroY);
-            cctx.lineTo(w - padRight + 5 * dpr, zeroY - 3 * dpr);
-            cctx.moveTo(w - padRight + 10 * dpr, zeroY);
-            cctx.lineTo(w - padRight + 5 * dpr, zeroY + 3 * dpr);
+            cctx.lineTo(rightArrowTipX, zeroY);
+            cctx.lineTo(rightArrowTipX - 5 * dpr, zeroY - 3 * dpr);
+            cctx.moveTo(rightArrowTipX, zeroY);
+            cctx.lineTo(rightArrowTipX - 5 * dpr, zeroY + 3 * dpr);
             
-            let bottomY = (forceZero || !hasZeroLine) ? h - padY : h - padY + 10 * dpr;
+            let bottomY = h - padY;
+            if (zeroY > bottomY) bottomY = zeroY;
+            const arrowTipY = padTop - 25 * dpr; 
+            
             cctx.moveTo(padX, bottomY);
-            cctx.lineTo(padX, padTop - 15 * dpr);
-            cctx.lineTo(padX - 3 * dpr, padTop - 10 * dpr);
-            cctx.moveTo(padX, padTop - 15 * dpr);
-            cctx.lineTo(padX + 3 * dpr, padTop - 10 * dpr);
+            cctx.lineTo(padX, arrowTipY);
+            cctx.lineTo(padX - 3 * dpr, arrowTipY + 5 * dpr);
+            cctx.moveTo(padX, arrowTipY);
+            cctx.lineTo(padX + 3 * dpr, arrowTipY + 5 * dpr);
             
             cctx.stroke();
 
@@ -1565,33 +1618,36 @@
             cctx.font = `normal ${fontSize * dpr}px sans-serif`;
             const xUnitStr = ' / s';
             const xUnitWidth = cctx.measureText(xUnitStr).width;
-            cctx.fillText(xUnitStr, w - padRight + 10 * dpr, zeroY - 5 * dpr);
+            cctx.fillText(xUnitStr, rightArrowTipX, zeroY - 8 * dpr);
             
             cctx.font = `italic ${fontSize * dpr}px sans-serif`;
-            cctx.fillText('t', w - padRight + 10 * dpr - xUnitWidth, zeroY - 5 * dpr);
+            cctx.fillText('t', rightArrowTipX - xUnitWidth, zeroY - 8 * dpr);
 
             cctx.textAlign = 'left';
-            cctx.textBaseline = 'middle';
+            cctx.textBaseline = 'bottom';
+            const labelYPos = padTop - 10 * dpr;
             cctx.font = labelVar === 'KE' ? `normal ${fontSize * dpr}px sans-serif` : `italic ${fontSize * dpr}px sans-serif`;
-            cctx.fillText(labelVar, padX + 6 * dpr, padTop - (fontSize + 5) * dpr);
+            cctx.fillText(labelVar, padX + 5 * dpr, labelYPos);
             let varWidth = cctx.measureText(labelVar).width;
             cctx.font = `normal ${fontSize * dpr}px sans-serif`;
-            cctx.fillText(labelUnit, padX + 6 * dpr + varWidth, padTop - (fontSize + 5) * dpr);
+            cctx.fillText(labelUnit, padX + 5 * dpr + varWidth, labelYPos);
 
             cctx.font = `normal ${fontSize * dpr}px sans-serif`;
             cctx.textAlign = 'right';
             cctx.textBaseline = 'middle';
-            cctx.fillText(maxV.toFixed(1), padX - 5 * dpr, padTop);
+            cctx.fillText(maxV.toFixed(1), padX - 6 * dpr, padTop);
             
-            if (!forceZero && minV !== 0 && !hasZeroLine) {
-                cctx.fillText(minV.toFixed(1), padX - 5 * dpr, h - padY);
+            if (minV < -1e-2) {
+                cctx.fillText(minV.toFixed(1), padX - 6 * dpr, h - padY);
             }
 
-            cctx.textBaseline = 'top';
-            cctx.fillText('0', padX - 5 * dpr, zeroY + 2 * dpr);
+            if (hasZeroLine) {
+                cctx.textBaseline = 'top';
+                cctx.fillText('0', padX - 6 * dpr, zeroY + 2 * dpr);
+            }
 
             cctx.textAlign = 'center';
-            cctx.fillText(maxT.toFixed(1), padX + drawW, zeroY + 5 * dpr);
+            cctx.fillText(maxT.toFixed(1), padX + drawW, zeroY + 8 * dpr);
         }
 
         // --- Camera integrated transforms ---
@@ -1620,6 +1676,7 @@
         }
 
         function drawCanvas() {
+            if (!ctx) return;
             ctx.clearRect(0, 0, width, height);
 
             const padX = (width - (ROOM_WIDTH * pxPerMeter)) / 2;
@@ -1846,6 +1903,7 @@
            ========================================== */
         
         function init() {
+            initDOM();
             bindEvents();
             setupDirectInputs();
             applyLanguage();
