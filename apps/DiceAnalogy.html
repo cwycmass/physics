@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="zh-HK" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Radioactive Decay: Dice Analogy | 放射性衰變：擲骰類比</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- MathJax 3 for Physics Notation -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* Custom scrollbar styling for Control Sidebar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(241, 245, 249, 0.8); /* slate-100 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.5); /* slate-400 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 116, 139, 0.8); /* slate-500 */
+        }
+        body {
+            overscroll-behavior-y: contain;
+        }
+    </style>
+</head>
+<body class="fixed inset-0 bg-slate-50 text-slate-800 font-sans overflow-hidden select-none">
+
+    <!-- OVERLAY FOR MOBILE SIDEBAR -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/40 z-30 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden backdrop-blur-sm"></div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="absolute inset-0 flex flex-col md:flex-row h-full w-full">
+        
+        <!-- SIDEBAR (CONTROLS & PHYSICS THEORY) -->
+        <aside id="sidebar" class="fixed md:relative top-0 bottom-0 left-0 z-40 w-[330px] md:w-[380px] bg-white border-r border-slate-200 flex flex-col justify-between transition-transform duration-300 transform -translate-x-full md:translate-x-0 h-full shadow-xl md:shadow-none">
+            
+            <!-- Sidebar Global Header -->
+            <div class="p-3 border-b border-slate-200 flex items-center justify-between bg-slate-50/90 backdrop-blur-sm">
+                <div class="flex items-center space-x-2.5 max-w-[60%]">
+                    <div class="w-8 h-8 flex-shrink-0 bg-indigo-600 rounded-lg flex items-center justify-center shadow-md shadow-indigo-500/20">
+                        <i class="fa-solid fa-dice text-white text-base animate-pulse"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <h1 class="text-[11px] md:text-xs font-bold uppercase text-indigo-700 truncate tracking-wide" data-en="Radioactive Decay" data-zh="放射性衰變">Radioactive Decay</h1>
+                        <p class="text-[9px] md:text-[10px] text-slate-500 font-semibold truncate" data-en="Dice Analogy" data-zh="擲骰類比">Dice Analogy</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                    <button id="helpModalBtnTop" class="w-7 h-7 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 rounded shadow-sm flex items-center justify-center transition active:scale-95" title="Info / 說明">
+                        <i class="fa-solid fa-circle-info text-indigo-500 text-sm"></i>
+                    </button>
+                    <button id="langToggle" class="px-2 h-7 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-[10px] font-bold rounded shadow-sm transition active:scale-95">
+                        繁/Eng
+                    </button>
+                    <button id="closeSidebarBtn" class="md:hidden w-7 h-7 text-slate-400 hover:text-slate-600 flex items-center justify-center transition active:scale-95">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-4">
+
+                <!-- Step 1: Configuration -->
+                <div class="bg-white border border-slate-200 shadow-sm p-4 rounded-xl space-y-3">
+                    <h2 class="text-xs font-bold text-indigo-600 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span data-en="1. Set Parameters" data-zh="1. 參數設定">1. Set Parameters</span>
+                    </h2>
+
+                    <!-- Dice Quantity Slider -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-600 font-medium" data-en="Initial Nuclei ($N_0$)" data-zh="初始原子核數量 ($N_0$)">Initial Nuclei ($N_0$)</span>
+                            <span id="n0Val" class="font-mono text-indigo-600 font-bold">80</span>
+                        </div>
+                        <input type="range" id="diceCountInput" min="10" max="200" step="5" value="80" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                    </div>
+
+                    <!-- Dice Type Selection (Stable flat face up kinds only) -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs text-slate-600 font-medium block" data-en="Dice Type (Decay Chance per Throw)" data-zh="骰子種類 (每次投擲衰變機率)">Dice Type (Decay Chance per Throw)</label>
+                        <select id="diceTypeSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-indigo-700 font-semibold focus:ring-1 focus:ring-indigo-500 focus:outline-none cursor-pointer">
+                            <option value="6" selected data-en="6-Sided (16.7%)" data-zh="6面骰 (16.7%)">6-Sided (16.7%)</option>
+                            <option value="8" data-en="8-Sided (12.5%)" data-zh="8面骰 (12.5%)">8-Sided (12.5%)</option>
+                            <option value="12" data-en="12-Sided (8.3%)" data-zh="12面骰 (8.3%)">12-Sided (8.3%)</option>
+                            <option value="20" data-en="20-Sided (5.0%)" data-zh="20面骰 (5.0%)">20-Sided (5.0%)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Live Analytical Dashboard -->
+                <div class="bg-white border border-slate-200 shadow-sm p-4 rounded-xl space-y-3">
+                    <h2 class="text-xs font-bold text-amber-600 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span data-en="2. Real-Time Analytics" data-zh="2. 即時數據分析">2. Real-Time Analytics</span>
+                    </h2>
+
+                    <div class="grid grid-cols-2 gap-2 text-center">
+                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-200">
+                            <div class="text-[10px] text-slate-500 uppercase font-medium" data-en="Time Elapsed" data-zh="投擲次數">Time Elapsed</div>
+                            <div id="statsStep" class="text-xl font-mono font-bold text-slate-800">0</div>
+                        </div>
+                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-200">
+                            <div class="text-[10px] text-slate-500 uppercase font-medium" data-en="Half-Life ($t_{1/2}$)" data-zh="理論半衰期 ($t_{1/2}$)">Half-Life ($t_{1/2}$)</div>
+                            <div id="statsHalfLife" class="text-xl font-mono font-bold text-indigo-600">3.8</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-center">
+                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-200">
+                            <div class="text-[10px] text-emerald-600 uppercase font-bold" data-en="Active ($N$)" data-zh="剩餘未衰變 ($N$)">Active ($N$)</div>
+                            <div id="statsActive" class="text-xl font-mono font-bold text-emerald-600">80</div>
+                        </div>
+                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-200">
+                            <div class="text-[10px] text-rose-600 uppercase font-bold" data-en="Decayed ($N_0 - N$)" data-zh="已衰變 ($N_0 - N$)">Decayed ($N_0 - N$)</div>
+                            <div id="statsDecayed" class="text-xl font-mono font-bold text-rose-600">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center p-2 bg-indigo-50 rounded-lg border border-indigo-100">
+                        <div class="text-[10px] text-indigo-600 font-semibold" data-en="Decay Probability per Throw ($k$)" data-zh="單次骰子衰變概率 ($k$)">Decay Probability per Throw ($k$)</div>
+                        <div id="statsProb" class="text-sm font-bold text-indigo-800">16.67%</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Desktop Footer -->
+            <footer class="p-3 bg-slate-100 text-center border-t border-slate-200 text-[10px] text-slate-500 font-medium tracking-wide">
+                <span data-en="CMA Secondary School • Physics Department." data-zh="廠商會中學．物理科">廠商會中學．物理科</span>
+            </footer>
+        </aside>
+
+        <!-- MAIN INTERACTIVE STAGE & VISUALIZATION -->
+        <main class="flex-1 flex flex-col relative h-full w-full overflow-hidden bg-slate-100">
+            
+            <!-- Mobile Navigation Trigger (Overlay) -->
+            <div class="absolute top-3 left-3 z-20 flex items-center gap-2 md:hidden">
+                <button id="openSidebarBtn" class="flex items-center justify-center w-10 h-10 bg-white/95 hover:bg-slate-50 text-slate-800 rounded-xl shadow-md border border-slate-200 backdrop-blur-md active:scale-95">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+
+            <!-- 3D Physics Tray Layer -->
+            <div class="flex-1 relative w-full h-[55%] min-h-[250px] border-b border-slate-200 bg-slate-50">
+                <div id="canvas3dContainer" class="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing"></div>
+                
+                <!-- Floating Labels & Indicators inside 3D Canvas -->
+                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2.5 rounded-xl border border-slate-200 text-[10px] text-slate-600 flex flex-col gap-1.5 pointer-events-none shadow-md max-w-[200px] md:max-w-none z-10">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 border border-red-400 rounded bg-gradient-to-br from-red-500 to-red-600 inline-block shadow-sm"></span>
+                        <span class="font-semibold text-red-600" data-en="Decayed (Stable Daughter Nuclei now)" data-zh="已衰變（現為穩定子核）">Decayed (Stable Daughter Nuclei now)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 border border-cyan-400 rounded bg-gradient-to-br from-cyan-500 to-cyan-600 inline-block shadow-sm"></span>
+                        <span class="font-medium" data-en="Undecayed Nuclei" data-zh="未衰變母核">Undecayed Nuclei</span>
+                    </div>
+                </div>
+
+                <!-- Floating Animation Controls -->
+                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white/95 backdrop-blur-md p-2.5 rounded-2xl border border-slate-200 shadow-xl flex items-center gap-2 z-20 w-max">
+                    <button id="rollSingleBtn" class="flex items-center justify-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs rounded-xl transition shadow-md shadow-indigo-600/20 active:scale-95">
+                        <i class="fa-solid fa-dice-d6 animate-spin-slow"></i>
+                        <span data-en="Roll Once" data-zh="單次投放">Roll Once</span>
+                    </button>
+                    <button id="autoRollBtn" class="flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl transition shadow-md shadow-emerald-600/20 active:scale-95">
+                        <i class="fa-solid fa-play"></i>
+                        <span id="autoBtnText" data-en="Auto Run" data-zh="自動執行">Auto Run</span>
+                    </button>
+                    <button id="resetSimulationBtn" class="flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-semibold text-xs rounded-xl transition active:scale-95">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span data-en="Reset" data-zh="重置">Reset</span>
+                    </button>
+                    <div class="flex items-center gap-2 pl-3 ml-1 border-l border-slate-300">
+                        <i class="fa-solid fa-gauge-high text-slate-400 text-xs"></i>
+                        <input type="range" id="speedInput" min="1.0" max="5.0" step="0.2" value="2.2" class="w-16 md:w-20 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" title="Animation Speed">
+                    </div>
+                </div>
+
+                <!-- Simulation State Overlay (Ready/Complete) -->
+                <div id="simCompleteOverlay" class="absolute inset-0 bg-slate-100/80 backdrop-blur-sm flex flex-col items-center justify-center text-center opacity-0 pointer-events-none transition-all duration-300 z-30">
+                    <div class="bg-white border border-slate-200 p-6 rounded-2xl max-w-sm mx-4 space-y-4 shadow-xl">
+                        <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto animate-bounce shadow-sm">
+                            <i class="fa-solid fa-shield-virus text-2xl"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-lg font-bold text-slate-800" data-en="100% Transition State Achieved" data-zh="全體衰變完成">100% Transition State Achieved</h3>
+                            <p class="text-xs text-slate-500" data-en="All active isotopes have transitioned to the stable state." data-zh="所有活躍原子核已全數蛻變。">All active isotopes have transitioned to the stable state.</p>
+                        </div>
+                        <button id="overlayResetBtn" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs rounded-xl transition shadow-md shadow-indigo-600/20 active:scale-95">
+                            <span data-en="Restart Simulation" data-zh="重新開始模擬">Restart Simulation</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytical Real-time Graph Layer -->
+            <div class="h-[45%] w-full bg-slate-50 p-3 flex flex-col min-h-[200px]">
+                <div class="flex items-center justify-between mb-1">
+                    <div class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-wave-square text-indigo-600 text-xs"></i>
+                        <h4 class="text-xs font-bold text-slate-700" data-en="Dynamic Decay Curve Analytics" data-zh="動態衰變曲線分析圖">Dynamic Decay Curve Analytics</h4>
+                    </div>
+                    <!-- Legend -->
+                    <div class="flex items-center gap-3 text-[10px] font-medium">
+                        <div class="flex items-center gap-1 text-emerald-600">
+                            <span class="w-2.5 h-0.5 bg-emerald-500 inline-block shadow-sm"></span>
+                            <span data-en="Simulation Data" data-zh="模擬實驗數據">Simulation Data</span>
+                        </div>
+                        <div class="flex items-center gap-1 text-indigo-600">
+                            <span class="w-2.5 h-0.5 bg-indigo-500 border-t border-dashed inline-block"></span>
+                            <span data-en="Theoretical Curve" data-zh="物理學理論曲線">Theoretical Curve</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Canvas for Chart -->
+                <div class="flex-1 relative w-full rounded-xl bg-white border border-slate-200 p-1 shadow-sm">
+                    <canvas id="decayChartCanvas" class="w-full h-full"></canvas>
+                </div>
+            </div>
+
+            <!-- Mobile Drawer Footer (Hiding standard header/footer on mobile) -->
+            <div class="md:hidden block bg-slate-100 text-center py-1.5 border-t border-slate-200 text-[8px] text-slate-500 font-medium">
+                <span data-en="CMA Secondary School • Physics Department" data-zh="廠商會中學．物理科">廠商會中學．物理科</span>
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- INSTRUCTION & THEORY LAB MODAL (HKDSE Physics Compliant) -->
+    <div id="theoryModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            
+            <!-- Modal Header -->
+            <div class="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-indigo-600 text-xl animate-bounce"></i>
+                    <h3 class="text-sm font-bold text-slate-800" data-en="HKDSE Physics: The Dice Throw Analogy" data-zh="HKDSE 物理：擲骰類比與放射性衰變">HKDSE Physics: The Dice Throw Analogy</h3>
+                </div>
+                <button id="closeTheoryBtn" class="text-slate-400 hover:text-slate-600 p-1 transition active:scale-95">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content (Scrollable & LaTeX Intensive) -->
+            <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-700 leading-relaxed select-text">
+                
+                <section class="space-y-2">
+                    <h4 class="font-bold text-indigo-700 border-b border-slate-200 pb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-atom text-xs"></i>
+                        <span data-en="1. Random & Spontaneous Nature" data-zh="1. 隨機與自發性質">1. Random & Spontaneous Nature</span>
+                    </h4>
+                    <p>
+                        <span data-en="Radioactive decay is a random and spontaneous process. In physics, " data-zh="放射性衰變是一個隨機且自發的過程。在物理學中，"></span>
+                        <strong data-en="spontaneous" data-zh="自發 (Spontaneous)">spontaneous</strong>
+                        <span data-en=" means it is unaffected by external factors (e.g., temperature, pressure), and " data-zh=" 指衰變不受外在環境因素（如溫度、壓力）影響；"></span>
+                        <strong data-en="random" data-zh="隨機 (Random)">random</strong>
+                        <span data-en=" means we cannot predict exactly when a particular nucleus will decay. This perfectly maps to rolling dice: each roll is independent and unpredictable." data-zh=" 則指我們無法預測某個特定原子核何時會發生衰變。這與擲骰子完美對應：每次投擲的結果都是獨立且無法預測的。"></span>
+                    </p>
+                </section>
+
+                <section class="space-y-2">
+                    <h4 class="font-bold text-indigo-700 border-b border-slate-200 pb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-percent text-xs"></i>
+                        <span data-en="2. Decay Constant ($k$)" data-zh="2. 衰變常數 ($k$)">2. Decay Constant ($k$)</span>
+                    </h4>
+                    <p>
+                        <span data-en="The decay constant " data-zh="衰變常數 "></span>
+                        $k$
+                        <span data-en=" represents the probability per unit time that a nucleus will decay. In our dice model, " data-zh=" 代表每個原子核在單位時間內發生衰變的概率。在擲骰模型中，"></span>
+                        $k$
+                        <span data-en=" is the probability of rolling the specific decay face (face '1') in a single throw:" data-zh=" 相當於在單次投擲中擲出特定點數（面「1」）的機率："></span>
+                    </p>
+                    <div class="bg-slate-50 py-2 rounded border border-slate-200 text-center font-medium">
+                        $k = \frac{1}{\text{Number of faces (骰子面數)}}$
+                    </div>
+                    <p class="text-xs text-slate-500 italic text-center">
+                        <span data-en="Example: For a 6-sided die, " data-zh="例子：對於 6 面骰，"></span> $k = \frac{1}{6} \approx 0.167$.
+                    </p>
+                </section>
+
+                <section class="space-y-2">
+                    <h4 class="font-bold text-indigo-700 border-b border-slate-200 pb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-area text-xs"></i>
+                        <span data-en="3. Activity ($A$) and Exponential Decay" data-zh="3. 放射性活度 ($A$) 與指數衰變">3. Activity ($A$) and Exponential Decay</span>
+                    </h4>
+                    <p>
+                        <span data-en="Activity " data-zh="放射性活度 "></span>
+                        $A$
+                        <span data-en=" is the rate of decay (SI Unit: Becquerel, Bq). It is directly proportional to the number of undecayed nuclei " data-zh=" 是衰變率（SI 單位：貝克, Bq）。它與剩餘未衰變的母元素原子核數量 "></span>
+                        $N$
+                        <span data-en=":" data-zh=" 成正比："></span>
+                    </p>
+                    <div class="bg-slate-50 py-2 rounded border border-slate-200 text-center font-medium">
+                        $A = -\frac{\Delta N}{\Delta t} = k N$
+                    </div>
+                    <p>
+                        <span data-en="By integrating this differential equation, we obtain the fundamental exponential decay laws governing both " data-zh="透過積分此微分方程，我們可得出支配 "></span>
+                        $N$
+                        <span data-en=" and " data-zh=" 及 "></span>
+                        $A$
+                        <span data-en=":" data-zh=" 的基本指數衰變定律："></span>
+                    </p>
+                    <div class="bg-slate-50 py-2 px-4 rounded border border-slate-200 flex justify-around font-medium">
+                        <span>$N = N_0 e^{-k t}$</span>
+                        <span>$A = A_0 e^{-k t}$</span>
+                    </div>
+                </section>
+
+                <section class="space-y-2">
+                    <h4 class="font-bold text-indigo-700 border-b border-slate-200 pb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-stopwatch text-xs"></i>
+                        <span data-en="4. Half-Life ($t_{1/2}$)" data-zh="4. 半衰期 ($t_{1/2}$)">4. Half-Life ($t_{1/2}$)</span>
+                    </h4>
+                    <p>
+                        <span data-en="Half-life " data-zh="半衰期 "></span>
+                        $t_{1/2}$
+                        <span data-en=" is the time taken for half of the radioactive nuclei in a sample to decay. It is mathematically linked to the decay constant " data-zh=" 是樣本中一半的放射性原子核發生衰變所需的時間。它在數學上與衰變常數 "></span>
+                        $k$
+                        <span data-en=" by:" data-zh=" 緊密相連："></span>
+                    </p>
+                    <div class="bg-slate-50 py-2 rounded border border-slate-200 text-center font-medium">
+                        $t_{1/2} = \frac{\ln 2}{k}$
+                    </div>
+                    <p class="text-xs text-slate-500">
+                        <span data-en="In the chart, observe how the time (number of throws) required for the active dice count to halve remains beautifully constant, regardless of the starting amount." data-zh="在即時圖表中，您可以觀察到剩餘活躍骰子數量每次減半所需的時間（投擲次數）均保持恆定，完美展示了指數衰變的基本特性。"></span>
+                    </p>
+                </section>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3 bg-slate-50 text-center border-t border-slate-200">
+                <button id="okTheoryBtn" class="px-8 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition shadow-md shadow-indigo-600/20 active:scale-95 uppercase tracking-wide">
+                    <span data-en="Acknowledge & Return" data-zh="確認並返回模擬">Acknowledge & Return</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MAIN JAVASCRIPT SYSTEM -->
+    <script>
+        /* --- 1. Global State Management --- */
+        const STATE = {
+            lang: 'zh', // 'zh' or 'en'
+            isAutoRolling: false,
+            autoRollTimer: null,
+            isAnimating: false, // Flag to prevent multi-click overlaps during scheduled timelines
+            
+            // Physics / Dice Parameters
+            N0: 80,
+            activeCount: 80,
+            decayedCount: 0,
+            diceSides: 6,
+            rollDelay: 2200, // milliseconds
+            currentStep: 0,
+            decayedSlotsFilled: 0, 
+            
+            // Math values
+            decayConstant: 1 / 6,
+            theoreticalHalfLife: 3.8,
+            
+            // Records
+            history: {
+                steps: [0],
+                experimental: [80],
+                theoretical: [80]
+            },
+
+            // ThreeJS State
+            diceArray: [] // Array of dice objects
+        };
+
+        const TRANSLATIONS = {
+            zh: {
+                autoBtnText: "自動執行",
+                autoBtnStop: "暫停執行"
+            },
+            en: {
+                autoBtnText: "Auto Run",
+                autoBtnStop: "Pause"
+            }
+        };
+
+        /* --- 2. Initialize ThreeJS Engine --- */
+        let scene, camera, renderer, trayGroup;
+        const container3d = document.getElementById('canvas3dContainer');
+        const textureCache = {}; 
+        
+        function init3D() {
+            // Scene Setup
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf8fafc); // slate-50 bright light theme
+
+            // Camera Setup
+            camera = new THREE.PerspectiveCamera(45, container3d.clientWidth / container3d.clientHeight, 0.1, 1000);
+            camera.position.set(0, 15, 14);
+            camera.lookAt(0, -1, 0);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
+            renderer.setSize(container3d.clientWidth, container3d.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            container3d.appendChild(renderer.domElement);
+
+            // Lighting Design for Light Theme
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+            scene.add(ambientLight);
+
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+            dirLight.position.set(2, 16, 4);
+            dirLight.castShadow = true;
+            dirLight.shadow.mapSize.width = 1024;
+            dirLight.shadow.mapSize.height = 1024;
+            dirLight.shadow.bias = -0.0005;
+            scene.add(dirLight);
+
+            // Colored secondary ambient glow
+            const blueFill = new THREE.PointLight(0x4f46e5, 0.8, 30);
+            blueFill.position.set(-6, 4, -4);
+            scene.add(blueFill);
+
+            const redContainmentFill = new THREE.PointLight(0xef4444, 0.6, 30);
+            redContainmentFill.position.set(6, 4, 4);
+            scene.add(redContainmentFill);
+
+            // Setup Dice Tray Group
+            trayGroup = new THREE.Group();
+            scene.add(trayGroup);
+
+            // Left (Active) Tray Floor
+            const activeFloorGeo = new THREE.BoxGeometry(10.5, 0.5, 11.5);
+            const activeFloorMat = new THREE.MeshStandardMaterial({
+                color: 0xf1f5f9, // slate-100
+                roughness: 0.5,
+                metalness: 0.1
+            });
+            const activeFloor = new THREE.Mesh(activeFloorGeo, activeFloorMat);
+            activeFloor.position.set(-3.0, -0.25, 0);
+            activeFloor.receiveShadow = true;
+            trayGroup.add(activeFloor);
+
+            // Right (Decayed Container) Tray Floor
+            const decayedFloorGeo = new THREE.BoxGeometry(6.0, 0.5, 11.5);
+            const decayedFloorMat = new THREE.MeshStandardMaterial({
+                color: 0xffedd5, // orange-50/red-50 tone
+                roughness: 0.7,
+                metalness: 0.1
+            });
+            const decayedFloor = new THREE.Mesh(decayedFloorGeo, decayedFloorMat);
+            decayedFloor.position.set(5.25, -0.25, 0);
+            decayedFloor.receiveShadow = true;
+            trayGroup.add(decayedFloor);
+
+            // Outer Tray Borders & Partition wall
+            const borderMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, roughness: 0.8 }); // slate-300
+            const walls = [
+                { size: [0.25, 1.2, 11.5], pos: [-8.375, 0.35, 0] }, // Left Wall
+                { size: [0.25, 1.2, 11.5], pos: [8.375, 0.35, 0] },  // Right Wall
+                { size: [17.0, 1.2, 0.25], pos: [0, 0.35, 5.875] },  // Front Wall
+                { size: [17.0, 1.2, 0.25], pos: [0, 0.35, -5.875] }, // Back Wall
+                { size: [0.25, 1.1, 11.5], pos: [2.25, 0.3, 0], color: 0xf87171 } // Partition wall (red-400)
+            ];
+
+            walls.forEach(w => {
+                const wallGeo = new THREE.BoxGeometry(...w.size);
+                const mat = w.color ? new THREE.MeshStandardMaterial({ color: w.color, roughness: 0.9 }) : borderMat;
+                const wallMesh = new THREE.Mesh(wallGeo, mat);
+                wallMesh.position.set(...w.pos);
+                wallMesh.castShadow = true;
+                wallMesh.receiveShadow = true;
+                trayGroup.add(wallMesh);
+            });
+
+            // Grid Helpers mapping both states (Light theme optimized)
+            const gridActive = new THREE.GridHelper(10.5, 10, 0x94a3b8, 0xe2e8f0); // slate-400 / slate-200
+            gridActive.position.set(-3.0, 0.01, 0);
+            trayGroup.add(gridActive);
+
+            const gridDecayed = new THREE.GridHelper(6.0, 6, 0xfca5a5, 0xfecaca); // red-300 / red-200
+            gridDecayed.position.set(5.25, 0.01, 0);
+            trayGroup.add(gridDecayed);
+
+            setupCustomCameraControls();
+
+            // Run ThreeJS loop
+            animate3D();
+        }
+
+        /* --- 3. Custom Orbit Controls (Touch/Mouse) --- */
+        let targetRotationY = 0;
+        let targetRotationX = 0;
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
+        function setupCustomCameraControls() {
+            const dom = container3d;
+
+            const startDrag = (x, y) => {
+                isDragging = true;
+                previousMousePosition = { x, y };
+            };
+
+            const doDrag = (x, y) => {
+                if (!isDragging) return;
+                const deltaX = x - previousMousePosition.x;
+                const deltaY = y - previousMousePosition.y;
+
+                targetRotationY += deltaX * 0.005;
+                targetRotationX = Math.max(-0.4, Math.min(0.4, targetRotationX + deltaY * 0.005));
+
+                previousMousePosition = { x, y };
+            };
+
+            const endDrag = () => { isDragging = false; };
+
+            dom.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+            window.addEventListener('mousemove', (e) => doDrag(e.clientX, e.clientY));
+            window.addEventListener('mouseup', endDrag);
+
+            dom.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    startDrag(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+
+            dom.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1) {
+                    doDrag(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+
+            dom.addEventListener('touchend', endDrag);
+        }
+
+        /* --- 4. Procedural Face Texture Generator --- */
+        function getFaceTexture(number, isDecayFace, isDecayed) {
+            const key = `${number}_${isDecayFace}_${isDecayed}`;
+            if (textureCache[key]) {
+                return textureCache[key];
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+
+            let bgColor = '#0891b2'; // Cyan-600
+            let strokeColor = '#22d3ee'; // Cyan-400
+
+            if (isDecayFace) {
+                bgColor = '#b91c1c'; 
+                strokeColor = '#f87171'; 
+            } else if (isDecayed) {
+                bgColor = '#450a0a'; 
+                strokeColor = '#991b1b';
+            }
+
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, 128, 128);
+
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 10;
+            ctx.strokeRect(5, 5, 118, 118);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 74px system-ui, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+            ctx.shadowBlur = 6;
+            ctx.shadowOffsetY = 3;
+
+            ctx.fillText(number.toString(), 64, 64);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+            textureCache[key] = texture;
+            return texture;
+        }
+
+        // Procedural Triangle Texture Generator (for 8, 12, and 20-sided polyhedra)
+        function getTriangularFaceTexture(number, isDecayFace, isDecayed) {
+            const key = `tri_${number}_${isDecayFace}_${isDecayed}`;
+            if (textureCache[key]) {
+                return textureCache[key];
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+
+            let bgColor = '#0891b2'; 
+            let strokeColor = '#22d3ee';
+
+            if (isDecayFace) {
+                bgColor = '#b91c1c'; 
+                strokeColor = '#f87171';
+            } else if (isDecayed) {
+                bgColor = '#450a0a'; 
+                strokeColor = '#991b1b';
+            }
+
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, 128, 128);
+
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 8;
+            ctx.beginPath();
+            ctx.moveTo(64, 12);
+            ctx.lineTo(12, 116);
+            ctx.lineTo(116, 116);
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 52px system-ui, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 4;
+            ctx.shadowOffsetY = 2;
+            ctx.fillText(number.toString(), 64, 76);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+            textureCache[key] = texture;
+            return texture;
+        }
+
+        function createPolyhedronMaterials(sidesCount, isDecayed) {
+            const materials = [];
+            for (let i = 1; i <= sidesCount; i++) {
+                const isDecayFace = (i === 1);
+                const tex = getTriangularFaceTexture(i, isDecayFace, isDecayed);
+                materials.push(new THREE.MeshStandardMaterial({
+                    map: tex,
+                    roughness: 0.15,
+                    metalness: 0.15,
+                }));
+            }
+            return materials;
+        }
+
+        function createCubeMaterials(isDecayed) {
+            const materials = [];
+            for (let faceNum = 1; faceNum <= 6; faceNum++) {
+                const isDecayFace = (faceNum === 1);
+                materials.push(new THREE.MeshStandardMaterial({
+                    map: getFaceTexture(faceNum, isDecayFace, isDecayed),
+                    roughness: 0.15,
+                    metalness: 0.1,
+                }));
+            }
+            return materials;
+        }
+
+        /* --- 5. Collision Avoidance Physics inside Parent Chamber --- */
+        function resolveSettlingCollisions(diceArray) {
+            const minDist = 0.82; 
+            
+            for (let iter = 0; iter < 40; iter++) {
+                for (let i = 0; i < diceArray.length; i++) {
+                    let d1 = diceArray[i];
+                    if (!d1.active && !d1.isPendingTransition) continue; 
+
+                    for (let j = i + 1; j < diceArray.length; j++) {
+                        let d2 = diceArray[j];
+                        if (!d2.active && !d2.isPendingTransition) continue;
+
+                        let dx = d2.targetPos.x - d1.targetPos.x;
+                        let dz = d2.targetPos.z - d1.targetPos.z;
+                        let distSq = dx * dx + dz * dz;
+
+                        if (distSq < minDist * minDist) {
+                            let dist = Math.sqrt(distSq);
+                            if (dist === 0) {
+                                dist = 0.1;
+                                dx = Math.random() - 0.5;
+                                dz = Math.random() - 0.5;
+                            }
+                            let overlap = minDist - dist;
+                            let rx = (dx / dist) * overlap * 0.5;
+                            let rz = (dz / dist) * overlap * 0.5;
+
+                            if (d1.active || d1.isPendingTransition) {
+                                d1.targetPos.x -= rx;
+                                d1.targetPos.z -= rz;
+                            }
+                            if (d2.active || d2.isPendingTransition) {
+                                d2.targetPos.x += rx;
+                                d2.targetPos.z += rz;
+                            }
+                        }
+                    }
+
+                    // Strict enclosure boundaries for LEFT active chamber only
+                    if (d1.active || d1.isPendingTransition) {
+                        d1.targetPos.x = Math.max(-7.8, Math.min(1.8, d1.targetPos.x));
+                        d1.targetPos.z = Math.max(-5.0, Math.min(5.0, d1.targetPos.z));
+                    }
+                }
+            }
+        }
+
+        /* --- 6. Generation of All Custom Dice Shapes & UV Projections --- */
+        function createPolyhedronGeometry(sides) {
+            const r = 0.52;
+            let rawGeo;
+
+            switch (parseInt(sides)) {
+                case 8:
+                    rawGeo = new THREE.OctahedronGeometry(r);
+                    break;
+                case 12:
+                    rawGeo = new THREE.DodecahedronGeometry(r);
+                    break;
+                case 20:
+                    rawGeo = new THREE.IcosahedronGeometry(r);
+                    break;
+                default:
+                    rawGeo = new THREE.BoxGeometry(r*1.1, r*1.1, r*1.1);
+                    return rawGeo;
+            }
+
+            const geo = rawGeo.toNonIndexed();
+            geo.clearGroups();
+            const vertexCount = geo.attributes.position.count;
+            const triangleCount = vertexCount / 3;
+            const trianglesPerFace = triangleCount / sides;
+
+            for (let i = 0; i < triangleCount; i++) {
+                const faceIndex = Math.floor(i / trianglesPerFace);
+                geo.addGroup(i * 3, 3, faceIndex);
+            }
+
+            const uvs = [];
+            for (let i = 0; i < vertexCount; i += 3) {
+                uvs.push(0.5, 1.0);
+                uvs.push(0.0, 0.0);
+                uvs.push(1.0, 0.0);
+            }
+            geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+            geo.computeVertexNormals();
+
+            return geo;
+        }
+
+        function createDicePool() {
+            STATE.diceArray.forEach(die => {
+                trayGroup.remove(die.mesh);
+            });
+            STATE.diceArray = [];
+
+            const count = STATE.N0;
+            const sides = STATE.diceSides;
+
+            // Initially arrange all parent atoms inside LEFT chamber
+            const tempPositions = [];
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.random() * 4.0;
+                tempPositions.push({
+                    active: true,
+                    targetPos: new THREE.Vector3(-3.0 + Math.cos(angle) * radius, 0.35, Math.sin(angle) * radius)
+                });
+            }
+            resolveSettlingCollisions(tempPositions);
+
+            const geometry = createPolyhedronGeometry(sides);
+
+            for (let i = 0; i < count; i++) {
+                let materials;
+                if (sides === 6) {
+                    materials = createCubeMaterials(false);
+                } else {
+                    materials = createPolyhedronMaterials(sides, false);
+                }
+
+                const mesh = new THREE.Mesh(geometry, materials);
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+
+                const pos = tempPositions[i].targetPos;
+                mesh.position.copy(pos);
+                trayGroup.add(mesh);
+
+                STATE.diceArray.push({
+                    id: i,
+                    active: true,
+                    isPendingTransition: false, 
+                    mesh: mesh,
+                    geometry: geometry,
+                    targetPos: pos.clone(),
+                    targetRot: new THREE.Euler(Math.random() * Math.PI, 0, Math.random() * Math.PI),
+                    startPos: new THREE.Vector3(),
+                    startRot: new THREE.Euler(),
+                    isRolling: false,
+                    isTransitioning: false, 
+                    decayedThisTurn: false,
+                    rollDuration: 1.0,
+                    rollStartTime: 0,
+                    jumpAmplitude: 0,
+                    spinX: 0, spinY: 0, spinZ: 0
+                });
+            }
+
+            STATE.decayedSlotsFilled = 0;
+            STATE.isAnimating = false;
+        }
+
+        /* --- 7. Radioactive Simulation Mathematics & Logic --- */
+        function calculateConstants() {
+            const s = STATE.diceSides;
+            STATE.decayConstant = 1 / s;
+            STATE.theoreticalHalfLife = (Math.log(2) / -Math.log(1 - STATE.decayConstant)).toFixed(1);
+        }
+
+        function executeRollStep() {
+            if (STATE.isAnimating) return; 
+            
+            if (STATE.activeCount <= 0 || !anyDiceActive()) {
+                stopAutoRoll();
+                toggleSimulationCompleteOverlay(true);
+                return;
+            }
+
+            STATE.isAnimating = true;
+            STATE.currentStep++;
+            let decayEventsThisTurn = 0;
+            const now = performance.now();
+
+            // STEP 1: All active parent dice roll and tumble inside the LEFT tray
+            STATE.diceArray.forEach(die => {
+                if (die.active) {
+                    const rolledValue = Math.floor(Math.random() * STATE.diceSides) + 1;
+                    const decayed = (rolledValue === 1); 
+
+                    die.isRolling = true;
+                    die.rollStartTime = now;
+                    die.rollDuration = 1.0 + Math.random() * 0.3; // fast settling
+                    
+                    die.startPos.copy(die.mesh.position);
+                    die.startRot.copy(die.mesh.rotation);
+
+                    // Settle within Left Parent Pool first
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = Math.random() * 3.8;
+                    die.targetPos.set(-3.0 + Math.cos(angle) * radius, 0.35, Math.sin(angle) * radius);
+                    die.jumpAmplitude = 1.2 + Math.random() * 0.8; // Low bouncing tumble
+
+                    if (decayed) {
+                        die.isPendingTransition = true;
+                        die.decayedThisTurn = true;
+                        decayEventsThisTurn++;
+                    } else {
+                        die.decayedThisTurn = false;
+                        die.stableLandingFace = Math.floor(Math.random() * (STATE.diceSides - 1)) + 2; 
+                    }
+                }
+            });
+
+            resolveSettlingCollisions(STATE.diceArray);
+
+            STATE.diceArray.forEach(die => {
+                if (die.active) {
+                    let targetFace = die.decayedThisTurn ? 1 : die.stableLandingFace;
+                    const targetEuler = getRotationToPointFaceUp(die.mesh.geometry, targetFace);
+                    die.targetRot.copy(targetEuler);
+
+                    die.spinX = (Math.random() + 2) * Math.PI * 3.0;
+                    die.spinY = (Math.random() + 2) * Math.PI * 3.0;
+                    die.spinZ = (Math.random() + 2) * Math.PI * 3.0;
+                }
+            });
+
+            // Update local statistics instantly
+            STATE.activeCount = Math.max(0, STATE.activeCount - decayEventsThisTurn);
+            STATE.decayedCount = STATE.N0 - STATE.activeCount;
+
+            STATE.history.steps.push(STATE.currentStep);
+            STATE.history.experimental.push(STATE.activeCount);
+            
+            const theoreticalActive = Math.round(STATE.N0 * Math.pow(1 - STATE.decayConstant, STATE.currentStep));
+            STATE.history.theoretical.push(theoreticalActive);
+
+            updateUI();
+            drawDecayChart();
+
+            // STEP 2: Settle observation window. Allow 1.4 seconds of stillness on the left tray
+            setTimeout(() => {
+                triggerDecayedMigration();
+            }, 1400);
+        }
+
+        // STEP 3: Decayed dice migrate in high, elegant parabolic arcs into right grid chambers
+        function triggerDecayedMigration() {
+            const now = performance.now();
+            let transitionDelayOffset = 0;
+
+            STATE.diceArray.forEach(die => {
+                if (die.isPendingTransition) {
+                    die.isPendingTransition = false;
+                    die.active = false;
+
+                    // Staggered launch times
+                    setTimeout(() => {
+                        die.isTransitioning = true;
+                        die.rollStartTime = performance.now();
+                        die.rollDuration = 1.1 + Math.random() * 0.3; // flying speed over partition
+
+                        die.startPos.copy(die.mesh.position);
+                        die.startRot.copy(die.mesh.rotation);
+
+                        // Set right containment target coordinate
+                        const slotIdx = STATE.decayedSlotsFilled++;
+                        const cols = STATE.N0 > 80 ? 6 : 5;
+                        const row = Math.floor(slotIdx / cols);
+                        const col = slotIdx % cols;
+                        
+                        const colWidth = 4.2;
+                        const xStart = 3.1;
+                        const targetX = xStart + col * (colWidth / (cols - 1));
+                        
+                        const totalRows = Math.ceil(STATE.N0 / cols);
+                        const rowSpacing = Math.min(0.5, 9.6 / (totalRows + 1));
+                        const zStart = -4.8;
+                        const targetZ = zStart + row * rowSpacing;
+
+                        die.targetPos.set(targetX, 0.35, targetZ);
+                        die.jumpAmplitude = 3.6 + Math.random() * 1.0; // High arc leap
+
+                        const targetEuler = getRotationToPointFaceUp(die.mesh.geometry, 1);
+                        die.targetRot.copy(targetEuler);
+
+                        die.spinX = Math.PI * 2 * (Math.random() > 0.5 ? 1 : -1);
+                        die.spinY = Math.PI * 4 * (Math.random() > 0.5 ? 1 : -1);
+                        die.spinZ = Math.PI * 2 * (Math.random() > 0.5 ? 1 : -1);
+
+                    }, transitionDelayOffset);
+
+                    transitionDelayOffset += 180; 
+                }
+            });
+
+            // Unlock controls after the transition ends
+            const totalAnimationDuration = transitionDelayOffset + 1400;
+            setTimeout(() => {
+                STATE.isAnimating = false;
+                if (STATE.activeCount === 0) {
+                    toggleSimulationCompleteOverlay(true);
+                } else if (STATE.isAutoRolling) {
+                    STATE.autoRollTimer = setTimeout(executeRollStep, 100);
+                }
+            }, totalAnimationDuration);
+        }
+
+        function getRotationToPointFaceUp(geometry, faceNumber) {
+            const targetNormal = new THREE.Vector3(0, 1, 0);
+
+            if (STATE.diceSides === 6) {
+                const faceNormals = {
+                    1: new THREE.Vector3(1, 0, 0),   
+                    2: new THREE.Vector3(-1, 0, 0),  
+                    3: new THREE.Vector3(0, 1, 0),   
+                    4: new THREE.Vector3(0, -1, 0),  
+                    5: new THREE.Vector3(0, 0, 1),   
+                    6: new THREE.Vector3(0, 0, -1)   
+                };
+                const localNormal = faceNormals[faceNumber] || faceNormals[1];
+                const quaternion = new THREE.Quaternion().setFromUnitVectors(localNormal, targetNormal);
+                return new THREE.Euler().setFromQuaternion(quaternion);
+            }
+
+            const posAttr = geometry.attributes.position;
+            const triangleCount = posAttr.count / 3;
+            const trianglesPerFace = triangleCount / STATE.diceSides;
+
+            const triangleIndex = Math.floor((faceNumber - 1) * trianglesPerFace);
+            const idx = triangleIndex * 3;
+
+            const vA = new THREE.Vector3().fromBufferAttribute(posAttr, idx);
+            const vB = new THREE.Vector3().fromBufferAttribute(posAttr, idx + 1);
+            const vC = new THREE.Vector3().fromBufferAttribute(posAttr, idx + 2);
+
+            const ab = new THREE.Vector3().subVectors(vB, vA);
+            const ac = new THREE.Vector3().subVectors(vC, vA);
+            const localNormal = new THREE.Vector3().crossVectors(ab, ac).normalize();
+
+            const quaternion = new THREE.Quaternion().setFromUnitVectors(localNormal, targetNormal);
+            return new THREE.Euler().setFromQuaternion(quaternion);
+        }
+
+        function anyDiceActive() {
+            return STATE.diceArray.some(d => d.active || d.isPendingTransition);
+        }
+
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+
+            trayGroup.rotation.y += (targetRotationY - trayGroup.rotation.y) * 0.1;
+            trayGroup.rotation.x += (targetRotationX - trayGroup.rotation.x) * 0.1;
+
+            const now = performance.now();
+            STATE.diceArray.forEach(die => {
+                if (die.isRolling) {
+                    const elapsed = (now - die.rollStartTime) / 1000;
+                    const duration = die.rollDuration;
+
+                    if (elapsed >= duration) {
+                        die.isRolling = false;
+                        die.mesh.position.copy(die.targetPos);
+                        die.mesh.rotation.copy(die.targetRot);
+                    } else {
+                        const progress = elapsed / duration;
+                        const jumpHeight = die.jumpAmplitude * Math.sin(progress * Math.PI);
+                        
+                        die.mesh.position.x = THREE.MathUtils.lerp(die.startPos.x, die.targetPos.x, progress);
+                        die.mesh.position.z = THREE.MathUtils.lerp(die.startPos.z, die.targetPos.z, progress);
+                        die.mesh.position.y = die.targetPos.y + jumpHeight;
+
+                        die.mesh.rotation.x = die.startRot.x + (die.spinX * progress);
+                        die.mesh.rotation.y = die.startRot.y + (die.spinY * progress);
+                        die.mesh.rotation.z = die.startRot.z + (die.spinZ * progress);
+                    }
+                } else if (die.isTransitioning) {
+                    const elapsed = (now - die.rollStartTime) / 1000;
+                    const duration = die.rollDuration;
+
+                    if (elapsed >= duration) {
+                        die.isTransitioning = false;
+                        die.mesh.position.copy(die.targetPos);
+                        die.mesh.rotation.copy(die.targetRot);
+                        
+                        applyDecayVisEffects(die);
+                    } else {
+                        const progress = elapsed / duration;
+                        const jumpHeight = die.jumpAmplitude * Math.sin(progress * Math.PI);
+                        
+                        die.mesh.position.x = THREE.MathUtils.lerp(die.startPos.x, die.targetPos.x, progress);
+                        die.mesh.position.z = THREE.MathUtils.lerp(die.startPos.z, die.targetPos.z, progress);
+                        die.mesh.position.y = die.targetPos.y + jumpHeight;
+
+                        die.mesh.rotation.x = die.startRot.x + (die.spinX * progress);
+                        die.mesh.rotation.y = die.startRot.y + (die.spinY * progress);
+                        die.mesh.rotation.z = die.startRot.z + (die.spinZ * progress);
+                    }
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        function applyDecayVisEffects(die) {
+            let materials;
+            if (STATE.diceSides === 6) {
+                materials = createCubeMaterials(true);
+            } else {
+                materials = createPolyhedronMaterials(STATE.diceSides, true);
+            }
+            die.mesh.material = materials;
+            
+            let flashCount = 0;
+            const flashInterval = setInterval(() => {
+                flashCount++;
+                if (flashCount % 2 === 0) {
+                    die.mesh.scale.set(1.1, 1.1, 1.1);
+                } else {
+                    die.mesh.scale.set(1.0, 1.0, 1.0);
+                }
+                if (flashCount >= 4) {
+                    clearInterval(flashInterval);
+                    die.mesh.scale.set(1.0, 1.0, 1.0); 
+                }
+            }, 100);
+        }
+
+        function resetSimulation() {
+            stopAutoRoll();
+            toggleSimulationCompleteOverlay(false);
+            
+            STATE.currentStep = 0;
+            STATE.activeCount = STATE.N0;
+            STATE.decayedCount = 0;
+            
+            STATE.history.steps = [0];
+            STATE.history.experimental = [STATE.N0];
+            STATE.history.theoretical = [STATE.N0];
+
+            calculateConstants();
+            createDicePool();
+            updateUI();
+            drawDecayChart();
+        }
+
+        /* --- 8. Beautiful HTML5 Chart Rendering --- */
+        const chartCanvas = document.getElementById('decayChartCanvas');
+        const chartCtx = chartCanvas.getContext('2d');
+
+        function resizeChart() {
+            const rect = chartCanvas.parentElement.getBoundingClientRect();
+            chartCanvas.width = rect.width * window.devicePixelRatio;
+            chartCanvas.height = rect.height * window.devicePixelRatio;
+            chartCanvas.style.width = rect.width + 'px';
+            chartCanvas.style.height = rect.height + 'px';
+            chartCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            drawDecayChart();
+        }
+
+        function drawDecayChart() {
+            const width = chartCanvas.width / window.devicePixelRatio;
+            const height = chartCanvas.height / window.devicePixelRatio;
+            if (width === 0 || height === 0) return;
+
+            chartCtx.clearRect(0, 0, width, height);
+
+            const padLeft = 60;
+            const padRight = 35;
+            const padTop = 30;
+            const padBottom = 45;
+
+            const plotW = width - padLeft - padRight;
+            const plotH = height - padTop - padBottom;
+
+            const maxStep = Math.max(12, Math.max(...STATE.history.steps, Math.ceil(STATE.theoreticalHalfLife * 3.5)));
+            const maxVal = STATE.N0;
+
+            const getX = (step) => padLeft + (step / maxStep) * plotW;
+            const getY = (val) => padTop + plotH - (val / maxVal) * plotH;
+
+            // Background Grid lines - Light Theme
+            chartCtx.strokeStyle = '#e2e8f0'; // slate-200
+            chartCtx.lineWidth = 1;
+
+            const xGridInterval = Math.ceil(maxStep / 10);
+            for (let i = 0; i <= maxStep; i += xGridInterval) {
+                const cx = getX(i);
+                chartCtx.beginPath();
+                chartCtx.moveTo(cx, padTop);
+                chartCtx.lineTo(cx, padTop + plotH);
+                chartCtx.stroke();
+
+                chartCtx.fillStyle = '#64748b'; 
+                chartCtx.font = '10px monospace';
+                chartCtx.textAlign = 'center';
+                chartCtx.fillText(i, cx, padTop + plotH + 15);
+            }
+
+            const yGridInterval = maxVal >= 100 ? 25 : 10;
+            for (let v = 0; v <= maxVal; v += yGridInterval) {
+                const cy = getY(v);
+                chartCtx.beginPath();
+                chartCtx.moveTo(padLeft, cy);
+                chartCtx.lineTo(padLeft + plotW, cy);
+                chartCtx.stroke();
+
+                chartCtx.fillStyle = '#64748b'; 
+                chartCtx.font = '10px monospace';
+                chartCtx.textAlign = 'right';
+                chartCtx.fillText(v, padLeft - 8, cy + 3);
+            }
+
+            // Draw Half-Life horizontal marker line (N0 / 2)
+            const halfN0 = STATE.N0 / 2;
+            const cyHalf = getY(halfN0);
+            chartCtx.strokeStyle = 'rgba(217, 119, 6, 0.4)'; 
+            chartCtx.lineWidth = 1.5;
+            chartCtx.setLineDash([5, 5]);
+            chartCtx.beginPath();
+            chartCtx.moveTo(padLeft, cyHalf);
+            chartCtx.lineTo(padLeft + plotW, cyHalf);
+            chartCtx.stroke();
+            chartCtx.setLineDash([]); 
+
+            chartCtx.fillStyle = '#d97706'; 
+            chartCtx.font = '9px system-ui';
+            chartCtx.textAlign = 'right';
+            chartCtx.fillText("0.5 N₀", padLeft + plotW - 10, cyHalf - 5);
+
+            // Draw theoretical curve
+            chartCtx.strokeStyle = 'rgba(79, 70, 229, 0.7)'; 
+            chartCtx.lineWidth = 2;
+            chartCtx.setLineDash([4, 4]);
+            chartCtx.beginPath();
+            for (let step = 0; step <= maxStep; step += 0.1) {
+                const valTheo = STATE.N0 * Math.pow(1 - STATE.decayConstant, step);
+                const tx = getX(step);
+                const ty = getY(valTheo);
+                if (step === 0) chartCtx.moveTo(tx, ty);
+                else chartCtx.lineTo(tx, ty);
+            }
+            chartCtx.stroke();
+            chartCtx.setLineDash([]); 
+
+            // Draw simulated data line
+            chartCtx.strokeStyle = '#10b981'; 
+            chartCtx.lineWidth = 2.5;
+            chartCtx.beginPath();
+            for (let i = 0; i < STATE.history.steps.length; i++) {
+                const ex = getX(STATE.history.steps[i]);
+                const ey = getY(STATE.history.experimental[i]);
+                if (i === 0) chartCtx.moveTo(ex, ey);
+                else chartCtx.lineTo(ex, ey);
+            }
+            chartCtx.stroke();
+
+            // Draw nodes
+            for (let i = 0; i < STATE.history.steps.length; i++) {
+                const ex = getX(STATE.history.steps[i]);
+                const ey = getY(STATE.history.experimental[i]);
+                chartCtx.fillStyle = '#34d399';
+                chartCtx.beginPath();
+                chartCtx.arc(ex, ey, 4.5, 0, Math.PI * 2);
+                chartCtx.fill();
+                chartCtx.strokeStyle = '#065f46';
+                chartCtx.lineWidth = 1;
+                chartCtx.stroke();
+            }
+
+            // DRAW AXES
+            chartCtx.strokeStyle = '#94a3b8'; 
+            chartCtx.lineWidth = 1.5;
+            chartCtx.beginPath();
+            chartCtx.moveTo(padLeft, padTop - 15);
+            chartCtx.lineTo(padLeft, padTop + plotH);
+            chartCtx.lineTo(padLeft + plotW + 15, padTop + plotH);
+            chartCtx.stroke();
+
+            // Y-axis Arrow (UP)
+            chartCtx.fillStyle = '#94a3b8'; 
+            chartCtx.beginPath();
+            chartCtx.moveTo(padLeft, padTop - 20);
+            chartCtx.lineTo(padLeft - 4, padTop - 12);
+            chartCtx.lineTo(padLeft + 4, padTop - 12);
+            chartCtx.closePath();
+            chartCtx.fill();
+
+            // X-axis Arrow (RIGHT)
+            chartCtx.fillStyle = '#94a3b8'; 
+            chartCtx.beginPath();
+            chartCtx.moveTo(padLeft + plotW + 20, padTop + plotH);
+            chartCtx.lineTo(padLeft + plotW + 12, padTop + plotH - 4);
+            chartCtx.lineTo(padLeft + plotW + 12, padTop + plotH + 4);
+            chartCtx.closePath();
+            chartCtx.fill();
+
+            // RENDER LABELS FOR AXES with Italic N Support
+            chartCtx.save();
+            chartCtx.translate(padLeft - 42, padTop + plotH / 2);
+            chartCtx.rotate(-Math.PI / 2);
+            chartCtx.textAlign = 'center';
+            
+            const part1 = STATE.lang === 'zh' ? '未衰變骰子數量 (' : 'Number of undecayed dice (';
+            const part2 = 'N';
+            const part3 = ')';
+            
+            chartCtx.font = 'bold 10px system-ui, sans-serif';
+            const w1 = chartCtx.measureText(part1).width;
+            chartCtx.font = 'italic bold 10px system-ui, sans-serif';
+            const w2 = chartCtx.measureText(part2).width;
+            chartCtx.font = 'bold 10px system-ui, sans-serif';
+            const w3 = chartCtx.measureText(part3).width;
+            
+            const totalW = w1 + w2 + w3;
+            let currentX = -totalW / 2;
+            
+            chartCtx.textAlign = 'left';
+            chartCtx.fillStyle = '#334155';
+            
+            chartCtx.font = 'bold 10px system-ui, sans-serif';
+            chartCtx.fillText(part1, currentX, 0);
+            currentX += w1;
+            
+            chartCtx.font = 'italic bold 10px system-ui, sans-serif';
+            chartCtx.fillText(part2, currentX, 0);
+            currentX += w2;
+            
+            chartCtx.font = 'bold 10px system-ui, sans-serif';
+            chartCtx.fillText(part3, currentX, 0);
+            chartCtx.restore();
+
+            chartCtx.fillStyle = '#334155';
+            chartCtx.textAlign = 'center';
+            const xLabel = STATE.lang === 'zh' ? '投擲次數' : 'Number of throws';
+            chartCtx.fillText(xLabel, padLeft + plotW / 2, padTop + plotH + 34);
+        }
+
+        /* --- 9. UI Controls & Dynamic Language Binding --- */
+        function toggleLanguage() {
+            STATE.lang = STATE.lang === 'zh' ? 'en' : 'zh';
+            updateBilingualDOM();
+        }
+
+        function updateBilingualDOM() {
+            const currentLang = STATE.lang;
+            
+            document.querySelectorAll('[data-en]').forEach(el => {
+                const enVal = el.getAttribute('data-en');
+                const zhVal = el.getAttribute('data-zh');
+                if (currentLang === 'zh') {
+                    el.innerHTML = zhVal;
+                } else {
+                    el.innerHTML = enVal;
+                }
+            });
+
+            const autoBtn = document.getElementById('autoRollBtn');
+            const autoIcon = STATE.isAutoRolling ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
+            const autoText = STATE.isAutoRolling ? TRANSLATIONS[currentLang].autoBtnStop : TRANSLATIONS[currentLang].autoBtnText;
+            autoBtn.innerHTML = `${autoIcon} <span>${autoText}</span>`;
+
+            updateUI();
+
+            // Force MathJax to re-render the injected math formulas
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise().catch((err) => console.error('MathJax error:', err));
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('statsStep').innerText = STATE.currentStep;
+            document.getElementById('statsActive').innerText = STATE.activeCount;
+            document.getElementById('statsDecayed').innerText = STATE.decayedCount;
+            document.getElementById('statsProb').innerText = `${(STATE.decayConstant * 100).toFixed(2)}%`;
+            document.getElementById('statsHalfLife').innerText = `${STATE.theoreticalHalfLife} ${STATE.lang === 'zh' ? '次' : 'throws'}`;
+        }
+
+        function startAutoRoll() {
+            if (STATE.isAutoRolling) return;
+            STATE.isAutoRolling = true;
+            
+            executeRollStep();
+            updateBilingualDOM();
+        }
+
+        function stopAutoRoll() {
+            if (!STATE.isAutoRolling) return;
+            STATE.isAutoRolling = false;
+            clearTimeout(STATE.autoRollTimer);
+            updateBilingualDOM();
+        }
+
+        function toggleSimulationCompleteOverlay(visible) {
+            const overlay = document.getElementById('simCompleteOverlay');
+            if (visible) {
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        /* --- 10. Event Binding & Initialization Loop --- */
+        function bindInteractiveEvents() {
+            const diceSlider = document.getElementById('diceCountInput');
+            diceSlider.addEventListener('input', (e) => {
+                STATE.N0 = parseInt(e.target.value);
+                document.getElementById('n0Val').innerText = STATE.N0;
+                resetSimulation();
+            });
+
+            const typeSelector = document.getElementById('diceTypeSelect');
+            typeSelector.addEventListener('change', (e) => {
+                STATE.diceSides = parseInt(e.target.value);
+                resetSimulation();
+            });
+
+            const speedSlider = document.getElementById('speedInput');
+            speedSlider.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                STATE.rollDelay = val * 1000;
+            });
+
+            document.getElementById('rollSingleBtn').addEventListener('click', () => {
+                stopAutoRoll();
+                executeRollStep();
+            });
+
+            document.getElementById('autoRollBtn').addEventListener('click', () => {
+                if (STATE.isAutoRolling) {
+                    stopAutoRoll();
+                } else {
+                    startAutoRoll();
+                }
+            });
+
+            document.getElementById('resetSimulationBtn').addEventListener('click', resetSimulation);
+            document.getElementById('overlayResetBtn').addEventListener('click', resetSimulation);
+
+            document.getElementById('langToggle').addEventListener('click', toggleLanguage);
+
+            // Responsive Sidebar handlers
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const openBtn = document.getElementById('openSidebarBtn');
+            const closeBtn = document.getElementById('closeSidebarBtn');
+
+            const openSidebar = () => {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+            };
+
+            const closeSidebar = () => {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            };
+
+            openBtn.addEventListener('click', openSidebar);
+            closeBtn.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+
+            // Help Modal handlers (Info Button mapped here)
+            const theoryModal = document.getElementById('theoryModal');
+            document.getElementById('helpModalBtnTop').addEventListener('click', () => {
+                theoryModal.classList.remove('opacity-0', 'pointer-events-none');
+            });
+            const hideTheory = () => {
+                theoryModal.classList.add('opacity-0', 'pointer-events-none');
+            };
+            document.getElementById('closeTheoryBtn').addEventListener('click', hideTheory);
+            document.getElementById('okTheoryBtn').addEventListener('click', hideTheory);
+
+            window.addEventListener('resize', () => {
+                camera.aspect = container3d.clientWidth / container3d.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container3d.clientWidth, container3d.clientHeight);
+                resizeChart();
+            });
+        }
+
+        window.onload = function() {
+            bindInteractiveEvents();
+            init3D();
+            calculateConstants();
+            createDicePool();
+            updateBilingualDOM();
+            setTimeout(resizeChart, 250);
+        };
+    </script>
+</body>
+</html>
