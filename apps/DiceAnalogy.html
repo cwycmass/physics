@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Radioactive Decay: Dice Analogy | 放射性衰變：擲骰類比</title>
+    <title>放射性衰變：擲骰類比 | Radioactive Decay: Dice Analogy</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome for Icons -->
@@ -164,7 +164,7 @@
             </div>
 
             <!-- 3D Physics Tray Layer -->
-            <div class="flex-1 relative w-full h-[55%] min-h-[250px] border-b border-slate-200 bg-slate-50">
+            <div class="relative w-full min-h-[250px] border-b border-slate-200 bg-slate-50 flex flex-col" style="flex: 5.5;">
                 <div id="canvas3dContainer" class="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing"></div>
                 
                 <!-- Floating Labels & Indicators inside 3D Canvas -->
@@ -195,7 +195,7 @@
                     </button>
                     <div class="flex items-center gap-2 pl-3 ml-1 border-l border-slate-300">
                         <i class="fa-solid fa-gauge-high text-slate-400 text-xs"></i>
-                        <input type="range" id="speedInput" min="1.0" max="5.0" step="0.2" value="2.2" class="w-16 md:w-20 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" title="Animation Speed">
+                        <input type="range" id="speedInput" min="0.5" max="4.0" step="0.1" value="1.0" class="w-16 md:w-20 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" title="Animation Speed">
                     </div>
                 </div>
 
@@ -217,7 +217,7 @@
             </div>
 
             <!-- Analytical Real-time Graph Layer -->
-            <div class="h-[45%] w-full bg-slate-50 p-3 flex flex-col min-h-[200px]">
+            <div class="relative w-full bg-slate-50 p-3 flex flex-col min-h-[200px]" style="flex: 4.5;">
                 <div class="flex items-center justify-between mb-1">
                     <div class="flex items-center gap-1.5">
                         <i class="fa-solid fa-wave-square text-indigo-600 text-xs"></i>
@@ -227,18 +227,20 @@
                     <div class="flex items-center gap-3 text-[10px] font-medium">
                         <div class="flex items-center gap-1 text-emerald-600">
                             <span class="w-2.5 h-0.5 bg-emerald-500 inline-block shadow-sm"></span>
-                            <span data-en="Simulation Data" data-zh="模擬實驗數據">Simulation Data</span>
+                            <span data-en="Simulation Data" data-zh="實驗數據">Simulation Data</span>
                         </div>
                         <div class="flex items-center gap-1 text-indigo-600">
                             <span class="w-2.5 h-0.5 bg-indigo-500 border-t border-dashed inline-block"></span>
-                            <span data-en="Theoretical Curve" data-zh="物理學理論曲線">Theoretical Curve</span>
+                            <span data-en="Theoretical Curve" data-zh="理論曲線">Theoretical Curve</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Canvas for Chart -->
-                <div class="flex-1 relative w-full rounded-xl bg-white border border-slate-200 p-1 shadow-sm">
-                    <canvas id="decayChartCanvas" class="w-full h-full"></canvas>
+                <div class="flex-1 relative w-full rounded-xl bg-white border border-slate-200 p-1 shadow-sm flex flex-col overflow-hidden">
+                    <div id="chartWrapper" class="flex-1 relative w-full h-full">
+                        <canvas id="decayChartCanvas" class="absolute inset-0 w-full h-full block"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -376,7 +378,7 @@
             activeCount: 80,
             decayedCount: 0,
             diceSides: 6,
-            rollDelay: 2200, // milliseconds
+            speedMultiplier: 1.0, // Multiplier for animation timelines
             currentStep: 0,
             decayedSlotsFilled: 0, 
             
@@ -865,7 +867,7 @@
 
                     die.isRolling = true;
                     die.rollStartTime = now;
-                    die.rollDuration = 1.0 + Math.random() * 0.3; // fast settling
+                    die.rollDuration = (1.0 + Math.random() * 0.3) / STATE.speedMultiplier; // fast settling scaled by speed
                     
                     die.startPos.copy(die.mesh.position);
                     die.startRot.copy(die.mesh.rotation);
@@ -914,10 +916,10 @@
             updateUI();
             drawDecayChart();
 
-            // STEP 2: Settle observation window. Allow 1.4 seconds of stillness on the left tray
+            // STEP 2: Settle observation window.
             setTimeout(() => {
                 triggerDecayedMigration();
-            }, 1400);
+            }, 1400 / STATE.speedMultiplier);
         }
 
         // STEP 3: Decayed dice migrate in high, elegant parabolic arcs into right grid chambers
@@ -934,7 +936,7 @@
                     setTimeout(() => {
                         die.isTransitioning = true;
                         die.rollStartTime = performance.now();
-                        die.rollDuration = 1.1 + Math.random() * 0.3; // flying speed over partition
+                        die.rollDuration = (1.1 + Math.random() * 0.3) / STATE.speedMultiplier; // flying speed scaled
 
                         die.startPos.copy(die.mesh.position);
                         die.startRot.copy(die.mesh.rotation);
@@ -966,18 +968,18 @@
 
                     }, transitionDelayOffset);
 
-                    transitionDelayOffset += 180; 
+                    transitionDelayOffset += 180 / STATE.speedMultiplier; 
                 }
             });
 
             // Unlock controls after the transition ends
-            const totalAnimationDuration = transitionDelayOffset + 1400;
+            const totalAnimationDuration = transitionDelayOffset + (1400 / STATE.speedMultiplier);
             setTimeout(() => {
                 STATE.isAnimating = false;
                 if (STATE.activeCount === 0) {
                     toggleSimulationCompleteOverlay(true);
                 } else if (STATE.isAutoRolling) {
-                    STATE.autoRollTimer = setTimeout(executeRollStep, 100);
+                    STATE.autoRollTimer = setTimeout(executeRollStep, 100 / STATE.speedMultiplier);
                 }
             }, totalAnimationDuration);
         }
@@ -1125,7 +1127,8 @@
         const chartCtx = chartCanvas.getContext('2d');
 
         function resizeChart() {
-            const rect = chartCanvas.parentElement.getBoundingClientRect();
+            const wrapper = document.getElementById('chartWrapper');
+            const rect = wrapper.getBoundingClientRect();
             chartCanvas.width = rect.width * window.devicePixelRatio;
             chartCanvas.height = rect.height * window.devicePixelRatio;
             chartCanvas.style.width = rect.width + 'px';
@@ -1393,8 +1396,7 @@
 
             const speedSlider = document.getElementById('speedInput');
             speedSlider.addEventListener('input', (e) => {
-                const val = parseFloat(e.target.value);
-                STATE.rollDelay = val * 1000;
+                STATE.speedMultiplier = parseFloat(e.target.value);
             });
 
             document.getElementById('rollSingleBtn').addEventListener('click', () => {
