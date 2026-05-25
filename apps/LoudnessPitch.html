@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>音高和響度 | Pitch and Loudness</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3c72',
+                        secondary: '#2a5298',
+                        vectorBlue: '#3b82f6',
+                        vectorRed: '#DC2626',
+                        bgGrid: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar for Sidebar */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Graph Background Grid */
+        .canvas-grid {
+            background-color: #f8fafc;
+            background-image: 
+                linear-gradient(#e2e8f0 1px, transparent 1px),
+                linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: center center;
+        }
+
+        /* Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #1e3c72;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body class="fixed inset-0 overflow-hidden bg-slate-100 text-slate-800 font-sans select-none">
+
+    <!-- Mobile Floating Button (Moved to Top-Left) -->
+    <button id="mobileMenuBtn" class="md:hidden fixed top-3 left-3 z-50 p-2 bg-primary text-white rounded-lg shadow-lg hover:bg-secondary transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+
+    <!-- Mobile Overlay -->
+    <div id="mobileOverlay" class="fixed inset-0 bg-black/50 z-40 hidden opacity-0 transition-opacity duration-300"></div>
+
+    <!-- Mobile Off-Canvas Sidebar (Opens from Left side) -->
+    <div id="mobileSidebar" class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 flex flex-col md:hidden">
+        <div class="p-4 bg-primary text-white flex justify-between items-center">
+            <h1 class="font-bold text-lg" data-i18n="title">Sound Wave Analysis</h1>
+            <button id="closeMobileMenuBtn" class="p-1 hover:bg-white/20 rounded">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 custom-scroll" id="mobileSidebarContent">
+            <!-- Content will be cloned here via JS for mobile view -->
+        </div>
+        <div class="p-4 bg-slate-100 text-xs text-center text-slate-500 border-t">
+            <span data-i18n="footerText">CMA Secondary School. Physics Department.</span>
+        </div>
+    </div>
+
+    <!-- Main Application Container -->
+    <div class="flex flex-col h-full w-full">
+        
+        <!-- Desktop Header -->
+        <header class="hidden md:flex bg-primary text-white shadow-md z-10 px-6 py-3 justify-between items-center shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+                    </svg>
+                </div>
+                <h1 class="font-bold text-xl tracking-wide" data-i18n="title">Sound Wave Analysis</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="helpBtn" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </button>
+                <button id="langToggle" class="px-3 py-1 text-sm border border-white/40 rounded-full hover:bg-white/10 transition-colors">
+                    繁 / Eng
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area (Split Pane) -->
+        <main class="flex-1 flex overflow-hidden relative">
+            
+            <!-- Left Sidebar Controls (Desktop) -->
+            <aside id="desktopSidebar" class="hidden md:flex flex-col w-80 bg-white shadow-[4px_0_15px_-3px_rgba(0,0,0,0.1)] z-10 shrink-0 border-r border-slate-200">
+                <div class="p-5 flex-1 overflow-y-auto custom-scroll flex flex-col gap-6" id="controlsContainer">
+                    
+                    <!-- Audio Input Source Section -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h2 class="text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider flex items-center gap-2">
+                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                            </svg>
+                            <span data-i18n="inputSource">Input Source</span>
+                        </h2>
+                        
+                        <div class="flex flex-col gap-3">
+                            <button id="recordBtn" class="flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-4 py-2 rounded-lg font-medium transition-colors w-full">
+                                <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse hidden" id="recordIndicator"></span>
+                                <span id="recordBtnText" data-i18n="recordVoice">Record Voice</span>
+                            </button>
+                            
+                            <div class="relative w-full">
+                                <input type="file" id="audioUpload" accept="audio/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                <button class="flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-4 py-2 rounded-lg font-medium transition-colors w-full">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                                    </svg>
+                                    <span data-i18n="uploadAudio">Upload Audio</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Physics Properties Section -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm opacity-50 pointer-events-none transition-opacity duration-300" id="propertiesPanel">
+                        <h2 class="text-sm font-bold text-slate-700 mb-4 uppercase tracking-wider flex items-center gap-2">
+                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                            </svg>
+                            <span data-i18n="waveProperties">Wave Properties</span>
+                        </h2>
+
+                        <!-- Amplitude -->
+                        <div class="mb-5">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-semibold text-slate-600" data-i18n="amplitude">Amplitude (A)</span>
+                                <span id="ampValue" class="font-mono text-vectorBlue font-bold">1.0x</span>
+                            </div>
+                            <input type="range" id="ampSlider" min="0.1" max="3.0" step="0.1" value="1.0">
+                            <div class="flex justify-between text-xs text-slate-400 mt-1">
+                                <span data-i18n="softer">Softer</span>
+                                <span data-i18n="louder">Louder</span>
+                            </div>
+                        </div>
+
+                        <!-- Frequency -->
+                        <div class="mb-5">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-semibold text-slate-600" data-i18n="frequency">Frequency (f)</span>
+                                <span id="freqValue" class="font-mono text-vectorRed font-bold">1.0x</span>
+                            </div>
+                            <input type="range" id="freqSlider" min="0.5" max="2.0" step="0.1" value="1.0">
+                            <div class="flex justify-between text-xs text-slate-400 mt-1">
+                                <span data-i18n="lowerPitch">Lower Pitch</span>
+                                <span data-i18n="higherPitch">Higher Pitch</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- View Controls -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm opacity-50 pointer-events-none transition-opacity duration-300" id="viewPanel">
+                         <h2 class="text-sm font-bold text-slate-700 mb-4 uppercase tracking-wider flex items-center gap-2">
+                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            <span data-i18n="graphView">Graph View</span>
+                        </h2>
+                        
+                        <!-- Zoom (Time Window) -->
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-semibold text-slate-600" data-i18n="timeWindow">Time Window (ms)</span>
+                                <span id="windowValue" class="font-mono">20 ms</span>
+                            </div>
+                            <input type="range" id="windowSlider" min="5" max="500" step="5" value="20">
+                        </div>
+
+                        <!-- Scrub/Position -->
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-semibold text-slate-600" data-i18n="scanPosition">Scan Position</span>
+                            </div>
+                            <input type="range" id="scrubSlider" min="0" max="100" step="0.1" value="50">
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
+
+            <!-- Right Area (Canvas + Minimap) -->
+            <div class="flex-1 flex flex-col relative bg-white border-l border-slate-200">
+                
+                <!-- Main Graph Area -->
+                <div id="canvasContainer" class="flex-1 relative w-full canvas-grid">
+                    <canvas id="physicsCanvas" class="absolute inset-0 w-full h-full block"></canvas>
+                    
+                    <!-- Top Half: Original Wave Controls & Labels (Added left-14 to avoid overlapping mobile menu button) -->
+                    <div class="absolute top-2 left-14 md:left-4 text-xs font-semibold text-vectorBlue bg-white/80 px-2 py-1 rounded shadow-sm z-10 flex gap-1">
+                        <span data-i18n="originalWave">Original Sound Wave</span>
+                        <span id="durationOriginal"></span>
+                    </div>
+                    
+                    <div class="absolute top-2 right-4 flex gap-2 z-10 hidden" id="controlsOriginal">
+                        <button id="playBtnOrg" class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center hover:bg-green-600 transition-colors shadow-sm" title="Play Original">
+                            <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <button id="stopBtnOrg" class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center hover:bg-slate-300 transition-colors shadow-sm" title="Stop">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <button id="downloadBtnOrg" class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center hover:bg-blue-600 transition-colors shadow-sm" title="Download">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Bottom Half: Modified Wave Controls & Labels -->
+                    <div class="absolute top-[52%] left-4 text-xs font-semibold text-vectorRed bg-white/80 px-2 py-1 rounded shadow-sm z-10 flex gap-1">
+                        <span data-i18n="modifiedWave">Modified Sound Wave</span>
+                        <span id="durationModified"></span>
+                    </div>
+                    
+                    <div class="absolute top-[52%] right-4 flex gap-2 z-10 hidden" id="controlsModified">
+                        <button id="playBtnMod" class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center hover:bg-green-600 transition-colors shadow-sm" title="Play Modified">
+                            <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <button id="stopBtnMod" class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center hover:bg-slate-300 transition-colors shadow-sm" title="Stop">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <button id="downloadBtnMod" class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center hover:bg-blue-600 transition-colors shadow-sm" title="Download">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- State Messaging overlay -->
+                    <div id="stateMessage" class="absolute inset-0 flex items-center justify-center flex-col bg-white/60 backdrop-blur-sm z-20 transition-opacity duration-300">
+                        <div class="bg-white p-6 rounded-2xl shadow-xl border border-slate-200 text-center max-w-sm mx-4">
+                            <div class="w-16 h-16 bg-blue-50 text-vectorBlue rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2" data-i18n="awaitingInput">Awaiting Input</h3>
+                            <p class="text-sm text-slate-500" data-i18n="awaitingInputDesc">Please record your voice or upload an audio file to view its displacement-time graph.</p>
+                            
+                            <!-- Mobile-only Action Reminder to Open Side Menu -->
+                            <p class="text-xs text-primary font-bold mt-4 md:hidden border-t border-slate-100 pt-3 flex items-center justify-center gap-1" data-i18n="mobileMenuReminder">
+                                💡 Tap the menu button (top-left) to record or upload!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Audio Minimap (Thumbnail of whole duration) -->
+                <div id="minimapWrapper" class="h-16 w-full border-t border-slate-300 bg-slate-50 relative shrink-0 hidden">
+                    <canvas id="minimapCanvas" class="absolute inset-0 w-full h-full block"></canvas>
+                    <div id="minimapRect" class="absolute top-0 bottom-0 bg-vectorBlue/20 border-x border-vectorBlue pointer-events-none"></div>
+                    <!-- Overlay to make the thumbnail clickable to seek -->
+                    <div id="minimapClicker" class="absolute inset-0 cursor-pointer"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Desktop Footer -->
+        <footer class="hidden md:flex bg-white border-t border-slate-200 text-xs text-slate-500 p-3 justify-center items-center shrink-0 shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
+            <span data-i18n="footerText">CMA Secondary School. Physics Department.</span>
+        </footer>
+    </div>
+
+    <!-- UI Message Modal -->
+    <div id="messageModal" class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-xl shadow-2xl p-6 max-w-sm w-full mx-4 transform scale-95 transition-transform duration-300" id="messageModalContent">
+            <h3 class="text-lg font-bold text-slate-800 mb-2" id="messageModalTitle">Message</h3>
+            <p class="text-sm text-slate-600 mb-5" id="messageModalBody">Body text here.</p>
+            <div class="flex justify-end">
+                <button id="messageModalClose" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary transition-colors">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help / Instructions Modal -->
+    <div id="helpModal" class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center opacity-0 transition-opacity duration-300 p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300" id="helpModalContent">
+            <div class="p-4 bg-primary text-white flex justify-between items-center shrink-0">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span data-i18n="helpTitle">Physics Principles</span>
+                </h3>
+                <button id="closeHelpBtn" class="text-white/70 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto text-sm text-slate-700 space-y-4">
+                <p data-i18n="helpDesc1">A sound wave is a longitudinal wave that propagates through a medium (like air) via pressure variations. A microphone converts these pressure changes into electrical signals, which we plot on a <strong>Displacement-Time Graph</strong>.</p>
+                
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <h4 class="font-bold text-primary mb-2" data-i18n="helpAmpTitle">1. Amplitude (A)</h4>
+                    <p data-i18n="helpAmpDesc">Amplitude corresponds to the maximum displacement from the equilibrium position. Physically, a larger amplitude means greater pressure variation, resulting in a <strong>louder</strong> sound. In the graph, this stretches the wave vertically.</p>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <h4 class="font-bold text-primary mb-2" data-i18n="helpFreqTitle">2. Frequency (f)</h4>
+                    <p data-i18n="helpFreqDesc">Frequency is the number of complete cycles per second, measured in Hertz (Hz). Physically, a higher frequency means the particles vibrate faster, resulting in a <strong>higher pitch</strong>. In the graph, a higher frequency compresses the wave horizontally (shorter period).</p>
+                </div>
+                
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <h4 class="font-bold text-primary mb-2" data-i18n="helpQualityTitle">3. Quality (Timbre)</h4>
+                    <p data-i18n="helpQualityDesc">The quality of a sound enables us to distinguish between different musical instruments playing the same note at the same loudness. It is determined by the waveform.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        /* --- 1. Global State & i18n --- */
+        const state = {
+            lang: 'zh', // Traditional Chinese as Default
+            audioCtx: null,
+            audioBuffer: null,
+            
+            // Playback state
+            playingType: 'none', // 'none', 'original', 'modified'
+            sourceNode: null,
+            gainNode: null,
+            
+            // Physics variables
+            amplitudeMult: 1.0,
+            frequencyMult: 1.0,
+            
+            // Graph View variables
+            windowMs: 20, // Milliseconds of audio to show on screen
+            scrubPercent: 50, // 0 to 100
+            
+            // Recording
+            mediaRecorder: null,
+            recordedChunks: [],
+            isRecording: false
+        };
+
+        const i18n = {
+            en: {
+                title: "Sound Wave Analysis",
+                footerText: "CMA Secondary School. Physics Department.",
+                inputSource: "Input Source",
+                recordVoice: "Record Voice",
+                stopRecord: "Stop Recording",
+                uploadAudio: "Upload Audio",
+                waveProperties: "Wave Properties",
+                amplitude: "Amplitude (Loudness)",
+                frequency: "Frequency (Pitch)",
+                softer: "Softer",
+                louder: "Louder",
+                lowerPitch: "Lower Pitch",
+                higherPitch: "Higher Pitch",
+                graphView: "Graph View",
+                timeWindow: "Time Window (ms)",
+                scanPosition: "Scan Position",
+                originalWave: "Original Sound Wave",
+                modifiedWave: "Modified Wave",
+                awaitingInput: "Awaiting Input",
+                awaitingInputDesc: "Please record your voice or upload an audio file to view its displacement-time graph.",
+                mobileMenuReminder: "💡 Tap the menu button (top-left) to record or upload!",
+                processing: "Processing Audio...",
+                helpTitle: "Physics Principles",
+                helpDesc1: "Sound is a longitudinal wave traveling through a medium. A microphone converts sound pressure variations into electrical signals, which are displayed as a Displacement-Time (y-t) graph. The characteristics of sound depend on the properties of its wave.",
+                helpAmpTitle: "1. Loudness & Amplitude (A)",
+                helpAmpDesc: "The loudness of a sound is determined by its amplitude. A larger amplitude means a greater maximum displacement of particles, transferring more energy and resulting in a louder sound. On the graph, this increases the vertical height of the wave.",
+                helpFreqTitle: "2. Pitch & Frequency (f)",
+                helpFreqDesc: "The pitch of a sound is determined by its frequency. A higher frequency (more cycles per second, measured in Hz) results in a higher pitch. On the graph, a higher frequency compresses the wave horizontally, resulting in a shorter period (T = 1/f).",
+                helpQualityTitle: "3. Quality (Timbre) & Waveform",
+                helpQualityDesc: "The quality of a sound enables us to distinguish between different musical instruments playing the same note at the same loudness. It is determined by the waveform, which is a complex mixture of the fundamental frequency and various overtones (harmonics).",
+                errMicSetup: "Could not access microphone. Please ensure permissions are granted.",
+                errAudioDecode: "Error decoding audio file. Please try a valid mp3/wav/mp4 file.",
+                errMicPermission: "Microphone permission denied. This app requires microphone access to record voice.",
+                errPlayback: "Audio playback failed. Please try re-uploading the file."
+            },
+            zh: {
+                title: "聲音波形分析",
+                footerText: "廠商會中學．物理科",
+                inputSource: "音源輸入",
+                recordVoice: "錄製聲音",
+                stopRecord: "停止錄音",
+                uploadAudio: "上傳音檔",
+                waveProperties: "聲波屬性",
+                amplitude: "振幅 (響度)",
+                frequency: "頻率 (音高)",
+                softer: "較小聲",
+                louder: "較大聲",
+                lowerPitch: "較低音",
+                higherPitch: "較高音",
+                graphView: "圖表檢視",
+                timeWindow: "時間視窗 (毫秒)",
+                scanPosition: "掃描位置",
+                originalWave: "原始聲波",
+                modifiedWave: "修改後聲波",
+                awaitingInput: "等待輸入",
+                awaitingInputDesc: "請錄製您的聲音或上傳音檔以檢視其位移-時間圖像。",
+                mobileMenuReminder: "💡 請點擊左上角選單按鈕來錄製或上傳聲音！",
+                processing: "處理音訊中...",
+                helpTitle: "物理原理",
+                helpDesc1: "聲音是在介質中傳播的縱波。麥克風將聲音的壓力變化轉換為電信號，並顯示為位移-時間 (y-t) 圖像。聲音的特性取決於其波的物理屬性。",
+                helpAmpTitle: "1. 響度 (Loudness) 與 振幅 (Amplitude, A)",
+                helpAmpDesc: "聲音的響度取決於其振幅。振幅越大代表粒子的最大位移越大，傳遞的能量越多，聲音就越響亮。在圖像上，波形的垂直高度會增加。",
+                helpFreqTitle: "2. 音高 (Pitch) 與 頻率 (Frequency, f)",
+                helpFreqDesc: "聲音的音高取決於其頻率。頻率較高（每秒的循環次數較多，單位為 Hz）會產生較高的音高。在圖像上，波形會在水平方向被壓縮，導致週期變短 (T = 1/f)。",
+                helpQualityTitle: "3. 音色 (Quality/Timbre) 與 波形 (Waveform)",
+                helpQualityDesc: "音色讓我們能分辨出以相同響度和音高演奏的不同樂器。音色取決於波形 (Waveform)，它是基頻和各種泛音（諧波）的複雜混合體。",
+                errMicSetup: "無法存取麥克風。請確保已授予權限。",
+                errAudioDecode: "解碼音檔時發生錯誤。請嘗試有效的 mp3/wav/mp4 檔案。",
+                errMicPermission: "麥克風權限被拒絕。此應用需要麥克風存取權限以錄製聲音。",
+                errPlayback: "音頻播放失敗。請嘗試重新上傳檔案。"
+            }
+        };
+
+        function updateLanguage() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[state.lang][key]) {
+                    el.innerText = i18n[state.lang][key];
+                }
+            });
+            requestAnimationFrame(drawGraph); // Redraw canvas labels
+        }
+
+        /* --- 2. Layout & UI Initialization --- */
+        const DOM = {
+            langToggle: document.getElementById('langToggle'),
+            mobileMenuBtn: document.getElementById('mobileMenuBtn'),
+            mobileSidebar: document.getElementById('mobileSidebar'),
+            mobileOverlay: document.getElementById('mobileOverlay'),
+            closeMobileMenuBtn: document.getElementById('closeMobileMenuBtn'),
+            mobileSidebarContent: document.getElementById('mobileSidebarContent'),
+            controlsContainer: document.getElementById('controlsContainer'),
+            
+            ampSlider: document.getElementById('ampSlider'),
+            ampValue: document.getElementById('ampValue'),
+            freqSlider: document.getElementById('freqSlider'),
+            freqValue: document.getElementById('freqValue'),
+            windowSlider: document.getElementById('windowSlider'),
+            windowValue: document.getElementById('windowValue'),
+            scrubSlider: document.getElementById('scrubSlider'),
+            
+            recordBtn: document.getElementById('recordBtn'),
+            recordBtnText: document.getElementById('recordBtnText'),
+            recordIndicator: document.getElementById('recordIndicator'),
+            audioUpload: document.getElementById('audioUpload'),
+            
+            // Playback controls (Original and Modified)
+            controlsOriginal: document.getElementById('controlsOriginal'),
+            playBtnOrg: document.getElementById('playBtnOrg'),
+            stopBtnOrg: document.getElementById('stopBtnOrg'),
+            downloadBtnOrg: document.getElementById('downloadBtnOrg'),
+            
+            controlsModified: document.getElementById('controlsModified'),
+            playBtnMod: document.getElementById('playBtnMod'),
+            stopBtnMod: document.getElementById('stopBtnMod'),
+            downloadBtnMod: document.getElementById('downloadBtnMod'),
+            
+            durationOriginal: document.getElementById('durationOriginal'),
+            durationModified: document.getElementById('durationModified'),
+            
+            propertiesPanel: document.getElementById('propertiesPanel'),
+            viewPanel: document.getElementById('viewPanel'),
+            stateMessage: document.getElementById('stateMessage'),
+            
+            canvasContainer: document.getElementById('canvasContainer'),
+            canvas: document.getElementById('physicsCanvas'),
+            
+            minimapWrapper: document.getElementById('minimapWrapper'),
+            minimapCanvas: document.getElementById('minimapCanvas'),
+            minimapRect: document.getElementById('minimapRect'),
+            minimapClicker: document.getElementById('minimapClicker'),
+
+            helpBtn: document.getElementById('helpBtn'),
+            helpModal: document.getElementById('helpModal'),
+            helpModalContent: document.getElementById('helpModalContent'),
+            closeHelpBtn: document.getElementById('closeHelpBtn'),
+
+            msgModal: document.getElementById('messageModal'),
+            msgModalContent: document.getElementById('messageModalContent'),
+            msgModalTitle: document.getElementById('messageModalTitle'),
+            msgModalBody: document.getElementById('messageModalBody'),
+            msgModalClose: document.getElementById('messageModalClose'),
+        };
+
+        // Mobile Menu Logic (Adjusted for Slide-In from Left)
+        function toggleMobileMenu(show) {
+            if (show) {
+                // Move controls to mobile sidebar
+                DOM.mobileSidebarContent.appendChild(DOM.controlsContainer);
+                
+                DOM.mobileSidebar.classList.remove('-translate-x-full');
+                DOM.mobileOverlay.classList.remove('hidden');
+                setTimeout(() => DOM.mobileOverlay.classList.remove('opacity-0'), 10);
+            } else {
+                DOM.mobileSidebar.classList.add('-translate-x-full');
+                DOM.mobileOverlay.classList.add('opacity-0');
+                setTimeout(() => {
+                    DOM.mobileOverlay.classList.add('hidden');
+                    // Move controls back to desktop sidebar
+                    document.getElementById('desktopSidebar').appendChild(DOM.controlsContainer);
+                }, 300);
+            }
+            // Trigger resize to fix canvas sizing
+            setTimeout(resizeCanvas, 350);
+        }
+
+        DOM.mobileMenuBtn.addEventListener('click', () => toggleMobileMenu(true));
+        DOM.closeMobileMenuBtn.addEventListener('click', () => toggleMobileMenu(false));
+        DOM.mobileOverlay.addEventListener('click', () => toggleMobileMenu(false));
+
+        // Language Toggle
+        DOM.langToggle.addEventListener('click', () => {
+            state.lang = state.lang === 'en' ? 'zh' : 'en';
+            updateLanguage();
+        });
+
+        // UI Modals Replacement for alert()
+        function showMessage(title, body) {
+            DOM.msgModalTitle.innerText = title;
+            DOM.msgModalBody.innerText = body;
+            DOM.msgModal.classList.remove('hidden');
+            DOM.msgModal.style.display = 'flex';
+            setTimeout(() => {
+                DOM.msgModal.classList.remove('opacity-0');
+                DOM.msgModalContent.classList.remove('scale-95');
+            }, 10);
+        }
+        DOM.msgModalClose.addEventListener('click', () => {
+            DOM.msgModal.classList.add('opacity-0');
+            DOM.msgModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                DOM.msgModal.classList.add('hidden');
+                DOM.msgModal.style.display = 'none';
+            }, 300);
+        });
+
+        // Help Modal
+        function toggleHelp(show) {
+            if(show) {
+                DOM.helpModal.classList.remove('hidden');
+                DOM.helpModal.style.display = 'flex';
+                setTimeout(() => {
+                    DOM.helpModal.classList.remove('opacity-0');
+                    DOM.helpModalContent.classList.remove('scale-95');
+                }, 10);
+            } else {
+                DOM.helpModal.classList.add('opacity-0');
+                DOM.helpModalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    DOM.helpModal.classList.add('hidden');
+                    DOM.helpModal.style.display = 'none';
+                }, 300);
+            }
+        }
+        DOM.helpBtn.addEventListener('click', () => toggleHelp(true));
+        DOM.closeHelpBtn.addEventListener('click', () => toggleHelp(false));
+
+        // Format time helper (e.g., converts 125.342 to "2:05.342")
+        function formatTime(totalSeconds) {
+            const m = Math.floor(totalSeconds / 60);
+            const s = totalSeconds % 60;
+            if (m > 0) {
+                return `${m}:${s.toFixed(3).padStart(6, '0')}`;
+            }
+            return `${s.toFixed(3)} s`;
+        }
+
+        function updateDurations() {
+            if (!state.audioBuffer) {
+                DOM.durationOriginal.innerText = "";
+                DOM.durationModified.innerText = "";
+                return;
+            }
+            const origDur = state.audioBuffer.duration;
+            const modDur = origDur / state.frequencyMult;
+            
+            DOM.durationOriginal.innerText = `(${formatTime(origDur)})`;
+            DOM.durationModified.innerText = `(${formatTime(modDur)})`;
+        }
+
+        // Physics Sliders Logic
+        function updateSliders() {
+            state.amplitudeMult = parseFloat(DOM.ampSlider.value);
+            state.frequencyMult = parseFloat(DOM.freqSlider.value);
+            state.windowMs = parseFloat(DOM.windowSlider.value);
+            state.scrubPercent = parseFloat(DOM.scrubSlider.value);
+
+            DOM.ampValue.innerText = state.amplitudeMult.toFixed(1) + 'x';
+            DOM.freqValue.innerText = state.frequencyMult.toFixed(1) + 'x';
+            DOM.windowValue.innerText = state.windowMs + ' ms';
+
+            updateDurations();
+            updateMinimapRect();
+            requestAnimationFrame(drawGraph);
+            
+            // If playing the modified wave, update its properties live
+            if(state.playingType === 'modified') {
+                if(state.sourceNode) state.sourceNode.playbackRate.value = state.frequencyMult;
+                if(state.gainNode) state.gainNode.gain.value = state.amplitudeMult;
+            }
+        }
+
+        DOM.ampSlider.addEventListener('input', updateSliders);
+        DOM.freqSlider.addEventListener('input', updateSliders);
+        DOM.windowSlider.addEventListener('input', updateSliders);
+        DOM.scrubSlider.addEventListener('input', updateSliders);
+
+        // Minimap click & touch to scrub
+        function attachMinimapListeners() {
+            const updateScrub = (clientX) => {
+                const rect = DOM.minimapWrapper.getBoundingClientRect();
+                const clickX = clientX - rect.left;
+                let pct = (clickX / rect.width) * 100;
+                pct = Math.max(0, Math.min(100, pct));
+                DOM.scrubSlider.value = pct;
+                updateSliders();
+            };
+
+            // Mouse events
+            DOM.minimapClicker.addEventListener('mousedown', (e) => {
+                if (!state.audioBuffer) return;
+                updateScrub(e.clientX);
+                const onMouseMove = (ev) => updateScrub(ev.clientX);
+                const onMouseUp = () => {
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                };
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+
+            // Touch events for mobile
+            DOM.minimapClicker.addEventListener('touchstart', (e) => {
+                if (!state.audioBuffer) return;
+                e.preventDefault(); // Prevent page scrolling while scrubbing
+                updateScrub(e.touches[0].clientX);
+                const onTouchMove = (ev) => {
+                    ev.preventDefault();
+                    updateScrub(ev.touches[0].clientX);
+                };
+                const onTouchEnd = () => {
+                    document.removeEventListener('touchmove', onTouchMove);
+                    document.removeEventListener('touchend', onTouchEnd);
+                };
+                document.addEventListener('touchmove', onTouchMove, { passive: false });
+                document.addEventListener('touchend', onTouchEnd);
+            }, { passive: false });
+        }
+        
+        attachMinimapListeners();
+
+        /* --- 3. Audio Processing Logic --- */
+        
+        async function initAudioContext() {
+            if (!state.audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                state.audioCtx = new AudioContext();
+            }
+            if (state.audioCtx.state === 'suspended') {
+                await state.audioCtx.resume();
+            }
+        }
+
+        function onAudioDataLoaded(buffer) {
+            state.audioBuffer = buffer;
+            
+            // Enable UI
+            DOM.propertiesPanel.classList.remove('opacity-50', 'pointer-events-none');
+            DOM.viewPanel.classList.remove('opacity-50', 'pointer-events-none');
+            DOM.controlsOriginal.classList.remove('hidden');
+            DOM.controlsModified.classList.remove('hidden');
+            DOM.minimapWrapper.classList.remove('hidden');
+            DOM.stateMessage.classList.add('opacity-0');
+            setTimeout(() => DOM.stateMessage.classList.add('hidden'), 300);
+
+            // Reset Sliders
+            DOM.ampSlider.value = 1.0;
+            DOM.freqSlider.value = 1.0;
+            DOM.scrubSlider.value = 0;
+            updateSliders();
+            
+            // Close mobile menu if open to show graph
+            if(!DOM.mobileSidebar.classList.contains('translate-x-full')){
+                toggleMobileMenu(false);
+            }
+            
+            // Draw Minimap (static full render)
+            drawMinimap();
+            
+            // Draw initial Graph
+            requestAnimationFrame(drawGraph);
+        }
+
+        // File Upload
+        DOM.audioUpload.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            try {
+                await initAudioContext();
+                const arrayBuffer = await file.arrayBuffer();
+                state.audioCtx.decodeAudioData(arrayBuffer, 
+                    (buffer) => onAudioDataLoaded(buffer),
+                    (err) => {
+                        console.error("Decode Error:", err);
+                        showMessage("Error", i18n[state.lang].errAudioDecode);
+                    }
+                );
+            } catch (err) {
+                 console.error("Upload Error:", err);
+                 showMessage("Error", i18n[state.lang].errAudioDecode);
+            }
+            
+            // Reset input so the same file can be selected again
+            e.target.value = '';
+        });
+
+        // Microphone Recording
+        DOM.recordBtn.addEventListener('click', async () => {
+            if (state.isRecording) {
+                stopRecording();
+                return;
+            }
+            
+            try {
+                await initAudioContext();
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                state.mediaRecorder = new MediaRecorder(stream);
+                state.recordedChunks = [];
+
+                state.mediaRecorder.ondataavailable = e => {
+                    if (e.data.size > 0) state.recordedChunks.push(e.data);
+                };
+
+                state.mediaRecorder.onstop = async () => {
+                    // Use the browser's native mime type instead of forcing webm (Fixes iOS Safari)
+                    const blob = new Blob(state.recordedChunks, { type: state.mediaRecorder.mimeType || 'audio/webm' });
+                    try {
+                        const arrayBuffer = await blob.arrayBuffer();
+                        state.audioCtx.decodeAudioData(arrayBuffer, 
+                            (buffer) => onAudioDataLoaded(buffer),
+                            (e) => {
+                                showMessage("Recording Error", "Could not decode recording. Please try uploading a file instead.");
+                            }
+                        );
+                    } catch(err) {
+                         showMessage("Recording Error", "Could not process recording data.");
+                    }
+                    
+                    // Stop tracks to release mic
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                state.mediaRecorder.start();
+                state.isRecording = true;
+                
+                // UI updates for recording state
+                DOM.recordIndicator.classList.remove('hidden');
+                DOM.recordBtn.classList.replace('bg-red-50', 'bg-red-600');
+                DOM.recordBtn.classList.replace('text-red-600', 'text-white');
+                DOM.recordBtnText.innerText = i18n[state.lang].stopRecord;
+                DOM.stateMessage.querySelector('p').innerText = "Recording... Speak clearly.";
+
+            } catch (err) {
+                console.error(err);
+                if(err.name === "NotAllowedError"){
+                    showMessage("Permission Error", i18n[state.lang].errMicPermission);
+                } else {
+                    showMessage("Microphone Error", i18n[state.lang].errMicSetup);
+                }
+            }
+        });
+
+        function stopRecording() {
+            if (state.mediaRecorder && state.mediaRecorder.state !== 'inactive') {
+                state.mediaRecorder.stop();
+            }
+            state.isRecording = false;
+            
+            // Restore UI
+            DOM.recordIndicator.classList.add('hidden');
+            DOM.recordBtn.classList.replace('bg-red-600', 'bg-red-50');
+            DOM.recordBtn.classList.replace('text-white', 'text-red-600');
+            DOM.recordBtnText.innerText = i18n[state.lang].recordVoice;
+            DOM.stateMessage.querySelector('p').innerText = i18n[state.lang].processing;
+        }
+
+        // Central UI Update for Playback
+        function updatePlaybackUI() {
+            // Reset all buttons to default (unplayed) state
+            [DOM.playBtnOrg, DOM.playBtnMod].forEach(btn => {
+                btn.classList.replace('bg-green-200', 'bg-green-500');
+            });
+            [DOM.stopBtnOrg, DOM.stopBtnMod].forEach(btn => {
+                btn.classList.replace('bg-slate-500', 'bg-slate-200');
+                btn.classList.replace('text-white', 'text-slate-700');
+            });
+
+            // Highlight the active playing context
+            if (state.playingType === 'original') {
+                DOM.playBtnOrg.classList.replace('bg-green-500', 'bg-green-200');
+                DOM.stopBtnOrg.classList.replace('bg-slate-200', 'bg-slate-500');
+                DOM.stopBtnOrg.classList.replace('text-slate-700', 'text-white');
+            } else if (state.playingType === 'modified') {
+                DOM.playBtnMod.classList.replace('bg-green-500', 'bg-green-200');
+                DOM.stopBtnMod.classList.replace('bg-slate-200', 'bg-slate-500');
+                DOM.stopBtnMod.classList.replace('text-slate-700', 'text-white');
+            }
+        }
+
+        // Playback Logic
+        async function playAudio(type) {
+            if (!state.audioBuffer) return;
+            
+            try {
+                await initAudioContext();
+                stopAudio(); // Ensure any existing audio is fully stopped and cleaned up
+
+                state.sourceNode = state.audioCtx.createBufferSource();
+                state.sourceNode.buffer = state.audioBuffer;
+                
+                // Determine physics properties based on which play button was hit
+                let freq = 1.0;
+                let amp = 1.0;
+                if (type === 'modified') {
+                    freq = state.frequencyMult;
+                    amp = state.amplitudeMult;
+                }
+
+                state.sourceNode.playbackRate.value = freq;
+                
+                state.gainNode = state.audioCtx.createGain();
+                state.gainNode.gain.value = amp;
+
+                // Start playing from the scrubbed position
+                const duration = state.audioBuffer.duration;
+                const startTimeOffset = (state.scrubPercent / 100) * duration;
+
+                // Connect nodes: Source -> Gain -> Destination
+                state.sourceNode.connect(state.gainNode);
+                state.gainNode.connect(state.audioCtx.destination);
+                
+                // Start playback
+                state.sourceNode.start(0, startTimeOffset);
+                state.playingType = type;
+
+                updatePlaybackUI();
+
+                // Cleanup when audio finishes naturally
+                state.sourceNode.onended = () => {
+                    // Only trigger if it wasn't stopped manually
+                    if(state.playingType !== 'none') {
+                        stopAudio();
+                    }
+                };
+            } catch(err) {
+                console.error("Playback Error:", err);
+                showMessage("Playback Error", i18n[state.lang].errPlayback);
+                stopAudio();
+            }
+        }
+
+        function stopAudio() {
+            if (state.sourceNode) {
+                try {
+                    state.sourceNode.stop();
+                    state.sourceNode.disconnect();
+                } catch(e) {}
+                state.sourceNode = null;
+            }
+            if(state.gainNode) {
+                 try { state.gainNode.disconnect(); } catch(e){}
+                 state.gainNode = null;
+            }
+            
+            state.playingType = 'none';
+            updatePlaybackUI();
+        }
+
+        // Attach listeners for both Original and Modified playback
+        DOM.playBtnOrg.addEventListener('click', () => playAudio('original'));
+        DOM.stopBtnOrg.addEventListener('click', stopAudio);
+        
+        DOM.playBtnMod.addEventListener('click', () => playAudio('modified'));
+        DOM.stopBtnMod.addEventListener('click', stopAudio);
+
+        /* --- Audio Export to WAV Logic --- */
+        function audioBufferToWav(buffer) {
+            const numOfChan = buffer.numberOfChannels;
+            const length = buffer.length * numOfChan * 2 + 44;
+            const bufferData = new ArrayBuffer(length);
+            const view = new DataView(bufferData);
+            const channels = [];
+            let i, sample, offset = 0, pos = 0;
+
+            function setUint16(data) { view.setUint16(pos, data, true); pos += 2; }
+            function setUint32(data) { view.setUint32(pos, data, true); pos += 4; }
+
+            // write header
+            setUint32(0x46464952); // "RIFF"
+            setUint32(length - 8); // file length - 8
+            setUint32(0x45564157); // "WAVE"
+
+            setUint32(0x20746d66); // "fmt " chunk
+            setUint32(16); // length = 16
+            setUint16(1); // PCM (uncompressed)
+            setUint16(numOfChan);
+            setUint32(buffer.sampleRate);
+            setUint32(buffer.sampleRate * 2 * numOfChan); // avg. bytes/sec
+            setUint16(numOfChan * 2); // block-align
+            setUint16(16); // 16-bit
+
+            setUint32(0x61746164); // "data" - chunk
+            setUint32(length - pos - 4); // chunk length
+
+            // write interleaved data
+            for (i = 0; i < buffer.numberOfChannels; i++) {
+                channels.push(buffer.getChannelData(i));
+            }
+
+            while (pos < length) {
+                for (i = 0; i < numOfChan; i++) {
+                    sample = Math.max(-1, Math.min(1, channels[i][offset])); // clamp
+                    sample = (0.5 + sample < 0 ? sample * 32768 : sample * 32767) | 0; // scale to 16-bit signed int
+                    view.setInt16(pos, sample, true); // write 16-bit sample
+                    pos += 2;
+                }
+                offset++; // next source sample
+            }
+            return new Blob([bufferData], { type: "audio/wav" });
+        }
+
+        function triggerDownload(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 100);
+        }
+
+        DOM.downloadBtnOrg.addEventListener('click', () => {
+            if (!state.audioBuffer) return;
+            const wavBlob = audioBufferToWav(state.audioBuffer);
+            triggerDownload(wavBlob, 'original_sound.wav');
+        });
+
+        DOM.downloadBtnMod.addEventListener('click', async () => {
+            if (!state.audioBuffer) return;
+            
+            // --- UI Loading State ---
+            const originalIcon = DOM.downloadBtnMod.innerHTML;
+            DOM.downloadBtnMod.disabled = true;
+            DOM.downloadBtnMod.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+
+            // Minimal timeout to let the DOM update the loading icon before the heavy rendering thread starts
+            setTimeout(async () => {
+                // Use OfflineAudioContext to render the modified audio instantly
+                const OfflineAudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+                const offlineCtx = new OfflineAudioContext(
+                    state.audioBuffer.numberOfChannels,
+                    Math.ceil(state.audioBuffer.length / state.frequencyMult),
+                    state.audioBuffer.sampleRate
+                );
+                
+                const source = offlineCtx.createBufferSource();
+                source.buffer = state.audioBuffer;
+                source.playbackRate.value = state.frequencyMult;
+                
+                const gain = offlineCtx.createGain();
+                gain.gain.value = state.amplitudeMult;
+                
+                source.connect(gain);
+                gain.connect(offlineCtx.destination);
+                source.start(0);
+                
+                try {
+                    const renderedBuffer = await offlineCtx.startRendering();
+                    const wavBlob = audioBufferToWav(renderedBuffer);
+                    triggerDownload(wavBlob, 'modified_sound.wav');
+                } catch (err) {
+                    console.error("Download Error:", err);
+                    showMessage("Export Error", "Failed to render modified audio.");
+                }
+
+                // --- Revert UI ---
+                DOM.downloadBtnMod.disabled = false;
+                DOM.downloadBtnMod.innerHTML = originalIcon;
+            }, 50);
+        });
+
+
+        /* --- 4. Canvas Engine & Math Logic --- */
+        const ctx = DOM.canvas.getContext('2d', { alpha: false }); // Main graph context
+        const mCtx = DOM.minimapCanvas.getContext('2d', { alpha: false }); // Minimap context
+        
+        let canvasW = 0, canvasH = 0;
+        let minimapW = 0, minimapH = 0;
+
+        function resizeCanvas() {
+            const rect = DOM.canvasContainer.getBoundingClientRect();
+            const mRect = DOM.minimapWrapper.getBoundingClientRect();
+            
+            // Handle High-DPI displays (Retina)
+            const dpr = window.devicePixelRatio || 1;
+            
+            // Main Canvas
+            canvasW = rect.width;
+            canvasH = rect.height;
+            DOM.canvas.width = canvasW * dpr;
+            DOM.canvas.height = canvasH * dpr;
+            ctx.scale(dpr, dpr);
+            
+            // Minimap Canvas
+            minimapW = mRect.width;
+            minimapH = mRect.height;
+            DOM.minimapCanvas.width = minimapW * dpr;
+            DOM.minimapCanvas.height = minimapH * dpr;
+            mCtx.scale(dpr, dpr);
+
+            if (state.audioBuffer) {
+                drawMinimap();
+            }
+            requestAnimationFrame(drawGraph);
+        }
+
+        // Auto-fitting viewport via ResizeObserver
+        const resizeObserver = new ResizeObserver(resizeCanvas);
+        resizeObserver.observe(DOM.canvasContainer);
+        // Also observe minimap container to keep them in sync
+        resizeObserver.observe(DOM.minimapWrapper);
+
+        // Minimap Render Math
+        function updateMinimapRect() {
+            if (!state.audioBuffer) return;
+            
+            const totalSamples = state.audioBuffer.getChannelData(0).length;
+            const sampleRate = state.audioBuffer.sampleRate;
+            
+            // Window calculation
+            const windowSamples = (state.windowMs / 1000) * sampleRate;
+            let widthPct = (windowSamples / totalSamples) * 100;
+            widthPct = Math.min(100, Math.max(0, widthPct)); // Clamp 0-100
+            
+            // Start calculation
+            const maxStart = Math.max(0, totalSamples - windowSamples);
+            const startSample = Math.floor((state.scrubPercent / 100) * maxStart);
+            let leftPct = (startSample / totalSamples) * 100;
+            leftPct = Math.max(0, leftPct);
+
+            DOM.minimapRect.style.width = `${widthPct}%`;
+            DOM.minimapRect.style.left = `${leftPct}%`;
+        }
+
+        function drawMinimap() {
+            mCtx.fillStyle = '#f8fafc'; // slate-50 background
+            mCtx.fillRect(0, 0, minimapW, minimapH);
+
+            if (!state.audioBuffer) return;
+            
+            const data = state.audioBuffer.getChannelData(0);
+            
+            mCtx.beginPath();
+            mCtx.strokeStyle = '#94a3b8'; // slate-400
+            mCtx.lineWidth = 1;
+            
+            const midY = minimapH / 2;
+            const maxGraphAmp = minimapH * 0.45; 
+            
+            // Optimize drawing by chunking samples per pixel width
+            const step = Math.ceil(data.length / minimapW);
+            
+            for (let x = 0; x < minimapW; x++) {
+                const sampleIndex = x * step;
+                if (sampleIndex >= data.length) break;
+                
+                // Find peak absolute amplitude in this step chunk to draw visible envelope
+                let peak = 0;
+                for (let j = 0; j < step && (sampleIndex + j) < data.length; j++) {
+                    const absVal = Math.abs(data[sampleIndex + j]);
+                    if (absVal > peak) peak = absVal;
+                }
+                
+                const yOffset = peak * maxGraphAmp;
+                mCtx.moveTo(x, midY - yOffset);
+                mCtx.lineTo(x, midY + yOffset);
+            }
+            mCtx.stroke();
+            
+            updateMinimapRect();
+        }
+
+        // Main Graph Render Math
+        function drawGraph() {
+            // Background clearance (using Tailwind grid color)
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, canvasW, canvasH);
+
+            if (!state.audioBuffer) return;
+
+            const data = state.audioBuffer.getChannelData(0);
+            const sampleRate = state.audioBuffer.sampleRate;
+            
+            // Calculate slice of data to display based on scrub & window
+            const windowSamples = (state.windowMs / 1000) * sampleRate;
+            const maxStart = Math.max(0, data.length - windowSamples);
+            const startSample = Math.floor((state.scrubPercent / 100) * maxStart);
+            const endSample = startSample + windowSamples;
+
+            // Split canvas into Top (Original) and Bottom (Modified)
+            const halfH = canvasH / 2;
+            
+            // Draw Axes
+            drawAxes(0, halfH, "Original");
+            drawAxes(halfH, canvasH, "Modified");
+
+            // Draw Waves
+            // 1. Original (Top half)
+            drawWave(data, startSample, endSample, 0, halfH, 1.0, 1.0, '#3b82f6'); // vectorBlue
+            
+            // 2. Modified (Bottom half)
+            drawWave(data, startSample, endSample, halfH, canvasH, state.amplitudeMult, state.frequencyMult, '#DC2626'); // vectorRed
+        }
+
+        function drawAxes(startY, endY, type) {
+            const height = endY - startY;
+            const midY = startY + height / 2;
+            
+            ctx.beginPath();
+            ctx.strokeStyle = '#cbd5e1'; // slate-300
+            ctx.lineWidth = 2;
+            
+            // X-Axis (Time)
+            ctx.moveTo(0, midY);
+            ctx.lineTo(canvasW, midY);
+            
+            // Y-Axis (Displacement) - draw at 5% width margin
+            const xMargin = canvasW * 0.05;
+            ctx.moveTo(xMargin, startY + 20);
+            ctx.lineTo(xMargin, endY - 20);
+            ctx.stroke();
+
+            // Arrows for axes
+            ctx.fillStyle = '#94a3b8';
+            ctx.beginPath(); // Y arrow
+            ctx.moveTo(xMargin - 4, startY + 20);
+            ctx.lineTo(xMargin + 4, startY + 20);
+            ctx.lineTo(xMargin, startY + 12);
+            ctx.fill();
+            
+            ctx.beginPath(); // X arrow
+            ctx.moveTo(canvasW - 20, midY - 4);
+            ctx.lineTo(canvasW - 20, midY + 4);
+            ctx.lineTo(canvasW - 12, midY);
+            ctx.fill();
+
+            // Axis Labels
+            ctx.font = '12px sans-serif';
+            ctx.fillText('t (ms)', canvasW - 45, midY + 20);
+            ctx.fillText('y', xMargin + 10, startY + 25);
+        }
+
+        function drawWave(data, startSample, endSample, startY, endY, ampMult, freqMult, color) {
+            const height = endY - startY;
+            const midY = startY + height / 2;
+            
+            // Max amplitude allowed physically on graph (leaving margins)
+            const maxGraphAmp = height * 0.4; 
+            
+            // Drawing margin offset
+            const xMargin = canvasW * 0.05;
+            const graphWidth = canvasW - xMargin - 20; // 20px padding right
+
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.lineJoin = 'round';
+
+            // Base scaling for amplitude
+            // We normalize against roughly 0.5 to make normal speech visible, then apply multiplier
+            const baseAmpScale = maxGraphAmp * 2.0; 
+
+            // Time window iteration
+            const windowSamples = endSample - startSample;
+            let firstPoint = true;
+            
+            // Calculate how many audio samples fall into one horizontal canvas pixel
+            const samplesPerPixel = (windowSamples * freqMult) / graphWidth;
+
+            for (let x = 0; x < graphWidth; x++) {
+                // Map x-coordinate back to time (t)
+                const t_ratio = x / graphWidth;
+                
+                // Actual index in the audio buffer relative to start
+                const sampleOffsetStart = t_ratio * windowSamples * freqMult;
+                const sIdxStart = Math.floor(startSample + sampleOffsetStart);
+                const sIdxEnd = Math.floor(sIdxStart + samplesPerPixel);
+
+                if (sIdxStart >= data.length) break;
+
+                const canvasX = xMargin + x;
+
+                // Anti-Aliasing (Envelope Rendering)
+                // If a single pixel represents many samples (zoomed out), find the min/max peak
+                if (samplesPerPixel > 2) {
+                    let minVal = 0;
+                    let maxVal = 0;
+                    const endIter = Math.min(sIdxEnd, data.length);
+                    
+                    for (let i = sIdxStart; i < endIter; i++) {
+                        if (data[i] > maxVal) maxVal = data[i];
+                        if (data[i] < minVal) minVal = data[i];
+                    }
+                    
+                    const y1 = midY - Math.max(Math.min(maxVal * baseAmpScale * ampMult, maxGraphAmp), -maxGraphAmp);
+                    const y2 = midY - Math.max(Math.min(minVal * baseAmpScale * ampMult, maxGraphAmp), -maxGraphAmp);
+
+                    if (firstPoint) {
+                        ctx.moveTo(canvasX, y1);
+                        firstPoint = false;
+                    }
+                    ctx.lineTo(canvasX, y1);
+                    ctx.lineTo(canvasX, y2);
+                } 
+                // Smooth line rendering (zoomed in)
+                else {
+                    const val = data[sIdxStart];
+                    const yOffset = val * baseAmpScale * ampMult;
+                    const canvasY = midY - Math.max(Math.min(yOffset, maxGraphAmp), -maxGraphAmp);
+
+                    if (firstPoint) {
+                        ctx.moveTo(canvasX, canvasY);
+                        firstPoint = false;
+                    } else {
+                        ctx.lineTo(canvasX, canvasY);
+                    }
+                }
+            }
+            ctx.stroke();
+        }
+
+        /* --- 5. Main Loop & Bootstrapping --- */
+        window.addEventListener('load', () => {
+            updateLanguage();
+            resizeCanvas(); // Ensure canvases are sized correctly
+        });
+
+    </script>
+</body>
+</html>
