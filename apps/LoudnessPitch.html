@@ -23,7 +23,27 @@
         }
     </script>
 
+    <!-- MathJax 3 for LaTeX rendering -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
     <style>
+        /* Fix Tailwind's 'display: block' reset on SVG elements, which breaks MathJax inline formulas */
+        mjx-container[jax="SVG"] {
+            display: inline-block !important;
+            vertical-align: -0.1em !important;
+            margin: 0 0.1em !important;
+        }
+        mjx-container[jax="SVG"] svg {
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+
         /* Custom Scrollbar for Sidebar */
         .custom-scroll::-webkit-scrollbar {
             width: 6px;
@@ -103,7 +123,7 @@
             <!-- Content will be cloned here via JS for mobile view -->
         </div>
         <div class="p-4 bg-slate-100 text-xs text-center text-slate-500 border-t">
-            <span data-i18n="footerText">CMA Secondary School. Physics Department.</span>
+            <span data-i18n="footerText">廠商會中學．物理科</span>
         </div>
     </div>
 
@@ -240,7 +260,7 @@
                 <div id="canvasContainer" class="flex-1 relative w-full canvas-grid">
                     <canvas id="physicsCanvas" class="absolute inset-0 w-full h-full block"></canvas>
                     
-                    <!-- Top Half: Original Wave Controls & Labels (Added left-14 to avoid overlapping mobile menu button) -->
+                    <!-- Top Half: Original Wave Controls & Labels -->
                     <div class="absolute top-2 left-14 md:left-4 text-xs font-semibold text-vectorBlue bg-white/80 px-2 py-1 rounded shadow-sm z-10 flex gap-1">
                         <span data-i18n="originalWave">Original Sound Wave</span>
                         <span id="durationOriginal"></span>
@@ -319,7 +339,7 @@
 
         <!-- Desktop Footer -->
         <footer class="hidden md:flex bg-white border-t border-slate-200 text-xs text-slate-500 p-3 justify-center items-center shrink-0 shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
-            <span data-i18n="footerText">CMA Secondary School. Physics Department.</span>
+            <span data-i18n="footerText">廠商會中學．物理科</span>
         </footer>
     </div>
 
@@ -423,11 +443,11 @@
                 mobileMenuReminder: "💡 Tap the menu button (top-left) to record or upload!",
                 processing: "Processing Audio...",
                 helpTitle: "Physics Principles",
-                helpDesc1: "Sound is a longitudinal wave traveling through a medium. A microphone converts sound pressure variations into electrical signals, which are displayed as a Displacement-Time (y-t) graph. The characteristics of sound depend on the properties of its wave.",
-                helpAmpTitle: "1. Loudness & Amplitude (A)",
+                helpDesc1: "Sound is a longitudinal wave traveling through a medium. A microphone converts sound pressure variations into electrical signals, which are displayed as a Displacement-Time ($(y-t)$) graph. The characteristics of sound depend on the properties of its wave.",
+                helpAmpTitle: "1. Loudness & Amplitude ($A$)",
                 helpAmpDesc: "The loudness of a sound is determined by its amplitude. A larger amplitude means a greater maximum displacement of particles, transferring more energy and resulting in a louder sound. On the graph, this increases the vertical height of the wave.",
-                helpFreqTitle: "2. Pitch & Frequency (f)",
-                helpFreqDesc: "The pitch of a sound is determined by its frequency. A higher frequency (more cycles per second, measured in Hz) results in a higher pitch. On the graph, a higher frequency compresses the wave horizontally, resulting in a shorter period (T = 1/f).",
+                helpFreqTitle: "2. Pitch & Frequency ($f$)",
+                helpFreqDesc: "The pitch of a sound is determined by its frequency. A higher frequency (more cycles per second, measured in Hz) results in a higher pitch. On the graph, a higher frequency compresses the wave horizontally, resulting in a shorter period ($T = 1/f$).",
                 helpQualityTitle: "3. Quality (Timbre) & Waveform",
                 helpQualityDesc: "The quality of a sound enables us to distinguish between different musical instruments playing the same note at the same loudness. It is determined by the waveform, which is a complex mixture of the fundamental frequency and various overtones (harmonics).",
                 errMicSetup: "Could not access microphone. Please ensure permissions are granted.",
@@ -459,13 +479,13 @@
                 mobileMenuReminder: "💡 請點擊左上角選單按鈕來錄製或上傳聲音！",
                 processing: "處理音訊中...",
                 helpTitle: "物理原理",
-                helpDesc1: "聲音是在介質中傳播的縱波。麥克風將聲音的壓力變化轉換為電信號，並顯示為位移-時間 (y-t) 圖像。聲音的特性取決於其波的物理屬性。",
-                helpAmpTitle: "1. 響度 (Loudness) 與 振幅 (Amplitude, A)",
+                helpDesc1: "聲音是在介質中傳播的縱波。麥克風將聲音的壓力變化轉換為電信號，並顯示為位移-時間 ($(y-t)$) 圖像。聲音的特性取決於其波的物理屬性。",
+                helpAmpTitle: "1. 響度與振幅 ($A$)",
                 helpAmpDesc: "聲音的響度取決於其振幅。振幅越大代表粒子的最大位移越大，傳遞的能量越多，聲音就越響亮。在圖像上，波形的垂直高度會增加。",
-                helpFreqTitle: "2. 音高 (Pitch) 與 頻率 (Frequency, f)",
-                helpFreqDesc: "聲音的音高取決於其頻率。頻率較高（每秒的循環次數較多，單位為 Hz）會產生較高的音高。在圖像上，波形會在水平方向被壓縮，導致週期變短 (T = 1/f)。",
-                helpQualityTitle: "3. 音色 (Quality/Timbre) 與 波形 (Waveform)",
-                helpQualityDesc: "音色讓我們能分辨出以相同響度和音高演奏的不同樂器。音色取決於波形 (Waveform)，它是基頻和各種泛音（諧波）的複雜混合體。",
+                helpFreqTitle: "2. 音高與頻率 ($f$)",
+                helpFreqDesc: "聲音的音高取決於其頻率。頻率較高（每秒的循環次數較多，單位為 Hz）會產生較高的音高。在圖像上，波形會在水平方向被壓縮，導致週期變短 ($T = 1/f$)。",
+                helpQualityTitle: "3. 音色與波形",
+                helpQualityDesc: "音色讓我們能分辨出以相同響度和音高演奏的不同樂器。音色取決於波形，它是基頻和各種泛音（諧波）的複雜混合體。",
                 errMicSetup: "無法存取麥克風。請確保已授予權限。",
                 errAudioDecode: "解碼音檔時發生錯誤。請嘗試有效的 mp3/wav/mp4 檔案。",
                 errMicPermission: "麥克風權限被拒絕。此應用需要麥克風存取權限以錄製聲音。",
@@ -477,9 +497,16 @@
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (i18n[state.lang][key]) {
-                    el.innerText = i18n[state.lang][key];
+                    el.innerHTML = i18n[state.lang][key];
                 }
             });
+            
+            // Re-render LaTeX symbols when text changes
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetClear();
+                MathJax.typesetPromise().catch(err => console.error("MathJax Error:", err));
+            }
+            
             requestAnimationFrame(drawGraph); // Redraw canvas labels
         }
 
@@ -601,6 +628,13 @@
             if(show) {
                 DOM.helpModal.classList.remove('hidden');
                 DOM.helpModal.style.display = 'flex';
+                
+                // Force MathJax to re-evaluate modal content upon opening to ensure SVG dimensions are correct
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                    MathJax.typesetClear([DOM.helpModalContent]);
+                    MathJax.typesetPromise([DOM.helpModalContent]).catch(e => console.error(e));
+                }
+
                 setTimeout(() => {
                     DOM.helpModal.classList.remove('opacity-0');
                     DOM.helpModalContent.classList.remove('scale-95');
