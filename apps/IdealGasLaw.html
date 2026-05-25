@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>理想氣體定律與分子運動論 | Ideal Gas Law & Kinetic Theory</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3c72',
+                        secondary: '#2a5298',
+                        danger: '#DC2626',
+                        vector: {
+                            blue: '#3b82f6',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            purple: '#8b5cf6',
+                            teal: '#14b8a6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- MathJax 3 -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' },
+            startup: {
+                ready: () => {
+                    MathJax.startup.defaultReady();
+                    MathJax.startup.promise.then(() => {
+                        document.dispatchEvent(new Event('MathJaxReady'));
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        /* Prevent Tailwind preflight block resets from breaking inline MathJax SVG equations */
+        mjx-container[jax="SVG"] {
+            display: inline-block !important;
+            vertical-align: -0.1em !important;
+            margin: 0 0.1em !important;
+        }
+        mjx-container[jax="SVG"] svg {
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+
+        /* Custom Scrollbar for Controls */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #1e3c72;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        input[type=range]:disabled::-webkit-slider-thumb {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+        input[type=range]:disabled::-webkit-slider-runnable-track {
+            background: #e2e8f0;
+        }
+        
+        /* Background Grid */
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+                linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+        }
+        
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+    </style>
+</head>
+<body class="fixed inset-0 overflow-hidden bg-slate-50 text-slate-800 font-sans">
+
+    <!-- === Mobile Overlay for System-Specific Controls Drawer === -->
+    <div id="controlsOverlay_A" onclick="toggleMobileControls('A')" class="fixed inset-0 bg-black/50 z-40 hidden opacity-0 transition-opacity duration-300 md:hidden"></div>
+    <div id="controlsOverlay_B" onclick="toggleMobileControls('B')" class="fixed inset-0 bg-black/50 z-40 hidden opacity-0 transition-opacity duration-300 md:hidden"></div>
+
+    <!-- === Main Layout === -->
+    <div class="flex flex-col h-full w-full">
+        
+        <!-- Desktop Header -->
+        <header class="hidden md:flex bg-primary text-white p-4 items-center justify-between shadow-md z-20">
+            <div class="flex items-center">
+                <!-- Gas Particle Vector Grid Icon -->
+                <svg class="w-8 h-8 mr-3 text-amber-400 fill-current" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3" />
+                    <circle cx="5" cy="12" r="1.5" />
+                    <circle cx="19" cy="12" r="1.5" />
+                    <circle cx="12" cy="5" r="1.5" />
+                    <circle cx="12" cy="19" r="1.5" />
+                    <path d="M12 5a7 7 0 0 1 7 7M5 12a7 7 0 0 1 7-7M12 19a7 7 0 0 1-7-7M19 12a7 7 0 0 1-7 7" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+                <h1 class="text-2xl font-bold tracking-wide" data-i18n="appTitle">Ideal Gas Law & Kinetic Theory</h1>
+            </div>
+            <div class="flex space-x-4">
+                <button onclick="openHelpModal()" class="flex items-center space-x-1 bg-secondary hover:bg-blue-700 px-4 py-2 rounded-lg transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span data-i18n="helpBtn">說明</span>
+                </button>
+                <button onclick="toggleLanguage()" class="flex items-center space-x-1 bg-secondary hover:bg-blue-700 px-4 py-2 rounded-lg transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Mobile System Selector Tabs -->
+        <div class="flex md:hidden bg-slate-200 p-1 rounded-lg m-2 flex-none z-10 relative">
+            <button id="tabBtnA" onclick="switchMobileSystem('A')" class="flex-1 text-center py-2 text-xs font-bold rounded-md bg-white text-primary shadow transition">A</button>
+            <button id="tabBtnB" onclick="switchMobileSystem('B')" class="flex-1 text-center py-2 text-xs font-bold rounded-md text-slate-600 transition">B</button>
+        </div>
+
+        <!-- Interactive Area (Split Pane) -->
+        <main class="flex-1 flex flex-col md:flex-row overflow-hidden grid-bg">
+            
+            <!-- System A -->
+            <section id="sec_A" class="flex-1 flex flex-col p-2 min-h-0 border-b-2 md:border-b-0 md:border-r-2 border-slate-300 relative">
+                
+                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-md shadow-sm border border-slate-200 z-10 font-bold text-primary max-md:hidden" data-i18n="systemA">System A</div>
+                
+                <!-- 3D Canvas Container -->
+                <div class="flex-1 relative bg-slate-900 rounded-xl shadow-inner overflow-hidden mb-2" id="canvasContainerA">
+                    <canvas id="canvasA" class="absolute inset-0 w-full h-full"></canvas>
+                    
+                    <!-- Floating Slider Menu Toggle Button (Mobile Only) - Top Left -->
+                    <button onclick="toggleMobileControls('A')" class="md:hidden absolute top-3 left-3 z-20 p-2 bg-white/90 backdrop-blur text-slate-700 border border-slate-200 rounded-md shadow-md hover:bg-white transition flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+
+                    <!-- System Tag inside canvas for mobile -->
+                    <div class="md:hidden absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1.5 rounded-md shadow-sm border border-slate-200 z-10 font-bold text-primary text-xs" data-i18n="systemA">System A</div>
+
+                    <div class="absolute bottom-2 right-2 flex space-x-2 z-10">
+                        <button onclick="sysA.resetParticles()" class="bg-white/20 hover:bg-white/30 text-white p-2 rounded backdrop-blur" title="Reset Particles">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Outputs Bar (Always visible) -->
+                <div class="flex-none bg-blue-50 p-2 md:p-3 rounded-xl border border-blue-100 text-sm mb-2 md:mb-0">
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div>
+                            <div class="text-[10px] md:text-xs text-slate-500 font-semibold" data-i18n="speedLbl">RMS Speed ($c_{\mathrm{rms}}$)</div>
+                            <div class="text-sm md:text-base font-bold text-vector-blue"><span id="out_v_A">0</span> <span class="text-xs font-normal">m s<sup>-1</sup></span></div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] md:text-xs text-slate-500 font-semibold" data-i18n="avgKeLbl">Mean KE ($E_{\mathrm{K}}$)</div>
+                            <div class="text-sm md:text-base font-bold text-slate-700"><span id="out_ke_A">0.0</span> <span class="text-xs font-normal">J</span></div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] md:text-xs text-slate-500 font-semibold" data-i18n="totKeLbl">Total KE ($N \cdot E_{\mathrm{K}}$)</div>
+                            <div class="text-sm md:text-base font-bold text-slate-700"><span id="out_totke_A">0.0</span> <span id="unit_totke_A" class="text-xs font-normal">kJ</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls Drawer (Mobile: slide-out overlay; Desktop: static card) -->
+                <div id="controlsContainer_A" class="flex-none bg-white rounded-xl shadow-md p-3 md:p-4 flex flex-col space-y-3 z-10 max-md:fixed max-md:top-0 max-md:right-0 max-md:h-full max-md:w-[80%] max-md:z-50 max-md:shadow-2xl max-md:transition-transform max-md:duration-300 max-md:translate-x-full overflow-y-auto">
+                    
+                    <!-- Mobile Drawer Header -->
+                    <div class="md:hidden flex flex-col mb-4 pb-4 border-b border-slate-200 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center text-primary">
+                                <svg class="w-6 h-6 mr-2 text-amber-500 fill-current" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="3" />
+                                    <circle cx="5" cy="12" r="1.5" />
+                                    <circle cx="19" cy="12" r="1.5" />
+                                    <circle cx="12" cy="5" r="1.5" />
+                                    <circle cx="12" cy="19" r="1.5" />
+                                    <path d="M12 5a7 7 0 0 1 7 7M5 12a7 7 0 0 1 7-7M12 19a7 7 0 0 1-7-7M19 12a7 7 0 0 1-7 7" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                </svg>
+                                <h2 class="text-sm font-bold leading-tight" data-i18n="appTitle">Ideal Gas Law & Kinetic Theory</h2>
+                            </div>
+                            <button onclick="toggleMobileControls('A')" class="text-slate-500 hover:text-slate-800 p-1 bg-slate-100 rounded-full">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="toggleLanguage()" class="flex-1 flex items-center justify-center space-x-1 bg-secondary text-white px-2 py-2 rounded-md text-xs transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+                                <span>繁 / Eng</span>
+                            </button>
+                            <button onclick="openHelpModal()" class="flex-1 flex items-center justify-center space-x-1 bg-secondary text-white px-2 py-2 rounded-md text-xs transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span data-i18n="helpBtn">說明</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lock Controls -->
+                    <div class="flex items-center justify-between bg-slate-100 px-3 py-1.5 rounded-lg">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[10px] md:text-xs font-semibold text-slate-700" data-i18n="lockLbl">Keep Constant:</span>
+                            <button onclick="resetSystem('A')" class="px-1.5 py-0.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded text-[10px] transition" data-i18n="resetBtn">Reset</button>
+                        </div>
+                        <div class="flex space-x-3 text-[11px] md:text-xs">
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="lock_A" value="none" checked onchange="handleLockChange('A')" class="accent-primary">
+                                <span data-i18n="lockNone">None</span>
+                            </label>
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="lock_A" value="p" onchange="handleLockChange('A')" class="accent-primary">
+                                <span class="italic font-serif font-semibold">p</span>
+                            </label>
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="lock_A" value="V" onchange="handleLockChange('A')" class="accent-primary">
+                                <span class="italic font-serif font-semibold">V</span>
+                            </label>
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="lock_A" value="T" onchange="handleLockChange('A')" class="accent-primary">
+                                <span class="italic font-serif font-semibold">T</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Input Sliders -->
+                    <div class="space-y-2 text-xs md:text-sm">
+                        <!-- Pressure Slider -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between">
+                                <label class="font-medium text-slate-700" data-i18n="pressureLbl">Pressure ($p$)</label>
+                                <span class="text-primary font-bold" id="val_p_A">5000 kPa</span>
+                            </div>
+                            <input type="range" id="slider_p_A" min="100" max="20000" value="5000" step="50" oninput="updateSystem('A', 'p')">
+                        </div>
+                        <!-- Volume Slider -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between items-end">
+                                <label class="font-medium text-slate-700 whitespace-nowrap" data-i18n="volLbl">Volume ($V$)</label>
+                                <span class="text-primary font-bold text-[10px] md:text-xs text-right" id="val_v_A">500 cm<sup>3</sup> (5.0 &times; 10<sup>-4</sup> m<sup>3</sup>)</span>
+                            </div>
+                            <input type="range" id="slider_v_A" min="10" max="1000" value="500" step="10" oninput="updateSystem('A', 'v')">
+                        </div>
+                        <!-- Temperature Slider -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between">
+                                <label class="font-medium text-slate-700" data-i18n="tempLbl">Temperature ($T$)</label>
+                                <span class="text-primary font-bold"><span id="val_t_A">300</span> K</span>
+                            </div>
+                            <input type="range" id="slider_t_A" min="100" max="1000" value="300" step="1" oninput="updateSystem('A', 't')">
+                        </div>
+                        <!-- Mole Slider -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between">
+                                <label class="font-medium text-slate-700" data-i18n="molLbl">Moles ($n$)</label>
+                                <span class="text-primary font-bold"><span id="val_n_A">1.0</span> mol</span>
+                            </div>
+                            <input type="range" id="slider_n_A" min="0.1" max="5.0" value="1.0" step="0.1" oninput="updateSystem('A', 'n')">
+                        </div>
+                        <!-- Molar Mass Slider -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between">
+                                <label class="font-medium text-slate-700" data-i18n="massLbl">Molar Mass ($N_{\mathrm{A}} m$)</label>
+                                <span class="text-primary font-bold"><span id="val_m_A">4</span> g mol<sup>-1</sup></span>
+                            </div>
+                            <input type="range" id="slider_m_A" min="2" max="100" value="4" step="1" oninput="updateSystem('A', 'm')">
+                        </div>
+                    </div>
+
+                    <!-- Mobile Drawer Footer -->
+                    <div class="md:hidden mt-auto pt-6 border-t border-slate-200 text-center text-xs text-slate-400" data-i18n="footerText">
+                        廠商會中學．物理科
+                    </div>
+                </div>
+            </section>
+
+            <!-- System B -->
+            <section id="sec_B" class="flex-1 flex flex-col p-2 min-h-0 relative max-md:hidden">
+                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-md shadow-sm border border-slate-200 z-10 font-bold text-emerald-700 max-md:hidden" data-i18n="systemB">System B</div>
+                
+                <!-- 3D Canvas Container -->
+                <div class="flex-1 relative bg-slate-900 rounded-xl shadow-inner overflow-hidden mb-2" id="canvasContainerB">
+                    <canvas id="canvasB" class="absolute inset-0 w-full h-full"></canvas>
+                    
+                    <!-- Floating Slider Menu Toggle Button (Mobile Only) - Top Left -->
+                    <button onclick="toggleMobileControls('B')" class="md:hidden absolute top-3 left-3 z-20 p-2 bg-white/90 backdrop-blur text-slate-700 border border-slate-200 rounded-md shadow-md hover:bg-white transition flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+
+                    <!-- System Tag inside canvas for mobile -->
+                    <div class="md:hidden absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1.5 rounded-md shadow-sm border border-slate-200 z-10 font-bold text-emerald-700 text-xs" data-i18n="systemB">System B</div>
+
+                    <div class="absolute bottom-2 right-2 flex space-x-2 z-10">
+                        <button onclick="sysB.resetParticles()" class="bg-white/20 hover:bg-white/30 text-white p-2 rounded backdrop-blur" title="Reset Particles">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Outputs Bar (Always visible) -->
+                <div class="flex-none bg-emerald-50 p-2 md:p-3 rounded-xl border border-emerald-100 text-sm mb-2 md:mb-0">
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div>
+                            <div class="text-[10px] md:text-xs text-slate-500 font-semibold" data-i18n="speedLbl">RMS Speed ($c_{\mathrm{rms}}$)</div>
+                            <div class="text-sm md:text-base font-bold text-vector-emerald"><span id="out_v_B">0</span> <span class="text-xs font-normal">m s<sup>-1</sup></span></div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] md:text-xs text-slate-500 font-semibold" data-i18n="avgKeLbl">Mean KE ($E_{\mathrm{K}}$)</div>
+                            <div class="text-sm md:text-base font-bold text-slate-700"><span id="out_ke_B">0.0</span> <span class="text-xs font-normal">J</span></div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] md:text-xs text-slate-500 font-semibold" data-i18n="totKeLbl">Total KE ($N \cdot E_{\mathrm{K}}$)</div>
+                            <div class="text-sm md:text-base font-bold text-slate-700"><span id="out_totke_B">0.0</span> <span id="unit_totke_B" class="text-xs font-normal">kJ</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls Drawer (Mobile: slide-out overlay; Desktop: static card) -->
+                <div id="controlsContainer_B" class="flex-none bg-white rounded-xl shadow-md p-3 md:p-4 flex flex-col space-y-3 z-10 max-md:fixed max-md:top-0 max-md:right-0 max-md:h-full max-md:w-[80%] max-md:z-50 max-md:shadow-2xl max-md:transition-transform max-md:duration-300 max-md:translate-x-full overflow-y-auto">
+                    
+                    <!-- Mobile Drawer Header -->
+                    <div class="md:hidden flex flex-col mb-4 pb-4 border-b border-slate-200 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center text-emerald-700">
+                                <svg class="w-6 h-6 mr-2 text-amber-500 fill-current" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="3" />
+                                    <circle cx="5" cy="12" r="1.5" />
+                                    <circle cx="19" cy="12" r="1.5" />
+                                    <circle cx="12" cy="5" r="1.5" />
+                                    <circle cx="12" cy="19" r="1.5" />
+                                    <path d="M12 5a7 7 0 0 1 7 7M5 12a7 7 0 0 1 7-7M12 19a7 7 0 0 1-7-7M19 12a7 7 0 0 1-7 7" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                </svg>
+                                <h2 class="text-sm font-bold leading-tight" data-i18n="appTitle">Ideal Gas Law & Kinetic Theory</h2>
+                            </div>
+                            <button onclick="toggleMobileControls('B')" class="text-slate-500 hover:text-slate-800 p-1 bg-slate-100 rounded-full">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="toggleLanguage()" class="flex-1 flex items-center justify-center space-x-1 bg-emerald-600 text-white px-2 py-2 rounded-md text-xs transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+                                <span>繁 / Eng</span>
+                            </button>
+                            <button onclick="openHelpModal()" class="flex-1 flex items-center justify-center space-x-1 bg-emerald-600 text-white px-2 py-2 rounded-md text-xs transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span data-i18n="helpBtn">說明</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lock Controls -->
+                    <div class="flex items-center justify-between bg-slate-100 px-3 py-1.5 rounded-lg">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[10px] md:text-xs font-semibold text-slate-700" data-i18n="lockLbl">Keep Constant:</span>
+                            <button onclick="resetSystem('B')" class="px-1.5 py-0.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded text-[10px] transition" data-i18n="resetBtn">Reset</button>
+                        </div>
+                        <div class="flex space-x-3 text-[11px] md:text-xs">
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="lock_B" value="none" checked onchange="handleLockChange('B')" class="accent-emerald-600">
+                                <span data-i18n="lockNone">None</span>
+                            </label>
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="lock_B" value="p" onchange="handleLockChange('B')" class="accent-emerald-600">
+                                <span class="italic font-serif font-semibold">p</span>
+                            </label>
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="lock_B" value="V" onchange="handleLockChange('B')" class="accent-emerald-600">
+                                <span class="italic font-serif font-semibold">V</span>
+                            </label>
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="lock_B" value="T" onchange="handleLockChange('B')" class="accent-emerald-600">
+                                <span class="italic font-serif font-semibold">T</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Input Sliders -->
+                    <div class="space-y-2 text-xs md:text-sm">
+                        <!-- Pressure Slider -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between">
+                                <label class="font-medium text-slate-700" data-i18n="pressureLbl">Pressure ($p$)</label>
+                                <span class="text-vector-emerald font-bold" id="val_p_B">5000 kPa</span>
+                            </div>
+                            <input type="range" id="slider_p_B" min="100" max="20000" value="5000" step="50" oninput="updateSystem('B', 'p')">
+                        </div>
+                        <!-- Volume Slider -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between items-end">
+                                <label class="font-medium text-slate-700 whitespace-nowrap" data-i18n="volLbl">Volume ($V$)</label>
+                                <span class="text-vector-emerald font-bold text-[10px] md:text-xs text-right" id="val_v_B">500 cm<sup>3</sup> (5.0 &times; 10<sup>-4</sup> m<sup>3</sup>)</span>
+                            </div>
+                            <input type="range" id="slider_v_B" min="10" max="1000" value="500" step="10" oninput="updateSystem('B', 'v')">
+                        </div>
+                        <!-- Temperature Slider -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between">
+                                <label class="font-medium text-slate-700" data-i18n="tempLbl">Temperature ($T$)</label>
+                                <span class="text-vector-emerald font-bold"><span id="val_t_B">600</span> K</span>
+                            </div>
+                            <input type="range" id="slider_t_B" min="100" max="1000" value="600" step="1" oninput="updateSystem('B', 't')">
+                        </div>
+                        <!-- Mole Slider -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between">
+                                <label class="font-medium text-slate-700" data-i18n="molLbl">Moles ($n$)</label>
+                                <span class="text-vector-emerald font-bold"><span id="val_n_B">1.0</span> mol</span>
+                            </div>
+                            <input type="range" id="slider_n_B" min="0.1" max="5.0" value="1.0" step="0.1" oninput="updateSystem('B', 'n')">
+                        </div>
+                        <!-- Molar Mass Slider -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between">
+                                <label class="font-medium text-slate-700" data-i18n="massLbl">Molar Mass ($N_{\mathrm{A}} m$)</label>
+                                <span class="text-vector-emerald font-bold"><span id="val_m_B">20</span> g mol<sup>-1</sup></span>
+                            </div>
+                            <input type="range" id="slider_m_B" min="2" max="100" value="20" step="1" oninput="updateSystem('B', 'm')">
+                        </div>
+                    </div>
+
+                    <!-- Mobile Drawer Footer -->
+                    <div class="md:hidden mt-auto pt-6 border-t border-slate-200 text-center text-xs text-slate-400" data-i18n="footerText">
+                        廠商會中學．物理科
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Desktop Footer -->
+        <footer class="hidden md:block bg-white text-center p-3 text-sm text-slate-500 border-t border-slate-200 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] z-20">
+            <span data-i18n="footerText">廠商會中學．物理科</span>
+        </footer>
+    </div>
+
+    <!-- === Modals === -->
+    <!-- Help / Theory Modal (Language Specific Content populated dynamically) -->
+    <div id="helpModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="bg-primary text-white p-4 flex justify-between items-center">
+                <h2 class="text-xl font-bold" id="helpModalTitle">Help</h2>
+                <button onclick="closeHelpModal()" class="text-blue-200 hover:text-white transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <!-- Dynamic Translation Target for Help Menu Content -->
+            <div class="p-6 overflow-y-auto flex-1 text-slate-700 space-y-6" id="helpModalContent">
+                <!-- Content will be injected dynamically based on currentLang to avoid mixing languages -->
+            </div>
+            <div class="p-4 border-t border-slate-200 text-center bg-slate-50">
+                <button onclick="closeHelpModal()" class="bg-primary hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition" data-i18n="closeBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Toast -->
+    <div id="errorToast" class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-danger text-white px-6 py-3 rounded-lg shadow-xl z-[60] transition-opacity opacity-0 pointer-events-none flex items-center space-x-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span id="errorMsg">Error message</span>
+    </div>
+
+    <!-- === Scripts === -->
+    <script>
+        /* --- 1. Global Constants & i18n --- */
+        const CONSTANTS = {
+            R: 8.314,          // Universal gas constant (J/(mol*K))
+            NA: 6.02214e23,    // Avogadro's number
+            PARTICLE_SCALE: 20 // How many visual particles per mole
+        };
+
+        const LIMITS = {
+            p: { min: 100, max: 20000 },    // kPa
+            v: { min: 10, max: 1000 },      // cm^3
+            t: { min: 100, max: 1000 },     // K
+            n: { min: 0.1, max: 5.0 }       // mol
+        };
+
+        const INITIAL_STATES = {
+            A: { v: 500, n: 1.0, t: 300, m: 4, lock: 'none' },
+            B: { v: 500, n: 1.0, t: 600, m: 20, lock: 'none' }
+        };
+
+        const translations = {
+            en: {
+                appTitle: "Ideal Gas Law & Kinetic Theory",
+                footerText: "CMA Secondary School. Physics Department.",
+                systemA: "System A",
+                systemB: "System B",
+                controlTitle: "System A Controls",
+                controlTitleB: "System B Controls",
+                volLbl: "Volume ($V$)",
+                molLbl: "Moles ($n$)",
+                tempLbl: "Temperature ($T$)",
+                massLbl: "Molar Mass ($N_{\\mathrm{A}} m$)",
+                pressureLbl: "Pressure ($p$)",
+                speedLbl: "RMS Speed ($c_{\\mathrm{rms}}$)",
+                avgKeLbl: "Mean KE ($E_{\\mathrm{K}}$)",
+                totKeLbl: "Total KE ($N \\cdot E_{\\mathrm{K}}$)",
+                lockLbl: "Keep Constant:",
+                lockNone: "None",
+                helpBtn: "Help",
+                helpTitle: "Help",
+                closeBtn: "Close",
+                resetBtn: "Reset",
+                helpText: `
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-lg mb-2 text-primary">1. Ideal Gas Law</h3>
+                        <p class="mb-2">Relates macroscopic properties of a gas.</p>
+                        <div class="text-center text-xl overflow-x-auto py-2">
+                            $$pV = nRT$$
+                        </div>
+                        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm">
+                            <li>$p$: Pressure ($\\mathrm{Pa}$)</li>
+                            <li>$V$: Volume ($\\mathrm{m}^3$)</li>
+                            <li>$n$: Number of moles ($\\mathrm{mol}$)</li>
+                            <li>$R$: Universal gas constant ($8.314 \\mathrm{ J K}^{-1} \\mathrm{ mol}^{-1}$)</li>
+                            <li>$T$: Absolute temperature ($\\mathrm{K}$)</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-lg mb-2 text-primary">2. Kinetic Theory of Gases</h3>
+                        <p class="mb-2">Connects microscopic particle motion to macroscopic pressure.</p>
+                        <div class="text-center text-xl overflow-x-auto py-2">
+                            $$pV = \\frac{1}{3} N m c_{\\mathrm{rms}}^2$$
+                        </div>
+                        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm">
+                            <li>$N$: Total number of molecules ($N = n N_{\\mathrm{A}}$)</li>
+                            <li>$m$: Mass of one molecule ($\\mathrm{kg}$)</li>
+                            <li>$c_{\\mathrm{rms}}$: Root-mean-square speed ($\\mathrm{m s}^{-1}$)</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-lg mb-2 text-primary">3. Energy of Particles</h3>
+                        <p class="mb-2">The average translational kinetic energy of a single gas particle depends purely on temperature:</p>
+                        <div class="text-center text-xl overflow-x-auto py-2">
+                            $$E_{\\mathrm{K}} = \\frac{3}{2} \\left(\\frac{R}{N_{\\mathrm{A}}}\\right) T$$
+                        </div>
+                        <p class="mb-2">The total internal/kinetic energy of all molecules in the gas system is:</p>
+                        <div class="text-center text-xl overflow-x-auto py-2">
+                            $$E_{\\mathrm{total}} = N \\cdot E_{\\mathrm{K}} = \\frac{3}{2} n R T$$
+                        </div>
+                        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm">
+                            <li>$N_{\\mathrm{A}}$: Avogadro constant ($6.02 \\times 10^{23} \\mathrm{ mol}^{-1}$)</li>
+                            <li>$E_{\\mathrm{K}}$: Mean kinetic energy of a single molecule ($\\mathrm{J}$)</li>
+                            <li>$E_{\\mathrm{total}}$: Total kinetic energy of the gas ($\\mathrm{J}$ or $\\mathrm{kJ}$)</li>
+                        </ul>
+                    </div>
+                `
+            },
+            zh: {
+                appTitle: "理想氣體定律與分子運動論",
+                footerText: "廠商會中學．物理科",
+                systemA: "系統 A",
+                systemB: "系統 B",
+                controlTitle: "系統 A 控制",
+                controlTitleB: "系統 B 控制",
+                volLbl: "體積 ($V$)",
+                molLbl: "摩爾數 ($n$)",
+                tempLbl: "溫度 ($T$)",
+                massLbl: "摩爾質量 ($N_{\\mathrm{A}} m$)",
+                pressureLbl: "壓力 ($p$)",
+                speedLbl: "方均根速率 ($c_{\\mathrm{rms}}$)",
+                avgKeLbl: "平均動能 ($E_{\\mathrm{K}}$)",
+                totKeLbl: "總動能 ($N \\cdot E_{\\mathrm{K}}$)",
+                lockLbl: "保持固定：",
+                lockNone: "無",
+                helpBtn: "說明",
+                helpTitle: "說明",
+                closeBtn: "關閉",
+                resetBtn: "重設",
+                helpText: `
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-lg mb-2 text-primary">1. 理想氣體定律</h3>
+                        <p class="mb-2">關聯氣體的宏觀物理量。</p>
+                        <div class="text-center text-xl overflow-x-auto py-2">
+                            $$pV = nRT$$
+                        </div>
+                        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm">
+                            <li>$p$: 壓力 ($\\mathrm{Pa}$)</li>
+                            <li>$V$: 體積 ($\\mathrm{m}^3$)</li>
+                            <li>$n$: 摩爾數 ($\\mathrm{mol}$)</li>
+                            <li>$R$: 通用氣體常數 ($8.314 \\mathrm{ J K}^{-1} \\mathrm{ mol}^{-1}$)</li>
+                            <li>$T$: 絕對溫度 ($\\mathrm{K}$)</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-lg mb-2 text-primary">2. 氣體分子運動論</h3>
+                        <p class="mb-2">將微觀分子運動與宏觀壓力聯繫起來。</p>
+                        <div class="text-center text-xl overflow-x-auto py-2">
+                            $$pV = \\frac{1}{3} N m c_{\\mathrm{rms}}^2$$
+                        </div>
+                        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm">
+                            <li>$N$: 分子總數 ($N = n N_{\\mathrm{A}}$)</li>
+                            <li>$m$: 單個分子的質量 ($\\mathrm{kg}$)</li>
+                            <li>$c_{\\mathrm{rms}}$: 方均根速率 ($\\mathrm{m s}^{-1}$)</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-lg mb-2 text-primary">3. 分子動能項目</h3>
+                        <p class="mb-2">單個氣體分子的平均平移動能僅取決於溫度：</p>
+                        <div class="text-center text-xl overflow-x-auto py-2">
+                            $$E_{\\mathrm{K}} = \\frac{3}{2} \\left(\\frac{R}{N_{\\mathrm{A}}}\\right) T$$
+                        </div>
+                        <p class="mb-2">氣體系統中所有分子的總內能/動能為：</p>
+                        <div class="text-center text-xl overflow-x-auto py-2">
+                            $$E_{\\mathrm{total}} = N \\cdot E_{\\mathrm{K}} = \\frac{3}{2} n R T$$
+                        </div>
+                        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm">
+                            <li>$N_{\\mathrm{A}}$: 阿佛加德羅常數 ($6.02 \\times 10^{23} \\mathrm{ mol}^{-1}$)</li>
+                            <li>$E_{\\mathrm{K}}$: 單個分子的平均動能 ($\\mathrm{J}$)</li>
+                            <li>$E_{\\mathrm{total}}$: 氣體總動能 ($\\mathrm{J}$ 或 $\\mathrm{kJ}$)</li>
+                        </ul>
+                    </div>
+                `
+            }
+        };
+
+        let currentLang = 'zh';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    el.innerHTML = translations[currentLang][key];
+                }
+            });
+
+            // Dynamically load language-specific Help Modal Content to prevent mix of languages
+            document.getElementById('helpModalTitle').innerText = translations[currentLang].helpTitle;
+            document.getElementById('helpModalContent').innerHTML = translations[currentLang].helpText;
+
+            // Re-render MathJax if necessary
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise().catch((err) => console.log('MathJax error: ', err));
+            }
+            // Update labels
+            updateSystemDOM('A', false);
+            updateSystemDOM('B', false);
+        }
+
+        /* --- 2. UI, Mobile Drawer & Tab switching Logic --- */
+
+        // System Control Slide-Out Drawer for Mobile
+        function toggleMobileControls(sysId) {
+            const drawer = document.getElementById(`controlsContainer_${sysId}`);
+            const controlsOverlay = document.getElementById(`controlsOverlay_${sysId}`);
+            
+            if (drawer.classList.contains('max-md:translate-x-full')) {
+                // Open Drawer
+                drawer.classList.remove('max-md:translate-x-full');
+                drawer.classList.add('max-md:translate-x-0');
+                controlsOverlay.classList.remove('hidden');
+                setTimeout(() => controlsOverlay.classList.remove('opacity-0'), 10);
+            } else {
+                // Close Drawer
+                drawer.classList.add('max-md:translate-x-full');
+                drawer.classList.remove('max-md:translate-x-0');
+                controlsOverlay.classList.add('opacity-0');
+                setTimeout(() => controlsOverlay.classList.add('hidden'), 300);
+            }
+        }
+
+        // Mobile active System Switcher (Only rendering 1 system at a time in mobile portrait)
+        function switchMobileSystem(sysId) {
+            const secA = document.getElementById('sec_A');
+            const secB = document.getElementById('sec_B');
+            const tabA = document.getElementById('tabBtnA');
+            const tabB = document.getElementById('tabBtnB');
+
+            if (sysId === 'A') {
+                secA.classList.remove('max-md:hidden');
+                secB.classList.add('max-md:hidden');
+                tabA.className = "flex-1 text-center py-2 text-xs font-bold rounded-md bg-white text-primary shadow transition";
+                tabB.className = "flex-1 text-center py-2 text-xs font-bold rounded-md text-slate-600 transition";
+                sysA.resizeCanvas();
+            } else {
+                secB.classList.remove('max-md:hidden');
+                secA.classList.add('max-md:hidden');
+                tabB.className = "flex-1 text-center py-2 text-xs font-bold rounded-md bg-white text-primary shadow transition";
+                tabA.className = "flex-1 text-center py-2 text-xs font-bold rounded-md text-slate-600 transition";
+                sysB.resizeCanvas();
+            }
+        }
+
+        // Help Modal Logic
+        const helpModal = document.getElementById('helpModal');
+        function openHelpModal() {
+            helpModal.classList.remove('hidden');
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        }
+        function closeHelpModal() {
+            helpModal.classList.add('hidden');
+        }
+
+        // Error handling utility
+        function showError(msg) {
+            const toast = document.getElementById('errorToast');
+            document.getElementById('errorMsg').innerText = msg;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+            }, 3000);
+        }
+
+        /* --- 3. 3D Engine & Physics Simulation --- */
+
+        class GasSimulation {
+            constructor(canvasId, colorBase) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d', { alpha: false });
+                this.colorBase = colorBase; // [r, g, b]
+                
+                // Physics State
+                this.V = 500; // cm^3
+                this.n = 1.0; // mol
+                this.T = 300; // K
+                this.M = 4; // g/mol (N_A * m)
+                
+                this.boxSize = 1; // logical size based on V
+                this.particles = [];
+                this.rotationY = 0;
+                this.rotationX = 0.2; // slight tilt
+                
+                // Animation loop
+                this.lastTime = performance.now();
+                
+                // Bind methods
+                this.animate = this.animate.bind(this);
+                this.resizeCanvas = this.resizeCanvas.bind(this);
+                
+                // Handle resize
+                window.addEventListener('resize', this.resizeCanvas);
+                this.resizeCanvas();
+                
+                this.initParticles();
+                requestAnimationFrame(this.animate);
+            }
+
+            resizeCanvas() {
+                const container = this.canvas.parentElement;
+                const dpr = window.devicePixelRatio || 1;
+                const rect = container.getBoundingClientRect();
+                
+                this.canvas.width = rect.width * dpr;
+                this.canvas.height = rect.height * dpr;
+                
+                this.ctx.scale(dpr, dpr);
+                this.width = rect.width;
+                this.height = rect.height;
+            }
+
+            updateParams(V, n, T, M) {
+                this.V = parseFloat(V);
+                this.n = parseFloat(n);
+                this.T = parseFloat(T);
+                this.M = parseFloat(M);
+                
+                // Volume -> logical box size (V in cm^3)
+                this.boxSize = Math.cbrt(this.V) * 23; 
+                
+                // Physics calculation for true v_rms
+                const M_kg = this.M / 1000;
+                const c_rms = Math.sqrt((3 * CONSTANTS.R * this.T) / M_kg);
+                
+                // Visual speed mapping
+                const visualSpeed = Math.max(0.5, c_rms / 100); 
+
+                const targetCount = Math.min(250, Math.floor(this.n * CONSTANTS.PARTICLE_SCALE));
+                
+                // Sync particles
+                if (targetCount > this.particles.length) {
+                    for (let i = this.particles.length; i < targetCount; i++) {
+                        this.particles.push(this.createParticle(visualSpeed));
+                    }
+                } else if (targetCount < this.particles.length) {
+                    this.particles.splice(targetCount, this.particles.length - targetCount);
+                }
+
+                // Update speeds of all existing particles
+                for (let p of this.particles) {
+                    const currentSpeed = Math.sqrt(p.vx*p.vx + p.vy*p.vy + p.vz*p.vz);
+                    if (currentSpeed > 0) {
+                        p.vx = (p.vx / currentSpeed) * visualSpeed;
+                        p.vy = (p.vy / currentSpeed) * visualSpeed;
+                        p.vz = (p.vz / currentSpeed) * visualSpeed;
+                    }
+                }
+            }
+
+            createParticle(speed) {
+                const half = this.boxSize / 2;
+                const theta = Math.random() * 2 * Math.PI;
+                const phi = Math.acos(2 * Math.random() - 1);
+                
+                return {
+                    x: (Math.random() - 0.5) * this.boxSize,
+                    y: (Math.random() - 0.5) * this.boxSize,
+                    z: (Math.random() - 0.5) * this.boxSize,
+                    vx: speed * Math.sin(phi) * Math.cos(theta),
+                    vy: speed * Math.sin(phi) * Math.sin(theta),
+                    vz: speed * Math.cos(phi)
+                };
+            }
+
+            resetParticles() {
+                this.particles = [];
+                this.updateParams(this.V, this.n, this.T, this.M);
+            }
+
+            project(x, y, z) {
+                const focalLength = 400;
+                const zOffset = 300; 
+                const zpos = z + zOffset;
+                
+                if (zpos < 10) return null; 
+                
+                const scale = focalLength / zpos;
+                return {
+                    x: (x * scale) + this.width / 2,
+                    y: (y * scale) + this.height / 2,
+                    s: scale
+                };
+            }
+
+            rotate3D(x, y, z, rotX, rotY) {
+                let y1 = y * Math.cos(rotX) - z * Math.sin(rotX);
+                let z1 = y * Math.sin(rotX) + z * Math.cos(rotX);
+                let x2 = x * Math.cos(rotY) + z1 * Math.sin(rotY);
+                let z2 = -x * Math.sin(rotY) + z1 * Math.cos(rotY);
+                return { x: x2, y: y1, z: z2 };
+            }
+
+            animate(time) {
+                const dt = Math.min((time - this.lastTime) / 16.66, 3);
+                this.lastTime = time;
+
+                this.rotationY += 0.005 * dt;
+
+                const half = this.boxSize / 2;
+                for (let p of this.particles) {
+                    p.x += p.vx * dt;
+                    p.y += p.vy * dt;
+                    p.z += p.vz * dt;
+
+                    if (p.x > half) { p.x = half; p.vx *= -1; }
+                    else if (p.x < -half) { p.x = -half; p.vx *= -1; }
+                    
+                    if (p.y > half) { p.y = half; p.vy *= -1; }
+                    else if (p.y < -half) { p.y = -half; p.vy *= -1; }
+                    
+                    if (p.z > half) { p.z = half; p.vz *= -1; }
+                    else if (p.z < -half) { p.z = -half; p.vz *= -1; }
+                }
+
+                this.render();
+                requestAnimationFrame(this.animate);
+            }
+
+            render() {
+                if (!this.ctx) return;
+                
+                this.ctx.fillStyle = '#0f172a';
+                this.ctx.fillRect(0, 0, this.width, this.height);
+
+                this.ctx.strokeStyle = `rgba(255, 255, 255, 0.25)`;
+                this.ctx.lineWidth = 1.5;
+
+                const half = this.boxSize / 2;
+                const corners = [
+                    [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+                    [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]
+                ];
+
+                const projCorners = corners.map(c => {
+                    const rot = this.rotate3D(c[0]*half, c[1]*half, c[2]*half, this.rotationX, this.rotationY);
+                    return this.project(rot.x, rot.y, rot.z);
+                });
+
+                const edges = [
+                    [0,1], [1,2], [2,3], [3,0],
+                    [4,5], [5,6], [6,7], [7,4],
+                    [0,4], [1,5], [2,6], [3,7]
+                ];
+
+                this.ctx.beginPath();
+                for (let edge of edges) {
+                    const p1 = projCorners[edge[0]];
+                    const p2 = projCorners[edge[1]];
+                    if (p1 && p2) {
+                        this.ctx.moveTo(p1.x, p1.y);
+                        this.ctx.lineTo(p2.x, p2.y);
+                    }
+                }
+                this.ctx.stroke();
+
+                let drawList = this.particles.map(p => {
+                    const rot = this.rotate3D(p.x, p.y, p.z, this.rotationX, this.rotationY);
+                    return { x: rot.x, y: rot.y, z: rot.z, origZ: rot.z };
+                });
+                drawList.sort((a, b) => b.origZ - a.origZ);
+
+                const [r, g, b] = this.colorBase;
+                const baseRadius = 3;
+                
+                for (let p of drawList) {
+                    const proj = this.project(p.x, p.y, p.z);
+                    if (proj) {
+                        const size = Math.max(0.5, baseRadius * proj.s);
+                        const depthAlpha = Math.max(0.15, 1 - (p.origZ + half) / (this.boxSize * 1.5));
+                        
+                        this.ctx.beginPath();
+                        this.ctx.arc(proj.x, proj.y, size, 0, Math.PI * 2);
+                        this.ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${depthAlpha})`;
+                        this.ctx.fill();
+                        
+                        this.ctx.beginPath();
+                        this.ctx.arc(proj.x - size*0.3, proj.y - size*0.3, size*0.3, 0, Math.PI * 2);
+                        this.ctx.fillStyle = `rgba(255, 255, 255, ${depthAlpha * 0.75})`;
+                        this.ctx.fill();
+                    }
+                }
+            }
+            
+            initParticles() {
+                this.updateParams(this.V, this.n, this.T, this.M);
+            }
+        }
+
+        /* --- 4. Initialization, Mathematical Solver, & Wiring --- */
+
+        let sysA, sysB;
+
+        function init() {
+            sysA = new GasSimulation('canvasA', [59, 130, 246]);
+            sysB = new GasSimulation('canvasB', [16, 185, 129]);
+
+            // Sync visual states of sliders on load based on default checked radios
+            handleLockChange('A');
+            handleLockChange('B');
+
+            updateSystem('A', 'init');
+            updateSystem('B', 'init');
+            applyTranslations();
+        }
+
+        function resetSystem(sysId) {
+            const defaults = INITIAL_STATES[sysId];
+            
+            // Reset radio lock button to defaults.lock
+            const radios = document.getElementsByName(`lock_${sysId}`);
+            radios.forEach(r => r.checked = (r.value === defaults.lock));
+            
+            // Reset parameters
+            document.getElementById(`slider_v_${sysId}`).value = defaults.v;
+            document.getElementById(`slider_n_${sysId}`).value = defaults.n;
+            document.getElementById(`slider_t_${sysId}`).value = defaults.t;
+            document.getElementById(`slider_m_${sysId}`).value = defaults.m;
+            
+            // Recalculate default pressure
+            const V_m3 = defaults.v * 1e-6;
+            const p_kPa = (defaults.n * CONSTANTS.R * defaults.t) / (V_m3 * 1000);
+            document.getElementById(`slider_p_${sysId}`).value = Math.round(p_kPa);
+
+            // Re-trigger visual classes and physics parameters
+            handleLockChange(sysId);
+        }
+
+        function handleLockChange(sysId) {
+            const mode = document.querySelector(`input[name="lock_${sysId}"]:checked`).value;
+            
+            // Sync slider UI statuses immediately on lock changes
+            const sliderP = document.getElementById(`slider_p_${sysId}`);
+            const sliderV = document.getElementById(`slider_v_${sysId}`);
+            const sliderT = document.getElementById(`slider_t_${sysId}`);
+
+            // Set dynamic enables: P is unlocked unless locked on P
+            sliderP.disabled = (mode === 'p');
+            sliderV.disabled = (mode === 'V');
+            sliderT.disabled = (mode === 'T');
+
+            // Apply locked/unlocked visual feedback classes
+            sliderP.classList.toggle('opacity-40', sliderP.disabled);
+            sliderP.classList.toggle('pointer-events-none', sliderP.disabled);
+
+            sliderV.classList.toggle('opacity-40', sliderV.disabled);
+            sliderV.classList.toggle('pointer-events-none', sliderV.disabled);
+
+            sliderT.classList.toggle('opacity-40', sliderT.disabled);
+            sliderT.classList.toggle('pointer-events-none', sliderT.disabled);
+
+            if (mode === 'p') {
+                // Pin dynamic locked pressure from current state
+                let v = parseFloat(document.getElementById(`slider_v_${sysId}`).value);
+                let n = parseFloat(document.getElementById(`slider_n_${sysId}`).value);
+                let t = parseFloat(document.getElementById(`slider_t_${sysId}`).value);
+                let V_m3 = v * 1e-6;
+                window[`lockedP_${sysId}`] = (n * CONSTANTS.R * t) / V_m3;
+                
+                // Sync the Pressure slider to reflect this locked pressure
+                const currentP_kPa = (window[`lockedP_${sysId}`] / 1000);
+                sliderP.value = Math.round(currentP_kPa);
+            }
+
+            updateSystem(sysId, 'mode');
+        }
+
+        // Unified mathematical solver enforcing pV = nRT under physical constraints
+        function updateSystem(sysId, source = null) {
+            const mode = document.querySelector(`input[name="lock_${sysId}"]:checked`).value;
+            
+            let p_kPa = parseFloat(document.getElementById(`slider_p_${sysId}`).value);
+            let v_cm3 = parseFloat(document.getElementById(`slider_v_${sysId}`).value);
+            let n_mol = parseFloat(document.getElementById(`slider_n_${sysId}`).value);
+            let t_K = parseFloat(document.getElementById(`slider_t_${sysId}`).value);
+            let m_g = parseFloat(document.getElementById(`slider_m_${sysId}`).value);
+
+            let P_pa = p_kPa * 1000;
+            let V_m3 = v_cm3 * 1e-6;
+            const R = CONSTANTS.R;
+
+            if (mode === 'none') {
+                if (source === 'p') {
+                    // User dragged Pressure: Volume responds
+                    V_m3 = (n_mol * R * t_K) / P_pa;
+                    v_cm3 = V_m3 * 1e6;
+                    if (v_cm3 < LIMITS.v.min || v_cm3 > LIMITS.v.max) {
+                        v_cm3 = Math.max(LIMITS.v.min, Math.min(LIMITS.v.max, v_cm3));
+                        V_m3 = v_cm3 * 1e-6;
+                        // Temperature compensates
+                        t_K = (P_pa * V_m3) / (n_mol * R);
+                        if (t_K < LIMITS.t.min || t_K > LIMITS.t.max) {
+                            t_K = Math.max(LIMITS.t.min, Math.min(LIMITS.t.max, t_K));
+                            // Mole adjusts as last resort
+                            n_mol = (P_pa * V_m3) / (R * t_K);
+                            n_mol = Math.max(LIMITS.n.min, Math.min(LIMITS.n.max, n_mol));
+                        }
+                    }
+                } else {
+                    // User changed V, T, n, or Mass: Pressure updates
+                    P_pa = (n_mol * R * t_K) / V_m3;
+                    p_kPa = P_pa / 1000;
+                    if (p_kPa < LIMITS.p.min || p_kPa > LIMITS.p.max) {
+                        p_kPa = Math.max(LIMITS.p.min, Math.min(LIMITS.p.max, p_kPa));
+                        P_pa = p_kPa * 1000;
+                        // Volume adjusts first to try to satisfy equation
+                        V_m3 = (n_mol * R * t_K) / P_pa;
+                        v_cm3 = V_m3 * 1e6;
+                        if (v_cm3 < LIMITS.v.min || v_cm3 > LIMITS.v.max) {
+                            v_cm3 = Math.max(LIMITS.v.min, Math.min(LIMITS.v.max, v_cm3));
+                            V_m3 = v_cm3 * 1e-6;
+                            // Temperature compensates
+                            t_K = (P_pa * V_m3) / (n_mol * R);
+                            if (t_K < LIMITS.t.min || t_K > LIMITS.t.max) {
+                                t_K = Math.max(LIMITS.t.min, Math.min(LIMITS.t.max, t_K));
+                                // Mole adjusts
+                                n_mol = (P_pa * V_m3) / (R * t_K);
+                                n_mol = Math.max(LIMITS.n.min, Math.min(LIMITS.n.max, n_mol));
+                            }
+                        }
+                    }
+                }
+            } 
+            else if (mode === 'p') {
+                const targetP_pa = window[`lockedP_${sysId}`] || (p_kPa * 1000);
+                P_pa = targetP_pa;
+                p_kPa = P_pa / 1000;
+
+                if (source === 'v') {
+                    // Constant Pressure + change Volume: Temperature responds
+                    t_K = (P_pa * V_m3) / (n_mol * R);
+                    if (t_K < LIMITS.t.min || t_K > LIMITS.t.max) {
+                        t_K = Math.max(LIMITS.t.min, Math.min(LIMITS.t.max, t_K));
+                        // Volume adjusts back
+                        V_m3 = (n_mol * R * t_K) / P_pa;
+                        v_cm3 = V_m3 * 1e6;
+                    }
+                } else {
+                    // Constant Pressure + change T or Moles: Volume responds
+                    V_m3 = (n_mol * R * t_K) / P_pa;
+                    v_cm3 = V_m3 * 1e6;
+                    if (v_cm3 < LIMITS.v.min || v_cm3 > LIMITS.v.max) {
+                        v_cm3 = Math.max(LIMITS.v.min, Math.min(LIMITS.v.max, v_cm3));
+                        V_m3 = v_cm3 * 1e-6;
+                        // Temperature compensates
+                        t_K = (P_pa * V_m3) / (n_mol * R);
+                        if (t_K < LIMITS.t.min || t_K > LIMITS.t.max) {
+                            t_K = Math.max(LIMITS.t.min, Math.min(LIMITS.t.max, t_K));
+                            // Moles adjust
+                            n_mol = (P_pa * V_m3) / (R * t_K);
+                            n_mol = Math.max(LIMITS.n.min, Math.min(LIMITS.n.max, n_mol));
+                        }
+                    }
+                }
+            } 
+            else if (mode === 'V') {
+                // Volume remains strictly pinned
+                const lockedV_m3 = parseFloat(document.getElementById(`slider_v_${sysId}`).value) * 1e-6;
+                V_m3 = lockedV_m3;
+                v_cm3 = V_m3 * 1e6;
+
+                if (source === 'p') {
+                    // Constant Volume + change Pressure: Temperature responds
+                    t_K = (P_pa * V_m3) / (n_mol * R);
+                    if (t_K < LIMITS.t.min || t_K > LIMITS.t.max) {
+                        t_K = Math.max(LIMITS.t.min, Math.min(LIMITS.t.max, t_K));
+                        // Pressure adjusts back
+                        P_pa = (n_mol * R * t_K) / V_m3;
+                        p_kPa = P_pa / 1000;
+                    }
+                } else {
+                    // Constant Volume + change T or Moles: Pressure responds
+                    P_pa = (n_mol * R * t_K) / V_m3;
+                    p_kPa = P_pa / 1000;
+                    if (p_kPa < LIMITS.p.min || p_kPa > LIMITS.p.max) {
+                        p_kPa = Math.max(LIMITS.p.min, Math.min(LIMITS.p.max, p_kPa));
+                        P_pa = p_kPa * 1000;
+                        // Temperature compensates
+                        t_K = (P_pa * V_m3) / (n_mol * R);
+                        if (t_K < LIMITS.t.min || t_K > LIMITS.t.max) {
+                            t_K = Math.max(LIMITS.t.min, Math.min(LIMITS.t.max, t_K));
+                            // Moles adjust
+                            n_mol = (P_pa * V_m3) / (R * t_K);
+                            n_mol = Math.max(LIMITS.n.min, Math.min(LIMITS.n.max, n_mol));
+                        }
+                    }
+                }
+            } 
+            else if (mode === 'T') {
+                // Temperature remains strictly pinned
+                const lockedT = parseFloat(document.getElementById(`slider_t_${sysId}`).value);
+                t_K = lockedT;
+
+                if (source === 'p') {
+                    // Constant Temp + change Pressure: Volume responds
+                    V_m3 = (n_mol * R * t_K) / P_pa;
+                    v_cm3 = V_m3 * 1e6;
+                    if (v_cm3 < LIMITS.v.min || v_cm3 > LIMITS.v.max) {
+                        v_cm3 = Math.max(LIMITS.v.min, Math.min(LIMITS.v.max, v_cm3));
+                        V_m3 = v_cm3 * 1e-6;
+                        // Pressure adjusts back
+                        P_pa = (n_mol * R * t_K) / V_m3;
+                        p_kPa = P_pa / 1000;
+                    }
+                } else {
+                    // Constant Temp + change Volume or Moles: Pressure responds
+                    P_pa = (n_mol * R * t_K) / V_m3;
+                    p_kPa = P_pa / 1000;
+                    if (p_kPa < LIMITS.p.min || p_kPa > LIMITS.p.max) {
+                        p_kPa = Math.max(LIMITS.p.min, Math.min(LIMITS.p.max, p_kPa));
+                        P_pa = p_kPa * 1000;
+                        // Volume compensates
+                        V_m3 = (n_mol * R * t_K) / P_pa;
+                        v_cm3 = V_m3 * 1e6;
+                        if (v_cm3 < LIMITS.v.min || v_cm3 > LIMITS.v.max) {
+                            v_cm3 = Math.max(LIMITS.v.min, Math.min(LIMITS.v.max, v_cm3));
+                            V_m3 = v_cm3 * 1e-6;
+                            // Moles adjust
+                            n_mol = (P_pa * V_m3) / (R * t_K);
+                            n_mol = Math.max(LIMITS.n.min, Math.min(LIMITS.n.max, n_mol));
+                        }
+                    }
+                }
+            }
+
+            // Push dynamically solved states back to DOM Sliders safely
+            document.getElementById(`slider_p_${sysId}`).value = Math.round(p_kPa);
+            document.getElementById(`slider_v_${sysId}`).value = Math.round(v_cm3);
+            document.getElementById(`slider_t_${sysId}`).value = Math.round(t_K);
+            document.getElementById(`slider_n_${sysId}`).value = n_mol.toFixed(1);
+
+            // Update 3D Particle parameters
+            if (sysId === 'A') {
+                sysA.updateParams(v_cm3, n_mol, t_K, m_g);
+            } else {
+                sysB.updateParams(v_cm3, n_mol, t_K, m_g);
+            }
+
+            // Final DOM layout updates
+            updateSystemDOM(sysId, true);
+        }
+
+        function updateSystemDOM(sysId, calcValues) {
+            const p_slider = document.getElementById(`slider_p_${sysId}`).value;
+            const v = document.getElementById(`slider_v_${sysId}`).value;
+            const n = document.getElementById(`slider_n_${sysId}`).value;
+            const t = document.getElementById(`slider_t_${sysId}`).value;
+            const m = document.getElementById(`slider_m_${sysId}`).value;
+
+            // Format Volume for cm3 and m3
+            const v_cm3 = parseFloat(v);
+            const v_m3 = v_cm3 * 1e-6;
+            const expValV = v_m3.toExponential(1);
+            const [baseV, expV] = expValV.split('e');
+            document.getElementById(`val_v_${sysId}`).innerHTML = `${v_cm3} cm<sup>3</sup> (${baseV} &times; 10<sup>${expV}</sup> m<sup>3</sup>)`;
+
+            // Update slider display labels
+            document.getElementById(`val_p_${sysId}`).innerText = `${parseFloat(p_slider).toFixed(0)} kPa`;
+            document.getElementById(`val_n_${sysId}`).innerText = parseFloat(n).toFixed(1);
+            document.getElementById(`val_t_${sysId}`).innerText = t;
+            document.getElementById(`val_m_${sysId}`).innerText = m;
+
+            if (calcValues) {
+                // Physics Calculations
+                const V_m3 = v_m3; 
+                const N_mol = parseFloat(n);
+                const T_K = parseFloat(t);
+                const M_kg = parseFloat(m) / 1000; 
+
+                // c_rms = sqrt(3RT / M)
+                let c_rms = Math.sqrt((3 * CONSTANTS.R * T_K) / M_kg);
+
+                // Mean translational kinetic energy of single particle E_K = 1.5 * (R/N_A) * T
+                let E_K = 1.5 * (CONSTANTS.R / CONSTANTS.NA) * T_K;
+
+                // Total kinetic energy of all gas molecules E_total = N * E_K = 1.5 * n * R * T
+                let E_total = 1.5 * N_mol * CONSTANTS.R * T_K;
+
+                // Safety checks
+                if (!isFinite(c_rms)) c_rms = 0;
+                if (!isFinite(E_K)) E_K = 0;
+                if (!isFinite(E_total)) E_total = 0;
+
+                // Format Scientific Outputs nicely
+                document.getElementById(`out_v_${sysId}`).innerText = Math.round(c_rms);
+
+                // Format average kinetic energy in scientific notation
+                const expVal = E_K.toExponential(2); 
+                const parts = expVal.split('e');
+                const base = parts[0];
+                const exponent = parts[1];
+                document.getElementById(`out_ke_${sysId}`).innerHTML = `${base} &times; 10<sup>${exponent}</sup>`;
+
+                // Format total kinetic energy
+                if (E_total >= 1000) {
+                    const totalKJ = E_total / 1000;
+                    document.getElementById(`out_totke_${sysId}`).innerText = totalKJ.toFixed(2);
+                    document.getElementById(`unit_totke_${sysId}`).innerText = "kJ";
+                } else {
+                    document.getElementById(`out_totke_${sysId}`).innerText = E_total.toFixed(1);
+                    document.getElementById(`unit_totke_${sysId}`).innerText = "J";
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
