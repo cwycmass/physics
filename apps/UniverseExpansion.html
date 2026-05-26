@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>宇宙膨脹與哈勃定律 | Universe Expansion</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config for Custom Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        physics: {
+                            primary: '#1e3c72',
+                            secondary: '#2a5298',
+                            vector: '#0d9488',    // Teal
+                            resultant: '#DC2626', // Bold Red
+                            accent: '#F59E0B',    // Amber
+                            bg: '#f8fafc',        // Slate-50
+                            panel: '#ffffff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- MathJax 3 -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* --- 1. 全域與公用樣式 --- */
+        
+        mjx-container[jax="SVG"] {
+            display: inline-block !important;
+            vertical-align: -0.1em !important;
+            margin: 0 0.1em !important;
+        }
+        mjx-container[jax="SVG"] svg {
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+        mjx-container[jax="SVG"][display="true"] {
+            display: block !important;
+            text-align: center;
+            margin: 1em 0 !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 10px;
+        }
+
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        canvas {
+            cursor: crosshair;
+            touch-action: none; 
+        }
+    </style>
+</head>
+<body class="bg-physics-bg text-slate-800 antialiased overflow-hidden">
+
+    <div id="app" class="fixed inset-0 flex flex-col">
+
+        <!-- --- 2. 電腦版頂部導航列 (手機直向/平板模式下隱藏) --- -->
+        <header class="hidden md:flex bg-physics-primary text-white p-3 md:p-4 items-center justify-between shadow-md z-20">
+            <!-- 標題區域 -->
+            <div class="flex items-center space-x-2 min-w-0">
+                <i data-lucide="orbit" class="w-6 h-6 md:w-8 md:h-8 text-physics-accent flex-shrink-0"></i>
+                <h1 class="text-base md:text-xl font-bold tracking-wide truncate" data-i18n="appTitle">宇宙膨脹與哈勃定律</h1>
+            </div>
+            <!-- 右側操作按鈕 -->
+            <div class="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
+                <button onclick="toggleHelp()" class="flex items-center space-x-1 hover:text-physics-accent transition-colors bg-white/5 md:bg-transparent px-2.5 py-1.5 rounded-lg border border-white/10 md:border-none">
+                    <i data-lucide="info" class="w-4.5 h-4.5 md:w-5 md:h-5"></i>
+                    <span class="text-xs md:text-sm font-medium" data-i18n="helpBtn">說明</span>
+                </button>
+                <button onclick="toggleLanguage()" class="flex items-center space-x-1 hover:text-physics-accent transition-colors bg-white/10 px-2.5 py-1.5 rounded-lg border border-white/20">
+                    <i data-lucide="globe" class="w-4.5 h-4.5 md:w-5 md:h-5"></i>
+                    <span id="lang-indicator" class="text-xs md:text-sm font-medium">EN</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- --- 3. 主版面配置 --- -->
+        <main class="flex-1 flex flex-col md:flex-row min-h-0 relative">
+            
+            <!-- 手機版抽屜背景遮罩 (手機直向點擊可關閉選單) -->
+            <div id="mobileDrawerOverlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-black/50 z-40 hidden opacity-0 transition-opacity duration-300 md:hidden"></div>
+
+            <!-- 左側控制面板 (桌機：側邊欄 / 手機直向：左側滑出抽屜，精確覆蓋 80% 寬度) -->
+            <aside id="mainSidebar" class="fixed inset-y-0 left-0 z-50 w-[80%] md:w-80 lg:w-96 bg-white transform -translate-x-full transition-transform duration-300 md:relative md:translate-x-0 flex flex-col shadow-2xl md:shadow-[4px_0_24px_rgba(0,0,0,0.05)] border-r border-slate-200">
+                
+                <!-- 手機版抽屜頂部 Header (包含 App 正式標題與關閉按鈕) -->
+                <div class="md:hidden bg-physics-primary text-white p-4 flex justify-between items-center flex-shrink-0">
+                    <div class="flex items-center space-x-2 min-w-0">
+                        <i data-lucide="orbit" class="w-5 h-5 text-physics-accent flex-shrink-0"></i>
+                        <h2 class="text-sm font-bold truncate" data-i18n="appTitle">宇宙膨脹與哈勃定律</h2>
+                    </div>
+                    <button onclick="toggleMobileMenu()" class="text-white/80 hover:text-white p-1 bg-white/10 rounded-lg flex-shrink-0">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- 控制選單內容區塊 (免滾動精緻化排版，高度自適應彈性配置) -->
+                <div class="flex-1 flex flex-col justify-between p-4 space-y-4 overflow-hidden select-none">
+                    
+                    <div class="space-y-4">
+                        
+                        <!-- 手機版專屬：頂部語言切換與說明按鈕列 -->
+                        <div class="md:hidden grid grid-cols-2 gap-2.5 pb-2 border-b border-slate-100">
+                            <button onclick="toggleHelp(); toggleMobileMenu();" class="flex items-center justify-center space-x-1.5 py-2 px-3 bg-physics-bg hover:bg-slate-100 rounded-lg text-physics-primary border border-slate-200 active:scale-95 transition-transform text-xs font-semibold">
+                                <i data-lucide="info" class="w-4 h-4"></i>
+                                <span data-i18n="helpBtn">說明</span>
+                            </button>
+                            <button onclick="toggleLanguage()" class="flex items-center justify-center space-x-1.5 py-2 px-3 bg-physics-bg hover:bg-slate-100 rounded-lg text-physics-primary border border-slate-200 active:scale-95 transition-transform text-xs font-semibold">
+                                <i data-lucide="globe" class="w-4 h-4"></i>
+                                <span id="lang-indicator-mobile">EN</span>
+                            </button>
+                        </div>
+
+                        <!-- 操作指示卡片 -->
+                        <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 shadow-sm">
+                            <h3 class="font-bold text-physics-primary flex items-center space-x-1.5 mb-1 text-xs md:text-sm">
+                                <i data-lucide="lightbulb" class="w-4 h-4 text-physics-accent"></i>
+                                <span data-i18n="instructionTitle">操作指示</span>
+                            </h3>
+                            <p class="text-[11px] md:text-xs text-slate-600 leading-normal" data-i18n="instructionText">
+                                點擊右方畫布中的任何一個星系將其設為「觀察者」(紅色)。拖曳時間滑桿觀察空間膨脹。您會發現，無論選擇哪一個星系，其他星系都看似正在遠離它。
+                            </p>
+                        </div>
+
+                        <!-- 模擬場景選擇 -->
+                        <div class="space-y-1.5">
+                            <h3 class="font-semibold text-xs md:text-sm text-slate-800 border-b pb-1" data-i18n="scenarioTitle">模擬場景</h3>
+                            <select id="scenarioSelect" onchange="changeScenario()" class="w-full p-2 border border-slate-200 rounded-lg bg-white text-slate-700 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-physics-primary cursor-pointer shadow-sm">
+                                <option value="grid" data-i18n="scenGrid">虛構方格排列 (Virtual Grid Layout)</option>
+                                <option value="vizier" data-i18n="scenVizier">真實星表資料 (VizieR GWGC)</option>
+                            </select>
+                            
+                            <div id="vizierNote" class="hidden bg-purple-50 border border-purple-100 rounded-xl p-2.5 shadow-sm transition-all duration-300">
+                                <h3 class="font-bold text-purple-800 flex items-center space-x-1 mb-0.5 text-[10px] md:text-xs">
+                                    <i id="vizierIcon" data-lucide="database" class="w-3.5 h-3.5 text-purple-800"></i>
+                                    <span id="vizierTitle" data-i18n="vizierNoteTitle">來自 VizieR 的真實數據</span>
+                                </h3>
+                                <p id="vizierDesc" class="text-[9px] md:text-[10px] text-purple-700 leading-relaxed" data-i18n="vizierNoteDesc">
+                                    此場景即時下載近鄰星表並轉換至 2D 平面，真實呈現哈勃膨脹。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 膨脹控制項 -->
+                        <div class="space-y-2.5">
+                            <h3 class="font-semibold text-xs md:text-sm text-slate-800 border-b pb-1" data-i18n="controlTitle">膨脹控制</h3>
+                            
+                            <!-- 桌機版 Play/Reset 按鈕 (手機直向時隱藏，由畫布底部的漂浮面板取代) -->
+                            <div class="hidden md:flex items-center space-x-2">
+                                <button onclick="togglePlay()" class="play-btn flex-1 bg-physics-primary hover:bg-physics-secondary text-white font-medium py-2 px-3 rounded-lg shadow-sm transition-colors flex justify-center items-center space-x-1.5 active:scale-95 text-xs">
+                                    <i data-lucide="play" class="play-icon w-3.5 h-3.5"></i>
+                                    <span class="play-label" data-i18n="play">播放膨脹</span>
+                                </button>
+                                <button onclick="resetSimulation()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium p-2 rounded-lg shadow-sm transition-colors active:scale-95">
+                                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+
+                            <!-- 比例因子時間軸 -->
+                            <div class="pt-0.5">
+                                <div class="flex justify-between text-[11px] md:text-xs font-medium mb-1">
+                                    <span class="text-slate-600" data-i18n="scaleFactorLabel">比例因子</span>
+                                    <span id="scaleValue" class="text-physics-primary font-bold">1.00</span>
+                                </div>
+                                <input type="range" id="scaleSlider" min="1" max="1.8" step="0.01" value="1" 
+                                    class="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-physics-primary">
+                            </div>
+                        </div>
+
+                        <!-- 顯示設定 -->
+                        <div class="space-y-1.5">
+                            <h3 class="font-semibold text-xs md:text-sm text-slate-800 border-b pb-1" data-i18n="visualTitle">顯示設定</h3>
+                            <div class="space-y-1">
+                                <label class="flex items-center space-x-2 cursor-pointer group py-0.5">
+                                    <input type="checkbox" id="toggleLabels" checked onchange="updateVisuals()" class="form-checkbox h-4 w-4 text-physics-primary rounded border-slate-300 focus:ring-physics-primary cursor-pointer">
+                                    <span class="text-[11px] md:text-xs font-medium text-slate-700 group-hover:text-physics-primary transition-colors" data-i18n="showLabels">顯示星系名稱</span>
+                                </label>
+
+                                <label class="flex items-center space-x-2 cursor-pointer group py-0.5">
+                                    <input type="checkbox" id="toggleVectors" checked onchange="updateVisuals()" class="form-checkbox h-4 w-4 text-physics-primary rounded border-slate-300 focus:ring-physics-primary cursor-pointer">
+                                    <span class="text-[11px] md:text-xs font-medium text-slate-700 group-hover:text-physics-primary transition-colors" data-i18n="showVectors">顯示相對速度向量</span>
+                                </label>
+
+                                <label class="flex items-center space-x-2 cursor-pointer group py-0.5">
+                                    <input type="checkbox" id="toggleGrid" checked onchange="updateVisuals()" class="form-checkbox h-4 w-4 text-physics-primary rounded border-slate-300 focus:ring-physics-primary cursor-pointer">
+                                    <span class="text-[11px] md:text-xs font-medium text-slate-700 group-hover:text-physics-primary transition-colors" data-i18n="showGrid">顯示共動座標網格</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 側邊欄底部固定之學校物理科標籤 -->
+                    <div class="pt-3 border-t border-slate-100 text-center text-[10px] text-slate-400 font-medium flex-shrink-0">
+                        <span data-i18n="footerText">廠商會中學．物理科</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 右側互動畫布區域 (手機與桌機版面全螢幕焦點) -->
+            <div class="flex-1 relative bg-physics-bg overflow-hidden flex flex-col min-h-0">
+                
+                <!-- 手機版專屬：左上角極簡 Menu 控制按鈕 -->
+                <button onclick="toggleMobileMenu()" class="md:hidden absolute top-4 left-4 z-30 bg-white/95 backdrop-blur-sm text-physics-primary p-2.5 rounded-xl shadow-md border border-slate-200 active:scale-95 transition-transform" title="開啟選單">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+
+                <!-- 提示疊加層 (在手機版稍微下移避開選單按鈕) -->
+                <div class="absolute top-16 md:top-4 left-0 right-0 flex justify-center z-10 pointer-events-none px-4">
+                    <div class="bg-white/85 backdrop-blur-sm border border-slate-200 text-slate-700 text-[10px] sm:text-xs md:text-sm font-medium py-1.5 px-3 rounded-full shadow-sm flex items-center space-x-1.5">
+                        <i data-lucide="mouse-pointer-click" class="w-3.5 h-3.5 text-physics-vector"></i>
+                        <span data-i18n="clickHint">點擊任何星系設為原點</span>
+                    </div>
+                </div>
+
+                <!-- 畫布主容器 -->
+                <div class="flex-1 relative w-full h-full min-h-0" id="canvasContainer">
+                    <!-- 連線載入過濾器 -->
+                    <div id="loadingOverlay" class="absolute inset-0 bg-white/80 z-20 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-300">
+                        <i data-lucide="loader-2" class="w-8 h-8 text-physics-primary animate-spin mb-2"></i>
+                        <span id="loadingText" class="text-physics-primary text-xs font-bold shadow-sm" data-i18n="loadingCatalog">正在連線...</span>
+                    </div>
+                    
+                    <!-- 畫布縮放控制按鈕 (在手機版適當上移避開底部播放欄) -->
+                    <div class="absolute bottom-20 md:bottom-6 right-4 md:right-6 flex flex-col bg-white/90 backdrop-blur-sm border border-slate-200 rounded-lg shadow-lg overflow-hidden z-30">
+                        <button onclick="zoomIn()" class="p-2 md:p-2.5 text-slate-700 hover:bg-slate-100 hover:text-physics-primary transition-colors border-b border-slate-200" title="放大">
+                            <i data-lucide="zoom-in" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </button>
+                        <button onclick="zoomOut()" class="p-2 md:p-2.5 text-slate-700 hover:bg-slate-100 hover:text-physics-primary transition-colors border-b border-slate-200" title="縮小">
+                            <i data-lucide="zoom-out" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </button>
+                        <button onclick="resetZoom()" class="p-2 md:p-2.5 text-slate-700 hover:bg-slate-100 hover:text-physics-primary transition-colors" title="重置視角">
+                            <i data-lucide="maximize" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </button>
+                    </div>
+
+                    <!-- 手機版專屬：底部中央 Play / Reset 懸浮控制列 -->
+                    <div class="md:hidden absolute bottom-5 left-1/2 transform -translate-x-1/2 z-30 flex items-center space-x-2.5 w-max bg-white/95 backdrop-blur-sm p-1.5 rounded-2xl shadow-xl border border-slate-200">
+                        <button onclick="togglePlay()" class="play-btn bg-physics-primary text-white font-medium py-2.5 px-5 rounded-xl shadow-sm transition-colors flex justify-center items-center space-x-1.5 active:scale-95 min-w-[120px] text-xs">
+                            <i data-lucide="play" class="play-icon w-4 h-4"></i>
+                            <span class="play-label" data-i18n="play">播放膨脹</span>
+                        </button>
+                        <button onclick="resetSimulation()" class="bg-slate-100 text-slate-700 font-medium p-2.5 rounded-xl shadow-sm transition-colors active:scale-95 active:bg-slate-200">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <canvas id="simCanvas" class="absolute inset-0 w-full h-full no-select"></canvas>
+                </div>
+            </div>
+        </main>
+
+        <!-- --- 4. 電腦版底部 Footer (手機版隱藏) --- -->
+        <footer class="hidden md:flex bg-slate-100 border-t border-slate-200 p-2.5 items-center justify-center text-xs font-medium text-slate-500 z-10">
+            <span data-i18n="footerText">廠商會中學．物理科</span>
+        </footer>
+
+    </div>
+
+    <!-- --- 5. 說明視窗 (Modal) --- -->
+    <div id="helpModal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center opacity-0 transition-opacity duration-300 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto transform scale-95 transition-transform duration-300" id="helpModalContent">
+            <div class="p-5 md:p-8">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-xl md:text-2xl font-bold text-physics-primary flex items-center space-x-2">
+                        <i data-lucide="book-open" class="w-5.5 h-5.5 md:w-6 md:h-6"></i>
+                        <span data-i18n="helpModalTitle">宇宙膨脹無中心</span>
+                    </h2>
+                    <button onclick="toggleHelp()" class="text-slate-400 hover:text-slate-700 p-1 bg-slate-100 rounded-full transition-colors">
+                        <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-4 text-slate-700 leading-relaxed text-xs md:text-sm">
+                    <p data-i18n="helpDesc1">
+                        宇宙的膨脹經常被誤解為從空間中某個特定「中心點」向外爆炸。實際上，是整個<strong>空間本身在膨脹</strong>。
+                    </p>
+                    
+                    <div class="bg-blue-50 border-l-4 border-physics-primary p-4 rounded-r-lg space-y-2">
+                        <h4 class="font-bold text-physics-primary text-sm md:text-base" data-i18n="hubbleDseTitle">中學物理（HKDSE）概念：哈勃定律</h4>
+                        <p class="text-xs md:text-sm text-slate-700 leading-relaxed" data-i18n="hubbleDseDesc">
+                            哈勃定律指出：星系退行的速度與它和觀測者之間的距離成正比。這並非因為銀河系是宇宙的中心，而是因為宇宙的空間正在均勻地膨脹。
+                        </p>
+                    </div>
+
+                    <p data-i18n="helpDesc2">
+                        在模擬器中，您可以點選任何星系作為參考系原點。您會發現，不論您身處何方，所有的星系都看似正在對稱地向外遠離。這證明了<strong>宇宙膨脹沒有絕對的中心</strong>，每一個地方觀測到的退行現象都是一樣的。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* =========================================================================
+           I. 全域狀態與多語言定義
+           ========================================================================= */
+        const state = {
+            lang: 'zh',
+            scenario: 'grid', 
+            scaleFactor: 1.0,
+            isPlaying: false,
+            showLabels: true, 
+            showVectors: true,
+            showGrid: true,
+            
+            baseSpacing: 80, 
+            galaxies: [],
+            observerIndex: 0, 
+            gridTargetIx: 0, 
+            gridTargetIy: 0,
+            
+            animationId: null,
+            playSpeed: 0.0015,
+            maxScale: 1.8,    
+            minScale: 1.0,
+
+            currentObsBaseX: 0,
+            currentObsBaseY: 0,
+            targetObsBaseX: 0,
+            targetObsBaseY: 0,
+            panSpeed: 0.1, 
+            cameraZoom: 1.0, 
+            
+            mouseX: 0,
+            mouseY: 0,
+            hoverIndex: -1
+        };
+
+        const i18n = {
+            zh: {
+                appTitle: "宇宙膨脹與哈勃定律",
+                helpBtn: "說明",
+                langToggle: "切換語言",
+                footerText: "廠商會中學．物理科",
+                controlPanelTitle: "控制選單",
+                instructionTitle: "操作指示",
+                instructionText: "點擊右方畫布中的任何一個星系將其設為「觀察者」(紅色)。拖曳時間滑桿觀察空間膨脹。您會發現，無論選擇哪一個星系，其他星系都看似正在遠離它。",
+                scenarioTitle: "模擬場景",
+                scenGrid: "虛構方格排列",
+                scenVizier: "真實星表資料 (VizieR GWGC)",
+                controlTitle: "膨脹控制",
+                play: "播放膨脹",
+                pause: "暫停",
+                scaleFactorLabel: "比例因子",
+                visualTitle: "顯示設定",
+                showLabels: "顯示星系名稱",
+                showVectors: "顯示相對速度向量",
+                showGrid: "顯示共動座標網格",
+                clickHint: "點擊任何星系設為原點",
+                helpModalTitle: "宇宙膨脹無中心",
+                helpDesc1: "宇宙的膨脹經常被誤解為空間中某個特定「中心點」向外爆炸。實際上，是整個<strong>空間本身在膨脹</strong>。",
+                hubbleDseTitle: "中學物理（HKDSE）概念：哈勃定律 (Hubble's Law)",
+                hubbleDseDesc: "哈勃定律指出：一個星系遠離（退行）我們的速度，與它和我們（觀測者）之間的距離成正比。換句話說，距離我們越遠的星系，其退行速度就越快。這並非因為銀河系（或太陽系）是宇宙的中心，而是因為宇宙的所有空間正在同時均勻地膨脹。不論我們站在哪一個星系上進行觀測，都會看見完全相同的退行現象——所有其他星系都在遠離我們。這有力地證明了<strong>宇宙膨脹沒有絕對的中心</strong>。",
+                helpDesc2: "在模擬器中，您可以點選任何星系作為參考系原點。您會發現，不論您身處何方，所有的星系都看似正在對稱地向外遠離。這證明了<strong>宇宙膨脹沒有絕對的中心</strong>，每一個地方觀測到的退行現象都是一樣的。",
+                obsLabel: "觀察者",
+                mw: "銀河系 (含太陽系)",
+                vizierNoteTitle: "來自 VizieR 的真實數據",
+                vizierNoteDesc: "此場景即時從法國 CDS 下載 GWGC 近鄰星表。3D 天球座標已投影至 2D 平面，真實呈現哈勃膨脹。",
+                loadingCatalog: "正在連線至 VizieR...",
+                vizierFallbackTitle: "API 連線受阻，已啟用擬真星表",
+                vizierFallbackDesc: "由於安全限制(CORS)無法連接天文台，系統已即時生成符合真實統計特徵的擬真星系供您體驗。"
+            },
+            en: {
+                appTitle: "Expansion & Hubble's Law",
+                helpBtn: "Explanation",
+                langToggle: "Language",
+                footerText: "CMA Secondary School. Physics.",
+                controlPanelTitle: "Controls Menu",
+                instructionTitle: "Instructions",
+                instructionText: "Click any galaxy to set it as the 'Observer' (Red). Drag the slider to watch space expand. All galaxies appear to move away from your chosen point.",
+                scenarioTitle: "Scenario",
+                scenGrid: "Virtual Grid Layout",
+                scenVizier: "Real Catalog (VizieR GWGC)",
+                controlTitle: "Expansion Controls",
+                play: "Play Expansion",
+                pause: "Pause",
+                scaleFactorLabel: "Scale Factor",
+                visualTitle: "Visual Settings",
+                showLabels: "Show Galaxy Names",
+                showVectors: "Show Velocity Vectors",
+                showGrid: "Show Comoving Grid",
+                clickHint: "Click any galaxy to set as origin",
+                helpModalTitle: "No Center of Expansion",
+                helpDesc1: "The expansion of the universe is often misunderstood as an explosion from a specific 'center'. In reality, <strong>space itself is expanding</strong>.",
+                hubbleDseTitle: "Physics Concept: Hubble's Law",
+                hubbleDseDesc: "Hubble's Law states that the recession velocity of a galaxy is proportional to its distance. This happens not because we are at the center, but because space expands uniformly. No matter where you stand, all other galaxies recede from you, proving <strong>there is no absolute center</strong>.",
+                helpDesc2: "In the simulation, select any galaxy as the origin. Regardless of your choice, all other galaxies appear to move away symmetrically.",
+                obsLabel: "Observer",
+                mw: "Milky Way",
+                vizierNoteTitle: "Real Data from VizieR",
+                vizierNoteDesc: "Fetches GWGC catalog live from CDS, France. 3D coordinates are projected to 2D to demonstrate Hubble expansion.",
+                loadingCatalog: "Connecting to VizieR...",
+                vizierFallbackTitle: "API Blocked, Using Simulated Data",
+                vizierFallbackDesc: "Due to browser security (CORS), we have instantly generated simulated galaxies matching real statistical features."
+            }
+        };
+
+        let canvas, ctx, container;
+
+        /* =========================================================================
+           II. UI 互動與切換邏輯
+           ========================================================================= */
+
+        function toggleLanguage() {
+            state.lang = state.lang === 'zh' ? 'en' : 'zh';
+            const dict = i18n[state.lang];
+            
+            const desktopIndicator = document.getElementById('lang-indicator');
+            const mobileIndicator = document.getElementById('lang-indicator-mobile');
+            const labelText = state.lang === 'zh' ? 'EN' : '中';
+            if (desktopIndicator) desktopIndicator.innerText = labelText;
+            if (mobileIndicator) mobileIndicator.innerText = labelText;
+            
+            updateDOMStrings();
+            
+            document.querySelectorAll('.play-label').forEach(el => {
+                el.innerText = state.isPlaying ? dict.pause : dict.play;
+            });
+            
+            if (state.scenario === 'vizier') {
+                const vizierNote = document.getElementById('vizierNote');
+                if (vizierNote && vizierNote.classList.contains('bg-orange-50')) {
+                    document.getElementById('vizierTitle').innerHTML = `<span class="text-orange-800">${dict.vizierFallbackTitle}</span>`;
+                    document.getElementById('vizierDesc').innerHTML = dict.vizierFallbackDesc;
+                }
+            }
+        }
+
+        function updateDOMStrings() {
+            const dict = i18n[state.lang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) el.innerHTML = dict[key];
+            });
+            
+            if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+                MathJax.typesetPromise().catch((err) => console.log(err.message));
+            }
+        }
+
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('mainSidebar');
+            const overlay = document.getElementById('mobileDrawerOverlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => {
+                    overlay.classList.remove('opacity-0');
+                    sidebar.classList.remove('-translate-x-full');
+                }, 10);
+            } else {
+                overlay.classList.add('opacity-0');
+                sidebar.classList.add('-translate-x-full');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function toggleHelp() {
+            const modal = document.getElementById('helpModal');
+            const content = document.getElementById('helpModalContent');
+            
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+                    MathJax.typesetPromise([content]).catch(err => console.log(err));
+                }
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('scale-95');
+                }, 10);
+            } else {
+                modal.classList.add('opacity-0');
+                content.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function togglePlay() {
+            if (!state.isPlaying && state.scaleFactor >= state.maxScale) {
+                state.scaleFactor = 1.0;
+                updateScaleUI();
+            }
+            
+            state.isPlaying = !state.isPlaying;
+            const dict = i18n[state.lang];
+            
+            document.querySelectorAll('.play-btn').forEach(btn => {
+                const icon = btn.querySelector('.play-icon');
+                const label = btn.querySelector('.play-label');
+                
+                if (state.isPlaying) {
+                    if(icon) icon.setAttribute('data-lucide', 'pause');
+                    if(label) label.innerText = dict.pause;
+                    btn.classList.replace('bg-physics-primary', 'bg-physics-accent');
+                    btn.classList.replace('hover:bg-physics-secondary', 'hover:bg-amber-600');
+                } else {
+                    if(icon) icon.setAttribute('data-lucide', 'play');
+                    if(label) label.innerText = dict.play;
+                    btn.classList.replace('bg-physics-accent', 'bg-physics-primary');
+                    btn.classList.replace('hover:bg-amber-600', 'hover:bg-physics-secondary');
+                }
+            });
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function resetSimulation() {
+            state.scaleFactor = 1.0;
+            state.isPlaying = false;
+            state.cameraZoom = 1.0; 
+            document.getElementById('scaleSlider').value = 1.0;
+            updateScaleUI();
+            
+            const dict = i18n[state.lang];
+            
+            document.querySelectorAll('.play-btn').forEach(btn => {
+                const icon = btn.querySelector('.play-icon');
+                const label = btn.querySelector('.play-label');
+                if(icon) icon.setAttribute('data-lucide', 'play');
+                if(label) label.innerText = dict.play;
+                btn.classList.replace('bg-physics-accent', 'bg-physics-primary');
+                btn.classList.replace('hover:bg-amber-600', 'hover:bg-physics-secondary');
+            });
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+
+            if (state.scenario === 'grid') {
+                state.gridTargetIx = 0;
+                state.gridTargetIy = 0;
+            } else {
+                setObserver(0);
+            }
+        }
+
+        async function changeScenario() {
+            state.scenario = document.getElementById('scenarioSelect').value;
+            const vizierNote = document.getElementById('vizierNote');
+            const vizierIcon = document.getElementById('vizierIcon');
+            
+            if(vizierNote) {
+                vizierNote.classList.add('hidden');
+                vizierNote.classList.replace('bg-orange-50', 'bg-purple-50');
+                vizierNote.classList.replace('border-orange-200', 'border-purple-100');
+            }
+            if(vizierIcon) {
+                vizierIcon.classList.remove('text-orange-600');
+                vizierIcon.classList.add('text-purple-800');
+            }
+            
+            const vizTitle = document.getElementById('vizierTitle');
+            const vizDesc = document.getElementById('vizierDesc');
+            if(vizTitle) vizTitle.innerHTML = i18n[state.lang].vizierNoteTitle;
+            if(vizDesc) vizDesc.innerHTML = i18n[state.lang].vizierNoteDesc;
+            
+            if (state.scenario === 'vizier' && vizierNote) vizierNote.classList.remove('hidden');
+            
+            resetSimulation();
+            
+            if (state.scenario === 'vizier') {
+                await fetchVizierData();
+            } else {
+                initGalaxies();
+            }
+        }
+
+        async function fetchVizierData() {
+            const loading = document.getElementById('loadingOverlay');
+            loading.classList.remove('hidden');
+            
+            try {
+                const url = 'https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync';
+                const params = new URLSearchParams();
+                params.append('request', 'doQuery');
+                params.append('lang', 'ADQL');
+                params.append('format', 'json');
+                params.append('query', `SELECT TOP 800 Name, RAdeg, DEdeg, Dist FROM "VII/267/gwgc" WHERE Dist > 0 AND Dist < 25 ORDER BY Dist ASC`);
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                    body: params.toString()
+                });
+
+                if (!response.ok) throw new Error('Network API Error');
+                const data = await response.json();
+                
+                state.galaxies = [];
+                let id = 0;
+                
+                state.galaxies.push({ id: id++, baseX: 0, baseY: 0, offX: 0, offY: 0, pecVx: 0, pecVy: 0, label: i18n[state.lang].mw });
+                
+                if (data && data.data) {
+                    data.data.forEach(row => {
+                        const name = row[0] || "";
+                        const ra = row[1]; 
+                        const dec = row[2]; 
+                        const distMpc = row[3]; 
+                        
+                        const raRad = ra * Math.PI / 180;
+                        const decRad = dec * Math.PI / 180;
+                        const scale = 50; 
+                        
+                        const bx = distMpc * scale * Math.cos(raRad) * Math.cos(decRad);
+                        const by = distMpc * scale * Math.sin(raRad) * Math.cos(decRad);
+                        
+                        let showLabel = false;
+                        if (name.startsWith("NGC") || name.startsWith("M ") || name.startsWith("IC ")) {
+                            showLabel = true;
+                        }
+                        
+                        state.galaxies.push({
+                            id: id++, baseX: bx, baseY: by, offX: 0, offY: 0, pecVx: 0, pecVy: 0,
+                            label: showLabel ? name.trim() : null
+                        });
+                    });
+                }
+                
+            } catch (e) {
+                const vizierNote = document.getElementById('vizierNote');
+                const vizierIcon = document.getElementById('vizierIcon');
+                
+                if (vizierNote) {
+                    vizierNote.classList.replace('bg-purple-50', 'bg-orange-50');
+                    vizierNote.classList.replace('border-purple-100', 'border-orange-200');
+                }
+                if (vizierIcon) {
+                    vizierIcon.classList.remove('text-purple-800');
+                    vizierIcon.classList.add('text-orange-600');
+                }
+                
+                const vizTitle = document.getElementById('vizierTitle');
+                const vizDesc = document.getElementById('vizierDesc');
+                if (vizTitle) vizTitle.innerHTML = `<span class="text-orange-800">${i18n[state.lang].vizierFallbackTitle}</span>`;
+                if (vizDesc) vizDesc.innerHTML = i18n[state.lang].vizierFallbackDesc;
+                
+                state.galaxies = [];
+                let id = 0;
+                state.galaxies.push({ id: id++, baseX: 0, baseY: 0, offX: 0, offY: 0, pecVx: 0, pecVy: 0, label: i18n[state.lang].mw });
+                
+                for(let i = 0; i < 800; i++) {
+                    const distMpc = Math.sqrt(Math.random()) * 25; 
+                    const raRad = Math.random() * Math.PI * 2;
+                    const decRad = (Math.random() - 0.5) * Math.PI; 
+                    const scale = 50;
+                    const bx = distMpc * scale * Math.cos(raRad) * Math.cos(decRad);
+                    const by = distMpc * scale * Math.sin(raRad) * Math.cos(decRad);
+                    
+                    state.galaxies.push({
+                        id: id++, baseX: bx, baseY: by, offX: 0, offY: 0, pecVx: 0, pecVy: 0,
+                        label: null
+                    });
+                }
+            } finally {
+                setObserver(0);
+                loading.classList.add('hidden');
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+        }
+
+        function updateVisuals() {
+            state.showLabels = document.getElementById('toggleLabels').checked;
+            state.showVectors = document.getElementById('toggleVectors').checked;
+            state.showGrid = document.getElementById('toggleGrid').checked;
+        }
+
+        function updateScaleUI() {
+            document.getElementById('scaleValue').innerText = state.scaleFactor.toFixed(2);
+            document.getElementById('scaleSlider').value = state.scaleFactor;
+        }
+
+        document.getElementById('scaleSlider').addEventListener('input', (e) => {
+            state.scaleFactor = parseFloat(e.target.value);
+            updateScaleUI();
+            if (state.isPlaying) togglePlay(); 
+        });
+
+        function zoomIn() { state.cameraZoom = Math.min(state.cameraZoom * 1.25, 10.0); }
+        function zoomOut() { state.cameraZoom = Math.max(state.cameraZoom / 1.25, state.scenario === 'grid' ? 0.3 : 0.05); }
+        function resetZoom() { state.cameraZoom = 1.0; }
+
+        /* =========================================================================
+           III. 物理計算與畫布渲染引擎
+           ========================================================================= */
+
+        function initGalaxies() {
+            state.galaxies = [];
+            if (state.scenario === 'grid') {
+                state.gridTargetIx = 0;
+                state.gridTargetIy = 0;
+            }
+        }
+
+        function setObserver(index) {
+            if (index < 0 || index >= state.galaxies.length) return;
+            state.observerIndex = index;
+            const obs = state.galaxies[index];
+            if (obs) {
+                state.targetObsBaseX = obs.baseX + (obs.offX || 0);
+                state.targetObsBaseY = obs.offY + (obs.offY || 0);
+            }
+        }
+
+        function setupCanvasEvents() {
+            canvas.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                state.mouseX = e.clientX - rect.left;
+                state.mouseY = e.clientY - rect.top;
+            });
+
+            canvas.addEventListener('mouseleave', () => { state.hoverIndex = -1; });
+
+            canvas.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                if (e.deltaY < 0) zoomIn(); else zoomOut();
+            }, { passive: false });
+
+            canvas.addEventListener('click', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const mx = e.clientX - rect.left;
+                const my = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                if (state.scenario === 'grid') {
+                    const zoomFactor = state.cameraZoom;
+                    const rx = ((mx - centerX) / zoomFactor + state.currentObsBaseX) / state.scaleFactor;
+                    const ry = ((my - centerY) / zoomFactor + state.currentObsBaseY) / state.scaleFactor;
+                    state.gridTargetIx = Math.round(rx / state.baseSpacing);
+                    state.gridTargetIy = Math.round(ry / state.baseSpacing);
+                    return;
+                }
+
+                let closestIdx = -1;
+                let minDistance = 30; 
+                let foundMain = false; 
+
+                for (let i = 0; i < state.galaxies.length; i++) {
+                    const g = state.galaxies[i];
+                    const currentAbs = (g.baseX * state.scaleFactor) + (g.offX || 0) + ((g.pecVx || 0) * (state.scaleFactor - 1.0));
+                    const currentAbsY = (g.baseY * state.scaleFactor) + (g.offY || 0) + ((g.pecVy || 0) * (state.scaleFactor - 1.0));
+                    
+                    const screenX = centerX + (currentAbs - state.currentObsBaseX) * state.cameraZoom;
+                    const screenY = centerY + (currentAbsY - state.currentObsBaseY) * state.cameraZoom;
+                    const dist = Math.hypot(mx - screenX, my - screenY);
+                    
+                    if (g.label && dist < 30) {
+                        if (!foundMain || dist < minDistance) {
+                            minDistance = dist;
+                            closestIdx = i;
+                            foundMain = true;
+                        }
+                    } else if (!foundMain && !g.label && dist < 12) {
+                        if (dist < minDistance) {
+                            minDistance = dist;
+                            closestIdx = i;
+                        }
+                    }
+                }
+
+                if (closestIdx !== -1) setObserver(closestIdx);
+            });
+        }
+
+        /* =========================================================================
+           IV. 畫布渲染核心循環
+           ========================================================================= */
+        
+        function drawArrow(ctx, fromX, fromY, toX, toY, color) {
+            const headlen = 8; 
+            const dx = toX - fromX;
+            const dy = toY - fromY;
+            const angle = Math.atan2(dy, dx);
+            
+            if (Math.hypot(dx, dy) < 2) return;
+
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.lineTo(toX, toY);
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+
+        function render() {
+            const rect = container.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            const targetWidth = Math.max(1, Math.floor(rect.width * dpr));
+            const targetHeight = Math.max(1, Math.floor(rect.height * dpr));
+            
+            if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+                canvas.width = targetWidth;
+                canvas.height = targetHeight;
+                ctx.scale(dpr, dpr);
+            }
+
+            const width = rect.width;
+            const height = rect.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+
+            ctx.clearRect(0, 0, width, height);
+
+            const getAbsPos = (g, scaleFactor) => {
+                const t = scaleFactor - 1.0;
+                const x = (g.baseX * scaleFactor) + (g.offX || 0) + ((g.pecVx || 0) * t);
+                const y = (g.baseY * scaleFactor) + (g.offY || 0) + ((g.pecVy || 0) * t);
+                return { x, y };
+            };
+
+            if (state.isPlaying) {
+                state.scaleFactor += state.playSpeed;
+                if (state.scaleFactor >= state.maxScale) {
+                    state.scaleFactor = state.maxScale;
+                    state.isPlaying = false; 
+                    
+                    const dict = i18n[state.lang];
+                    document.querySelectorAll('.play-btn').forEach(btn => {
+                        const icon = btn.querySelector('.play-icon');
+                        const label = btn.querySelector('.play-label');
+                        if (icon) icon.setAttribute('data-lucide', 'play');
+                        if (label) label.innerText = dict.play;
+                        btn.classList.replace('bg-physics-accent', 'bg-physics-primary');
+                        btn.classList.replace('hover:bg-amber-600', 'hover:bg-physics-secondary');
+                    });
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }
+                updateScaleUI();
+            }
+
+            const gridSpacing = state.baseSpacing * state.scaleFactor;
+            const origSpacing = state.baseSpacing; 
+            const halfW = centerX / state.cameraZoom;
+            const halfH = centerY / state.cameraZoom;
+
+            const startIx = Math.floor((state.currentObsBaseX - halfW) / gridSpacing) - 1;
+            const endIx = Math.ceil((state.currentObsBaseX + halfW) / gridSpacing) + 1;
+            const startIy = Math.floor((state.currentObsBaseY - halfH) / gridSpacing) - 1;
+            const endIy = Math.ceil((state.currentObsBaseY + halfH) / gridSpacing) + 1;
+
+            if (state.scenario === 'grid') {
+                state.targetObsBaseX = state.gridTargetIx * state.baseSpacing * state.scaleFactor;
+                state.targetObsBaseY = state.gridTargetIy * state.baseSpacing * state.scaleFactor;
+            } else {
+                const obsGalaxy = state.galaxies[state.observerIndex];
+                if (!obsGalaxy) {
+                    state.animationId = requestAnimationFrame(render);
+                    return; 
+                }
+                const obsAbs = getAbsPos(obsGalaxy, state.scaleFactor);
+                state.targetObsBaseX = obsAbs.x;
+                state.targetObsBaseY = obsAbs.y;
+            }
+
+            state.currentObsBaseX += (state.targetObsBaseX - state.currentObsBaseX) * state.panSpeed;
+            state.currentObsBaseY += (state.targetObsBaseY - state.currentObsBaseY) * state.panSpeed;
+
+            if (state.showGrid) {
+                ctx.strokeStyle = 'rgba(203, 213, 225, 0.45)';
+                ctx.lineWidth = 1;
+                for (let ix = startIx; ix <= endIx; ix++) {
+                    const lineX = centerX + (ix * gridSpacing - state.currentObsBaseX) * state.cameraZoom;
+                    ctx.beginPath(); ctx.moveTo(lineX, 0); ctx.lineTo(lineX, height); ctx.stroke();
+                }
+                for (let iy = startIy; iy <= endIy; iy++) {
+                    const lineY = centerY + (iy * gridSpacing - state.currentObsBaseY) * state.cameraZoom;
+                    ctx.beginPath(); ctx.moveTo(0, lineY); ctx.lineTo(width, lineY); ctx.stroke();
+                }
+
+                ctx.strokeStyle = 'rgba(203, 213, 225, 0.20)';
+                for (let ix = startIx; ix <= endIx; ix++) {
+                    const origX = ix * origSpacing;
+                    const offset = state.targetObsBaseX - (state.targetObsBaseX / state.scaleFactor);
+                    const lineX = centerX + (origX + offset - state.currentObsBaseX) * state.cameraZoom;
+                    ctx.beginPath(); ctx.moveTo(lineX, 0); ctx.lineTo(lineX, height); ctx.stroke();
+                }
+                for (let iy = startIy; iy <= endIy; iy++) {
+                    const origY = iy * origSpacing;
+                    const offset = state.targetObsBaseY - (state.targetObsBaseY / state.scaleFactor);
+                    const lineY = centerY + (origY + offset - state.currentObsBaseY) * state.cameraZoom;
+                    ctx.beginPath(); ctx.moveTo(0, lineY); ctx.lineTo(width, lineY); ctx.stroke();
+                }
+            }
+
+            const baseDotRadius = 5;
+            const currentDotRadius = Math.max(1.2, Math.min(baseDotRadius * state.cameraZoom, 15));
+            const origDotRadius = Math.max(0.8, Math.min(4 * state.cameraZoom, 10));
+
+            if (state.scenario === 'grid') {
+                for (let ix = startIx; ix <= endIx; ix++) {
+                    for (let iy = startIy; iy <= endIy; iy++) {
+                        const posX = ix * gridSpacing;
+                        const posY = iy * gridSpacing;
+                        const screenX = centerX + (posX - state.currentObsBaseX) * state.cameraZoom;
+                        const screenY = centerY + (posY - state.currentObsBaseY) * state.cameraZoom;
+
+                        const origX = ix * origSpacing + (state.targetObsBaseX - state.targetObsBaseX / state.scaleFactor);
+                        const origY = iy * origSpacing + (state.targetObsBaseY - state.targetObsBaseY / state.scaleFactor);
+                        const origScreenX = centerX + (origX - state.currentObsBaseX) * state.cameraZoom;
+                        const origScreenY = centerY + (origY - state.currentObsBaseY) * state.cameraZoom;
+
+                        const isCenter = (ix === state.gridTargetIx && iy === state.gridTargetIy);
+
+                        ctx.beginPath();
+                        if (isCenter) {
+                            ctx.fillStyle = 'rgba(220, 38, 38, 0.4)';
+                            ctx.arc(origScreenX, origScreenY, currentDotRadius * 1.5, 0, Math.PI * 2);
+                        } else {
+                            ctx.fillStyle = '#cbd5e1'; 
+                            ctx.arc(origScreenX, origScreenY, origDotRadius, 0, Math.PI * 2);
+                        }
+                        ctx.fill();
+
+                        ctx.beginPath();
+                        if (isCenter) {
+                            ctx.shadowBlur = Math.min(15 * state.cameraZoom, 30);
+                            ctx.shadowColor = '#DC2626';
+                            ctx.fillStyle = '#DC2626';
+                            ctx.arc(screenX, screenY, currentDotRadius * 1.5, 0, Math.PI * 2);
+                        } else {
+                            ctx.shadowBlur = 0;
+                            ctx.fillStyle = '#1e3c72'; 
+                            ctx.arc(screenX, screenY, currentDotRadius, 0, Math.PI * 2);
+                        }
+                        ctx.fill();
+                        ctx.shadowBlur = 0; 
+
+                        if (state.showVectors && !isCenter) {
+                            const vX = posX - state.targetObsBaseX;
+                            const vY = posY - state.targetObsBaseY;
+                            const arrowToX = screenX + vX * 0.15 * state.cameraZoom;
+                            const arrowToY = screenY + vY * 0.15 * state.cameraZoom;
+                            drawArrow(ctx, screenX, screenY, arrowToX, arrowToY, '#0d9488');
+                        }
+
+                        if (isCenter && state.showLabels) {
+                            ctx.fillStyle = '#DC2626';
+                            ctx.font = `bold ${Math.max(10, Math.min(12 * state.cameraZoom, 16))}px sans-serif`;
+                            ctx.textAlign = 'center';
+                            ctx.fillText(`(${i18n[state.lang].obsLabel})`, screenX, screenY - currentDotRadius * 2.5);
+                        }
+                    }
+                }
+            } else {
+                const obsGalaxy = state.galaxies[state.observerIndex];
+                const obsAbs = getAbsPos(obsGalaxy, state.scaleFactor);
+                const obsOrigAbs = getAbsPos(obsGalaxy, 1.0);
+
+                state.galaxies.forEach((g, index) => {
+                    const origAbs = getAbsPos(g, 1.0);
+                    const shiftedX = origAbs.x + (obsAbs.x - obsOrigAbs.x);
+                    const shiftedY = origAbs.y + (obsAbs.y - obsOrigAbs.y);
+                    const screenX = centerX + (shiftedX - state.currentObsBaseX) * state.cameraZoom;
+                    const screenY = centerY + (shiftedY - state.currentObsBaseY) * state.cameraZoom;
+                    
+                    if (screenX < -20 || screenX > width + 20 || screenY < -20 || screenY > height + 20) return;
+                    
+                    ctx.beginPath();
+                    if (index === state.observerIndex) {
+                        ctx.fillStyle = 'rgba(220, 38, 38, 0.4)'; 
+                        ctx.arc(screenX, screenY, Math.max(4, Math.min(12 * state.cameraZoom, 16)), 0, Math.PI * 2);
+                    } else {
+                        ctx.fillStyle = '#cbd5e1'; 
+                        ctx.arc(screenX, screenY, origDotRadius, 0, Math.PI * 2);
+                    }
+                    ctx.fill();
+                });
+
+                const renderData = state.galaxies.map((g, index) => {
+                    const currentAbs = getAbsPos(g, state.scaleFactor);
+                    const screenX = centerX + (currentAbs.x - state.currentObsBaseX) * state.cameraZoom;
+                    const screenY = centerY + (currentAbs.y - state.currentObsBaseY) * state.cameraZoom;
+                    const vX = (g.baseX - obsGalaxy.baseX) + (g.pecVx || 0) - (obsGalaxy.pecVx || 0);
+                    const vY = (g.baseY - obsGalaxy.baseY) + (g.pecVy || 0) - (obsGalaxy.pecVy || 0);
+                    
+                    return { index, screenX, screenY, vX, vY, isObserver: index === state.observerIndex, galaxy: g };
+                });
+
+                if (state.showVectors) {
+                    renderData.forEach(d => {
+                        if (d.isObserver) return; 
+                        const vectorScale = 0.15 * state.scaleFactor; 
+                        const arrowToX = d.screenX + d.vX * vectorScale * state.cameraZoom;
+                        const arrowToY = d.screenY + d.vY * vectorScale * state.cameraZoom;
+                        drawArrow(ctx, d.screenX, d.screenY, arrowToX, arrowToY, '#0d9488'); 
+                    });
+                }
+
+                renderData.forEach(d => {
+                    if (d.screenX < -20 || d.screenX > width + 20 || d.screenY < -20 || d.screenY > height + 20) return;
+
+                    ctx.beginPath();
+                    let r = currentDotRadius; 
+                    
+                    if (d.isObserver) {
+                        r = Math.max(5, Math.min(8 * state.cameraZoom, 18));
+                        ctx.shadowBlur = Math.min(15 * state.cameraZoom, 30);
+                        ctx.shadowColor = '#DC2626';
+                        ctx.fillStyle = '#DC2626'; 
+                    } else {
+                        ctx.shadowBlur = 0;
+                        ctx.fillStyle = '#1e3c72'; 
+                    }
+
+                    ctx.arc(d.screenX, d.screenY, r, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0; 
+
+                    if (state.showLabels) {
+                        let yOffset = r * 1.8;
+                        const nameStr = d.galaxy.label === i18n.en.mw || d.galaxy.label === i18n.zh.mw 
+                                        ? i18n[state.lang].mw : (d.galaxy.label || "");
+                                        
+                        if (nameStr) {
+                            ctx.fillStyle = d.isObserver ? '#DC2626' : '#1e3c72';
+                            ctx.font = d.isObserver ? `bold ${Math.max(10, Math.min(13 * state.cameraZoom, 17))}px sans-serif` : `${Math.max(9, Math.min(11 * state.cameraZoom, 14))}px sans-serif`;
+                            ctx.textAlign = 'center';
+                            ctx.fillText(nameStr, d.screenX, d.screenY - yOffset);
+                            yOffset += 14;
+                        }
+                        
+                        if (d.isObserver) {
+                            ctx.fillStyle = '#DC2626';
+                            ctx.font = `bold ${Math.max(8, Math.min(11 * state.cameraZoom, 13))}px sans-serif`;
+                            ctx.textAlign = 'center';
+                            ctx.fillText(`(${i18n[state.lang].obsLabel})`, d.screenX, d.screenY - yOffset);
+                        }
+                    }
+                });
+            }
+
+            state.animationId = requestAnimationFrame(render);
+        }
+
+        // ==========================================
+        // V. 系統安全啟動程序
+        // ==========================================
+        function initApp() {
+            canvas = document.getElementById('simCanvas');
+            ctx = canvas.getContext('2d');
+            container = document.getElementById('canvasContainer');
+            
+            try { if (typeof lucide !== 'undefined') lucide.createIcons(); } catch(e) {}
+            try { updateDOMStrings(); } catch(e) {}
+
+            setupCanvasEvents();
+            initGalaxies();
+            render(); 
+        }
+
+        window.onload = initApp;
+
+    </script>
+</body>
+</html>
