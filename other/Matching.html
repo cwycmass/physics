@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Match & Learn: English to Chinese</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom Animations for "Juice" */
+        /* Custom Animations */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20% { transform: translateX(-8px); }
@@ -23,7 +23,7 @@
 
         .shake-error {
             animation: shake 0.4s ease-in-out;
-            border-color: #ef4444 !important; /* Red */
+            border-color: #ef4444 !important;
             background-color: #fef2f2 !important;
             color: #b91c1c !important;
             z-index: 30;
@@ -31,7 +31,7 @@
 
         .pop-success {
             animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-color: #22c55e !important; /* Green */
+            border-color: #22c55e !important;
             background-color: #f0fdf4 !important;
             color: #166534 !important;
             z-index: 30;
@@ -49,234 +49,197 @@
         }
         
         /* Container queries dynamically scale text sizes based on the card's dimensions */
-        .text-en { font-size: max(0.8rem, min(14cqmin, 1.4rem)); text-align: center; line-height: 1.15; padding: 0 4px; word-break: break-word; }
-        .text-zh { font-size: max(1.1rem, min(20cqmin, 2.2rem)); text-align: center; line-height: 1.15; padding: 0 2px; }
+        .text-en { font-size: max(1rem, min(15cqmin, 2rem)); text-align: center; line-height: 1.15; padding: 0 4px; word-break: break-word; }
+        .text-zh { font-size: max(1.2rem, min(22cqmin, 2.5rem)); text-align: center; line-height: 1.15; padding: 0 2px; }
 
-        /* Column/Type Specific Styles & Selection Glows */
-        .card-left {
-            border-color: #bae6fd; /* light blue */
-            background-color: #f0f9ff;
-            color: #0369a1;
-        }
-        .card-left:hover {
-            border-color: #38bdf8;
-            background-color: #e0f2fe;
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15);
-        }
-        .card-left.selected {
-            border-color: #0284c7 !important;
-            background-color: #e0f2fe !important;
-            box-shadow: 0 0 15px rgba(2, 132, 199, 0.4);
-            transform: scale(1.08) rotate(0deg) !important; /* straightens up when selected */
-            z-index: 20;
-        }
+        .card-left { border-color: #bae6fd; background-color: #f0f9ff; color: #0369a1; }
+        .card-left:hover { border-color: #38bdf8; background-color: #e0f2fe; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15); }
+        .card-left.selected { border-color: #0284c7 !important; background-color: #e0f2fe !important; box-shadow: 0 0 15px rgba(2, 132, 199, 0.4); transform: scale(1.05) rotate(0deg) !important; z-index: 20; }
 
-        .card-right {
-            border-color: #ddd6fe; /* light purple */
-            background-color: #f5f3ff;
-            color: #6d28d9;
-        }
-        .card-right:hover {
-            border-color: #c084fc;
-            background-color: #ede9fe;
-            box-shadow: 0 4px 12px rgba(192, 132, 252, 0.15);
-        }
-        .card-right.selected {
-            border-color: #7c3aed !important;
-            background-color: #ede9fe !important;
-            box-shadow: 0 0 15px rgba(124, 58, 237, 0.4);
-            transform: scale(1.08) rotate(0deg) !important; /* straightens up when selected */
-            z-index: 20;
-        }
+        .card-right { border-color: #ddd6fe; background-color: #f5f3ff; color: #6d28d9; }
+        .card-right:hover { border-color: #c084fc; background-color: #ede9fe; box-shadow: 0 4px 12px rgba(192, 132, 252, 0.15); }
+        .card-right.selected { border-color: #7c3aed !important; background-color: #ede9fe !important; box-shadow: 0 0 15px rgba(124, 58, 237, 0.4); transform: scale(1.05) rotate(0deg) !important; z-index: 20; }
 
-        /* Shared Match State */
         .card.matched {
-            opacity: 0.5;
-            cursor: default;
-            border-color: #86efac !important;
-            background-color: #f0fdf4 !important;
-            color: #166534 !important;
+            opacity: 0; /* Fade out completely on match for paginated layout */
+            transform: scale(0.8) !important;
             pointer-events: none;
-            box-shadow: none !important;
-            transform: scale(0.95) !important;
+            transition: all 0.4s ease-out;
         }
         
-        /* SVG Line drawing animation */
         .match-line {
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
-            animation: drawLine 0.5s ease-out forwards;
+            animation: drawLine 0.4s ease-out forwards;
         }
 
-        @keyframes drawLine {
-            to { stroke-dashoffset: 0; }
-        }
-
-        /* Animations for Score and Combo */
+        @keyframes drawLine { to { stroke-dashoffset: 0; } }
         @keyframes float-up {
             0% { opacity: 1; transform: translateY(0) scale(1); }
             100% { opacity: 0; transform: translateY(-45px) scale(1.25); }
         }
-        .floating-score {
-            animation: float-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            pointer-events: none;
-            z-index: 50;
-        }
-        @keyframes combo-pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-        .combo-active {
-            animation: combo-pulse 0.3s ease-in-out;
-            font-weight: bold;
-        }
+        .floating-score { animation: float-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; pointer-events: none; z-index: 50; }
+        @keyframes combo-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .combo-active { animation: combo-pulse 0.3s ease-in-out; font-weight: bold; }
 
-        /* Rank Pulse Animation */
-        @keyframes pulse-gold {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7); }
-            50% { transform: scale(1.05); box-shadow: 0 0 20px 10px rgba(234, 179, 8, 0); }
+        /* End Game Animation Classes */
+        .fade-row {
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
-        .rank-s {
-            animation: pulse-gold 2s infinite ease-in-out;
+        .anim-hidden {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        
+        @keyframes stamp {
+            0% { transform: scale(4) rotate(-35deg); opacity: 0; }
+            50% { transform: scale(0.8) rotate(-10deg); opacity: 1; }
+            70% { transform: scale(1.1) rotate(-14deg); opacity: 1; }
+            100% { transform: scale(1) rotate(-12deg); opacity: 1; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); }
+        }
+        .stamp-in {
+            animation: stamp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         /* Responsive Layout Rules */
-        @media (orientation: landscape) and (min-width: 768px) {
-            .app-container {
-                height: 100vh;
-                height: 100svh; /* Dynamic/safe viewport size to fix cut-offs */
-                overflow: hidden;
-            }
-            .scrollable-on-portrait {
-                overflow: hidden;
-                height: 100%;
-            }
+        .app-container {
+            height: 100svh; /* Dynamic viewport size */
+            overflow: hidden;
         }
-        @media (orientation: portrait), (max-width: 767px) {
-            .app-container {
-                height: auto;
-                min-height: 100vh;
-                min-height: 100svh; /* Safe minimum height on modern portable browsers */
-                overflow-y: auto;
-            }
-            .scrollable-on-portrait {
-                overflow-y: visible;
-                height: auto;
-            }
-            #scramble-grid {
-                grid-template-rows: auto !important; /* Let cards flow naturally on portrait mobile */
-            }
+        
+        #scramble-grid {
+            /* Stretch rows to fill available height completely */
+            grid-auto-rows: 1fr;
+        }
+        
+        /* Mobile Menu Transitions */
+        #mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #mobile-menu.open {
+            transform: translateX(0);
         }
     </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 flex flex-col app-container">
 
-    <header class="bg-white shadow-sm py-3 px-4 z-10 relative flex flex-col md:flex-row justify-between items-center shrink-0">
-        <div class="text-center md:text-left mb-3 md:mb-0">
-            <h1 id="app-title" class="text-2xl font-bold text-slate-800 flex items-center justify-center md:justify-start gap-2">
-                ⚡ Match & Learn
-            </h1>
-            <p id="app-subtitle" class="text-slate-500 text-sm mt-0.5">Mixed board! Match the <span class="text-sky-600 font-bold">English</span> and <span class="text-purple-600 font-bold">Chinese</span> pairs.</p>
+    <!-- DESKTOP HEADER (Hidden on small portrait screens) -->
+    <header class="hidden md:flex bg-white shadow-sm py-3 px-4 z-10 relative flex-row justify-between items-center shrink-0">
+        <div>
+            <h1 id="app-title" class="text-2xl font-bold text-slate-800 flex items-center gap-2">⚡ Match & Learn</h1>
+            <p id="app-subtitle" class="text-slate-500 text-sm mt-0.5">Match the <span class="text-sky-600 font-bold">English</span> and <span class="text-purple-600 font-bold">Chinese</span> pairs.</p>
         </div>
         
-        <div class="flex items-center gap-3 flex-wrap justify-center">
+        <div class="flex items-center gap-3">
             <div class="text-sm bg-slate-100 px-4 py-2 rounded-lg flex gap-4 shadow-inner">
-                <div><span id="label-timer">Time:</span> <span id="timer-display" class="font-mono font-bold">0:00</span></div>
-                <div><span id="label-score">Score:</span> <span id="score-display" class="font-bold text-blue-600">0</span></div>
-                <div><span id="label-combo">Combo:</span> <span id="combo-display" class="font-bold text-slate-400">x1</span></div>
+                <div><span id="label-timer">Time:</span> <span class="timer-display font-mono font-bold">0:00</span></div>
+                <div><span id="label-score">Score:</span> <span class="score-display font-bold text-blue-600">0</span></div>
+                <div><span id="label-combo">Combo:</span> <span class="combo-display font-bold text-slate-400">x1</span></div>
             </div>
-            <button id="lang-btn" class="text-sm font-semibold text-slate-700 bg-slate-200 hover:bg-slate-300 px-3 py-2 rounded-lg transition-colors shadow-sm">
-                繁體中文
-            </button>
-            <button id="reset-btn" class="text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors shadow-sm">
-                Restart
-            </button>
+            <button class="lang-btn text-sm font-semibold text-slate-700 bg-slate-200 hover:bg-slate-300 px-3 py-2 rounded-lg transition-colors">繁體中文</button>
+            <button class="reset-btn text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors">Restart</button>
         </div>
     </header>
 
-    <!-- Visual Timer Progress Bar representing potential Speed Bonus -->
-    <div class="w-full bg-slate-200 h-2 relative shrink-0">
-        <div id="bonus-progress-bar" class="bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 h-full w-full transition-all duration-1000 ease-linear"></div>
+    <!-- MOBILE SLIM HEADER -->
+    <header class="flex md:hidden bg-white shadow-sm py-2 px-3 z-10 relative justify-between items-center shrink-0 h-12">
+        <button id="menu-toggle-btn" class="p-1 text-slate-600 hover:bg-slate-100 rounded-md">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <div class="flex gap-4 text-sm font-bold items-center">
+            <div class="flex items-center text-slate-700"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> <span class="timer-display">0:00</span></div>
+            <div class="flex items-center text-blue-600"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg> <span class="score-display">0</span></div>
+            <div class="flex items-center text-slate-400 combo-display">x1</div>
+        </div>
+        <div class="text-xs font-semibold text-slate-400"><span id="page-indicator">1/3</span></div>
+    </header>
+
+    <!-- Visual Combo Timer (Drains over 4 seconds) -->
+    <div class="w-full bg-slate-200 h-1.5 relative shrink-0 z-10 shadow-inner">
+        <div id="combo-drain-bar" class="bg-orange-500 h-full w-0"></div>
     </div>
 
-    <main class="flex-grow flex flex-col items-center p-2 w-full max-w-6xl mx-auto relative min-h-0 scrollable-on-portrait">
+    <!-- MOBILE OFF-CANVAS MENU -->
+    <div id="mobile-menu" class="fixed inset-0 z-50 bg-white/95 backdrop-blur-sm flex flex-col p-6 shadow-2xl md:hidden">
+        <div class="flex justify-between items-center mb-8 border-b pb-4">
+            <h2 class="text-2xl font-bold text-slate-800">Menu</h2>
+            <button id="close-menu-btn" class="p-2 text-slate-500 bg-slate-100 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        </div>
+        <button class="lang-btn w-full text-left font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 px-4 py-4 rounded-xl mb-4 text-lg">🌐 繁體中文 / English</button>
+        <button class="reset-btn w-full text-left font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 px-4 py-4 rounded-xl text-lg">🔄 Restart Game</button>
+    </div>
+
+    <main class="flex-grow flex flex-col items-center p-2 sm:p-4 w-full max-w-6xl mx-auto relative min-h-0">
         
-        <!-- START GAME MODAL (Masks the board initially) -->
-        <div id="start-modal" class="absolute inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
-            <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-100 transform scale-100 transition-all">
+        <!-- START GAME MODAL -->
+        <div id="start-modal" class="absolute inset-0 z-40 bg-slate-900/80 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
+            <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-slate-100">
                 <div class="text-5xl mb-4">🧠</div>
                 <h2 id="modal-title" class="text-3xl font-extrabold text-slate-800 mb-2">Are you ready?</h2>
-                <p id="modal-subtitle" class="text-slate-600 mb-6 text-sm sm:text-base text-center">
-                    The cards are scrambled all over the desk! Match the <span class="text-sky-600 font-bold">English (Blue)</span> cards with their <span class="text-purple-600 font-bold">Chinese (Purple)</span> counterparts before time runs out.
+                <p id="modal-subtitle" class="text-slate-600 mb-6 text-sm text-center">
+                    Match the <span class="text-sky-600 font-bold">English (Blue)</span> cards with their <span class="text-purple-600 font-bold">Chinese (Purple)</span> counterparts!
                 </p>
-                <div class="flex flex-col gap-2 mb-6 text-left text-xs text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <p id="rule-scrambled" class="flex items-center gap-2">🎲 <strong>Scrambled Board:</strong> Cards are scattered and mixed randomly!</p>
-                    <p id="rule-combo" class="flex items-center gap-2">🔥 <strong>Combo Power:</strong> Quick successive matches multiply your points!</p>
-                    <p id="rule-rank" class="flex items-center gap-2">⚡ <strong>S-Rank Rank:</strong> Complete the puzzle in under 30 seconds!</p>
-                </div>
-                <button id="start-btn" onclick="startGame()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-indigo-500/20 transform hover:-translate-y-0.5 active:translate-y-0 transition-all text-lg">
+                <button id="start-btn" onclick="startGame()" class="w-full bg-blue-600 text-white font-bold py-4 px-8 rounded-2xl shadow-lg active:scale-95 transition-all text-lg">
                     Start Scramble! 🚀
                 </button>
             </div>
         </div>
 
-        <!-- Confetti/Win Overlay -->
-        <div id="win-screen" class="absolute inset-0 z-50 hidden bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center rounded-2xl">
-            <div class="text-6xl mb-2">🎉</div>
-            <h2 id="win-title" class="text-4xl font-bold text-slate-800 mb-1">Level Complete!</h2>
-            <p id="win-tagline" class="text-emerald-600 font-semibold mb-4">Incredible Speed!</p>
+        <!-- PAGE TRANSITION OVERLAY -->
+        <div id="page-transition" class="absolute inset-0 z-30 hidden bg-white/90 backdrop-blur-sm flex-col items-center justify-center text-center rounded-2xl">
+            <div class="text-6xl mb-4 pop-success bg-transparent">🚀</div>
+            <h2 id="page-title" class="text-3xl font-bold text-slate-800 mb-2">Page Cleared!</h2>
+            <p class="text-emerald-600 font-semibold text-lg">Loading next set...</p>
+        </div>
+
+        <!-- WIN SCREEN OVERLAY (With Animated Tally) -->
+        <div id="win-screen" class="absolute inset-0 z-40 hidden bg-white/95 backdrop-blur-md flex-col items-center justify-center p-6 text-center rounded-2xl">
+            <div class="text-5xl md:text-6xl mb-2">🎉</div>
+            <h2 id="win-title" class="text-3xl md:text-4xl font-bold text-slate-800 mb-6">Dictionary Complete!</h2>
             
-            <div class="bg-white rounded-2xl p-6 mb-6 w-full max-w-sm border border-slate-200 shadow-md text-left relative overflow-hidden">
-                <!-- Rank Badge -->
-                <div class="absolute right-6 top-6 flex flex-col items-center">
-                    <span id="label-rank" class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Rank</span>
-                    <span id="win-rank" class="text-5xl font-black transition-all">S</span>
+            <div class="relative bg-white rounded-2xl p-6 mb-8 w-full max-w-md border border-slate-200 shadow-xl text-left overflow-hidden">
+                
+                <!-- The giant animated rank stamp -->
+                <div id="anim-rank" class="hidden absolute -right-4 top-4 md:right-4 md:top-6 text-8xl md:text-9xl font-black opacity-0"></div>
+
+                <!-- Step 1: Base Score -->
+                <div id="anim-base-row" class="fade-row anim-hidden flex justify-between items-center mb-3 pr-16">
+                    <span id="label-win-base" class="text-slate-600 font-medium">Base Score:</span>
+                    <span id="win-base-score" class="font-bold text-slate-800 text-xl">0</span>
                 </div>
 
-                <div class="flex justify-between mb-2">
-                    <span id="label-win-base" class="text-slate-600">Base Match Score:</span>
-                    <span id="win-base-score" class="font-bold text-slate-800">0</span>
+                <!-- Step 2: Time Bonus -->
+                <div id="anim-bonus-row" class="fade-row anim-hidden flex justify-between items-center mb-4 pr-16">
+                    <span class="text-slate-600 font-medium"><span id="label-win-bonus">Speed Bonus</span> <span id="win-time-taken-info" class="text-xs text-slate-400"></span>:</span>
+                    <span class="font-bold text-emerald-500 text-xl">+<span id="win-time-bonus">0</span></span>
                 </div>
-                <div class="flex justify-between mb-2">
-                    <span id="label-win-bonus" class="text-slate-600">Speed Bonus:</span>
-                    <span id="win-time-bonus" class="font-bold text-emerald-600">+0</span>
-                </div>
-                <div class="flex justify-between mb-2">
-                    <span id="label-win-clear" class="text-slate-600">Clear Time:</span>
-                    <span id="win-time-taken" class="font-bold text-slate-800">0s</span>
-                </div>
-                <div class="w-full h-px bg-slate-200 my-3"></div>
-                <div class="flex justify-between items-end">
+
+                <div id="anim-divider" class="fade-row anim-hidden w-full h-px bg-slate-200 my-4"></div>
+
+                <!-- Step 3: Final Score -->
+                <div id="anim-total-row" class="fade-row anim-hidden flex justify-between items-end pr-16">
                     <span id="label-win-final" class="text-lg font-bold text-slate-800">Final Score:</span>
                     <span id="win-total-score" class="text-4xl font-black text-blue-600">0</span>
                 </div>
-                <div class="text-center mt-4 text-sm text-slate-500">
-                    🏆 <span id="label-win-high">High Score:</span> <span id="win-high-score" class="font-bold text-slate-800">0</span>
-                </div>
             </div>
 
-            <button id="win-replay-btn" onclick="initGame()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all">
-                Play Again & Beat Score!
+            <!-- Step 4: Play Again Button -->
+            <button id="win-replay-btn" class="fade-row anim-hidden reset-btn bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 px-10 rounded-full shadow-lg hover:shadow-indigo-500/30 active:scale-95 transition-all text-lg">
+                Play Again
             </button>
         </div>
 
         <!-- Game Board Container -->
-        <div id="game-board" class="relative w-full mt-2 p-1 flex-grow flex flex-col min-h-[500px] md:min-h-0 overflow-visible">
-            <!-- Floating scores container -->
+        <div id="game-board" class="relative w-full h-full flex-grow flex flex-col p-1 md:p-2">
             <div id="floating-scores" class="absolute inset-0 pointer-events-none z-50"></div>
-
-            <!-- SVG Container for connecting lines -->
             <svg id="lines-container" class="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-0"></svg>
-            
-            <!-- Randomized Single Grid Area -->
-            <div id="scramble-grid" class="grid gap-2 sm:gap-3 w-full h-full z-10">
-                <!-- Dynamically generated mixed cards and random spacers populate here -->
-            </div>
+            <div id="scramble-grid" class="grid gap-2 sm:gap-3 w-full h-full z-10"></div>
         </div>
     </main>
 
     <script>
-        // 1. Data Structure (Chemistry Concepts)
+        // Dictionary updated per request (15 items)
         const dictionary = [
             { id: 1, english: "atom", chinese: "原子"},
             { id: 2, english: "molecule", chinese: "分子"},
@@ -292,85 +255,44 @@
             { id: 12, english: "copper", chinese: "銅"},
             { id: 13, english: "silver", chinese: "銀"},         
             { id: 14, english: "aluminium", chinese: "鋁"},         
-            { id: 15, english: "carbon", chinese: "碳"},  
+            { id: 15, english: "carbon", chinese: "碳"}
         ];
 
         // UI Translations
         const locales = {
             en: {
                 title: "⚡ Match & Learn",
-                subtitle: "Mixed board! Match the <span class='text-sky-600 font-bold'>English</span> and <span class='text-purple-600 font-bold'>Chinese</span> pairs.",
-                time: "Time:",
-                score: "Score:",
-                combo: "Combo:",
-                restart: "Restart",
-                langBtn: "繁體中文",
-                readyTitle: "Are you ready?",
-                readySubtitle: "The cards are scrambled all over the desk! Match the <span class='text-sky-600 font-bold'>English (Blue)</span> cards with their <span class='text-purple-600 font-bold'>Chinese (Purple)</span> counterparts before time runs out.",
-                rulesScrambled: "🎲 <strong>Scrambled Board:</strong> Cards are scattered and mixed randomly!",
-                rulesCombo: "🔥 <strong>Combo Power:</strong> Quick successive matches multiply your points!",
-                rulesRank: "⚡ <strong>S-Rank Rank:</strong> Complete the puzzle in under 30 seconds!",
-                btnStart: "Start Scramble! 🚀",
-                winTitle: "Level Complete!",
-                winTaglineS: "⚡ LIGHTNING FAST SPEED! ⚡",
-                winTaglineA: "🚀 Super Swift! Excellent work!",
-                winTaglineB: "✨ Steady and accurate! Keep it up!",
-                winTaglineC: "Good job! Try to match faster!",
-                winBaseScore: "Base Match Score:",
-                winSpeedBonus: "Speed Bonus:",
-                winClearTime: "Clear Time:",
-                winFinalScore: "Final Score:",
-                winHighScore: "High Score:",
-                btnPlayAgain: "Play Again & Beat Score!",
-                seconds: "seconds",
-                rankLabel: "Rank"
+                subtitle: "Match the <span class='text-sky-600 font-bold'>English</span> and <span class='text-purple-600 font-bold'>Chinese</span> pairs.",
+                time: "Time:", score: "Score:", combo: "Combo:", restart: "Restart", langBtn: "繁體中文",
+                readyTitle: "Are you ready?", btnStart: "Start Game! 🚀", winTitle: "Dictionary Complete!",
+                winBaseScore: "Base Score:", winTimeBonus: "Speed Bonus", winFinalScore: "Final Score:", winClearTime: "Total Time:"
             },
             zh: {
                 title: "⚡ 配對學習樂",
-                subtitle: "混合字卡！請將<span class='text-sky-600 font-bold'>英文</span>與對應的<span class='text-purple-600 font-bold'>中文</span>配對。",
-                time: "時間:",
-                score: "分數:",
-                combo: "連擊:",
-                restart: "重新開始",
-                langBtn: "English",
-                readyTitle: "準備好了嗎？",
-                readySubtitle: "卡片隨機散落桌上！在時間耗盡前，將<span class='text-sky-600 font-bold'>英文（藍色）</span>卡片與對應的<span class='text-purple-600 font-bold'>中文（紫色）</span>卡片配對。",
-                rulesScrambled: "🎲 <strong>隨機盤面：</strong>卡片全部打亂並隨機散落！",
-                rulesCombo: "🔥 <strong>連擊加成：</strong>連續快速配對成功，獲得倍數高分！",
-                rulesRank: "⚡ <strong>極限S級：</strong>30 秒內完成挑戰以獲得 S 級評價！",
-                btnStart: "開始配對！🚀",
-                winTitle: "挑戰完成！",
-                winTaglineS: "⚡ 閃電般的速度！太神了！⚡",
-                winTaglineA: "🚀 身手矯健！表現非常出色！",
-                winTaglineB: "✨ 穩定且精準！繼續加油！",
-                winTaglineC: "做得好！下次試著挑戰更快速度！",
-                winBaseScore: "配對基礎分：",
-                winSpeedBonus: "速度加分：",
-                winClearTime: "通關時間：",
-                winFinalScore: "最終得分：",
-                winHighScore: "最高紀錄：",
-                btnPlayAgain: "再玩一次，挑戰高分！",
-                seconds: "秒",
-                rankLabel: "等級"
+                subtitle: "請將<span class='text-sky-600 font-bold'>英文</span>與對應的<span class='text-purple-600 font-bold'>中文</span>配對。",
+                time: "時間:", score: "分數:", combo: "連擊:", restart: "重新開始", langBtn: "English",
+                readyTitle: "準備好了嗎？", btnStart: "開始配對！🚀", winTitle: "詞彙庫挑戰完成！",
+                winBaseScore: "基礎分數：", winTimeBonus: "速度加分", winFinalScore: "最終得分：", winClearTime: "總時間："
             }
         };
 
-        // Constants
-        const PAR_TIME = 90; // Expanded par time because there are 32 cards total!
+        const CARDS_PER_PAGE = 6; // 6 pairs (12 cards) per chunk for max visibility
+        const COMBO_WINDOW_MS = 4000; 
+        const PAR_TIME = 60; // Par time to calculate Speed Bonus
 
-        // 2. Game State
+        // Game State
         let state = {
             selectedCard: null,
-            matches: [], // Array of matched IDs
-            isAnimating: false, // Prevents clicking during error animations
+            pageMatches: [], 
+            isAnimating: false, 
             score: 0,
             combo: 1,
-            lastMatchTime: 0,
             startTime: 0,
             timerInterval: null,
-            highScore: parseInt(localStorage.getItem('match_high_score') || '0', 10),
+            comboTimeout: null,
             gameStarted: false,
-            currentDeck: [],
+            chunks: [],
+            currentChunkIndex: 0,
             locale: 'en'
         };
 
@@ -378,239 +300,183 @@
         const scrambleGrid = document.getElementById('scramble-grid');
         const linesContainer = document.getElementById('lines-container');
         const floatingScores = document.getElementById('floating-scores');
-        
-        // UI Elements
-        const appTitle = document.getElementById('app-title');
-        const appSubtitle = document.getElementById('app-subtitle');
-        const labelTimer = document.getElementById('label-timer');
-        const labelScore = document.getElementById('label-score');
-        const labelCombo = document.getElementById('label-combo');
-        const timerDisplay = document.getElementById('timer-display');
-        const scoreDisplay = document.getElementById('score-display');
-        const comboDisplay = document.getElementById('combo-display');
-        const bonusProgressBar = document.getElementById('bonus-progress-bar');
-        const startModal = document.getElementById('start-modal');
-        const langBtn = document.getElementById('lang-btn');
-        
-        // Modal & Win elements
-        const modalTitle = document.getElementById('modal-title');
-        const modalSubtitle = document.getElementById('modal-subtitle');
-        const ruleScrambled = document.getElementById('rule-scrambled');
-        const ruleCombo = document.getElementById('rule-combo');
-        const ruleRank = document.getElementById('rule-rank');
-        const startBtn = document.getElementById('start-btn');
-        
-        const winScreen = document.getElementById('win-screen');
-        const winTitle = document.getElementById('win-title');
-        const winTagline = document.getElementById('win-tagline');
-        const labelRank = document.getElementById('label-rank');
-        const winRank = document.getElementById('win-rank');
-        const labelWinBase = document.getElementById('label-win-base');
-        const winBaseScore = document.getElementById('win-base-score');
-        const labelWinBonus = document.getElementById('label-win-bonus');
-        const winTimeBonus = document.getElementById('win-time-bonus');
-        const labelWinClear = document.getElementById('label-win-clear');
-        const winTimeTaken = document.getElementById('win-time-taken');
-        const labelWinFinal = document.getElementById('label-win-final');
-        const winTotalScore = document.getElementById('win-total-score');
-        const labelWinHigh = document.getElementById('label-win-high');
-        const winHighScore = document.getElementById('win-high-score');
-        const winReplayBtn = document.getElementById('win-replay-btn');
-        
         const gameBoard = document.getElementById('game-board');
-        const resetBtn = document.getElementById('reset-btn');
-
-        // 3. Utility Functions
-        const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
         
-        const formatTime = (seconds) => {
-            const m = Math.floor(seconds / 60);
-            const s = seconds % 60;
-            return `${m}:${s.toString().padStart(2, '0')}`;
-        };
+        // Dynamic UI elements
+        const timerDisplays = document.querySelectorAll('.timer-display');
+        const scoreDisplays = document.querySelectorAll('.score-display');
+        const comboDisplays = document.querySelectorAll('.combo-display');
+        const langBtns = document.querySelectorAll('.lang-btn');
+        const resetBtns = document.querySelectorAll('.reset-btn');
+        const pageIndicator = document.getElementById('page-indicator');
+        const comboDrainBar = document.getElementById('combo-drain-bar');
 
-        // UI Localization Update
-        function updateUILocale() {
-            const current = locales[state.locale];
-            
-            // Header
-            appTitle.innerHTML = current.title;
-            appSubtitle.innerHTML = current.subtitle;
-            labelTimer.textContent = current.time;
-            labelScore.textContent = current.score;
-            labelCombo.textContent = current.combo;
-            langBtn.textContent = current.langBtn;
-            resetBtn.textContent = current.restart;
-            
-            // Start Modal
-            modalTitle.textContent = current.readyTitle;
-            modalSubtitle.innerHTML = current.readySubtitle;
-            ruleScrambled.innerHTML = current.rulesScrambled;
-            ruleCombo.innerHTML = current.rulesCombo;
-            ruleRank.innerHTML = current.rulesRank;
-            startBtn.textContent = current.btnStart;
-            
-            // Win Screen
-            winTitle.textContent = current.winTitle;
-            labelRank.textContent = current.rankLabel;
-            labelWinBase.textContent = current.winBaseScore;
-            labelWinBonus.textContent = current.winSpeedBonus;
-            labelWinClear.textContent = current.winClearTime;
-            labelWinFinal.textContent = current.winFinalScore;
-            labelWinHigh.textContent = current.winHighScore;
-            winReplayBtn.textContent = current.btnPlayAgain;
+        // Menus/Overlays
+        const startModal = document.getElementById('start-modal');
+        const winScreen = document.getElementById('win-screen');
+        const pageTransition = document.getElementById('page-transition');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuToggleBtn = document.getElementById('menu-toggle-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+
+        // Utils
+        const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
+        const formatTime = (seconds) => `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`;
+        const chunkArray = (arr, size) => Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size));
+
+        // Animated Number Counter Tool
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                // Ease out cubic
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                obj.innerHTML = Math.floor(easeOut * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
         }
 
-        // Toggle Language Action
-        langBtn.addEventListener('click', () => {
+        // Language toggle
+        function updateUILocale() {
+            const current = locales[state.locale];
+            document.getElementById('app-title').innerHTML = current.title;
+            document.getElementById('app-subtitle').innerHTML = current.subtitle;
+            document.getElementById('modal-title').textContent = current.readyTitle;
+            document.getElementById('start-btn').textContent = current.btnStart;
+            document.getElementById('win-title').textContent = current.winTitle;
+            
+            document.getElementById('label-win-base').textContent = current.winBaseScore;
+            document.getElementById('label-win-bonus').textContent = current.winTimeBonus;
+            document.getElementById('label-win-final').textContent = current.winFinalScore;
+            
+            document.getElementById('label-timer').textContent = current.time;
+            document.getElementById('label-score').textContent = current.score;
+            document.getElementById('label-combo').textContent = current.combo;
+
+            langBtns.forEach(btn => btn.textContent = current.langBtn);
+            resetBtns.forEach(btn => btn.textContent = current.restart);
+        }
+
+        langBtns.forEach(btn => btn.addEventListener('click', () => {
             state.locale = state.locale === 'en' ? 'zh' : 'en';
             updateUILocale();
-        });
+            mobileMenu.classList.remove('open');
+        }));
 
-        // 4. Initialization & Setup
+        menuToggleBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+        closeMenuBtn.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        
+        resetBtns.forEach(btn => btn.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            initGame();
+        }));
+
+        // Init Game (Slices Dictionary into pages)
         function initGame() {
             state.selectedCard = null;
-            state.matches = [];
+            state.pageMatches = [];
             state.isAnimating = false;
             state.score = 0;
             state.combo = 1;
-            state.lastMatchTime = 0;
             state.gameStarted = false;
+            state.currentChunkIndex = 0;
             
             linesContainer.innerHTML = '';
             floatingScores.innerHTML = '';
             winScreen.classList.add('hidden');
+            winScreen.classList.remove('flex');
+            pageTransition.classList.add('hidden');
+            pageTransition.classList.remove('flex');
             
-            // Show the start modal mask
             startModal.classList.remove('hidden');
             startModal.classList.add('flex');
             
+            // Reset Animation elements for end screen
+            document.getElementById('anim-base-row').classList.add('anim-hidden');
+            document.getElementById('anim-bonus-row').classList.add('anim-hidden');
+            document.getElementById('anim-divider').classList.add('anim-hidden');
+            document.getElementById('anim-total-row').classList.add('anim-hidden');
+            document.getElementById('win-replay-btn').classList.add('anim-hidden');
+            
+            const rankEl = document.getElementById('anim-rank');
+            rankEl.className = 'hidden absolute -right-4 top-4 md:right-4 md:top-6 text-8xl md:text-9xl font-black opacity-0';
+
             updateScoreUI();
             updateUILocale();
+            resetComboBar();
             
-            // Prepare progress bar in ready state
-            bonusProgressBar.style.width = '100%';
-            bonusProgressBar.className = "bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 h-full w-full";
-
-            // Put timer at rest
             clearInterval(state.timerInterval);
-            timerDisplay.textContent = "0:00";
+            timerDisplays.forEach(el => el.textContent = "0:00");
 
-            // Create flat list containing both English and Chinese items
-            const englishCards = dictionary.map(item => ({ ...item, side: 'left' }));
-            const chineseCards = dictionary.map(item => ({ ...item, side: 'right' }));
+            // Chunk the entire dictionary for pagination
+            const shuffledDict = shuffleArray(dictionary);
+            state.chunks = chunkArray(shuffledDict, CARDS_PER_PAGE);
             
-            // Combine and fully shuffle them together
-            let combinedDeck = shuffleArray([...englishCards, ...chineseCards]);
-
-            // Add some "empty spacers" to make the grid look uneven and beautifully scrambled
-            // Spacers only on larger viewports, adjusted dynamically depending on deck size
-            const cardCount = combinedDeck.length;
-            const spacerCount = window.innerWidth > 640 && cardCount < 30 ? 2 : 0;
-            for (let i = 0; i < spacerCount; i++) {
-                const insertIndex = Math.floor(Math.random() * (combinedDeck.length + 1));
-                combinedDeck.splice(insertIndex, 0, { isSpacer: true });
-            }
-
-            state.currentDeck = combinedDeck;
-            layoutGrid();
-            renderScrambledBoard(combinedDeck);
+            loadPage(0);
         }
 
-        // Active Start Game
+        function loadPage(pageIndex) {
+            state.pageMatches = [];
+            state.selectedCard = null;
+            linesContainer.innerHTML = '';
+            
+            const currentItems = state.chunks[pageIndex];
+            pageIndicator.textContent = `${pageIndex + 1}/${state.chunks.length}`;
+
+            const englishCards = currentItems.map(item => ({ ...item, side: 'left' }));
+            const chineseCards = currentItems.map(item => ({ ...item, side: 'right' }));
+            
+            let combinedDeck = shuffleArray([...englishCards, ...chineseCards]);
+            renderScrambledBoard(combinedDeck);
+            layoutGrid(combinedDeck.length);
+        }
+
         function startGame() {
             startModal.classList.add('hidden');
             startModal.classList.remove('flex');
             state.gameStarted = true;
-            
             state.startTime = Date.now();
             
-            // Start clock
             state.timerInterval = setInterval(() => {
                 if (!state.gameStarted) return;
                 const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
-                timerDisplay.textContent = formatTime(elapsed);
-                
-                // Update Progress Bar
-                const percentLeft = Math.max(0, ((PAR_TIME - elapsed) / PAR_TIME) * 100);
-                bonusProgressBar.style.width = `${percentLeft}%`;
-                
-                // Progress Colors
-                if (percentLeft < 30) {
-                    bonusProgressBar.className = "bg-rose-500 h-full w-full transition-all duration-1000 ease-linear";
-                } else if (percentLeft < 60) {
-                    bonusProgressBar.className = "bg-amber-500 h-full w-full transition-all duration-1000 ease-linear";
-                } else {
-                    bonusProgressBar.className = "bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 h-full w-full transition-all duration-1000 ease-linear";
-                }
+                timerDisplays.forEach(el => el.textContent = formatTime(elapsed));
             }, 1000);
         }
 
-        // Layout Grid dynamically based on container size
-        function layoutGrid() {
-            if (!state.currentDeck || state.currentDeck.length === 0) return;
+        // Layout calculates cols/rows. We use 1fr for rows to MAXIMIZE height.
+        function layoutGrid(totalCells) {
+            const isPortrait = window.innerHeight > window.innerWidth;
+            const ratio = gameBoard.clientWidth / gameBoard.clientHeight;
             
-            const isPortrait = window.innerHeight > window.innerWidth || window.innerWidth < 768;
-            
-            const W = gameBoard.clientWidth;
-            // On portrait screens, set height relative to dynamic viewport dimensions
-            const H = isPortrait ? Math.max(500, window.innerHeight - 200) : gameBoard.clientHeight;
-            if (W === 0 || H === 0) return;
-            
-            const ratio = W / H;
-            const totalCells = state.currentDeck.length;
-            
-            // Calculate optimal columns and rows to fit the container
-            let cols = Math.ceil(Math.sqrt(totalCells * ratio));
-            
-            // Ensure visual appeal on small screens/portraits
+            let cols, rows;
             if (isPortrait) {
-                cols = window.innerWidth < 640 ? 2 : 3;
-            }
-            let rows = Math.ceil(totalCells / cols);
-            
-            // Ensure we have enough cells (covers edge cases of rounding down)
-            while (cols * rows < totalCells) {
-                if ((cols + 1) / rows < ratio && !isPortrait) {
-                    cols++;
-                } else {
-                    rows++;
-                }
+                cols = 2; 
+                rows = Math.ceil(totalCells / 2);
+            } else {
+                cols = Math.ceil(Math.sqrt(totalCells * ratio));
+                rows = Math.ceil(totalCells / cols);
+                while (cols * rows < totalCells) { cols++; }
             }
             
             scrambleGrid.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
-            
-            if (isPortrait) {
-                // On portrait/mobile, let cards grow to min height of 72px and expand/scroll down
-                scrambleGrid.style.gridTemplateRows = `repeat(${rows}, minmax(72px, 1fr))`;
-                gameBoard.style.height = 'auto';
-            } else {
-                // On landscape, fit everything perfectly in the viewport height bounds
-                scrambleGrid.style.gridTemplateRows = `repeat(${rows}, minmax(0, 1fr))`;
-                gameBoard.style.height = '100%';
-            }
+            scrambleGrid.style.gridTemplateRows = `repeat(${rows}, 1fr)`; // Stretch fully to fill space!
         }
 
-        // 5. Rendering the Mixed Scrambled Desk with Auto-Adjust Card Sizing
         function renderScrambledBoard(deck) {
             scrambleGrid.innerHTML = '';
-
             deck.forEach(item => {
-                if (item.isSpacer) {
-                    const spacer = document.createElement('div');
-                    spacer.className = 'hidden sm:block pointer-events-none opacity-0 w-full h-full';
-                    scrambleGrid.appendChild(spacer);
-                    return;
-                }
-
                 const card = document.createElement('div');
                 const sideClass = item.side === 'left' ? 'card-left' : 'card-right';
 
-                card.className = `card ${sideClass} relative flex flex-col justify-center items-center border-2 rounded-2xl cursor-pointer shadow-sm`;
+                card.className = `card ${sideClass} relative flex flex-col justify-center items-center border-2 rounded-2xl cursor-pointer shadow-sm overflow-hidden p-2`;
                 card.dataset.id = item.id;
                 card.dataset.side = item.side;
 
-                // Add unique slight rotation and translation offsets to look like scattered physical cards
                 const randomRotation = (Math.random() * 4 - 2).toFixed(1); 
                 const randomOffsetTranslateX = (Math.random() * 2 - 1).toFixed(1); 
                 const randomOffsetTranslateY = (Math.random() * 2 - 1).toFixed(1);
@@ -619,9 +485,9 @@
                 card.dataset.defaultTransform = card.style.transform;
 
                 if (item.side === 'left') {
-                    card.innerHTML = `<span class="text-en font-extrabold text-center leading-tight">${item.english}</span>`;
+                    card.innerHTML = `<span class="text-en font-extrabold">${item.english}</span>`;
                 } else {
-                    card.innerHTML = `<span class="text-zh font-extrabold text-center leading-tight">${item.chinese}</span>`;
+                    card.innerHTML = `<span class="text-zh font-extrabold">${item.chinese}</span>`;
                 }
 
                 card.addEventListener('click', () => handleCardClick(card));
@@ -629,7 +495,27 @@
             });
         }
 
-        // 6. Interaction Logic
+        function triggerComboTimer() {
+            clearTimeout(state.comboTimeout);
+            comboDrainBar.style.transition = 'none';
+            comboDrainBar.style.width = '100%';
+            void comboDrainBar.offsetWidth; 
+            
+            comboDrainBar.style.transition = `width ${COMBO_WINDOW_MS}ms linear`;
+            comboDrainBar.style.width = '0%';
+
+            state.comboTimeout = setTimeout(() => {
+                state.combo = 1;
+                updateScoreUI();
+            }, COMBO_WINDOW_MS);
+        }
+
+        function resetComboBar() {
+            clearTimeout(state.comboTimeout);
+            comboDrainBar.style.transition = 'none';
+            comboDrainBar.style.width = '0%';
+        }
+
         function handleCardClick(card) {
             if (!state.gameStarted || state.isAnimating || card.classList.contains('matched')) return;
             
@@ -640,11 +526,9 @@
                 return;
             }
 
-            // Prevent selecting two cards from the exact same side (English-to-English or Chinese-to-Chinese)
             if (state.selectedCard && state.selectedCard.dataset.side === card.dataset.side) {
                 state.selectedCard.classList.remove('selected');
                 state.selectedCard.style.transform = state.selectedCard.dataset.defaultTransform;
-                
                 card.classList.add('selected');
                 state.selectedCard = card;
                 return;
@@ -663,48 +547,33 @@
         function checkMatch(card1, card2) {
             state.isAnimating = true;
 
-            const id1 = card1.dataset.id;
-            const id2 = card2.dataset.id;
-
-            if (id1 === id2) {
-                state.matches.push(id1);
+            if (card1.dataset.id === card2.dataset.id) {
+                state.pageMatches.push(card1.dataset.id);
                 
-                // --- SCORING & COMBO LOGIC ---
-                const now = Date.now();
-                if (state.lastMatchTime > 0 && (now - state.lastMatchTime) < 4000) {
-                    state.combo++; 
-                } else if (state.matches.length > 1) {
-                    state.combo = 1; 
-                }
-                state.lastMatchTime = now;
+                // Keep Combo alive
+                state.combo = (state.pageMatches.length > 1 || state.combo > 1) ? state.combo + 1 : 1;
+                triggerComboTimer();
                 
-                const pointsEarned = 100 * state.combo;
-                state.score += pointsEarned;
+                const points = 100 * state.combo;
+                state.score += points;
                 
                 updateScoreUI();
-                showFloatingScore(card2, pointsEarned, state.combo);
+                showFloatingScore(card2, points, state.combo);
                 
-                // Match feedback
                 card1.classList.remove('selected');
                 card2.classList.remove('selected');
-                
-                card1.style.transform = 'scale(0.95)';
-                card2.style.transform = 'scale(0.95)';
-                
                 card1.classList.add('matched', 'pop-success');
                 card2.classList.add('matched', 'pop-success');
 
-                drawLineBetween(card1, card2, id1);
+                drawLineBetween(card1, card2);
 
                 setTimeout(() => {
-                    card1.classList.remove('pop-success');
-                    card2.classList.remove('pop-success');
-                    state.isAnimating = false;
-                    checkWin();
+                    checkPageWin();
                 }, 400);
 
             } else {
                 state.combo = 1; 
+                resetComboBar();
                 updateScoreUI();
                 
                 card1.classList.add('shake-error');
@@ -713,158 +582,153 @@
                 setTimeout(() => {
                     card1.classList.remove('selected', 'shake-error');
                     card2.classList.remove('selected', 'shake-error');
-                    
                     card1.style.transform = card1.dataset.defaultTransform;
                     card2.style.transform = card2.dataset.defaultTransform;
-                    
                     state.isAnimating = false;
                 }, 500);
             }
-
             state.selectedCard = null;
         }
 
-        // UI Update Helper
         function updateScoreUI() {
-            scoreDisplay.textContent = state.score;
-            comboDisplay.textContent = `x${state.combo}`;
-            
-            if (state.combo > 1) {
-                comboDisplay.classList.add('combo-active', 'text-orange-600');
-                comboDisplay.classList.remove('text-slate-400');
-                setTimeout(() => comboDisplay.classList.remove('combo-active'), 300);
-            } else {
-                comboDisplay.classList.remove('text-orange-600');
-                comboDisplay.classList.add('text-slate-400');
-            }
+            scoreDisplays.forEach(el => el.textContent = state.score);
+            comboDisplays.forEach(el => {
+                el.textContent = `x${state.combo}`;
+                if (state.combo > 1) {
+                    el.classList.add('combo-active', 'text-orange-500');
+                    el.classList.remove('text-slate-400');
+                } else {
+                    el.classList.remove('text-orange-500', 'combo-active');
+                    el.classList.add('text-slate-400');
+                }
+            });
         }
         
-        // Floating Score Animation
         function showFloatingScore(targetCard, points, combo) {
             const rect = targetCard.getBoundingClientRect();
             const boardRect = gameBoard.getBoundingClientRect();
             
             const floatEl = document.createElement('div');
             floatEl.className = 'floating-score absolute font-black text-xl md:text-2xl drop-shadow-md text-center pointer-events-none';
-            
             floatEl.style.left = `${rect.left - boardRect.left + (rect.width / 2) - 40}px`;
             floatEl.style.top = `${rect.top - boardRect.top}px`;
             
-            if (combo > 1) {
-                floatEl.innerHTML = `<span class="text-orange-500">Combo x${combo}!</span><br><span class="text-green-500">+${points}</span>`;
-            } else {
-                floatEl.innerHTML = `<span class="text-green-500">+${points}</span>`;
-            }
+            floatEl.innerHTML = combo > 1 
+                ? `<span class="text-orange-500">Combo x${combo}!</span><br><span class="text-green-500">+${points}</span>`
+                : `<span class="text-green-500">+${points}</span>`;
             
             floatingScores.appendChild(floatEl);
-            
-            setTimeout(() => {
-                if (floatingScores.contains(floatEl)) floatEl.remove();
-            }, 1000);
+            setTimeout(() => floatEl.remove(), 1000);
         }
 
-        function checkWin() {
-            if (state.matches.length === dictionary.length) {
-                clearInterval(state.timerInterval); 
-                state.gameStarted = false;
-                
-                // Calculate Speed & Time Bonus
-                const elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
-                
-                // Speed Formula: 100 points per unused second!
-                const timeBonus = Math.max(0, (PAR_TIME - elapsedSeconds) * 100); 
-                const finalScore = state.score + timeBonus;
-                
-                // Determine Rank based on Clear Time
-                let rank = "C";
-                let rankColorClass = "text-slate-500";
-                let tagline = locales[state.locale].winTaglineC;
-                
-                if (elapsedSeconds <= 30) {
-                    rank = "S";
-                    rankColorClass = "text-yellow-500 font-extrabold rank-s";
-                    tagline = locales[state.locale].winTaglineS;
-                } else if (elapsedSeconds <= 55) {
-                    rank = "A";
-                    rankColorClass = "text-orange-500 font-extrabold";
-                    tagline = locales[state.locale].winTaglineA;
-                } else if (elapsedSeconds <= 75) {
-                    rank = "B";
-                    rankColorClass = "text-blue-500 font-bold";
-                    tagline = locales[state.locale].winTaglineB;
-                }
+        function checkPageWin() {
+            const currentChunkSize = state.chunks[state.currentChunkIndex].length;
+            
+            if (state.pageMatches.length === currentChunkSize) {
+                state.currentChunkIndex++;
+                resetComboBar();
 
-                // Track High Score
-                if (finalScore > state.highScore) {
-                    state.highScore = finalScore;
-                    localStorage.setItem('match_high_score', finalScore);
+                if (state.currentChunkIndex < state.chunks.length) {
+                    // Show Page Transition
+                    pageTransition.classList.remove('hidden');
+                    pageTransition.classList.add('flex');
+                    
+                    setTimeout(() => {
+                        pageTransition.classList.add('hidden');
+                        pageTransition.classList.remove('flex');
+                        loadPage(state.currentChunkIndex);
+                        state.isAnimating = false;
+                    }, 1200);
+                } else {
+                    triggerEndGameAnimation();
                 }
-                
-                // Populate Win Screen Data
-                winTagline.textContent = tagline;
-                winRank.textContent = rank;
-                winRank.className = `text-6xl font-black ${rankColorClass} mt-1`;
-                winBaseScore.textContent = state.score;
-                winTimeBonus.textContent = `+${timeBonus}`;
-                winTimeTaken.textContent = `${elapsedSeconds} ${locales[state.locale].seconds}`;
-                winTotalScore.textContent = finalScore;
-                winHighScore.textContent = state.highScore;
-
-                setTimeout(() => {
-                    winScreen.classList.remove('hidden');
-                    winScreen.classList.add('flex');
-                }, 300);
+            } else {
+                state.isAnimating = false;
             }
         }
 
-        // 7. Dynamic SVG Line Drawing (Connects scattered card centers)
-        function drawLineBetween(card1, card2, matchId) {
+        function triggerEndGameAnimation() {
+            clearInterval(state.timerInterval); 
+            state.gameStarted = false;
+            
+            const elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
+            
+            // Calculate huge speed bonus: 50 pts per second saved under Par Time
+            const timeBonus = Math.max(0, (PAR_TIME - elapsedSeconds) * 50); 
+            const finalScore = state.score + timeBonus;
+            
+            // Determine Rank
+            let rank = 'C'; let rankColor = 'text-slate-400';
+            if (elapsedSeconds <= 25) { rank = 'S'; rankColor = 'text-yellow-500'; }
+            else if (elapsedSeconds <= 40) { rank = 'A'; rankColor = 'text-orange-500'; }
+            else if (elapsedSeconds <= 60) { rank = 'B'; rankColor = 'text-blue-500'; }
+
+            // Ensure counters start at 0
+            document.getElementById('win-base-score').textContent = "0";
+            document.getElementById('win-time-bonus').textContent = "0";
+            document.getElementById('win-total-score').textContent = "0";
+            document.getElementById('win-time-taken-info').textContent = `(${elapsedSeconds}s)`;
+
+            // Show Screen Background
+            setTimeout(() => {
+                winScreen.classList.remove('hidden');
+                winScreen.classList.add('flex');
+            }, 300);
+
+            // SEQUENCE 1: Base Score (0.8s mark)
+            setTimeout(() => {
+                document.getElementById('anim-base-row').classList.remove('anim-hidden');
+                animateValue(document.getElementById('win-base-score'), 0, state.score, 800);
+            }, 800);
+
+            // SEQUENCE 2: Time Bonus (1.8s mark)
+            setTimeout(() => {
+                document.getElementById('anim-bonus-row').classList.remove('anim-hidden');
+                animateValue(document.getElementById('win-time-bonus'), 0, timeBonus, 800);
+            }, 1800);
+
+            // SEQUENCE 3: Final Score & Divider (2.8s mark)
+            setTimeout(() => {
+                document.getElementById('anim-divider').classList.remove('anim-hidden');
+                document.getElementById('anim-total-row').classList.remove('anim-hidden');
+                animateValue(document.getElementById('win-total-score'), 0, finalScore, 1000);
+            }, 2800);
+
+            // SEQUENCE 4: The Giant Rank Stamp & Play Again Button (4.0s mark)
+            setTimeout(() => {
+                const rankEl = document.getElementById('anim-rank');
+                rankEl.textContent = rank;
+                rankEl.className = `absolute -right-4 top-4 md:right-4 md:top-6 text-8xl md:text-9xl font-black ${rankColor} stamp-in`;
+                
+                document.getElementById('win-replay-btn').classList.remove('anim-hidden');
+            }, 4000);
+        }
+
+        function drawLineBetween(card1, card2) {
             const containerRect = gameBoard.getBoundingClientRect();
             const rect1 = card1.getBoundingClientRect();
             const rect2 = card2.getBoundingClientRect();
-
-            // Calculate precise coordinates from center-to-center
-            const x1 = (rect1.left - containerRect.left) + (rect1.width / 2);
-            const y1 = (rect1.top - containerRect.top) + (rect1.height / 2);
-            const x2 = (rect2.left - containerRect.left) + (rect2.width / 2);
-            const y2 = (rect2.top - containerRect.top) + (rect2.height / 2);
-
             const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('x1', x1);
-            line.setAttribute('y1', y1);
-            line.setAttribute('x2', x2);
-            line.setAttribute('y2', y2);
-            line.setAttribute('stroke', '#22c55e'); // Green line
+            line.setAttribute('x1', (rect1.left - containerRect.left) + (rect1.width / 2));
+            line.setAttribute('y1', (rect1.top - containerRect.top) + (rect1.height / 2));
+            line.setAttribute('x2', (rect2.left - containerRect.left) + (rect2.width / 2));
+            line.setAttribute('y2', (rect2.top - containerRect.top) + (rect2.height / 2));
+            line.setAttribute('stroke', '#22c55e');
             line.setAttribute('stroke-width', '4');
             line.setAttribute('stroke-linecap', 'round');
-            line.setAttribute('stroke-dasharray', '8, 8'); // Stylish dashed pattern for scattered layout
+            line.setAttribute('stroke-dasharray', '8, 8');
             line.setAttribute('class', 'match-line');
-            line.dataset.matchId = matchId; 
-
             linesContainer.appendChild(line);
         }
 
-        function redrawLines() {
-            linesContainer.innerHTML = ''; 
-            if (!state.gameStarted) return;
-            state.matches.forEach(matchId => {
-                const card1 = document.querySelector(`.card[data-id="${matchId}"][data-side="left"]`);
-                const card2 = document.querySelector(`.card[data-id="${matchId}"][data-side="right"]`);
-                if (card1 && card2) {
-                    drawLineBetween(card1, card2, matchId);
-                }
-            });
-        }
-
-        // 8. Event Listeners & Startup
         window.addEventListener('resize', () => {
+            if (!state.gameStarted) return;
             window.requestAnimationFrame(() => {
-                layoutGrid();
-                redrawLines();
+                const totalCells = state.chunks[state.currentChunkIndex]?.length * 2 || 0;
+                layoutGrid(totalCells);
+                linesContainer.innerHTML = ''; // Lines clear on resize to prevent visual bugs
             });
         });
-
-        resetBtn.addEventListener('click', initGame);
 
         initGame();
     </script>
