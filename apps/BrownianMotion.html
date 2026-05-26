@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>布朗運動 | Brownian Motion</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* --- 1. Global State & Fixes --- */
+        
+        /* Custom Scrollbar for sidebars */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Prevent text selection in interactive areas */
+        .no-select {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* Deep blue theme overrides */
+        .bg-primary { background-color: #1e3c72; }
+        .text-primary { color: #1e3c72; }
+        .border-primary { border-color: #1e3c72; }
+        .bg-resultant { background-color: #DC2626; }
+        .text-resultant { color: #DC2626; }
+
+        /* Grid Background Pattern (Moved from Tailwind arbitrary value for safety) */
+        .bg-grid-pattern {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgMGwwIDE5TDIwIDE5IiBzdHJva2U9IiNlMmU4ZjAiIGZpbGw9Im5vbmUiLz48L3N2Zz4=");
+        }
+    </style>
+</head>
+<!-- Force width and height 100% to prevent mobile viewport collapsing bugs -->
+<body class="fixed inset-0 w-full h-full overflow-hidden bg-slate-50 text-slate-800 font-sans selection:bg-blue-200">
+
+    <!-- Main Container -->
+    <div id="app" class="absolute inset-0 flex flex-col overflow-hidden">
+        
+        <!-- Header (Desktop only) -->
+        <header class="hidden md:flex items-center justify-between bg-primary text-white px-6 py-3 shadow-md z-20">
+            <div class="flex items-center gap-3">
+                <i data-lucide="atom" class="w-6 h-6"></i>
+                <h1 class="text-xl font-bold tracking-wide" data-i18n="title">布朗運動與馬克士威速率分佈</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="toggleHelp()" class="flex items-center gap-2 hover:text-blue-200 transition-colors">
+                    <i data-lucide="info" class="w-5 h-5"></i>
+                    <span data-i18n="help">說明</span>
+                </button>
+                <button onclick="toggleLanguage()" class="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full transition-colors">
+                    <i data-lucide="languages" class="w-4 h-4"></i>
+                    <span id="langLabel" class="text-sm font-medium">EN</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Mobile FAB -->
+        <button id="mobileMenuBtn" class="md:hidden absolute top-4 left-4 z-30 bg-white text-primary p-2.5 rounded-xl shadow-md border border-slate-200 hover:bg-slate-50 transition-colors">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+
+        <!-- Mobile Off-Canvas Sidebar -->
+        <div id="mobileSidebar" class="fixed inset-y-0 left-0 w-[80vw] bg-white shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col md:hidden">
+            <div class="bg-primary text-white p-4 flex flex-col gap-3">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-lg font-bold" data-i18n="title">布朗運動</h2>
+                    <button id="closeMobileMenuBtn" class="text-white hover:text-blue-200">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="toggleHelp()" class="flex-1 flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 py-1.5 rounded-lg transition-colors text-sm">
+                        <i data-lucide="info" class="w-4 h-4"></i>
+                        <span data-i18n="help">說明</span>
+                    </button>
+                    <button onclick="toggleLanguage()" class="flex-1 flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 py-1.5 rounded-lg transition-colors text-sm">
+                        <i data-lucide="languages" class="w-4 h-4"></i>
+                        <span id="langLabelMobile">EN</span>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4" id="mobileControlsContainer">
+                <!-- Controls will be mirrored here via JS or kept in sync -->
+            </div>
+            <div class="bg-slate-100 p-2 text-center text-xs text-slate-500 font-medium border-t border-slate-200" data-i18n="footer">
+                廠商會中學．物理科
+            </div>
+        </div>
+        <!-- Mobile Sidebar Overlay -->
+        <div id="mobileOverlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden opacity-0 transition-opacity duration-300"></div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+            
+            <!-- Desktop Control Sidebar -->
+            <aside class="hidden md:flex w-72 flex-col bg-white border-r border-slate-200 shadow-[2px_0_8px_rgba(0,0,0,0.05)] z-10" id="desktopSidebar">
+                <div class="flex-1 overflow-y-auto p-4 flex flex-col">
+                    
+                    <!-- Control Panel Title -->
+                    <div class="flex items-center gap-2 text-primary mb-3 border-b border-blue-100 pb-2">
+                        <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
+                        <h2 class="font-bold text-base" data-i18n="controls">模擬參數</h2>
+                    </div>
+
+                    <div class="space-y-3 flex-1">
+                        <!-- Temp Control -->
+                        <div class="bg-slate-50 rounded-lg p-3 border border-slate-100 shadow-sm">
+                            <label class="flex justify-between text-xs md:text-sm font-semibold text-slate-700 mb-2">
+                                <span data-i18n="temperature">氣體溫度</span>
+                                <span id="tempValue" class="text-blue-600">300 K</span>
+                            </label>
+                            <input type="range" id="tempSlider" min="50" max="1000" value="300" class="w-full accent-primary h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <!-- Smoke Mass Control -->
+                        <div class="bg-slate-50 rounded-lg p-3 border border-slate-100 shadow-sm">
+                            <label class="flex justify-between text-xs md:text-sm font-semibold text-slate-700 mb-2">
+                                <span data-i18n="smokeMass">煙霧粒子質量</span>
+                                <span id="massValue" class="text-blue-600">1000 u</span>
+                            </label>
+                            <input type="range" id="massSlider" min="100" max="5000" step="100" value="1000" class="w-full accent-primary h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <!-- Molecule Count -->
+                        <div class="bg-slate-50 rounded-lg p-3 border border-slate-100 shadow-sm">
+                            <label class="flex justify-between text-xs md:text-sm font-semibold text-slate-700 mb-2">
+                                <span data-i18n="moleculeCount">氣體分子數量</span>
+                                <span id="countValue" class="text-blue-600">400</span>
+                            </label>
+                            <input type="range" id="countSlider" min="50" max="800" step="50" value="400" class="w-full accent-primary h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Toggles & Actions -->
+                    <div class="flex flex-row gap-2 mt-4 pt-3 border-t border-slate-100">
+                        <label class="flex-1 flex items-center justify-center gap-1.5 cursor-pointer p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                            <input type="checkbox" id="traceToggle" checked class="w-4 h-4 accent-primary cursor-pointer">
+                            <span class="text-xs font-semibold text-slate-700" data-i18n="showTrace">顯示軌跡</span>
+                        </label>
+
+                        <button id="resetBtn" class="flex-1 flex items-center justify-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg text-xs font-bold transition-colors border border-slate-200 shadow-sm">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                            <span data-i18n="reset">重置模擬</span>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Simulation & Charts Area -->
+            <section class="flex-1 flex flex-col relative overflow-hidden bg-white">
+                
+                <!-- Main Canvas (Brownian Motion) -->
+                <div class="flex-1 relative cursor-crosshair bg-grid-pattern">
+                    <canvas id="simCanvas" class="absolute inset-0 w-full h-full block"></canvas>
+                    
+                    <!-- Overlay Legend -->
+                    <div class="absolute top-4 right-4 md:left-4 md:right-auto bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-slate-200 shadow-sm pointer-events-none z-10">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-4 h-4 rounded-full bg-resultant shadow-sm"></div>
+                            <span class="text-xs font-semibold text-slate-700" data-i18n="smokeLabel">煙霧粒子 (大質量)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-sky-500 shadow-sm ml-1 mr-1"></div>
+                            <span class="text-xs font-semibold text-slate-700" data-i18n="gasLabel">氣體分子 (小質量)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Distribution Chart -->
+                <div class="h-48 md:h-64 bg-slate-50 border-t border-slate-200 relative flex flex-col">
+                    <div class="px-4 py-2 border-b border-slate-200 flex justify-between items-center bg-white">
+                        <h3 class="text-sm font-bold text-primary flex items-center gap-2">
+                            <span data-i18n="chartTitle">馬克士威-波茲曼速率分佈</span>
+                        </h3>
+                        <div class="flex items-center gap-3 text-xs text-slate-500 font-medium hidden sm:flex">
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3 h-3 bg-sky-500/40 border border-sky-500/80 rounded-sm"></div>
+                                <span data-i18n="histLabel">實際統計</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-4 h-0.5 bg-primary"></div>
+                                <span data-i18n="curveLabel">理論曲線</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-1 relative w-full h-full">
+                        <canvas id="chartCanvas" class="absolute inset-0 w-full h-full block"></canvas>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <!-- Footer (Desktop only) -->
+        <footer class="hidden md:flex bg-white border-t border-slate-200 p-3 text-center text-sm text-slate-500 font-medium justify-center items-center z-10" data-i18n="footer">
+            廠商會中學．物理科
+        </footer>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300" id="helpModalContent">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-primary text-white rounded-t-2xl">
+                <h3 class="text-xl font-bold flex items-center gap-2">
+                    <i data-lucide="book-open" class="w-6 h-6"></i>
+                    <span data-i18n="helpTitle">原理解說</span>
+                </h3>
+                <button onclick="toggleHelp()" class="text-white hover:text-blue-200 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto text-slate-700 space-y-5 text-sm md:text-base leading-relaxed rounded-b-2xl">
+                
+                <section>
+                    <h4 class="font-bold text-lg text-primary mb-2 border-l-4 border-primary pl-3" data-i18n="h_brownian">布朗運動</h4>
+                    <p data-i18n="p_brownian">
+                        布朗運動是指懸浮在流體（液體或氣體）中的微小顆粒所做的無規則運動。在此模擬中，紅色的<b>煙霧粒子</b>受到周圍大量高速運動的<b>氣體分子</b>不間斷的隨機撞擊。由於撞擊力量在各個方向上並不完全抵消，導致煙霧粒子產生隨機的折線運動軌跡。
+                    </p>
+                </section>
+
+                <section>
+                    <h4 class="font-bold text-lg text-primary mb-2 border-l-4 border-primary pl-3" data-i18n="h_momentum">動量守恆與碰撞</h4>
+                    <p data-i18n="p_momentum">
+                        氣體分子與煙霧粒子之間的碰撞設定為<b>完全彈性碰撞</b>。系統總動量 $p = mv$ 及總動能 $E_k = \frac{1}{2}mv^2$ 在碰撞前後均保持守恆。因為氣體分子質量極小，單次碰撞對巨大煙霧粒子造成的速度改變 $\Delta V$ 微乎其微。
+                    </p>
+                </section>
+
+                <section>
+                    <h4 class="font-bold text-lg text-primary mb-2 border-l-4 border-primary pl-3" data-i18n="h_maxwell">氣體分子的速率分佈</h4>
+                    <p data-i18n="p_maxwell">
+                        氣體分子的速率並非一致，而是呈現特定的統計分佈。隨著溫度 $T$ 升高，分佈曲線的峰值會向右移動且變得平緩，代表整體分子運動速率變快。
+                    </p>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- /* --- 2. JavaScript Logic --- */ -->
+    <script>
+        /* --- UI Cloning & Setup (Synchronous Execution) --- */
+        
+        // Clone controls to mobile sidebar
+        document.getElementById('mobileControlsContainer').innerHTML = document.querySelector('#desktopSidebar .flex-1').innerHTML;
+        
+        // Prefix mobile IDs to avoid duplicates breaking logic
+        document.getElementById('mobileControlsContainer').querySelectorAll('*[id]').forEach(el => {
+            el.id = 'm_' + el.id;
+        });
+
+        /* --- I18n Dictionary --- */
+        const dict = {
+            zh: {
+                title: "布朗運動",
+                help: "說明",
+                footer: "廠商會中學．物理科",
+                controls: "模擬參數",
+                temperature: "氣體溫度",
+                smokeMass: "煙霧粒子質量",
+                moleculeCount: "氣體分子數量",
+                showTrace: "顯示粒子軌跡",
+                reset: "重置模擬",
+                smokeLabel: "煙霧粒子 (大質量)",
+                gasLabel: "氣體分子 (小質量)",
+                chartTitle: "氣體粒子速率分佈的理論曲線及即時統計",
+                histLabel: "實際統計",
+                curveLabel: "理論曲線",
+                helpTitle: "原理解說",
+                h_brownian: "布朗運動",
+                p_brownian: "布朗運動是指懸浮在流體（液體或氣體）中的微小顆粒所做的無規則運動。在此模擬中，紅色的<b>煙霧粒子</b>受到周圍大量高速運動的<b>氣體分子</b>不間斷的隨機撞擊。由於撞擊力量在各個方向上並不完全抵消，導致煙霧粒子產生隨機的折線運動軌跡。",
+                h_momentum: "動量守恆與碰撞",
+                p_momentum: "氣體分子與煙霧粒子之間的碰撞設定為<b>完全彈性碰撞</b>。系統總動量及總動能在碰撞前後均保持守恆。因為氣體分子質量極小，單次碰撞對巨大煙霧粒子造成的速度改變微乎其微。",
+                h_maxwell: "氣體分子的速率分佈",
+                p_maxwell: "氣體分子的速率並非一致，而是呈現特定的統計分佈。隨著溫度升高，分佈曲線的峰值會向右移動且變得平緩，代表整體分子運動速率變快。",
+                xAxisLabel: "速率",
+                yAxisLabel: "分子數量",
+                closeBtn: "了解",
+                langToggle: "EN"
+            },
+            en: {
+                title: "Brownian Motion",
+                help: "Help",
+                footer: "CMA Secondary School. Physics Department.",
+                controls: "Simulation Parameters",
+                temperature: "Temperature",
+                smokeMass: "Smoke Mass",
+                moleculeCount: "Molecule Count",
+                showTrace: "Show Particle Trace",
+                reset: "Reset Simulation",
+                smokeLabel: "Smoke Particle (Heavy)",
+                gasLabel: "Gas Molecule (Light)",
+                chartTitle: "Theoretical Curve & Real-time Stats of Gas Speed",
+                histLabel: "Actual Histogram",
+                curveLabel: "Theoretical Curve",
+                helpTitle: "Physics Principles",
+                h_brownian: "Brownian Motion",
+                p_brownian: "Brownian motion is the random, uncontrolled movement of particles in a fluid (liquid or gas). In this simulation, the red <b>smoke particle</b> is continuously bombarded by many fast-moving <b>gas molecules</b>. Because the collision forces do not perfectly cancel out at any given moment, the smoke particle follows a random, zig-zag path.",
+                h_momentum: "Conservation of Momentum",
+                p_momentum: "Collisions between gas molecules and the smoke particle are perfectly elastic. Total momentum and kinetic energy are conserved. Because the gas mass is tiny, a single collision causes a very small change in the velocity of the massive smoke particle.",
+                h_maxwell: "Gas Molecule Speed Distribution",
+                p_maxwell: "Gas molecules do not all travel at the same speed, but rather follow a specific statistical distribution. As temperature increases, the peak of the distribution curve shifts to the right and flattens, indicating that the overall molecular speed becomes faster.",
+                xAxisLabel: "Speed",
+                yAxisLabel: "Number of Molecules",
+                closeBtn: "Close",
+                langToggle: "繁"
+            }
+        };
+
+        let currentLang = 'zh';
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[currentLang][key]) {
+                    el.innerHTML = dict[currentLang][key];
+                }
+            });
+            document.getElementById('langLabel').innerText = dict[currentLang].langToggle;
+            document.getElementById('langLabelMobile').innerText = dict[currentLang].langToggle;
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            applyTranslations();
+        }
+
+        /* --- Mobile Menu Logic --- */
+        
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMobileMenuBtn = document.getElementById('closeMobileMenuBtn');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        function openMobileMenu() {
+            mobileSidebar.classList.remove('-translate-x-full');
+            mobileOverlay.classList.remove('hidden');
+            setTimeout(() => { mobileOverlay.classList.remove('opacity-0'); }, 10);
+        }
+
+        function closeMobileMenu() {
+            mobileSidebar.classList.add('-translate-x-full');
+            mobileOverlay.classList.add('opacity-0');
+            setTimeout(() => { mobileOverlay.classList.add('hidden'); }, 300);
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileMenu);
+        closeMobileMenuBtn.addEventListener('click', closeMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+
+        // Help Modal
+        const helpModal = document.getElementById('helpModal');
+        const helpContent = document.getElementById('helpModalContent');
+        let helpOpen = false;
+
+        function toggleHelp() {
+            helpOpen = !helpOpen;
+            if (helpOpen) {
+                helpModal.classList.remove('hidden');
+                setTimeout(() => {
+                    helpModal.classList.remove('opacity-0');
+                    helpContent.classList.remove('scale-95');
+                }, 10);
+            } else {
+                helpModal.classList.add('opacity-0');
+                helpContent.classList.add('scale-95');
+                setTimeout(() => {
+                    helpModal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        /* --- 3. Physics Simulation Engine --- */
+
+        const simCanvas = document.getElementById('simCanvas');
+        const simCtx = simCanvas.getContext('2d'); // Removed alpha: false to avoid Safari black screen artifacts
+        
+        const chartCanvas = document.getElementById('chartCanvas');
+        const chartCtx = chartCanvas.getContext('2d');
+
+        // Physics State
+        let T = 300; 
+        let M = 1000; 
+        let N = 400; 
+        let showTrace = true;
+        
+        const m = 1; 
+        const R_gas = 2; 
+        
+        let width = 600, height = 400; // Fallbacks
+        let cWidth = 600, cHeight = 200; 
+
+        class Particle {
+            constructor(x, y, vx, vy, radius, mass, color) {
+                this.x = x;
+                this.y = y;
+                this.vx = vx;
+                this.vy = vy;
+                this.radius = radius;
+                this.mass = mass;
+                this.color = color;
+            }
+            
+            update(dt, w, h) {
+                this.x += this.vx * dt;
+                this.y += this.vy * dt;
+
+                if (this.x - this.radius < 0) {
+                    this.x = this.radius;
+                    this.vx *= -1;
+                } else if (this.x + this.radius > w) {
+                    this.x = w - this.radius;
+                    this.vx *= -1;
+                }
+
+                if (this.y - this.radius < 0) {
+                    this.y = this.radius;
+                    this.vy *= -1;
+                } else if (this.y + this.radius > h) {
+                    this.y = h - this.radius;
+                    this.vy *= -1;
+                }
+            }
+
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        let smoke;
+        let gases = [];
+        let smokePath = [];
+        const maxPathLength = 300;
+
+        function generateMBSpeeds(temp) {
+            const sigma = Math.sqrt(temp / 10); 
+            let u1 = Math.random();
+            let u2 = Math.random();
+            while(u1 === 0) u1 = Math.random(); 
+            
+            const z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+            const z1 = Math.sqrt(-2.0 * Math.log(u1)) * Math.sin(2.0 * Math.PI * u2);
+            
+            return { vx: z0 * sigma, vy: z1 * sigma };
+        }
+
+        function initSimulation() {
+            smokePath = [];
+            
+            // 計算動態半徑 (假設密度固定，面積與質量成正比：R ∝ √M)
+            let current_R_smoke = 0.8 * Math.sqrt(M);
+
+            // Safe center coordinates 
+            let cx = Math.max(width / 2, current_R_smoke + 1);
+            let cy = Math.max(height / 2, current_R_smoke + 1);
+            smoke = new Particle(cx, cy, 0, 0, current_R_smoke, M, '#DC2626');
+            
+            gases = [];
+            for (let i = 0; i < N; i++) {
+                let x, y, dist;
+                do {
+                    x = Math.random() * (Math.max(width - 2 * R_gas, 1)) + R_gas;
+                    y = Math.random() * (Math.max(height - 2 * R_gas, 1)) + R_gas;
+                    const dx = x - smoke.x;
+                    const dy = y - smoke.y;
+                    dist = Math.sqrt(dx*dx + dy*dy);
+                } while (dist < current_R_smoke + R_gas + 2);
+
+                const v = generateMBSpeeds(T);
+                gases.push(new Particle(x, y, v.vx, v.vy, R_gas, m, 'rgba(14, 165, 233, 0.8)'));
+            }
+        }
+
+        function resolveCollision(p1, p2) {
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const distSq = dx*dx + dy*dy;
+            const radii = p1.radius + p2.radius;
+            
+            if (distSq < radii * radii && distSq > 0) {
+                const dist = Math.sqrt(distSq);
+                const nx = dx / dist;
+                const ny = dy / dist;
+
+                const rvx = p1.vx - p2.vx;
+                const rvy = p1.vy - p2.vy;
+                
+                const velAlongNormal = rvx * nx + rvy * ny;
+                if (velAlongNormal > 0) return;
+
+                const j = -(2 * velAlongNormal) / (1/p1.mass + 1/p2.mass);
+                const impulseX = j * nx;
+                const impulseY = j * ny;
+
+                p1.vx += impulseX / p1.mass;
+                p1.vy += impulseY / p1.mass;
+                p2.vx -= impulseX / p2.mass;
+                p2.vy -= impulseY / p2.mass;
+
+                const percent = 0.8;
+                const slop = 0.01;
+                const penetration = radii - dist;
+                const correctionMag = Math.max(penetration - slop, 0.0) / (1/p1.mass + 1/p2.mass) * percent;
+                const cx = nx * correctionMag;
+                const cy = ny * correctionMag;
+
+                p1.x += cx / p1.mass;
+                p1.y += cy / p1.mass;
+                p2.x -= cx / p2.mass;
+                p2.y -= cy / p2.mass;
+            }
+        }
+
+        function scaleSpeeds(oldT, newT) {
+            const scale = Math.sqrt(newT / oldT);
+            for (let g of gases) {
+                g.vx *= scale;
+                g.vy *= scale;
+            }
+        }
+
+        const dt = 1.0; 
+
+        function animate(timestamp) {
+            requestAnimationFrame(animate);
+
+            // Sim Canvas Background
+            simCtx.clearRect(0, 0, width, height);
+
+            // Path Recording Guard
+            if (showTrace && smoke) {
+                if (smokePath.length === 0 || Math.hypot(smoke.x - smokePath[smokePath.length-1].x, smoke.y - smokePath[smokePath.length-1].y) > 2) {
+                    smokePath.push({x: smoke.x, y: smoke.y});
+                    if (smokePath.length > maxPathLength) smokePath.shift();
+                }
+            }
+
+            // Draw Trace
+            if (showTrace && smokePath.length > 1) {
+                simCtx.beginPath();
+                simCtx.moveTo(smokePath[0].x, smokePath[0].y);
+                for (let i = 1; i < smokePath.length; i++) {
+                    simCtx.lineTo(smokePath[i].x, smokePath[i].y);
+                }
+                simCtx.strokeStyle = 'rgba(217, 119, 6, 0.6)'; // Amber
+                simCtx.lineWidth = 2;
+                simCtx.stroke();
+            }
+
+            // Update & Draw
+            if (smoke) {
+                for (let i = 0; i < gases.length; i++) {
+                    let g = gases[i];
+                    g.update(dt, width, height);
+                    resolveCollision(smoke, g);
+                    
+                    simCtx.beginPath();
+                    simCtx.arc(g.x, g.y, g.radius, 0, Math.PI * 2);
+                    simCtx.fillStyle = g.color;
+                    simCtx.fill();
+                }
+
+                smoke.update(dt, width, height);
+                
+                // Draw Smoke without the glow
+                smoke.draw(simCtx);
+            }
+
+            drawChart();
+        }
+
+        function drawChart() {
+            chartCtx.clearRect(0, 0, cWidth, cHeight);
+
+            const padL = 40, padR = 20, padT = 20, padB = 30;
+            const w = Math.max(cWidth - padL - padR, 10);
+            const h = Math.max(cHeight - padT - padB, 10);
+
+            let speeds = [];
+            let maxSpeedActual = 0;
+            for (let g of gases) {
+                let s = Math.sqrt(g.vx*g.vx + g.vy*g.vy);
+                speeds.push(s);
+                if (s > maxSpeedActual) maxSpeedActual = s;
+            }
+
+            const sigma = Math.sqrt(T / 10);
+            
+            // FIX: Use fixed axes so the curve shape changes are visible!
+            // Max temp is 1000 (sigma 10), so vMax 40 covers the fastest particles
+            const vMaxAxis = 40; 
+            
+            // Axes
+            chartCtx.strokeStyle = '#cbd5e1';
+            chartCtx.lineWidth = 1;
+            chartCtx.beginPath();
+            chartCtx.moveTo(padL, padT);
+            chartCtx.lineTo(padL, padT + h);
+            chartCtx.lineTo(padL + w, padT + h);
+            chartCtx.stroke();
+
+            // Labels
+            const lang = dict[currentLang];
+            chartCtx.fillStyle = '#64748b';
+            chartCtx.font = '12px sans-serif';
+            chartCtx.textAlign = 'center';
+            chartCtx.fillText(lang.xAxisLabel, padL + w/2, cHeight - 5);
+            
+            chartCtx.save();
+            chartCtx.translate(15, padT + h/2);
+            chartCtx.rotate(-Math.PI/2);
+            chartCtx.fillText(lang.yAxisLabel, 0, 0);
+            chartCtx.restore();
+
+            const bins = 50;
+            const binWidth = vMaxAxis / bins;
+            let histogram = new Array(bins).fill(0);
+            
+            for (let s of speeds) {
+                let binIdx = Math.floor(s / binWidth);
+                if (binIdx >= 0 && binIdx < bins) {
+                    histogram[binIdx]++;
+                }
+            }
+
+            // FIX: Y-axis max is now based on absolute number of molecules
+            // Max possible molecules in a bin is roughly ~174 (when T=50, N=800)
+            // 將上限從 200 壓低至 100，讓整體曲線在視覺上畫得更高、更滿
+            const yMaxAxis = 100;
+
+            // Histograms
+            chartCtx.fillStyle = 'rgba(14, 165, 233, 0.4)';
+            chartCtx.strokeStyle = 'rgba(14, 165, 233, 0.8)';
+            for (let i = 0; i < bins; i++) {
+                let freq = histogram[i];
+                let barH = (freq / yMaxAxis) * h;
+                
+                let bx = padL + i * (w / bins);
+                let by = padT + h - barH;
+                
+                if (barH > 0) {
+                    chartCtx.fillRect(bx, by, w/bins - 1, barH);
+                    chartCtx.strokeRect(bx, by, w/bins - 1, barH);
+                }
+            }
+
+            // Theory Curve
+            chartCtx.beginPath();
+            chartCtx.strokeStyle = '#1e3c72'; 
+            chartCtx.lineWidth = 2;
+            
+            const steps = 100;
+            for (let i = 0; i <= steps; i++) {
+                let v = (i / steps) * vMaxAxis;
+                let pv = (v / (sigma * sigma)) * Math.exp(-(v * v) / (2 * sigma * sigma));
+                let expectedCount = N * pv * binWidth;
+                
+                let px = padL + (v / vMaxAxis) * w;
+                let py = padT + h - (expectedCount / yMaxAxis) * h;
+                
+                if (i === 0) chartCtx.moveTo(px, py);
+                else chartCtx.lineTo(px, py);
+            }
+            chartCtx.stroke();
+        }
+
+        /* --- Resize Handling --- */
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            
+            // Sim Canvas robust layout sizing
+            const simContainer = simCanvas.parentElement;
+            const simRect = simContainer.getBoundingClientRect();
+            // Fallback sizes if CSS flexbox hasn't calculated dimensions yet
+            width = simRect.width || simContainer.clientWidth || 600;
+            height = simRect.height || simContainer.clientHeight || 400;
+            
+            simCanvas.width = width * dpr;
+            simCanvas.height = height * dpr;
+            simCtx.scale(dpr, dpr);
+
+            // Chart Canvas robust layout sizing
+            const chartContainer = chartCanvas.parentElement;
+            const chartRect = chartContainer.getBoundingClientRect();
+            cWidth = chartRect.width || chartContainer.clientWidth || 600;
+            cHeight = chartRect.height || chartContainer.clientHeight || 200;
+            
+            chartCanvas.width = cWidth * dpr;
+            chartCanvas.height = cHeight * dpr;
+            chartCtx.scale(dpr, dpr);
+
+            // Keep smoke in bounds if resized smaller
+            if (smoke) {
+                if (smoke.x > width) smoke.x = Math.max(width - smoke.radius, 0);
+                if (smoke.y > height) smoke.y = Math.max(height - smoke.radius, 0);
+            }
+        }
+
+        window.addEventListener('resize', resize);
+
+        /* --- Event Listeners for Controls --- */
+        function bindControls() {
+            const tempSliders = [document.getElementById('tempSlider'), document.getElementById('m_tempSlider')].filter(Boolean);
+            const massSliders = [document.getElementById('massSlider'), document.getElementById('m_massSlider')].filter(Boolean);
+            const countSliders = [document.getElementById('countSlider'), document.getElementById('m_countSlider')].filter(Boolean);
+            const traceToggles = [document.getElementById('traceToggle'), document.getElementById('m_traceToggle')].filter(Boolean);
+            const resetBtns = [document.getElementById('resetBtn'), document.getElementById('m_resetBtn')].filter(Boolean);
+
+            const tempValues = [document.getElementById('tempValue'), document.getElementById('m_tempValue')].filter(Boolean);
+            const massValues = [document.getElementById('massValue'), document.getElementById('m_massValue')].filter(Boolean);
+            const countValues = [document.getElementById('countValue'), document.getElementById('m_countValue')].filter(Boolean);
+
+            function updateT(e) {
+                let oldT = T;
+                T = parseInt(e.target.value);
+                tempSliders.forEach(s => s.value = T);
+                tempValues.forEach(v => v.innerText = T + " K");
+                scaleSpeeds(oldT, T);
+            }
+
+            function updateM(e) {
+                M = parseInt(e.target.value);
+                massSliders.forEach(s => s.value = M);
+                massValues.forEach(v => v.innerText = M + " u");
+                if (smoke) {
+                    smoke.mass = M;
+                    // 同步更新粒子的視覺半徑
+                    smoke.radius = 0.8 * Math.sqrt(M); 
+                }
+            }
+
+            function updateN(e) {
+                N = parseInt(e.target.value);
+                countSliders.forEach(s => s.value = N);
+                countValues.forEach(v => v.innerText = N);
+                initSimulation();
+            }
+
+            function updateTrace(e) {
+                showTrace = e.target.checked;
+                traceToggles.forEach(t => t.checked = showTrace);
+                if (!showTrace) smokePath = [];
+            }
+
+            tempSliders.forEach(s => s.addEventListener('input', updateT));
+            massSliders.forEach(s => s.addEventListener('input', updateM));
+            countSliders.forEach(s => s.addEventListener('change', updateN));
+            traceToggles.forEach(t => t.addEventListener('change', updateTrace));
+            resetBtns.forEach(b => b.addEventListener('click', initSimulation));
+        }
+
+        /* --- ROBUST INITIALIZATION --- */
+        
+        function initApp() {
+            try {
+                // 載入圖示
+                lucide.createIcons();
+            } catch(e) {
+                console.warn("Lucide icons could not be loaded.", e);
+            }
+
+            applyTranslations();
+            bindControls();
+            
+            // 確保 Flexbox 版面佈局計算完成後再初始化 Canvas 大小
+            setTimeout(() => {
+                resize();
+                initSimulation();
+                requestAnimationFrame(animate);
+            }, 50);
+        }
+
+        // Handle environments where `window.onload` is unreliable or has already fired 
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+
+    </script>
+</body>
+</html>
