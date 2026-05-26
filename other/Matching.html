@@ -144,6 +144,7 @@
         @media (orientation: landscape) and (min-width: 768px) {
             .app-container {
                 height: 100vh;
+                height: 100svh; /* Dynamic/safe viewport size to fix cut-offs */
                 overflow: hidden;
             }
             .scrollable-on-portrait {
@@ -155,6 +156,7 @@
             .app-container {
                 height: auto;
                 min-height: 100vh;
+                min-height: 100svh; /* Safe minimum height on modern portable browsers */
                 overflow-y: auto;
             }
             .scrollable-on-portrait {
@@ -282,16 +284,15 @@
             { id: 4, english: "compound", chinese: "化合物"},
             { id: 5, english: "physical change", chinese: "物理變化"},
             { id: 6, english: "chemical change", chinese: "化學變化"},
-            { id: 7, english: "hydrocarbon", chinese: "碳氫化合物"},
-            { id: 8, english: "mixture", chinese: "混合物"},      
-            { id: 13, english: "metal", chinese: "金屬"},
-            { id: 14, english: "helium", chinese: "氦"},
-            { id: 15, english: "iron", chinese: "鐵"},
-            { id: 16, english: "gold", chinese: "金"},
-            { id: 17, english: "copper", chinese: "銅"},
-            { id: 18, english: "silver", chinese: "銀"},         
-            { id: 19, english: "aluminium", chinese: "鋁"},         
-            { id: 20, english: "carbon", chinese: "碳"},  
+            { id: 7, english: "hydrocarbon", chinese: "碳氫化合物"},   
+            { id: 8, english: "metal", chinese: "金屬"},
+            { id: 9, english: "helium", chinese: "氦"},
+            { id: 10, english: "iron", chinese: "鐵"},
+            { id: 11, english: "gold", chinese: "金"},
+            { id: 12, english: "copper", chinese: "銅"},
+            { id: 13, english: "silver", chinese: "銀"},         
+            { id: 14, english: "aluminium", chinese: "鋁"},         
+            { id: 15, english: "carbon", chinese: "碳"},  
         ];
 
         // UI Translations
@@ -552,6 +553,7 @@
             const isPortrait = window.innerHeight > window.innerWidth || window.innerWidth < 768;
             
             const W = gameBoard.clientWidth;
+            // On portrait screens, set height relative to dynamic viewport dimensions
             const H = isPortrait ? Math.max(500, window.innerHeight - 200) : gameBoard.clientHeight;
             if (W === 0 || H === 0) return;
             
@@ -722,6 +724,7 @@
             state.selectedCard = null;
         }
 
+        // UI Update Helper
         function updateScoreUI() {
             scoreDisplay.textContent = state.score;
             comboDisplay.textContent = `x${state.combo}`;
@@ -736,6 +739,7 @@
             }
         }
         
+        // Floating Score Animation
         function showFloatingScore(targetCard, points, combo) {
             const rect = targetCard.getBoundingClientRect();
             const boardRect = gameBoard.getBoundingClientRect();
