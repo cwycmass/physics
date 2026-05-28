@@ -1,0 +1,2433 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物理新手村 - 力和運動</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* 自訂滾動條樣式，讓畫面更精緻 */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        /* 隱藏原生 details 的箭頭 */
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased flex h-screen overflow-hidden">
+
+    <!-- 行動版頂部導覽列 -->
+    <header class="md:hidden fixed top-0 left-0 right-0 h-16 bg-white shadow-sm z-30 flex items-center justify-between px-4">
+        <div class="flex items-center gap-3">
+            <button onclick="toggleMobileMenu()" class="text-slate-600 hover:text-blue-600 focus:outline-none p-2">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            <div class="relative">
+                <h1 class="text-lg font-bold text-slate-800 leading-tight">物理新手村</h1>
+                <!-- 行動版：書本切換下拉選單 -->
+                <details class="group">
+                    <summary class="cursor-pointer text-xs text-blue-600 font-medium flex items-center mt-0.5">
+                        力和運動 (Book 2) <i class="fa-solid fa-chevron-down ml-1 transition-transform group-open:rotate-180" style="font-size: 0.6rem;"></i>
+                    </summary>
+                    <!-- 下拉選單內容 -->
+                    <div class="absolute top-full left-0 mt-3 w-48 bg-white border border-slate-200 rounded-lg shadow-xl z-50 overflow-hidden">
+                        <a href="book1.html" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">熱和氣體 (Book 1)</a>
+                        <a href="#" class="block px-4 py-2.5 text-sm font-bold bg-blue-50 text-blue-700 flex justify-between items-center">力和運動 (Book 2) <i class="fa-solid fa-check"></i></a>
+                        <a href="book3a.html" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">波動 (Book 3A)</a>
+                        <a href="book3b.html" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">光學 (Book 3B)</a>
+                        <a href="book4.html" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">電和磁 (Book 4)</a>
+                        <a href="book5.html" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">放射現象 (Book 5)</a>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </header>
+
+    <!-- 行動版半透明遮罩 -->
+    <div id="mobile-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-slate-900/50 z-40 hidden md:hidden transition-opacity"></div>
+
+    <!-- 左側邊欄 (導覽目錄) -->
+    <aside id="sidebar" class="fixed md:static inset-y-0 left-0 w-72 bg-white shadow-xl md:shadow-sm border-r border-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
+        <!-- 側邊欄標頭 (僅桌機版顯示) -->
+        <div class="hidden md:block p-6 border-b border-slate-100 relative">
+            <h1 class="text-2xl font-black text-slate-800 tracking-tight">物理新手村</h1>
+            
+            <!-- 電腦版：書本切換下拉選單 -->
+            <details class="mt-3 group relative">
+                <summary class="cursor-pointer flex items-center justify-between bg-slate-50 hover:bg-slate-100 text-sm font-semibold text-blue-700 py-2 px-3 rounded-lg border border-slate-200 transition-colors">
+                    <span><i class="fa-solid fa-book-open mr-2"></i>力和運動 (Book 2)</span>
+                    <i class="fa-solid fa-chevron-down text-xs transition-transform group-open:rotate-180"></i>
+                </summary>
+                <!-- 下拉選單內容 -->
+                <div class="absolute left-0 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                    <a href="book1.html" class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">熱和氣體 (Book 1)</a>
+                    <a href="#" class="block px-4 py-2 text-sm font-bold bg-blue-50 text-blue-700">力和運動 (Book 2) <i class="fa-solid fa-check float-right mt-1"></i></a>
+                    <a href="book3a.html" class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">波動 (Book 3A)</a>
+                    <a href="book3b.html" class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">光學 (Book 3B)</a>
+                    <a href="book4.html" class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">電和磁 (Book 4)</a>
+                    <a href="book5.html" class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">放射現象 (Book 5)</a>
+                </div>
+            </details>
+        </div>
+        
+        <!-- 導覽選單 -->
+        <nav class="flex-1 overflow-y-auto p-4 space-y-6">
+            <!-- 第 1 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 1 章：位置與運動</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch1-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors bg-blue-50 text-blue-800 font-medium border-l-4 border-blue-500">
+                            1.1 距離與位移
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch1-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            1.2 速率與速度
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch1-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            1.3 勻加速運動
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <!-- 第 2 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 2 章：牛頓運動定律</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch2-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            2.1 牛頓第一定律
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch2-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            2.2 牛頓第二定律
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <!-- 第 3 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 3 章：力與運動(1)</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch3-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.1 力
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.2 牛頓第一運動定律
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.3 牛頓第二運動定律
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-4', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.4 重量與對重量的感覺
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-5', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.5 流體阻力
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-6', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.6 摩擦力
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-7', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.7 牛頓第三運動定律
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- 側邊欄頁尾 -->
+        <div class="p-4 border-t border-slate-100 text-center">
+            <p class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-graduation-cap mr-1"></i> 廠商會中學．物理科</p>
+        </div>
+    </aside>
+
+    <!-- 右側主要內容區 -->
+    <main id="main-content" class="flex-1 h-screen overflow-y-auto pt-16 md:pt-0 scroll-smooth">
+        <div class="max-w-4xl mx-auto p-4 md:p-8 lg:p-12 pb-24">
+            
+            <!-- ========================================== -->
+            <!-- 區塊 1.1: 距離與位移 (完整示範骨架) -->
+            <!-- ========================================== -->
+            <article id="ch1-1" class="content-section block">
+                <header class="mb-8 border-b-2 border-slate-200 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.1</span>距離與位移</h2>
+                    <p class="text-slate-500 mt-2">認識標量與矢量，以及描述物體位置變化的基本概念。</p>
+                </header>
+
+                <!-- 📌 1. 名詞定義 / 核心概念 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+                    <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                        <p>在物理學中，物理量可分為 <strong class="text-blue-700 font-bold">標量 (Scalar)</strong> 和 <strong class="text-blue-700 font-bold">矢量 (Vector)</strong>：</p>
+                        <ul class="list-disc list-inside ml-2 space-y-2">
+                            <li><strong>標量：</strong> 只有大小 (Magnitude) 沒有方向的物理量。例如：質量 ($50 \text{ kg}$)、時間 ($10 \text{ s}$)。</li>
+                            <li><strong>矢量：</strong> 同時具備大小和方向 (Direction) 的物理量。例如：力、位移。</li>
+                        </ul>
+                        <hr class="my-4 border-slate-100">
+                        <p>描述物體的運動時，我們會區分 <strong class="text-blue-700 font-bold">距離 (Distance)</strong> 與 <strong class="text-blue-700 font-bold">位移 (Displacement)</strong>：</p>
+                        <ul class="list-disc list-inside ml-2 space-y-2">
+                            <li><strong>距離：</strong> 物體實際運動軌跡的總長度。它是一個標量。</li>
+                            <li><strong>位移：</strong> 由起點指向終點的直線距離與方向。它是一個矢量。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 📐 2. 核心公式與單位 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+                        <p class="text-slate-700 mb-3">位移 ($\vec{s}$) 的數學表示法（在一維運動中）：</p>
+                        <div class="text-center my-4 overflow-x-auto">
+                            <!-- MathJax Block Formula -->
+                            $$ \vec{s} = x_f - x_i $$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>$x_f$：最終位置 (Final position)</li>
+                            <li>$x_i$：初始位置 (Initial position)</li>
+                            <li><i class="fa-solid fa-circle-info text-blue-400 mr-1"></i> <strong>SI 單位：</strong> 兩者的標準單位皆為米 ($\text{m}$)。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 📊 3. 重要性質 / 物理規律對照 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 距離與位移對照表</h3>
+                    
+                    <!-- 桌機版 Table -->
+                    <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+                        <table class="w-full text-left text-slate-700">
+                            <thead class="bg-blue-100 text-blue-900">
+                                <tr>
+                                    <th class="p-3 font-semibold w-1/4">比較項目</th>
+                                    <th class="p-3 font-semibold w-3/8">距離 (Distance)</th>
+                                    <th class="p-3 font-semibold w-3/8">位移 (Displacement)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr class="even:bg-slate-50">
+                                    <td class="p-3 font-medium">物理量性質</td>
+                                    <td class="p-3">標量 (僅有大小)</td>
+                                    <td class="p-3">矢量 (有大小與方向)</td>
+                                </tr>
+                                <tr class="even:bg-slate-50">
+                                    <td class="p-3 font-medium">路徑依賴性</td>
+                                    <td class="p-3">取決於實際行走路徑</td>
+                                    <td class="p-3">僅取決於起點與終點位置</td>
+                                </tr>
+                                <tr class="even:bg-slate-50">
+                                    <td class="p-3 font-medium">數值範圍</td>
+                                    <td class="p-3">永遠為正值 ($ \ge 0 $)</td>
+                                    <td class="p-3">可正、可負或為零</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 行動版卡片 (自動切換) -->
+                    <div class="grid md:hidden gap-4">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                            <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">距離 (Distance)</h4>
+                            <ul class="text-sm space-y-1 text-slate-600">
+                                <li><span class="font-semibold text-slate-700">性質：</span> 標量 (僅有大小)</li>
+                                <li><span class="font-semibold text-slate-700">路徑：</span> 取決於實際行走路徑</li>
+                                <li><span class="font-semibold text-slate-700">數值：</span> 永遠為正值 ($ \ge 0 $)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                            <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">位移 (Displacement)</h4>
+                            <ul class="text-sm space-y-1 text-slate-600">
+                                <li><span class="font-semibold text-slate-700">性質：</span> 矢量 (有大小與方向)</li>
+                                <li><span class="font-semibold text-slate-700">路徑：</span> 僅取決於起點與終點位置</li>
+                                <li><span class="font-semibold text-slate-700">數值：</span> 可正、可負或為零</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⚠️ 4. 常見迷思與誤區 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- 錯誤觀念 -->
+                        <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                            <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                            <p class="text-sm">「位移的大小有可能大於距離。」或者「返回起點時，距離等於零。」</p>
+                        </div>
+                        <!-- 正確觀念 -->
+                        <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                            <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                            <p class="text-sm">兩點之間直線最短，因此 <strong>位移的大小永遠小於或等於距離</strong>。返回起點時，位移為零，但距離是走過軌跡的總長度。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ✍️ 5. 典型例題解說 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+                    <div class="space-y-6">
+                        
+                        <!-- 例題 1 -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                            <div class="flex items-start">
+                                <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                                <p class="text-slate-800 leading-relaxed font-medium">
+                                    小明在一個半徑為 $r = 50 \text{ m}$ 的圓形跑道上跑步。他從 A 點出發，跑了半圈到達 B 點。求小明的 (a) 距離 和 (b) 位移的大小。
+                                </p>
+                            </div>
+                            <!-- 隱藏詳解區 -->
+                            <details class="mt-4 group">
+                                <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                                    <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                                    <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                                </summary>
+                                <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                                    <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                                    <p class="mb-2">(a) 距離是實際軌跡長度，即半個圓周長：</p>
+                                    $$ \text{距離} = \frac{1}{2} \times 2\pi r = \pi (50) \approx 157 \text{ m} $$
+                                    <p class="mt-4 mb-2">(b) 位移是由起點直指終點的最短距離，即圓的直徑：</p>
+                                    $$ \text{位移大小} = 2r = 2(50) = 100 \text{ m} $$
+                                    <p class="mt-2 text-sm text-slate-500">（註：位移必須指明方向，例如「由 A 指向 B」。本題僅求大小）</p>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <!-- 佔位例題 2, 3 -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 opacity-70">
+                            <div class="flex items-start">
+                                <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                                <p class="text-slate-800 leading-relaxed font-medium">[佔位符] 二維平面的距離與位移計算題。向東走 $3 \text{ m}$ 再向北走 $4 \text{ m}$...</p>
+                            </div>
+                            <details class="mt-4 group">
+                                <summary class="cursor-pointer bg-amber-100 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center">
+                                    <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                                </summary>
+                                <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg">使用畢氏定理：$\sqrt{3^2 + 4^2} = 5 \text{ m}$。</div>
+                            </details>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 opacity-70">
+                            <div class="flex items-start">
+                                <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                                <p class="text-slate-800 leading-relaxed font-medium">[佔位符] HKDSE 歷屆題型變化示範...</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- 🧠 6. 隨堂測驗 -->
+                <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗 (概念檢測)</h3>
+                    
+                    <div class="space-y-8">
+                        <!-- Q1 -->
+                        <div class="quiz-item">
+                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 下列哪一個物理量屬於矢量 (Vector)？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp-q1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 質量</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 距離</button>
+                                <button onclick="checkAnswer(this, true, 'exp-q1-1')"  class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 位移</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 時間</button>
+                            </div>
+                            <!-- 解析區塊 (預設隱藏) -->
+                            <div id="exp-q1-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                                <strong>解析：</strong> 質量、距離、時間都只有大小而沒有方向，屬於標量。位移具有方向性，因此是矢量。
+                            </div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="quiz-item">
+                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 物體作直線運動並折返至起點，此時其距離與位移的大小分別為何？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp-q1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">A. 兩者皆為 0</button>
+                                <button onclick="checkAnswer(this, true, 'exp-q1-2')"  class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">B. 距離 $> 0$，位移 $= 0$</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">C. 距離 $= 0$，位移 $> 0$</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">D. 兩者皆 $> 0$ 且相等</button>
+                            </div>
+                            <div id="exp-q1-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                                <strong>解析：</strong> 只要物體有移動，其行走路徑總長（距離）必大於 0。但物體回到起點，代表最終位置與初始位置相同，故位移 $ \vec{s} = x_f - x_i = 0 $。
+                            </div>
+                        </div>
+                        
+                        <!-- 佔位 Q3, 4, 5 -->
+                        <div class="quiz-item opacity-60">
+                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> [佔位題目] 測試渲染 LaTeX 的題目 $v = \frac{s}{t}$ ...</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, true, 'exp-q1-3')" class="text-left p-3 rounded-lg border border-slate-200">A. 選項 A</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q1-3')" class="text-left p-3 rounded-lg border border-slate-200">B. 選項 B</button>
+                            </div>
+                            <div id="exp-q1-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm">解析：這是一個測試 $ F=ma $ 渲染的佔位。</div>
+                        </div>
+                        <div class="quiz-item opacity-60"><p class="font-medium">Q4. [佔位題目]</p></div>
+                        <div class="quiz-item opacity-60"><p class="font-medium">Q5. [佔位題目]</p></div>
+                    </div>
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 1.2: 速率與速度 (空殼佔位) -->
+            <!-- ========================================== -->
+            <article id="ch1-2" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-slate-200 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.2</span>速率與速度</h2>
+                    <p class="text-slate-500 mt-2">介紹平均速率、平均速度以及勻速運動的概念。</p>
+                </header>
+                <div class="p-10 text-center text-slate-400 bg-white border border-dashed border-slate-300 rounded-2xl">
+                    <i class="fa-solid fa-person-digging text-4xl mb-3"></i>
+                    <p>此章節內容建置中...</p>
+                    <p class="text-sm mt-2">將嚴格遵守 6 大結構：定義、公式、對照表、迷思、例題、測驗</p>
+                </div>
+            </article>
+
+            <!-- 其他佔位章節 -->
+            <article id="ch1-3" class="content-section hidden"><header><h2 class="text-3xl font-black text-slate-800">1.3 勻加速運動</h2></header><div class="p-10 text-center text-slate-400 mt-4 bg-white border border-dashed rounded-2xl">建置中...</div></article>
+            <article id="ch2-1" class="content-section hidden"><header><h2 class="text-3xl font-black text-slate-800">2.1 牛頓第一定律</h2></header><div class="p-10 text-center text-slate-400 mt-4 bg-white border border-dashed rounded-2xl">建置中...</div></article>
+            <article id="ch2-2" class="content-section hidden"><header><h2 class="text-3xl font-black text-slate-800">2.2 牛頓第二定律</h2></header><div class="p-10 text-center text-slate-400 mt-4 bg-white border border-dashed rounded-2xl">建置中...</div></article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 3.1: 力 (新增內容) -->
+            <!-- ========================================== -->
+            <article id="ch3-1" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-slate-200 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.1</span>力</h2>
+                    <p class="text-slate-500 mt-2">了解力的基本概念、特性，以及力如何改變物體的運動與形狀。</p>
+                </header>
+
+                <!-- 📌 1. 名詞定義 / 核心概念 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+                    <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                        <p>一般來說，<strong class="text-blue-700 font-bold">力 (Force)</strong> 是向某一方向的推或拉的作用。力具有以下三個主要特性（能產生的效果）：</p>
+                        <ul class="list-disc list-inside ml-2 space-y-2">
+                            <li><strong>改變運動速率：</strong> 能使物體加快（加速）或減慢（減速）。</li>
+                            <li><strong>改變運動方向：</strong> 能使正在移動的物體改變它的移動方向。</li>
+                            <li><strong>改變形狀：</strong> 能令物體發生形變（例如把彈簧拉長、把黏土壓扁）。</li>
+                        </ul>
+                        <hr class="my-4 border-slate-100">
+                        <p>力是 <strong class="text-blue-700 font-bold">成對出現的 (Forces appear in pairs)</strong>。當你對一個物體施力時，該物體也會同時對你施加一個力。例如：當你拉動行李箱時，行李箱也會向反方向拉你。</p>
+                    </div>
+                </section>
+
+                <!-- 📐 2. 核心公式與單位 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+                        <p class="text-slate-700 mb-3">力是一個 <strong class="text-blue-700">矢量 (Vector)</strong>，因此它同時具有「大小」和「方向」。在繪圖時，我們常以箭頭表示：</p>
+                        <div class="text-center my-4 overflow-x-auto">
+                            <!-- MathJax Block Formula -->
+                            $$ \vec{F} $$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2">
+                            <li><strong>圖解表示：</strong> 箭頭的指向代表力的方向，線段的長度代表力的大小。</li>
+                            <li><i class="fa-solid fa-circle-info text-blue-400 mr-1"></i> <strong>SI 單位：</strong> 力的標準單位是 <strong class="text-blue-700">牛頓 (Newton)</strong>，簡寫為 $\text{N}$。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 📊 3. 重要性質 / 物理規律對照 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 接觸力與非接觸力分類表</h3>
+                    
+                    <!-- 桌機版 Table -->
+                    <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+                        <table class="w-full text-left text-slate-700">
+                            <thead class="bg-blue-100 text-blue-900">
+                                <tr>
+                                    <th class="p-3 font-semibold w-1/4">力的種類</th>
+                                    <th class="p-3 font-semibold w-3/8">接觸力 (Contact Forces)</th>
+                                    <th class="p-3 font-semibold w-3/8">非接觸力 (Non-contact Forces)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr class="even:bg-slate-50">
+                                    <td class="p-3 font-medium">定義</td>
+                                    <td class="p-3">兩個物體必須互相接觸才能產生的力。</td>
+                                    <td class="p-3">物體之間不需要互相接觸就能相互作用的力。</td>
+                                </tr>
+                                <tr class="even:bg-slate-50">
+                                    <td class="p-3 font-medium">常見例子</td>
+                                    <td class="p-3">
+                                        <ul class="list-disc list-inside">
+                                            <li>摩擦力 (Friction)</li>
+                                            <li>拉力 (Tension)</li>
+                                            <li>法向反作用力 (Normal reaction)</li>
+                                        </ul>
+                                    </td>
+                                    <td class="p-3">
+                                        <ul class="list-disc list-inside">
+                                            <li>重力 / 重量 (Weight)</li>
+                                            <li>磁力 (Magnetic force)</li>
+                                            <li>靜電力 (Electrostatic force)</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 行動版卡片 -->
+                    <div class="grid md:hidden gap-4">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                            <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">接觸力 (Contact Forces)</h4>
+                            <p class="text-sm text-slate-600 mb-2">必須互相接觸才能產生的力。</p>
+                            <ul class="text-sm space-y-1 text-slate-600 font-medium">
+                                <li>👉 摩擦力 (Friction)</li>
+                                <li>👉 拉力 (Tension)</li>
+                                <li>👉 法向反作用力 (Normal reaction)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                            <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">非接觸力 (Non-contact Forces)</h4>
+                            <p class="text-sm text-slate-600 mb-2">不需要互相接觸就能產生的力。</p>
+                            <ul class="text-sm space-y-1 text-slate-600 font-medium">
+                                <li>👉 重力 (Gravity/Weight)</li>
+                                <li>👉 磁力 (Magnetic force)</li>
+                                <li>👉 靜電力 (Electrostatic force)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⚠️ 4. 常見迷思與誤區 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- 錯誤觀念 -->
+                        <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                            <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                            <p class="text-sm">「物體必須受到力的作用，才能維持它向前運動。」或者「當推力消失時，物體就一定會立刻停下來。」</p>
+                        </div>
+                        <!-- 正確觀念 -->
+                        <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                            <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                            <p class="text-sm"><strong>力是「改變」運動狀態的原因，而不是「維持」運動的原因。</strong>如果沒有淨力，運動中的物體會一直保持等速直線運動（這在後面的牛頓第一定律會詳細說明）。現實中推力消失會停下，是因為有<strong>摩擦力</strong>的阻礙。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ✍️ 5. 典型例題解說 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+                    <div class="space-y-6">
+                        
+                        <!-- 例題 1 -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                            <div class="flex items-start">
+                                <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                                <p class="text-slate-800 leading-relaxed font-medium">
+                                    下列哪些情況中，物體受到了力的作用？（可多選）<br>
+                                    (1) 一個被用力踢出並飛向空中的足球<br>
+                                    (2) 一塊正在被雙手壓扁的黏土<br>
+                                    (3) 一輛正在筆直公路上減速煞車的汽車
+                                </p>
+                            </div>
+                            <details class="mt-4 group">
+                                <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                                    <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                                    <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                                </summary>
+                                <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                                    <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                                    <p class="mb-2">回顧力的三大效果：改變速率、改變方向、改變形狀。</p>
+                                    <ul class="list-decimal list-inside space-y-1 mb-2">
+                                        <li>足球由靜止變為飛出，速率和方向改變，受力。</li>
+                                        <li>黏土被壓扁，形狀發生改變，受力。</li>
+                                        <li>汽車減速煞車，速率變慢，受力（摩擦力）。</li>
+                                    </ul>
+                                    <p class="mt-2 font-bold text-green-700">答案：(1), (2), (3) 全部皆受力。</p>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <!-- 例題 2 -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                            <div class="flex items-start">
+                                <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                                <p class="text-slate-800 leading-relaxed font-medium">
+                                    小華在水平地面上用 $10 \text{ N}$ 的力向右推一個木箱。由於力是一個矢量，請寫出這個推力的兩個核心組成部分。
+                                </p>
+                            </div>
+                            <details class="mt-4 group">
+                                <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                                    <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                                    <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                                </summary>
+                                <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                                    <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                                    <p class="mb-2">力作為一個矢量，必須同時具備「大小」與「方向」。</p>
+                                    <p class="mb-1">1. <strong>大小 (Magnitude)：</strong> $10 \text{ N}$</p>
+                                    <p class="mb-1">2. <strong>方向 (Direction)：</strong> 向右</p>
+                                    <p class="mt-2 text-sm text-slate-500">（註：在解題或作圖時，這兩個要素缺一不可。）</p>
+                                </div>
+                            </details>
+                        </div>
+
+                        <!-- 例題 3 -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                            <div class="flex items-start">
+                                <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                                <p class="text-slate-800 leading-relaxed font-medium">
+                                    當足球員用力踢向靜止的足球時，足球會飛出去。在此過程中，是只有腳對球施力，還是球也會對腳施力？試說明原因。
+                                </p>
+                            </div>
+                            <details class="mt-4 group">
+                                <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                                    <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                                    <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                                </summary>
+                                <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                                    <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                                    <p class="mb-2">根據力的基本特性：「力是成對出現的」。</p>
+                                    <p class="mb-2">當腳對足球施加推力（作用力）時，足球也必定會同時對腳施加一個反方向的推力（反作用力）。這就是為什麼踢到硬物時，腳也會感到疼痛的原因。</p>
+                                    <p class="mt-2 font-bold text-green-700">答案：球也會同時對腳施加反方向的力。</p>
+                                </div>
+                            </details>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- 🧠 6. 隨堂測驗 -->
+                <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗 (概念檢測)</h3>
+                    
+                    <div class="space-y-8">
+                        <!-- Q1 -->
+                        <div class="quiz-item">
+                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 力的國際單位制 (SI 單位) 是甚麼？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp-q3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 焦耳 (J)</button>
+                                <button onclick="checkAnswer(this, true, 'exp-q3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 牛頓 (N)</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 千克 (kg)</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 瓦特 (W)</button>
+                            </div>
+                            <div id="exp-q3-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                                <strong>解析：</strong> 力的 SI 單位是牛頓 ($\text{N}$)，為了紀念偉大物理學家牛頓。千克是質量單位，焦耳是能量單位。
+                            </div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="quiz-item">
+                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 關於力的性質，下列哪一項描述是正確的？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp-q3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 力只有大小，沒有方向</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 力是標量 (Scalar)</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 單一的力可以獨立存在於宇宙中</button>
+                                <button onclick="checkAnswer(this, true, 'exp-q3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 力是一個矢量，且總是成對出現的</button>
+                            </div>
+                            <div id="exp-q3-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                                <strong>解析：</strong> 力同時具有大小和方向，屬於矢量 (Vector)。並且力總是成對出現（作用力與反作用力），不可能單獨存在一個力。
+                            </div>
+                        </div>
+
+                        <!-- Q3 -->
+                        <div class="quiz-item">
+                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 下列哪一項 <strong>不是</strong> 力對物體可能產生的效果？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, true, 'exp-q3-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 改變物體的質量</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q3-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 改變物體的移動速率</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q3-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 改變物體的移動方向</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q3-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 改變物體的形狀</button>
+                            </div>
+                            <div id="exp-q3-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                                <strong>解析：</strong> 根據經典力學，物體的質量是物體本身含有的物質總量，不會因為受力而改變。力只能改變物體的運動狀態（速率、方向）或使其發生形變。
+                            </div>
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="quiz-item">
+                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 小明用力向後拉動一條彈簧，彈簧被拉長了。在此過程中，彈簧對小明的手...</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp-q3-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 沒有施加任何力</button>
+                                <button onclick="checkAnswer(this, true, 'exp-q3-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 施加了一個向前的力</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q3-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 施加了一個向後的力</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q3-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 施加了一個向下的力</button>
+                            </div>
+                            <div id="exp-q3-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                                <strong>解析：</strong> 力是成對出現的。當小明向「後」拉彈簧，彈簧同時會產生一個反方向（即向「前」）的力作用在小明的手上。這就是彈簧的拉力（張力）。
+                            </div>
+                        </div>
+
+                        <!-- Q5 -->
+                        <div class="quiz-item">
+                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 樹上的蘋果掉落到地面上。導致蘋果掉落的力屬於哪一種力？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp-q3-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 接觸力：因為蘋果接觸到了空氣</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q3-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 接觸力：因為蘋果最終接觸到了地面</button>
+                                <button onclick="checkAnswer(this, true, 'exp-q3-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 非接觸力：因為地球重力不需要接觸就能作用</button>
+                                <button onclick="checkAnswer(this, false, 'exp-q3-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 非接觸力：因為蘋果沒有重量</button>
+                            </div>
+                            <div id="exp-q3-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                                <strong>解析：</strong> 蘋果掉落是因為受到地球的「重力 (Weight)」作用。重力是一種即使物體沒有與地球表面接觸，也能在一段距離外相互吸引的作用力，因此屬於非接觸力 (Non-contact force)。
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </article>
+
+<!-- ========================================== -->
+<!-- 區塊 3.2: 牛頓運動定律 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch3-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.2</span>牛頓第一運動定律</h2>
+        <p class="text-slate-500 mt-2">認識慣性的概念，並理解物體在沒有淨力作用時的運動狀態。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>物體具有一種抵抗其運動狀態被改變的內在傾向，這種性質稱為 <strong class="text-blue-700 font-bold">慣性 (Inertia)</strong>。物體的質量越大，其慣性就越大，就越難改變它的運動狀態。</p>
+            <hr class="my-4 border-slate-100">
+            <p><strong class="text-blue-700 font-bold">牛頓第一定律 (Newton's First Law)</strong> 規定：</p>
+            <ul class="list-disc list-inside ml-2 space-y-2">
+                <li>如果作用於物體上的 <strong>淨力為零</strong>，則：</li>
+                <li>靜止的物體會 <strong>保持靜止</strong>。</li>
+                <li>運動中的物體會 <strong>保持勻速直線運動</strong>（即速率與方向皆不變）。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與關係 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與關係</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">牛頓第一定律的數學條件可以表示為：</p>
+            <div class="text-center my-4 overflow-x-auto">
+                $$ \text{若 } \vec{F}_{\text{net}} = 0 \text{ , 則 } \vec{a} = 0 $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2">
+                <li>$\vec{F}_{\text{net}}$：淨力 (Net force)，即所有作用力的矢量和。</li>
+                <li>$\vec{a} = 0$ 代表速度 ($\vec{v}$) 為常數（包含 $v = 0$ 的靜止狀態）。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 淨力為零時的運動狀態對照</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/3">運動狀態</th>
+                        <th class="p-3 font-semibold w-1/3">靜止 (Rest)</th>
+                        <th class="p-3 font-semibold w-1/3">勻速直線運動 (Uniform Motion)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">速度 ($v$)</td>
+                        <td class="p-3">$v = 0 \text{ m s}^{-1}$</td>
+                        <td class="p-3">$v \neq 0$ 且保持不變</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">加速度 ($a$)</td>
+                        <td class="p-3">$a = 0 \text{ m s}^{-2}$</td>
+                        <td class="p-3">$a = 0 \text{ m s}^{-2}$</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">所需淨力 ($\vec{F}_{\text{net}}$)</td>
+                        <td class="p-3">$0 \text{ N}$</td>
+                        <td class="p-3">$0 \text{ N}$</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">靜止 (Rest)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>速度: $0 \text{ m s}^{-1}$</li>
+                    <li>加速度: $0 \text{ m s}^{-2}$</li>
+                    <li>淨力: $0 \text{ N}$</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">勻速直線運動</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>速度: $v \neq 0$ 且保持不變</li>
+                    <li>加速度: $0 \text{ m s}^{-2}$</li>
+                    <li>淨力: $0 \text{ N}$</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <p class="text-sm">「當巴士突然煞車時，乘客會向前傾，是因為有一股『慣性力』把乘客推向前方。」</p>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <p class="text-sm"><strong>慣性是物體本身的性質，並不是一種力。</strong> 乘客向前傾是因為下半身隨巴士減速，而上半身因為「慣性」傾向保持原本向前的速度而繼續向前移動。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一艘太空船在深遠的太空中以 $500 \text{ m s}^{-1}$ 的速度直線飛行。如果太空船關閉所有引擎，且不受任何星體引力影響，它之後的運動狀態會如何？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">根據牛頓第一定律，當物體不受淨力作用（深空無引力且引擎關閉）時，運動中的物體將保持原有的勻速直線運動。</p>
+                        <p class="mt-2 font-bold text-green-700">答案：太空船將繼續以 $500 \text{ m s}^{-1}$ 沿原方向進行勻速直線運動。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個重 $20 \text{ N}$ 的木塊靜止放在水平桌面上。木塊受到向下的重力，為何它不會向下加速運動？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">雖然木塊受到向下的重力 $W = 20 \text{ N}$，但桌面同時會對木塊施加一個向上的法向反作用力 $R = 20 \text{ N}$。</p>
+                        <p class="mb-2">這兩個力大小相等、方向相反，因此作用在木塊上的淨力 $\vec{F}_{\text{net}} = 20 - 20 = 0 \text{ N}$。</p>
+                        <p class="mt-2 font-bold text-green-700">答案：因為淨力為零，根據牛頓第一定律，木塊保持靜止。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        降落傘張開後，跳傘員最終會以恆定的「終端速度 (Terminal velocity)」向下掉落。此時跳傘員受到的空氣阻力與其重量的關係為何？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">跳傘員以「恆定速度（勻速）」直線下落，這表示跳傘員的加速度 $a = 0$。</p>
+                        <p class="mb-2">根據牛頓第一定律，加速度為零代表作用在跳傘員身上的淨力為零。</p>
+                        <p class="mt-2 font-bold text-green-700">答案：向上的空氣阻力必須剛好等於向下的重量，兩者互相抵消。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 根據牛頓第一定律，若物體不受淨力作用，它可能處於甚麼狀態？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 只能處於靜止狀態</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 必定會慢慢減速直到停止</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 保持靜止或作勻速直線運動</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 作勻加速運動</button>
+                </div>
+                <div id="exp-q32-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 淨力為零時，$a=0$。這涵蓋了靜止 ($v=0$) 與勻速直線運動 ($v \neq 0$ 且為常數)。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 桌面上的水杯，當你突然把桌布向左快速抽走時，水杯幾乎留在原位。這是因為水杯具有甚麼物理性質？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">A. 慣性</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">B. 摩擦力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">C. 反作用力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">D. 引力</button>
+                </div>
+                <div id="exp-q32-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 水杯原本是靜止的。由於慣性，水杯有保持靜止狀態的傾向。當桌布快速抽走時，摩擦力作用時間極短，水杯來不及跟著移動。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 下列哪一個物體的慣性最大？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q32-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">A. 以 $100 \text{ km h}^{-1}$ 飛行的網球</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q32-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">B. 靜止的 10 噸貨車</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">C. 以 $10 \text{ m s}^{-1}$ 奔跑的運動員</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">D. 靜止的足球</button>
+                </div>
+                <div id="exp-q32-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 慣性的唯一度量標準是「質量」。質量越大，慣性越大，與物體的速度完全無關。10 噸貨車質量最大。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 3.3: 牛頓第二運動定律 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch3-3" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.3</span>牛頓第二運動定律</h2>
+        <p class="text-slate-500 mt-2">學習如何計算淨力、質量與加速度之間的定量關係，並應用於真實運動情境中。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>牛頓第一定律告訴我們「沒有淨力時」物體的運動狀態；而 <strong class="text-blue-700 font-bold">牛頓第二定律 (Newton's Second Law)</strong> 則精確說明了「當有淨力作用時」會發生甚麼事：</p>
+            <ul class="list-disc list-inside ml-2 space-y-2">
+                <li>當物體受到一個不為零的淨力作用時，物體會朝著淨力的方向產生<strong>加速度 (Acceleration)</strong>。</li>
+                <li>這個加速度的大小與作用在物體上的<strong>淨力成正比 ($a \propto F_{\text{net}}$)</strong>。</li>
+                <li>這個加速度的大小與物體的<strong>質量成反比 ($a \propto \frac{1}{m}$)</strong>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">結合上述的比例關係，我們可以得出經典力學中最著名的運動方程式：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ \vec{F}_{\text{net}} = m \vec{a} $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$\vec{F}_{\text{net}}$：作用於物體上的<strong>淨力 (Net force)</strong>，是所有作用力的矢量和 (SI 單位：牛頓 $\text{N}$)。</li>
+                <li>$m$：物體的<strong>質量 (Mass)</strong> (SI 單位：千克 $\text{kg}$)。</li>
+                <li>$\vec{a}$：物體的<strong>加速度 (Acceleration)</strong> (SI 單位：$\text{m s}^{-2}$)。</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>單位的物理定義：</strong> $1 \text{ N}$ 被定義為使 $1 \text{ kg}$ 質量的物體產生 $1 \text{ m s}^{-2}$ 加速度所需的淨力 ($1 \text{ N} = 1 \text{ kg m s}^{-2}$)。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 加速度、淨力與質量的關係圖</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/3">實驗情境</th>
+                        <th class="p-3 font-semibold w-1/3">關係結論</th>
+                        <th class="p-3 font-semibold w-1/3">線圖特徵 ($y$ 軸 vs $x$ 軸)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">保持「質量 $m$」不變<br><span class="text-sm text-slate-500">(如：推同一輛車，用不同的力)</span></td>
+                        <td class="p-3">加速度與淨力成正比<br>$$ a \propto F_{\text{net}} $$</td>
+                        <td class="p-3"><strong>$a$ - $F_{\text{net}}$ 圖：</strong><br>一條穿過原點的直線。斜率為 $\frac{1}{m}$。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">保持「淨力 $F_{\text{net}}$」不變<br><span class="text-sm text-slate-500">(如：用相同的力，推不同質量的車)</span></td>
+                        <td class="p-3">加速度與質量成反比<br>$$ a \propto \frac{1}{m} $$</td>
+                        <td class="p-3"><strong>$a$ - $\frac{1}{m}$ 圖：</strong><br>一條穿過原點的直線。斜率為 $F_{\text{net}}$。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">情境 1：質量固定</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">結論：</span> 加速度與淨力成 <strong>正比</strong> ($a \propto F_{\text{net}}$)。</li>
+                    <li><span class="font-medium text-slate-800">線圖：</span> $a$ - $F_{\text{net}}$ 圖為穿過原點的直線，斜率為 $\frac{1}{m}$。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">情境 2：淨力固定</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">結論：</span> 加速度與質量成 <strong>反比</strong> ($a \propto \frac{1}{m}$)。</li>
+                    <li><span class="font-medium text-slate-800">線圖：</span> $a$ - $\frac{1}{m}$ 圖為穿過原點的直線，斜率為 $F_{\text{net}}$。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>「公式 $F=ma$ 中的 $F$ 就是我推物體所用的推力。」</li>
+                    <li>「物體移動的方向，必定與它受到的力的方向相同。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>公式中的 $F$ 必須是 <strong>淨力 (Net force, 所有力的總和)</strong>。真實世界中計算時通常為「推力 - 摩擦力 = $ma$」。</li>
+                    <li>淨力的方向決定的是 <strong>加速度的方向</strong>，而不一定是物體當下速度的方向（例如汽車向右移動但踩煞車減速時，速度向右，但淨力與加速度向左）。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (水平方向 + 摩擦力) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個質量為 $5 \text{ kg}$ 的木箱放在粗糙的水平地面上。小華施加一個 $30 \text{ N}$ 向右的水平推力，同時地面對木箱產生 $10 \text{ N}$ 的摩擦力。求木箱的加速度。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 先找出作用於木箱上的水平淨力 ($F_{\text{net}}$)。取向右為正：</p>
+                        $$ F_{\text{net}} = \text{推力} - \text{摩擦力} $$
+                        $$ F_{\text{net}} = 30 \text{ N} - 10 \text{ N} = 20 \text{ N} $$
+                        <p class="mt-4 mb-2">2. 代入牛頓第二定律公式 $F_{\text{net}} = ma$：</p>
+                        $$ 20 = 5 \times a $$
+                        $$ a = \frac{20}{5} = 4 \text{ m s}^{-2} $$
+                        <p class="mt-2 font-bold text-green-700">答案：木箱的加速度為 $4 \text{ m s}^{-2}$，方向向右。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (垂直方向 + 重力) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一枚質量為 $2000 \text{ kg}$ 的小型火箭在發射台上垂直點火升空。若火箭引擎產生向上的推力為 $30000 \text{ N}$，求火箭剛離地時的初始加速度。（假設重力加速度 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 火箭在垂直方向受兩個力：向上的推力 ($T$) 與向下的重力 ($W = mg$)。取向上為正。</p>
+                        $$ W = 2000 \times 9.81 = 19620 \text{ N} $$
+                        <p class="mt-4 mb-2">2. 計算向上淨力：</p>
+                        $$ F_{\text{net}} = T - W = 30000 - 19620 = 10380 \text{ N} $$
+                        <p class="mt-4 mb-2">3. 代入 $F_{\text{net}} = ma$：</p>
+                        $$ 10380 = 2000 \times a $$
+                        $$ a = \frac{10380}{2000} = 5.19 \text{ m s}^{-2} $$
+                        <p class="mt-2 font-bold text-green-700">答案：火箭的初始加速度為 $5.19 \text{ m s}^{-2}$ 向上。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (比例問題) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        賽車工程師為一輛賽車進行改裝。改裝後，賽車的質量減少了 $20\%$，而引擎輸出的淨力增加了 $60\%$。若原本的加速度為 $a_0$，求改裝後的新加速度 $a'$ （以 $a_0$ 表示）。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">根據公式 $a = \frac{F_{\text{net}}}{m}$，我們可以列出新舊狀態的比例。</p>
+                        <ul class="list-disc list-inside mb-4 space-y-1">
+                            <li>新質量 $m' = 0.8m$</li>
+                            <li>新淨力 $F_{\text{net}}' = 1.6F_{\text{net}}$</li>
+                        </ul>
+                        $$ a' = \frac{F_{\text{net}}'}{m'} = \frac{1.6F_{\text{net}}}{0.8m} $$
+                        $$ a' = \left(\frac{1.6}{0.8}\right) \times \frac{F_{\text{net}}}{m} = 2 \times a_0 $$
+                        <p class="mt-2 font-bold text-green-700">答案：改裝後的加速度是原本的 2 倍 ($2a_0$)。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 一個質量為 $2 \text{ kg}$ 的物體，受兩個方向相反的力作用，分別為向右 $10 \text{ N}$ 和向左 $4 \text{ N}$。物體的加速度為？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q33-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $5 \text{ m s}^{-2}$ 向右</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $7 \text{ m s}^{-2}$ 向左</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q33-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $3 \text{ m s}^{-2}$ 向右</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $3 \text{ m s}^{-2}$ 向左</button>
+                </div>
+                <div id="exp-q33-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 淨力 $F_{\text{net}} = 10 - 4 = 6 \text{ N}$ (向右)。根據 $F = ma$，$6 = 2 \times a$，$a = 3 \text{ m s}^{-2}$，方向與淨力相同（向右）。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 若在一項實驗中，保持物體的質量不變，並紀錄不同淨力 $F$ 下的加速度 $a$。繪製出 $a$ 對 $F$ 的線圖（$a$ 為 $y$ 軸），則該線圖斜率的物理意義是：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q33-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 物體的質量 $m$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q33-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 質量的倒數 $\frac{1}{m}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 物體的速度 $v$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 作用力的平方 $F^2$</button>
+                </div>
+                <div id="exp-q33-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據公式 $F = ma$，可改寫為 $a = (\frac{1}{m}) \times F$。對應數學直線方程 $y = kx$，斜率 $k$ 即為 $\frac{1}{m}$。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 關於物體運動時「速度的方向」、「淨力的方向」以及「加速度的方向」，下列哪一個說法是絕對正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q33-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 三者的方向必定永遠相同</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q33-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 淨力方向必定等於加速度方向，但可以與速度方向相反</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 速度方向必定等於加速度方向，但可以與淨力方向相反</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 淨力方向只決定位移方向，不決定加速度方向</button>
+                </div>
+                <div id="exp-q33-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據 $\vec{F} = m\vec{a}$，因為質量 $m$ 是正純量，所以淨力矢量與加速度矢量方向必定相同。但當物體減速時（如煞車），加速度與速度方向是相反的。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 一輛 $1000 \text{ kg}$ 的汽車正在筆直公路上以 $20 \text{ m s}^{-1}$ 勻速行駛，引擎提供的驅動力為 $2000 \text{ N}$。請問汽車受到的淨力為多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q33-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $0 \text{ N}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $2000 \text{ N}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $20000 \text{ N}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 條件不足，無法計算</button>
+                </div>
+                <div id="exp-q33-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 關鍵字是<strong>「勻速行駛」</strong>。這代表加速度 $a = 0$。根據 $F_{\text{net}} = ma$，若 $a = 0$，則淨力必定為 $0 \text{ N}$。這意味著 $2000 \text{ N}$ 的驅動力剛好被 $2000 \text{ N}$ 的阻力抵消了。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 甲乙兩台推車質量比為 $1:2$。若對甲施加 $F$ 的淨力，使其產生 $a$ 的加速度；若要使乙推車產生 $3a$ 的加速度，需要施加多大的淨力？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q33-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $3F$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $1.5F$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q33-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $6F$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $F$</button>
+                </div>
+                <div id="exp-q33-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 甲的方程式：$F = 1m \times a$。乙的質量是 $2m$，目標加速度是 $3a$。乙所需的淨力 $F_{乙} = (2m) \times (3a) = 6ma = 6F$。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 3.4: 重量與對重量的感覺 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch3-4" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.4</span>重量與對重量的感覺</h2>
+        <p class="text-slate-500 mt-2">區分質量與重量的差別，並利用牛頓第二定律探討升降機中的視重 (Apparent weight) 現象。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在日常生活中，我們常把「質量」與「重量」混為一談，但在物理學中，它們是兩個完全不同的概念：</p>
+            <ul class="list-disc list-inside ml-2 space-y-2">
+                <li><strong class="text-blue-700 font-bold">質量 (Mass, $m$)：</strong> 衡量物體所含物質總量的標量，也是物體<strong>慣性</strong>的量度。物體的質量不會隨地點（例如地球或月球）而改變。</li>
+                <li><strong class="text-blue-700 font-bold">重量 (Weight, $W$)：</strong> 星體（如地球）對物體產生的<strong>重力</strong>拉力。它是一個矢量，方向恆指向地心，數值會隨當地的引力場強度改變。</li>
+            </ul>
+            <hr class="my-4 border-slate-100">
+            <p><strong class="text-blue-700 font-bold">對重量的感覺（視重 Apparent Weight）：</strong></p>
+            <p>我們平時感覺到的「體重」，其實並不是重力本身，而是支撐面（例如地板或磅秤）對我們施加的向上推力——即 <strong class="text-blue-700">法向反作用力 (Normal reaction, $R$)</strong>。這個支撐力 $R$ 的量值就稱為物體的「視重」。</p>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">根據牛頓第二定律，若物體僅受重力作用而自由下落，其加速度為重力加速度 $g$。因此重力（重量）可表示為：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ W = mg $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$W$：重量 (SI 單位：牛頓 $\text{N}$)</li>
+                <li>$m$：質量 (SI 單位：千克 $\text{kg}$)</li>
+                <li>$g$：重力加速度 (地球表面平均約為 $9.81 \text{ m s}^{-2}$)</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>升降機內的運動方程：</strong> 設向上為正，淨力 $F_{\text{net}} = R - mg = ma$。因此視重 $R = m(g + a)$。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 升降機內的視重變化對照表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">運動狀態 (加速度 $a$)</th>
+                        <th class="p-3 font-semibold w-1/4">牛頓第二定律方程</th>
+                        <th class="p-3 font-semibold w-1/4">磅的讀數 (視重 $R$)</th>
+                        <th class="p-3 font-semibold w-1/4">對重量的感覺</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">靜止 或 勻速運動<br>($a = 0$)</td>
+                        <td class="p-3">$R - mg = 0$</td>
+                        <td class="p-3">$R = mg$</td>
+                        <td class="p-3">等於真實重量</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">向上加速 或 向下減速<br>($a > 0$, 向上)</td>
+                        <td class="p-3">$R - mg = ma$</td>
+                        <td class="p-3">$R = m(g + a)$</td>
+                        <td class="p-3 font-bold text-red-600">變重 (超重)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">向下加速 或 向上減速<br>($a < 0$, 向下)</td>
+                        <td class="p-3">$mg - R = ma$</td>
+                        <td class="p-3">$R = m(g - a)$</td>
+                        <td class="p-3 font-bold text-blue-600">變輕 (失重)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">自由下落<br>($a = g$, 向下)</td>
+                        <td class="p-3">$mg - R = mg$</td>
+                        <td class="p-3">$R = 0$</td>
+                        <td class="p-3 font-bold text-slate-400">完全失重 (無重)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">靜止 / 勻速 ($a = 0$)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">視重：</span> $R = mg$ (感覺如常)</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">向上加速 / 向下減速</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">加速度：</span> 向上</li>
+                    <li><span class="font-medium text-slate-800">視重：</span> $R = m(g+a)$ <strong class="text-red-600">(超重)</strong></li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">向下加速 / 向上減速</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">加速度：</span> 向下</li>
+                    <li><span class="font-medium text-slate-800">視重：</span> $R = m(g-a)$ <strong class="text-blue-600">(失重)</strong></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>「太空人在國際太空站裡飄浮，是因為太空中完全沒有重力（引力）。」</li>
+                    <li>「升降機往下移動時，人一定會覺得變輕。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>太空站高度的地球重力仍有地表約 $90\%$。太空人飄浮是因為他們與太空站一起繞地球<strong>自由下落</strong>，缺乏支撐力（$R=0$），產生<strong>完全失重</strong>的錯覺。</li>
+                    <li>感覺變輕（失重）的條件是「加速度向下」，而不是「運動方向向下」。如果升降機向下<strong>勻速</strong>移動，$a=0$，$R=mg$，感覺是不變的。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        地球的重力加速度約為 $9.81 \text{ m s}^{-2}$，月球的重力加速度約為地球的 $\frac{1}{6}$。若一名太空人在地球上的重量為 $686.7 \text{ N}$，求他在月球上的 (a) 質量 和 (b) 重量。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">(a) 質量不隨地點改變，可由地球的重量求出：</p>
+                        $$ m = \frac{W_{\text{地球}}}{g_{\text{地球}}} = \frac{686.7}{9.81} = 70 \text{ kg} $$
+                        <p class="mt-4 mb-2">(b) 在月球上，重力加速度 $g_{\text{月}} = \frac{9.81}{6} = 1.635 \text{ m s}^{-2}$：</p>
+                        $$ W_{\text{月球}} = m \times g_{\text{月}} = 70 \times 1.635 = 114.45 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 質量為 $70 \text{ kg}$，(b) 月球上的重量為 $114.45 \text{ N}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一名質量為 $60 \text{ kg}$ 的學生站在升降機內的一個磅秤上。升降機以 $2 \text{ m s}^{-2}$ 的加速度向上啟動。求磅秤的讀數（以牛頓為單位）。（取 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 學生受兩個力：向下的重力 $W = mg$，與向上的磅秤推力（法向反作用力 $R$）。磅秤讀數即為 $R$。</p>
+                        <p class="mb-2">2. 因為加速度 $a$ 向上，取向上為正方向，利用 $F_{\text{net}} = ma$：</p>
+                        $$ R - mg = ma $$
+                        $$ R - (60)(9.81) = 60 \times 2 $$
+                        $$ R - 588.6 = 120 $$
+                        $$ R = 588.6 + 120 = 708.6 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：磅秤讀數為 $708.6 \text{ N}$（處於超重狀態，大於原本的 $588.6 \text{ N}$）。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        承接上題，當升降機接近頂樓時，以 $1.5 \text{ m s}^{-2}$ 的加速度減速向上行駛。此時磅秤的讀數會大於、等於還是小於學生的真實重量？並計算該讀數。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 「減速向上」代表加速度的方向是<strong>向下</strong>的（與速度方向相反）。</p>
+                        <p class="mb-2">2. 取向下為正方向：</p>
+                        $$ mg - R = ma $$
+                        $$ (60)(9.81) - R = 60 \times 1.5 $$
+                        $$ 588.6 - R = 90 $$
+                        $$ R = 588.6 - 90 = 498.6 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：讀數 $498.6 \text{ N}$ <strong>小於</strong>真實重量 $588.6 \text{ N}$（處於失重狀態）。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 關於質量與重量，下列敘述何者正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q34-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 兩者皆為標量</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 質量的單位是牛頓，重量的單位是千克</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q34-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 質量是物體慣性的量度，不會隨地點改變</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 帶物體到外太空，它的質量會減少</button>
+                </div>
+                <div id="exp-q34-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 質量是標量，不會隨地點改變（單位：$\text{kg}$）。重量是矢量，隨重力場改變（單位：$\text{N}$）。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 當一個人站在升降機內的磅秤上，在甚麼情況下，磅秤的讀數會精確等於該人的真實重量 $mg$？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q34-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 只有在升降機靜止時</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q34-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 升降機靜止 或 勻速運動時</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 升降機向上加速時</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 升降機的纜索斷裂，自由下落時</button>
+                </div>
+                <div id="exp-q34-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 讀數等於真實重量，代表 $R = mg$，這只有在淨力為零時發生。根據牛頓第一定律，靜止或勻速直線運動的加速度 $a=0$。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 小明搭乘升降機下樓。當升降機剛啟動，正「向下加速」時，小明對自己體重的感覺是？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q34-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 感覺變重了（超重）</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q34-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 感覺變輕了（失重）</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 感覺體重沒有變化</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 感覺完全失去體重（無重）</button>
+                </div>
+                <div id="exp-q34-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 向下加速代表加速度方向向下。根據 $mg - R = ma$，可得 $R = m(g - a)$。因為支撐力 $R$ 變小了，小明會覺得自己變輕了。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 承上題，當升降機到達底層準備停下，正在「向下減速」時，小明的體重感覺又會如何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q34-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 感覺變重了（超重）</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 感覺變輕了（失重）</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 感覺體重沒有變化</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 無法判斷</button>
+                </div>
+                <div id="exp-q34-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 「向下減速」代表速度向下，但加速度方向必須相反，即<strong>向上</strong>。加速度向上時，$R - mg = ma \implies R = m(g + a)$，視重 $R$ 增加，感覺變重。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 過山車從最高點急速下墜的瞬間，乘客會有一種身體飄起的感覺。若某瞬間過山車下落的加速度剛好等於重力加速度 $g$，此時乘客的視重為多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q34-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 大於 $mg$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 等於 $mg$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 小於 $mg$ 但大於 0</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q34-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 等於 0 (完全失重)</button>
+                </div>
+                <div id="exp-q34-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 當向下的加速度 $a = g$ 時（自由下落），代入公式 $mg - R = mg$，可得 $R = 0$。此時座位不再對乘客提供任何支撐力，即完全失重。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 3.5: 摩擦力與流體阻力 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch3-5" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.5</span>摩擦力與流體阻力</h2>
+        <p class="text-slate-500 mt-2">研究阻礙運動的力，包括固體接觸面的靜摩擦、動摩擦，以及流體中的空氣阻力與終端速度。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p><strong class="text-blue-700 font-bold">摩擦力 (Friction)：</strong> 當兩個固體表面互相接觸並產生相對運動（或有相對運動的趨勢）時，接觸面之間產生的一種阻礙力。它平行於接觸面，可分為兩種：</p>
+            <ul class="list-disc list-inside ml-2 space-y-2">
+                <li><strong>靜摩擦力 (Static friction)：</strong> 阻止物體開始滑動的力。其大小會隨着外力增加而增加，直至達到「最大靜摩擦力」。</li>
+                <li><strong>動摩擦力 (Kinetic friction)：</strong> 物體在表面滑動時受到的摩擦力。通常是一個常數，且略小於最大靜摩擦力。</li>
+            </ul>
+            <hr class="my-4 border-slate-100">
+            <p><strong class="text-blue-700 font-bold">流體阻力 / 空氣阻力 (Fluid / Air Resistance)：</strong></p>
+            <p>物體在氣體或液體中穿梭時所受到的阻力。與固體摩擦力不同，流體阻力會隨着物體的 <strong class="text-blue-700">運動速率增加而增大</strong>。此外，它也受物體的迎風截面積和形狀（如流線型）影響。</p>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與關係 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心關係與終端速度</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">當物體在空氣中自由下落時，受向下的重力 $W$ 和向上的空氣阻力 $R_a$。根據牛頓第二定律，向下的淨力為：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ F_{\text{net}} = mg - R_a = ma $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-3 mt-4">
+                <li><i class="fa-solid fa-arrow-down-long text-blue-500 mr-1"></i> <strong>加速階段：</strong> 物體剛落下時，速度低，$R_a$ 小，物體向下加速。</li>
+                <li><i class="fa-solid fa-arrow-up-right-dots text-blue-500 mr-1"></i> <strong>阻力增加：</strong> 隨着速度 $v$ 增加，空氣阻力 $R_a$ 隨之增大，導致淨力減少，加速度 $a$ 開始變小。</li>
+                <li><i class="fa-solid fa-plane-arrival text-blue-500 mr-1"></i> <strong>終端速度 (Terminal Velocity)：</strong> 當速度增加到某一數值，使得 <strong class="text-blue-700">$R_a = mg$</strong> 時，淨力為零（$a = 0$）。此後物體將以恆定的最高速率下落。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 固體摩擦力與流體阻力對照表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8">固體動摩擦力 (Kinetic Friction)</th>
+                        <th class="p-3 font-semibold w-3/8">流體阻力 (Fluid Resistance)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">發生環境</td>
+                        <td class="p-3">固體與固體的接觸面</td>
+                        <td class="p-3">固體在氣體或液體中穿梭</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">與速率的關係</td>
+                        <td class="p-3">幾乎 <strong>不隨速率改變</strong>（常數）</td>
+                        <td class="p-3">速率越高，阻力 <strong>越大</strong></td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">與接觸面積的關係</td>
+                        <td class="p-3">幾乎無關</td>
+                        <td class="p-3">迎風截面積越大，阻力越大</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">固體動摩擦力</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">速率關係：</span> 幾乎不隨速率改變（保持常數）。</li>
+                    <li><span class="font-medium text-slate-800">面積關係：</span> 與接觸面積大小幾乎無關。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">流體阻力</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">速率關係：</span> 速率越高，阻力越大。</li>
+                    <li><span class="font-medium text-slate-800">面積關係：</span> 迎風截面積越大，阻力越大。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>「摩擦力總是有害的，並且一定與物體運動的方向相反。」</li>
+                    <li>「在空氣中，較重的石頭與較輕的羽毛會有相同的終端速度。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>沒有摩擦力我們就無法走路！當你走路時，腳向後推地，地面的<strong>靜摩擦力會向前推你的腳</strong>，使你前進。</li>
+                    <li>較重的石頭需要更大的空氣阻力才能與其重量 ($mg$) 平衡，因此它必須加速到<strong>更高的速率</strong>才能達到終端速度，所以它會比羽毛先落地。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (靜摩擦與動摩擦) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        工人試圖推動一個靜止的沉重木箱。他最初施加 $50 \text{ N}$ 的力，木箱不動；施加到 $100 \text{ N}$ 時，木箱剛好開始滑動；一旦木箱滑動後，他只需維持 $80 \text{ N}$ 的力就能讓木箱作勻速直線運動。請分別寫出以上三個階段木箱所受的摩擦力大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. <strong>施力 $50 \text{ N}$ 時：</strong> 木箱靜止，淨力為零。靜摩擦力會自動調節至與推力相等，故摩擦力為 $50 \text{ N}$。</p>
+                        <p class="mb-2">2. <strong>施力 $100 \text{ N}$ 時：</strong> 木箱剛好滑動，代表克服了「最大靜摩擦力」，故最大靜摩擦力為 $100 \text{ N}$。</p>
+                        <p class="mb-2">3. <strong>勻速滑行時：</strong> 勻速代表淨力為零。推力 $80 \text{ N}$ 與「動摩擦力」抵消，故動摩擦力為 $80 \text{ N}$。</p>
+                        <p class="mt-2 text-sm text-slate-500">（這證明了動摩擦力通常略小於最大靜摩擦力。）</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (終端速度) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一顆質量為 $0.05 \text{ kg}$ 的雨滴從高空雲層落下。當雨滴達到終端速度時，它受到的空氣阻力是多少？此時它的加速度是多少？（取 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">「終端速度」意味着雨滴以恆定速率下落，根據牛頓第一定律，此時的淨力必定為零，即加速度 $a = 0 \text{ m s}^{-2}$。</p>
+                        <p class="mb-2">當淨力為零時，向上的空氣阻力必須精確等於向下的重量：</p>
+                        $$ R_a = W = mg $$
+                        $$ R_a = 0.05 \times 9.81 = 0.4905 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：空氣阻力為 $0.4905 \text{ N}$，加速度為 $0 \text{ m s}^{-2}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (跳傘員的 $v-t$ 圖分析) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一名跳傘員從直升機躍下。他先達到一個較高的終端速度 $v_1$。接着他打開降落傘，經過短暫減速後，達到一個較低且安全的終端速度 $v_2$ 直至著陸。在「剛打開降落傘的一瞬間」，跳傘員受到的淨力方向為何？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 在打開傘之前（終端速度 $v_1$），空氣阻力等於重量 ($R_a = mg$)。</p>
+                        <p class="mb-2">2. 打開降落傘的一瞬間，由於迎風截面積劇增，空氣阻力 $R_a$ 會瞬間變得<strong>遠大於</strong>跳傘員的重量 $mg$。</p>
+                        <p class="mb-2">3. 淨力 $F_{\text{net}} = R_a - mg$。因為向上的 $R_a$ 大於向下的 $mg$，淨力方向為<strong>向上</strong>。</p>
+                        <p class="mt-2 font-bold text-green-700">答案：淨力方向向上（這導致他向下減速，直到阻力隨着速度變慢而再次等於重量，達到 $v_2$）。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在田徑跑道上準備起跑時，運動員用力向後蹬起跑器。此時起跑器對運動員鞋底的摩擦力方向為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q35-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 向前</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 向後</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 向上</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 為零</button>
+                </div>
+                <div id="exp-q35-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 運動員的腳有向「後」滑動的趨勢，靜摩擦力會阻止這個相對滑動，因此摩擦力方向向「前」。正是這個向前的摩擦力為運動員提供了起跑的加速度。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 一個球體在空氣中從高空下落。在它達到終端速度之前（仍在加速階段），它所受的空氣阻力與加速度如何變化？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q35-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 阻力增加，加速度增加</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q35-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 阻力增加，加速度減少</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 阻力減少，加速度增加</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 阻力不變，加速度不變</button>
+                </div>
+                <div id="exp-q35-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 隨着速度增加，空氣阻力增加。淨力 $F_{\text{net}} = mg - R_a$，因為 $R_a$ 變大，淨力變小，所以根據 $a = F_{\text{net}}/m$，加速度會不斷減小，直至變為 0。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 關於動摩擦力，下列哪一項描述是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q35-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 動摩擦力會隨着物體的滑行速度增加而大幅增加</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 動摩擦力的大小總是等於推力</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q35-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 動摩擦力通常略小於最大靜摩擦力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 接觸面積越大，動摩擦力必定倍增</button>
+                </div>
+                <div id="exp-q35-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 動摩擦力通常視為一個常數，幾乎不隨速度和接觸面積改變，並且在數值上會略小於啟動物體所需的「最大靜摩擦力」。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 物流貨車在公路上以 $100 \text{ km h}^{-1}$ 勻速行駛。若司機踩油門提供更大的驅動力，貨車的最終速度會如何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q35-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 速度會無限增加，因為驅動力大於阻力</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q35-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 速度會增加，直至增加後的空氣阻力與新的驅動力重新平衡，達到新的終端速度</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 速度不變，因為動摩擦力是常數</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 貨車會維持固定的加速度持續前進</button>
+                </div>
+                <div id="exp-q35-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 增加驅動力後，淨力向前，車輛加速。但隨着車速加快，流體阻力（空氣阻力）也會變大。當空氣阻力大到再次與新的驅動力相等時，加速度歸零，車輛將以一個更高的勻速（新的終端速度）行駛。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 把兩張形狀、大小完全相同的紙張，其中一張揉成緊密的紙團。同時從三樓讓它們下落，紙團會先落地。為甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q35-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 因為紙團的質量變大了</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 因為紙團受到的重力較大</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q35-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 因為紙團的迎風面積較小，空氣阻力對它的影響較小</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 因為紙團的靜摩擦力較小</button>
+                </div>
+                <div id="exp-q35-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 兩者的質量和重力完全一樣。但攤平的紙張擁有較大的迎風面積，會受到極大的空氣阻力，很快就達到很低的終端速度而緩慢飄落。紙團迎風面積小，能達到較高的終端速度，因此先落地。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 3.6: 摩擦力 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch3-6" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.6</span>摩擦力</h2>
+        <p class="text-slate-500 mt-2">深入探討固體接觸面之間的阻力，釐清靜摩擦與動摩擦的特性及應用。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p><strong class="text-blue-700 font-bold">摩擦力 (Friction, $f$)</strong> 是當兩個固體表面互相接觸，並產生相對運動或「有相對運動的趨勢」時，接觸面之間產生的一種阻礙力。摩擦力的方向永遠平行於接觸面，並分為兩種主要形態：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">靜摩擦力 (Static friction)：</strong> 
+                    作用於相對靜止的表面之間。它會自動調節大小以抵消外力，直到達到一個極限值，稱為 <strong class="text-blue-700">最大靜摩擦力 (Maximum static friction)</strong>。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">動摩擦力 (Kinetic friction)：</strong> 
+                    作用於正在發生相對滑動的表面之間。一旦物體開始滑動，摩擦力通常會稍微下降並保持在一個恆定的數值。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心關係與特性</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">在 HKDSE 中，我們主要透過牛頓定律來推導摩擦力的大小。摩擦力與接觸面的粗糙程度以及 <strong class="text-blue-700">法向反作用力 ($R$)</strong> 有關：</p>
+            <div class="my-4 overflow-x-auto text-lg font-medium text-slate-800 bg-white p-4 rounded border border-blue-100">
+                <p class="mb-2">1. <span class="text-blue-700 font-bold">靜止時：</span> $f_{\text{靜}} = F_{\text{施力}}$ （隨施力增大而增大）</p>
+                <p class="mb-2">2. <span class="text-blue-700 font-bold">剛要滑動時：</span> 達到極限 $f_{\text{最大靜}}$</p>
+                <p>3. <span class="text-blue-700 font-bold">滑動時：</span> $f_{\text{動}} = \text{常數}$ （通常 $f_{\text{動}} < f_{\text{最大靜}}$）</p>
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>單位：</strong> 摩擦力是一種力，單位為牛頓 ($\text{N}$)。</li>
+                <li><i class="fa-solid fa-chart-line text-blue-500 mr-1"></i> <strong>摩擦力與施力圖象：</strong> 隨施力增加，摩擦力先呈 $1:1$ 直線上升（靜摩擦），到達頂點（最大靜摩擦）後，突然微降並保持水平（動摩擦）。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 靜摩擦力與動摩擦力對照表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8">靜摩擦力 (Static Friction)</th>
+                        <th class="p-3 font-semibold w-3/8">動摩擦力 (Kinetic Friction)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">發生條件</td>
+                        <td class="p-3">兩接觸面 <strong>相對靜止</strong>，但有滑動趨勢。</td>
+                        <td class="p-3">兩接觸面正在發生 <strong>相對滑動</strong>。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">量值大小</td>
+                        <td class="p-3">可變動的。剛好抵消平行於接觸面的外力 ($f = F_{\text{外}})$。</td>
+                        <td class="p-3">恆定的（常數）。不隨滑動速率改變。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">與極限值的關係</td>
+                        <td class="p-3">最高可達「最大靜摩擦力」。</td>
+                        <td class="p-3">通常 <strong>略小於</strong> 最大靜摩擦力。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">靜摩擦力</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">條件：</span> 相對靜止，有滑動趨勢。</li>
+                    <li><span class="font-medium text-slate-800">大小：</span> 可變的，剛好抵消外力。</li>
+                    <li><span class="font-medium text-slate-800">極限：</span> 最高可達最大靜摩擦力。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">動摩擦力</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">條件：</span> 正在發生相對滑動。</li>
+                    <li><span class="font-medium text-slate-800">大小：</span> 恆定的常數，不隨速率改變。</li>
+                    <li><span class="font-medium text-slate-800">與極限比較：</span> 略小於最大靜摩擦力。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>「摩擦力的方向必定與物體的運動方向相反，總是在阻礙物體前進。」</li>
+                    <li>「如果我用 $10 \text{ N}$ 推一個靜止的木箱，木箱沒動，這代表木箱太重，而不是因為摩擦力也是 $10 \text{ N}$。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>摩擦力是阻礙<strong>「相對」</strong>運動。當人向前走路時，腳有向後滑的趨勢，地面提供的靜摩擦力是<strong>向前</strong>的，這正是人能前進的動力！</li>
+                    <li>木箱沒動代表處於平衡狀態（淨力為零）。你推 $10 \text{ N}$，靜摩擦力就會精準地自動調節為 $10 \text{ N}$ 來抵消你的推力。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (水平推力與動態摩擦) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個質量為 $20 \text{ kg}$ 的木箱放在水平地面上。已知木箱與地面的最大靜摩擦力為 $80 \text{ N}$，動摩擦力為 $60 \text{ N}$。<br>
+                        (a) 若小明用 $50 \text{ N}$ 的水平力推木箱，木箱的摩擦力是多少？<br>
+                        (b) 若小明改用 $100 \text{ N}$ 的水平力推木箱，求木箱的加速度。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a)</strong> 推力 $50 \text{ N}$ 小於最大靜摩擦力 $80 \text{ N}$，木箱保持靜止。靜摩擦力剛好抵消推力。</p>
+                        $$ f_{\text{靜}} = 50 \text{ N} $$
+                        <p class="mt-4 mb-2"><strong>(b)</strong> 推力 $100 \text{ N}$ 大於最大靜摩擦力，木箱開始滑動。此時受到的阻力轉為恆定的動摩擦力 $60 \text{ N}$。</p>
+                        $$ F_{\text{net}} = F_{\text{推}} - f_{\text{動}} = 100 - 60 = 40 \text{ N} $$
+                        $$ a = \frac{F_{\text{net}}}{m} = \frac{40}{20} = 2 \text{ m s}^{-2} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) $50 \text{ N}$，(b) $2 \text{ m s}^{-2}$ 向着推力方向。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (斜面上的摩擦力) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個質量為 $2 \text{ kg}$ 的物體靜止放置在一個與水平面成 $\theta = 30^\circ$ 的斜面上。求斜面對物體施加的靜摩擦力大小。（取 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 物體靜止，代表沿着斜面方向的淨力為零。</p>
+                        <p class="mb-2">2. 使物體有向下滑動趨勢的力是重力沿斜面的分量 ($mg \sin \theta$)。</p>
+                        <p class="mb-2">3. 靜摩擦力 ($f$) 必須指向斜面向上，且剛好抵消下滑力：</p>
+                        $$ f = mg \sin \theta $$
+                        $$ f = (2)(9.81) \sin 30^\circ = 19.62 \times 0.5 = 9.81 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：靜摩擦力為 $9.81 \text{ N}$，沿斜面向上。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (煞車減速問題) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一輛質量為 $1200 \text{ kg}$ 的汽車在平直公路上以 $15 \text{ m s}^{-1}$ 的速率行駛。司機緊急煞車，車輪鎖死並在路面上滑行。若路面提供的動摩擦力為 $7200 \text{ N}$，求汽車完全停下所需的距離。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 煞車時，水平方向淨力即為動摩擦力（方向與運動相反，故為負）。</p>
+                        $$ F_{\text{net}} = -f = -7200 \text{ N} $$
+                        $$ a = \frac{F_{\text{net}}}{m} = \frac{-7200}{1200} = -6 \text{ m s}^{-2} $$
+                        <p class="mt-4 mb-2">2. 利用運動學公式 $v^2 - u^2 = 2as$，已知 $u = 15 \text{ m s}^{-1}$，停下代表 $v = 0$：</p>
+                        $$ 0^2 - 15^2 = 2(-6)s $$
+                        $$ -225 = -12s $$
+                        $$ s = \frac{225}{12} = 18.75 \text{ m} $$
+                        <p class="mt-2 font-bold text-green-700">答案：汽車需要滑行 $18.75 \text{ m}$ 才會停下。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 一個重 $50 \text{ N}$ 的鐵塊放置在水平桌面上。小美用 $10 \text{ N}$ 的水平力推它，但鐵塊沒有移動。此時桌面對鐵塊的摩擦力是多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q36-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $0 \text{ N}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q36-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $10 \text{ N}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q36-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $50 \text{ N}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q36-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 條件不足，必須知道摩擦係數才能計算</button>
+                </div>
+                <div id="exp-q36-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 鐵塊「沒有移動」代表淨力為零。靜摩擦力會自動調節其大小，剛好等於施加的推力以達到平衡，因此是 $10 \text{ N}$。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 小明在平地上跑步前進。他腳底的鞋子與地面之間的摩擦力屬於甚麼類型？方向為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q36-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 動摩擦力，向後</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q36-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 動摩擦力，向前</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q36-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 靜摩擦力，向前</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q36-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 靜摩擦力，向後</button>
+                </div>
+                <div id="exp-q36-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 跑步時腳底「沒有相對滑動」（除非打滑），所以是靜摩擦力。腳有向後滑的趨勢，因此地面對腳的靜摩擦力方向向「前」，提供前進的動力。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 一個木塊沿着傾角為 $\theta$ 的粗糙斜面「勻速」下滑。關於木塊受到的摩擦力，下列哪一項是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q36-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 動摩擦力，大小等於 $mg \sin \theta$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q36-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 靜摩擦力，大小等於 $mg \cos \theta$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q36-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 動摩擦力，大小為零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q36-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 靜摩擦力，大小大於 $mg \sin \theta$</button>
+                </div>
+                <div id="exp-q36-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 「勻速」滑下代表沿斜面方向淨力為零。向下滑動的重力分量為 $mg \sin \theta$。因為正在滑動，所以是動摩擦力，且大小必須剛好等於 $mg \sin \theta$ 才能達成勻速。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 如果增加一個在水平面上滑動物體的質量，其受到的動摩擦力會有甚麼改變？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q36-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 保持不變，因為接觸面積沒有改變</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q36-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 會減少，因為重力變大</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q36-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 會增加，因為法向反作用力增加了</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q36-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 不確定，取決於物體滑動的速率</button>
+                </div>
+                <div id="exp-q36-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 摩擦力的大小與兩表面間擠壓的力（即法向反作用力 $R$）成正比。質量增加會導致重量增加，在水平面上這會使法向反作用力 $R$ 同步增加，從而導致摩擦力變大。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 關於最大靜摩擦力與動摩擦力的關係，一般情況下哪一個較大？這在日常生活中能如何體現？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q36-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 動摩擦力較大；推重物時，物體一動就會變得很難推</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q36-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 最大靜摩擦力較大；推重物時，物體剛開始很難推，一旦滑動後就變得較為省力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q36-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 兩者永遠相等；推重物時所需的力維持不變</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q36-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 與兩者的關係無關，省力與否只取決於推的速度</button>
+                </div>
+                <div id="exp-q36-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 大多數表面組合的「最大靜摩擦力」都會略大於「動摩擦力」。所以要讓靜止的重物開始移動（克服最大靜摩擦），比讓它繼續滑行（克服動摩擦）更費力。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 3.7: 牛頓第三運動定律 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch3-7" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.7</span>牛頓第三運動定律</h2>
+        <p class="text-slate-500 mt-2">了解自然界中力總是成對出現的原理，並學會分辨「作用力與反作用力」與「平衡力」的關鍵差異。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p><strong class="text-blue-700 font-bold">牛頓第三運動定律 (Newton's Third Law of Motion)</strong> 揭示了自然界中力的一個基本屬性：力永遠不可能單獨存在，它們總是成對出現的。</p>
+            <p>該定律指出：</p>
+            <blockquote class="border-l-4 border-blue-400 pl-4 py-2 bg-blue-50/50 text-blue-900 font-medium italic rounded-r-lg">
+                「當物體 A 對物體 B 施加一個力時，物體 B 必定會同時對物體 A 施加一個大小相等、方向相反的力。」
+            </blockquote>
+            <p>這兩個力通常被稱為 <strong class="text-blue-700">作用力 (Action)</strong> 和 <strong class="text-blue-700">反作用力 (Reaction)</strong>。重要的是，哪一個被稱為作用力並不重要，因為它們是同時產生、同時消失的。</p>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心關係與表示法</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">若以矢量形式表達，物體 A 施加於 B 的力 $\vec{F}_{AB}$，與物體 B 施加於 A 的力 $\vec{F}_{BA}$ 之間的關係為：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$\vec{F}_{AB} = -\vec{F}_{BA}$$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$\vec{F}_{AB}$：物體 A 施於物體 B 的力（作用於 B 上）。</li>
+                <li>$\vec{F}_{BA}$：物體 B 施於物體 A 的力（作用於 A 上）。</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>負號的意義：</strong> 負號代表這兩個力在直線上方向完全相反。</li>
+                <li><i class="fa-solid fa-bolt text-blue-500 mr-1"></i> <strong>同種性質：</strong> 作用力與反作用力必定屬於同一性質的力（例如：如果作用力是引力，反作用力也必定是引力；如果作用力是摩擦力，反作用力也必定是摩擦力）。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 作用與反作用力 vs 一對平衡力</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8">作用力與反作用力 (Action-Reaction Pair)</th>
+                        <th class="p-3 font-semibold w-3/8">一對平衡力 (Balanced Forces)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">作用對象</td>
+                        <td class="p-3 font-bold text-blue-700">作用在兩個「不同」的物體上</td>
+                        <td class="p-3 font-bold text-slate-700">作用在「同一個」物體上</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">能否互相抵消</td>
+                        <td class="p-3"><strong>不能抵消</strong>（因為作用對象不同，不能計算淨力）</td>
+                        <td class="p-3"><strong>可以抵消</strong>（淨力為零）</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">力的性質 (種類)</td>
+                        <td class="p-3">必定是同類型的力（如：皆為磁力）</td>
+                        <td class="p-3">不一定相同（如：重力可以與法向力平衡）</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">作用力與反作用力</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">作用對象：</span> 分別作用於 <strong>兩個不同</strong> 的物體上。</li>
+                    <li><span class="font-medium text-slate-800">抵消：</span> <strong>無法抵消</strong>，不可相加。</li>
+                    <li><span class="font-medium text-slate-800">性質：</span> 必定屬於同類型的力。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-slate-700 border-b border-slate-100 pb-2 mb-2">一對平衡力</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">作用對象：</span> 共同作用於 <strong>同一個</strong> 物體上。</li>
+                    <li><span class="font-medium text-slate-800">抵消：</span> <strong>可以抵消</strong>，使該物體淨力為零。</li>
+                    <li><span class="font-medium text-slate-800">性質：</span> 力的類型可以不同。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>「高速行駛的大貨車撞上靜止的小轎車，小轎車損毀嚴重，這代表大貨車對小轎車的撞擊力『大於』小轎車對大貨車的反作用力。」</li>
+                    <li>「動作總有先後，我先推牆壁（作用力），牆壁之後才推我（反作用力）。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>根據第三定律，<strong>雙方受到的撞擊力必定大小完全相等</strong>。小轎車損毀嚴重，是因為小轎車的質量小，根據 $a=F/m$ 產生了極大的加速度(衝擊)，而非受力較大。</li>
+                    <li>作用力與反作用力是 <strong>同時發生、同時消失的</strong>，沒有任何時間差。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (DSE 經典陷阱題) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一本書靜止平放在水平桌面上。書本受到向下的重力 $W$ 和桌面對它向上的法向反作用力 $R$。請問 $W$ 和 $R$ 是否為「一對作用力與反作用力」？試解釋原因，並分別指出 $W$ 和 $R$ 真正的反作用力是甚麼。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>1. 它們不是作用力與反作用力。</strong> 因為 $W$ 和 $R$ 都同時作用在「書本」這同一個物體上，而且性質不同（重力 vs 接觸力）。它們是一對「平衡力」，使得書本保持靜止 ($F_{\text{net}} = 0$)。</p>
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>2. 尋找真正的反作用力對應關係：</strong></p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>$W$ 是地球對書本的向下引力。它的反作用力是：<strong>書本對地球的向上引力</strong>。</li>
+                            <li>$R$ 是桌面對書本的向上推力。它的反作用力是：<strong>書本對桌面的向下推力</strong>。</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (游泳/走路推進原理) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        請利用牛頓第三定律，解釋游泳運動員如何能在水中向前推進。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">根據牛頓第三定律：</p>
+                        <p class="mb-2">1. <strong>作用力：</strong> 游泳時，運動員的手和腳會用力向「後」推水。</p>
+                        <p class="mb-2">2. <strong>反作用力：</strong> 由於力是成對出現的，水會同時對運動員的手和腳產生一個大小相等、方向相反的力，即向「前」的推力。</p>
+                        <p class="mt-2 font-bold text-green-700">結論：正是這個來自水的向前「反作用力」，成為了推動運動員前進的淨力。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (加速度不同的計算) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        太空人 (質量 $80 \text{ kg}$) 在無重力的太空中維修人造衛星 (質量 $400 \text{ kg}$)。太空人用力把衛星推開。在推動的過程中，若太空人對衛星施加了 $200 \text{ N}$ 的力，求太空人和衛星在推動期間各自的加速度大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. <strong>衛星的加速度：</strong> 衛星受到的力 $F = 200 \text{ N}$。根據第二定律 $F = ma$：</p>
+                        $$a_{\text{衛星}} = \frac{200}{400} = 0.5 \text{ m s}^{-2}$$
+                        <p class="mb-2 mt-4">2. <strong>太空人的加速度：</strong> 根據第三定律，衛星必定同時對太空人施加一個反作用力，大小也是 $200 \text{ N}$（方向相反）。</p>
+                        $$a_{\text{太空人}} = \frac{200}{80} = 2.5 \text{ m s}^{-2}$$
+                        <p class="mt-2 text-sm text-slate-500">（註：這說明了即使受力相同，質量較小的物體會獲得較大的加速度。）</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 關於作用力與反作用力，下列哪一項敘述是 <strong>錯誤</strong> 的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q37-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 它們總是成對出現，且大小相等、方向相反。</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q37-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 如果作用力較大，物體會先移動，然後才產生反作用力。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q37-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 它們必須作用在兩個不同的物體上。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q37-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 即使在加速運動中，作用力與反作用力的大小依然相等。</button>
+                </div>
+                <div id="exp-q37-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 作用力與反作用力是「同時」產生、「同時」消失的，絕對沒有先後之分。選項 B 敘述錯誤。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 蘋果受到地球引力從樹上掉落。根據牛頓第三定律，這代表：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q37-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 空氣阻力同時將蘋果向上推。</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q37-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 蘋果也以同樣大小的引力吸引地球向上。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q37-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 地球對蘋果的引力大於蘋果對地球的引力，所以蘋果才會掉落。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q37-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 由於沒有接觸，此情況不適用牛頓第三定律。</button>
+                </div>
+                <div id="exp-q37-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 引力屬於非接觸力，同樣遵守第三定律。地球吸引蘋果向下，蘋果必定以相同大小的力吸引地球向上。地球沒有明顯移動是因為其質量極大，產生的加速度幾乎為零。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 小船停泊在平靜的湖面上。小華從船頭跳上岸，小船會向後退。這是因為：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q37-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 慣性使船保持原本的狀態。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q37-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 水流把船推向後方。</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q37-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 小華向後推船（作用力），船推小華向前上岸（反作用力）。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q37-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 小華的質量大於小船。</button>
+                </div>
+                <div id="exp-q37-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 為了獲得向前的動力，小華必須用腳向「後」推小船。根據第三定律，這會對小船施加一個向後的力，導致小船後退。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 磁鐵 A 質量較大，磁鐵 B 質量較小，把它們互相靠近時會互相吸引。比較它們受到的磁力大小：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q37-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. A 受到的力較大</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q37-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. B 受到的力較大</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q37-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. A 與 B 受到的力一樣大</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q37-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 無法比較，取決於磁性強弱</button>
+                </div>
+                <div id="exp-q37-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> A 吸引 B 的力與 B 吸引 A 的力是一對作用力與反作用力，根據牛頓第三定律，它們必定大小相等，與物體的質量無關。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 拔河比賽中，甲隊贏了乙隊（把乙隊拉過來了）。在此過程中，繩子兩端所受的拉力關係為何？（假設繩子極輕，質量可忽略）</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q37-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 甲隊拉繩子的力大於乙隊拉繩子的力。</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q37-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 甲隊拉繩子的力等於乙隊拉繩子的力。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q37-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 甲隊的重力大於乙隊。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q37-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 繩子沒有被拉斷，所以沒有受力。</button>
+                </div>
+                <div id="exp-q37-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 對於輕繩而言，兩端的拉力永遠是一對大小相等的力。甲隊之所以能贏，是因為甲隊鞋底與地面之間的「靜摩擦力」大於乙隊鞋底與地面之間的靜摩擦力。繩子兩端的受力（張力）始終相等。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 3.4 ~ 3.6 (標準佔位符結構) -->
+            <!-- ========================================== -->
+
+
+
+        </div>
+    </main>
+
+    <!-- 頁面互動邏輯 JavaScript -->
+    <script>
+        // 切換頁面 (零延遲切換 + 重新渲染 LaTeX)
+        function switchPage(pageId, btnElement) {
+            // 1. 隱藏所有章節內容
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+                section.classList.remove('block');
+            });
+
+            // 2. 顯示目標章節
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.remove('hidden');
+                target.classList.add('block');
+            }
+
+            // 3. 更新側邊欄選單樣式 (移除所有 active 樣式，並套用到點擊的目標)
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300";
+            });
+            if (btnElement) {
+                btnElement.className = "nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors bg-blue-50 text-blue-800 font-medium border-l-4 border-blue-500";
+            }
+
+            // 4. 行動版：點擊後自動收起側邊欄
+            if (window.innerWidth < 768) {
+                toggleMobileMenu();
+            }
+
+            // 5. 滾動回頂部
+            document.getElementById('main-content').scrollTo(0, 0);
+
+            // 6. 重新渲染 MathJax LaTeX 公式 (重要要求！)
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([target]).catch(function (err) {
+                    console.error('MathJax 渲染失敗: ', err.message);
+                });
+            }
+        }
+
+        // 開關行動版選單
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                // 打開
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                overlay.classList.add('block');
+            } else {
+                // 關閉
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('block');
+            }
+        }
+
+        // 測驗作答邏輯
+        function checkAnswer(btn, isCorrect, expId) {
+            const container = btn.parentElement;
+            const buttons = container.querySelectorAll('button');
+            
+            // 1. 停用該題所有按鈕，防止重複作答
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.classList.remove('hover:bg-slate-50');
+                b.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+
+            // 2. 標記使用者選中的按鈕顏色
+            btn.classList.remove('border-slate-200', 'opacity-50');
+            if (isCorrect) {
+                btn.classList.add('bg-green-100', 'border-green-400', 'text-green-800', 'font-bold', 'opacity-100');
+                btn.innerHTML = `<i class="fa-solid fa-check-circle mr-1"></i> ` + btn.innerHTML;
+            } else {
+                btn.classList.add('bg-red-100', 'border-red-400', 'text-red-800', 'font-bold', 'opacity-100');
+                btn.innerHTML = `<i class="fa-solid fa-times-circle mr-1"></i> ` + btn.innerHTML;
+            }
+
+            // 3. 顯示對應的解析區塊，並根據對錯顯示邊框顏色
+            const expDiv = document.getElementById(expId);
+            if (expDiv) {
+                expDiv.classList.remove('hidden');
+                if (isCorrect) {
+                    expDiv.classList.add('border-green-500');
+                } else {
+                    expDiv.classList.add('border-red-500');
+                }
+
+                // 4. 解析顯示後，即時渲染解析內的 LaTeX (重要要求！)
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise([expDiv]).catch(function (err) {
+                        console.error('MathJax 測驗解析渲染失敗: ', err.message);
+                    });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
