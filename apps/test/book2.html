@@ -99,34 +99,39 @@
                 <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 1 章：位置與運動</h2>
                 <ul class="space-y-1">
                     <li>
-                        <button onclick="switchPage('ch1-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors bg-blue-50 text-blue-800 font-medium border-l-4 border-blue-500">
-                            1.1 距離與位移
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="switchPage('ch1-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            1.2 速率與速度
+                        <button onclick="switchPage('ch1-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors bg-blue-50 text-blue-800 font-medium border-l-4 border-blue-500">
+                            1.2 距離與位移
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch1-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            1.3 勻加速運動
+                            1.3 速率、速度和加速度
                         </button>
                     </li>
                 </ul>
             </div>
             <!-- 第 2 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 2 章：牛頓運動定律</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 2 章：直線運動</h2>
                 <ul class="space-y-1">
                     <li>
                         <button onclick="switchPage('ch2-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            2.1 牛頓第一定律
+                           2.1 描述直線運動
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch2-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            2.2 牛頓第二定律
+                           2.2 運動線圖
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch2-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                           2.3 勻加速運動方程
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch2-4', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                           2.4 重力下的垂直運動
                         </button>
                     </li>
                 </ul>
@@ -187,222 +192,8 @@
             <!-- ========================================== -->
             <!-- 區塊 1.1: 距離與位移 (完整示範骨架) -->
             <!-- ========================================== -->
-            <article id="ch1-1" class="content-section block">
-                <header class="mb-8 border-b-2 border-slate-200 pb-4">
-                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.1</span>距離與位移</h2>
-                    <p class="text-slate-500 mt-2">認識標量與矢量，以及描述物體位置變化的基本概念。</p>
-                </header>
-
-                <!-- 📌 1. 名詞定義 / 核心概念 -->
-                <section class="mb-10">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
-                    <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-                        <p>在物理學中，物理量可分為 <strong class="text-blue-700 font-bold">標量 (Scalar)</strong> 和 <strong class="text-blue-700 font-bold">矢量 (Vector)</strong>：</p>
-                        <ul class="list-disc list-inside ml-2 space-y-2">
-                            <li><strong>標量：</strong> 只有大小 (Magnitude) 沒有方向的物理量。例如：質量 ($50 \text{ kg}$)、時間 ($10 \text{ s}$)。</li>
-                            <li><strong>矢量：</strong> 同時具備大小和方向 (Direction) 的物理量。例如：力、位移。</li>
-                        </ul>
-                        <hr class="my-4 border-slate-100">
-                        <p>描述物體的運動時，我們會區分 <strong class="text-blue-700 font-bold">距離 (Distance)</strong> 與 <strong class="text-blue-700 font-bold">位移 (Displacement)</strong>：</p>
-                        <ul class="list-disc list-inside ml-2 space-y-2">
-                            <li><strong>距離：</strong> 物體實際運動軌跡的總長度。它是一個標量。</li>
-                            <li><strong>位移：</strong> 由起點指向終點的直線距離與方向。它是一個矢量。</li>
-                        </ul>
-                    </div>
-                </section>
-
-                <!-- 📐 2. 核心公式與單位 -->
-                <section class="mb-10">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
-                        <p class="text-slate-700 mb-3">位移 ($\vec{s}$) 的數學表示法（在一維運動中）：</p>
-                        <div class="text-center my-4 overflow-x-auto">
-                            <!-- MathJax Block Formula -->
-                            $$ \vec{s} = x_f - x_i $$
-                        </div>
-                        <ul class="text-sm text-slate-600 space-y-1">
-                            <li>$x_f$：最終位置 (Final position)</li>
-                            <li>$x_i$：初始位置 (Initial position)</li>
-                            <li><i class="fa-solid fa-circle-info text-blue-400 mr-1"></i> <strong>SI 單位：</strong> 兩者的標準單位皆為米 ($\text{m}$)。</li>
-                        </ul>
-                    </div>
-                </section>
-
-                <!-- 📊 3. 重要性質 / 物理規律對照 -->
-                <section class="mb-10">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 距離與位移對照表</h3>
-                    
-                    <!-- 桌機版 Table -->
-                    <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
-                        <table class="w-full text-left text-slate-700">
-                            <thead class="bg-blue-100 text-blue-900">
-                                <tr>
-                                    <th class="p-3 font-semibold w-1/4">比較項目</th>
-                                    <th class="p-3 font-semibold w-3/8">距離 (Distance)</th>
-                                    <th class="p-3 font-semibold w-3/8">位移 (Displacement)</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-200">
-                                <tr class="even:bg-slate-50">
-                                    <td class="p-3 font-medium">物理量性質</td>
-                                    <td class="p-3">標量 (僅有大小)</td>
-                                    <td class="p-3">矢量 (有大小與方向)</td>
-                                </tr>
-                                <tr class="even:bg-slate-50">
-                                    <td class="p-3 font-medium">路徑依賴性</td>
-                                    <td class="p-3">取決於實際行走路徑</td>
-                                    <td class="p-3">僅取決於起點與終點位置</td>
-                                </tr>
-                                <tr class="even:bg-slate-50">
-                                    <td class="p-3 font-medium">數值範圍</td>
-                                    <td class="p-3">永遠為正值 ($ \ge 0 $)</td>
-                                    <td class="p-3">可正、可負或為零</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- 行動版卡片 (自動切換) -->
-                    <div class="grid md:hidden gap-4">
-                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                            <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">距離 (Distance)</h4>
-                            <ul class="text-sm space-y-1 text-slate-600">
-                                <li><span class="font-semibold text-slate-700">性質：</span> 標量 (僅有大小)</li>
-                                <li><span class="font-semibold text-slate-700">路徑：</span> 取決於實際行走路徑</li>
-                                <li><span class="font-semibold text-slate-700">數值：</span> 永遠為正值 ($ \ge 0 $)</li>
-                            </ul>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                            <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">位移 (Displacement)</h4>
-                            <ul class="text-sm space-y-1 text-slate-600">
-                                <li><span class="font-semibold text-slate-700">性質：</span> 矢量 (有大小與方向)</li>
-                                <li><span class="font-semibold text-slate-700">路徑：</span> 僅取決於起點與終點位置</li>
-                                <li><span class="font-semibold text-slate-700">數值：</span> 可正、可負或為零</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- ⚠️ 4. 常見迷思與誤區 -->
-                <section class="mb-10">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- 錯誤觀念 -->
-                        <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
-                            <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
-                            <p class="text-sm">「位移的大小有可能大於距離。」或者「返回起點時，距離等於零。」</p>
-                        </div>
-                        <!-- 正確觀念 -->
-                        <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
-                            <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
-                            <p class="text-sm">兩點之間直線最短，因此 <strong>位移的大小永遠小於或等於距離</strong>。返回起點時，位移為零，但距離是走過軌跡的總長度。</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- ✍️ 5. 典型例題解說 -->
-                <section class="mb-10">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
-                    <div class="space-y-6">
-                        
-                        <!-- 例題 1 -->
-                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
-                            <div class="flex items-start">
-                                <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
-                                <p class="text-slate-800 leading-relaxed font-medium">
-                                    小明在一個半徑為 $r = 50 \text{ m}$ 的圓形跑道上跑步。他從 A 點出發，跑了半圈到達 B 點。求小明的 (a) 距離 和 (b) 位移的大小。
-                                </p>
-                            </div>
-                            <!-- 隱藏詳解區 -->
-                            <details class="mt-4 group">
-                                <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
-                                    <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
-                                    <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
-                                </summary>
-                                <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
-                                    <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                                    <p class="mb-2">(a) 距離是實際軌跡長度，即半個圓周長：</p>
-                                    $$ \text{距離} = \frac{1}{2} \times 2\pi r = \pi (50) \approx 157 \text{ m} $$
-                                    <p class="mt-4 mb-2">(b) 位移是由起點直指終點的最短距離，即圓的直徑：</p>
-                                    $$ \text{位移大小} = 2r = 2(50) = 100 \text{ m} $$
-                                    <p class="mt-2 text-sm text-slate-500">（註：位移必須指明方向，例如「由 A 指向 B」。本題僅求大小）</p>
-                                </div>
-                            </details>
-                        </div>
-                        
-                        <!-- 佔位例題 2, 3 -->
-                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 opacity-70">
-                            <div class="flex items-start">
-                                <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
-                                <p class="text-slate-800 leading-relaxed font-medium">[佔位符] 二維平面的距離與位移計算題。向東走 $3 \text{ m}$ 再向北走 $4 \text{ m}$...</p>
-                            </div>
-                            <details class="mt-4 group">
-                                <summary class="cursor-pointer bg-amber-100 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center">
-                                    <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
-                                </summary>
-                                <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg">使用畢氏定理：$\sqrt{3^2 + 4^2} = 5 \text{ m}$。</div>
-                            </details>
-                        </div>
-                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 opacity-70">
-                            <div class="flex items-start">
-                                <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
-                                <p class="text-slate-800 leading-relaxed font-medium">[佔位符] HKDSE 歷屆題型變化示範...</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </section>
-
-                <!-- 🧠 6. 隨堂測驗 -->
-                <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗 (概念檢測)</h3>
-                    
-                    <div class="space-y-8">
-                        <!-- Q1 -->
-                        <div class="quiz-item">
-                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 下列哪一個物理量屬於矢量 (Vector)？</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                <button onclick="checkAnswer(this, false, 'exp-q1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 質量</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 距離</button>
-                                <button onclick="checkAnswer(this, true, 'exp-q1-1')"  class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 位移</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 時間</button>
-                            </div>
-                            <!-- 解析區塊 (預設隱藏) -->
-                            <div id="exp-q1-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                                <strong>解析：</strong> 質量、距離、時間都只有大小而沒有方向，屬於標量。位移具有方向性，因此是矢量。
-                            </div>
-                        </div>
-
-                        <!-- Q2 -->
-                        <div class="quiz-item">
-                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 物體作直線運動並折返至起點，此時其距離與位移的大小分別為何？</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                <button onclick="checkAnswer(this, false, 'exp-q1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">A. 兩者皆為 0</button>
-                                <button onclick="checkAnswer(this, true, 'exp-q1-2')"  class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">B. 距離 $> 0$，位移 $= 0$</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">C. 距離 $= 0$，位移 $> 0$</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50">D. 兩者皆 $> 0$ 且相等</button>
-                            </div>
-                            <div id="exp-q1-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                                <strong>解析：</strong> 只要物體有移動，其行走路徑總長（距離）必大於 0。但物體回到起點，代表最終位置與初始位置相同，故位移 $ \vec{s} = x_f - x_i = 0 $。
-                            </div>
-                        </div>
-                        
-                        <!-- 佔位 Q3, 4, 5 -->
-                        <div class="quiz-item opacity-60">
-                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> [佔位題目] 測試渲染 LaTeX 的題目 $v = \frac{s}{t}$ ...</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                <button onclick="checkAnswer(this, true, 'exp-q1-3')" class="text-left p-3 rounded-lg border border-slate-200">A. 選項 A</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q1-3')" class="text-left p-3 rounded-lg border border-slate-200">B. 選項 B</button>
-                            </div>
-                            <div id="exp-q1-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm">解析：這是一個測試 $ F=ma $ 渲染的佔位。</div>
-                        </div>
-                        <div class="quiz-item opacity-60"><p class="font-medium">Q4. [佔位題目]</p></div>
-                        <div class="quiz-item opacity-60"><p class="font-medium">Q5. [佔位題目]</p></div>
-                    </div>
-                </section>
-            </article>
-
-<!-- ========================================== -->
+            
+            <!-- ========================================== -->
 <!-- 區塊 1.2: 距離和位移 (可直接插入主檔案) -->
 <!-- ========================================== -->
 <article id="ch1-2" class="content-section hidden">
@@ -685,7 +476,8 @@
     </section>
 </article>
 
-<!-- ========================================== -->
+
+            <!-- ========================================== -->
 <!-- 區塊 1.3: 速率、速度和加速度 (可直接插入主檔案) -->
 <!-- ========================================== -->
 <article id="ch1-3" class="content-section hidden">
@@ -1006,8 +798,11 @@
         </div>
     </section>
 </article>
-
-            <!-- ========================================== -->
+            
+            
+            
+            
+<!-- ========================================== -->
 <!-- 區塊 2.1: 描述直線運動 (可直接插入主檔案) -->
 <!-- ========================================== -->
 <article id="ch2-1" class="content-section hidden">
