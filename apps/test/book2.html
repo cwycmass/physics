@@ -2021,6 +2021,298 @@
     </section>
 </article>
 
+
+<!-- ========================================== -->
+<!-- 區塊 3.1: 力 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch3-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.1</span>力</h2>
+        <p class="text-slate-500 mt-2">了解力的基本概念、特性，以及力如何改變物體的運動狀態與形狀。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在日常生活中，<strong class="text-blue-700 font-bold">力 (Force)</strong> 通常可以理解為對物體向某一方向的「推」或「拉」的作用。當物體受力時，力會對物體產生以下三種主要的物理效果：</p>
+            <ul class="list-decimal list-inside ml-2 space-y-2">
+                <li><strong>改變運動速率：</strong> 能使靜止的物體開始移動，或使移動中的物體加快（加速）或減慢（減速/煞車）。</li>
+                <li><strong>改變運動方向：</strong> 能使正在移動的物體轉彎（例如：用球拍擊打飛過來的網球）。</li>
+                <li><strong>改變形狀：</strong> 能令物體發生形變（例如：把彈簧拉長、把海綿壓扁）。</li>
+            </ul>
+            <hr class="my-4 border-slate-100">
+            <p>此外，力在自然界中總是 <strong class="text-blue-700 font-bold">成對出現的 (Forces appear in pairs)</strong>。當你對一個物體施力時，該物體也會同時對你施加一個反方向的力。（這點將在 3.7 節牛頓第三定律中詳細探討）。</p>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 矢量特性與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">力是一個 <strong class="text-blue-700">矢量 (Vector)</strong>，這意味着要完整描述一個力，我們必須同時指出它的「大小」和「方向」。在物理繪圖中，我們常以箭頭表示力：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$\vec{F}$$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li><i class="fa-solid fa-arrow-right text-blue-500 mr-1"></i> <strong>圖解表示：</strong> 箭頭的指向代表力的方向，箭頭線段的長度代表力的大小。</li>
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>SI 單位：</strong> 力的國際標準單位是 <strong class="text-blue-700 font-bold">牛頓 (Newton)</strong>，簡寫為 <strong class="text-blue-700 font-bold">$\text{N}$</strong>。</li>
+                <li><strong>例子：</strong> 「向右推 $50 \text{ N}$」這句話同時包含了大小 ($50 \text{ N}$) 和方向 (向右)。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 接觸力與非接觸力分類表</h3>
+        <p class="text-slate-700 mb-3">根據施力物體與受力物體之間是否需要直接接觸，我們可將力分為兩大類：</p>
+        
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">力的種類</th>
+                        <th class="p-3 font-semibold w-3/8">接觸力 (Contact Forces)</th>
+                        <th class="p-3 font-semibold w-3/8">非接觸力 (Non-contact Forces)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">定義</td>
+                        <td class="p-3">兩個物體必須 <strong>互相接觸</strong> 才能產生的力。</td>
+                        <td class="p-3">物體之間 <strong>不需要互相接觸</strong>，能在一段距離外相互作用的力。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">常見例子</td>
+                        <td class="p-3">
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>摩擦力 (Friction)</li>
+                                <li>拉力 / 張力 (Tension)</li>
+                                <li>法向反作用力 (Normal reaction)</li>
+                                <li>空氣阻力 (Air resistance)</li>
+                            </ul>
+                        </td>
+                        <td class="p-3">
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>重力 / 重量 (Gravity / Weight)</li>
+                                <li>磁力 (Magnetic force)</li>
+                                <li>靜電力 (Electrostatic force)</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">接觸力 (Contact Forces)</h4>
+                <p class="text-sm text-slate-600 mb-2">必須互相接觸才能產生的力。</p>
+                <ul class="text-sm space-y-1 text-slate-600 font-medium">
+                    <li>👉 摩擦力、空氣阻力</li>
+                    <li>👉 繩子的拉力 (張力)</li>
+                    <li>👉 桌面支撐書本的法向反作用力</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">非接觸力 (Non-contact Forces)</h4>
+                <p class="text-sm text-slate-600 mb-2">不需要互相接觸就能產生的力。</p>
+                <ul class="text-sm space-y-1 text-slate-600 font-medium">
+                    <li>👉 地球對物體的重力 (重量)</li>
+                    <li>👉 磁鐵之間的磁力</li>
+                    <li>👉 帶電體之間的靜電力</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <p class="text-sm">「物體必須受到力的作用，才能維持它向前運動。」或者「當我停止推一輛購物車，它停下來了，這證明沒有力就沒有運動。」</p>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <p class="text-sm"><strong>力是「改變」運動狀態的原因，而不是「維持」運動的原因。</strong> 如果沒有任何阻力（淨力為零），運動中的物體會永遠保持等速直線運動。購物車會停下來，是因為它受到了<strong>摩擦力</strong>這個阻力的作用，是摩擦力「改變」了它的速度讓它減速！</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (力的效果) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        下列哪些情況中，明顯顯示出物體受到了力的作用？（可多選）<br>
+                        (1) 一個被用力踢出並飛向空中的足球<br>
+                        (2) 一塊正在被雙手壓扁的黏土<br>
+                        (3) 一輛正在筆直公路上減速煞車的汽車
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">回顧力的三大效果：改變速率、改變方向、改變形狀。</p>
+                        <ul class="list-decimal list-inside space-y-1 mb-2">
+                            <li>足球由靜止變為飛出，速率和方向改變，受力。</li>
+                            <li>黏土被壓扁，形狀發生改變，受力。</li>
+                            <li>汽車減速煞車，速率變慢，受力（主要是地面摩擦力）。</li>
+                        </ul>
+                        <p class="mt-2 font-bold text-green-700">答案：(1), (2), (3) 全部皆有受力。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (力的分類) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        請將下列的力分類為「接觸力」或「非接觸力」：<br>
+                        (A) 蘋果從樹上掉下來所受的力<br>
+                        (B) 兩塊磁鐵互相排斥的力<br>
+                        (C) 手推動門的力<br>
+                        (D) 降落傘下落時受到的空氣阻力
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">判斷基準：施力物體與受力物體是否需要物理上的接觸。</p>
+                        <ul class="list-disc list-inside space-y-1 mb-2">
+                            <li>(A) 地球對蘋果的重力，不需接觸，為<strong>非接觸力</strong>。</li>
+                            <li>(B) 磁力可在一段距離外作用，為<strong>非接觸力</strong>。</li>
+                            <li>(C) 手必須碰到門才能推，為<strong>接觸力</strong>。</li>
+                            <li>(D) 降落傘必須與空氣粒子碰撞接觸才能產生阻力，為<strong>接觸力</strong>。</li>
+                        </ul>
+                        <p class="mt-2 font-bold text-green-700">答案：接觸力：(C), (D)；非接觸力：(A), (B)。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (矢量的組成) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        小華在水平地面上用 $15 \text{ N}$ 的力向右推一個木箱。由於力是一個矢量，請寫出這個推力的兩個核心組成部分。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">力作為一個矢量，必須同時具備「大小」與「方向」。</p>
+                        <p class="mb-1">1. <strong>大小 (Magnitude)：</strong> $15 \text{ N}$</p>
+                        <p class="mb-1">2. <strong>方向 (Direction)：</strong> 向右</p>
+                        <p class="mt-2 text-sm text-slate-500">（註：在物理作圖或計算時，這兩個要素缺一不可。）</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 力的國際單位制 (SI 單位) 是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 焦耳 (J)</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 牛頓 (N)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 千克 (kg)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 瓦特 (W)</button>
+                </div>
+                <div id="exp-q31-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 力的 SI 單位是牛頓 ($\text{N}$)，為了紀念偉大的物理學家牛頓。千克是質量單位，焦耳是能量單位。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 關於力的性質，下列哪一項描述是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 力只有大小，沒有方向</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 力是標量 (Scalar)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 單一的力可以獨立存在於宇宙中</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 力是一個矢量，且總是成對出現的</button>
+                </div>
+                <div id="exp-q31-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 力同時具有大小和方向，屬於矢量 (Vector)。並且在自然界中，力總是成對出現（作用力與反作用力），不可能單獨存在一個孤立的力。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 下列哪一項 <strong>不是</strong> 力對物體可能產生的效果？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 改變物體的質量</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 改變物體的移動速率</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 改變物體的移動方向</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 改變物體的形狀</button>
+                </div>
+                <div id="exp-q31-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 在經典力學中，物體的質量是物體本身含有的物質總量，不會因為受力而改變。力只能改變物體的運動狀態（速率、方向）或使其發生形變。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 小明用力向後拉動一條彈簧，彈簧被拉長了。在此過程中，彈簧對小明的手...</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 沒有施加任何力</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 施加了一個向前的力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 施加了一個向後的力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 施加了一個向下的力</button>
+                </div>
+                <div id="exp-q31-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 力是成對出現的。當小明向「後」拉彈簧，彈簧同時會產生一個反方向（即向「前」）的力作用在小明的手上。這就是彈簧的拉力（張力）。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 樹上的蘋果掉落到地面上。導致蘋果掉落的力屬於哪一種力？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 接觸力：因為蘋果接觸到了空氣</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 接觸力：因為蘋果最終接觸到了地面</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 非接觸力：因為地球重力不需要接觸就能作用</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 非接觸力：因為蘋果沒有重量</button>
+                </div>
+                <div id="exp-q31-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 蘋果掉落是因為受到地球的「重力 (Weight)」作用。重力是一種即使物體沒有與地球表面接觸，也能在一段距離外相互吸引的作用力，因此屬於非接觸力 (Non-contact force)。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+                        
 <!-- ========================================== -->
 <!-- 區塊 3.2: 牛頓運動定律 (可直接插入主檔案) -->
 <!-- ========================================== -->
