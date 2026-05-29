@@ -350,16 +350,16 @@
     <section class="mb-10">
         <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
         <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-            <p>要描述物體的運動，我們必須先定義物體的 <strong class="text-blue-700 font-bold">位置 (Position)</strong>。要準確指出位置，必須先選定一個 <strong class="text-blue-700 font-bold">參考點 (Reference point)</strong>。</p>
+            <p>要描述物體的運動，我們必須先定義物體的 <strong class="text-blue-700 font-bold">位置</strong>。要準確指出位置，必須先選定一個 <strong class="text-blue-700 font-bold">參考點</strong>。</p>
             <p>當物體的位置發生改變時，我們可以用兩個不同的物理量來描述這段運動過程：</p>
             <ul class="list-disc list-inside ml-2 space-y-3">
                 <li>
-                    <strong class="text-blue-700 font-bold">距離 (Distance, $d$)：</strong> 
-                    物體在運動過程中，實際走過的路徑總長度。它是一個 <strong class="text-blue-700">標量 (Scalar)</strong>，即只有大小，沒有方向。
+                    <strong class="text-blue-700 font-bold">距離 ($d$)：</strong> 
+                    物體在運動過程中，實際走過的路徑總長度。它是一個 <strong class="text-blue-700">標量</strong>，即只有大小，沒有方向。
                 </li>
                 <li>
-                    <strong class="text-blue-700 font-bold">位移 (Displacement, $s$)：</strong> 
-                    物體位置的淨變化。它是由「起點」直線指向「終點」的距離與方向。它是一個 <strong class="text-blue-700">矢量 (Vector)</strong>，同時具備大小和方向。
+                    <strong class="text-blue-700 font-bold">位移 ($s$)：</strong> 
+                    物體位置的淨變化。它是由「起點」直線指向「終點」的距離與方向。它是一個 <strong class="text-blue-700">矢量</strong>，同時具備大小和方向。
                 </li>
             </ul>
         </div>
@@ -369,15 +369,15 @@
     <section class="mb-10">
         <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
         <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
-            <p class="text-slate-700 mb-3">在一維（直線）運動中，位移 $\vec{s}$ 可以用坐標的差值來計算：</p>
+            <p class="text-slate-700 mb-3">在一維（直線）運動中，位移 $s 可以用坐標的差值來計算：</p>
             <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
-                $$\vec{s} = x_f - x_i$$
+                $$\vec{s} = x_\text{f}- x_\text{i}$$
             </div>
             <ul class="text-sm text-slate-600 space-y-2 mt-4">
-                <li>$x_f$：物體的最終位置 (Final position)</li>
-                <li>$x_i$：物體的初始位置 (Initial position)</li>
+                <li>$x_\text{f}$：物體的最終位置</li>
+                <li>$x_\text{i}$：物體的初始位置</li>
                 <hr class="border-blue-200 my-2">
-                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>SI 單位：</strong> 距離和位移的國際標準單位皆為 <strong class="text-blue-700">米 (metre, $\text{m}$)</strong>。</li>
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>SI 單位：</strong> 距離和位移的國際標準單位皆為 <strong class="text-blue-700">米 ($\text{m}$)</strong>。</li>
                 <li><i class="fa-solid fa-compass text-blue-500 mr-1"></i> <strong>方向表示：</strong> 在一維空間，我們通常用正號 ($+$) 和負號 ($-$) 來表示位移的方向（例如：向右為正，向左為負）。</li>
             </ul>
         </div>
@@ -392,15 +392,15 @@
                 <thead class="bg-blue-100 text-blue-900">
                     <tr>
                         <th class="p-3 font-semibold w-1/4">比較項目</th>
-                        <th class="p-3 font-semibold w-3/8">距離 (Distance)</th>
-                        <th class="p-3 font-semibold w-3/8">位移 (Displacement)</th>
+                        <th class="p-3 font-semibold w-3/8">距離</th>
+                        <th class="p-3 font-semibold w-3/8">位移</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-200">
                     <tr class="even:bg-slate-50">
                         <td class="p-3 font-medium">物理量性質</td>
-                        <td class="p-3 font-bold text-slate-700">標量 (Scalar)</td>
-                        <td class="p-3 font-bold text-blue-700">矢量 (Vector)</td>
+                        <td class="p-3 font-bold text-slate-700">標量</td>
+                        <td class="p-3 font-bold text-blue-700">矢量</td>
                     </tr>
                     <tr class="even:bg-slate-50">
                         <td class="p-3 font-medium">考慮因素</td>
@@ -613,7 +613,7 @@
                     <button onclick="checkAnswer(this, false, 'exp-q12-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $+3 \text{ m}$</button>
                 </div>
                 <div id="exp-q12-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 位移公式 $ \vec{s} = x_f - x_i $。代入數值：$ \vec{s} = (-5) - (+2) = -7 \text{ m} $。負號表示位移的方向指向坐標軸的負方向。
+                    <strong>解析：</strong> 位移公式 $s = x_\text{f} - x_\text{i} $。代入數值：$s = (-5) - (+2) = -7 \text{ m} $。負號表示位移的方向指向坐標軸的負方向。
                 </div>
             </div>
         </div>
