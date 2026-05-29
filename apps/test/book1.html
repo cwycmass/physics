@@ -149,21 +149,16 @@
             </div>
                         <!-- 第 4 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 4 章：力與運動(2)</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 4 章：物態的改變</h2>
                 <ul class="space-y-1">
                     <li>
                         <button onclick="switchPage('ch4-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            4.1 物體組成的系統
+                            4.1 潛熱
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch4-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            4.2 力的合成和分解
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="switchPage('ch4-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            4.3 共面力與牛頓運動定律
+                            4.2 蒸發與凝結
                         </button>
                     </li>
                 </ul>
@@ -1736,7 +1731,446 @@
     </section>
 </article>            
           
+<!-- ========================================== -->
+<!-- 區塊 4.1: 潛熱 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch4-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-blue-100 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">4.1</span>潛熱</h2>
+        <p class="text-slate-500 mt-2">探討物質在改變物態時，為何吸收或釋放熱量但溫度卻保持不變的物理現象。</p>
+    </header>
 
+    <!-- 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 名詞定義與核心概念</h3>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+            <p class="mb-3">物質通常以三種物態存在：<span class="text-blue-700 font-bold">固態 (Solid)</span>、<span class="text-blue-700 font-bold">液態 (Liquid)</span> 和 <span class="text-blue-700 font-bold">氣態 (Gas)</span>。當物質從一種物態轉變成另一種物態時（例如冰融化成水，水沸騰成蒸汽），會發生能量的轉移。</p>
+            <ul class="list-disc list-inside space-y-2 ml-2">
+                <li><strong class="text-blue-700 font-bold">潛熱 (Latent Heat)：</strong> 在物態改變的過程中，物質吸收或釋放的熱量。之所以稱為「潛（隱藏）」，是因為在這個過程中，物質的<span class="text-blue-700 font-bold">溫度保持不變</span>，熱量似乎「潛藏」起來了。</li>
+                <li><strong class="text-blue-700 font-bold">微觀解釋：</strong> 吸收的潛熱並沒有用來增加分子的平均動能（所以溫度不變），而是用來<span class="text-blue-700 font-bold">克服分子之間的吸引力</span>，改變分子的排列結構（增加勢能）。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+            <p class="text-slate-700 mb-2">為了比較不同物質在改變物態時所需的熱量，我們定義了<span class="text-blue-700 font-bold">比潛熱 (Specific Latent Heat, $l$)</span>：改變 $1 \text{ kg}$ 該物質物態所需的熱量。公式為：</p>
+            <div class="text-center py-4 overflow-x-auto text-2xl font-bold">
+                $$ Q = ml $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-2">
+                <li>$Q$：轉移的熱量 (單位：焦耳 $\text{J}$)</li>
+                <li>$m$：物質的質量 (單位：千克 $\text{kg}$)</li>
+                <li>$l$：比潛熱 (單位：$\text{J kg}^{-1}$)</li>
+            </ul>
+            <p class="text-sm text-slate-600 mt-4"><i class="fa-solid fa-circle-info mr-1"></i> <strong>分類：</strong> 固態變液態時稱為<span class="text-blue-700 font-bold">熔解比潛熱 ($l_f$)</span>；液態變氣態時稱為<span class="text-blue-700 font-bold">汽化比潛熱 ($l_v$)</span>。</p>
+        </div>
+    </section>
+
+    <!-- 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 熔解 vs 汽化 對照</h3>
+        
+        <!-- 桌面版 Table (lg:block) -->
+        <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-slate-100 border-b border-slate-200">
+                    <tr>
+                        <th class="p-4 font-bold w-1/4">比較項目</th>
+                        <th class="p-4 font-bold w-3/8 text-blue-800">熔解 (Melting) / 凝固 (Freezing)</th>
+                        <th class="p-4 font-bold w-3/8 text-emerald-800">汽化 (Vaporization) / 凝結 (Condensation)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">物態變化</td>
+                        <td class="p-4">固態 $\leftrightarrow$ 液態</td>
+                        <td class="p-4">液態 $\leftrightarrow$ 氣態</td>
+                    </tr>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">發生溫度</td>
+                        <td class="p-4">熔點 / 凝固點（純物質為定值）</td>
+                        <td class="p-4">沸點（純物質為定值）</td>
+                    </tr>
+                    <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">涉及物理量</td>
+                        <td class="p-4">熔解比潛熱 ($l_f$)</td>
+                        <td class="p-4">汽化比潛熱 ($l_v$)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">能量需求差異</td>
+                        <td class="p-4">相對較小（只需稍微打破晶格結構，分子仍靠得很近）</td>
+                        <td class="p-4"><strong>極大</strong>（必須完全克服分子間引力，將分子推到很遠的地方）</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 行動版 Cards (lg:hidden) -->
+        <div class="space-y-4 lg:hidden">
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h4 class="font-bold text-blue-800 mb-2">熔解 / 凝固</h4>
+                <p class="text-sm text-slate-600 mb-1"><strong>變化：</strong> 固態 $\leftrightarrow$ 液態 (於熔點)</p>
+                <p class="text-sm text-slate-600 mb-1"><strong>物理量：</strong> 熔解比潛熱 ($l_f$)</p>
+                <p class="text-sm text-slate-600"><strong>能量：</strong> 較小（分子距離變化不大）。</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+                <h4 class="font-bold text-emerald-800 mb-2">汽化 / 凝結</h4>
+                <p class="text-sm text-slate-600 mb-1"><strong>變化：</strong> 液態 $\leftrightarrow$ 氣態 (於沸點)</p>
+                <p class="text-sm text-slate-600 mb-1"><strong>物理量：</strong> 汽化比潛熱 ($l_v$)</p>
+                <p class="text-sm text-slate-600"><strong>能量：</strong> <strong class="text-red-600">極大</strong>（需完全克服分子引力）。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-blue-500 w-8"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                <p class="text-sm">「物體在吸收熱量時，它的溫度一定會不斷上升。」</p>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                <p class="text-sm">當物體正在<span class="font-bold">改變物態</span>（如融化或沸騰）時，吸收的熱量（潛熱）會用來增加分子的勢能，此時分子的平均動能保持不變，因此<span class="font-bold">溫度維持恆定</span>，直到物態完全改變為止。</p>
+            </div>
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                <p class="text-sm">「將 $100\ ^\circ\text{C}$ 的水和 $100\ ^\circ\text{C}$ 的水蒸氣燙到手，造成的傷害是一樣的，因為它們溫度相同。」</p>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                <p class="text-sm">$100\ ^\circ\text{C}$ 的水蒸氣比 $100\ ^\circ\text{C}$ 的沸水<span class="font-bold">危險得多</span>！因為水蒸氣在接觸皮膚凝結成水時，會釋放出<span class="font-bold">巨大的汽化潛熱</span>，造成更嚴重的燙傷。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 典型例題解說 -->
+    <section class="mb-12">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+        
+        <!-- 題 1 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                <p class="text-slate-800 font-medium pt-1">要將 $2 \text{ kg}$ 處於 $0\ ^\circ\text{C}$ 的冰完全融化成 $0\ ^\circ\text{C}$ 的水，需要吸收多少熱能？（已知冰的熔解比潛熱 $l_f = 3.34 \times 10^5 \text{ J kg}^{-1}$）</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：確認物態變化過程</strong></p>
+                    <p class="mb-2">這是從固態到液態的改變，溫度維持在 $0\ ^\circ\text{C}$，因此使用潛熱公式。</p>
+                    <p class="mb-2 mt-4"><strong>第二步：應用公式 $Q = ml$ 計算</strong></p>
+                    <div class="overflow-x-auto">$$ Q = m \times l_f $$</div>
+                    <div class="overflow-x-auto">$$ Q = 2 \times 3.34 \times 10^5 $$</div>
+                    <div class="overflow-x-auto">$$ Q = 6.68 \times 10^5 \text{ J} $$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：需要吸收 $668,000 \text{ J}$ (或 $668 \text{ kJ}$) 的熱能。</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- 題 2 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                <p class="text-slate-800 font-medium pt-1">一個功率為 $2 \text{ kW}$ 的電熱水器，將一鍋 $100\ ^\circ\text{C}$ 的沸水持續加熱了 $5 \text{ 分鐘}$。如果水不斷沸騰並變成水蒸氣，求這段時間內有多少質量的水變成了蒸汽？（假設無熱量流失，水的汽化比潛熱 $l_v = 2.26 \times 10^6 \text{ J kg}^{-1}$）</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：計算電熱水器提供的總能量 ($Q$)</strong></p>
+                    <p class="mb-2">$P = 2 \text{ kW} = 2000 \text{ W}$，時間 $t = 5 \text{ 分鐘} = 300 \text{ s}$</p>
+                    <div class="overflow-x-auto">$$ Q = Pt = 2000 \times 300 = 600,000 \text{ J} $$</div>
+                    <p class="mb-2 mt-4"><strong>第二步：計算氣化的水質量 ($m$)</strong></p>
+                    <p class="mb-2">這些能量全部用來提供汽化潛熱：</p>
+                    <div class="overflow-x-auto">$$ Q = m \times l_v $$</div>
+                    <div class="overflow-x-auto">$$ 600,000 = m \times 2.26 \times 10^6 $$</div>
+                    <div class="overflow-x-auto">$$ m = \frac{600,000}{2,260,000} \approx 0.265 \text{ kg} $$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：約有 $0.265 \text{ kg}$ 的水變成了蒸汽。</p>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <!-- 6. 隨堂測驗 -->
+    <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+        <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗 (Quiz)</h3>
+        
+        <!-- Q1 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-1-1">
+            <p class="font-bold text-slate-800 mb-3">1. 當冰在 $0\ ^\circ\text{C}$ 融化成水的過程中，其吸收的熱量被用來做甚麼？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-1-1', 'quiz4-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 增加分子的平均動能</button>
+                <button onclick="checkAnswer(this, true,  'exp4-1-1', 'quiz4-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 克服分子間的吸引力，增加分子的勢能</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-1', 'quiz4-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 同時增加分子的動能和勢能</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-1', 'quiz4-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 降低整體的溫度</button>
+            </div>
+            <div id="exp4-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 物態改變時溫度不變，代表分子平均動能不變。吸收的潛熱完全用來做功，克服固體晶格的分子引力，改變排列結構，即增加勢能。
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-1-2">
+            <p class="font-bold text-slate-800 mb-3">2. 比潛熱 ($l$) 的國際標準單位是甚麼？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-1-2', 'quiz4-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $\text{J }^\circ\text{C}^{-1}$</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-2', 'quiz4-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $\text{J kg}^{-1}\ ^\circ\text{C}^{-1}$</button>
+                <button onclick="checkAnswer(this, true,  'exp4-1-2', 'quiz4-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $\text{J kg}^{-1}$</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-2', 'quiz4-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $\text{W}$</button>
+            </div>
+            <div id="exp4-1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 比潛熱的定義是「每 $1 \text{ kg}$」物質改變物態所需熱量，與溫度變化無關。由 $Q = ml$ 得到 $l = Q/m$，故單位是 $\text{J kg}^{-1}$。
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz4-1-3">
+            <p class="font-bold text-slate-800 mb-3">3. 對於同一種物質，其汽化比潛熱 ($l_v$) 通常會大於其熔解比潛熱 ($l_f$)，原因是甚麼？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, true,  'exp4-1-3', 'quiz4-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 氣化時需要完全克服分子間引力將其分開，而熔解只需稍微打斷排列結構</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-3', 'quiz4-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 氣體的溫度通常比液體高很多</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-3', 'quiz4-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 液態的質量通常大於固態</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-3', 'quiz4-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 熔解過程不需要吸收能量，只有氣化才需要</button>
+            </div>
+            <div id="exp4-1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 固態變液態時，分子距離增加不多；但液態變氣態時，分子距離會急劇增加，幾乎需要完全克服所有的分子間引力，因此需要消耗龐大的能量。
+            </div>
+        </div>
+
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 4.2: 蒸發與凝結 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch4-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-blue-100 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">4.2</span>蒸發與凝結</h2>
+        <p class="text-slate-500 mt-2">從微觀角度探討液體表面發生的氣化現象，並比較蒸發與沸騰的本質差異。</p>
+    </header>
+
+    <!-- 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 名詞定義與核心概念</h3>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+            <p class="mb-3">水除了在沸點（$100\ ^\circ\text{C}$）會變成水蒸氣外，即使在室溫下，晾在繩子上的濕衣服也會乾。這種現象稱為<span class="text-blue-700 font-bold">蒸發 (Evaporation)</span>。</p>
+            <ul class="list-disc list-inside space-y-3 ml-2">
+                <li><strong class="text-blue-700 font-bold">微觀解釋：</strong> 液體中不同分子的動能是不一樣的。位於<span class="text-blue-700 font-bold">液體表面</span>且<span class="text-blue-700 font-bold">動能特別大</span>的分子，能夠克服周圍分子的吸引力，逃逸到空氣中變成氣體分子。這就是蒸發。</li>
+                <li><strong class="text-blue-700 font-bold">製冷效應：</strong> 由於逃逸的都是「高動能」的分子，留下來的液體分子「平均動能」就會降低，導致<span class="text-blue-700 font-bold">液體的溫度下降</span>。因此，蒸發會從周圍環境吸收熱量，產生冷卻效果。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 2. 影響因素與機制 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 影響蒸發速率的因素</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+            <p class="text-slate-700 mb-4">蒸發的速度快慢受以下四個主要因素影響：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2">1. 溫度</p>
+                    <p class="text-sm text-slate-600">溫度越高，擁有足夠動能逃逸的分子比例越多，蒸發越快。</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2">2. 表面積</p>
+                    <p class="text-sm text-slate-600">表面積越大，能同時逃逸的分子越多，蒸發越快（如把濕毛巾攤開）。</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2">3. 空氣流動 (風速)</p>
+                    <p class="text-sm text-slate-600">風能吹走剛逃逸的水蒸氣分子，防止它們重新落回水中（凝結），加速淨蒸發率。</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2">4. 濕度</p>
+                    <p class="text-sm text-slate-600">環境空氣越乾燥（濕度低），水蒸氣分子落回水中的機率越小，蒸發越快。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 對照表：蒸發 vs 沸騰</h3>
+        
+        <!-- 桌面版 Table (lg:block) -->
+        <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-slate-100 border-b border-slate-200">
+                    <tr>
+                        <th class="p-4 font-bold w-1/4">比較項目</th>
+                        <th class="p-4 font-bold w-3/8 text-blue-800">蒸發 (Evaporation)</th>
+                        <th class="p-4 font-bold w-3/8 text-emerald-800">沸騰 (Boiling)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">發生溫度</td>
+                        <td class="p-4"><strong>任何溫度下</strong>皆可發生</td>
+                        <td class="p-4">只有在<strong>特定的沸點</strong>下才會發生</td>
+                    </tr>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">發生位置</td>
+                        <td class="p-4">只發生在液體的<strong>表面</strong></td>
+                        <td class="p-4">發生在液體的<strong>內部和表面</strong>（產生氣泡）</td>
+                    </tr>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">發生速率</td>
+                        <td class="p-4">相對較慢，受環境因素影響大</td>
+                        <td class="p-4">非常劇烈、快速</td>
+                    </tr>
+                    <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">溫度變化</td>
+                        <td class="p-4">若無外部熱源，液體溫度會<strong>下降</strong></td>
+                        <td class="p-4">在沸騰過程中，液體溫度<strong>保持不變</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 行動版 Cards (lg:hidden) -->
+        <div class="space-y-4 lg:hidden">
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h4 class="font-bold text-blue-800 mb-2">蒸發 (Evaporation)</h4>
+                <p class="text-sm text-slate-600 mb-1"><strong>溫度：</strong> 任何溫度下都會發生。</p>
+                <p class="text-sm text-slate-600 mb-1"><strong>位置：</strong> 僅在液體表面。</p>
+                <p class="text-sm text-slate-600"><strong>特徵：</strong> 導致液體自身降溫。</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+                <h4 class="font-bold text-emerald-800 mb-2">沸騰 (Boiling)</h4>
+                <p class="text-sm text-slate-600 mb-1"><strong>溫度：</strong> 必須達到特定沸點。</p>
+                <p class="text-sm text-slate-600 mb-1"><strong>位置：</strong> 整個液體內部（冒泡）。</p>
+                <p class="text-sm text-slate-600"><strong>特徵：</strong> 沸騰期間溫度保持恆定不變。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-blue-500 w-8"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                <p class="text-sm">「水一定要加熱到 $100\ ^\circ\text{C}$ 才會變成氣體跑到空氣中。」</p>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                <p class="text-sm">氣化包含「蒸發」和「沸騰」。水在任何溫度（如室溫 $25\ ^\circ\text{C}$ 甚至更低）下都會蒸發變成水蒸氣，只是速度比沸騰慢得多。</p>
+            </div>
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                <p class="text-sm">「流汗本身就能讓人涼快。」</p>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                <p class="text-sm">流汗並不能降溫，是汗水在皮膚表面<span class="font-bold">蒸發</span>的過程帶走了大量的熱（吸收了汽化潛熱），才讓人感到涼快。如果濕度達 100% 導致汗水無法蒸發，人還是會覺得非常悶熱。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 典型例題解說 -->
+    <section class="mb-12">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+        
+        <!-- 題 1 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                <p class="text-slate-800 font-medium pt-1">當護士在病人手臂上塗抹酒精準備打針時，病人會覺得塗酒精的地方特別冰涼。試用分子運動論來解釋這個現象。</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2">1. 酒精在室溫下很容易<span class="font-bold text-blue-700">蒸發</span>。</p>
+                    <p class="mb-2">2. 在蒸發過程中，液體酒精中動能較大的分子克服引力逃逸到空氣中。</p>
+                    <p class="mb-2">3. 這導致留在皮膚上的液體酒精分子<span class="font-bold text-blue-700">平均動能下降</span>，溫度降低。</p>
+                    <p class="mb-2">4. 為了繼續蒸發，低溫的酒精會從較熱的皮膚中<span class="font-bold text-blue-700">吸收潛熱</span>，導致皮膚熱量流失，因此感覺冰涼。</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- 題 2 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                <p class="text-slate-800 font-medium pt-1">為什麼在潮濕無風的春季，晾在室內的濕衣服很難變乾？請列出至少兩個影響蒸發的物理因素來解釋。</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><strong>濕度高：</strong> 空氣中的水蒸氣分子已經很多，它們落回衣服表面並<span class="font-bold text-blue-700">凝結</span>的速度，與衣服上水分子逃逸（蒸發）的速度差不多，導致淨蒸發率極低。</li>
+                        <li><strong>無風：</strong> 沒有空氣流動把衣服表面附近的水蒸氣帶走，使得局部的濕度一直維持在飽和狀態，進一步阻礙蒸發。</li>
+                    </ul>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <!-- 6. 隨堂測驗 -->
+    <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+        <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗 (Quiz)</h3>
+        
+        <!-- Q1 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-2-1">
+            <p class="font-bold text-slate-800 mb-3">1. 關於「蒸發」的微觀機制，下列哪一項陳述最為準確？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-2-1', 'quiz4-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 液體中所有的分子同時獲得能量並離開液面</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-1', 'quiz4-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 只有位於液體底部的分子受熱後變成氣泡浮出水面</button>
+                <button onclick="checkAnswer(this, true,  'exp4-2-1', 'quiz4-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 位於液體表面且動能較大的分子，克服引力逃逸到空氣中</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-1', 'quiz4-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 空氣分子撞擊液面，把液體分子撞出來</button>
+            </div>
+            <div id="exp4-2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 蒸發是一個表面現象，只有位於表面且動能高於平均水平的分子，才有機會克服周圍液體分子的吸引力而逃逸。
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-2-2">
+            <p class="font-bold text-slate-800 mb-3">2. 蒸發會導致剩餘液體的溫度下降。這是因為：</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, true,  'exp4-2-2', 'quiz4-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 逃逸的分子帶走了較高的動能，導致剩餘分子的平均動能減少</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-2', 'quiz4-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 逃逸的分子具有較低的動能，留下了較高勢能的分子</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-2', 'quiz4-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 空氣中的冷空氣進入了液體中</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-2', 'quiz4-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 液體的質量減少，根據熱容量公式溫度必須下降</button>
+            </div>
+            <div id="exp4-2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 溫度是平均動能的量度。因為跑掉的都是動能特別大的「精英」分子，留下來的「平庸」分子就會拉低整體的平均動能，導致溫度下降（製冷效應）。
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz4-2-3">
+            <p class="font-bold text-slate-800 mb-3">3. 比較「蒸發」與「沸騰」，下列哪一項敘述是正確的？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-2-3', 'quiz4-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 兩者都只能在特定的溫度（沸點）下發生</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-3', 'quiz4-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 兩者都只發生在液體的表面</button>
+                <button onclick="checkAnswer(this, true,  'exp4-2-3', 'quiz4-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 蒸發在任何溫度下皆可發生，而沸騰只在沸點發生</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-3', 'quiz4-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 沸騰時液體溫度會不斷上升，而蒸發時溫度不變</button>
+            </div>
+            <div id="exp4-2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 這是最核心的區別。蒸發無時無刻都在發生（受環境影響快慢），而沸騰是一個劇烈的相變過程，必須達到沸點且提供充足熱源才會發生，且發生時內部會產生氣泡。
+            </div>
+        </div>
+
+    </section>
+</article>
+
+            
 <!-- ========================================== -->
           
 
