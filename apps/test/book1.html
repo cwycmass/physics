@@ -117,26 +117,16 @@
             </div>
             <!-- 第 2 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 2 章：直線運動</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 2 章：內能、熱與熱傳遞</h2>
                 <ul class="space-y-1">
                     <li>
                         <button onclick="switchPage('ch2-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                           2.1 描述直線運動
+                           2.1 內能與能量轉移
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch2-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                           2.2 運動線圖
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="switchPage('ch2-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                           2.3 勻加速運動方程
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="switchPage('ch2-4', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                           2.4 重力下的垂直運動
+                           2.2 熱傳遞方式
                         </button>
                     </li>
                 </ul>
@@ -787,7 +777,519 @@
 </article>
 
 
+<!-- ========================================== -->
+<!-- 區塊 2.1: 內能與能量轉移 -->
+<!-- ========================================== -->
+<article id="ch2-1" class="content-section">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.1</span>內能與能量轉移</h2>
+        <p class="text-slate-500 mt-2">從微觀的分子運動出發，理解溫度的本質、內能的組成，以及熱量轉移與熱平衡的觀念。</p>
+    </header>
 
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>根據物質的粒子模型，物體是由不停隨機運動的分子或原子所組成。這些微觀粒子的運動狀態決定了物體的宏觀熱學性質：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">動能 ($KE$)：</strong> 
+                    分子因為不停地隨機運動而具有動能。分子的運動越劇烈，其平均動能就越大。物體的 <strong class="text-blue-700">溫度 ($T$)</strong> 正是系統內分子隨機運動的 <strong>平均動能</strong> 的客觀量度。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">勢能 ($PE$)：</strong> 
+                    分子之間存在相互作用力，因此具有勢能。分子間的平均距離和排列方式（即物態，如固態、液態、氣態）決定了分子的勢能。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">內能 ($U$)：</strong> 
+                    物體內所有分子的動能和勢能的 <strong>總和</strong>。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與熱平衡機制 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 熱與熱平衡機制</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">當兩個溫度不同的物體發生熱接觸時，能量會發生轉移：</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">熱 ($Q$)</p>
+                    <p class="text-sm text-slate-600 leading-relaxed mt-2">
+                        因為溫差而發生轉移的能量稱為「熱」。熱 <strong>必然</strong> 從溫度較高的物體流向溫度較低的物體。
+                    </p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">熱平衡</p>
+                    <p class="text-sm text-slate-600 leading-relaxed mt-2">
+                        當熱量轉移使得兩個物體的溫度達到相同時，淨能量轉移停止，此狀態稱為熱平衡。
+                    </p>
+                    <div class="text-center mt-2 text-lg font-bold text-blue-900">
+                        $$T_1 = T_2$$
+                    </div>
+                </div>
+            </div>
+            <p class="text-sm text-slate-600 mt-4"><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>單位：</strong> 內能和熱都是能量的形式，其國際標準單位皆為 <strong class="text-blue-700 font-bold">焦耳 ($\text{J}$)</strong>。</p>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 溫度與內能的比較</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8">溫度 ($T$)</th>
+                        <th class="p-3 font-semibold w-3/8">內能 ($U$)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">微觀物理意義</td>
+                        <td class="p-3 font-bold text-blue-700">分子的「平均」動能</td>
+                        <td class="p-3 font-bold text-blue-700">所有分子動能與勢能的「總和」</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">與質量的關係</td>
+                        <td class="p-3">與物體的質量（粒子數量）<strong>無關</strong>。一杯沸水和一桶沸水溫度相同。</td>
+                        <td class="p-3">與物體的質量（粒子數量）<strong>成正比</strong>。一桶沸水的內能遠大於一杯沸水。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">與物態的關係</td>
+                        <td class="p-3">狀態改變（如冰融化）時，溫度可以保持不變。</td>
+                        <td class="p-3">狀態改變時，分子間勢能改變，因此內能必然改變。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">決定熱傳遞方向</td>
+                        <td class="p-3 text-green-700 font-bold">是。熱量由高溫流向低溫。</td>
+                        <td class="p-3 text-red-600 font-bold">否。熱量可以由內能小的物體流向內能大的物體。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">溫度 ($T$)</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">意義：</span> 分子平均動能。</li>
+                    <li><span class="font-medium text-slate-800">質量影響：</span> 無關。</li>
+                    <li><span class="font-medium text-slate-800">熱傳遞：</span> 決定方向（高溫 $\to$ 低溫）。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">內能 ($U$)</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">意義：</span> 分子動能與勢能總和。</li>
+                    <li><span class="font-medium text-slate-800">質量影響：</span> 成正比（粒子越多，總和越大）。</li>
+                    <li><span class="font-medium text-slate-800">熱傳遞：</span> 不能決定熱流方向。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「熱量總是從內能較大的物體流向內能較小的物體。」</li>
+                    <li>「物體吸收了熱量，它的溫度就一定會上升。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>熱傳遞的唯一條件是「溫差」！</strong> 一根燒紅的鐵釘（高溫，但內能小）丟入一桶冷水（低溫，但總內能巨大）中，熱量依然是從鐵釘流向冷水。</li>
+                    <li>當物體發生<strong>物態變化</strong>（如冰融化成水或水沸騰成蒸汽）時，吸收的熱量完全用於增加分子的勢能（打斷分子鍵），此時分子平均動能不變，因此<strong>溫度保持不變</strong>。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        比較一杯 $100\ ^\circ\text{C}$ 的沸水與一個裝滿 $20\ ^\circ\text{C}$ 溫水的大浴缸。哪個系統的分子平均動能較大？哪個系統的總內能較大？若將這杯沸水倒入浴缸中，能量將如何轉移？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <ul class="list-disc list-inside space-y-2 mb-2">
+                            <li><strong>平均動能：</strong> 溫度是平均動能的量度。沸水溫度高，故其分子平均動能較大。</li>
+                            <li><strong>總內能：</strong> 內能取決於溫度與質量。雖然浴缸水溫較低，但其質量（粒子數）極其龐大，所有粒子能量的「總和」遠超那杯沸水，故浴缸水的總內能較大。</li>
+                            <li><strong>能量轉移：</strong> 熱量永遠由高溫流向低溫。因此能量必定從沸水流向浴缸水，直至達到熱平衡。</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一塊 $0\ ^\circ\text{C}$ 的冰在室溫下逐漸融化成 $0\ ^\circ\text{C}$ 的水。在整個融化過程中，系統的溫度、分子平均動能及總內能分別有何改變？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <ul class="list-disc list-inside space-y-2 mb-2">
+                            <li><strong>溫度與平均動能：</strong> 因為融化過程中溫度保持在 $0\ ^\circ\text{C}$ 不變，所以分子的平均動能也 <strong>保持不變</strong>。</li>
+                            <li><strong>總內能：</strong> 冰吸收了周圍環境的熱量，這些能量被用來克服水分子之間的吸引力，從而改變分子的排列結構（固態轉液態）。這使得分子的 <strong>勢能增加</strong>。因為內能是動能與勢能的總和，所以系統的總內能 <strong>增加了</strong>。</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz2-1-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 關於物體的「內能」，下列哪一項陳述是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q21-1', 'quiz2-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 內能只取決於物體的溫度，與質量無關</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-1', 'quiz2-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 內能是物體整體運動時所具有的宏觀動能</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q21-1', 'quiz2-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 內能是物體內所有微觀粒子的動能和勢能的總和</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-1', 'quiz2-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 靜止在地面上的石頭沒有內能</button>
+                </div>
+                <div id="exp-q21-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 內能定義為所有微觀分子動能與勢能之和，受溫度、質量和物態共同影響。即使石頭靜止（宏觀動能為零），其內部的分子仍在振動，故依然有龐大的內能。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz2-1-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 當金屬塊的溫度由 $20\ ^\circ\text{C}$ 升高至 $80\ ^\circ\text{C}$ 時，金屬塊內部發生了甚麼變化？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q21-2', 'quiz2-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 分子的平均動能增加</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-2', 'quiz2-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 金屬塊內部的分子數量增加</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-2', 'quiz2-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 分子完全停止振動</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-2', 'quiz2-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 分子的勢能大幅減少</button>
+                </div>
+                <div id="exp-q21-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 溫度是分子平均動能的量度。溫度上升，代表粒子隨機運動（或振動）變得更加劇烈，平均動能增加。粒子數量（質量）則維持不變。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item" id="quiz2-1-3">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 將一塊 $80\ ^\circ\text{C}$ 的小鐵塊投入一杯 $40\ ^\circ\text{C}$ 的水中。假設沒有熱量散失到空氣中，達到熱平衡時，下列何者正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q21-3', 'quiz2-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 鐵塊的內能必定轉移到了水中，直到兩者的內能相等</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q21-3', 'quiz2-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 能量從鐵塊流向水，直到兩者的溫度相等</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-3', 'quiz2-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 能量從水流向鐵塊，因為水的質量較大</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-3', 'quiz2-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 鐵塊的溫度不會改變</button>
+                </div>
+                <div id="exp-q21-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 熱量永遠由高溫（$80\ ^\circ\text{C}$ 的鐵塊）流向低溫（$40\ ^\circ\text{C}$ 的水），直到兩者溫度相同為止（熱平衡）。平衡時兩者的內能通常不相等（因為質量和物質種類不同）。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 2.2: 熱傳遞方式 -->
+<!-- ========================================== -->
+<article id="ch2-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.2</span>熱傳遞方式</h2>
+        <p class="text-slate-500 mt-2">深入剖析傳導、對流與輻射三種熱能傳遞機制的物理原理及日常應用。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 三種熱傳遞機制</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>熱量從高溫區流向低溫區，主要透過三種不同的物理機制進行：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">傳導 (Conduction)：</strong> 
+                    能量透過物質內部相鄰粒子的碰撞而傳遞。過程中，物質本身不會發生宏觀的流動。主要發生在 <strong>固體</strong> 之中。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">對流 (Convection)：</strong> 
+                    能量透過流體（液體或氣體）本身的宏觀運動而傳遞。受熱流體膨脹變輕而上升，較冷的流體下沉填補，形成對流循環。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">輻射 (Radiation)：</strong> 
+                    能量以電磁波（主要是紅外線）的形式發射並傳播。這是唯一 <strong>不需要任何物質介質</strong> 就能進行的熱傳遞方式，可以在真空中發生（例如太陽的熱能傳到地球）。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心機制深度解析 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 微觀機制與影響因素</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">金屬為何是優良導熱體？</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        非金屬固體僅靠原子的振動碰撞傳熱，效率極低。金屬內部擁有大量的 <strong>自由電子 (Free electrons)</strong>。受熱時，自由電子獲得動能並迅速向冷端擴散，與原子發生碰撞交出能量。這雙重傳熱機制使金屬的導熱性能遠勝其他物質。
+                    </p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">影響熱輻射的因素</p>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-2">
+                        任何高於絕對零度的物體都會發出熱輻射。其發射或吸收的速率取決於：
+                    </p>
+                    <ul class="text-sm space-y-1 text-slate-600">
+                        <li>1. <strong>表面顏色與質地：</strong> 黯淡、黑色的表面是極佳的輻射吸收體和發射體；光亮、銀色的表面則是極差的吸收體和發射體（是良好的反射體）。</li>
+                        <li>2. <strong>表面溫度：</strong> 溫度越高，輻射越強。</li>
+                        <li>3. <strong>表面積：</strong> 表面積越大，輻射的能量越多。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 三大熱傳遞方式總結表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">方式</th>
+                        <th class="p-3 font-semibold w-1/4">發生介質</th>
+                        <th class="p-3 font-semibold w-1/4">物理機制</th>
+                        <th class="p-3 font-semibold w-1/4">日常應用/例子</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">傳導</td>
+                        <td class="p-3">固體最佳（液體、氣體極差）</td>
+                        <td class="p-3">粒子碰撞傳遞動能；自由電子擴散。</td>
+                        <td class="p-3">金屬鍋底傳熱快；羽絨被困住不流動的空氣（絕緣體）來保暖。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">對流</td>
+                        <td class="p-3">流體（液體、氣體）</td>
+                        <td class="p-3">受熱膨脹密度變小上升，冷流體下沉填補。</td>
+                        <td class="p-3">冷氣機安裝在高處（冷空氣下沉）；煮水時水流翻滾。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">輻射</td>
+                        <td class="p-3">無需介質（可在真空中進行）</td>
+                        <td class="p-3">發射並吸收紅外線（電磁波）。</td>
+                        <td class="p-3">太陽傳熱到地球；穿淺色衣服夏天較涼爽（少吸收）。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-blue-400">
+                <h4 class="font-bold text-slate-800 mb-2">傳導</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>介質：固體最佳，空氣極差。</li>
+                    <li>機制：粒子碰撞與自由電子。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-emerald-400">
+                <h4 class="font-bold text-slate-800 mb-2">對流</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>介質：流體（液體、氣體）。</li>
+                    <li>機制：密度差異造成宏觀流動。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-purple-400">
+                <h4 class="font-bold text-slate-800 mb-2">輻射</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>介質：無需介質（可穿透真空）。</li>
+                    <li>機制：紅外線電磁波；受顏色影響大。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「冬天蓋上厚厚的棉被，是因為棉被會產生熱量讓身體變暖。」</li>
+                    <li>「如果物體表面是光亮的銀色，它就能百分之百阻擋熱輻射的散失。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>棉被本身<strong>不會產生熱量</strong>！厚棉被含有大量無法流動的空氣。因為空氣是極差的導熱體（阻絕傳導），且被困住無法形成對流，因此能有效防止人體的熱量散失到環境中。</li>
+                    <li>銀色光亮表面是極差的輻射發射體，能「大幅減少」熱輻射散失，但<strong>無法完全降至零</strong>。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        在夏天，海邊經常會吹起由海洋吹向陸地的微風（海風）。試從熱傳遞的物理機制來解釋這種自然現象。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">這是<strong>對流</strong>的經典例子。</p>
+                        <ul class="list-decimal list-inside space-y-2 mb-2">
+                            <li>白天在陽光照射下，陸地比海洋升溫得更快。</li>
+                            <li>陸地上方的空氣被加熱，體積膨脹，密度變小而向上升起。</li>
+                            <li>海洋上方較冷、密度較大的空氣便會流過來填補陸地熱空氣上升後留下的空位。這股空氣流動就形成了由海面吹向陸地的「海風」。</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        分析日常使用的真空保溫壺（暖水壺），它是如何透過特定的設計，同時減少經由傳導、對流與輻射所散失的熱量的？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <ul class="list-disc list-inside space-y-2 mb-2">
+                            <li><strong>防止傳導與對流：</strong> 保溫瓶的雙層玻璃壁之間抽成了<strong>真空</strong>。由於真空沒有物質介質，因此幾乎完全切斷了透過傳導和對流散熱的途徑。同時配有塑膠或軟木塞（熱的不良導體）來減少瓶口的傳導。</li>
+                            <li><strong>防止輻射：</strong> 玻璃壁的內外面都鍍上了<strong>銀色反光塗層</strong>。由於光亮表面是極差的輻射發射體，這層塗層能把熱水發出的紅外線反射回水中，大幅減少輻射散熱。</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz2-2-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在完全沒有任何物質的真空中，熱量只能依靠哪一種方式進行傳遞？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-1', 'quiz2-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 傳導</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-1', 'quiz2-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 對流</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-1', 'quiz2-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 輻射</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-1', 'quiz2-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 熱平衡</button>
+                </div>
+                <div id="exp-q22-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 傳導需要相鄰粒子碰撞，對流需要流體宏觀運動，兩者皆需物質介質。只有輻射（紅外線電磁波）不需要介質，能在真空中傳播。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz2-2-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 在廚房煮湯時，鍋底的水受熱後會向上升，將熱量帶到水面。這種熱傳遞過程稱為：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-2', 'quiz2-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 傳導</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-2', 'quiz2-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 對流</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-2', 'quiz2-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 輻射</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-2', 'quiz2-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 沸騰</button>
+                </div>
+                <div id="exp-q22-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 鍋底的水受熱膨脹，密度變小而向上流動，這是由於密度差異造成的流體宏觀運動，屬於對流現象。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item" id="quiz2-2-3">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 金屬之所以是極佳的熱導體（傳導散熱快），最主要微觀原因是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-3', 'quiz2-2-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 金屬的密度很高，原子排列緊密</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-3', 'quiz2-2-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 金屬內部含有大量的自由電子，能迅速向冷端傳遞動能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-3', 'quiz2-2-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 金屬原子在受熱時體積會大幅膨脹</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-3', 'quiz2-2-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 金屬表面非常光滑，能有效反射熱輻射</button>
+                </div>
+                <div id="exp-q22-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 與非金屬僅靠原子振動傳熱不同，金屬內部有能夠自由移動的電子。自由電子受熱獲得高動能後，能在金屬晶格內迅速擴散並碰撞傳遞能量，使導熱速度極快。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item" id="quiz2-2-4">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 太陽能熱水器的集熱板表面通常被塗成甚麼顏色，以獲得最佳的加熱效率？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-4', 'quiz2-2-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 光亮的銀色，以反射熱能防止散失</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-4', 'quiz2-2-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 純白色，以維持乾淨吸熱</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-4', 'quiz2-2-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 黯淡的黑色，以最大化吸收熱輻射</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-4', 'quiz2-2-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 透明玻璃色，讓陽光直接穿透</button>
+                </div>
+                <div id="exp-q22-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 暗淡、黑色的表面是極佳的輻射吸收體。集熱板的主要目的是盡可能多地吸收太陽傳來的輻射能，因此塗成黑色效率最高。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item" id="quiz2-2-5">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 安裝在房間的冷氣機通常放置在靠近天花板的高處。其設計背後最主要的物理原理是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-5', 'quiz2-2-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 防止冷氣機吹出的風被家具擋住</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-5', 'quiz2-2-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 冷空氣密度較大會下沉，能有效地與房間下方較熱的空氣形成對流</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-5', 'quiz2-2-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 高處的熱輻射吸收力較弱</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-5', 'quiz2-2-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 減弱傳導散熱的效率</button>
+                </div>
+                <div id="exp-q22-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 冷空氣受冷收縮，密度變大而下沉。將冷氣機安裝在高處，吹出的冷空氣會自然下沉，將下方的熱空氣擠向上方，從而建立起良好的對流循環，快速冷卻整個房間。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
 
           
 
