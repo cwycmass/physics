@@ -133,41 +133,16 @@
             </div>
             <!-- 第 3 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 3 章：力與運動(1)</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 3 章：温度變化與熱容量</h2>
                 <ul class="space-y-1">
                     <li>
                         <button onclick="switchPage('ch3-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            3.1 力
+                            3.1 功率與量度轉移的能量
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch3-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            3.2 牛頓第一運動定律
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="switchPage('ch3-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            3.3 牛頓第二運動定律
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="switchPage('ch3-4', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            3.4 重量與對重量的感覺
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="switchPage('ch3-5', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            3.5 流體阻力
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="switchPage('ch3-6', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            3.6 摩擦力
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="switchPage('ch3-7', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            3.7 牛頓第三運動定律
+                            3.2 熱容量和比熱容量
                         </button>
                     </li>
                 </ul>
@@ -1291,6 +1266,475 @@
     </section>
 </article>
 
+
+<!-- ========================================== -->
+<!-- 區塊 3.1: 功率與量度轉移的能量 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch3-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-blue-100 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.1</span>功率與量度轉移的能量</h2>
+        <p class="text-slate-500 mt-2">了解能量轉移的快慢（功率），以及如何利用電器銘牌或焦耳計來計算和量度轉移的熱能。</p>
+    </header>
+
+    <!-- 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 名詞定義與核心概念</h3>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+            <p class="mb-3">加熱物體時，能量會從電源轉移到物體中。為了描述能量轉移的<span class="text-blue-700 font-bold">快慢程度</span>，我們引入了以下物理量：</p>
+            <ul class="list-disc list-inside space-y-2 ml-2">
+                <li><strong class="text-blue-700 font-bold">功率 ($P$)：</strong> 功率是能量的轉移率，即<span class="text-blue-700 font-bold">每單位時間轉移的能量</span>。一個發熱器的功率越大，代表它每秒鐘能提供更多的熱量。</li>
+                <li><strong class="text-blue-700 font-bold">焦耳計：</strong> 實驗室中用來直接量度轉移到發熱器能量總和的儀器。使用時，將焦耳計連接在電源和發熱器之間。轉移的總能量等於焦耳計的<span class="text-blue-700 font-bold">最後讀數減去初始讀數</span>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+            <p class="text-slate-700 mb-2">功率、轉移的能量與時間的關係公式為：</p>
+            <div class="text-center py-4 overflow-x-auto text-2xl font-bold">
+                $$ P = \frac{Q}{t} \quad \implies \quad Q = Pt $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-2">
+                <li>$P$：功率 (單位：瓦特 $\text{W}$)</li>
+                <li>$Q$：轉移的能量 (單位：焦耳 $\text{J}$)</li>
+                <li>$t$：加熱時間 (單位：秒 $\text{s}$)</li>
+            </ul>
+            <p class="text-sm text-slate-600 mt-4"><i class="fa-solid fa-circle-info mr-1"></i> <strong>單位的物理定義：</strong> $1 \text{ W} = 1 \text{ J s}^{-1}$。日常生活中，功率較大的電器常用<span class="text-blue-700 font-bold">千瓦 ($\text{kW}$)</span>，$1 \text{ kW} = 1000 \text{ W}$。</p>
+        </div>
+    </section>
+
+    <!-- 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 能量 ($Q$) vs 功率 ($P$) 對照</h3>
+        
+        <!-- 桌面版 Table (lg:block) -->
+        <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-slate-100 border-b border-slate-200">
+                    <tr>
+                        <th class="p-4 font-bold w-1/4">比較項目</th>
+                        <th class="p-4 font-bold w-3/8 text-blue-800">轉移的能量 ($Q$)</th>
+                        <th class="p-4 font-bold w-3/8 text-emerald-800">功率 ($P$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">物理意義</td>
+                        <td class="p-4">代表累積轉移的總熱量多寡。</td>
+                        <td class="p-4">代表熱量轉移的「速度」有多快。</td>
+                    </tr>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">是否受時間影響</td>
+                        <td class="p-4">受時間影響。開啟時間越長，轉移能量越多 ($Q = Pt$)。</td>
+                        <td class="p-4">由電器本身性質（銘牌標示）決定，不受開啟時間長短影響。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">測量儀器</td>
+                        <td class="p-4">焦耳計</td>
+                        <td class="p-4">瓦特計 (或透過電壓與電流計算)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 行動版 Cards (lg:hidden) -->
+        <div class="space-y-4 lg:hidden">
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h4 class="font-bold text-blue-800 mb-2">轉移的能量 ($Q$)</h4>
+                <p class="text-sm text-slate-600 mb-1"><strong>意義：</strong> 累積的總熱量。</p>
+                <p class="text-sm text-slate-600 mb-1"><strong>時間：</strong> 開啟越久，總能量越多。</p>
+                <p class="text-sm text-slate-600"><strong>測量：</strong> 焦耳計。</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+                <h4 class="font-bold text-emerald-800 mb-2">功率 ($P$)</h4>
+                <p class="text-sm text-slate-600 mb-1"><strong>意義：</strong> 能量轉移的速率（快慢）。</p>
+                <p class="text-sm text-slate-600 mb-1"><strong>時間：</strong> 屬機器固有特性，不隨時間改變。</p>
+                <p class="text-sm text-slate-600"><strong>測量：</strong> 瓦特計。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-blue-500 w-8"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                <p class="text-sm">「電熱水器的功率比微波爐大，所以電熱水器消耗的能量一定比微波爐多。」</p>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                <p class="text-sm">消耗的總能量 $Q$ 同時取決於<span class="font-bold">功率 $P$ 和時間 $t$</span> ($Q = Pt$)。即使電熱水器功率較大，如果只開啟 1 分鐘，而小功率的微波爐開啟了 10 分鐘，微波爐消耗的總能量很可能更多。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 典型例題解說 -->
+    <section class="mb-12">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+        
+        <!-- 題 1 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                <p class="text-slate-800 font-medium pt-1">一個標示為 $1.5 \text{ kW}$ 的電水煲，將一壺水加熱了 $3 \text{ 分鐘}$。求電水煲轉移給水的總能量（假設沒有能量流失至周圍環境）。</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：轉換單位為標準 SI 單位</strong></p>
+                    <p class="mb-2">功率 $P = 1.5 \text{ kW} = 1500 \text{ W}$</p>
+                    <p class="mb-2">時間 $t = 3 \text{ 分鐘} = 3 \times 60 \text{ s} = 180 \text{ s}$</p>
+                    <p class="mb-2 mt-4"><strong>第二步：應用公式 $Q = Pt$ 計算</strong></p>
+                    <div class="overflow-x-auto">$$ Q = 1500 \times 180 = 270,000 \text{ J} $$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：轉移的總能量為 $270,000 \text{ J}$ (或 $270 \text{ kJ}$)。</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- 題 2 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                <p class="text-slate-800 font-medium pt-1">在一次物理實驗中，學生使用焦耳計量度發熱器提供的能量。實驗開始時，焦耳計讀數為 $25,000 \text{ J}$。開啟發熱器 $4 \text{ 分鐘}$ 後，讀數變為 $43,000 \text{ J}$。求該發熱器的功率。</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：計算轉移的總能量</strong></p>
+                    <p class="mb-2">總能量 $Q = \text{最後讀數} - \text{初始讀數}$</p>
+                    <div class="overflow-x-auto">$$ Q = 43,000 - 25,000 = 18,000 \text{ J} $$</div>
+                    <p class="mb-2 mt-4"><strong>第二步：計算發熱器功率</strong></p>
+                    <p class="mb-2">時間 $t = 4 \times 60 = 240 \text{ s}$</p>
+                    <div class="overflow-x-auto">$$ P = \frac{Q}{t} = \frac{18000}{240} = 75 \text{ W} $$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：發熱器的功率為 $75 \text{ W}$。</p>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <!-- 6. 隨堂測驗 -->
+    <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+        <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗 (Quiz)</h3>
+        
+        <!-- Q1 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-1-1">
+            <p class="font-bold text-slate-800 mb-3">1. 功率的國際標準單位 (SI unit) 是甚麼？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp3-1-1', 'quiz3-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 焦耳 (J)</button>
+                <button onclick="checkAnswer(this, true,  'exp3-1-1', 'quiz3-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 瓦特 (W)</button>
+                <button onclick="checkAnswer(this, false, 'exp3-1-1', 'quiz3-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 千瓦 (kW)</button>
+                <button onclick="checkAnswer(this, false, 'exp3-1-1', 'quiz3-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 焦耳每千克 ($\text{J kg}^{-1}$)</button>
+            </div>
+            <div id="exp3-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 功率是能量的轉移率，單位是瓦特 ($\text{W}$)。$1 \text{ W}$ 等同於 $1 \text{ J s}^{-1}$。千瓦雖是功率單位，但非基本 SI 單位。
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-1-2">
+            <p class="font-bold text-slate-800 mb-3">2. 焦耳計在物理實驗中的主要用途是甚麼？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp3-1-2', 'quiz3-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 直接量度電器的功率大小</button>
+                <button onclick="checkAnswer(this, false, 'exp3-1-2', 'quiz3-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 量度物體的溫度變化</button>
+                <button onclick="checkAnswer(this, true,  'exp3-1-2', 'quiz3-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 直接量度轉移到發熱器的總能量</button>
+                <button onclick="checkAnswer(this, false, 'exp3-1-2', 'quiz3-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 測量發熱器加熱所花費的時間</button>
+            </div>
+            <div id="exp3-1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 焦耳計（Joulemeter）是專門用來計算累積轉移的總能量（單位：焦耳）的儀器。若要得知功率，還需測量時間並用 $P = Q/t$ 計算。
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz3-1-3">
+            <p class="font-bold text-slate-800 mb-3">3. 一個 $2 \text{ kW}$ 的電熱爐持續開啟了 5 分鐘，它轉移了多少能量？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp3-1-3', 'quiz3-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $10,000 \text{ J}$</button>
+                <button onclick="checkAnswer(this, false, 'exp3-1-3', 'quiz3-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $10 \text{ J}$</button>
+                <button onclick="checkAnswer(this, true,  'exp3-1-3', 'quiz3-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $600,000 \text{ J}$</button>
+                <button onclick="checkAnswer(this, false, 'exp3-1-3', 'quiz3-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $120,000 \text{ J}$</button>
+            </div>
+            <div id="exp3-1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 注意單位的轉換：$P = 2 \text{ kW} = 2000 \text{ W}$；$t = 5 \text{ 分鐘} = 300 \text{ s}$。代入公式 $Q = Pt = 2000 \times 300 = 600,000 \text{ J}$。
+            </div>
+        </div>
+
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 3.2: 熱容量和比熱容量 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch3-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-blue-100 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.2</span>熱容量和比熱容量</h2>
+        <p class="text-slate-500 mt-2">探討物質吸收熱量與溫度變化的定量關係，並了解水的高比熱容量在生活中的重要性。</p>
+    </header>
+
+    <!-- 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 名詞定義與核心概念</h3>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+            <p class="mb-3">為什麼在烈日下，沙灘的沙子燙腳，但海水卻十分涼爽？這是因為不同的物體和物質，對於溫度改變的「抵抗力」不同。物理學用以下兩個量來描述：</p>
+            <ul class="list-disc list-inside space-y-3 ml-2">
+                <li><strong class="text-blue-700 font-bold">熱容量 ($C$)：</strong> 針對<span class="text-blue-700 font-bold">整個特定物體</span>。定義為使該物體的溫度上升（或下降）$1\ ^\circ\text{C}$ 所需要的熱量。物體的質量越大，熱容量通常越大。</li>
+                <li><strong class="text-blue-700 font-bold">比熱容量 ($c$)：</strong> 針對<span class="text-blue-700 font-bold">某種物質</span>本身的特性，排除了質量的影響。定義為使 <span class="text-blue-700 font-bold">$1 \text{ kg}$</span> 的該種物質溫度上升 $1\ ^\circ\text{C}$ 所需要的熱量。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+            <p class="text-slate-700 mb-2">熱量 ($Q$)、質量 ($m$)、溫度變化 ($\Delta T$) 與熱容量/比熱容量的關係公式：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">使用熱容量 ($C$)</p>
+                    <div class="text-xl font-bold">$$ Q = C \Delta T $$</div>
+                    <p class="text-sm text-slate-500 mt-2">單位：$\text{J }^\circ\text{C}^{-1}$</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">使用比熱容量 ($c$)</p>
+                    <div class="text-xl font-bold">$$ Q = mc \Delta T $$</div>
+                    <p class="text-sm text-slate-500 mt-2">單位：$\text{J kg}^{-1}\ ^\circ\text{C}^{-1}$</p>
+                </div>
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$\Delta T$ 是溫度的改變量，計算時通常取<span class="text-blue-700 font-bold">高溫減低溫</span>以保持為正數。</li>
+                <li>熱容量與比熱容量的轉換關係為：<strong class="text-blue-700 font-bold">$$ C = mc $$</strong></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 對照表：熱容量 ($C$) vs 比熱容量 ($c$)</h3>
+        
+        <!-- 桌面版 Table (lg:block) -->
+        <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-slate-100 border-b border-slate-200">
+                    <tr>
+                        <th class="p-4 font-bold w-1/4">比較項目</th>
+                        <th class="p-4 font-bold w-3/8 text-blue-800">熱容量 ($C$)</th>
+                        <th class="p-4 font-bold w-3/8 text-emerald-800">比熱容量 ($c$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">適用對象</td>
+                        <td class="p-4">一整個特定的<span class="font-bold text-blue-700">物體</span>（如：一個杯子、一盆水）。</td>
+                        <td class="p-4">一種單純的<span class="font-bold text-emerald-700">物質</span>（如：水、鐵、玻璃）。</td>
+                    </tr>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">是否受質量影響？</td>
+                        <td class="p-4"><strong>是。</strong> 質量越大，熱容量越大。</td>
+                        <td class="p-4"><strong>否。</strong> 它是物質的常數，1 滴水和 1 桶水的比熱容量相同。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">國際單位 (SI unit)</td>
+                        <td class="p-4">$\text{J }^\circ\text{C}^{-1}$</td>
+                        <td class="p-4">$\text{J kg}^{-1}\ ^\circ\text{C}^{-1}$</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 行動版 Cards (lg:hidden) -->
+        <div class="space-y-4 lg:hidden">
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h4 class="font-bold text-blue-800 mb-2">熱容量 ($C$)</h4>
+                <p class="text-sm text-slate-600 mb-1"><strong>對象：</strong> 一個特定的整體物體。</p>
+                <p class="text-sm text-slate-600 mb-1"><strong>質量影響：</strong> 有影響，物體越重 $C$ 越大。</p>
+                <p class="text-sm text-slate-600"><strong>單位：</strong> $\text{J }^\circ\text{C}^{-1}$</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+                <h4 class="font-bold text-emerald-800 mb-2">比熱容量 ($c$)</h4>
+                <p class="text-sm text-slate-600 mb-1"><strong>對象：</strong> 一種單純物質的特性。</p>
+                <p class="text-sm text-slate-600 mb-1"><strong>質量影響：</strong> 無影響，是物質的常數。</p>
+                <p class="text-sm text-slate-600"><strong>單位：</strong> $\text{J kg}^{-1}\ ^\circ\text{C}^{-1}$</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-blue-500 w-8"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                <p class="text-sm">「比熱容量越大的物質，加熱時溫度上升得越快。」</p>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                <p class="text-sm">完全相反！比熱容量大，代表該物質溫度上升 $1\ ^\circ\text{C}$ 需要<span class="font-bold">非常多的熱量</span>。所以吸收相同熱量時，比熱容量越大的物質（如水），溫度上升反而越<span class="font-bold">慢</span>。</p>
+            </div>
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                <p class="text-sm">「溫度越高的物體，裡面含有的熱量（Heat）就越多。」</p>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                <p class="text-sm">物理學中，「熱量 ($Q$)」是指<span class="font-bold">轉移過程中的能量</span>，不能說物體「含有」熱量。物體含有的是「內能」。我們只能計算因為溫度差而轉移了多少熱量。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 典型例題解說 -->
+    <section class="mb-12">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+        
+        <!-- 題 1 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                <p class="text-slate-800 font-medium pt-1">一個金屬塊吸收了 $4000 \text{ J}$ 的熱量後，溫度從 $20\ ^\circ\text{C}$ 上升至 $40\ ^\circ\text{C}$。求該金屬塊的熱容量 $C$。</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：求溫度變化</strong></p>
+                    <div class="overflow-x-auto">$$ \Delta T = 40 - 20 = 20\ ^\circ\text{C} $$</div>
+                    <p class="mb-2 mt-4"><strong>第二步：應用熱容量公式</strong></p>
+                    <div class="overflow-x-auto">$$ Q = C \Delta T \implies 4000 = C \times 20 $$</div>
+                    <div class="overflow-x-auto">$$ C = \frac{4000}{20} = 200 \text{ J }^\circ\text{C}^{-1} $$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：金屬塊的熱容量為 $200 \text{ J }^\circ\text{C}^{-1}$。</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- 題 2 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                <p class="text-slate-800 font-medium pt-1">將 $2 \text{ kg}$ 的水從 $25\ ^\circ\text{C}$ 煮沸至 $100\ ^\circ\text{C}$，需要吸收多少熱能？（已知水的比熱容量 $c = 4200 \text{ J kg}^{-1}\ ^\circ\text{C}^{-1}$）</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：求溫度變化</strong></p>
+                    <div class="overflow-x-auto">$$ \Delta T = 100 - 25 = 75\ ^\circ\text{C} $$</div>
+                    <p class="mb-2 mt-4"><strong>第二步：應用比熱容量公式</strong></p>
+                    <div class="overflow-x-auto">$$ Q = mc \Delta T $$</div>
+                    <div class="overflow-x-auto">$$ Q = 2 \times 4200 \times 75 $$</div>
+                    <div class="overflow-x-auto">$$ Q = 8400 \times 75 = 630,000 \text{ J} $$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：需要吸收 $630,000 \text{ J}$ (或 $630 \text{ kJ}$) 的熱能。</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- 題 3 (熱平衡混合) -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                <p class="text-slate-800 font-medium pt-1">日常生活中，汽車引擎經常使用「水」作為冷卻劑，沿海地區的日夜溫差也比內陸沙漠地區小。試以物理學原理解釋這兩種現象的共同原因。</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2">這兩個現象都歸因於<span class="text-blue-700 font-bold">水具有非常高的比熱容量</span> ($4200 \text{ J kg}^{-1}\ ^\circ\text{C}^{-1}$)。</p>
+                    <ul class="list-disc list-inside space-y-2 mt-2">
+                        <li><strong>汽車冷卻劑：</strong> 因為水的比熱容量高，它在吸收引擎產生的大量廢熱時，自身的溫度只會輕微上升，能有效帶走熱量且不易沸騰。</li>
+                        <li><strong>沿海溫差小：</strong> 白天太陽輻射大量熱能，海水（比熱容量大）升溫緩慢；夜晚散熱時，海水降溫也緩慢。因此沿海地區氣溫受海水調節，日夜溫差較小；而沙漠沙石比熱容量小，吸熱升溫快、散熱降溫也快。</li>
+                    </ul>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <!-- 6. 隨堂測驗 -->
+    <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+        <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗 (Quiz)</h3>
+        
+        <!-- Q1 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-2-1">
+            <p class="font-bold text-slate-800 mb-3">1. 物理學中，比熱容量 ($c$) 的國際標準單位是甚麼？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp3-2-1', 'quiz3-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $\text{J }^\circ\text{C}^{-1}$</button>
+                <button onclick="checkAnswer(this, true,  'exp3-2-1', 'quiz3-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $\text{J kg}^{-1}\ ^\circ\text{C}^{-1}$</button>
+                <button onclick="checkAnswer(this, false, 'exp3-2-1', 'quiz3-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $\text{W kg}^{-1}\ ^\circ\text{C}^{-1}$</button>
+                <button onclick="checkAnswer(this, false, 'exp3-2-1', 'quiz3-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $\text{kg }^\circ\text{C}^{-1}$</button>
+            </div>
+            <div id="exp3-2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 比熱容量定義為「每 $1 \text{ kg}$」物質改變 $1\ ^\circ\text{C}$ 所需熱量，公式 $c = \frac{Q}{m\Delta T}$，故單位為 $\text{J kg}^{-1}\ ^\circ\text{C}^{-1}$。而 $\text{J }^\circ\text{C}^{-1}$ 是「熱容量 ($C$)」的單位。
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-2-2">
+            <p class="font-bold text-slate-800 mb-3">2. 質量相同、初溫相同的食油和水，若利用完全相同的加熱器加熱相同時間（吸收相同熱量），發現食油的溫度比水高很多。這是因為：</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp3-2-2', 'quiz3-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 食油的密度比水小</button>
+                <button onclick="checkAnswer(this, false, 'exp3-2-2', 'quiz3-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 食油的比熱容量比水大</button>
+                <button onclick="checkAnswer(this, true,  'exp3-2-2', 'quiz3-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 食油的比熱容量比水小</button>
+                <button onclick="checkAnswer(this, false, 'exp3-2-2', 'quiz3-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 水把熱量反射掉了</button>
+            </div>
+            <div id="exp3-2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 根據 $\Delta T = \frac{Q}{mc}$。當吸收熱量 $Q$ 與質量 $m$ 都相同時，溫度上升 $\Delta T$ 與比熱容量 $c$ 成反比。食油溫度升得快，代表它的比熱容量較小。
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-2-3">
+            <p class="font-bold text-slate-800 mb-3">3. 一個物體的熱容量 ($C$) 和該物質的比熱容量 ($c$) 之間，存在甚麼數學關係？（$m$ 為物體質量）</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp3-2-3', 'quiz3-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $C = \frac{c}{m}$</button>
+                <button onclick="checkAnswer(this, true,  'exp3-2-3', 'quiz3-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $C = mc$</button>
+                <button onclick="checkAnswer(this, false, 'exp3-2-3', 'quiz3-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $C = \frac{m}{c}$</button>
+                <button onclick="checkAnswer(this, false, 'exp3-2-3', 'quiz3-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 兩者沒有數學關係</button>
+            </div>
+            <div id="exp3-2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 比熱容量 $c$ 是一公斤物質的熱容量。因此，質量為 $m$ 公斤的整個物體的熱容量 $C$，就是將比熱容量乘上質量：$C = mc$。
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-2-4">
+            <p class="font-bold text-slate-800 mb-3">4. 計算熱量轉移時，公式 $Q = mc\Delta T$ 中的 $\Delta T$ （溫度變化）通常如何取值以確保算出的能量為正數？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp3-2-4', 'quiz3-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 末溫度 減去 初溫度</button>
+                <button onclick="checkAnswer(this, false, 'exp3-2-4', 'quiz3-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 初溫度 減去 末溫度</button>
+                <button onclick="checkAnswer(this, true,  'exp3-2-4', 'quiz3-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 較高的溫度 減去 較低的溫度</button>
+                <button onclick="checkAnswer(this, false, 'exp3-2-4', 'quiz3-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 絕對溫度 (Kelvin) 的總和</button>
+            </div>
+            <div id="exp3-2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 在處理熱量吸收或釋放的計算中（尤其是在熱平衡的「吸熱 = 放熱」方程中），我們習慣取 $\Delta T$ 為正值，因此一律以「高溫減低溫」來計算溫度變化量。
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz3-2-5">
+            <p class="font-bold text-slate-800 mb-3">5. 某未知金屬塊質量為 $1 \text{ kg}$，吸收了 $2000 \text{ J}$ 的能量後，其溫度上升了 $4\ ^\circ\text{C}$。求該金屬的比熱容量。</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp3-2-5', 'quiz3-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $8000 \text{ J kg}^{-1}\ ^\circ\text{C}^{-1}$</button>
+                <button onclick="checkAnswer(this, false, 'exp3-2-5', 'quiz3-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $250 \text{ J kg}^{-1}\ ^\circ\text{C}^{-1}$</button>
+                <button onclick="checkAnswer(this, true,  'exp3-2-5', 'quiz3-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $500 \text{ J kg}^{-1}\ ^\circ\text{C}^{-1}$</button>
+                <button onclick="checkAnswer(this, false, 'exp3-2-5', 'quiz3-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $400 \text{ J kg}^{-1}\ ^\circ\text{C}^{-1}$</button>
+            </div>
+            <div id="exp3-2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong> 代入公式 $Q = mc\Delta T$。$2000 = 1 \times c \times 4$。解得 $c = 2000 / 4 = 500 \text{ J kg}^{-1}\ ^\circ\text{C}^{-1}$。
+            </div>
+        </div>
+
+    </section>
+</article>            
           
 
 <!-- ========================================== -->
