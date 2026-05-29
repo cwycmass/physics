@@ -249,7 +249,7 @@
                     </li>
                     <li>
                         <button onclick="switchPage('ch8-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            8.2 輸 電
+                            8.2 輸電
                         </button>
                     </li>
                 </ul>
@@ -4015,6 +4015,388 @@
         </div>
     </section>
 </article>
+
+
+<!-- ========================================== -->
+<!-- 區塊 8.1: 變壓器 -->
+<!-- ========================================== -->
+<article id="ch8-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">8.1</span>變壓器</h2>
+        <p class="text-slate-500 mt-2">理解變壓器的構造與互感運作原理，掌握理想變壓器的變壓與變流公式，並探討實際變壓器的能量損耗及改善方法。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>將手提電腦或手機連接到市電插座時，電線上通常會有一個「小盒子」（俗稱火牛）。這個裝置的物理學名稱就是<strong>變壓器</strong>，它的功用是改變交流電的電壓，將市電的電壓調高或降低至電器所需的正常操作電壓。</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">構造：</strong> 
+                    簡單變壓器由繞在同一個<strong>軟鐵芯</strong>上的兩組獨立導線線圈組成：
+                    <ul class="list-none list-inside ml-6 text-sm space-y-1 mt-1">
+                        <li>👉 <strong>原線圈：</strong> 接駁至輸入交流電源的線圈，匝數記為 $N_1$，兩端電壓記為 $V_1$。</li>
+                        <li>👉 <strong>副線圈：</strong> 接駁至負載（電器）的輸出線圈，匝數記為 $N_2$，兩端電壓記為 $V_2$。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">互感原理：</strong> 
+                    變壓器利用<strong>電磁感應中的互感現象</strong>來運作：
+                    <ol class="list-decimal list-inside ml-6 text-sm space-y-1 mt-1">
+                        <li>當交流電通過原線圈時，會在軟鐵芯中產生不斷改變方向和大小的<strong>交變磁通量</strong>。</li>
+                        <li>軟鐵芯將這個變化的磁通量高效引導，使其穿過副線圈。</li>
+                        <li>由於穿過副線圈的磁通量不斷改變，副線圈兩端便會感應出相同頻率的<strong>感生電動勢（輸出電壓）</strong>。</li>
+                    </ol>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與理想變壓器 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與理想變壓器</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-4">當穿過兩組線圈的磁通量完全沒有漏失時，電壓之比等於線圈的匝數之比。這稱為<strong>變壓公式</strong>：</p>
+            
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$\frac{V_1}{V_2} = \frac{N_1}{N_2}$$
+            </div>
+
+            <p class="text-slate-700 my-4"><strong>理想變壓器：</strong> 假設變壓器在傳遞能量時沒有任何能量損耗，即其效率為 $100\%$。根據能量守恆定律，輸入功率等於輸出功率：</p>
+            
+            <div class="text-center my-4 overflow-x-auto text-xl font-bold text-blue-900">
+                $$P_{\text{入}} = P_{\text{出}} \quad \implies \quad V_1 I_1 = V_2 I_2$$
+            </div>
+
+            <p class="text-slate-700 my-4">結合兩式，我們可以導出理想變壓器的<strong>電流公式</strong>：</p>
+            
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$\frac{I_1}{I_2} = \frac{V_2}{V_1} = \frac{N_2}{N_1}$$
+            </div>
+
+            <ul class="text-sm text-slate-600 space-y-2 mt-4 border-t border-blue-200/60 pt-3">
+                <li><i class="fa-solid fa-arrow-up-right-dots text-blue-500 mr-1"></i> <strong>升壓變壓器 ($N_2 > N_1$)：</strong> 輸出電壓高於輸入電壓（$V_2 > V_1$），但同時會導致輸出電流變小（$I_2 < I_1$）。即：<strong>升壓同時降流</strong>。</li>
+                <li><i class="fa-solid fa-arrow-down-wide-short text-blue-500 mr-1"></i> <strong>降壓變壓器 ($N_2 < N_1$)：</strong> 輸出電壓低於輸入電壓（$V_2 < V_1$），但同時會導致輸出電流變大（$I_2 > I_1$）。即：<strong>降壓同時升流</strong>。</li>
+                <li><i class="fa-solid fa-ban text-red-500 mr-1"></i> <strong>直流電限制：</strong> 變壓器<strong>不可以用於恆定直流電</strong>。因為恆定直流電在鐵芯中產生恆定磁場，副線圈中的磁通量不變（變化率為零），故副線圈不會產生感生電壓。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 實際變壓器的能量損耗 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 實際變壓器的能量損耗與改善方法</h3>
+        <p class="text-slate-700 mb-3">在現實中，變壓器的效率不可能達到 $100\%$，部分電能會轉化為熱能而流失。以下是四種主要的損耗原因及改善方法：</p>
+        <!-- 桌面版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">損耗成因</th>
+                        <th class="p-3 font-semibold w-3/8">物理原理說明</th>
+                        <th class="p-3 font-semibold w-3/8">改善方法 / 結構設計</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">1. 線圈的焦耳熱</td>
+                        <td class="p-3">繞製線圈的導線具有電阻，當電流通過時，會依 $I^2R$ 的規律生熱。</td>
+                        <td class="p-3 text-green-700 font-bold">使用電阻率極低的粗銅線繞製線圈。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">2. 鐵芯中的渦電流</td>
+                        <td class="p-3">交變磁場會在整塊金屬鐵芯中感應出封閉的漩渦狀電流，使鐵芯過熱。</td>
+                        <td class="p-3 text-green-700 font-bold">使用表面塗有絕緣漆的薄鐵片疊合而成的「疊片鐵芯」以切斷電流通路。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">3. 磁滯損耗</td>
+                        <td class="p-3">鐵芯在交變磁場中反覆被磁化與退磁，需要消耗能量克服磁疇阻力。</td>
+                        <td class="p-3 text-green-700 font-bold">使用易磁化且極易退磁的「軟鐵」來製作鐵芯。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">4. 磁漏</td>
+                        <td class="p-3">原線圈產生的磁場線未能百分之百穿過副線圈，造成磁通量散失。</td>
+                        <td class="p-3 text-green-700 font-bold">採用閉合鐵芯設計，或直接將副線圈套繞在原線圈外面。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-blue-500">
+                <h4 class="font-bold text-blue-700 mb-1">焦耳熱損耗</h4>
+                <p class="text-sm text-slate-600">導線有電阻，電流生熱。<span class="font-bold text-green-700">改善：</span>使用粗銅線。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-blue-500">
+                <h4 class="font-bold text-blue-700 mb-1">鐵芯渦電流</h4>
+                <p class="text-sm text-slate-600">變化的磁場使整塊鐵芯發熱。<span class="font-bold text-green-700">改善：</span>使用塗有絕緣漆的疊片鐵芯。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-blue-500">
+                <h4 class="font-bold text-blue-700 mb-1">磁滯與磁漏</h4>
+                <p class="text-sm text-slate-600">反覆磁化耗能、磁場散失。<span class="font-bold text-green-700">改善：</span>採用軟鐵芯與套繞線圈設計。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「升壓變壓器可以把 $12 \text{ V}$ 的電壓升高到 $220 \text{ V}$，這代表它創造了額外的能量，違背了能量守恆定律。」</li>
+                    <li>「因為變壓器內部的線圈是繞在軟鐵芯上，所以電流可以直接通過鐵芯從原線圈流到副線圈。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>變壓器<strong>沒有創造能量</strong>。在升高電壓的同時，輸出電流會成比例地減小（$P = VI$ 保持不變）。理想狀態下的輸出功率最多只能等於輸入功率。</li>
+                    <li>兩組線圈的導線表面都塗有絕緣漆（漆包線），且與鐵芯完全絕緣。兩組線圈之間<strong>沒有任何電流直接流過</strong>，它們純粹依靠<strong>變化的磁場</strong>來進行電能的轉移。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個理想降壓變壓器的原線圈匝數為 $800$ 匝，接駁至 $220 \text{ V}$ 的交流電源。若要求副線圈輸出 $11 \text{ V}$ 的電壓，求：<br>
+                        (a) 副線圈的匝數。<br>
+                        (b) 當副線圈連接一個阻值為 $5.5\ \Omega$ 的電阻器時，流經原線圈和副線圈的電流大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 求副線圈的匝數 $N_2$：</strong></p>
+                        $$\frac{V_1}{V_2} = \frac{N_1}{N_2} \implies \frac{220}{11} = \frac{800}{N_2}$$
+                        $$20 = \frac{800}{N_2} \implies N_2 = \frac{800}{20} = 40 \text{ 匝}$$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 求電流 $I_1$ 與 $I_2$：</strong></p>
+                        <p class="mb-2">1. 先利用歐姆定律計算副線圈（輸出端）的電流 $I_2$：</p>
+                        $$I_2 = \frac{V_2}{R} = \frac{11 \text{ V}}{5.5\ \Omega} = 2 \text{ A}$$
+                        <p class="mb-2">2. 對於理想變壓器（功率守恆），利用電流比例公式計算原線圈電流 $I_1$：</p>
+                        $$\frac{I_1}{I_2} = \frac{N_2}{N_1} \implies \frac{I_1}{2} = \frac{40}{800}$$
+                        $$I_1 = 2 \times 0.05 = 0.1 \text{ A}$$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 副線圈匝數為 $40$ 匝；(b) 原線圈電流為 $0.1 \text{ A}$，副線圈電流為 $2 \text{ A}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz8-1-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 為什麼變壓器只能改變交流電（AC）的電壓，而無法改變恆定直流電（DC）的電壓？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q81-1', 'quiz8-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 因為直流電的電流太小，無法被鐵芯磁化</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q81-1', 'quiz8-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 因為直流電產生的是恆定不變的磁場，無法在副線圈引發電磁感應</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-1', 'quiz8-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 因為直流電具有極性，無法流過原線圈的銅導線</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-1', 'quiz8-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 因為直流電會直接將軟鐵芯永久磁化</button>
+                </div>
+                <div id="exp-q81-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 電磁感應的產生前提是「穿過線圈的磁通量發生變化」。恆定直流電產生的磁場強弱及方向不變，在副線圈中的磁通量變化率為零，因此副線圈無法感應出任何電動勢。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz8-1-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 在設計實際變壓器時，為了減少鐵芯內產生的「渦電流」熱損耗，通常會採取下列哪一種物理學設計？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q81-2', 'quiz8-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 棄用軟鐵，改用電阻率極低的純銅來製作鐵芯</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q81-2', 'quiz8-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 使用塗有絕緣漆的薄軟鐵片疊合而成的「疊片鐵芯」</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-2', 'quiz8-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 將原線圈和副線圈完全用塑膠片隔開</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-2', 'quiz8-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 減小副線圈的匝數</button>
+                </div>
+                <div id="exp-q81-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 交變磁場會穿過鐵芯，若鐵芯為一整塊金屬，其內部電阻極小，會感應出極大的漩渦狀電流（渦電流）。使用薄片疊合並塗上絕緣漆的「疊片鐵芯」，可以有效切斷渦電流的迴路，減小熱損耗。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 8.2: 輸電 -->
+<!-- ========================================== -->
+<article id="ch8-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">8.2</span>輸電</h2>
+        <p class="text-slate-500 mt-2">分析長距離輸電面臨的焦耳熱損耗問題，理解為何必須使用高電壓輸電，並學會計算輸電線上的功率損耗。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 遠距離輸電的挑戰</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>發電廠通常建於偏遠地區（如大亞灣核電廠），發出的電能必須經過長達數十甚至數百公里的輸電電纜才能輸送到城市。在這個長距離傳輸的過程中，電纜會面臨極大的挑戰：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">輸電線電阻 ($R_{\text{線}}$)：</strong> 
+                    雖然高架電纜常用電阻率極低的鋁或銅製成，但由於距離極長，輸電線的總電阻仍十分顯著。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">焦耳熱損耗 ($P_{\text{損}}$)：</strong> 
+                    當電流 $I$ 流經電纜時，電纜會像發熱線一樣生熱，部分電能會轉化為熱能散失到空氣中。損耗功率為：
+                    <div class="text-center my-3 text-lg font-bold text-blue-900">$$P_{\text{損}} = I^2 R_{\text{線}}$$</div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與高壓輸電原理 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 高壓輸電原理與公式推導</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">要減少輸電線上的電能流失，有兩個途徑：一、減小輸電線電阻 $R_{\text{線}}$；二、減小輸電電流 $I$。在工程上，<strong>減小電流是最有效且最可行的方法</strong>。</p>
+            <p class="text-slate-700 mb-3">假設發電廠向外輸出恆定的電功率 $P$。根據功率公式 $P = VI$，輸電電壓 $V$ 與輸電電流 $I$ 的關係為：</p>
+            <div class="text-center my-4 overflow-x-auto text-xl font-bold text-blue-900">
+                $$I = \frac{P}{V}$$
+            </div>
+            <p class="text-slate-700 mb-3">將此電流代入輸電線功率損耗公式：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$P_{\text{損}} = \left(\frac{P}{V}\right)^2 R_{\text{線}} = \frac{P^2 R_{\text{線}}}{V^2}$$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4 border-t border-blue-200/60 pt-3">
+                <li><i class="fa-solid fa-chart-line text-blue-500 mr-1"></i> <strong>平方反比規律：</strong> 輸電線上的功率損耗與<strong>輸電電壓的平方 ($V^2$) 成反比</strong>。</li>
+                <li><i class="fa-solid fa-arrow-up-right-dots text-blue-500 mr-1"></i> <strong>驚人效益：</strong> 若使用升壓變壓器將輸電電壓提升為原來的 $10$ 倍，輸電線上的電流將變為原來的 $\frac{1}{10}$，而<strong>電能損耗將大幅減小為原來的 $\frac{1}{100}$ ($1\%$)</strong>！這就是為何必須使用高電壓（可達 $400 \text{ kV}$）進行長途輸電。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 記憶摘要卡片 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-address-card text-blue-500 mr-2"></i> 概念摘要記憶卡片</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">輸電線功率損耗</h4>
+                <p class="text-xs text-slate-600">計算損耗必須使用公式 $P_{\text{損}} = I^2R_{\text{線}}$。注意：絕對不可使用 $P_{\text{損}} = \frac{V_{\text{總}}^2}{R_{\text{線}}}$，因為高電壓 $V_{\text{總}}$ 是跨在整條線與地之間的，而非僅跨在電纜電阻兩端。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">多股電線合併</h4>
+                <p class="text-xs text-slate-600">架空電纜通常由多股（如 40 股）電導線並聯組成。這使總橫截面積大幅增加，從而顯著減小電纜每公里的總電阻。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">安全降壓網絡</h4>
+                <p class="text-xs text-slate-600">高壓電不能直接引入住宅。電能輸送到城鎮邊緣後，必須經過一系列變電所的降壓變壓器，逐步降低到 $220 \text{ V}$ 的安全家居電壓。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「計算輸電線路損耗時，可以用公式 $P_{\text{損}} = \frac{V^2}{R_{\text{線}}}$，其中 $V$ 是輸電時的高電壓。」</li>
+                    <li>「我們之所以用多股相同的電線紮在一起作為一條架空電纜，是為了防止其中一股斷裂時，電纜徹底斷路。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>極危險的代數陷阱！</strong> 輸電高壓 $V$ 是輸電端與地面（或中線）之間的電勢差，並非全部跨在電線兩端。電線兩端的電壓降為 $V_{\text{線}} = I R_{\text{線}}$（遠低於 $V$）。因此損耗必須使用 $P_{\text{損}} = I^2 R_{\text{線}}$。</li>
+                    <li>多股並聯最主要的物理學目的是<strong>減小總電阻</strong>。根據電阻定律，當多股相同的電線並聯時，總橫截面積變為各股截面積之和，這使電纜的總電阻大幅度降為單股電線的幾十分之一。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        發電廠需要將 $220 \text{ kW}$ 的電功率輸送至遠處。輸電線的總電阻 $R_{\text{線}} = 10\ \Omega$。試分別計算當發電廠使用下列哪一種電壓進行輸電時，在輸電線上損耗的功率：<br>
+                        (a) 未經變壓，直接使用 $220 \text{ V}$ 輸電。<br>
+                        (b) 使用升壓變壓器提升至 $22 \text{ kV}$ 進行高壓輸電。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 使用 $220 \text{ V}$ 輸電：</strong></p>
+                        <p class="mb-1">1. 計算輸電電流 $I$：</p>
+                        $$I = \frac{P}{V} = \frac{220,000 \text{ W}}{220 \text{ V}} = 1000 \text{ A}$$
+                        <p class="mb-1">2. 計算電線上損耗的焦耳熱功率：</p>
+                        $$P_{\text{損}} = I^2 R_{\text{線}} = (1000)^2 \times 10 = 10,000,000 \text{ W} = 10 \text{ MW}$$
+                        <p class="text-xs text-red-600">（警告：損耗功率 $10 \text{ MW}$ 遠大於發電廠產生的總功率 $220 \text{ kW}$，這在現實中是完全無法運行的！）</p>
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 使用 $22 \text{ kV}$ ($22000 \text{ V}$) 輸電：</strong></p>
+                        <p class="mb-1">1. 計算輸電電流 $I'$：</p>
+                        $$I' = \frac{P}{V'} = \frac{220,000 \text{ W}}{22,000 \text{ V}} = 10 \text{ A}$$
+                        <p class="mb-1">2. 計算電線上損耗的功率：</p>
+                        $$P_{\text{損}}' = (I')^2 R_{\text{線}} = 10^2 \times 10 = 1000 \text{ W} = 1 \text{ kW}$$
+                        <p class="text-sm text-slate-500">（此時損耗僅佔總發電量的 $\frac{1 \text{ kW}}{220 \text{ kW}} \approx 0.45\%$，非常高效安全！）</p>
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 損耗功率高達 $10 \text{ MW}$；(b) 損耗功率降至僅 $1 \text{ kW}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz8-2-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在遠距離輸電中，採用「高壓輸電」最主要的物理學目的是什麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q82-1', 'quiz8-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 為了讓電流在電纜中流得更快，縮短電力傳輸時間</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q82-1', 'quiz8-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 在功率恆定下降低電纜電流，從而大幅減小電導線上的焦耳熱損耗</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-1', 'quiz8-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 為了增加高壓電纜每公里的等效電阻值</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-1', 'quiz8-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 為了配合家用電器的高電壓工作額定值</button>
+                </div>
+                <div id="exp-q82-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據公式 $P_{\text{損}} = I^2R_{\text{線}}$，輸電線上的電能損失與電流的平方成正比。在傳輸相同功率下，電壓越高，所需的電流就越小，電纜發熱損耗就能得到極大程度的減小。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz8-2-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 發電廠以恆定功率向外輸電，若利用變壓器將輸電電壓提升為原本的 5 倍，則在同條輸電線上損耗的電能功率會變為原本的幾分之幾？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q82-2', 'quiz8-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $\frac{1}{5}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q82-2', 'quiz8-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $\frac{1}{25}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-2', 'quiz8-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $5$ 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-2', 'quiz8-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $25$ 倍</button>
+                </div>
+                <div id="exp-q82-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 輸電功率損耗與電壓平方成反比（$P_{\text{損}} \propto \frac{1}{V^2}$）。當電壓變為原來的 5 倍，損耗會變為原來的 $5^2$ 分之一，即 $\frac{1}{25}$。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+
             
 <!-- ========================================== -->
           
