@@ -122,48 +122,63 @@
             </div>
             <!-- 第 2 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 2 章：內能、熱與熱傳遞</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 2 章：電流、電壓與電阻</h2>
                 <ul class="space-y-1">
                     <li>
                         <button onclick="switchPage('ch2-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                           2.1 內能與能量轉移
+                           2.1 電流
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch2-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                           2.2 熱傳遞方式
+                           2.2 電壓
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch2-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                           2.3 電阻
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch2-4', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                           2.4 電阻網絡
                         </button>
                     </li>
                 </ul>
             </div>
             <!-- 第 3 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 3 章：温度變化與熱容量</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 3 章：實際電路</h2>
                 <ul class="space-y-1">
                     <li>
                         <button onclick="switchPage('ch3-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            3.1 功率與量度轉移的能量
+                            3.1 分析電路
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch3-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            3.2 熱容量和比熱容量
+                            3.2 實際安培計、伏特計和電池組
                         </button>
                     </li>
                 </ul>
             </div>
                         <!-- 第 4 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 4 章：物態的改變</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 4 章：家居電學</h2>
                 <ul class="space-y-1">
                     <li>
                         <button onclick="switchPage('ch4-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            4.1 潛熱
+                            4.1 家用電器的功率和能量消耗
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch4-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            4.2 蒸發與凝結
+                            4.2 家居電線佈置及安全措施
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch4-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            4.3 交流電
                         </button>
                     </li>
                 </ul>
@@ -707,7 +722,655 @@
     </section>
 </article>
 
+<!-- ========================================== -->
+<!-- 區塊 2.1: 電流 -->
+<!-- ========================================== -->
+<article id="ch2-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.1</span>電流</h2>
+        <p class="text-slate-500 mt-2">理解電荷的定向移動如何形成電流，掌握電流強度的定量定義與微觀本質，並學習如何使用電流計進行測量。</p>
+    </header>
 
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在靜電學中，我們研究的是靜止的電荷。當導體兩端存在電壓時，導體內部的自由電荷便會發生定向移動，從而形成<strong>電流</strong>。</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">電流 ($I$)：</strong> 
+                    定義為單位時間內流過導體橫截面的電荷量。電流的大小反映了電荷流動的快慢程度。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">傳統電流方向：</strong> 
+                    歷史上規定，<strong>正電荷定向移動的方向</strong>為電流的方向。因此，在金屬導體中，實際發生定向移動的自由電子（帶負電）的移動方向與傳統電流的方向<strong>剛好相反</strong>（由負極流向正極）。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">電路的形成條件：</strong> 
+                    要維持穩定的電流，必須具備兩個基本條件：一是有提供能量的電源，二是電路必須是<strong>閉合迴路</strong>。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">電流強度、電荷量與時間之間的數學關係式：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ I = \frac{Q}{t} \quad \implies \quad Q = It $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$I$：電流強度（單位：安培 $\text{A}$）</li>
+                <li>$Q$：流過的電荷量（單位：庫侖 $\text{C}$）</li>
+                <li>$t$：時間（單位：秒 $\text{s}$）</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>單位的物理定義：</strong> $1 \text{ A} = 1 \text{ C s}^{-1}$。若每秒有 $1 \text{ C}$ 的電荷流過導體橫截面，電流大小即為 $1 \text{ A}$。</li>
+                <li><i class="fa-solid fa-square-plus text-blue-500 mr-1"></i> <strong>測量工具：</strong> 電流以<strong>電流計</strong>測量，在電路圖中以符號 $\text{A}$ 表示。電流計必須與被測量的電路元件<strong>串聯</strong>連接，且其內部電阻極小。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 記憶摘要卡片 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-address-card text-blue-500 mr-2"></i> 概念摘要記憶卡片</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">電流與電荷流</h4>
+                <p class="text-xs text-slate-600">電流是電荷在導體中的定向流動。金屬中流動的其實是自由電子，從負極移向正極。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">電流計算基礎</h4>
+                <p class="text-xs text-slate-600">公式 $Q = It$ 連結了宏觀電流與累積電荷。可利用基本電荷 $e$ 計算出流過電子的數量。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">電流計的連接</h4>
+                <p class="text-xs text-slate-600">電流計必須串聯在電路中。正接線柱（紅色）應靠近電源正極，負接線柱（黑色）應靠近電源負極。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>「因為電流是從電源正極流向負極，所以在金屬導線中，帶正電的質子在向負極移動。」</li>
+                    <li>「電流在流過燈泡之後會被消耗掉，因此流出燈泡的電流會小於流入燈泡的電流。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>傳統電流方向是歷史約定。金屬導體中原子核和質子無法移動，實際移動的只有帶負電的<strong>自由電子</strong>，它們向正極移動。</li>
+                    <li>根據電荷守恆，電荷不會在電路中憑空消失。電流在環路中處處相等，被燈泡消耗的是電子的<strong>電能</strong>，而非電荷本身。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個電路中的電流恆定為 $0.5 \text{ A}$。求在 $2 \text{ 分鐘}$ 內，流過導線橫截面的 (a) 總電荷量，以及 (b) 流過的電子數目。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 計算總電荷量 $Q$：</strong></p>
+                        <p class="mb-2">時間必須轉換為秒：$t = 2 \text{ 分鐘} = 120 \text{ s}$。</p>
+                        $$ Q = It = 0.5 \text{ A} \times 120 \text{ s} = 60 \text{ C} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 計算流過的電子數目 $n$：</strong></p>
+                        <p class="mb-2">已知單個電子電量量值為 $e = 1.60 \times 10^{-19} \text{ C}$。</p>
+                        $$ n = \frac{Q}{e} = \frac{60 \text{ C}}{1.60 \times 10^{-19} \text{ C}} = 3.75 \times 10^{20} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 流過總電量為 $60 \text{ C}$；(b) 流過電子數為 $3.75 \times 10^{20}$ 個。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz2-1-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在金屬導線中，電流的傳統方向與電子定向移動的實際方向關係為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q21-1', 'quiz2-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 兩者方向完全相同</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q21-1', 'quiz2-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 兩者方向截然相反</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-1', 'quiz2-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 水平導線中方向相同，垂直導線中相反</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-1', 'quiz2-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 兩者互相垂直</button>
+                </div>
+                <div id="exp-q21-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 傳統電流方向規定為正電荷移動方向。金屬中移動的是帶負電的電子，因此電子的實際運動方向（從負極流向正極）與傳統電流方向（正極流向負極）相反。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz2-1-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 若在 $10 \text{ s}$ 內，有 $20 \text{ C}$ 的電荷量流過某一燈泡，則通過該燈泡的電流是多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q21-2', 'quiz2-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $0.5 \text{ A}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q21-2', 'quiz2-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $2 \text{ A}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-2', 'quiz2-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $200 \text{ A}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-2', 'quiz2-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $10 \text{ A}$</button>
+                </div>
+                <div id="exp-q21-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據電流定義公式：$I = \frac{Q}{t} = \frac{20 \text{ C}}{10 \text{ s}} = 2 \text{ A}$。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 2.2: 電壓 -->
+<!-- ========================================== -->
+<article id="ch2-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.2</span>電壓</h2>
+        <p class="text-slate-500 mt-2">理解電動勢與電勢差的概念，掌握能量轉移與電壓之間的關係，並學習電壓計的使用方法。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>要讓電荷在電路中流動，必須有「力量」推動它們。這種在電路中驅動電荷流動的能量源泉，與<strong>電壓</strong>密切相關。我們主要區分兩個相似但本質不同的概念：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">電動勢 (Electromotive force, $\mathcal{E}$)：</strong> 
+                    針對<strong>電源</strong>（如電池）。定義為非電能（如化學能）轉化為電能時，每單位電量所轉化的能量。它描述了電源將其他形式能量「輸入」到電路中的能力。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">電勢差 / 電壓 (Potential difference, $V$)：</strong> 
+                    針對<strong>負載元件</strong>（如燈泡、電阻）。定義為電能轉化為其他形式能量（如熱能、光能）時，每單位電量所轉化的能量。它描述了電荷流過元件時「消耗」電能的程度。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">電壓（電勢差/電動勢）、能量與電荷量之間的關係式：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ V = \frac{E}{Q} \quad \implies \quad E = QV $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$V$：電勢差 或 電動勢（單位：伏特 $\text{V}$）</li>
+                <li>$E$：轉移或轉化的能量（單位：焦耳 $\text{J}$）</li>
+                <li>$Q$：電荷量（單位：庫侖 $\text{C}$）</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>單位的物理定義：</strong> $1 \text{ V} = 1 \text{ J C}^{-1}$。若每 $1 \text{ C}$ 電荷流過某元件時轉化了 $1 \text{ J}$ 的能量，該元件兩端的電勢差即為 $1 \text{ V}$。</li>
+                <li><i class="fa-solid fa-square-plus text-blue-500 mr-1"></i> <strong>測量工具：</strong> 電壓以<strong>電壓計</strong>測量，電路圖中以符號 $\text{V}$ 表示。電壓計必須與被測元件<strong>並聯</strong>連接，且其內部電阻極大，以防分流。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 記憶摘要卡片 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-address-card text-blue-500 mr-2"></i> 概念摘要記憶卡片</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">電動勢 vs 電勢差</h4>
+                <p class="text-xs text-slate-600">電動勢（對源）是化學能變電能；電勢差（對電器）是電能變熱能或光能。兩者單位皆為伏特。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">能量轉化計算</h4>
+                <p class="text-xs text-slate-600">公式 $E = QV$ 說明電壓本質是每單位電荷的能量。結合 $Q = It$，更可導出 $E = VIt$。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">電壓計的跨接</h4>
+                <p class="text-xs text-slate-600">電壓計必須與電路元件並聯。它的高電阻確保幾乎沒有電流通過它，不干擾原本的電路。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>「電壓是在電路中流動的物理量，它會隨着流經電器而被消耗。」</li>
+                    <li>「電壓計和電流計一樣，可以直接隨意串聯在電路中量度數據。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>電路中流動的是<strong>電流（電荷）</strong>。電壓（電勢差）是存在於元件「兩端」的物理量，代表兩點間的能量差。電壓不會流動，也不會被消耗。</li>
+                    <li>電壓計電阻極大。若將其串聯在電路中，它會阻截幾乎所有的電流，導致電路中所有電器無法運作。電壓計<strong>必須並聯</strong>在元件兩端。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個帶有 $12 \text{ V}$ 電動勢的蓄電池連接到一個小燈泡。當電路閉合時，有 $15 \text{ C}$ 的電荷從電池流出，流經燈泡。求：<br>
+                        (a) 電池轉移給電荷的化學能，以及 (b) 若這些電能在燈泡中完全轉化，燈泡釋放了多少熱能和光能？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 電池向電荷輸入的能量 $E_{\text{入}}$：</strong></p>
+                        <p class="mb-2">根據電動勢定義公式 $E = Q\mathcal{E}$：</p>
+                        $$ E_{\text{入}} = Q\mathcal{E} = 15 \text{ C} \times 12 \text{ V} = 180 \text{ J} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 燈泡釋放的能量 $E_{\text{出}}$：</strong></p>
+                        <p class="mb-2">根據能量守恆定律，若忽略導線的微小電阻，電池釋放的電能會全部在燈泡上轉化為其他形式的能量：</p>
+                        $$ E_{\text{出}} = E_{\text{入}} = 180 \text{ J} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 電池轉移了 $180 \text{ J}$ 的能量；(b) 燈泡釋放了 $180 \text{ J}$ 的光能與熱能。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz2-2-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 一個小燈泡兩端的電勢差為 $6 \text{ V}$。當有 $2 \text{ C}$ 的電荷流過該燈泡時，有多少電能會被轉化為光能與熱能？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-1', 'quiz2-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $3 \text{ J}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-1', 'quiz2-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $8 \text{ J}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-1', 'quiz2-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $12 \text{ J}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-1', 'quiz2-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $24 \text{ J}$</button>
+                </div>
+                <div id="exp-q22-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據電勢差定義公式，電能轉化量：$E = QV = 2 \text{ C} \times 6 \text{ V} = 12 \text{ J}$。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz2-2-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 關於電位差計（電壓計）的使用，下列哪項做法是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-2', 'quiz2-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 必須將它與待測電器串聯連接</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-2', 'quiz2-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 必須將它與待測電器並聯連接</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-2', 'quiz2-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 為了量度精確，它的電阻必須被設計得非常小</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-2', 'quiz2-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 它的紅接線柱（正極）應直接接在電源的負極上</button>
+                </div>
+                <div id="exp-q22-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 電壓計量度的是兩點之間的電勢差，因此必須<strong>並聯</strong>跨接在元件兩端。另外，為了避免分流干擾原本電路的運行，電壓計本身的電阻必須非常大。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 2.3: 電阻 -->
+<!-- ========================================== -->
+<article id="ch2-3" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.3</span>電阻</h2>
+        <p class="text-slate-500 mt-2">理解導體阻礙電流的物理屬性，掌握歐姆定律，並區分歐姆與非歐姆導體的電學行為。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與歐姆定律</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>當電子在導體內定向移動時，會不斷與導體內部的金屬陽離子發生碰撞，這種微觀碰撞在宏觀上表現為對電流的阻礙，稱為<strong>電阻</strong>。</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">電阻 ($R$)：</strong> 
+                    定義為元件兩端的電勢差 $V$ 與流經它的電流 $I$ 之比。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">歐姆定律 (Ohm's Law)：</strong> 
+                    在溫度保持恆定時，流經導體的電流 $I$ 與導體兩端的電勢差 $V$ 成正比。也就是說，導體的電阻 $R$ 保持恆定不變。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">歐姆導體 vs 非歐姆導體：</strong> 
+                    遵守歐姆定律的導體（如金屬導線、定值電阻）稱為歐姆導體，其 $V-I$ 圖像是一條穿過原點的直線；不遵守歐姆定律的導體（如鎢絲燈泡、半導體二極體）稱為非歐姆導體，其電阻會隨溫度或電壓改變。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與影響電阻的因素 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與電阻定律</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+                <!-- 公式 1 -->
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">電阻定義式（歐姆定律）</p>
+                    <p class="text-2xl font-bold">$$ R = \frac{V}{I} \quad \implies \quad V = IR $$</p>
+                    <p class="text-xs text-slate-500 mt-2">單位：歐姆（$\Omega$）。$1\ \Omega = 1 \text{ V A}^{-1}$。</p>
+                </div>
+                <!-- 公式 2 -->
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">影響導體電阻的因素（電阻定律）</p>
+                    <p class="text-xl font-bold">$$ R = \rho \frac{l}{A} $$</p>
+                    <p class="text-xs text-slate-500 mt-2">$\rho$：電阻率；$l$：導線長度；$A$：橫截面積</p>
+                </div>
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>電阻定律推論：</strong> 導線越長 ($l$ 越大)，電阻越大；導線越粗 ($A$ 越大)，電阻越小。</li>
+                <li><i class="fa-solid fa-temperature-half text-blue-500 mr-1"></i> <strong>溫度的影響：</strong> 對一般金屬導體而言，溫度越高，晶格振動越劇烈，阻礙越大，因此<strong>電阻隨溫度升高而增大</strong>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 記憶摘要卡片 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-address-card text-blue-500 mr-2"></i> 概念摘要記憶卡片</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">電阻的定義</h4>
+                <p class="text-xs text-slate-600">任何元件都有電阻。即便它是非歐姆導體，我們仍可在特定狀態下利用 $R = V/I$ 計算其瞬時電阻。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">鎢絲燈非歐姆特性</h4>
+                <p class="text-xs text-slate-600">燈泡通電後，電流生熱，溫度劇增。因此，鎢絲燈的電阻會隨着電壓和溫度的升高而急劇增大。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">電阻定律幾何分析</h4>
+                <p class="text-xs text-slate-600">電阻與長度成正比，與截面積（若為圓形導線，則與半徑的平方 $r^2$）成反比。這常用於比例計算題。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>「依據公式 $R = V/I$，當元件兩端未接通電源，即電壓 $V = 0$ 時，該元件的電阻便會變為零。」</li>
+                    <li>「因為鎢絲燈泡的 $V-I$ 圖像是一條向上彎曲的曲線，所以我們不能對它使用 $R = V/I$ 公式。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>電阻是<strong>導體本身的固有結構屬性</strong>，由電阻定律 $R = \rho \frac{l}{A}$ 決定。即使沒有通電 ($V=0$, $I=0$)，導體的電阻依然保持不變。</li>
+                    <li>$R = V/I$ 是電阻的<strong>普適定義式</strong>，適用於所有元件。非歐姆導體在不同的電壓下有不同的電阻，我們仍可用 $V/I$ 算出它在當前狀態下的電阻值。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 (電阻比例計算) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一條均勻金屬導線的電阻為 $8\ \Omega$。若將該導線均勻拉長為原來的 $2$ 倍（拉長後體積保持不變），求拉長後金屬線的新電阻。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 設原本導線長度為 $l$，橫截面積為 $A$。體積 $V = l \times A$ 為常數。</p>
+                        <p class="mb-2">2. 當長度拉長為原來的 2 倍（$l' = 2l$）時，為了保持體積不變，橫截面積必須縮小為原來的一半：</p>
+                        $$ A' = \frac{A}{2} $$
+                        <p class="mb-2">3. 代入電阻定律：</p>
+                        $$ R = \rho \frac{l}{A} = 8\ \Omega $$
+                        $$ R' = \rho \frac{l'}{A'} = \rho \frac{2l}{\frac{A}{2}} = 4 \left( \rho \frac{l}{A} \right) = 4 \times 8 = 32\ \Omega $$
+                        <p class="mt-2 font-bold text-green-700">答案：拉長後的金屬線電阻變為 $32\ \Omega$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz2-3-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 一個小燈泡接在 $12 \text{ V}$ 的電源上，測得流經它的電流為 $3 \text{ A}$。求該燈泡此時的電阻：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q23-1', 'quiz2-3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $0.25\ \Omega$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q23-1', 'quiz2-3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $4\ \Omega$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-1', 'quiz2-3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $36\ \Omega$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-1', 'quiz2-3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $15\ \Omega$</button>
+                </div>
+                <div id="exp-q23-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據電阻的定義公式：$R = \frac{V}{I} = \frac{12 \text{ V}}{3 \text{ A}} = 4\ \Omega$。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz2-3-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 有兩條材料完全相同的金屬導線 X 和 Y。X 的長度是 Y 的 2 倍，而 Y 的橫截面積是 X 的 2 倍。求 X 和 Y 的電阻之比 $R_X : R_Y$：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q23-2', 'quiz2-3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $1:1$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-2', 'quiz2-3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $2:1$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q23-2', 'quiz2-3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $4:1$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-2', 'quiz2-3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $1:4$</button>
+                </div>
+                <div id="exp-q23-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據電阻定律 $R = \rho \frac{l}{A}$。材料相同則 $\rho$ 相同。$$ R_X = \rho \frac{2l}{A} \quad , \quad R_Y = \rho \frac{l}{2A} $$ $$ \frac{R_X}{R_Y} = \frac{2l/A}{l/2A} = 4 \implies R_X : R_Y = 4:1 $$
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 2.4: 電阻網絡 -->
+<!-- ========================================== -->
+<article id="ch2-4" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.4</span>電阻網絡</h2>
+        <p class="text-slate-500 mt-2">學會計算複雜電阻網絡中的等效電阻，並運用基爾霍夫定律分析串聯與並聯電路中的電流和電壓分佈。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 串聯與並聯電路基礎</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在實際電路中，多個電阻常以不同方式組合在一起，最基礎的兩種連接方式為：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">串聯電路 (Series Circuit)：</strong> 
+                    元件首尾相連，電流只有一條路徑。
+                    <ul class="list-none list-inside ml-6 text-sm space-y-1">
+                        <li>👉 <strong>電流規律：</strong> 處處相等（$I_{\text{總}} = I_1 = I_2 = \dots$）。</li>
+                        <li>👉 <strong>電壓規律：</strong> 各元件電壓之和等於總電壓（$V_{\text{總}} = V_1 + V_2 + \dots$）。各元件電壓與電阻成正比（分壓原理）。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">並聯電路 (Parallel Circuit)：</strong> 
+                    元件兩端分別連接在一起，電流有多條路徑。
+                    <ul class="list-none list-inside ml-6 text-sm space-y-1">
+                        <li>👉 <strong>電流規律：</strong> 總電流等於各支路電流之和（$I_{\text{總}} = I_1 + I_2 + \dots$）。各支路電流與其電阻成反比（分流原理）。</li>
+                        <li>👉 <strong>電壓規律：</strong> 各支路兩端電壓相等，且等於總電壓（$V_{\text{總}} = V_1 = V_2 = \dots$）。</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與計算模型 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與等效電阻</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">要簡化複雜的電阻網絡，我們可以用一個單一的<strong>等效電阻 (Equivalent Resistance, $R_{\text{eq}}$)</strong> 來替代它們：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <!-- 公式 1 -->
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">串聯等效電阻</p>
+                    <p class="text-2xl font-bold">$$ R_{\text{eq}} = R_1 + R_2 + \dots $$</p>
+                    <p class="text-xs text-slate-500 mt-2">結論：串聯後的總電阻大於其中任何一個單獨電阻。</p>
+                </div>
+                <!-- 公式 2 -->
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">並聯等效電阻</p>
+                    <p class="text-2xl font-bold">$$ \frac{1}{R_{\text{eq}}} = \frac{1}{R_1} + \frac{1}{R_2} + \dots $$</p>
+                    <p class="text-xs text-slate-500 mt-2">結論：並聯後的總電阻小於其中任何一個支路電阻。</p>
+                </div>
+            </div>
+            <p class="text-sm text-slate-600"><i class="fa-solid fa-star text-blue-500 mr-1"></i> <strong>兩個電阻並聯的快捷公式：</strong> $$ R_{\text{eq}} = \frac{R_1 \times R_2}{R_1 + R_2} \quad \text{（即：積除以和）} $$</p>
+        </div>
+    </section>
+
+    <!-- 📊 3. 記憶摘要卡片 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-address-card text-blue-500 mr-2"></i> 概念摘要記憶卡片</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">串聯分壓原理</h4>
+                <p class="text-xs text-slate-600">在串聯電路中，電阻越大的元件，分配到的電壓就越多：$$ \frac{V_1}{V_2} = \frac{R_1}{R_2} $$</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">並聯分流原理</h4>
+                <p class="text-xs text-slate-600">在並聯電路中，阻值越小的支路，流經的電流就越多：$$ \frac{I_1}{I_2} = \frac{R_2}{R_1} $$</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">混聯電路分析</h4>
+                <p class="text-xs text-slate-600">分析複雜網絡時，應「由內而外」逐步合併。先簡化局部的並聯或串聯，一步步化簡為單一電阻。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>「一個 $1000\ \Omega$ 的電阻和一個 $1\ \Omega$ 的電阻並聯，因為 $1000\ \Omega$ 太大了，所以總電阻大約等於 $1000\ \Omega$。」</li>
+                    <li>「把多個電器串聯起來，如果其中一個壞了（斷路），其他電器仍然可以正常工作。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>並聯總電阻<strong>必定小於其中最小的那個電阻</strong>。代入公式：$$ R_{\text{eq}} = \frac{1000 \times 1}{1000 + 1} \approx 0.999\ \Omega $$。總電阻小於 $1\ \Omega$。</li>
+                    <li>在串聯電路中只有一條電流路徑。若其中一個元件斷路，整個電路都會變為開路，<strong>所有電器都將停止運作</strong>。這也是為什麼家用電器必須並聯連接。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 (混聯電阻計算) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        在一個電路中，電阻 $R_1 = 4\ \Omega$ 與一個並聯電阻組合串聯。該並聯組合由 $R_2 = 6\ \Omega$ 和 $R_3 = 3\ \Omega$ 組成。整個電路連接到一個 $12 \text{ V}$ 的直流電源兩端。求：<br>
+                        (a) 整個電路網絡的等效總電阻。<br>
+                        (b) 流經電源的總電流。<br>
+                        (c) 流經電阻 $R_2$ 的分電流。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 求等效總電阻 $R_{\text{eq}}$：</strong></p>
+                        <p class="mb-2">1. 先計算 $R_2$ 與 $R_3$ 的並聯等效電阻 $R_{23}$：</p>
+                        $$ R_{23} = \frac{R_2 \times R_3}{R_2 + R_3} = \frac{6 \times 3}{6 + 3} = \frac{18}{9} = 2\ \Omega $$
+                        <p class="mb-2">2. 總電阻等於 $R_1$ 與 $R_{23}$ 的串聯和：</p>
+                        $$ R_{\text{eq}} = R_1 + R_{23} = 4 + 2 = 6\ \Omega $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 求總電流 $I_{\text{總}}$：</strong></p>
+                        $$ I_{\text{總}} = \frac{V_{\text{總}}}{R_{\text{eq}}} = \frac{12 \text{ V}}{6\ \Omega} = 2 \text{ A} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(c) 求流經 $R_2$ 的分電流 $I_2$：</strong></p>
+                        <p class="mb-2">總電流 $2 \text{ A}$ 流經 $R_1$ 後，在並聯結點分流。根據並聯分流原理，電流與阻值成反比：</p>
+                        $$ I_2 = I_{\text{總}} \times \frac{R_3}{R_2 + R_3} = 2 \text{ A} \times \frac{3}{6 + 3} = 2 \times \frac{1}{3} \approx 0.67 \text{ A} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 總電阻為 $6\ \Omega$；(b) 總電流為 $2 \text{ A}$；(c) 流經 $R_2$ 的電流約為 $0.67 \text{ A}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz2-4-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 兩個電阻值分別為 $3\ \Omega$ 和 $6\ \Omega$ 的電阻並聯在一起。它們的等效總電阻是多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q24-1', 'quiz2-4-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $9\ \Omega$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q24-1', 'quiz2-4-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $2\ \Omega$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-1', 'quiz2-4-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $1.8\ \Omega$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-1', 'quiz2-4-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $4.5\ \Omega$</button>
+                </div>
+                <div id="exp-q24-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 利用並聯快捷公式：$$ R_{\text{eq}} = \frac{R_1 \times R_2}{R_1 + R_2} = \frac{3 \times 6}{3 + 6} = \frac{18}{9} = 2\ \Omega $$。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz2-4-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 在一個串聯電路中，連接了兩個電阻：$R_1 = 10\ \Omega$，$R_2 = 20\ \Omega$。若測得流經 $R_1$ 的電流為 $1.5 \text{ A}$，求此時電路兩端的總電壓是多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q24-2', 'quiz2-4-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $15 \text{ V}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-2', 'quiz2-4-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $30 \text{ V}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q24-2', 'quiz2-4-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $45 \text{ V}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-2', 'quiz2-4-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $60 \text{ V}$</button>
+                </div>
+                <div id="exp-q24-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 串聯電路電流處處相等，故總電流 $I_{\text{總}} = 1.5 \text{ A}$。總電阻 $R_{\text{eq}} = R_1 + R_2 = 10 + 20 = 30\ \Omega$。總電壓 $V_{\text{總}} = I_{\text{總}} \times R_{\text{eq}} = 1.5 \text{ A} \times 30\ \Omega = 45 \text{ V}$。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
             
 <!-- ========================================== -->
           
