@@ -333,11 +333,6 @@
     <main id="main-content" class="flex-1 h-screen overflow-y-auto pt-16 md:pt-0 scroll-smooth">
         <div class="max-w-4xl mx-auto p-4 md:p-8 lg:p-12 pb-24">
             
-            <!-- ========================================== -->
-            <!-- 區塊 1.1: 距離與位移 (完整示範骨架) -->
-            <!-- ========================================== -->
-            
-            <!-- ========================================== -->
 <!-- 區塊 1.2: 距離和位移 (可直接插入主檔案) -->
 <!-- ========================================== -->
 <article id="ch1-2" class="content-section hidden">
@@ -371,7 +366,7 @@
         <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
             <p class="text-slate-700 mb-3">在一維（直線）運動中，位移 $s 可以用坐標的差值來計算：</p>
             <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
-                $$\vec{s} = x_\text{f}- x_\text{i}$$
+                $$s = x_\text{f}- x_\text{i}$$
             </div>
             <ul class="text-sm text-slate-600 space-y-2 mt-4">
                 <li>$x_\text{f}$：物體的最終位置</li>
@@ -620,8 +615,7 @@
     </section>
 </article>
 
-
-            <!-- ========================================== -->
+<!-- ========================================== -->
 <!-- 區塊 1.3: 速率、速度和加速度 (可直接插入主檔案) -->
 <!-- ========================================== -->
 <article id="ch1-3" class="content-section hidden">
@@ -637,19 +631,19 @@
             <p>在日常用語中，「速率」和「速度」常被混用，但在物理學中，它們有嚴格的區別：</p>
             <ul class="list-disc list-inside ml-2 space-y-3">
                 <li>
-                    <strong class="text-blue-700 font-bold">速率 (Speed, $v$)：</strong> 
-                    物體在單位時間內所行走的「距離」。它只描述運動的快慢，是一個 <strong class="text-blue-700">標量 (Scalar)</strong>。
+                    <strong class="text-blue-700 font-bold">速率 ($v$)：</strong> 
+                    物體在單位時間內所行走的「距離」。它只描述運動的快慢，是一個 <strong class="text-blue-700">標量</strong>。
                 </li>
                 <li>
-                    <strong class="text-blue-700 font-bold">速度 (Velocity, $\vec{v}$)：</strong> 
-                    物體在單位時間內的「位移」。它不僅描述運動的快慢，還描述了運動的方向，是一個 <strong class="text-blue-700">矢量 (Vector)</strong>。
+                    <strong class="text-blue-700 font-bold">速度 ($v$)：</strong> 
+                    物體在單位時間內的「位移」。它不僅描述運動的快慢，還描述了運動的方向，是一個 <strong class="text-blue-700">矢量</strong>。
                 </li>
             </ul>
             <hr class="my-4 border-slate-100">
             <p>當物體的速度發生改變（不論是變快、變慢，或是轉彎改變方向），我們說該物體具有：</p>
             <ul class="list-disc list-inside ml-2">
                 <li>
-                    <strong class="text-blue-700 font-bold">加速度 (Acceleration, $\vec{a}$)：</strong> 
+                    <strong class="text-blue-700 font-bold">加速度 ($a$)：</strong> 
                     物體「速度」在單位時間內的變化率。它也是一個 <strong class="text-blue-700">矢量 (Vector)</strong>。
                 </li>
             </ul>
@@ -669,17 +663,17 @@
                 </div>
                 <div class="bg-white p-4 rounded border border-blue-100 text-center">
                     <p class="text-sm text-slate-500 mb-1">平均速度</p>
-                    $$\vec{v} = \frac{\vec{s}}{t}$$
+                    $$v = \frac{\vec{s}}{t}$$
                 </div>
             </div>
             <div class="bg-white p-4 rounded border border-blue-100 text-center text-lg my-4">
                 <p class="text-sm text-slate-500 mb-1">平均加速度</p>
-                $$\vec{a} = \frac{\vec{v} - \vec{u}}{t}$$
+                $a = \frac{末速度 - 初速度}{t}= \frac{v - u}{t}$$
             </div>
 
             <ul class="text-sm text-slate-600 space-y-2 mt-4">
-                <li>$d$：總距離；$\vec{s}$：總位移；$t$：經歷的時間</li>
-                <li>$\vec{v}$：最終速度 (Final velocity)；$\vec{u}$：初始速度 (Initial velocity)</li>
+                <li>$d$：總距離；$s$：總位移；$t$：經歷的時間</li>
+                <li>$v$：最終速度 (Final velocity)；$u$：初始速度 (Initial velocity)</li>
                 <hr class="border-blue-200 my-2">
                 <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>SI 單位：</strong> 速率和速度的單位是 <strong class="text-blue-700">$\text{m s}^{-1}$</strong>；加速度的單位是 <strong class="text-blue-700">$\text{m s}^{-2}$</strong>。</li>
             </ul>
@@ -696,8 +690,8 @@
             <table class="w-full text-left text-slate-700">
                 <thead class="bg-blue-100 text-blue-900">
                     <tr>
-                        <th class="p-3 font-semibold w-1/4">速度 ($\vec{v}$) 方向</th>
-                        <th class="p-3 font-semibold w-1/4">加速度 ($\vec{a}$) 方向</th>
+                        <th class="p-3 font-semibold w-1/4">速度 ($v$) 方向</th>
+                        <th class="p-3 font-semibold w-1/4">加速度 ($a$) 方向</th>
                         <th class="p-3 font-semibold w-1/4">兩者關係</th>
                         <th class="p-3 font-semibold w-1/4">運動狀態結果</th>
                     </tr>
@@ -735,16 +729,16 @@
             <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                 <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">同向 (相同符號)</h4>
                 <ul class="text-sm space-y-2 text-slate-600">
-                    <li><span class="font-medium text-slate-800">$\vec{v}$ 與 $\vec{a}$ 皆為正：</span> 向前加速。</li>
-                    <li><span class="font-medium text-slate-800">$\vec{v}$ 與 $\vec{a}$ 皆為負：</span> 向後加速。</li>
+                    <li><span class="font-medium text-slate-800">$v$ 與 $a$ 皆為正：</span> 向前加速。</li>
+                    <li><span class="font-medium text-slate-800">$v$ 與 $a$ 皆為負：</span> 向後加速。</li>
                     <li><span class="font-bold text-blue-600">結論：只要同向，物體就會變快。</span></li>
                 </ul>
             </div>
             <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                 <h4 class="font-bold text-amber-600 border-b border-slate-100 pb-2 mb-2">反向 (符號相反)</h4>
                 <ul class="text-sm space-y-2 text-slate-600">
-                    <li><span class="font-medium text-slate-800">$\vec{v}$ 正, $\vec{a}$ 負：</span> 向前減速 (煞車)。</li>
-                    <li><span class="font-medium text-slate-800">$\vec{v}$ 負, $\vec{a}$ 正：</span> 向後減速。</li>
+                    <li><span class="font-medium text-slate-800">$v$ 正, $a$ 負：</span> 向前減速 (煞車)。</li>
+                    <li><span class="font-medium text-slate-800">$v$ 負, $a$ 正：</span> 向後減速。</li>
                     <li><span class="font-bold text-amber-600">結論：只要反向，物體就會變慢。</span></li>
                 </ul>
             </div>
@@ -759,7 +753,7 @@
             <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
                 <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
                 <ul class="text-sm space-y-3 list-disc list-inside">
-                    <li>「如果物體保持『勻速』(Constant speed) 運動，它的加速度必定為零。」</li>
+                    <li>「如果物體保持『勻速率』運動，它的加速度必定為零。」</li>
                     <li>「負的加速度 ($-a$) 永遠代表物體正在減速 (煞車)。」</li>
                 </ul>
             </div>
@@ -767,7 +761,7 @@
             <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
                 <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
                 <ul class="text-sm space-y-3 list-disc list-inside">
-                    <li>若物體以勻速「轉彎」（例如圓周運動），速率雖然不變，但<strong>方向一直在改變</strong>。速度既是矢量，方向改變意味着速度改變了，所以<strong>加速度不為零</strong>！</li>
+                    <li>若物體以勻速率「轉彎」（例如圓周運動），速率雖然不變，但<strong>方向一直在改變</strong>。速度既是矢量，方向改變意味着速度改變了，所以<strong>加速度不為零</strong>！</li>
                     <li>負加速度只代表加速度的「方向」。如果物體正在向後倒車 (負速度)，加上負加速度，兩者同向，物體其實是在<strong>加速倒車</strong>！</li>
                 </ul>
             </div>
@@ -801,8 +795,8 @@
                         $$v = \frac{d}{t} = \frac{140}{60} = 2.33 \text{ m s}^{-1}$$
                         <hr class="my-2 border-amber-200">
                         <p class="mb-2"><strong>(b) 平均速度：</strong> 基於「總位移」。向東為 $+$，向西為 $-$。</p>
-                        $$\vec{s} = (+100) + (-40) = +60 \text{ m}$$
-                        $$\vec{v} = \frac{\vec{s}}{t} = \frac{+60}{60} = +1 \text{ m s}^{-1}$$
+                        $$s = (+100) + (-40) = +60 \text{ m}$$
+                        $$v = \frac{s}{t} = \frac{+60}{60} = +1 \text{ m s}^{-1}$$
                         <p class="mt-2 font-bold text-green-700">答案：(a) 平均速率為 $2.33 \text{ m s}^{-1}$；(b) 平均速度為 $1 \text{ m s}^{-1}$（向東）。</p>
                     </div>
                 </details>
@@ -880,7 +874,7 @@
                     <button onclick="checkAnswer(this, false, 'exp-q13-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 當汽車轉彎時，就算速率不變，速度也不會改變。</button>
                 </div>
                 <div id="exp-q13-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 速率（Distance/Time）只有大小，是標量。速度（Displacement/Time）具有方向性，是矢量。轉彎時方向改變，速度必定改變。
+                    <strong>解析：</strong> 速率只有大小，是標量。速度具有方向性，是矢量。轉彎時方向改變，速度必定改變。
                 </div>
             </div>
 
@@ -959,14 +953,14 @@
     <section class="mb-10">
         <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
         <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-            <p>我們在第 1 章學會了位移、速度和加速度的意義。這些物理量都是 <strong class="text-blue-700 font-bold">矢量 (Vectors)</strong>，同時具備「量值」和「方向」。</p>
+            <p>我們在第 1 章學會了位移、速度和加速度的意義。這些物理量都是 <strong class="text-blue-700 font-bold">矢量</strong>，同時具備「量值」和「方向」。</p>
             <p>當一個物體沿著一條 <strong>直路</strong>（一維空間）運動時，它的運動方向受到嚴格限制，不是向前就是向後，不是向左就是向右。也就是說，它 <strong>只可以指向兩個相反的方向</strong>。</p>
             <hr class="my-4 border-slate-100">
             <p><strong class="text-blue-700 font-bold">表達一維空間的矢量：</strong></p>
-            <p>遇上這種只有兩個相反方向的情況，我們在物理學中習慣選定其中一個方向為 <strong class="text-blue-700">正方向 (Positive direction)</strong>，並利用 <strong>正號 ($+$)</strong> 和 <strong>負號 ($-$)</strong> 來表示矢量的兩個方向。</p>
+            <p>遇上這種只有兩個相反方向的情況，我們在物理學中習慣選定其中一個方向為 <strong class="text-blue-700">正數方向</strong>，並利用 <strong>正號 ($+$)</strong> 和 <strong>負號 ($-$)</strong> 來表示矢量的兩個方向。</p>
             <ul class="list-disc list-inside ml-2 space-y-1">
-                <li>若矢量指向正方向，加上 <strong class="text-blue-700">$+$ 號</strong>（通常可省略不寫）。</li>
-                <li>若矢量指向反方向，加上 <strong class="text-red-600">$-$ 號</strong>。</li>
+                <li>若矢量指向正數方向，加上 <strong class="text-blue-700">$+$ 號</strong>（通常可省略不寫）。</li>
+                <li>若矢量指向負數方向，加上 <strong class="text-red-600">$-$ 號</strong>。</li>
             </ul>
         </div>
     </section>
@@ -982,13 +976,13 @@
                 <div class="flex items-center justify-center space-x-8 text-center mt-4">
                     <div>
                         <i class="fa-solid fa-car-side text-3xl text-red-500 transform -scale-x-100"></i>
-                        <p class="mt-2 text-sm font-bold text-red-600">速度 $\vec{v} = -10 \text{ m s}^{-1}$</p>
+                        <p class="mt-2 text-sm font-bold text-red-600">速度 $v = -10 \text{ m s}^{-1}$</p>
                         <p class="text-xs text-slate-500">代表向左移動 $10 \text{ m s}^{-1}$</p>
                     </div>
                     <div class="h-16 w-1 bg-slate-300 mx-4"></div>
                     <div>
                         <i class="fa-solid fa-car-side text-3xl text-blue-500"></i>
-                        <p class="mt-2 text-sm font-bold text-blue-700">速度 $\vec{v} = +15 \text{ m s}^{-1}$</p>
+                        <p class="mt-2 text-sm font-bold text-blue-700">速度 $v = +15 \text{ m s}^{-1}$</p>
                         <p class="text-xs text-slate-500">代表向右移動 $15 \text{ m s}^{-1}$</p>
                     </div>
                 </div>
@@ -1091,12 +1085,12 @@
                         <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
                         <p class="mb-2">1. 將每一段位移賦予正負號。向右為正，向左為負。</p>
                         <ul class="list-disc list-inside mb-2">
-                            <li>第一段位移 $\vec{s}_1 = +15 \text{ m}$</li>
-                            <li>第二段位移 $\vec{s}_2 = -25 \text{ m}$</li>
+                            <li>第一段位移 $s_1 = +15 \text{ m}$</li>
+                            <li>第二段位移 $s_2 = -25 \text{ m}$</li>
                         </ul>
                         <p class="mb-2">2. 總位移等於各段位移的矢量和：</p>
-                        $$ \vec{s}_{\text{總}} = \vec{s}_1 + \vec{s}_2 $$
-                        $$ \vec{s}_{\text{總}} = (+15) + (-25) = -10 \text{ m} $$
+                        $$ \s_{\text{總}} = s_1 + s_2 $$
+                        $$ \s_{\text{總}} = (+15) + (-25) = -10 \text{ m} $$
                         <p class="mt-2 font-bold text-green-700">答案：最終位移為 $-10 \text{ m}$。這表示機械人最終位於起點的左方 $10 \text{ m}$ 處。</p>
                     </div>
                 </details>
@@ -1120,15 +1114,15 @@
                     <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
                         <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
                         <p class="mb-2"><strong>(a) A 點到 B 點的位移：</strong> 由於她向南跑，方向與正方向相反，必須加上負號。</p>
-                        $$ \vec{s}_{AB} = -1200 \text{ m} $$
+                        $$s_{AB} = -1200 \text{ m} $$
                         <hr class="my-3 border-amber-200">
                         <p class="mb-2"><strong>(b) 整個旅程的平均速度：</strong></p>
                         <p class="mb-2">1. 計算總位移。向北為 $+$，向南為 $-$：</p>
-                        $$ \vec{s}_{\text{總}} = (+600) + (-1200) = -600 \text{ m} $$
+                        $$ s_{\text{總}} = (+600) + (-1200) = -600 \text{ m} $$
                         <p class="mb-2">2. 計算總時間（轉換為秒）：</p>
                         $$ t_{\text{總}} = 5 \text{ min} + 10 \text{ min} = 15 \text{ min} = 15 \times 60 \text{ s} = 900 \text{ s} $$
                         <p class="mb-2">3. 計算平均速度：</p>
-                        $$ \vec{v}_{\text{平均}} = \frac{\vec{s}_{\text{總}}}{t_{\text{總}}} = \frac{-600}{900} = -0.67 \text{ m s}^{-1} $$
+                        $$ v_{\text{平均}} = \frac{s_{\text{總}}}{t_{\text{總}}} = \frac{-600}{900} = -0.67 \text{ m s}^{-1} $$
                         <p class="mt-2 font-bold text-green-700">答案：(a) $-1200 \text{ m}$；(b) $-0.67 \text{ m s}^{-1}$（負號表示平均速度方向向南）。</p>
                     </div>
                 </details>
@@ -1149,8 +1143,8 @@
                     </summary>
                     <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
                         <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                        <p class="mb-2">1. <strong>判斷速度 $\vec{v}$ 的符號：</strong> 汽車正在「向南」行駛。因為設定向北為正，所以向南的速度必須是 <strong>負號 ($-$)</strong>。</p>
-                        <p class="mb-2">2. <strong>判斷加速度 $\vec{a}$ 的符號：</strong> 題目指出汽車的速率「越來越快」（即正在加速）。我們在 1.3 節學過，要使物體變快，加速度的方向必須與速度的方向 <strong>相同</strong>。既然速度是負的，加速度也必須是 <strong>負號 ($-$)</strong>，才能幫忙「向南推動」。</p>
+                        <p class="mb-2">1. <strong>判斷速度 $v$ 的符號：</strong> 汽車正在「向南」行駛。因為設定向北為正，所以向南的速度必須是 <strong>負號 ($-$)</strong>。</p>
+                        <p class="mb-2">2. <strong>判斷加速度 $a$ 的符號：</strong> 題目指出汽車的速率「越來越快」（即正在加速）。我們在 1.3 節學過，要使物體變快，加速度的方向必須與速度的方向 <strong>相同</strong>。既然速度是負的，加速度也必須是 <strong>負號 ($-$)</strong>，才能幫忙「向南推動」。</p>
                         <p class="mt-2 font-bold text-green-700">答案：速度為負 ($-$)，加速度為負 ($-$)。</p>
                         <p class="text-sm text-slate-500 mt-1">（這再次證明了：負的加速度不一定代表在煞車減速！）</p>
                     </div>
@@ -1193,7 +1187,7 @@
 
             <!-- Q3 -->
             <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 某物體在一維坐標軸上運動。它先位移了 $\vec{s}_1 = +8 \text{ m}$，接着位移了 $\vec{s}_2 = -12 \text{ m}$，最後位移了 $\vec{s}_3 = +4 \text{ m}$。該物體的總位移為多少？</p>
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 某物體在一維坐標軸上運動。它先位移了 $s_1 = +8 \text{ m}$，接着位移了 $s_2 = -12 \text{ m}$，最後位移了 $s_3 = +4 \text{ m}$。該物體的總位移為多少？</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <button onclick="checkAnswer(this, true, 'exp-q21-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $0 \text{ m}$</button>
                     <button onclick="checkAnswer(this, false, 'exp-q21-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $24 \text{ m}$</button>
@@ -1201,7 +1195,7 @@
                     <button onclick="checkAnswer(this, false, 'exp-q21-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $-4 \text{ m}$</button>
                 </div>
                 <div id="exp-q21-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 在一維運動中，總位移可以直接將帶有正負號的各段位移代數相加。$\vec{s}_{\text{總}} = (+8) + (-12) + (+4) = 0 \text{ m}$。這表示物體最終回到了出發點。注意 $24 \text{ m}$ 是總距離。
+                    <strong>解析：</strong> 在一維運動中，總位移可以直接將帶有正負號的各段位移代數相加。$s_{\text{總}} = (+8) + (-12) + (+4) = 0 \text{ m}$。這表示物體最終回到了出發點。注意 $24 \text{ m}$ 是總距離。
                 </div>
             </div>
 
@@ -1215,13 +1209,13 @@
                     <button onclick="checkAnswer(this, false, 'exp-q21-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $\vec{v}$ 為正，$\vec{a}$ 為正</button>
                 </div>
                 <div id="exp-q21-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 巴士「向西」行駛，與設定的正方向相反，故速度 $\vec{v}$ 為負。巴士正在「減速煞車」，表示加速度方向必須與速度方向<strong>相反</strong>，以產生阻礙。因為速度為負，加速度必須為正 ($+$) 才能達成減速。
+                    <strong>解析：</strong> 巴士「向西」行駛，與設定的正方向相反，故速度 $v$ 為負。巴士正在「減速煞車」，表示加速度方向必須與速度方向<strong>相反</strong>，以產生阻礙。因為速度為負，加速度必須為正 ($+$) 才能達成減速。
                 </div>
             </div>
 
             <!-- Q5 -->
             <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 小美把一個球垂直向上拋出，球達到最高點後掉回她的手中。若設定「向上為正方向」，當球從最高點開始「往下掉」的過程中，其位移 ($\vec{s}$，相對於手中起點) 和速度 ($\vec{v}$) 的符號為何？</p>
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 小美把一個球垂直向上拋出，球達到最高點後掉回她的手中。若設定「向上為正方向」，當球從最高點開始「往下掉」的過程中，其位移 ($s$，相對於手中起點) 和速度 ($v$) 的符號為何？</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <button onclick="checkAnswer(this, false, 'exp-q21-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 位移為負，速度為正</button>
                     <button onclick="checkAnswer(this, false, 'exp-q21-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 位移為負，速度為負</button>
@@ -1229,7 +1223,7 @@
                     <button onclick="checkAnswer(this, false, 'exp-q21-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 位移為正，速度為正</button>
                 </div>
                 <div id="exp-q21-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 即使球正在往下掉，但只要它還沒落回起點下方，它所處的「位置」仍然在起點的「上方」，因此位移 $\vec{s}$ 仍為正 ($+$)。然而，因為它目前的運動方向是「向下」，與正方向相反，所以當下的速度 $\vec{v}$ 為負 ($-$)。
+                    <strong>解析：</strong> 即使球正在往下掉，但只要它還沒落回起點下方，它所處的「位置」仍然在起點的「上方」，因此位移 $s$ 仍為正 ($+$)。然而，因為它目前的運動方向是「向下」，與正方向相反，所以當下的速度 $v$ 為負 ($-$)。
                 </div>
             </div>
         </div>
