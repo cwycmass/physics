@@ -186,21 +186,78 @@
 
                         <!-- 第 5 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 5 章：氣體</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 5 章：磁場</h2>
                 <ul class="space-y-1">
                     <li>
                         <button onclick="switchPage('ch5-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            5.1 氣體定律
+                            5.1 磁力和磁場
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch5-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            5.2 氣體分子運動論
+                            5.2 電流的磁效應
                         </button>
                     </li>
                 </ul>
             </div>
 
+            <!-- 第 6 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 6 章：磁場產生的力</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch6-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            6.1 作用於載電流導體的磁力
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch6-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            6.2 直流電動機
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 第 7 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 7 章：電磁感應</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch7-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            7.1 磁場產生的電流
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch7-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            7.2 電磁感應的應用
+                        </button>
+                    </li>
+                     <li>
+                        <button onclick="switchPage('ch7-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            7.3 法拉第定律的定量處理
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 第 8 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 8 章：變壓器及輸電</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch8-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            8.1 變壓器
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch8-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            8.2 輸 電
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            
             
         </nav>
 
@@ -1371,6 +1428,433 @@
         </div>
     </section>
 </article>
+
+<!-- ========================================== -->
+<!-- 區塊 3.1: 分析電路 -->
+<!-- ========================================== -->
+<article id="ch3-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.1</span>分析電路</h2>
+        <p class="text-slate-500 mt-2">學習如何運用基爾霍夫定律以及分流、分壓原理來系統性地分析複雜的電阻網絡。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>要精確分析複雜的電路，德國物理學家基爾霍夫提出了兩條極為重要的定律，這兩條定律分別建基於物理學中最核心的「電荷守恆」與「能量守恆」：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">基爾霍夫第一定律（節點定律）：</strong> 
+                    流入電路中任何一個節點（連接點）的總電流，必定等於流出該節點的總電流。這反映了<strong>電荷守恆</strong>，電荷不會在節點處憑空產生或消失。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">基爾霍夫第二定律（迴路定律）：</strong> 
+                    在任何一個閉合迴路中，各元件兩端的電勢差（電壓）的代數總和必定為零。這反映了<strong>能量守恆</strong>，電荷繞迴路一圈所獲得的能量必等於所消耗的能量。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與分流分壓原理</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">除了基爾霍夫定律，我們還可以運用分壓與分流原理來快速求解串聯與並聯電路中的電壓和電流：</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">串聯分壓原理</p>
+                    <p class="text-sm text-slate-600 mb-2">在串聯電路中，電壓與電阻成正比：</p>
+                    <div class="text-xl font-bold text-blue-900">$$\frac{V_1}{V_2} = \frac{R_1}{R_2}$$</div>
+                    <p class="text-xs text-slate-500 mt-2">電阻越大的元件，分配到的電壓越高。</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">並聯分流原理</p>
+                    <p class="text-sm text-slate-600 mb-2">在並聯電路中，電流與電阻成反比：</p>
+                    <div class="text-xl font-bold text-blue-900">$$\frac{I_1}{I_2} = \frac{R_2}{R_1}$$</div>
+                    <p class="text-xs text-slate-500 mt-2">電阻越小的支路，流過的電流越大。</p>
+                </div>
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li><i class="fa-solid fa-calculator text-blue-500 mr-1"></i> <strong>串聯總電阻：</strong> $R_{\text{eq}} = R_1 + R_2 + \dots$</li>
+                <li><i class="fa-solid fa-calculator text-blue-500 mr-1"></i> <strong>並聯總電阻：</strong> $\frac{1}{R_{\text{eq}}} = \frac{1}{R_1} + \frac{1}{R_2} + \dots$ （或雙電阻捷徑：$R_{\text{eq}} = \frac{R_1 R_2}{R_1 + R_2}$）</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 基爾霍夫定律對照表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">定律名稱</th>
+                        <th class="p-3 font-semibold w-1/4">應用位置</th>
+                        <th class="p-3 font-semibold w-1/4">數學表達式</th>
+                        <th class="p-3 font-semibold w-1/4">物理本質</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">第一定律 (節點定律)</td>
+                        <td class="p-3 text-blue-700 font-bold">電路中的交叉節點</td>
+                        <td class="p-3">$$\sum I_{\text{入}} = \sum I_{\text{出}}$$</td>
+                        <td class="p-3">電荷守恆</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">第二定律 (迴路定律)</td>
+                        <td class="p-3 text-green-700 font-bold">任何一個閉合迴圈</td>
+                        <td class="p-3">$$\sum \mathcal{E} = \sum V_{\text{降}}$$</td>
+                        <td class="p-3">能量守恆</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">節點定律</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">位置：</span> 節點</li>
+                    <li><span class="font-medium text-slate-800">公式：</span> $\sum I_{\text{入}} = \sum I_{\text{出}}$</li>
+                    <li><span class="font-medium text-slate-800">本質：</span> 電荷守恆</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-green-700 border-b border-slate-100 pb-2 mb-2">迴路定律</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">位置：</span> 閉合迴路</li>
+                    <li><span class="font-medium text-slate-800">公式：</span> $\sum \mathcal{E} = \sum V_{\text{降}}$</li>
+                    <li><span class="font-medium text-slate-800">本質：</span> 能量守恆</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「在並聯電路中增加更多電阻分支，總電阻會變得越來越大。」</li>
+                    <li>「電流流過電阻後，電流會被『消耗』掉，所以流出電阻的電流會比流入的小。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>並聯的總電阻會越來越小！</strong> 每增加一條分支，等於為電流提供了多一條通道，這會使得整體的導電能力增加，等效電阻必定<strong>小於</strong>其中任何一個分支的電阻。</li>
+                    <li>根據節點定律與電荷守恆，電荷不會在電阻中消失。串聯元件中各處的<strong>電流大小完全相等</strong>，被消耗的是電能（轉換為熱能或光能），而非電荷本身。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (分流分壓) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        在一個電路中，一個 $4\ \Omega$ 的電阻與一個 $12\ \Omega$ 的電阻並聯，然後再與一個 $5\ \Omega$ 的電阻串聯，最後接上 $16 \text{ V}$ 的電源。求：<br>
+                        (a) 該電路的總等效電阻。<br>
+                        (b) 電源輸出的總電流。<br>
+                        (c) 流過 $12\ \Omega$ 電阻的電流大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 計算總等效電阻：</strong> 先算並聯部分的等效電阻 $R_p$。</p>
+                        $$R_p = \frac{4 \times 12}{4 + 12} = \frac{48}{16} = 3\ \Omega$$
+                        <p class="mb-2">再加上串聯的電阻：</p>
+                        $$R_{\text{eq}} = 3 + 5 = 8\ \Omega$$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 計算總電流：</strong> 使用歐姆定律 $I = \frac{V}{R_{\text{eq}}}$。</p>
+                        $$I_{\text{總}} = \frac{16 \text{ V}}{8\ \Omega} = 2 \text{ A}$$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(c) 計算流過 $12\ \Omega$ 電阻的電流：</strong> 利用分流原理，總電流 $2 \text{ A}$ 將分入 $4\ \Omega$ 和 $12\ \Omega$ 兩條支路。</p>
+                        $$I_{12} = I_{\text{總}} \times \left( \frac{4}{4 + 12} \right) = 2 \times \frac{4}{16} = 2 \times 0.25 = 0.5 \text{ A}$$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 總電阻為 $8\ \Omega$；(b) 總電流為 $2 \text{ A}$；(c) 流經 $12\ \Omega$ 的電流為 $0.5 \text{ A}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 基爾霍夫節點定律（所有進入節點的電流總和等於離開的總和）是基於哪一項物理守恆定律？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 能量守恆定律</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 質量守恆定律</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 電荷守恆定律</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 動量守恆定律</button>
+                </div>
+                <div id="exp-q31-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 電流是電荷的流動。由於電荷不能在電路中憑空產生或消失，進入任何一個節點的電荷量必定等於離開的電荷量，即電荷守恆。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 有三個阻值分別為 $10\ \Omega$、$20\ \Omega$、$30\ \Omega$ 的電阻。若將它們全部並聯，其總等效電阻的範圍必定為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 大於 $30\ \Omega$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 介於 $10\ \Omega$ 與 $30\ \Omega$ 之間</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 小於 $10\ \Omega$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 等於 $60\ \Omega$</button>
+                </div>
+                <div id="exp-q31-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據並聯電阻的特性，並聯後的等效總電阻必定小於組合中最小的那個單獨電阻。因為最小的電阻是 $10\ \Omega$，所以總電阻必定小於 $10\ \Omega$。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 3.2: 實際安培計、伏特計和電池組 -->
+<!-- ========================================== -->
+<article id="ch3-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.2</span>實際安培計、伏特計和電池組</h2>
+        <p class="text-slate-500 mt-2">從理想電路過渡到實際情況，探討電池內阻對輸出的影響，以及測量儀器本身的非理想特性。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在現實世界中，所有的電池和測量儀器都不是「完美的」，它們本身都會干擾電路的運作：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">電動勢 ($\mathcal{E}$) 與內阻 ($r$)：</strong> 
+                    每個實際電池內部都含有對抗電流的電阻，稱為<strong>內阻</strong>。電動勢 $\mathcal{E}$ 是電池能提供的總能量（每單位電荷），但在輸出時，部分能量會消耗在克服內阻上。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">端電壓 ($V$)：</strong> 
+                    電池實際輸出給外部電路的電壓。當電路接通有電流時，端電壓必定<strong>小於</strong>電池的電動勢。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">實際電錶：</strong> 
+                    理想的安培計電阻應為 $0$，但實際安培計有微小的電阻；理想的伏特計電阻應為無限大，但實際伏特計電阻是有限大的。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與 V-I 圖象分析</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">電池的電動勢、端電壓與內阻之間的關係：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$\mathcal{E} = V + Ir \quad \implies \quad V = \mathcal{E} - Ir$$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$\mathcal{E}$：電池的電動勢 (單位：$\text{V}$)</li>
+                <li>$V$：電池的端電壓，也等於外部電阻兩端的電壓 $IR$ (單位：$\text{V}$)</li>
+                <li>$I$：流經電池的電流 (單位：$\text{A}$)</li>
+                <li>$r$：電池的內阻 (單位：$\Omega$)</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-chart-line text-blue-500 mr-1"></i> <strong>利用 $V-I$ 圖求解：</strong> 改變外電阻並記錄端電壓 $V$ 與電流 $I$，繪製 $V$ 對 $I$ 的線圖。根據 $V = -rI + \mathcal{E}$（類似 $y = mx + c$），圖線的 <strong>斜率等於 $-r$</strong>，而 <strong>$y$ 軸截距等於 $\mathcal{E}$</strong>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 理想與實際電錶對照表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">儀器</th>
+                        <th class="p-3 font-semibold w-1/4">理想狀態</th>
+                        <th class="p-3 font-semibold w-1/4">實際狀態</th>
+                        <th class="p-3 font-semibold w-1/4">實際影響</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">安培計 (Ammeter)</td>
+                        <td class="p-3 text-blue-700 font-bold">電阻 $= 0$</td>
+                        <td class="p-3 text-red-600 font-bold">電阻很小，但不為 $0$</td>
+                        <td class="p-3">串聯時會微微增加總電阻，使測得的電流比原本略小。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">伏特計 (Voltmeter)</td>
+                        <td class="p-3 text-blue-700 font-bold">電阻 $= \infty$</td>
+                        <td class="p-3 text-red-600 font-bold">電阻很大，但非無限大</td>
+                        <td class="p-3">並聯時會分走一小部分電流，干擾原本元件的電壓讀數。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">安培計</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">理想：</span> 電阻為 $0$。</li>
+                    <li><span class="font-medium text-slate-800">實際：</span> 具有小電阻，會令電路總電阻微增，導致實際電流變小。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">伏特計</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">理想：</span> 電阻無限大。</li>
+                    <li><span class="font-medium text-slate-800">實際：</span> 電阻有限，並聯時會產生微小分流效應。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「這顆電池標示 $9 \text{ V}$，所以無論接上甚麼燈泡，它兩端的電壓永遠都是 $9 \text{ V}$。」</li>
+                    <li>「因為公式 $V = \mathcal{E} - Ir$，當外部電阻減小時，端電壓會上升。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>$9 \text{ V}$ 只是電池的<strong>電動勢</strong>。當電池接通並輸出電流時，內阻會消耗部分電壓 ($Ir$)，導致輸出的<strong>端電壓必小於 $9 \text{ V}$</strong>。</li>
+                    <li>當外部電阻減小，電路的總電流 $I$ 會<strong>增大</strong>。這導致內阻消耗的電壓 ($Ir$) 變大，從而使輸出的端電壓 $V$ <strong>下降</strong>。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (內阻計算) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個電動勢為 $12 \text{ V}$、內阻為 $2\ \Omega$ 的電池，連接著一個 $4\ \Omega$ 的外部電阻形成閉合電路。求：<br>
+                        (a) 電路中的電流大小。<br>
+                        (b) 電池輸出的端電壓。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 計算總電流 $I$：</strong> 電池的內阻與外部電阻是串聯的關係。</p>
+                        $$I = \frac{\mathcal{E}}{R_{\text{外}} + r} = \frac{12}{4 + 2} = \frac{12}{6} = 2 \text{ A}$$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 計算端電壓 $V$：</strong> 可以用兩種方法。</p>
+                        <p class="mb-1">方法一：利用端電壓公式 $V = \mathcal{E} - Ir$</p>
+                        $$V = 12 - (2 \times 2) = 12 - 4 = 8 \text{ V}$$
+                        <p class="mb-1 mt-2">方法二：端電壓即為外部電阻兩端的電壓 $V = IR_{\text{外}}$</p>
+                        $$V = 2 \times 4 = 8 \text{ V}$$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 電流為 $2 \text{ A}$；(b) 端電壓為 $8 \text{ V}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (短路極限) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        承接上題的電池（$\mathcal{E} = 12 \text{ V}$, $r = 2\ \Omega$）。如果不小心用一條電阻為零的導線直接連接電池的正負極（發生短路）。此時流過電池的電流是多少？端電壓又是多少？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">短路意味着外部電阻 $R_{\text{外}} = 0\ \Omega$。</p>
+                        <p class="mb-2"><strong>求短路電流：</strong></p>
+                        $$I_{\text{short}} = \frac{\mathcal{E}}{r} = \frac{12}{2} = 6 \text{ A}$$
+                        <p class="mb-2 mt-4"><strong>求端電壓：</strong></p>
+                        $$V = \mathcal{E} - Ir = 12 - (6 \times 2) = 0 \text{ V}$$
+                        <p class="mt-2 font-bold text-green-700">答案：短路時電流高達 $6 \text{ A}$，端電壓降為 $0 \text{ V}$（所有電動勢都消耗在內阻上了）。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 汽車啟動引擎的一瞬間，車頭大燈會突然變暗。這是因為：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 電池的電動勢突然減少</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 啟動馬達抽走大量電流，導致電池內阻消耗的電壓增加，端電壓下降</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 車頭燈的電阻突然變大</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 電池內部發生短路</button>
+                </div>
+                <div id="exp-q32-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 電池電動勢是固定的。當啟動馬達運作時，需要極大電流 $I$。根據 $V = \mathcal{E} - Ir$，電流暴增使得 $Ir$ 項變大，導致輸出給車頭燈的端電壓 $V$ 瞬間急降，燈泡變暗。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 當我們說一個電池「耗盡（沒電）」了，主要是因為它內部的甚麼物理量發生了顯著變化？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 電動勢降至零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 電池重量減輕</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 內阻變得非常巨大</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 電池內部的自由電子完全消失</button>
+                </div>
+                <div id="exp-q32-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 舊電池的電動勢通常變化不大，但化學反應導致其內阻 $r$ 會變得非常巨大。這使得只要接上電路產生微小電流，大部分電壓就耗損在內阻上，端電壓無法驅動電器。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+
+
+
             
 <!-- ========================================== -->
           
