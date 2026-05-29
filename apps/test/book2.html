@@ -3372,287 +3372,517 @@
         </div>
     </section>
 </article>
-
-<!-- ========================================== -->
-<!-- 區塊 3.6: 摩擦力 (可直接插入主檔案) -->
-<!-- ========================================== -->
-<article id="ch3-6" class="content-section hidden">
-    <header class="mb-8 border-b-2 border-slate-200 pb-4">
-        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.6</span>摩擦力</h2>
-        <p class="text-slate-500 mt-2">深入探討固體接觸面之間的阻力，釐清靜摩擦與動摩擦的特性及應用。</p>
+<!-- ==========================================
+     子章節 1: 摩擦力的本質與規律
+     ========================================== -->
+<article id="page-1" class="page-content block max-w-4xl mx-auto pb-20">
+    <header class="mb-8 border-b-2 border-blue-100 pb-4">
+        <h2 class="text-3xl font-extrabold text-slate-800"><i class="fa-solid fa-cube text-blue-500 mr-3"></i>摩擦力的本質與規律</h2>
+        <p class="text-slate-500 mt-2">了解摩擦力產生的原因、方向判斷，以及香港 DSE 課程中的簡化處理方式。</p>
     </header>
 
-    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <!-- 1. 名詞定義 / 核心概念 -->
     <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
-        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-            <p><strong class="text-blue-700 font-bold">摩擦力 (Friction, $f$)</strong> 是當兩個固體表面互相接觸，並產生相對運動或「有相對運動的趨勢」時，接觸面之間產生的一種阻礙力。摩擦力的方向永遠平行於接觸面，並分為兩種主要形態：</p>
-            <ul class="list-disc list-inside ml-2 space-y-3">
-                <li>
-                    <strong class="text-blue-700 font-bold">靜摩擦力 (Static friction)：</strong> 
-                    作用於相對靜止的表面之間。它會自動調節大小以抵消外力，直到達到一個極限值，稱為 <strong class="text-blue-700">最大靜摩擦力 (Maximum static friction)</strong>。
-                </li>
-                <li>
-                    <strong class="text-blue-700 font-bold">動摩擦力 (Kinetic friction)：</strong> 
-                    作用於正在發生相對滑動的表面之間。一旦物體開始滑動，摩擦力通常會稍微下降並保持在一個恆定的數值。
-                </li>
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 名詞定義與核心概念</h3>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+            <p class="mb-3">當兩個互相接觸的物體發生<span class="text-blue-700 font-bold">相對運動</span>，或有<span class="text-blue-700 font-bold">相對運動的趨勢</span>時，接觸面上會產生一種阻礙相對運動的力，這種力稱為<span class="text-blue-700 font-bold">摩擦力 (Friction)</span>。</p>
+            <ul class="list-disc list-inside space-y-2 ml-2">
+                <li><strong>產生條件：</strong> 接觸面粗糙、物體之間有互相擠壓（存在正向力）、有相對運動或其趨勢。</li>
+                <li><strong>方向：</strong> 永遠與物體間的<span class="text-blue-700 font-bold">相對運動方向</span>或<span class="text-blue-700 font-bold">相對運動趨勢方向</span>相反。</li>
             </ul>
         </div>
     </section>
 
-    <!-- 📐 2. 核心公式與單位 -->
+    <!-- 2. 核心公式與單位 -->
     <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心關係與特性</h3>
-        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
-            <p class="text-slate-700 mb-3">在 HKDSE 中，我們主要透過牛頓定律來推導摩擦力的大小。摩擦力與接觸面的粗糙程度以及 <strong class="text-blue-700">法向反作用力 ($R$)</strong> 有關：</p>
-            <div class="my-4 overflow-x-auto text-lg font-medium text-slate-800 bg-white p-4 rounded border border-blue-100">
-                <p class="mb-2">1. <span class="text-blue-700 font-bold">靜止時：</span> $f_{\text{靜}} = F_{\text{施力}}$ （隨施力增大而增大）</p>
-                <p class="mb-2">2. <span class="text-blue-700 font-bold">剛要滑動時：</span> 達到極限 $f_{\text{最大靜}}$</p>
-                <p>3. <span class="text-blue-700 font-bold">滑動時：</span> $f_{\text{動}} = \text{常數}$ （通常 $f_{\text{動}} < f_{\text{最大靜}}$）</p>
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+            <p class="text-slate-700 mb-2">在 HKDSE 物理課程中，為簡化計算，我們通常假設<span class="text-blue-700 font-bold">動摩擦力</span> (Kinetic friction) 等於<span class="text-blue-700 font-bold">最大靜摩擦力</span> (Maximum static friction)，統一以定值 $f$ 表示：</p>
+            <div class="text-center py-4 overflow-x-auto">
+                $$ f = \text{定值 (取決於接觸面性質與正向力)} $$
             </div>
-            <ul class="text-sm text-slate-600 space-y-2 mt-4">
-                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>單位：</strong> 摩擦力是一種力，單位為牛頓 ($\text{N}$)。</li>
-                <li><i class="fa-solid fa-chart-line text-blue-500 mr-1"></i> <strong>摩擦力與施力圖象：</strong> 隨施力增加，摩擦力先呈 $1:1$ 直線上升（靜摩擦），到達頂點（最大靜摩擦）後，突然微降並保持水平（動摩擦）。</li>
-            </ul>
+            <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> <strong>單位：</strong> 牛頓 ($\text{N}$)，因為摩擦力是一種力，屬於<span class="text-blue-700 font-bold">矢量 (Vector)</span>。</p>
         </div>
     </section>
 
-    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <!-- 3. 重要性質 / 物理規律對照 -->
     <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 靜摩擦力與動摩擦力對照表</h3>
-        <!-- 桌機版 Table -->
-        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 重要性質對照：靜止 vs 滑動</h3>
+        
+        <!-- 桌面版 Table (lg:block) -->
+        <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
             <table class="w-full text-left text-slate-700">
-                <thead class="bg-blue-100 text-blue-900">
+                <thead class="bg-slate-100 border-b border-slate-200">
                     <tr>
-                        <th class="p-3 font-semibold w-1/4">比較項目</th>
-                        <th class="p-3 font-semibold w-3/8">靜摩擦力 (Static Friction)</th>
-                        <th class="p-3 font-semibold w-3/8">動摩擦力 (Kinetic Friction)</th>
+                        <th class="p-4 font-bold w-1/4">物體狀態</th>
+                        <th class="p-4 font-bold w-1/4">受力情況 (推力 $F$)</th>
+                        <th class="p-4 font-bold w-1/2">摩擦力 $f$ 大小</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-200">
-                    <tr class="even:bg-slate-50">
-                        <td class="p-3 font-medium">發生條件</td>
-                        <td class="p-3">兩接觸面 <strong>相對靜止</strong>，但有滑動趨勢。</td>
-                        <td class="p-3">兩接觸面正在發生 <strong>相對滑動</strong>。</td>
+                <tbody>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4"><span class="bg-slate-200 text-slate-800 px-2 py-1 rounded text-sm">保持靜止</span></td>
+                        <td class="p-4">$F < \text{最大靜摩擦力}$</td>
+                        <td class="p-4">靜摩擦力大小會隨推力改變，以保持淨力為零。根據牛頓第一定律：$f = F$。</td>
                     </tr>
-                    <tr class="even:bg-slate-50">
-                        <td class="p-3 font-medium">量值大小</td>
-                        <td class="p-3">可變動的。剛好抵消平行於接觸面的外力 ($f = F_{\text{外}})$。</td>
-                        <td class="p-3">恆定的（常數）。不隨滑動速率改變。</td>
-                    </tr>
-                    <tr class="even:bg-slate-50">
-                        <td class="p-3 font-medium">與極限值的關係</td>
-                        <td class="p-3">最高可達「最大靜摩擦力」。</td>
-                        <td class="p-3">通常 <strong>略小於</strong> 最大靜摩擦力。</td>
+                    <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4"><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">滑動中</span></td>
+                        <td class="p-4">$F \ge \text{最大靜摩擦力}$</td>
+                        <td class="p-4">物體受到的摩擦力為動摩擦力（HKDSE 視為定值）。不再隨推力 $F$ 增加而改變。</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <!-- 行動版卡片 -->
-        <div class="grid md:hidden gap-4">
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">靜摩擦力</h4>
-                <ul class="text-sm space-y-1 text-slate-600">
-                    <li><span class="font-medium text-slate-800">條件：</span> 相對靜止，有滑動趨勢。</li>
-                    <li><span class="font-medium text-slate-800">大小：</span> 可變的，剛好抵消外力。</li>
-                    <li><span class="font-medium text-slate-800">極限：</span> 最高可達最大靜摩擦力。</li>
-                </ul>
+
+        <!-- 行動版 Cards (lg:hidden) -->
+        <div class="space-y-4 lg:hidden">
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-slate-400"></div>
+                <h4 class="font-bold text-slate-800 mb-2">1. 保持靜止狀態</h4>
+                <p class="text-sm text-slate-600 mb-1"><strong>條件：</strong> 推力 $F < \text{最大靜摩擦力}$</p>
+                <p class="text-sm text-slate-600"><strong>摩擦力 $f$：</strong> 會隨推力改變。為了保持淨力為零（牛頓第一定律），$f = F$。</p>
             </div>
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">動摩擦力</h4>
-                <ul class="text-sm space-y-1 text-slate-600">
-                    <li><span class="font-medium text-slate-800">條件：</span> 正在發生相對滑動。</li>
-                    <li><span class="font-medium text-slate-800">大小：</span> 恆定的常數，不隨速率改變。</li>
-                    <li><span class="font-medium text-slate-800">與極限比較：</span> 略小於最大靜摩擦力。</li>
-                </ul>
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h4 class="font-bold text-slate-800 mb-2">2. 滑動狀態</h4>
+                <p class="text-sm text-slate-600 mb-1"><strong>條件：</strong> 曾經被克服最大靜摩擦力並保持運動。</p>
+                <p class="text-sm text-slate-600"><strong>摩擦力 $f$：</strong> 變為動摩擦力定值，不隨推力 $F$ 的改變而變大或變小。</p>
             </div>
         </div>
     </section>
 
-    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <!-- 4. 常見迷思與誤區 -->
     <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-blue-500 w-8"></i> 常見迷思與誤區</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- 錯誤觀念 -->
-            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
-                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
-                <ul class="text-sm space-y-2 list-disc list-inside">
-                    <li>「摩擦力的方向必定與物體的運動方向相反，總是在阻礙物體前進。」</li>
-                    <li>「如果我用 $10 \text{ N}$ 推一個靜止的木箱，木箱沒動，這代表木箱太重，而不是因為摩擦力也是 $10 \text{ N}$。」</li>
-                </ul>
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                <p class="text-sm">摩擦力的方向必定與物體的「運動方向」相反。</p>
             </div>
-            <!-- 正確觀念 -->
-            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
-                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
-                <ul class="text-sm space-y-2 list-disc list-inside">
-                    <li>摩擦力是阻礙<strong>「相對」</strong>運動。當人向前走路時，腳有向後滑的趨勢，地面提供的靜摩擦力是<strong>向前</strong>的，這正是人能前進的動力！</li>
-                    <li>木箱沒動代表處於平衡狀態（淨力為零）。你推 $10 \text{ N}$，靜摩擦力就會精準地自動調節為 $10 \text{ N}$ 來抵消你的推力。</li>
-                </ul>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                <p class="text-sm">摩擦力是與「<span class="font-bold">相對運動方向</span>」相反。例如人向前走路時，鞋底相對地面有向後滑動的趨勢，因此地面給鞋底的靜摩擦力是<span class="font-bold">向前</span>的，這正是推動人前進的動力！</p>
+            </div>
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                <p class="text-sm">推不動一個重物，是因為物體太重（重量大於推力）。</p>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                <p class="text-sm">推不動是因為推力尚未超過<span class="font-bold">最大靜摩擦力</span>。推力（水平方向）和重量（垂直方向）互相垂直，把它們直接比較大小是沒有物理意義的。</p>
             </div>
         </div>
     </section>
 
-    <!-- ✍️ 5. 典型例題解說 -->
+    <!-- 5. 典型例題解說 -->
+    <section class="mb-12">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+        
+        <!-- 題 1 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                <p class="text-slate-800 font-medium pt-1">一個放在水平地面上的木箱，與地面間的最大靜摩擦力為 $40 \text{ N}$。若小明用 $25 \text{ N}$ 的水平力推木箱，木箱保持靜止。此時木箱受到的摩擦力是多少？</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：判斷運動狀態</strong></p>
+                    <p class="mb-4">推力 $F = 25 \text{ N}$ 小於最大靜摩擦力 $40 \text{ N}$，因此木箱保持<span class="text-blue-700 font-bold">靜止</span>。</p>
+                    <p class="mb-2"><strong>第二步：應用牛頓第一定律</strong></p>
+                    <p class="mb-2">因為木箱靜止，水平方向上的淨力必須為零：</p>
+                    <div class="overflow-x-auto">$$ \text{淨力 } F_{\text{net}} = F - f = 0 $$</div>
+                    <div class="overflow-x-auto">$$ f = F = 25 \text{ N} $$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：摩擦力大小為 $25 \text{ N}$，方向與推力相反。</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- 題 2 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                <p class="text-slate-800 font-medium pt-1">承上題，若小明改用 $50 \text{ N}$ 的水平推力，木箱開始滑動。假設動摩擦力等於最大靜摩擦力，求木箱此時受到的摩擦力大小及淨力大小。</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：判定摩擦力大小</strong></p>
+                    <p class="mb-4">因為推力克服了最大靜摩擦力，物體處於滑動狀態，摩擦力達到定值。根據題意，動摩擦力 $f = 40 \text{ N}$。</p>
+                    <p class="mb-2"><strong>第二步：計算水平淨力</strong></p>
+                    <p class="mb-2">推力向前，摩擦力向後（與運動方向相反）：</p>
+                    <div class="overflow-x-auto">$$ F_{\text{net}} = F - f $$</div>
+                    <div class="overflow-x-auto">$$ F_{\text{net}} = 50 \text{ N} - 40 \text{ N} = 10 \text{ N} $$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：摩擦力為 $40 \text{ N}$，淨力為 $10 \text{ N}$ (向前)。</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- 題 3 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                <p class="text-slate-800 font-medium pt-1">質量為 $5 \text{ kg}$ 的玩具車在粗糙水平面上被 $30 \text{ N}$ 的拉力拉動，以 $2 \text{ m s}^{-2}$ 的勻加速運動前進。求玩具車受到的動摩擦力大小。</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：應用牛頓第二定律</strong></p>
+                    <p class="mb-2">已知質量 $m = 5 \text{ kg}$，拉力 $F = 30 \text{ N}$，加速度 $a = 2 \text{ m s}^{-2}$。根據公式：</p>
+                    <div class="overflow-x-auto">$$ F_{\text{net}} = ma $$</div>
+                    <div class="overflow-x-auto">$$ F - f = ma $$</div>
+                    <p class="mb-2 mt-4"><strong>第二步：代入數值求解</strong></p>
+                    <div class="overflow-x-auto">$$ 30 - f = 5 \times 2 $$</div>
+                    <div class="overflow-x-auto">$$ 30 - f = 10 $$</div>
+                    <div class="overflow-x-auto">$$ f = 20 \text{ N} $$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：摩擦力大小為 $20 \text{ N}$。</p>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <!-- 6. 隨堂測驗 -->
+    <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+        <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-blue-600 w-8"></i> 隨堂測驗 (Quiz)</h3>
+        
+        <!-- Q1 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1">
+            <p class="font-bold text-slate-800 mb-3">1. 關於摩擦力的產生，下列哪一項不是必要條件？</p>
+            <div class="flex flex-col space-y-2">
+                <button onclick="checkAnswer(this, false, 'exp1-1', 'quiz1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 接觸面必須粗糙</button>
+                <button onclick="checkAnswer(this, true,  'exp1-1', 'quiz1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 物體必須正在運動</button>
+                <button onclick="checkAnswer(this, false, 'exp1-1', 'quiz1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 物體之間有相對運動的趨勢</button>
+                <button onclick="checkAnswer(this, false, 'exp1-1', 'quiz1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 兩物體互相擠壓 (有正向力)</button>
+            </div>
+            <div id="exp1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong>即使物體處於靜止狀態，只要有「相對運動的趨勢」（例如推但推不動），接觸面之間也會產生靜摩擦力。因此「物體必須正在運動」不是產生摩擦力的必要條件。
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2">
+            <p class="font-bold text-slate-800 mb-3">2. 關於摩擦力的方向，下列哪一項陳述最準確？</p>
+            <div class="flex flex-col space-y-2">
+                <button onclick="checkAnswer(this, false, 'exp1-2', 'quiz1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 必定與物體運動方向相反</button>
+                <button onclick="checkAnswer(this, false, 'exp1-2', 'quiz1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 必定與推力方向相同</button>
+                <button onclick="checkAnswer(this, true,  'exp1-2', 'quiz1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 必定與接觸面的相對運動或相對運動趨勢相反</button>
+                <button onclick="checkAnswer(this, false, 'exp1-2', 'quiz1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 必定垂直於接觸面</button>
+            </div>
+            <div id="exp1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong>這是常見迷思。摩擦力阻礙的是「接觸面之間的相對滑動」，因此它與相對運動或相對運動趨勢的方向相反，而不是單純與運動方向相反（例如走路時摩擦力向前）。
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3">
+            <p class="font-bold text-slate-800 mb-3">3. 一個重 $100 \text{ N}$ 的鐵塊放在水平桌面上。小明用 $20 \text{ N}$ 的力向右推，鐵塊保持靜止。此時摩擦力的大小和方向為何？</p>
+            <div class="flex flex-col space-y-2">
+                <button onclick="checkAnswer(this, false, 'exp1-3', 'quiz1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $100 \text{ N}$ 向左</button>
+                <button onclick="checkAnswer(this, false, 'exp1-3', 'quiz1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $120 \text{ N}$ 向左</button>
+                <button onclick="checkAnswer(this, false, 'exp1-3', 'quiz1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $0 \text{ N}$</button>
+                <button onclick="checkAnswer(this, true,  'exp1-3', 'quiz1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $20 \text{ N}$ 向左</button>
+            </div>
+            <div id="exp1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong>鐵塊保持靜止，處於平衡狀態。根據牛頓第一定律，水平方向淨力為零。向右的推力 $20 \text{ N}$ 必須被向左的靜摩擦力 $20 \text{ N}$ 抵消。
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-4">
+            <p class="font-bold text-slate-800 mb-3">4. 承上題，若該桌面的最大靜摩擦力為 $45 \text{ N}$，小明將推力增加到 $50 \text{ N}$，鐵塊的運動狀態會如何改變？</p>
+            <div class="flex flex-col space-y-2">
+                <button onclick="checkAnswer(this, false, 'exp1-4', 'quiz1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 繼續保持靜止</button>
+                <button onclick="checkAnswer(this, false, 'exp1-4', 'quiz1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 以勻速運動滑動</button>
+                <button onclick="checkAnswer(this, true,  'exp1-4', 'quiz1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 以勻加速運動滑動</button>
+                <button onclick="checkAnswer(this, false, 'exp1-4', 'quiz1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 摩擦力會增加到 $50 \text{ N}$ 使其靜止</button>
+            </div>
+            <div id="exp1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong>推力 $F = 50 \text{ N}$ 大於最大靜摩擦力 $45 \text{ N}$，鐵塊開始滑動。因為推力持續大於動摩擦力（假設等於 $45 \text{ N}$），所以淨力不為零（向前 $5 \text{ N}$），根據牛頓第二定律 $F_{\text{net}} = ma$，物體會做勻加速運動。
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-5">
+            <p class="font-bold text-slate-800 mb-3">5. 在 HKDSE 物理中，當物體在粗糙平面上滑動時，其摩擦力大小通常被假設為：</p>
+            <div class="flex flex-col space-y-2">
+                <button onclick="checkAnswer(this, true,  'exp1-5', 'quiz1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 一個定值，並且約等於最大靜摩擦力</button>
+                <button onclick="checkAnswer(this, false, 'exp1-5', 'quiz1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 隨着速度增加而增加</button>
+                <button onclick="checkAnswer(this, false, 'exp1-5', 'quiz1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 隨着推力增加而無限增加</button>
+                <button onclick="checkAnswer(this, false, 'exp1-5', 'quiz1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 必定為零</button>
+            </div>
+            <div id="exp1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong>為了簡化計算，中學課程通常把動摩擦力視為與最大靜摩擦力相同的定值。且固體接觸面的動摩擦力通常與滑動速度無關。
+            </div>
+        </div>
+
+    </section>
+</article>
+
+<!-- ==========================================
+     子章節 2: 斜面上的摩擦力分析
+     ========================================== -->
+<article id="page-2" class="page-content hidden max-w-4xl mx-auto pb-20">
+    <header class="mb-8 border-b-2 border-blue-100 pb-4">
+        <h2 class="text-3xl font-extrabold text-slate-800"><i class="fa-solid fa-play text-blue-500 mr-3"></i>斜面上的摩擦力分析</h2>
+        <p class="text-slate-500 mt-2">結合三角函數，分析物體在斜面上受到的重力分量、正向力與摩擦力之間的關係。</p>
+    </header>
+
+    <!-- 1. 名詞定義 / 核心概念 -->
     <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
-        <div class="space-y-6">
-            
-            <!-- 例題 1 (水平推力與動態摩擦) -->
-            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
-                <div class="flex items-start">
-                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
-                    <p class="text-slate-800 leading-relaxed font-medium">
-                        一個質量為 $20 \text{ kg}$ 的木箱放在水平地面上。已知木箱與地面的最大靜摩擦力為 $80 \text{ N}$，動摩擦力為 $60 \text{ N}$。<br>
-                        (a) 若小明用 $50 \text{ N}$ 的水平力推木箱，木箱的摩擦力是多少？<br>
-                        (b) 若小明改用 $100 \text{ N}$ 的水平力推木箱，求木箱的加速度。
-                    </p>
-                </div>
-                <details class="mt-4 group">
-                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
-                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
-                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
-                    </summary>
-                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
-                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                        <p class="mb-2"><strong>(a)</strong> 推力 $50 \text{ N}$ 小於最大靜摩擦力 $80 \text{ N}$，木箱保持靜止。靜摩擦力剛好抵消推力。</p>
-                        $$ f_{\text{靜}} = 50 \text{ N} $$
-                        <p class="mt-4 mb-2"><strong>(b)</strong> 推力 $100 \text{ N}$ 大於最大靜摩擦力，木箱開始滑動。此時受到的阻力轉為恆定的動摩擦力 $60 \text{ N}$。</p>
-                        $$ F_{\text{net}} = F_{\text{推}} - f_{\text{動}} = 100 - 60 = 40 \text{ N} $$
-                        $$ a = \frac{F_{\text{net}}}{m} = \frac{40}{20} = 2 \text{ m s}^{-2} $$
-                        <p class="mt-2 font-bold text-green-700">答案：(a) $50 \text{ N}$，(b) $2 \text{ m s}^{-2}$ 向着推力方向。</p>
-                    </div>
-                </details>
-            </div>
-            
-            <!-- 例題 2 (斜面上的摩擦力) -->
-            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
-                <div class="flex items-start">
-                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
-                    <p class="text-slate-800 leading-relaxed font-medium">
-                        一個質量為 $2 \text{ kg}$ 的物體靜止放置在一個與水平面成 $\theta = 30^\circ$ 的斜面上。求斜面對物體施加的靜摩擦力大小。（取 $g = 9.81 \text{ m s}^{-2}$）
-                    </p>
-                </div>
-                <details class="mt-4 group">
-                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
-                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
-                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
-                    </summary>
-                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
-                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                        <p class="mb-2">1. 物體靜止，代表沿着斜面方向的淨力為零。</p>
-                        <p class="mb-2">2. 使物體有向下滑動趨勢的力是重力沿斜面的分量 ($mg \sin \theta$)。</p>
-                        <p class="mb-2">3. 靜摩擦力 ($f$) 必須指向斜面向上，且剛好抵消下滑力：</p>
-                        $$ f = mg \sin \theta $$
-                        $$ f = (2)(9.81) \sin 30^\circ = 19.62 \times 0.5 = 9.81 \text{ N} $$
-                        <p class="mt-2 font-bold text-green-700">答案：靜摩擦力為 $9.81 \text{ N}$，沿斜面向上。</p>
-                    </div>
-                </details>
-            </div>
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念：斜面受力分解</h3>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+            <p class="mb-3">當物體放在傾角為 $\theta$ 的斜面上時，垂直向下的<span class="text-blue-700 font-bold">重量 (Weight) $W = mg$</span> 不再與斜面垂直。我們必須將重量分解為兩個互相垂直的分量：</p>
+            <ul class="list-disc list-inside space-y-2 ml-2">
+                <li><strong>平行於斜面的分量：</strong> 驅使物體下滑的力，大小為 $mg \sin \theta$。</li>
+                <li><strong>垂直於斜面的分量：</strong> 壓緊斜面的力，大小為 $mg \cos \theta$。</li>
+            </ul>
+        </div>
+    </section>
 
-            <!-- 例題 3 (煞車減速問題) -->
-            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
-                <div class="flex items-start">
-                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
-                    <p class="text-slate-800 leading-relaxed font-medium">
-                        一輛質量為 $1200 \text{ kg}$ 的汽車在平直公路上以 $15 \text{ m s}^{-1}$ 的速率行駛。司機緊急煞車，車輪鎖死並在路面上滑行。若路面提供的動摩擦力為 $7200 \text{ N}$，求汽車完全停下所需的距離。
-                    </p>
-                </div>
-                <details class="mt-4 group">
-                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
-                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
-                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
-                    </summary>
-                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
-                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                        <p class="mb-2">1. 煞車時，水平方向淨力即為動摩擦力（方向與運動相反，故為負）。</p>
-                        $$ F_{\text{net}} = -f = -7200 \text{ N} $$
-                        $$ a = \frac{F_{\text{net}}}{m} = \frac{-7200}{1200} = -6 \text{ m s}^{-2} $$
-                        <p class="mt-4 mb-2">2. 利用運動學公式 $v^2 - u^2 = 2as$，已知 $u = 15 \text{ m s}^{-1}$，停下代表 $v = 0$：</p>
-                        $$ 0^2 - 15^2 = 2(-6)s $$
-                        $$ -225 = -12s $$
-                        $$ s = \frac{225}{12} = 18.75 \text{ m} $$
-                        <p class="mt-2 font-bold text-green-700">答案：汽車需要滑行 $18.75 \text{ m}$ 才會停下。</p>
-                    </div>
-                </details>
+    <!-- 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 核心公式</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+            <p class="text-slate-700 mb-2">斜面上的重要力學公式：</p>
+            <div class="text-center py-2 overflow-x-auto">
+                <p class="mb-2"><strong>正向力 (Normal Reaction):</strong></p>
+                $$ R = mg \cos \theta $$
+            </div>
+            <div class="text-center py-2 overflow-x-auto">
+                <p class="mb-2"><strong>若物體靜止或勻速下滑 (淨力為 0):</strong></p>
+                $$ f = mg \sin \theta $$
+            </div>
+            <div class="text-center py-2 overflow-x-auto">
+                <p class="mb-2"><strong>若物體加速下滑:</strong></p>
+                $$ F_{\text{net}} = mg \sin \theta - f = ma $$
+            </div>
+            <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> $\theta$ 為斜面與水平面的夾角，$m$ 為質量，單位 $\text{kg}$，$g$ 為重力加速度約 $9.81 \text{ m s}^{-2}$。</p>
+        </div>
+    </section>
+
+    <!-- 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 傾角 $\theta$ 變化對物理量的影響</h3>
+        
+        <!-- 桌面版 Table -->
+        <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-slate-100 border-b border-slate-200">
+                    <tr>
+                        <th class="p-4 font-bold w-1/4">當斜角 $\theta$ 逐漸增大</th>
+                        <th class="p-4 font-bold w-1/4">數學原理</th>
+                        <th class="p-4 font-bold w-1/2">物理意義與結果</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100">
+                        <td class="p-4"><span class="text-blue-700 font-bold">下滑力</span>增大</td>
+                        <td class="p-4">$\sin \theta$ 的值隨 $\theta$ 增大而增加</td>
+                        <td class="p-4">物體沿斜面下滑的趨勢變強。</td>
+                    </tr>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100">
+                        <td class="p-4"><span class="text-blue-700 font-bold">正向力 $R$</span> 減小</td>
+                        <td class="p-4">$\cos \theta$ 的值隨 $\theta$ 增大而減小</td>
+                        <td class="p-4">物體對斜面的擠壓程度變小。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50 hover:bg-slate-100">
+                        <td class="p-4"><span class="text-blue-700 font-bold">最大靜摩擦力</span>減小</td>
+                        <td class="p-4">因正向力 $R$ 減小導致</td>
+                        <td class="p-4">當傾角大到某個臨界點，下滑力會超過最大靜摩擦力，物體開始滑動。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 行動版 Cards -->
+        <div class="space-y-4 lg:hidden">
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h4 class="font-bold text-slate-800 mb-2">1. 下滑力 ($mg \sin \theta$)</h4>
+                <p class="text-sm text-slate-600">隨着 $\theta$ 增大，$\sin \theta$ 變大，下滑力<strong>增大</strong>，物體更容易滑下來。</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h4 class="font-bold text-slate-800 mb-2">2. 正向力 $R$ ($mg \cos \theta$)</h4>
+                <p class="text-sm text-slate-600">隨着 $\theta$ 增大，$\cos \theta$ 變小，正向力<strong>減小</strong>，擠壓斜面的力變弱。</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h4 class="font-bold text-slate-800 mb-2">3. 最大靜摩擦力</h4>
+                <p class="text-sm text-slate-600">因為正向力 $R$ 變小，最大靜摩擦力也跟著<strong>減小</strong>。</p>
             </div>
         </div>
     </section>
 
-    <!-- 🧠 6. 隨堂測驗 -->
-    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
-        <div class="space-y-8">
-            <!-- Q1 -->
-            <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 一個重 $50 \text{ N}$ 的鐵塊放置在水平桌面上。小美用 $10 \text{ N}$ 的水平力推它，但鐵塊沒有移動。此時桌面對鐵塊的摩擦力是多少？</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, false, 'exp-q36-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $0 \text{ N}$</button>
-                    <button onclick="checkAnswer(this, true, 'exp-q36-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $10 \text{ N}$</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q36-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $50 \text{ N}$</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q36-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 條件不足，必須知道摩擦係數才能計算</button>
-                </div>
-                <div id="exp-q36-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 鐵塊「沒有移動」代表淨力為零。靜摩擦力會自動調節其大小，剛好等於施加的推力以達到平衡，因此是 $10 \text{ N}$。
-                </div>
+    <!-- 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-blue-500 w-8"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                <p class="text-sm">任何情況下，物體受到的正向力 $R$ 都等於它的重量 $W = mg$。</p>
             </div>
-
-            <!-- Q2 -->
-            <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 小明在平地上跑步前進。他腳底的鞋子與地面之間的摩擦力屬於甚麼類型？方向為何？</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, false, 'exp-q36-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 動摩擦力，向後</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q36-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 動摩擦力，向前</button>
-                    <button onclick="checkAnswer(this, true, 'exp-q36-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 靜摩擦力，向前</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q36-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 靜摩擦力，向後</button>
-                </div>
-                <div id="exp-q36-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 跑步時腳底「沒有相對滑動」（除非打滑），所以是靜摩擦力。腳有向後滑的趨勢，因此地面對腳的靜摩擦力方向向「前」，提供前進的動力。
-                </div>
-            </div>
-
-            <!-- Q3 -->
-            <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 一個木塊沿着傾角為 $\theta$ 的粗糙斜面「勻速」下滑。關於木塊受到的摩擦力，下列哪一項是正確的？</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, true, 'exp-q36-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 動摩擦力，大小等於 $mg \sin \theta$</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q36-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 靜摩擦力，大小等於 $mg \cos \theta$</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q36-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 動摩擦力，大小為零</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q36-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 靜摩擦力，大小大於 $mg \sin \theta$</button>
-                </div>
-                <div id="exp-q36-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 「勻速」滑下代表沿斜面方向淨力為零。向下滑動的重力分量為 $mg \sin \theta$。因為正在滑動，所以是動摩擦力，且大小必須剛好等於 $mg \sin \theta$ 才能達成勻速。
-                </div>
-            </div>
-
-            <!-- Q4 -->
-            <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 如果增加一個在水平面上滑動物體的質量，其受到的動摩擦力會有甚麼改變？</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, false, 'exp-q36-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 保持不變，因為接觸面積沒有改變</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q36-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 會減少，因為重力變大</button>
-                    <button onclick="checkAnswer(this, true, 'exp-q36-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 會增加，因為法向反作用力增加了</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q36-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 不確定，取決於物體滑動的速率</button>
-                </div>
-                <div id="exp-q36-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 摩擦力的大小與兩表面間擠壓的力（即法向反作用力 $R$）成正比。質量增加會導致重量增加，在水平面上這會使法向反作用力 $R$ 同步增加，從而導致摩擦力變大。
-                </div>
-            </div>
-
-            <!-- Q5 -->
-            <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 關於最大靜摩擦力與動摩擦力的關係，一般情況下哪一個較大？這在日常生活中能如何體現？</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, false, 'exp-q36-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 動摩擦力較大；推重物時，物體一動就會變得很難推</button>
-                    <button onclick="checkAnswer(this, true, 'exp-q36-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 最大靜摩擦力較大；推重物時，物體剛開始很難推，一旦滑動後就變得較為省力</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q36-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 兩者永遠相等；推重物時所需的力維持不變</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q36-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 與兩者的關係無關，省力與否只取決於推的速度</button>
-                </div>
-                <div id="exp-q36-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 大多數表面組合的「最大靜摩擦力」都會略大於「動摩擦力」。所以要讓靜止的重物開始移動（克服最大靜摩擦），比讓它繼續滑行（克服動摩擦）更費力。
-                </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                <p class="text-sm">只有在<strong>水平面</strong>上且沒有其他垂直外力時，$R$ 才等於 $mg$。在斜面上，$R$ 只抵抗垂直於斜面的重力分量，因此 $R = mg \cos \theta$，必定<strong>小於</strong>物體的重量。</p>
             </div>
         </div>
+    </section>
+
+    <!-- 5. 典型例題解說 -->
+    <section class="mb-12">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+        
+        <!-- 題 1 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                <p class="text-slate-800 font-medium pt-1">一個質量為 $2 \text{ kg}$ 的木塊放在傾角為 $30^\circ$ 的斜面上。木塊保持靜止。求木塊受到的摩擦力。（取 $g = 9.81 \text{ m s}^{-2}$）</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：分析受力與狀態</strong></p>
+                    <p class="mb-4">木塊保持<span class="text-blue-700 font-bold">靜止</span>，表示沿斜面方向的淨力為零。驅使物體下滑的力是重力的平行分量，阻礙它下滑的力是靜摩擦力。</p>
+                    <p class="mb-2"><strong>第二步：建立平衡方程式</strong></p>
+                    <div class="overflow-x-auto">$$ f = mg \sin \theta $$</div>
+                    <div class="overflow-x-auto">$$ f = 2 \times 9.81 \times \sin 30^\circ $$</div>
+                    <div class="overflow-x-auto">$$ f = 19.62 \times 0.5 = 9.81 \text{ N} $$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：摩擦力大小為 $9.81 \text{ N}$，方向沿斜面向上。</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- 題 2 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                <p class="text-slate-800 font-medium pt-1">某木塊在一個粗糙斜面上以<strong>勻速</strong>下滑。已知木塊質量為 $m$，斜面傾角為 $\theta$。證明此時木塊受到的動摩擦力 $f$ 等於 $mg \sin \theta$。</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：解讀「勻速運動」</strong></p>
+                    <p class="mb-4">根據牛頓第一定律，<span class="text-blue-700 font-bold">勻速運動</span>意味着加速度 $a = 0$，即淨力 $F_{\text{net}} = 0$。</p>
+                    <p class="mb-2"><strong>第二步：列出沿斜面方向的受力</strong></p>
+                    <p class="mb-2">沿斜面向下的力：重力分量 $mg \sin \theta$</p>
+                    <p class="mb-2">沿斜面向上的力：動摩擦力 $f$</p>
+                    <div class="overflow-x-auto">$$ F_{\text{net}} = mg \sin \theta - f = 0 $$</div>
+                    <div class="overflow-x-auto">$$ \therefore f = mg \sin \theta $$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：證明完畢。勻速下滑時，摩擦力剛好抵消重力的下滑分量。</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- 題 3 -->
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                <p class="text-slate-800 font-medium pt-1">一個質量為 $10 \text{ kg}$ 的雪橇在傾角為 $20^\circ$ 的雪坡上向下滑動。若雪坡作用在雪橇上的動摩擦力為 $15 \text{ N}$，求雪橇下滑的加速度。（取 $g = 9.81 \text{ m s}^{-2}$，$\sin 20^\circ \approx 0.342$）</p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：計算下滑力</strong></p>
+                    <div class="overflow-x-auto">$$ \text{下滑力} = mg \sin \theta = 10 \times 9.81 \times \sin 20^\circ $$</div>
+                    <div class="overflow-x-auto">$$ \approx 98.1 \times 0.342 \approx 33.55 \text{ N} $$</div>
+                    <p class="mb-2 mt-4"><strong>第二步：計算淨力並求加速度</strong></p>
+                    <p class="mb-2">摩擦力阻礙運動，方向沿斜面向上：</p>
+                    <div class="overflow-x-auto">$$ F_{\text{net}} = mg \sin \theta - f = ma $$</div>
+                    <div class="overflow-x-auto">$$ 33.55 - 15 = 10 \times a $$</div>
+                    <div class="overflow-x-auto">$$ 18.55 = 10a \implies a \approx 1.86 \text{ m s}^{-2} $$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：加速度約為 $1.86 \text{ m s}^{-2}$，方向沿斜面向下。</p>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <!-- 6. 隨堂測驗 -->
+    <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+        <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-blue-600 w-8"></i> 隨堂測驗 (Quiz)</h3>
+        
+        <!-- Q1 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1">
+            <p class="font-bold text-slate-800 mb-3">1. 質量為 $m$ 的物體放在傾角為 $\theta$ 的斜面上。物體對斜面的正向力 $R$ 等於多少？</p>
+            <div class="flex flex-col space-y-2">
+                <button onclick="checkAnswer(this, false, 'exp2-1', 'quiz2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $mg$</button>
+                <button onclick="checkAnswer(this, false, 'exp2-1', 'quiz2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $mg \sin \theta$</button>
+                <button onclick="checkAnswer(this, true,  'exp2-1', 'quiz2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $mg \cos \theta$</button>
+                <button onclick="checkAnswer(this, false, 'exp2-1', 'quiz2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $mg \tan \theta$</button>
+            </div>
+            <div id="exp2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong>正向力 $R$ 是用來平衡垂直於斜面方向的重力分量，因此 $R = mg \cos \theta$。
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-2">
+            <p class="font-bold text-slate-800 mb-3">2. 當斜面的傾角 $\theta$ 逐漸增大時，放在上面的物體受到的最大靜摩擦力會怎樣改變？</p>
+            <div class="flex flex-col space-y-2">
+                <button onclick="checkAnswer(this, false, 'exp2-2', 'quiz2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 變大</button>
+                <button onclick="checkAnswer(this, true,  'exp2-2', 'quiz2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 變小</button>
+                <button onclick="checkAnswer(this, false, 'exp2-2', 'quiz2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 保持不變</button>
+                <button onclick="checkAnswer(this, false, 'exp2-2', 'quiz2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 變為零</button>
+            </div>
+            <div id="exp2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong>傾角 $\theta$ 增大，導致 $\cos \theta$ 變小，所以正向力 $R = mg \cos \theta$ 變小。因為最大靜摩擦力取決於正向力的大小，所以最大靜摩擦力也會變小。
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-3">
+            <p class="font-bold text-slate-800 mb-3">3. 一木塊在斜面上靜止不動。此時木塊受到的靜摩擦力大小取決於：</p>
+            <div class="flex flex-col space-y-2">
+                <button onclick="checkAnswer(this, true,  'exp2-3', 'quiz2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 重力沿斜面的分量 ($mg \sin \theta$)</button>
+                <button onclick="checkAnswer(this, false, 'exp2-3', 'quiz2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 重力垂直於斜面的分量 ($mg \cos \theta$)</button>
+                <button onclick="checkAnswer(this, false, 'exp2-3', 'quiz2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 物體的總重量 ($mg$)</button>
+                <button onclick="checkAnswer(this, false, 'exp2-3', 'quiz2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 零，因為沒有運動</button>
+            </div>
+            <div id="exp2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong>物體靜止，表示沿斜面淨力為零。向下的分量 $mg \sin \theta$ 完全被靜摩擦力 $f$ 抵消，因此 $f = mg \sin \theta$。
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-4">
+            <p class="font-bold text-slate-800 mb-3">4. 如果一個物體在斜面上正在以<span class="text-blue-700 font-bold">勻速</span>向下滑動，這表示甚麼？</p>
+            <div class="flex flex-col space-y-2">
+                <button onclick="checkAnswer(this, false, 'exp2-4', 'quiz2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 沒有摩擦力作用於物體</button>
+                <button onclick="checkAnswer(this, true,  'exp2-4', 'quiz2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 摩擦力恰好等於重力沿斜面的分量</button>
+                <button onclick="checkAnswer(this, false, 'exp2-4', 'quiz2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 摩擦力大於重力沿斜面的分量</button>
+                <button onclick="checkAnswer(this, false, 'exp2-4', 'quiz2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 淨力等於物體的重量</button>
+            </div>
+            <div id="exp2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong>勻速運動代表加速度為零，即淨力為零。這意味著推動下滑的力 ($mg \sin \theta$) 完全等於阻礙下滑的動摩擦力 ($f$)。
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz2-5">
+            <p class="font-bold text-slate-800 mb-3">5. 物體在斜面上加速下滑的方程式為何？ (設沿斜面向下為正方向)</p>
+            <div class="flex flex-col space-y-2">
+                <button onclick="checkAnswer(this, false, 'exp2-5', 'quiz2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $mg \cos \theta - f = ma$</button>
+                <button onclick="checkAnswer(this, false, 'exp2-5', 'quiz2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $f - mg \sin \theta = ma$</button>
+                <button onclick="checkAnswer(this, true,  'exp2-5', 'quiz2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $mg \sin \theta - f = ma$</button>
+                <button onclick="checkAnswer(this, false, 'exp2-5', 'quiz2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $mg - f = ma$</button>
+            </div>
+            <div id="exp2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+                <strong>解析：</strong>沿斜面方向，驅動下滑的力是 $mg \sin \theta$，阻礙運動的力是摩擦力 $f$。根據牛頓第二定律：淨力 $F_{\text{net}} = mg \sin \theta - f = ma$。
+            </div>
+        </div>
+
     </section>
 </article>
 
