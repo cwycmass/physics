@@ -3278,270 +3278,280 @@
 <!-- 區塊 3.5: 流體阻力 (可直接插入主檔案) -->
 <!-- ========================================== -->
 <article id="ch3-5" class="content-section hidden">
-    <header class="mb-8 border-b-2 border-blue-100 pb-4">
-        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.5</span>流體阻力</h2>    
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.5</span>流體阻力</h2>
         <p class="text-slate-500 mt-2">探討物體在液體或氣體中運動時所受到的阻力，以及「終端速率」的概念。</p>
     </header>
 
-    <!-- 1. 名詞定義 / 核心概念 -->
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
     <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 名詞定義與核心概念</h3>
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
-            <p class="mb-3">物理學中，液體和氣體統稱為<span class="text-blue-700 font-bold">流體 (Fluid)</span>。當物體在流體中運動時，流體會對物體施加一個阻礙其運動的力，稱為<span class="text-blue-700 font-bold">流體阻力 (Fluid Resistance)</span>。在空氣中運動時受到的流體阻力，我們通常稱為<span class="text-blue-700 font-bold">空氣阻力 (Air Resistance)</span>。</p>
-            <ul class="list-disc list-inside space-y-2 ml-2">
-                <li><strong>方向：</strong> 永遠與物體在流體中的<span class="text-blue-700 font-bold">運動方向相反</span>。</li>
-                <li><strong>影響因素：</strong> 流體阻力的大小並非固定不變，它會隨着物體的<span class="text-blue-700 font-bold">速率 (Speed)</span>、<span class="text-blue-700 font-bold">正視截面積 (Cross-sectional area)</span> 以及流體的密度增加而變大。此外，採用<span class="text-blue-700 font-bold">流線型 (Streamlined)</span> 設計能有效減小阻力。</li>
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>物理學中，液體和氣體統稱為 <strong class="text-blue-700 font-bold">流體</strong>。當物體在流體中運動時，流體會對物體施加一個阻礙其運動的力，稱為 <strong class="text-blue-700 font-bold">流體阻力 (Fluid Resistance)</strong>。在空氣中運動時受到的流體阻力，我們通常稱為 <strong class="text-blue-700 font-bold">空氣阻力 (Air Resistance)</strong>。</p>
+            <ul class="list-disc list-inside ml-2 space-y-2">
+                <li><strong>方向：</strong> 永遠與物體在流體中的 <strong class="text-blue-700 font-bold">運動方向相反</strong>。</li>
+                <li><strong>影響因素：</strong> 流體阻力的大小並非固定不變，它會隨着物體的 <strong class="text-blue-700 font-bold">速率 (Speed)</strong>、<strong class="text-blue-700 font-bold">正視截面積 (Cross-sectional area)</strong> 以及流體的密度增加而變大。此外，採用 <strong class="text-blue-700 font-bold">流線型 (Streamlined)</strong> 設計能有效減小阻力。</li>
             </ul>
         </div>
     </section>
 
-    <!-- 2. 核心公式與單位 -->
+    <!-- 📐 2. 核心公式與單位 -->
     <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 核心公式與單位</h3>
-        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
-            <p class="text-slate-700 mb-2">在 HKDSE 物理中，我們不需要計算流體阻力的精確數值方程（如 $kv$ 或 $kv^2$），但必須懂得利用牛頓第二定律來分析下落物體的<span class="text-blue-700 font-bold">淨力</span>：</p>
-            <div class="text-center py-4 overflow-x-auto">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">我們只需懂得利用牛頓第二定律來分析下落物體的 <strong class="text-blue-700 font-bold">淨力</strong>：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
                 $$ F_{\text{net}} = W - R = ma $$
             </div>
-            <p class="text-sm text-slate-600 mb-2">其中 $W$ 為物體重量 ($mg$)，$R$ 為流體阻力，$a$ 為向下的加速度。</p>
-            <p class="text-slate-700 mt-4 mb-2"><strong>終端速率：</strong></p>
-            <p class="text-slate-700 mb-2">當物體下落速率增加，阻力 $R$ 亦會隨之增加。當阻力 $R$ 增大至與重量 $W$ 相等時，淨力變為零，物體不再加速，此時的最高恆定速率稱為終端速率：</p>
-            <div class="text-center py-4 overflow-x-auto">
+            <p class="text-sm text-slate-600 mb-4">其中 $W$ 為物體重量 ($mg$)，$R$ 為流體阻力，$a$ 為向下的加速度。</p>
+            
+            <p class="font-bold text-blue-800 mb-2 border-b border-blue-100 pb-1 inline-block">終端速率</p>
+            <p class="text-slate-700 mb-3">當物體下落速率增加，阻力 $R$ 亦會隨之增加。當阻力 $R$ 增大至與重量 $W$ 相等時，淨力變為零，物體不再加速，此時的最高恆定速率稱為終端速率：</p>
+            <div class="text-center my-4 overflow-x-auto text-xl font-bold">
                 $$ R = W \quad \implies \quad F_{\text{net}} = 0 \quad \implies \quad a = 0 $$
             </div>
-            <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> <strong>單位：</strong> 流體阻力的單位是牛頓 ($\text{N}$)，終端速率的單位是 $\text{m s}^{-1}$。</p>
+            <ul class="text-sm text-slate-600 space-y-1">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>單位：</strong> 流體阻力的單位是牛頓 ($\text{N}$)，終端速率的單位是 $\text{m s}^{-1}$。</li>
+            </ul>
         </div>
     </section>
 
-    <!-- 3. 重要性質 / 物理規律對照 -->
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
     <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 重要性質對照：真空 vs 空氣中下落</h3>
-        
-        <!-- 桌面版 Table (lg:block) -->
-        <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 重要性質對照：真空 vs 空氣中下落</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
             <table class="w-full text-left text-slate-700">
-                <thead class="bg-slate-100 border-b border-slate-200">
+                <thead class="bg-blue-100 text-blue-900">
                     <tr>
-                        <th class="p-4 font-bold w-1/4">比較項目</th>
-                        <th class="p-4 font-bold w-3/8 text-blue-800">在真空中自由下落 (無阻力)</th>
-                        <th class="p-4 font-bold w-3/8 text-emerald-800">在空氣中下落 (有空氣阻力)</th>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8 text-blue-800">在真空中自由下落 (無阻力)</th>
+                        <th class="p-3 font-semibold w-3/8 text-emerald-800">在空氣中下落 (有空氣阻力)</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
-                        <td class="p-4 font-bold">受力情況</td>
-                        <td class="p-4">只有重量 $W$。淨力恆定不變。</td>
-                        <td class="p-4">受重量 $W$ 及向上阻力 $R$。淨力 ($W - R$) 逐漸變小。</td>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">受力情況</td>
+                        <td class="p-3">只有重量 $W$。淨力恆定不變。</td>
+                        <td class="p-3">受重量 $W$ 及向上阻力 $R$。淨力 ($W - R$) 逐漸變小。</td>
                     </tr>
-                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
-                        <td class="p-4 font-bold">加速度 $a$</td>
-                        <td class="p-4">保持恆定，$a = 9.81 \text{ m s}^{-2}$ (作勻加速運動)。</td>
-                        <td class="p-4">最初為 $9.81 \text{ m s}^{-2}$，隨後逐漸減小，最後變為 $0$。</td>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">加速度 $a$</td>
+                        <td class="p-3">保持恆定，$a = 9.81 \text{ m s}^{-2}$ (作勻加速運動)。</td>
+                        <td class="p-3">最初為 $9.81 \text{ m s}^{-2}$，隨後逐漸減小，最後變為 $0$。</td>
                     </tr>
-                    <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
-                        <td class="p-4 font-bold">速率 $v$</td>
-                        <td class="p-4">隨時間直線增加 (沒有上限)。</td>
-                        <td class="p-4">增加得越來越慢，最後達到一個恆定最大值（終端速率）。</td>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">速率 $v$</td>
+                        <td class="p-3">隨時間直線增加 (沒有上限)。</td>
+                        <td class="p-3">增加得越來越慢，最後達到一個恆定最大值（終端速率）。</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-
-        <!-- 行動版 Cards (lg:hidden) -->
-        <div class="space-y-4 lg:hidden">
-            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-blue-500">
                 <h4 class="font-bold text-blue-800 mb-2">在真空中自由下落 (無阻力)</h4>
-                <p class="text-sm text-slate-600 mb-1"><strong>受力：</strong> 只有重量 $W$，淨力不變。</p>
-                <p class="text-sm text-slate-600 mb-1"><strong>加速度：</strong> 保持恆定 $9.81 \text{ m s}^{-2}$。</p>
-                <p class="text-sm text-slate-600"><strong>速率：</strong> 隨時間直線無上限增加。</p>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">受力：</span> 只有重量 $W$，淨力不變。</li>
+                    <li><span class="font-medium text-slate-800">加速度：</span> 保持恆定 $9.81 \text{ m s}^{-2}$。</li>
+                    <li><span class="font-medium text-slate-800">速率：</span> 隨時間直線無上限增加。</li>
+                </ul>
             </div>
-            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-emerald-500">
                 <h4 class="font-bold text-emerald-800 mb-2">在空氣中下落 (有空氣阻力)</h4>
-                <p class="text-sm text-slate-600 mb-1"><strong>受力：</strong> 淨力 ($W - R$) 隨速率增加而減小。</p>
-                <p class="text-sm text-slate-600 mb-1"><strong>加速度：</strong> 逐漸減小，最終變為 $0$。</p>
-                <p class="text-sm text-slate-600"><strong>速率：</strong> 最終達到最高並保持不變（終端速率），作勻速運動。</p>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">受力：</span> 淨力 ($W - R$) 隨速率增加而減小。</li>
+                    <li><span class="font-medium text-slate-800">加速度：</span> 逐漸減小，最終變為 $0$。</li>
+                    <li><span class="font-medium text-slate-800">速率：</span> 最終達到最高並保持不變（終端速率），作勻速運動。</li>
+                </ul>
             </div>
         </div>
     </section>
 
-    <!-- 4. 常見迷思與誤區 -->
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
     <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-blue-500 w-8"></i> 常見迷思與誤區</h3>
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
-                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
-                <p class="text-sm">當物體達到「終端速率」時，因為加速度是零，所以物體會停在半空中。</p>
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「當物體達到『終端速率』時，因為加速度是零，所以物體會停在半空中。」</li>
+                    <li>「質量越大的物體，在空氣中受到的空氣阻力一定比質量小的物體大。」</li>
+                </ul>
             </div>
-            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
-                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
-                <p class="text-sm">加速度為零代表「速率不再改變」，而不是速率為零。物體達到終端速率後，會以該<span class="font-bold">最高的恆定速率</span>繼續向下作<span class="font-bold">勻速運動</span>。</p>
-            </div>
-            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
-                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
-                <p class="text-sm">質量越大的物體，在空氣中受到的空氣阻力一定比質量小的物體大。</p>
-            </div>
-            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
-                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
-                <p class="text-sm">空氣阻力主要取決於<span class="font-bold">速率、截面積和形狀</span>。若一個大鐵球和一根羽毛以相同速率運動，大鐵球受到的空氣阻力可能大於羽毛；但這與質量無直接關係。質量大的物體會有較大的「終端速率」，因為需要更大的阻力才能平衡其重量。</p>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>加速度為零代表「速率不再改變」，而不是速率為零。物體達到終端速率後，會以該 <strong>最高的恆定速率</strong> 繼續向下作 <strong>勻速運動</strong>。</li>
+                    <li>空氣阻力主要取決於 <strong>速率、截面積和形狀</strong>。若大鐵球和羽毛以相同速率運動，阻力取決於形狀與截面積，與質量無直接關係。但質量大的物體會有 <strong>較大的終端速率</strong>，因為它需要更大的阻力才能平衡其巨大的重量。</li>
+                </ul>
             </div>
         </div>
     </section>
 
-    <!-- 5. 典型例題解說 -->
-    <section class="mb-12">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
-        
-        <!-- 題 1 -->
-        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
-            <div class="flex items-start">
-                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
-                <p class="text-slate-800 font-medium pt-1">一個質量為 $2 \text{ kg}$ 的金屬球從高空落下。在某個瞬間，金屬球下落的速率為 $15 \text{ m s}^{-1}$，此時它受到的空氣阻力為 $6 \text{ N}$。求該瞬間金屬球的加速度。（取 $g = 9.81 \text{ m s}^{-2}$）</p>
-            </div>
-            <details class="mt-4 group">
-                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
-                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
-                </summary>
-                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
-                    <p class="mb-2"><strong>第一步：分析物體受力</strong></p>
-                    <p class="mb-2">金屬球受到兩個力：向下的重量 $W$ 和向上的空氣阻力 $R$。</p>
-                    <div class="overflow-x-auto">$$ W = mg = 2 \times 9.81 = 19.62 \text{ N} $$</div>
-                    <p class="mb-2 mt-2"><strong>第二步：應用牛頓第二定律</strong></p>
-                    <p class="mb-2">取向下為正方向，淨力 $F_{\text{net}} = W - R$。</p>
-                    <div class="overflow-x-auto">$$ F_{\text{net}} = ma $$</div>
-                    <div class="overflow-x-auto">$$ 19.62 - 6 = 2 \times a $$</div>
-                    <div class="overflow-x-auto">$$ 13.62 = 2a \quad \implies \quad a = 6.81 \text{ m s}^{-2} $$</div>
-                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：該瞬間金屬球的加速度為 $6.81 \text{ m s}^{-2}$，方向向下。</p>
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個質量為 $2 \text{ kg}$ 的金屬球從高空落下。在某個瞬間，金屬球下落的速率為 $15 \text{ m s}^{-1}$，此時它受到的空氣阻力為 $6 \text{ N}$。求該瞬間金屬球的加速度。（取 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
                 </div>
-            </details>
-        </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>第一步：分析物體受力</strong><br>金屬球受到兩個力：向下的重量 $W$ 和向上的空氣阻力 $R$。</p>
+                        $$ W = mg = 2 \times 9.81 = 19.62 \text{ N} $$
+                        <p class="mb-2 mt-4"><strong>第二步：應用牛頓第二定律</strong><br>取向下為正方向，淨力 $F_{\text{net}} = W - R$。</p>
+                        $$ F_{\text{net}} = ma $$
+                        $$ 19.62 - 6 = 2 \times a $$
+                        $$ 13.62 = 2a \implies a = 6.81 \text{ m s}^{-2} $$
+                        <p class="mt-2 font-bold text-green-700">答案：該瞬間金屬球的加速度為 $6.81 \text{ m s}^{-2}$，方向向下。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一名質量為 $70 \text{ kg}$ 的跳傘運動員從直升機跳下。一段時間後，他達到終端速率並以勻速下落。求此時他受到的空氣阻力。（取 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>第一步：解讀「終端速率」</strong><br>達到終端速率代表運動員以 <strong>勻速運動</strong> 下落，根據牛頓第一定律，此時他受到的淨力為零 ($F_{\text{net}} = 0$)。</p>
+                        <p class="mb-2 mt-4"><strong>第二步：建立平衡方程式</strong><br>向上的空氣阻力 $R$ 必須剛好抵消向下的重量 $W$：</p>
+                        $$ R = W = mg $$
+                        $$ R = 70 \times 9.81 = 686.7 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：他受到的空氣阻力為 $686.7 \text{ N}$，方向向上。</p>
+                    </div>
+                </details>
+            </div>
 
-        <!-- 題 2 -->
-        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
-            <div class="flex items-start">
-                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
-                <p class="text-slate-800 font-medium pt-1">一名質量為 $70 \text{ kg}$ 的跳傘運動員從直升機跳下。一段時間後，他達到終端速率並以勻速下落。求此時他受到的空氣阻力。（取 $g = 9.81 \text{ m s}^{-2}$）</p>
-            </div>
-            <details class="mt-4 group">
-                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
-                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
-                </summary>
-                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
-                    <p class="mb-2"><strong>第一步：解讀「終端速率」</strong></p>
-                    <p class="mb-4">達到終端速率代表運動員以<span class="text-blue-700 font-bold">勻速運動</span>下落，根據牛頓第一定律，此時他受到的淨力為零 ($F_{\text{net}} = 0$)。</p>
-                    <p class="mb-2"><strong>第二步：建立平衡方程式</strong></p>
-                    <p class="mb-2">向上的空氣阻力 $R$ 必須剛好抵消向下的重量 $W$：</p>
-                    <div class="overflow-x-auto">$$ R = W = mg $$</div>
-                    <div class="overflow-x-auto">$$ R = 70 \times 9.81 $$</div>
-                    <div class="overflow-x-auto">$$ R = 686.7 \text{ N} $$</div>
-                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：他受到的空氣阻力為 $686.7 \text{ N}$，方向向上。</p>
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        承上題，當跳傘運動員打開降落傘的瞬間，他的速率遠大於打開降落傘後的新終端速率。描述在打開降落傘的瞬間，他受到的淨力方向以及他的運動狀態變化。
+                    </p>
                 </div>
-            </details>
-        </div>
-
-        <!-- 題 3 -->
-        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
-            <div class="flex items-start">
-                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
-                <p class="text-slate-800 font-medium pt-1">承上題，當跳傘運動員打開降落傘的瞬間，他的速率遠大於打開降落傘後的新終端速率。描述在打開降落傘的瞬間，他受到的淨力方向以及他的運動狀態變化。</p>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>第一步：分析打開降落傘瞬間的阻力</strong><br>打開降落傘會瞬間極大地增加 <strong>正視截面積</strong>，導致向上的空氣阻力 $R$ 劇增，變得遠大於向下的重量 $W$ ($R > W$)。</p>
+                        <p class="mb-2 mt-4"><strong>第二步：判斷淨力與運動狀態</strong><br>因為向上的力大於向下的力，淨力 $F_{\text{net}}$ 的方向為 <strong>向上</strong>。</p>
+                        <p class="mb-2">由於淨力方向（向上）與運動方向（向下）相反，跳傘員會產生向上的加速度，即他正在 <strong>減速 (Decelerate)</strong>。</p>
+                        <p class="mt-2 font-bold text-green-700">答案：淨力方向向上；跳傘員會急劇減速，直到達到新的、較小的終端速率為止。</p>
+                    </div>
+                </details>
             </div>
-            <details class="mt-4 group">
-                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
-                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
-                </summary>
-                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
-                    <p class="mb-2"><strong>第一步：分析打開降落傘瞬間的阻力</strong></p>
-                    <p class="mb-4">打開降落傘會瞬間極大地增加<span class="text-blue-700 font-bold">正視截面積</span>，導致向上的空氣阻力 $R$ 劇增，變得遠大於向下的重量 $W$ ($R > W$)。</p>
-                    <p class="mb-2"><strong>第二步：判斷淨力與運動狀態</strong></p>
-                    <p class="mb-2">因為向上的力大於向下的力，淨力 $F_{\text{net}}$ 的方向為<span class="text-blue-700 font-bold">向上</span>。</p>
-                    <p class="mb-2">由於淨力方向（向上）與運動方向（向下）相反，跳傘員會產生向上的加速度，即他正在<span class="text-blue-700 font-bold">減速 (Decelerate)</span>。</p>
-                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：淨力方向向上；跳傘員會急劇減速，直到達到新的、較小的終端速率為止。</p>
-                </div>
-            </details>
         </div>
     </section>
 
-    <!-- 6. 隨堂測驗 -->
-    <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
-        <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-blue-600 w-8"></i> 隨堂測驗 (Quiz)</h3>
-        
-        <!-- Q1 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-4-1">
-            <p class="font-bold text-slate-800 mb-3">1. 下列哪一項因素通常<span class="text-red-600 underline">不會</span>影響物體在空氣中受到的空氣阻力大小？</p>
-            <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp3-4-1', 'quiz3-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 物體的速率</button>
-                <button onclick="checkAnswer(this, true,  'exp3-4-1', 'quiz3-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 物體的質量</button>
-                <button onclick="checkAnswer(this, false, 'exp3-4-1', 'quiz3-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 物體的形狀 (流線型與否)</button>
-                <button onclick="checkAnswer(this, false, 'exp3-4-1', 'quiz3-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 物體的正視截面積</button>
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 下列哪一項因素通常 <strong>不會</strong> 影響物體在空氣中受到的空氣阻力大小？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q35-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 物體的速率</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q35-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 物體的質量</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 物體的形狀 (流線型與否)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 物體的正視截面積</button>
+                </div>
+                <div id="exp-q35-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 空氣阻力是由於物體排開空氣分子造成的，主要受速率、截面積和形狀影響。質量本身不會直接改變空氣阻力的大小（儘管它會影響終端速率的大小）。
+                </div>
             </div>
-            <div id="exp3-4-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
-                <strong>解析：</strong>空氣阻力是由於物體排開空氣分子造成的，主要受速率、截面積和形狀影響。質量本身不會直接改變空氣阻力的大小（儘管它會影響終端速率的大小）。
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 當一粒雨滴在空氣中由靜止開始下落（未達終端速率前），它的加速度會怎樣改變？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q35-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 保持 $9.81 \text{ m s}^{-2}$ 不變</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 逐漸增加</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q35-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 逐漸減小</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 保持為零</button>
+                </div>
+                <div id="exp-q35-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 雨滴下落時速率增加，空氣阻力隨之增加。向下的淨力 ($mg - R$) 逐漸變小，根據牛頓第二定律 ($F = ma$)，加速度也逐漸減小。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 物體達到「終端速率」時，代表了甚麼物理狀態？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q35-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 物體的速率變為零</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q35-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 空氣阻力與物體重量大小相等，淨力為零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 空氣阻力大於物體重量，物體開始減速</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 失去重力作用</button>
+                </div>
+                <div id="exp-q35-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 終端速率是指物體無法再加速的狀態。此時向上的空氣阻力剛好完全抵消向下的重量 ($R = W$)，淨力為零，物體作勻速運動。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 汽車設計師通常將跑車設計成「流線型」，主要物理目的是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q35-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 減輕汽車的質量</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 增加地心吸力以提供更好抓地力</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q35-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 減小高速行駛時受到的空氣阻力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 增加法向反作用力</button>
+                </div>
+                <div id="exp-q35-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 流線型設計可以讓空氣更平順地流過車身，從而大幅減少空氣阻力，提升最高速率和燃油效率。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 兩個形狀和體積完全相同的球，一個是實心鐵球（重 $50 \text{ N}$），另一個是空心塑膠球（重 $5 \text{ N}$）。如果把它們從極高處同時釋放，下列描述何者正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q35-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 兩者會同時落地，且終端速率相同</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q35-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 鐵球的終端速率較大，會先落地</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 塑膠球的終端速率較大，會先落地</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q35-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 兩者都不會達到終端速率</button>
+                </div>
+                <div id="exp-q35-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 因為形狀和體積相同，在任何相同的速率下，兩者受到的空氣阻力 $R$ 都一樣。但鐵球需要 $R = 50 \text{ N}$ 才能停止加速，塑膠球只需要 $R = 5 \text{ N}$ 就會停止加速。因此鐵球會加速到更高的速率才達到終端狀態，所以鐵球的終端速率更大，會先落地。
+                </div>
             </div>
         </div>
-
-        <!-- Q2 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-4-2">
-            <p class="font-bold text-slate-800 mb-3">2. 當一粒雨滴在空氣中由靜止開始下落（未達終端速率前），它的加速度會怎樣改變？</p>
-            <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp3-4-2', 'quiz3-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 保持 $9.81 \text{ m s}^{-2}$ 不變</button>
-                <button onclick="checkAnswer(this, false, 'exp3-4-2', 'quiz3-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 逐漸增加</button>
-                <button onclick="checkAnswer(this, true,  'exp3-4-2', 'quiz3-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 逐漸減小</button>
-                <button onclick="checkAnswer(this, false, 'exp3-4-2', 'quiz3-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 保持為零</button>
-            </div>
-            <div id="exp3-4-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
-                <strong>解析：</strong>雨滴下落時速率增加，空氣阻力隨之增加。向下的淨力 ($mg - R$) 逐漸變小，根據牛頓第二定律 ($F = ma$)，加速度也逐漸減小。
-            </div>
-        </div>
-
-        <!-- Q3 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-4-3">
-            <p class="font-bold text-slate-800 mb-3">3. 物體達到「終端速率」時，代表了甚麼物理狀態？</p>
-            <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp3-4-3', 'quiz3-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 物體的速率變為零</button>
-                <button onclick="checkAnswer(this, true,  'exp3-4-3', 'quiz3-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 空氣阻力與物體重量大小相等，淨力為零</button>
-                <button onclick="checkAnswer(this, false, 'exp3-4-3', 'quiz3-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 空氣阻力大於物體重量，物體開始減速</button>
-                <button onclick="checkAnswer(this, false, 'exp3-4-3', 'quiz3-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 失去重力作用</button>
-            </div>
-            <div id="exp3-4-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
-                <strong>解析：</strong>終端速率是指物體無法再加速的狀態。此時向上的空氣阻力剛好完全抵消向下的重量 ($R = W$)，淨力為零，物體作勻速運動。
-            </div>
-        </div>
-
-        <!-- Q4 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-4-4">
-            <p class="font-bold text-slate-800 mb-3">4. 汽車設計師通常將跑車設計成「流線型 (Streamlined)」，主要物理目的是甚麼？</p>
-            <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp3-4-4', 'quiz3-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 減輕汽車的質量</button>
-                <button onclick="checkAnswer(this, false, 'exp3-4-4', 'quiz3-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 增加地心吸力以提供更好抓地力</button>
-                <button onclick="checkAnswer(this, true,  'exp3-4-4', 'quiz3-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 減小高速行駛時受到的空氣阻力</button>
-                <button onclick="checkAnswer(this, false, 'exp3-4-4', 'quiz3-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 增加法向反作用力</button>
-            </div>
-            <div id="exp3-4-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
-                <strong>解析：</strong>流線型設計可以讓空氣更平順地流過車身，從而大幅減少空氣阻力，提升最高速率和燃油效率。
-            </div>
-        </div>
-
-        <!-- Q5 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz3-4-5">
-            <p class="font-bold text-slate-800 mb-3">5. 兩個形狀和體積完全相同的球，一個是實心鐵球（重 $50 \text{ N}$），另一個是空心塑膠球（重 $5 \text{ N}$）。如果把它們從極高處同時釋放，下列描述何者正確？</p>
-            <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp3-4-5', 'quiz3-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 兩者會同時落地，且終端速率相同</button>
-                <button onclick="checkAnswer(this, true,  'exp3-4-5', 'quiz3-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 鐵球的終端速率較大，會先落地</button>
-                <button onclick="checkAnswer(this, false, 'exp3-4-5', 'quiz3-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 塑膠球的終端速率較大，會先落地</button>
-                <button onclick="checkAnswer(this, false, 'exp3-4-5', 'quiz3-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 兩者都不會達到終端速率</button>
-            </div>
-            <div id="exp3-4-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
-                <strong>解析：</strong>因為形狀和體積相同，在任何相同的速率下，兩者受到的空氣阻力 $R$ 都一樣。但鐵球需要 $R = 50 \text{ N}$ 才能停止加速，塑膠球只需要 $R = 5 \text{ N}$ 就會停止加速。因此鐵球會加速到更高的速率才達到終端狀態，所以鐵球的終端速率更大，會先落地。
-            </div>
-        </div>
-
     </section>
 </article>
                         
-<!-- ==========================================
-     章節 3.6: 摩擦力
-     ========================================== -->
+<!-- ========================================== -->
+<!-- 區塊 3.6: 摩擦力 (可直接插入主檔案) -->
+<!-- ========================================== -->
 <article id="ch3-6" class="content-section hidden">
     <header class="mb-8 border-b-2 border-blue-100 pb-4">
         <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.6</span>摩擦力</h2>
@@ -3554,7 +3564,7 @@
         <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
             <p class="mb-3">當兩個互相接觸的物體發生<span class="text-blue-700 font-bold">相對運動</span>，或有<span class="text-blue-700 font-bold">相對運動的趨勢</span>時，接觸面上會產生一種阻礙相對運動的力，這種力稱為<span class="text-blue-700 font-bold">摩擦力 (Friction)</span>。</p>
             <ul class="list-disc list-inside space-y-2 ml-2">
-                <li><strong>產生條件：</strong> 接觸面粗糙、物體之間有互相擠壓（存在金）、有相對運動或其趨勢。</li>
+                <li><strong>產生條件：</strong> 接觸面粗糙、物體之間有互相擠壓（存在法向反作用力）、有相對運動或其趨勢。</li>
                 <li><strong>方向：</strong> 永遠與物體間的<span class="text-blue-700 font-bold">相對運動方向</span>或<span class="text-blue-700 font-bold">相對運動趨勢方向</span>相反。</li>
             </ul>
         </div>
@@ -3565,7 +3575,7 @@
         <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 核心公式與單位</h3>
         <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
             <p class="text-slate-700 mb-2">在 HKDSE 物理課程中，為簡化計算，我們通常假設<span class="text-blue-700 font-bold">動摩擦力</span> (Kinetic friction) 等於<span class="text-blue-700 font-bold">最大靜摩擦力</span> (Maximum static friction)，統一以定值 $f$ 表示：</p>
-            <div class="text-center py-4 overflow-x-auto">
+            <div class="text-center py-4 overflow-x-auto text-lg font-bold">
                 $$ f = \text{定值 (取決於接觸面性質與法向反作用力)} $$
             </div>
             <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> <strong>單位：</strong> 牛頓 ($\text{N}$)，因為摩擦力是一種力，屬於<span class="text-blue-700 font-bold">矢量</span>。</p>
@@ -3588,12 +3598,12 @@
                 </thead>
                 <tbody>
                     <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
-                        <td class="p-4"><span class="bg-slate-200 text-slate-800 px-2 py-1 rounded text-sm">保持靜止</span></td>
+                        <td class="p-4"><span class="bg-slate-200 text-slate-800 px-2 py-1 rounded text-sm font-bold">保持靜止</span></td>
                         <td class="p-4">$F < \text{最大靜摩擦力}$</td>
                         <td class="p-4">靜摩擦力大小會隨推力改變，以保持淨力為零。根據牛頓第一定律：$f = F$。</td>
                     </tr>
                     <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
-                        <td class="p-4"><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">滑動中</span></td>
+                        <td class="p-4"><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm font-bold">滑動中</span></td>
                         <td class="p-4">$F \ge \text{最大靜摩擦力}$</td>
                         <td class="p-4">物體受到的摩擦力為動摩擦力（HKDSE 視為定值）。不再隨推力 $F$ 增加而改變。</td>
                     </tr>
@@ -3624,7 +3634,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
                 <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
-                <p class="text-sm">摩擦力的方向必定與物體的「運動方向」相反。</p>
+                <p class="text-sm">「摩擦力的方向必定與物體的『運動方向』相反。」</p>
             </div>
             <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
                 <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
@@ -3632,7 +3642,7 @@
             </div>
             <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
                 <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
-                <p class="text-sm">推不動一個重物，是因為物體太重（重量大於推力）。</p>
+                <p class="text-sm">「推不動一個重物，是因為物體太重（重量大於推力）。」</p>
             </div>
             <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
                 <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
@@ -3719,71 +3729,71 @@
         <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-blue-600 w-8"></i> 隨堂測驗 (Quiz)</h3>
         
         <!-- Q1 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1">
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-6-1">
             <p class="font-bold text-slate-800 mb-3">1. 關於摩擦力的產生，下列哪一項不是必要條件？</p>
             <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp1-1', 'quiz1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 接觸面必須粗糙</button>
-                <button onclick="checkAnswer(this, true,  'exp1-1', 'quiz1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 物體必須正在運動</button>
-                <button onclick="checkAnswer(this, false, 'exp1-1', 'quiz1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 物體之間有相對運動的趨勢</button>
-                <button onclick="checkAnswer(this, false, 'exp1-1', 'quiz1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 兩物體互相擠壓 (有法向反作用力)</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-1', 'quiz3-6-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 接觸面必須粗糙</button>
+                <button onclick="checkAnswer(this, true,  'exp3-6-1', 'quiz3-6-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 物體必須正在運動</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-1', 'quiz3-6-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 物體之間有相對運動的趨勢</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-1', 'quiz3-6-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 兩物體互相擠壓 (有法向反作用力)</button>
             </div>
-            <div id="exp1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+            <div id="exp3-6-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
                 <strong>解析：</strong>即使物體處於靜止狀態，只要有「相對運動的趨勢」（例如推但推不動），接觸面之間也會產生靜摩擦力。因此「物體必須正在運動」不是產生摩擦力的必要條件。
             </div>
         </div>
 
         <!-- Q2 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2">
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-6-2">
             <p class="font-bold text-slate-800 mb-3">2. 關於摩擦力的方向，下列哪一項陳述最準確？</p>
             <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp1-2', 'quiz1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 必定與物體運動方向相反</button>
-                <button onclick="checkAnswer(this, false, 'exp1-2', 'quiz1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 必定與推力方向相同</button>
-                <button onclick="checkAnswer(this, true,  'exp1-2', 'quiz1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 必定與接觸面的相對運動或相對運動趨勢相反</button>
-                <button onclick="checkAnswer(this, false, 'exp1-2', 'quiz1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 必定垂直於接觸面</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-2', 'quiz3-6-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 必定與物體運動方向相反</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-2', 'quiz3-6-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 必定與推力方向相同</button>
+                <button onclick="checkAnswer(this, true,  'exp3-6-2', 'quiz3-6-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 必定與接觸面的相對運動或相對運動趨勢相反</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-2', 'quiz3-6-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 必定垂直於接觸面</button>
             </div>
-            <div id="exp1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+            <div id="exp3-6-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
                 <strong>解析：</strong>這是常見迷思。摩擦力阻礙的是「接觸面之間的相對滑動」，因此它與相對運動或相對運動趨勢的方向相反，而不是單純與運動方向相反（例如走路時摩擦力向前）。
             </div>
         </div>
 
         <!-- Q3 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3">
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-6-3">
             <p class="font-bold text-slate-800 mb-3">3. 一個重 $100 \text{ N}$ 的鐵塊放在水平桌面上。小明用 $20 \text{ N}$ 的力向右推，鐵塊保持靜止。此時摩擦力的大小和方向為何？</p>
             <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp1-3', 'quiz1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $100 \text{ N}$ 向左</button>
-                <button onclick="checkAnswer(this, false, 'exp1-3', 'quiz1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $120 \text{ N}$ 向左</button>
-                <button onclick="checkAnswer(this, false, 'exp1-3', 'quiz1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $0 \text{ N}$</button>
-                <button onclick="checkAnswer(this, true,  'exp1-3', 'quiz1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $20 \text{ N}$ 向左</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-3', 'quiz3-6-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $100 \text{ N}$ 向左</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-3', 'quiz3-6-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $120 \text{ N}$ 向左</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-3', 'quiz3-6-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $0 \text{ N}$</button>
+                <button onclick="checkAnswer(this, true,  'exp3-6-3', 'quiz3-6-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $20 \text{ N}$ 向左</button>
             </div>
-            <div id="exp1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+            <div id="exp3-6-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
                 <strong>解析：</strong>鐵塊保持靜止，處於平衡狀態。根據牛頓第一定律，水平方向淨力為零。向右的推力 $20 \text{ N}$ 必須被向左的靜摩擦力 $20 \text{ N}$ 抵消。
             </div>
         </div>
 
         <!-- Q4 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-4">
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-6-4">
             <p class="font-bold text-slate-800 mb-3">4. 承上題，若該桌面的最大靜摩擦力為 $45 \text{ N}$，小明將推力增加到 $50 \text{ N}$，鐵塊的運動狀態會如何改變？</p>
             <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp1-4', 'quiz1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 繼續保持靜止</button>
-                <button onclick="checkAnswer(this, false, 'exp1-4', 'quiz1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 以勻速運動滑動</button>
-                <button onclick="checkAnswer(this, true,  'exp1-4', 'quiz1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 以勻加速運動滑動</button>
-                <button onclick="checkAnswer(this, false, 'exp1-4', 'quiz1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 摩擦力會增加到 $50 \text{ N}$ 使其靜止</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-4', 'quiz3-6-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 繼續保持靜止</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-4', 'quiz3-6-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 以勻速運動滑動</button>
+                <button onclick="checkAnswer(this, true,  'exp3-6-4', 'quiz3-6-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 以勻加速運動滑動</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-4', 'quiz3-6-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 摩擦力會增加到 $50 \text{ N}$ 使其靜止</button>
             </div>
-            <div id="exp1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+            <div id="exp3-6-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
                 <strong>解析：</strong>推力 $F = 50 \text{ N}$ 大於最大靜摩擦力 $45 \text{ N}$，鐵塊開始滑動。因為推力持續大於動摩擦力（假設等於 $45 \text{ N}$），所以淨力不為零（向前 $5 \text{ N}$），根據牛頓第二定律 $F_{\text{net}} = ma$，物體會做勻加速運動。
             </div>
         </div>
 
         <!-- Q5 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-5">
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz3-6-5">
             <p class="font-bold text-slate-800 mb-3">5. 在 HKDSE 物理中，當物體在粗糙平面上滑動時，其摩擦力大小通常被假設為：</p>
             <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, true,  'exp1-5', 'quiz1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 一個定值，並且約等於最大靜摩擦力</button>
-                <button onclick="checkAnswer(this, false, 'exp1-5', 'quiz1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 隨着速度增加而增加</button>
-                <button onclick="checkAnswer(this, false, 'exp1-5', 'quiz1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 隨着推力增加而無限增加</button>
-                <button onclick="checkAnswer(this, false, 'exp1-5', 'quiz1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 必定為零</button>
+                <button onclick="checkAnswer(this, true,  'exp3-6-5', 'quiz3-6-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 一個定值，並且約等於最大靜摩擦力</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-5', 'quiz3-6-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 隨着速度增加而增加</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-5', 'quiz3-6-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 隨着推力增加而無限增加</button>
+                <button onclick="checkAnswer(this, false, 'exp3-6-5', 'quiz3-6-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 必定為零</button>
             </div>
-            <div id="exp1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
+            <div id="exp3-6-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
                 <strong>解析：</strong>為了簡化計算，中學課程通常把動摩擦力視為與最大靜摩擦力相同的定值。且固體接觸面的動摩擦力通常與滑動速度無關。
             </div>
         </div>
