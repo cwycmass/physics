@@ -8413,10 +8413,564 @@
     </section>
 </article>
                             
-            <!-- ========================================== -->
-            <!-- 區塊 3.4 ~ 3.6 (標準佔位符結構) -->
-            <!-- ========================================== -->
+<!-- ========================================== -->
+<!-- 區塊 10.1: 萬有引力 -->
+<!-- ========================================== -->
+<article id="ch10-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">10.1</span>萬有引力</h2>
+        <p class="text-slate-500 mt-2">學習牛頓萬有引力定律，理解宇宙中任何具質量的物體之間都存在相互吸引的力。</p>
+    </header>
 
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在十七世紀，牛頓提出了一個震驚科學界的理論：使蘋果掉落到地面的力，與使月球維持在軌道上繞地球運行的力，其實是 <strong class="text-blue-700 font-bold">同一種力</strong>。這就是 <strong class="text-blue-700 font-bold">萬有引力 (Universal Gravitation)</strong>。</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">牛頓萬有引力定律：</strong> 
+                    宇宙中任何兩個質點之間，都存在着一股互相吸引的力。這股引力的大小與兩者質量的乘積成 <strong>正比</strong>，並與兩者之間距離的平方成 <strong>反比</strong>。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">引力的成對性：</strong> 
+                    萬有引力是一對「作用力與反作用力」。地球吸引蘋果的力，必定 <strong>完全等於</strong> 蘋果吸引地球的力，兩者大小相同、方向相反。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">萬有引力的數學表達式（平方反比定律）：</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">萬有引力 ($F$)</p>
+                    <p class="text-2xl font-bold">$$ F = G \frac{m_1 m_2}{r^2} $$</p>
+                    <p class="text-sm text-slate-500 mt-2">$r$ 是兩個球體「質心」之間的距離</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">地表重力加速度 ($g$)</p>
+                    <p class="text-2xl font-bold">$$ g = \frac{GM}{r^2} $$</p>
+                    <p class="text-sm text-slate-500 mt-2">$M$ 為星體質量，$r$ 為星體半徑</p>
+                </div>
+            </div>
+            <ul class="text-sm text-slate-600 space-y-1">
+                <li>$G$：萬有引力常數 (Universal gravitational constant)，數值約為 $6.67 \times 10^{-11} \text{ N m}^2 \text{ kg}^{-2}$。這是一個極小的數值。</li>
+                <li>$m_1, m_2$：兩個物體的質量 (單位：$\text{kg}$)。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 「重量」與「萬有引力」的關係對照</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8">日常所說的「重量 ($W$)」</th>
+                        <th class="p-3 font-semibold w-3/8">萬有引力 ($F$)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">公式表達</td>
+                        <td class="p-3 font-bold text-blue-700">$$ W = mg $$</td>
+                        <td class="p-3 font-bold text-blue-700">$$ F = G \frac{M_{\text{地球}} m}{r^2} $$</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">本質關聯</td>
+                        <td class="p-3" colspan="2">兩者其實是 <strong>完全相同</strong> 的力！在地球表面，物體的重量 $W$ 就是地球對它的萬有引力 $F$。<br>因此 $mg = G \frac{M_{\text{地球}} m}{r^2}$，這解釋了為何 $g = \frac{GM_{\text{地球}}}{r^2}$。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">隨高度變化</td>
+                        <td class="p-3">通常在地面附近視為常數（$g \approx 9.81$）</td>
+                        <td class="p-3">隨着距離地心 $r$ 的增加，引力會呈 <strong>平方反比</strong> 迅速減小。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">重量即萬有引力</h4>
+                <p class="text-sm text-slate-600 mb-1">公式等價：$mg = G \frac{M_{\text{地球}} m}{r^2}$</p>
+                <p class="text-sm text-slate-600">地表重力加速度：$g = \frac{GM_{\text{地球}}}{r^2}$</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">隨距離衰減</h4>
+                <p class="text-sm text-slate-600">物體離地心越遠，重力 $g$ 會以「距離平方的反比」逐漸變小。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>「萬有引力只存在於星球、恆星等巨大的天體之間。我們日常生活中的物體（如兩個人）之間沒有引力。」</li>
+                    <li>「地球質量極大，蘋果質量極小，所以地球吸引蘋果的引力 遠大於 蘋果吸引地球的引力。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li><strong>任何有質量的物體之間都有引力！</strong> 兩個人之間確實有引力，但因為常數 $G$ 極小 ($10^{-11}$)，算出來的力只有幾微牛頓，完全被摩擦力抵消，因此日常感覺不到。</li>
+                    <li><strong>萬有引力是作用與反作用力對！</strong> 根據牛頓第三定律，地球吸蘋果的力 <strong>等於</strong> 蘋果吸地球的力。只不過地球質量太大，產生的加速度極小，所以看不出地球在動。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        計算兩名質量皆為 $50 \text{ kg}$ 的學生，當他們相距 $1 \text{ m}$ 時，彼此之間的萬有引力大小。（已知 $G = 6.67 \times 10^{-11} \text{ N m}^2 \text{ kg}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">直接代入萬有引力公式：</p>
+                        $$ F = G \frac{m_1 m_2}{r^2} $$
+                        $$ F = (6.67 \times 10^{-11}) \times \frac{50 \times 50}{1^2} $$
+                        $$ F = (6.67 \times 10^{-11}) \times 2500 $$
+                        $$ F \approx 1.67 \times 10^{-7} \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：兩人之間的引力約為 $1.67 \times 10^{-7} \text{ N}$。這是一個微乎其微的力，因此在日常生活中無法察覺。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        地球的質量約為 $6.0 \times 10^{24} \text{ kg}$，半徑約為 $6.4 \times 10^6 \text{ m}$。利用這些數據和萬有引力常數 $G = 6.67 \times 10^{-11} \text{ N m}^2 \text{ kg}^{-2}$，計算地球表面的重力加速度 $g$。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">根據公式 $g = \frac{GM}{r^2}$：</p>
+                        $$ g = \frac{(6.67 \times 10^{-11}) \times (6.0 \times 10^{24})}{(6.4 \times 10^6)^2} $$
+                        $$ g = \frac{40.02 \times 10^{13}}{40.96 \times 10^{12}} $$
+                        $$ g = \frac{4.002 \times 10^{14}}{4.096 \times 10^{13}} \approx 9.77 \text{ m s}^{-2} $$
+                        <p class="mt-2 font-bold text-green-700">答案：計算出的地表重力加速度約為 $9.77 \text{ m s}^{-2}$（這與我們常用的 $9.81$ 非常接近，差異來自於地球並非完美球體及密度不均）。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (平方反比定律) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        太空船從地球表面發射升空，飛向太空。當太空船與地心的距離增加到原來地球半徑的 $3$ 倍時（即 $r' = 3R$），太空船所受的地球引力會變成它在地表時的幾分之幾？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">萬有引力與距離的平方成反比：$F \propto \frac{1}{r^2}$。</p>
+                        <p class="mb-2">距離變為原來的 $3$ 倍，則分母變為 $3^2 = 9$：</p>
+                        $$ F' = G \frac{Mm}{(3R)^2} = G \frac{Mm}{9R^2} = \frac{1}{9} \left( G \frac{Mm}{R^2} \right) = \frac{1}{9} F_{\text{地表}} $$
+                        <p class="mt-2 font-bold text-green-700">答案：太空船受到的引力將急劇減小為原來的 $\frac{1}{9}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 根據牛頓萬有引力定律，兩個質點之間的引力大小與它們之間距離的關係是？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q101-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 與距離成正比</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q101-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 與距離的平方成正比</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q101-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 與距離成反比</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q101-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 與距離的平方成反比</button>
+                </div>
+                <div id="exp-q101-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> $F = G \frac{m_1 m_2}{r^2}$。公式中距離 $r$ 在分母且有平方，故為距離的平方成反比 (Inverse square law)。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 考慮太陽對地球的萬有引力 $F_{SE}$，以及地球對太陽的萬有引力 $F_{ES}$。下列敘述何者正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q101-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $F_{SE}$ 遠大於 $F_{ES}$，因為太陽質量大得多</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q101-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $F_{SE}$ 遠小於 $F_{ES}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q101-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $F_{SE}$ 的大小完全等於 $F_{ES}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q101-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 太陽對地球有引力，但地球對太陽沒有引力</button>
+                </div>
+                <div id="exp-q101-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 萬有引力符合牛頓第三定律，互為作用力與反作用力，因此大小絕對相等，方向相反。公式 $G\frac{M_S M_E}{r^2}$ 算出的數值對雙方都是一樣的。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 兩個小球相距 $r$ 時，彼此的引力為 $F$。如果將兩顆小球的質量都增加為原來的 2 倍，且距離保持 $r$ 不變，它們之間的引力會變成多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q101-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $2F$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q101-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $4F$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q101-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $F$ (不變)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q101-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $0.25F$</button>
+                </div>
+                <div id="exp-q101-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> $F' = G \frac{(2m_1)(2m_2)}{r^2} = 4 \times \left(G \frac{m_1 m_2}{r^2}\right) = 4F$。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 計算地球與月球之間的萬有引力時，公式中的距離 $r$ 代表的是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q101-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 地球表面到月球表面的最短距離</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q101-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 地球中心（質心）到月球中心（質心）的距離</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q101-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 地球直徑與月球直徑的總和</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q101-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 兩者表面距離的一半</button>
+                </div>
+                <div id="exp-q101-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 牛頓證明了，對於質量均勻分佈的球體，計算萬有引力時，可以將它們視為所有質量都集中在「球心（質心）」。因此 $r$ 必須是兩球心之間的距離。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 我們日常生活中被身邊的高樓大廈包圍，為甚麼我們感覺不到大廈對我們的萬有引力？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q101-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 因為建築物是靜止的，靜止物體沒有引力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q101-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 因為建築物深埋地下，引力被地面擋住了</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q101-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 因為相較於萬有引力常數 $G$ 的極小值，建築物的質量仍不夠大，產生的引力微乎其微</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q101-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 因為我們與建築物之間存在空氣，空氣抵消了引力</button>
+                </div>
+                <div id="exp-q101-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 萬有引力常數 $G \approx 6.67 \times 10^{-11}$ 是一個極小極小的數字。只有當其中一個物體的質量達到行星級別（如地球 $10^{24} \text{ kg}$）時，萬有引力才會大到讓我們能明顯感受到。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 10.2: 引力作用下的圓周運動 -->
+<!-- ========================================== -->
+<article id="ch10-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">10.2</span>引力作用下的圓周運動</h2>
+        <p class="text-slate-500 mt-2">將萬有引力作為向心力，分析人造衛星、行星軌道的運動，並解開太空失重之謎。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 核心概念：軌道運動的動力學</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>月球繞地球轉、人造衛星繞地球轉、地球繞太陽轉，這些都是 <strong class="text-blue-700 font-bold">軌道運動 (Orbital Motion)</strong>。在高中物理中，我們通常將這些軌道近似為理想的 <strong class="text-blue-700">勻速圓周運動</strong>。</p>
+            <p>使星體或衛星能在圓形軌道上不斷轉彎的向心力，正是由中心星體的 <strong class="text-blue-700 font-bold">萬有引力</strong> 所提供的：</p>
+            <div class="text-center font-bold text-xl text-blue-900 bg-blue-50 py-3 rounded">
+                萬有引力 = 向心力<br> $F_g = F_c$
+            </div>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 軌道速度與克卜勒第三定律</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">透過等式 $F_g = F_c$，我們可以推導出兩個極為重要的軌道公式：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">軌道速度 ($v$)</p>
+                    <p class="mb-1">$$ G \frac{Mm}{r^2} = \frac{mv^2}{r} $$</p>
+                    <p class="text-2xl font-bold text-blue-900 mt-2">$$ v = \sqrt{\frac{GM}{r}} $$</p>
+                    <p class="text-xs text-slate-500 mt-2">注意：衛星的質量 $m$ 被消去了，速度只與軌道半徑 $r$ 及中心星體質量 $M$ 有關。</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">克卜勒第三定律 ($T^2 \propto r^3$)</p>
+                    <p class="mb-1">代入 $v = \frac{2\pi r}{T}$，可得：</p>
+                    <p class="text-2xl font-bold text-blue-900 mt-2">$$ T^2 = \left(\frac{4\pi^2}{GM}\right) r^3 $$</p>
+                    <p class="text-xs text-slate-500 mt-2">軌道半徑越大，公轉週期 $T$ 就會越長。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 低地軌道衛星 vs 地球同步衛星</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8">低地軌道衛星 (LEO Satellites)</th>
+                        <th class="p-3 font-semibold w-3/8">地球同步衛星 (Geosynchronous Satellites)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">軌道高度</td>
+                        <td class="p-3">極低（離地表數百公里）</td>
+                        <td class="p-3">極高（約離地心 $42000 \text{ km}$，在赤道上空）</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">公轉週期 ($T$)</td>
+                        <td class="p-3">短（約 90 分鐘轉一圈）</td>
+                        <td class="p-3 font-bold text-blue-700">剛好等於地球自轉週期 (24 小時)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">軌道速度 ($v$)</td>
+                        <td class="p-3">非常快（為了在低軌道對抗強引力）</td>
+                        <td class="p-3">相對較慢</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">主要用途</td>
+                        <td class="p-3">氣象觀測、地球資源探測 (如 Google Earth)</td>
+                        <td class="p-3">通訊、GPS、電視廣播（對地面接收器而言，它永遠停在空中同一位置）</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">低地軌道衛星</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li>高度：低</li>
+                    <li>週期：短 (約 90 分鐘)</li>
+                    <li>速度：極快</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">地球同步衛星</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li>高度：高 (固定在赤道上空)</li>
+                    <li>週期：<strong class="text-blue-600">24 小時</strong> (與地球同步)</li>
+                    <li>特點：從地面看，永遠靜止在空中同一個點。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區 (失重之謎)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「太空人在國際太空站裡會飄浮（失重），是因為太空站離地球太遠了，那裡沒有地心引力。」</li>
+                    <li>「越重的衛星，必須飛得越快才不會掉下來。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>太空中仍有強大的引力！</strong> 國際太空站高度的地心引力仍有地表的 $90\%$。太空人會飄浮是因為他們與太空站 <strong>正以相同的向心加速度繞着地球「自由下落」</strong>。由於缺乏地板的支撐力（法向力 $N = 0$），產生了「視重為零（無重）」的感覺。</li>
+                    <li>根據公式 $v = \sqrt{\frac{GM}{r}}$，軌道速度只與軌道半徑 $r$ 有關，與衛星本身的質量 $m$ 完全無關！</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (計算軌道速度) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        國際太空站 (ISS) 質量約為 $420,000 \text{ kg}$，在距離地球表面約 $400 \text{ km}$ 的圓形軌道上運行。已知地球質量 $M = 6.0 \times 10^{24} \text{ kg}$，地球半徑 $R = 6400 \text{ km}$，$G = 6.67 \times 10^{-11} \text{ N m}^2 \text{ kg}^{-2}$。求 ISS 的軌道速度。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>第一步：求出正確的軌道半徑 $r$。</strong></p>
+                        <p class="mb-2 text-red-600 font-bold">極易錯陷阱：$r$ 必須是從「地心」算起的距離！</p>
+                        $$ r = R_{\text{地球}} + h_{\text{高度}} = 6400 \text{ km} + 400 \text{ km} = 6800 \text{ km} = 6.8 \times 10^6 \text{ m} $$
+                        <p class="mb-2 mt-4"><strong>第二步：代入軌道速度公式：</strong></p>
+                        $$ v = \sqrt{\frac{GM}{r}} = \sqrt{\frac{(6.67 \times 10^{-11})(6.0 \times 10^{24})}{6.8 \times 10^6}} $$
+                        $$ v = \sqrt{\frac{40.02 \times 10^{13}}{6.8 \times 10^6}} = \sqrt{5.885 \times 10^7} \approx 7671 \text{ m s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：ISS 的軌道速度極快，約為 $7671 \text{ m s}^{-1}$（即 $7.67 \text{ km/s}$）。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (比例問題 T^2 proportional to r^3) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        已知地球同步衛星在軌道半徑為 $r_1$ 時，其公轉週期 $T_1 = 24 \text{ 小時}$。若另一顆探索衛星在較低的軌道運行，其軌道半徑 $r_2$ 只有同步衛星半徑的四分之一（即 $r_2 = 0.25 r_1$）。求該探索衛星的公轉週期 $T_2$。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">根據克卜勒第三定律，對於繞同一個中心星體（地球）運行的所有衛星：</p>
+                        $$ \frac{T_1^2}{r_1^3} = \frac{T_2^2}{r_2^3} = \text{常數} $$
+                        <p class="mb-2">將公式重新排列：</p>
+                        $$ \left(\frac{T_2}{T_1}\right)^2 = \left(\frac{r_2}{r_1}\right)^3 $$
+                        $$ \left(\frac{T_2}{24}\right)^2 = (0.25)^3 = \left(\frac{1}{4}\right)^3 = \frac{1}{64} $$
+                        <p class="mb-2">兩邊開平方：</p>
+                        $$ \frac{T_2}{24} = \sqrt{\frac{1}{64}} = \frac{1}{8} $$
+                        $$ T_2 = 24 \times \frac{1}{8} = 3 \text{ 小時} $$
+                        <p class="mt-2 font-bold text-green-700">答案：該探索衛星的公轉週期為 3 小時。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (失重分析) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一名質量為 $70 \text{ kg}$ 的太空人站在國際太空站內的體重磅上。若太空站正以圓周軌道繞地球運行，該處的重力加速度 $g' = 8.7 \text{ m s}^{-2}$。<br>
+                        (a) 計算地球對太空人的萬有引力（真實重量）。<br>
+                        (b) 體重磅的讀數（視重）是多少？試用牛頓第二定律解釋原因。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 真實重量：</strong> 取決於當地的引力場強度 $g'$。</p>
+                        $$ W = m g' = 70 \times 8.7 = 609 \text{ N} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 視重（磅的讀數 $R$）：</strong></p>
+                        <p class="mb-2">太空人和太空站一起繞地運動，向心力由萬有引力提供，因此他們都有一個指向地心的向心加速度 $a_c = g'$。</p>
+                        <p class="mb-2">根據牛頓第二定律（以向地心為正方向）：</p>
+                        $$ F_{\text{net}} = m a_c $$
+                        $$ mg' - R = m (g') $$
+                        $$ R = mg' - mg' = 0 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 真實重量為 $609 \text{ N}$；(b) 磅的讀數為 $0 \text{ N}$。因為太空人處於持續的自由下落狀態，不需要地板提供任何支撐力來維持軌道運動。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在圓形軌道上繞地球運行的通訊衛星，使它保持圓周運動的「向心力」是由甚麼提供的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q102-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 衛星引擎持續噴射產生的推力</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q102-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 地球對衛星的萬有引力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q102-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 太陽對衛星的萬有引力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q102-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 地球磁場對衛星的磁力</button>
+                </div>
+                <div id="exp-q102-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 在太空中不需要引擎推力來維持軌道。地球對衛星產生的萬有引力完美地提供了衛星轉彎所需的向心力 ($F_g = F_c$)。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 關於地球「同步衛星 (Geosynchronous satellite)」，下列哪一項敘述是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q102-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 它的公轉週期剛好是 24 小時</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q102-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 它可以停留在地球上任何一個城市（例如香港或紐約）的正上空</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q102-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 它是在距離地表幾百公里的「低地軌道」運行的</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q102-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 它的軌道速度比低地軌道衛星還要快</button>
+                </div>
+                <div id="exp-q102-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 同步衛星為了在地面觀測者眼中保持「靜止」，其公轉週期必須與地球自轉週期（24小時）一致。此外，它只能位於「赤道」正上方，高度極高（軌道半徑大，速度較慢）。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 有兩顆人造衛星 A 和 B 繞着地球運行。A 的質量是 B 的 2 倍。如果它們都在「同一個高度」的圓形軌道上運行，比較它們的軌道速度：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q102-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. A 的速度是 B 的 2 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q102-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. B 的速度是 A 的 2 倍</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q102-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 它們的速度完全相同</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q102-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. A 的速度是 B 的 $\sqrt{2}$ 倍</button>
+                </div>
+                <div id="exp-q102-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據軌道速度公式 $v = \sqrt{\frac{GM}{r}}$，速度只取決於中心星體質量 $M$ (地球) 和軌道半徑 $r$。衛星本身的質量 $m$ 已經在推導過程中被約去了，因此只要軌道相同，速度就一定相同。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 國際太空站內的太空人常常呈現出「飄浮在半空中」的狀態，這是因為：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q102-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 太空站內充滿了特殊的失重氣體</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q102-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 太空站距離地球太遠，地球的萬有引力已經減弱到零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q102-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 月球的引力抵消了地球的引力</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q102-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 太空人和太空站正以相同的加速度繞地球作連續的自由下落</button>
+                </div>
+                <div id="exp-q102-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 這被稱為「視重為零 (Apparent weightlessness)」。因為太空人和地板都在以同一個加速度向地心「掉落」（轉彎），所以地板不需要對太空人施加任何向上的支撐力（法向力 $N=0$），產生了飄浮的錯覺。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 根據克卜勒第三定律，行星繞太陽公轉的週期 ($T$) 和軌道半徑 ($r$) 之間的數學比例關係為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q102-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $T \propto r^2$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q102-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $T^2 \propto r$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q102-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $T^2 \propto r^3$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q102-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $T^3 \propto r^2$</button>
+                </div>
+                <div id="exp-q102-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 克卜勒第三定律（可以由 $G\frac{Mm}{r^2} = m\frac{4\pi^2 r}{T^2}$ 推導出）表明，週期的平方與軌道半徑的立方成正比，即 $T^2 \propto r^3$。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
 
 
         </div>
