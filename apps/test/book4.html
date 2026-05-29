@@ -3091,8 +3091,930 @@
     </section>
 </article>
 
-            
+<!-- ========================================== -->
+<!-- 區塊 6.1: 作用於載電流導體的磁力 -->
+<!-- ========================================== -->
+<article id="ch6-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">6.1</span>作用於載電流導體的磁力</h2>
+        <p class="text-slate-500 mt-2">理解載流導體在磁場中受力（磁力）的物理機制，學習利用弗林明左手定則判定受力方向，並掌握磁力的計量公式。</p>
+    </header>
 
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>我們在第 5 章中了解到，載流導體會在周圍產生磁場。如果我們把一根通有電流的導線放入另一個<strong>外加磁場</strong>中，導線產生的磁場會與外加磁場發生相互作用。這種相互作用會導致導體受到一個力的作用，我們稱之為<strong>磁力</strong>（有時也稱為安培力或電磁力）。</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">磁力的方向：</strong> 
+                    磁力的方向永遠同時<strong>垂直於電流方向</strong>以及<strong>外加磁場方向</strong>。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">弗林明左手定則：</strong> 
+                    這是判定磁力方向最核心的幾何法則。伸出左手，使大拇指、食指和中指相互垂直：
+                    <ul class="list-none list-inside ml-6 text-sm space-y-1 mt-1">
+                        <li>👉 <strong>食指（First finger）：</strong> 指向<strong>外加磁場的方向</strong>（由 $N$ 極指向 $S$ 極）。</li>
+                        <li>👉 <strong>中指（SeCond finger）：</strong> 指向<strong>傳統電流的方向</strong>（由正極流向負極）。</li>
+                        <li>👉 <strong>大拇指（ThuMb）：</strong> 所指的方向即為導體所受<strong>磁力的方向</strong>（運動方向）。</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與磁感應強度</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">當長度為 $l$ 的直導線通有電流 $I$，且導線與強度為 $B$ 的均勻外加磁場夾角為 $\theta$ 時，導線所受的磁力 $F$ 大小滿足：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ F = B I l \sin\theta $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-3 mt-4">
+                <li>$F$：導體所受磁力（單位：牛頓 $\text{N}$）</li>
+                <li>$B$：<strong>磁感應強度</strong>，即磁場強度（單位：特斯拉 $\text{T}$）</li>
+                <li>$I$：流經導體的電流（單位：安培 $\text{A}$）</li>
+                <li>$l$：在磁場中導線的長度（單位：米 $\text{m}$）</li>
+                <li>$\theta$：電流方向與磁場方向之間的夾角</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>最大受力情況（$\theta = 90^\circ$）：</strong> 當導線與磁場方向<strong>互相垂直</strong>時，受到的磁力最大：$$ F = B I l $$</li>
+                <li><i class="fa-solid fa-ban text-red-500 mr-1"></i> <strong>零受力情況（$\theta = 0^\circ$ 或 $180^\circ$）：</strong> 當導線與磁場方向<strong>平行</strong>時，導線<strong>完全不受磁力作用</strong>：$$ F = 0 $$</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 記憶摘要卡片 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-address-card text-blue-500 mr-2"></i> 概念摘要記憶卡片</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">弗林明左手定則</h4>
+                <p class="text-xs text-slate-600">食指磁場、中指電流、拇指受力。三者在空間中必須呈兩兩互相垂直的關係。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">磁感應強度單位</h4>
+                <p class="text-xs text-slate-600">特斯拉 $\text{T}$ 是磁場單位的標準國際單位。$1 \text{ T}$ 代表每安培電流在每米導線上產生的最大磁力為 $1 \text{ N}$。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">非垂直夾角計算</h4>
+                <p class="text-xs text-slate-600">當導線與磁場不垂直時，必須利用三角函數 $\sin\theta$ 提取出與磁場相垂直的電流有效分量。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「因為電流是帶負電的電子在金屬中移動，所以在應用弗林明左手定則時，中指應指向電子移動的方向。」</li>
+                    <li>「只要把通電導線放在磁場中，無論怎麼擺放，導線都必然會受到磁力的作用。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>中指必須指向<strong>傳統電流的方向</strong>。傳統電流的方向規定為正電荷移動的方向，因此與電子流動（負電荷）的方向<strong>相反</strong>。</li>
+                    <li>如果導線與外加磁場的方向<strong>完全平行</strong>，那麼夾角 $\theta = 0^\circ$ 或 $180^\circ$，此時 $\sin\theta = 0$，導線<strong>不會受到任何磁力作用</strong>。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一根長 $0.2 \text{ m}$ 的直導線放置在 $0.5 \text{ T}$ 的均勻磁場中。導線中通有 $4 \text{ A}$ 的電流。求當導線與磁場方向：<br>
+                        (a) 互相垂直時，導線所受的磁力大小。<br>
+                        (b) 夾角為 $30^\circ$ 時，導線所受的磁力大小。<br>
+                        (c) 互相平行時，導線所受的磁力大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 互相垂直（$\theta = 90^\circ$）：</strong></p>
+                        $$ F = B I l \sin 90^\circ = 0.5 \times 4 \times 0.2 \times 1 = 0.4 \text{ N} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 夾角為 $30^\circ$（$\theta = 30^\circ$）：</strong></p>
+                        $$ F = B I l \sin 30^\circ = 0.5 \times 4 \times 0.2 \times 0.5 = 0.2 \text{ N} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(c) 互相平行（$\theta = 0^\circ$）：</strong></p>
+                        $$ F = B I l \sin 0^\circ = 0 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 磁力為 $0.4 \text{ N}$；(b) 磁力為 $0.2 \text{ N}$；(c) 磁力為 $0 \text{ N}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz6-1-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 一根水平橫放的載流導線，傳統電流方向指向「東方」。若將此導線放置在一個方向指向「北方」的水平磁場中。利用弗林明左手定則判定，導線受到的磁力方向指向哪裡？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q61-1', 'quiz6-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 南方</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-1', 'quiz6-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 西方</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q61-1', 'quiz6-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 垂直向上（指離紙面）</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-1', 'quiz6-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 垂直向下（指入紙面）</button>
+                </div>
+                <div id="exp-q61-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 伸出左手：食指（磁場）指向北方（前方），中指（電流）指向東方（右側）。此時伸直的大拇指必定指向垂直向上。故導線受力方向為垂直向上（指離紙面）。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz6-1-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 若載流直導線與磁場方向呈 $45^\circ$ 夾角。當導線中的電流與磁感應強度皆變為原來的 2 倍，且導線在磁場中的長度保持不變，則導線所受的磁力大小變為原來的多少倍？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q61-2', 'quiz6-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 2 倍</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q61-2', 'quiz6-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 4 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-2', 'quiz6-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $\sqrt{2}$ 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-2', 'quiz6-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 不變</button>
+                </div>
+                <div id="exp-q61-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據公式 $F = BIl\sin\theta$。由於長度 $l$ 和夾角 $\theta$ 不變，力 $F$ 與 $B$ 和 $I$ 的乘積成正比。當 $B$ 和 $I$ 同時變為 2 倍，力變為原來的 $2 \times 2 = 4$ 倍。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 6.2: 直流電動機 -->
+<!-- ========================================== -->
+<article id="ch6-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">6.2</span>直流電動機</h2>
+        <p class="text-slate-500 mt-2">分析將電能轉化為動能的關鍵家居裝置，探討直流電動機的內部構造、運作原理與性能優化方式。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p><strong class="text-blue-700 font-bold">直流電動機（直流馬達）：</strong> 是一種將 <strong>電能轉化為動能（機械能）</strong> 的電磁學裝置。它主要應用在風扇、電動玩具車及各類家居電器中。</p>
+            <p>要讓一個矩形線圈在磁場中持續地朝同一個方向旋轉，電動機內部必須具備以下四大關鍵組件：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">永久磁鐵（定子）：</strong> 
+                    提供穩定的外加均勻磁場。為了使磁場線更加聚焦，通常採用弧形磁極面。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">矩形線圈（轉子）：</strong> 
+                    通電後，線圈兩側垂直於磁場的導線會受到方向相反的磁力作用，產生扭轉的<strong>力偶矩</strong>使線圈旋轉。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">換向器（半環）：</strong> 
+                    這是直流電動機中最精妙的機械設計，由兩個相互絕緣的半圓銅環組成。它的功用是：<strong>每當線圈轉過垂直位置（中性面）時，自動改變流入線圈的電流方向</strong>。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">碳刷：</strong> 
+                    與外接直流電源連接，並與旋轉的換向器保持滑動接觸，負責將電流輸入線圈中。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 運作原理解析 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-rotate mr-2 text-blue-500"></i> 電動機的旋轉原理解析</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">當矩形線圈 $ABCD$ 平放在兩磁極之間，且電流由 $A$ 流向 $D$：</p>
+            <ul class="list-decimal list-inside space-y-2 text-sm text-slate-700">
+                <li>左側邊 $AB$ 通有向內的電流，根據弗林明左手定則，它受到一個<strong>向下</strong>的磁力。</li>
+                <li>右側邊 $CD$ 通有向外的電流，根據弗林明左手定則，它受到一個<strong>向上</strong>的磁力。</li>
+                <li>這對大小相等、方向相反且不共線的力偶，會促使線圈開始<strong>逆時針旋轉</strong>。</li>
+                <li>當線圈轉到垂直位置（中性面）時，碳刷剛好與兩個半環之間的絕緣間隙接觸，線圈中暫時沒有電流（力為零），但線圈會依靠<strong>慣性</strong>越過此垂直位置。</li>
+                <li><strong>越過垂直位置後：</strong> 換向器的兩個半環與碳刷對調接觸，這使線圈各邊的<strong>電流方向發生反轉</strong>。因此，各邊所受磁力的方向也發生反轉，確保線圈能<strong>繼續朝同一個方向旋轉</strong>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 如何增大電動機的旋轉速率與轉矩？</h3>
+        <p class="text-slate-700 mb-3">若要在工業或工程中提升電動機的性能，可以透過以下方式來增大線圈受到的轉矩：</p>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/3">優化手段</th>
+                        <th class="p-3 font-semibold w-2/3">物理學合理解釋（為何有效）</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">增加線圈的圈數 (匝數 $N$)</td>
+                        <td class="p-3">每一圈線圈都會受到等大的磁力作用。圈數變為 $N$ 倍，總受力與總轉矩也會變為 $N$ 倍。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">增加通過線圈的電流大小 ($I$)</td>
+                        <td class="p-3">根據 $F=BIl$，磁力與電流強度成正比。增大電流可直接增大作用力與轉矩。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">使用磁性更強的永久磁鐵 ($B$)</td>
+                        <td class="p-3">增大磁感應強度 $B$ 能直接提升 $F=BIl$ 的力大小。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">在線圈內部插入軟鐵芯</td>
+                        <td class="p-3">軟鐵在通電時會被磁化，從而極大程度地<strong>集中並增強線圈內部的磁場</strong>，產生更強大的轉動力矩。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">提升電動機性能之方法</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li>👉 <strong>增多圈數：</strong> 總受力隨匝數增加成比例增大。</li>
+                    <li>👉 <strong>加大電流：</strong> 根據 $F = BIl$，電流越大，磁力越強。</li>
+                    <li>👉 <strong>增強磁鐵：</strong> 採用磁性更強的定子。</li>
+                    <li>👉 <strong>加軟鐵芯：</strong> 集中並大幅增強工作區域的磁場。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <p class="text-sm">「換向器（半環）的作用是為了將交流電轉換成直流電輸入線圈。」</p>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <p class="text-sm"><strong>完全相反！</strong> 我們輸入的是直流電（DC），而換向器的主要功用是<strong>將直流電在特定位置反向，在線圈內部產生「交替方向的電流」</strong>。這確保了線圈越過垂直面後，各側邊受力方向自動反轉，使線圈能夠持續朝同一方向旋轉，而不是在垂直位置來回擺動。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個簡單的直流電動機包含一個有 50 圈的矩形線圈，放置在 $0.4 \text{ T}$ 的均勻磁場中。線圈平行於磁場的邊長度為 $0.1 \text{ m}$（即不受力邊），垂直於磁場的工作邊長度為 $0.15 \text{ m}$。若流經線圈的直流電流為 $2 \text{ A}$。求：<br>
+                        (a) 當線圈平面與磁場平行時，單一條工作邊受到的磁力大小。<br>
+                        (b) 該狀態下，整個 50 圈線圈所受到的最大總磁力大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 計算單邊受力 $F_1$：</strong> 垂直於磁場的工作邊長度 $l = 0.15 \text{ m}$。因為垂直，$\theta = 90^\circ$。</p>
+                        $$ F_1 = B I l = 0.4 \times 2 \times 0.15 = 0.12 \text{ N} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 計算 50 圈線圈受到的總磁力：</strong></p>
+                        <p class="mb-2">一個矩形線圈有左右兩條工作邊同時受力。因此單圈受力為：$$ 2 \times F_1 = 0.24 \text{ N} $$</p>
+                        <p class="mb-2">對於有 50 圈的線圈，總力為：</p>
+                        $$ F_{\text{總}} = N \times (2 F_1) = 50 \times 0.24 = 12 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 單一工作邊受力為 $0.12 \text{ N}$；(b) 線圈受到的最大總力為 $12 \text{ N}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz6-2-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在直流電動機中，「換向器（半環）」最主要的物理功用是什麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q62-1', 'quiz6-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 增大流入線圈的電流大小，以獲得更強的轉矩</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-1', 'quiz6-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 防止線圈在旋轉時發生短路</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q62-1', 'quiz6-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 在線圈轉過垂直位置時自動改變電流方向，確保線圈持續朝同一個方向旋轉</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-1', 'quiz6-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 降低線圈運作時因生熱而損耗的電能</button>
+                </div>
+                <div id="exp-q62-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 如果沒有換向器，線圈轉過垂直位置後，磁力方向不改變，會阻礙線圈繼續旋轉，使其在垂直面兩側來回擺動。換向器能每半圈反轉一次電流方向，從而維持不間斷的同向旋轉。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz6-2-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 當直流電動機的線圈剛好旋轉到「垂直於磁場（中性面）」的位置時，下列關於線圈狀態的描述，哪一項是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q62-2', 'quiz6-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 線圈受到的電磁轉矩達到最大值</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q62-2', 'quiz6-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 碳擺與換向器絕緣間隙接觸，線圈內無電流，線圈依靠慣性越過此位置</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-2', 'quiz6-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 線圈會立刻停止旋轉並卡在該位置</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-2', 'quiz6-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 線圈內部的電流達到最大值</button>
+                </div>
+                <div id="exp-q62-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 在垂直位置，換向器的兩半環剛好與碳刷斷開（接觸絕緣間隙），此時線圈中沒有電流，受力為零。然而，運動中的線圈具有動能，會依靠自身的慣性順利轉過這個特定位置。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+            
+<!-- ========================================== -->
+<!-- 區塊 7.1: 磁場產生的電流 -->
+<!-- ========================================== -->
+<article id="ch7-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">7.1</span>磁場產生的電流</h2>
+        <p class="text-slate-500 mt-2">理解磁場如何產生電流的物理機制，認識感生電動勢與感生電流，並學會運用冷次定律判斷電流方向。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>我們在第 5 章學過，電流會產生磁場。反過來，磁場是否也能產生電流？1831年，法拉第發現，只要穿過閉合電路的磁場發生變化，電路中就會產生電流。這種現象稱為<strong class="text-blue-700 font-bold">電磁感應</strong>。</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">感生電動勢與感生電流：</strong> 
+                    在電磁感應現象中產生的電動勢稱為<strong>感生電動勢</strong>（以符號 $\mathcal{E}$ 表示）。若電路是閉合的，電路中便會產生電流，稱為<strong>感生電流</strong>。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">產生條件：</strong> 
+                    只有當穿過閉合電路的<strong>磁通量發生變化</strong>（例如導體切割磁場線，或穿過線圈的磁場強度改變）時，才會產生感生電動勢。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">右手定則：</strong> 
+                    用於判定直導體在磁場中運動切割磁場線時，所產生的感生電流方向。伸出右手，使大拇指、食指和中指相互垂直：
+                    <ul class="list-none list-inside ml-6 text-sm space-y-1 mt-1">
+                        <li>👉 <strong>大拇指：</strong> 指向導體<strong>運動的方向</strong>。</li>
+                        <li>👉 <strong>食指：</strong> 指向<strong>磁場的方向</strong>（由 $N$ 極指向 $S$ 極）。</li>
+                        <li>👉 <strong>中指：</strong> 所指的方向即為<strong>感生電流的方向</strong>。</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心定律：冷次定律 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心定律：冷次定律</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">當穿過線圈的磁通量改變時，判斷感生電流環繞方向的黃金法則為<strong>冷次定律</strong>：</p>
+            <blockquote class="border-l-4 border-blue-400 pl-4 py-2 bg-blue-50/50 text-blue-900 font-medium italic rounded-r-lg mb-4">
+                「感生電流的方向，總是使其產生的磁場去<strong>阻礙</strong>引起感生電流的磁通量變化。」
+            </blockquote>
+            <p class="text-sm text-slate-600 mb-3"><strong>冷次定律的物理本質：</strong></p>
+            <ul class="list-disc list-inside space-y-2 text-sm text-slate-600">
+                <li>這符合<strong>能量守恆定律</strong>。當我們把磁鐵推入線圈時，感生電流產生的磁場必定會排斥磁鐵（在接近端形成同名磁極），我們必須做功克服這個排斥力，我們做的機械功便轉化為電路中的電能。</li>
+                <li>如果感生電流是吸引磁鐵進入，那麼磁鐵會自動加速，這將無中生有地創造能量，違反能量守恆定律。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 記憶摘要卡片 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-address-card text-blue-500 mr-2"></i> 概念摘要記憶卡片</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">相對運動與感應</h4>
+                <p class="text-xs text-slate-600">只有當導體與磁場之間有相對運動，或者穿過線圈的磁場隨時間改變時，才會產生感生電流。兩者保持靜止則無電流。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">右手定則 vs 左手定則</h4>
+                <p class="text-xs text-slate-600"><strong>右手定則</strong>用於「發電」（動生靜，求感生電流）；<strong>左手定則</strong>用於「電動機」（通電受力，求磁力）。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">冷次定律阻礙法</h4>
+                <p class="text-xs text-slate-600">外加磁通量增加時，感應磁場方向與外加磁場相反；外加磁通量減少時，感應磁場方向與外加磁場相同。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「只要把一根金屬導線放在強大的永久磁鐵中間，導線中就一定會產生感生電流。」</li>
+                    <li>「冷次定律中的『阻礙』，代表感應磁場一定會把外加磁場完全消除，使其變為零。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>如果導線與磁鐵都保持<strong>相對靜止</strong>，穿過導線的磁場沒有改變，就不會有感生電流。必須要有相對運動，切割磁場線。</li>
+                    <li>「阻礙」只是減緩其變化的趨勢，就像物理阻尼一樣。它<strong>不可能</strong>完全消除原本的磁場變化。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個螺線管與靈敏檢流計連接成閉合迴路。當我們把一根條形磁鐵的 $N$ 極迅速向下推入螺線管的上方開口時，請利用冷次定律判斷：<br>
+                        (a) 螺線管上端會感應出什麼磁極？<br>
+                        (b) 從上往下俯視，線圈中的感生電流是順時針還是逆時針環繞？<br>
+                        (c) 若把磁鐵 $N$ 極迅速向上拉離螺線管，螺線管上端的磁極會如何改變？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 判斷螺線管上端的磁極：</strong></p>
+                        <p class="mb-2">當 $N$ 極靠近時，穿過螺線管向下的磁通量在增加。根據冷次定律，感生電流產生的磁場必須阻礙這個增加，即產生排斥力來阻礙 $N$ 極靠近。因此，<strong>螺線管上端會形成 $N$ 極</strong>以排斥磁鐵。</p>
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 判斷感生電流方向：</strong></p>
+                        <p class="mb-2">上端為 $N$ 極。使用右手安培定則（握拳法則）：伸直大拇指指向向上（$N$ 極方向），其餘彎曲四指的指向即為電流環繞方向。從上往下看，四指的指向是<strong>逆時針方向</strong>。</p>
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(c) 磁鐵向上拉離時：</strong></p>
+                        <p class="mb-2">當 $N$ 極遠離時，穿過螺線管向下的磁通量在減少。為了阻礙減少，感應磁場必須產生吸引力來阻止其遠離。因此，<strong>螺線管上端會變為 $S$ 極</strong>以吸引遠離的 $N$ 極。</p>
+                        <p class="mt-2 font-bold text-green-700">答案：(a) $N$ 極；(b) 逆時針方向；(c) 變為 $S$ 極。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz7-1-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 關於電磁感應現象，下列哪一種情況<strong>不會</strong>在閉合線圈中產生感生電流？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q71-1', 'quiz7-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 快速將條形磁鐵推入線圈中</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q71-1', 'quiz7-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 線圈保持靜止，但旁邊的磁鐵正在迅速旋轉</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q71-1', 'quiz7-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 線圈與磁鐵綁在一起，以相同的速度在空間中一起勻速移動</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q71-1', 'quiz7-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 改變鄰近另一個線圈中的電流大小</button>
+                </div>
+                <div id="exp-q71-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 當兩者一起勻速移動時，它們之間沒有相對運動，穿過線圈的磁通量保持不變（沒有發生變化），因此不會產生任何感生電流。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz7-1-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 冷次定律（感生電流的方向總是阻礙磁通量的變化）本質上是哪一項物理學大定律的體現？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q71-2', 'quiz7-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 電荷守恆定律</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q71-2', 'quiz7-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 能量守恆定律</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q71-2', 'quiz7-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 質量守恆定律</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q71-2', 'quiz7-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 牛頓第一運動定律</button>
+                </div>
+                <div id="exp-q71-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 冷次定律確保了我們必須做功（克服磁力阻礙）才能產生電能，這是能量守恆定律在電磁學中的必然要求。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 7.2: 電磁感應的應用 -->
+<!-- ========================================== -->
+<article id="ch7-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">7.2</span>電磁感應的應用</h2>
+        <p class="text-slate-500 mt-2">分析發電機的工作原理，區分交流與直流發電機，並探討變壓器和渦電流在日常生活中的應用。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 發電機與變壓器原理</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>電磁感應在現代工業中有着極為廣泛的應用，我們日常使用的大部分電能都是透過以下裝置產生的：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">發電機 (Generator)：</strong> 
+                    一種將<strong>機械能轉化為電能</strong>的裝置。當線圈在磁場中旋轉時，線圈的兩側邊不斷切割磁場線，從而產生感生電動勢與電流。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">交流發電機：</strong> 
+                    利用兩個完整的<strong>滑環</strong>與碳刷接觸。由於線圈兩側交替向上和向下切割磁場線，輸出的電流方向每半圈反轉一次，產生交流電。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">直流發電機：</strong> 
+                    利用兩個半圓形的<strong>換向器（半環）</strong>代替滑環。它能在線圈電流反向的瞬間，自動調換輸出端，使輸出給外電路的電流方向保持恆定（直流電）。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">變壓器 (Transformer)：</strong> 
+                    利用<strong>互感現象</strong>來改變交流電壓大小的裝置。它由繞在同一個鐵芯上的初級線圈和次級線圈組成，只能用於改變交流電，無法改變恆定的直流電。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 渦電流與日常應用 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 渦電流及其效應</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">當一大塊金屬處於變化的磁場中，或者在磁場中移動時，金屬內部會感應出呈漩渦狀的閉合電流，稱為<strong class="text-blue-700 font-bold">渦電流</strong>。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">1. 熱效應應用：電磁爐</p>
+                    <p class="text-sm text-slate-600">
+                        電磁爐內部的線圈通有高頻交流電，產生快速變化的磁場。這個磁場穿過鐵質鍋底，在鍋底產生強烈的<strong>渦電流</strong>。由於鍋底具有電阻，渦電流生熱（焦耳熱）從而直接加熱食物。
+                    </p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">2. 力學效應應用：磁力制動</p>
+                    <p class="text-sm text-slate-600">
+                        當金屬片（如火車輪或過山車銅片）通過強磁場時，感應出的渦電流會受到阻礙其運動的磁力作用（冷次定律）。這種無接觸的阻力能使列車平穩減速，稱為<strong>電磁阻尼（渦流制動）</strong>。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 發電機與電動機對照表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8">發電機 (Generator)</th>
+                        <th class="p-3 font-semibold w-3/8">電動機 (Motor)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">能量轉化</td>
+                        <td class="p-3 text-green-700 font-bold">機械能 $\rightarrow$ 電能</td>
+                        <td class="p-3 text-red-600 font-bold">電能 $\rightarrow$ 機械能</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">基本原理</td>
+                        <td class="p-3">電磁感應現象（切割磁場線產生電流）</td>
+                        <td class="p-3">磁場對載流導線的作用力（通電導線受力旋轉）</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">判定方向的定則</td>
+                        <td class="p-3 font-bold text-blue-700">弗林明右手定則</td>
+                        <td class="p-3 font-bold text-blue-700">弗林明左手定則</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">發電機 (Generator)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">方向：</span> 機械能轉電能</li>
+                    <li><span class="font-medium text-slate-800">定則：</span> 右手定則</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">電動機 (Motor)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">方向：</span> 電能轉機械能</li>
+                    <li><span class="font-medium text-slate-800">定則：</span> 左手定則</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「電磁爐非常安全，因為它運作時就算用手直接摸集熱面板，手也完全不會被燙傷，所以電磁爐不產生熱能。」</li>
+                    <li>「變壓器功能強大，既可以把 220 V 的直流電升壓到 1000 V，也可以把交流電降壓。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>電磁爐產生交變磁場，只會在<strong>鐵磁性鍋底</strong>中感應出渦電流生熱。人手不是磁性導體，不會產生渦電流，所以集熱板本身不發熱（但剛拿開熱鍋時，集熱板會因鍋底傳熱而燙手，需小心）。</li>
+                    <li>變壓器<strong>只能在交流電路中工作</strong>。因為變壓器依賴於初級線圈中「不斷變化的電流」來產生「不斷變化的磁場」，從而在次級線圈感應出電壓。恆定的直流電無法在變壓器中引發感應。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 (變壓器計算) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個理想變壓器的初級線圈為 400 匝，次級線圈為 100 匝。若將初級線圈接駁到 $220 \text{ V}$ 的交流電源兩端。求：<br>
+                        (a) 次級線圈輸出的電壓。<br>
+                        (b) 這個變壓器是升壓變壓器還是降壓變壓器？<br>
+                        (c) 若次級線圈接上一個阻值為 $5\ \Omega$ 的電阻，求流經初級線圈的電流大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 計算輸出電壓 $V_2$：</strong></p>
+                        <p class="mb-2">利用變壓比公式：$$ \frac{V_1}{V_2} = \frac{N_1}{N_2} $$</p>
+                        $$ \frac{220}{V_2} = \frac{400}{100} = 4 \quad \implies \quad V_2 = \frac{220}{4} = 55 \text{ V} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 判斷類型：</strong></p>
+                        <p class="mb-2">因為次級線圈電壓 ($55 \text{ V}$) 小於初級線圈電壓 ($220 \text{ V}$)，這是一個<strong>降壓變壓器</strong>。</p>
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(c) 計算初級電流 $I_1$：</strong></p>
+                        <p class="mb-2">1. 先計算次級電流 $I_2$：$$ I_2 = \frac{V_2}{R} = \frac{55 \text{ V}}{5\ \Omega} = 11 \text{ A} $$</p>
+                        <p class="mb-2">2. 對於理想變壓器，輸入功率等於輸出功率（$V_1 I_1 = V_2 I_2$）：</p>
+                        $$ 220 \times I_1 = 55 \times 11 = 605 $$
+                        $$ I_1 = \frac{605}{220} = 2.75 \text{ A} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) $55 \text{ V}$；(b) 降壓變壓器；(c) 初級電流為 $2.75 \text{ A}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz7-2-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 關於理想變壓器的運作，下列哪一項物理敘述是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q72-1', 'quiz7-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 變壓器可以調高或降低直流電壓的大小</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q72-1', 'quiz7-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 變壓器運作時，次級線圈輸出的電功率不可能大於初級線圈輸入的電功率</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q72-1', 'quiz7-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 升壓變壓器在升高電壓的同時，也等比例地增大了電流的大小</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q72-1', 'quiz7-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 變壓器內部的軟鐵芯之所以做成薄片重疊狀（疊片鐵芯），是為了增加鐵芯的導電能力</button>
+                </div>
+                <div id="exp-q72-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據能量守恆定律，任何機器都不可能無中生有地創造能量。理想變壓器的輸出功率最多只能等於輸入功率 ($P_{\text{出}} = P_{\text{入}}$)。另外，升壓變壓器升高電壓時，電流會相應變小（$V \uparrow \implies I \downarrow$）；疊片鐵芯是為了減少因渦電流生熱產生的能量耗損。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz7-2-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 在電磁爐上煮食時，如果把不銹鋼平底鍋換成一個導熱性能極佳的純「鋁鍋」，會發現電磁爐幾乎無法將水煮沸。這最主要的物理原因是什麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q72-2', 'quiz7-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 鋁的導熱性太好，熱量立刻散失到空氣中</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q72-2', 'quiz7-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 鋁是非磁性材料，且電阻率極低，在交變磁場下產生的渦流發熱效果極差</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q72-2', 'quiz7-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 鋁會阻擋磁場，使磁場無法穿透鍋底</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q72-2', 'quiz7-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 鋁鍋底部的表面積太小</button>
+                </div>
+                <div id="exp-q72-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 電磁爐主要依賴磁性材料（如鐵、不銹鋼）在交變磁場下的磁滯效應以及渦流熱效應。鋁是非磁性材料，且電阻極小。雖然鋁中也會產生微弱渦流，但因為電阻極低，根據 $P = I^2R$ 或熱效應原理，其發熱效率（焦耳熱）極低，無法有效加熱。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 7.3: 法拉第定律的定量處理 -->
+<!-- ========================================== -->
+<article id="ch7-3" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">7.3</span>法拉第定律的定量處理</h2>
+        <p class="text-slate-500 mt-2">定量計算感生電動勢的大小，掌握法拉第電磁感應定律，並熟練計算直導線切割磁場線的電壓。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與法拉第定律</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>冷次定律定性地告訴了我們感生電流的方向；而<strong class="text-blue-700 font-bold">法拉第電磁感應定律</strong>則定量地說明了感生電動勢大小的決定因素：</p>
+            <blockquote class="border-l-4 border-blue-400 pl-4 py-2 bg-blue-50/50 text-blue-900 font-medium italic rounded-r-lg mb-4">
+                「在電磁感應現象中，電路中感生電動勢的大小，與穿過該電路的<strong>磁通量變化率</strong>成正比。」
+            </blockquote>
+            <p>為了定量描述穿過某一面積的磁場線總量，物理學引入了以下物理量：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">磁通量 ($\Phi$)：</strong> 
+                    定義為穿過某一面積的均勻磁感應強度 $B$ 與垂直於磁場方向的面積 $A$ 的乘積。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">磁通匝鏈 ($N\Phi$)：</strong> 
+                    對於由 $N$ 匝線圈組成的電路，穿過整個線圈的總磁通量為各匝線圈磁通量之和，即 $N\Phi$。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">法拉第電磁感應定律與導體切割磁場線的核心數學公式：</p>
+            
+            <div class="space-y-4">
+                <!-- 1 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-1">1. 磁通量計算式（磁場垂直於平面時）</p>
+                    <div class="text-xl font-bold text-center">$$ \Phi = B A $$</div>
+                    <p class="text-xs text-slate-500 mt-1">磁通量 $\Phi$ 的標準國際單位是<strong>韋伯 (Weber, $\text{Wb}$)</strong>。$1 \text{ Wb} = 1 \text{ T m}^2$。</p>
+                </div>
+                <!-- 2 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-1">2. 法拉第電磁感應定律（考慮 $N$ 匝線圈）</p>
+                    <div class="text-xl font-bold text-center">$$ \mathcal{E} = N \frac{\Delta \Phi}{\Delta t} $$</div>
+                    <p class="text-xs text-slate-500 mt-1">其中 $\mathcal{E}$ 為感生電動勢（單位：$\text{V}$），$\frac{\Delta \Phi}{\Delta t}$ 為磁通量隨時間的變化率。</p>
+                </div>
+                <!-- 3 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-1">3. 直導線切割磁場線產生的動生電動勢</p>
+                    <div class="text-xl font-bold text-center">$$ \mathcal{E} = B l v $$</div>
+                    <p class="text-xs text-slate-500 mt-1">當長度為 $l$ 的直導體以速度 $v$ 在磁感應強度為 $B$ 的均勻磁場中作<strong>垂直</strong>切割運動時產生的電動勢大小。若非垂直運動，則為 $B l v \sin\theta$。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 記憶摘要卡片 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-address-card text-blue-500 mr-2"></i> 概念摘要記憶卡片</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">磁通量的本質</h4>
+                <p class="text-xs text-slate-600">磁通量 $\Phi = BA$ 代表穿過特定面積的磁場線「總根數」。磁通密度（即 $\frac{\Phi}{A}$）在數值上等於磁感應強度 $B$。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">變化率是關鍵</h4>
+                <p class="text-xs text-slate-600">感生電動勢的大小只取決於磁通量的<strong>變化快慢（變化率 $\frac{\Delta\Phi}{\Delta t}$）</strong>，與磁通量本身的絕對數值大小無關。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">直導線切割電壓</h4>
+                <p class="text-xs text-slate-600">公式 $\mathcal{E} = Blv$ 描述了動生電動勢。導線越長、磁場越強、移動越快，兩端產生的感應電壓就越大。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「穿過線圈的磁通量 $\Phi$ 越大，線圈中產生的感生電動勢就一定越大。」</li>
+                    <li>「一根直導體在均勻磁場中運動。只要它的速度非常快，導線兩端就必然會產生巨大的感生電動勢。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>大錯特錯！</strong> 電動勢取決於磁通量的「變化率」而不是「數值」。一個放在極強恆定磁場中的靜止線圈，其磁通量巨大，但變化率為零，因此電動勢為零。而一個微弱磁場迅速消失時，變化率極高，反而會產生很大的電動勢。</li>
+                    <li>如果導體的運動方向與磁場線<strong>完全平行</strong>（即沒有進行切割磁場線的運動），此時 $\sin\theta = 0$，即使速度再快，產生的電動勢也<strong>絕對為零</strong>。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (法拉第定律計算) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個包含 200 匝的扁平圓線圈，其橫截面積為 $0.05 \text{ m}^2$。線圈垂直放置在均勻磁場中。在 $0.2 \text{ s}$ 的時間內，磁感應強度由原本的 $0.1 \text{ T}$ 均勻增加到 $0.5 \text{ T}$。求：<br>
+                        (a) 初始和最終穿過單匝線圈的磁通量。<br>
+                        (b) 這段時間內，線圈中產生的平均感生電動勢大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 計算初始和最終磁通量 $\Phi_1, \Phi_2$：</strong></p>
+                        $$\Phi_1 = B_1 A = 0.1 \text{ T} \times 0.05 \text{ m}^2 = 5.0 \times 10^{-3} \text{ Wb}$$
+                        $$\Phi_2 = B_2 A = 0.5 \text{ T} \times 0.05 \text{ m}^2 = 2.5 \times 10^{-2} \text{ Wb}$$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 計算平均感生電動勢 $\mathcal{E}$：</strong></p>
+                        <p class="mb-1">首先求單匝磁通量的改變量 $\Delta \Phi$：</p>
+                        $$\Delta \Phi = \Phi_2 - \Phi_1 = (2.5 \times 10^{-2}) - (0.5 \times 10^{-2}) = 2.0 \times 10^{-2} \text{ Wb}$$
+                        <p class="mb-2">代入法拉第電磁感應定律：</p>
+                        $$\mathcal{E} = N \frac{\Delta \Phi}{\Delta t} = 200 \times \frac{2.0 \times 10^{-2} \text{ Wb}}{0.2 \text{ s}}$$
+                        $$\mathcal{E} = 200 \times 0.1 = 20 \text{ V}$$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 初始為 $5.0 \times 10^{-3} \text{ Wb}$，最終為 $2.5 \times 10^{-2} \text{ Wb}$；(b) 感生電動勢為 $20 \text{ V}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (Blv 切割公式) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一架飛機的翼展（兩翼尖端之間的距離）為 $30 \text{ m}$。飛機在北半球以 $250 \text{ m s}^{-1}$ 的速度水平向前飛行。已知該處地磁場的垂直分量大小為 $4.0 \times 10^{-5} \text{ T}$，方向垂直向下。求飛機兩翼尖端之間產生的感應電動勢大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">飛機水平飛行時，機翼（導體）剛好垂直切割地磁場的垂直向下磁場線。這是一個典型的導體切割磁場線模型。</p>
+                        <p class="mb-2">已知：導體有效長度 $l = 30 \text{ m}$，速度 $v = 250 \text{ m s}^{-1}$，垂直磁感應強度 $B = 4.0 \times 10^{-5} \text{ T}$。</p>
+                        <p class="mb-2">直接代入動生電動勢公式：</p>
+                        $$\mathcal{E} = B l v$$
+                        $$\mathcal{E} = (4.0 \times 10^{-5} \text{ T}) \times 30 \text{ m} \times 250 \text{ m s}^{-1}$$
+                        $$\mathcal{E} = 4.0 \times 10^{-5} \times 7500 = 0.3 \text{ V}$$
+                        <p class="mt-2 font-bold text-green-700">答案：飛機兩翼尖端之間產生的感生電動勢大小為 $0.3 \text{ V}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz7-3-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 根據法拉第電磁感應定律，在一個閉合線圈中產生的感生電動勢大小，直接與下列哪一個物理量成正比？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q73-1', 'quiz7-3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 穿過線圈的總磁通量的大小</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q73-1', 'quiz7-3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 線圈內部導線的電阻大小</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q73-1', 'quiz7-3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 穿過線圈的磁通量的變化率</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q73-1', 'quiz7-3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 外加永久磁鐵的重量大小</button>
+                </div>
+                <div id="exp-q73-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 法拉第定律指出，感生電動勢大小與磁通量變化快慢成正比，即 $\mathcal{E} \propto \frac{\Delta\Phi}{\Delta t}$。磁通量大但如果完全不改變，便不會有電動勢。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz7-3-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 在均勻磁場中，一根直導體棒與磁場線方向平行放置。若我們以極高的速度垂直於導線方向移動這根導體棒，則導體棒兩端產生的感應電動勢大小為多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q73-2', 'quiz7-3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 數值非常巨大</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q73-2', 'quiz7-3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 數值非常微小但非零</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q73-2', 'quiz7-3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q73-2', 'quiz7-3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 取決於導體棒的粗細</button>
+                </div>
+                <div id="exp-q73-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 導線本身與磁場平行，此時導體移動時，其內部的自由電荷並未進行「切割磁場線」的有效移動（或者從公式 $\mathcal{E} = Blv\sin\theta$ 來看，導線與磁場夾角 $\theta = 0^\circ$，$\sin 0^\circ = 0$）。因此，感應電動勢必定為零。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
             
 <!-- ========================================== -->
           
