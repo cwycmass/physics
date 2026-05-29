@@ -2985,14 +2985,14 @@
                 <li>$m$：質量 (SI 單位：千克 $\text{kg}$)</li>
                 <li>$g$：重力加速度 (地球表面平均約為 $9.81 \text{ m s}^{-2}$)</li>
                 <hr class="border-blue-200 my-2">
-                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>升降機內的運動方程：</strong> 設向上為正，淨力 $F_{\text{net}} = R - mg = ma$。因此視重 $R = m(g + a)$。</li>
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>升降機內的運動方程：</strong> 設向上為正，淨力 $F_{\text{net}} = R - mg = ma$。因此表觀重量 $R = m(g + a)$。</li>
             </ul>
         </div>
     </section>
 
     <!-- 📊 3. 重要性質 / 物理規律對照 -->
     <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 升降機內的視重變化對照表</h3>
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 升降機內的表觀重量變化對照表</h3>
         <!-- 桌機版 Table -->
         <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
             <table class="w-full text-left text-slate-700">
@@ -3000,7 +3000,7 @@
                     <tr>
                         <th class="p-3 font-semibold w-1/4">運動狀態 (加速度 $a$)</th>
                         <th class="p-3 font-semibold w-1/4">牛頓第二定律方程</th>
-                        <th class="p-3 font-semibold w-1/4">磅的讀數 (視重 $R$)</th>
+                        <th class="p-3 font-semibold w-1/4">磅的讀數 (表觀重量 $R$)</th>
                         <th class="p-3 font-semibold w-1/4">對重量的感覺</th>
                     </tr>
                 </thead>
@@ -3037,21 +3037,21 @@
             <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                 <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">靜止 / 勻速 ($a = 0$)</h4>
                 <ul class="text-sm space-y-1 text-slate-600">
-                    <li><span class="font-medium text-slate-800">視重：</span> $R = mg$ (感覺如常)</li>
+                    <li><span class="font-medium text-slate-800">表觀重量：</span> $R = mg$ (感覺如常)</li>
                 </ul>
             </div>
             <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                 <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">向上加速 / 向下減速</h4>
                 <ul class="text-sm space-y-1 text-slate-600">
                     <li><span class="font-medium text-slate-800">加速度：</span> 向上</li>
-                    <li><span class="font-medium text-slate-800">視重：</span> $R = m(g+a)$ <strong class="text-red-600">(超重)</strong></li>
+                    <li><span class="font-medium text-slate-800">表觀重量：</span> $R = m(g+a)$ <strong class="text-red-600">(超重)</strong></li>
                 </ul>
             </div>
             <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                 <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">向下加速 / 向上減速</h4>
                 <ul class="text-sm space-y-1 text-slate-600">
                     <li><span class="font-medium text-slate-800">加速度：</span> 向下</li>
-                    <li><span class="font-medium text-slate-800">視重：</span> $R = m(g-a)$ <strong class="text-blue-600">(失重)</strong></li>
+                    <li><span class="font-medium text-slate-800">表觀重量：</span> $R = m(g-a)$ <strong class="text-blue-600">(失重)</strong></li>
                 </ul>
             </div>
         </div>
@@ -3219,13 +3219,13 @@
                     <button onclick="checkAnswer(this, false, 'exp-q34-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 無法判斷</button>
                 </div>
                 <div id="exp-q34-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 「向下減速」代表速度向下，但加速度方向必須相反，即<strong>向上</strong>。加速度向上時，$R - mg = ma \implies R = m(g + a)$，視重 $R$ 增加，感覺變重。
+                    <strong>解析：</strong> 「向下減速」代表速度向下，但加速度方向必須相反，即<strong>向上</strong>。加速度向上時，$R - mg = ma \implies R = m(g + a)$，表觀重量 $R$ 增加，感覺變重。
                 </div>
             </div>
 
             <!-- Q5 -->
             <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 過山車從最高點急速下墜的瞬間，乘客會有一種身體飄起的感覺。若某瞬間過山車下落的加速度剛好等於重力加速度 $g$，此時乘客的視重為多少？</p>
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 過山車從最高點急速下墜的瞬間，乘客會有一種身體飄起的感覺。若某瞬間過山車下落的加速度剛好等於重力加速度 $g$，此時乘客的表觀重量為多少？</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <button onclick="checkAnswer(this, false, 'exp-q34-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 大於 $mg$</button>
                     <button onclick="checkAnswer(this, false, 'exp-q34-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 等於 $mg$</button>
@@ -8421,7 +8421,7 @@
     <section class="mb-10">
         <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
         <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-            <p>在十七世紀，牛頓提出了一個震驚科學界的理論：使蘋果掉落到地面的力，與使月球維持在軌道上繞地球運行的力，其實是 <strong class="text-blue-700 font-bold">同一種力</strong>。這就是 <strong class="text-blue-700 font-bold">萬有引力 (Universal Gravitation)</strong>。</p>
+            <p>在十七世紀，牛頓提出了一個震驚科學界的理論：使蘋果掉落到地面的力，與使月球維持在軌道上繞地球運行的力，其實是 <strong class="text-blue-700 font-bold">同一種力</strong>。這就是 <strong class="text-blue-700 font-bold">萬有引力 ( Gravitation)</strong>。</p>
             <ul class="list-disc list-inside ml-2 space-y-3">
                 <li>
                     <strong class="text-blue-700 font-bold">牛頓萬有引力定律：</strong> 
@@ -8454,7 +8454,7 @@
                 </div>
             </div>
             <ul class="text-sm text-slate-600 space-y-1">
-                <li>$G$：萬有引力常數 (Universal gravitational constant)，數值約為 $6.67 \times 10^{-11} \text{ N m}^2 \text{ kg}^{-2}$。這是一個極小的數值。</li>
+                <li>$G$：萬有引力常數，數值約為 $6.67 \times 10^{-11} \text{ N m}^2 \text{ kg}^{-2}$。這是一個極小的數值。</li>
                 <li>$m_1, m_2$：兩個物體的質量 (單位：$\text{kg}$)。</li>
             </ul>
         </div>
@@ -8702,7 +8702,7 @@
 
     <!-- 📐 2. 核心公式與單位 -->
     <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 軌道速度與克卜勒第三定律</h3>
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 軌道速度與開普勒第三定律</h3>
         <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
             <p class="text-slate-700 mb-3">透過等式 $F_g = F_c$，我們可以推導出兩個極為重要的軌道公式：</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
@@ -8713,7 +8713,7 @@
                     <p class="text-xs text-slate-500 mt-2">注意：衛星的質量 $m$ 被消去了，速度只與軌道半徑 $r$ 及中心星體質量 $M$ 有關。</p>
                 </div>
                 <div class="bg-white p-4 rounded border border-blue-100 text-center">
-                    <p class="font-bold text-blue-800 mb-2">克卜勒第三定律 ($T^2 \propto r^3$)</p>
+                    <p class="font-bold text-blue-800 mb-2">開普勒第三定律 ($T^2 \propto r^3$)</p>
                     <p class="mb-1">代入 $v = \frac{2\pi r}{T}$，可得：</p>
                     <p class="text-2xl font-bold text-blue-900 mt-2">$$ T^2 = \left(\frac{4\pi^2}{GM}\right) r^3 $$</p>
                     <p class="text-xs text-slate-500 mt-2">軌道半徑越大，公轉週期 $T$ 就會越長。</p>
@@ -8796,7 +8796,7 @@
             <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
                 <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
                 <ul class="text-sm space-y-3 list-disc list-inside">
-                    <li><strong>太空中仍有強大的引力！</strong> 國際太空站高度的地心引力仍有地表的 $90\%$。太空人會飄浮是因為他們與太空站 <strong>正以相同的向心加速度繞着地球「自由下落」</strong>。由於缺乏地板的支撐力（法向反作用力 $N = 0$），產生了「視重為零（無重）」的感覺。</li>
+                    <li><strong>太空中仍有強大的引力！</strong> 國際太空站高度的地心引力仍有地表的 $90\%$。太空人會飄浮是因為他們與太空站 <strong>正以相同的向心加速度繞着地球「自由下落」</strong>。由於缺乏地板的支撐力（法向反作用力 $N = 0$），產生了「表觀重量為零（無重）」的感覺。</li>
                     <li>根據公式 $v = \sqrt{\frac{GM}{r}}$，軌道速度只與軌道半徑 $r$ 有關，與衛星本身的質量 $m$ 完全無關！</li>
                 </ul>
             </div>
@@ -8849,7 +8849,7 @@
                     </summary>
                     <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
                         <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                        <p class="mb-2">根據克卜勒第三定律，對於繞同一個中心星體（地球）運行的所有衛星：</p>
+                        <p class="mb-2">根據開普勒第三定律，對於繞同一個中心星體（地球）運行的所有衛星：</p>
                         $$ \frac{T_1^2}{r_1^3} = \frac{T_2^2}{r_2^3} = \text{常數} $$
                         <p class="mb-2">將公式重新排列：</p>
                         $$ \left(\frac{T_2}{T_1}\right)^2 = \left(\frac{r_2}{r_1}\right)^3 $$
@@ -8869,7 +8869,7 @@
                     <p class="text-slate-800 leading-relaxed font-medium">
                         一名質量為 $70 \text{ kg}$ 的太空人站在國際太空站內的體重磅上。若太空站正以圓周軌道繞地球運行，該處的重力加速度 $g' = 8.7 \text{ m s}^{-2}$。<br>
                         (a) 計算地球對太空人的萬有引力（真實重量）。<br>
-                        (b) 體重磅的讀數（視重）是多少？試用牛頓第二定律解釋原因。
+                        (b) 體重磅的讀數（表觀重量）是多少？試用牛頓第二定律解釋原因。
                     </p>
                 </div>
                 <details class="mt-4 group">
@@ -8882,7 +8882,7 @@
                         <p class="mb-2"><strong>(a) 真實重量：</strong> 取決於當地的引力場強度 $g'$。</p>
                         $$ W = m g' = 70 \times 8.7 = 609 \text{ N} $$
                         <hr class="my-3 border-amber-200">
-                        <p class="mb-2"><strong>(b) 視重（磅的讀數 $R$）：</strong></p>
+                        <p class="mb-2"><strong>(b) 表觀重量（磅的讀數 $R$）：</strong></p>
                         <p class="mb-2">太空人和太空站一起繞地運動，向心力由萬有引力提供，因此他們都有一個指向地心的向心加速度 $a_c = g'$。</p>
                         <p class="mb-2">根據牛頓第二定律（以向地心為正方向）：</p>
                         $$ F_{\text{net}} = m a_c $$
@@ -8947,12 +8947,12 @@
                     <button onclick="checkAnswer(this, true, 'exp-q102-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 太空人和太空站正以相同的加速度繞地球作連續的自由下落</button>
                 </div>
                 <div id="exp-q102-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 這被稱為「視重為零 (Apparent weightlessness)」。因為太空人和地板都在以同一個加速度向地心「掉落」（轉彎），所以地板不需要對太空人施加任何向上的支撐力（法向反作用力 $N=0$），產生了飄浮的錯覺。
+                    <strong>解析：</strong> 這被稱為「表觀無重」。因為太空人和地板都在以同一個加速度向地心「掉落」（轉彎），所以地板不需要對太空人施加任何向上的支撐力（法向反作用力 $N=0$），產生了飄浮的錯覺。
                 </div>
             </div>
 
             <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 根據克卜勒第三定律，行星繞太陽公轉的週期 ($T$) 和軌道半徑 ($r$) 之間的數學比例關係為何？</p>
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 根據開普勒第三定律，行星繞太陽公轉的週期 ($T$) 和軌道半徑 ($r$) 之間的數學比例關係為何？</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <button onclick="checkAnswer(this, false, 'exp-q102-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $T \propto r^2$</button>
                     <button onclick="checkAnswer(this, false, 'exp-q102-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $T^2 \propto r$</button>
@@ -8960,7 +8960,7 @@
                     <button onclick="checkAnswer(this, false, 'exp-q102-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $T^3 \propto r^2$</button>
                 </div>
                 <div id="exp-q102-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 克卜勒第三定律（可以由 $G\frac{Mm}{r^2} = m\frac{4\pi^2 r}{T^2}$ 推導出）表明，週期的平方與軌道半徑的立方成正比，即 $T^2 \propto r^3$。
+                    <strong>解析：</strong> 開普勒第三定律（可以由 $G\frac{Mm}{r^2} = m\frac{4\pi^2 r}{T^2}$ 推導出）表明，週期的平方與軌道半徑的立方成正比，即 $T^2 \propto r^3$。
                 </div>
             </div>
         </div>
