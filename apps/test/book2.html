@@ -402,307 +402,1829 @@
                 </section>
             </article>
 
-            <!-- ========================================== -->
-            <!-- 區塊 1.2: 速率與速度 (空殼佔位) -->
-            <!-- ========================================== -->
-            <article id="ch1-2" class="content-section hidden">
-                <header class="mb-8 border-b-2 border-slate-200 pb-4">
-                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.2</span>速率與速度</h2>
-                    <p class="text-slate-500 mt-2">介紹平均速率、平均速度以及勻速運動的概念。</p>
-                </header>
-                <div class="p-10 text-center text-slate-400 bg-white border border-dashed border-slate-300 rounded-2xl">
-                    <i class="fa-solid fa-person-digging text-4xl mb-3"></i>
-                    <p>此章節內容建置中...</p>
-                    <p class="text-sm mt-2">將嚴格遵守 6 大結構：定義、公式、對照表、迷思、例題、測驗</p>
+<!-- ========================================== -->
+<!-- 區塊 1.2: 距離和位移 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch1-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.2</span>距離和位移</h2>
+        <p class="text-slate-500 mt-2">學習設定參考點，並理解標量（距離）與矢量（位移）在描述位置變化時的關鍵差異。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>要描述物體的運動，我們必須先定義物體的 <strong class="text-blue-700 font-bold">位置 (Position)</strong>。要準確指出位置，必須先選定一個 <strong class="text-blue-700 font-bold">參考點 (Reference point)</strong>。</p>
+            <p>當物體的位置發生改變時，我們可以用兩個不同的物理量來描述這段運動過程：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">距離 (Distance, $d$)：</strong> 
+                    物體在運動過程中，實際走過的路徑總長度。它是一個 <strong class="text-blue-700">標量 (Scalar)</strong>，即只有大小，沒有方向。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">位移 (Displacement, $s$)：</strong> 
+                    物體位置的淨變化。它是由「起點」直線指向「終點」的距離與方向。它是一個 <strong class="text-blue-700">矢量 (Vector)</strong>，同時具備大小和方向。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">在一維（直線）運動中，位移 $\vec{s}$ 可以用坐標的差值來計算：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$\vec{s} = x_f - x_i$$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$x_f$：物體的最終位置 (Final position)</li>
+                <li>$x_i$：物體的初始位置 (Initial position)</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>SI 單位：</strong> 距離和位移的國際標準單位皆為 <strong class="text-blue-700">米 (metre, $\text{m}$)</strong>。</li>
+                <li><i class="fa-solid fa-compass text-blue-500 mr-1"></i> <strong>方向表示：</strong> 在一維空間，我們通常用正號 ($+$) 和負號 ($-$) 來表示位移的方向（例如：向右為正，向左為負）。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 距離與位移對照表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8">距離 (Distance)</th>
+                        <th class="p-3 font-semibold w-3/8">位移 (Displacement)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">物理量性質</td>
+                        <td class="p-3 font-bold text-slate-700">標量 (Scalar)</td>
+                        <td class="p-3 font-bold text-blue-700">矢量 (Vector)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">考慮因素</td>
+                        <td class="p-3">與物體實際行走的 <strong>路徑</strong> 有關</td>
+                        <td class="p-3">只與 <strong>起點和終點</strong> 的位置有關</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">數值特性</td>
+                        <td class="p-3">永遠是正值（或零），會不斷累積增加</td>
+                        <td class="p-3">可正、可負、可為零</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">大小關係</td>
+                        <td class="p-3" colspan="2">距離 <strong>永遠大於或等於</strong> 位移的大小 ($d \ge |s|$)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">距離 (Distance)</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">性質：</span> 標量（只有大小）。</li>
+                    <li><span class="font-medium text-slate-800">路徑：</span> 與實際行走路徑有關，會不斷累積。</li>
+                    <li><span class="font-medium text-slate-800">數值：</span> 永遠為正（或零）。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">位移 (Displacement)</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">性質：</span> 矢量（具備大小和方向）。</li>
+                    <li><span class="font-medium text-slate-800">路徑：</span> 僅取決於起點與終點的直線。</li>
+                    <li><span class="font-medium text-slate-800">數值：</span> 可正、可負、可為零。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>「位移的大小就是距離。如果我走了 $10 \text{ m}$，位移的大小一定也是 $10 \text{ m}$。」</li>
+                    <li>「物體運動了很長時間，位移一定很大。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-2 list-disc list-inside">
+                    <li>只有當物體作 <strong>單向直線運動</strong> 時，距離才等於位移的大小。只要物體有轉彎或折返，距離必定 <strong>大於</strong> 位移的大小。</li>
+                    <li>位移只看「起點」和「終點」。如果物體繞了一大圈回到原點，即使運動時間很長、距離很遠，其位移依然是 <strong>零</strong>。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (一維折返) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        子健從家裡出發，先向東走了 $40 \text{ m}$ 到達便利店，發現忘記帶錢包，於是原路向西折返了 $15 \text{ m}$ 到達公園等候家人。求子健的 (a) 總距離 與 (b) 總位移。
+                    </p>
                 </div>
-            </article>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 總距離：</strong> 將所有走過的路徑長度相加，不考慮方向。</p>
+                        $$d = 40 + 15 = 55 \text{ m}$$
+                        <p class="mt-4 mb-2"><strong>(b) 總位移：</strong> 位移需考慮方向。設定向東為正 ($+$)，向西為負 ($-$)。</p>
+                        $$s = (+40) + (-15) = +25 \text{ m}$$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 距離為 $55 \text{ m}$；(b) 位移為 $25 \text{ m}$，方向向東（因為是正值）。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (二維畢氏定理) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        救生員在沙灘上巡邏。他先向北跑了 $40 \text{ m}$，然後轉向東跑了 $30 \text{ m}$ 到達觀察塔。求他運動的 (a) 距離 和 (b) 位移的大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 距離：</strong> 實際路徑的總和。</p>
+                        $$d = 40 + 30 = 70 \text{ m}$$
+                        <p class="mt-4 mb-2"><strong>(b) 位移大小：</strong> 起點與終點之間的直線距離。由於向北與向東互相垂直，可使用畢氏定理計算斜邊。</p>
+                        $$|s| = \sqrt{40^2 + 30^2} = \sqrt{1600 + 900} = \sqrt{2500} = 50 \text{ m}$$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 距離為 $70 \text{ m}$；(b) 位移大小為 $50 \text{ m}$。</p>
+                        <p class="text-sm text-slate-500 mt-1">（註：完整的位移答案還需用角度標示方向，本題僅求大小。）</p>
+                    </div>
+                </details>
+            </div>
 
-            <!-- 其他佔位章節 -->
-            <article id="ch1-3" class="content-section hidden"><header><h2 class="text-3xl font-black text-slate-800">1.3 勻加速運動</h2></header><div class="p-10 text-center text-slate-400 mt-4 bg-white border border-dashed rounded-2xl">建置中...</div></article>
-            <article id="ch2-1" class="content-section hidden"><header><h2 class="text-3xl font-black text-slate-800">2.1 牛頓第一定律</h2></header><div class="p-10 text-center text-slate-400 mt-4 bg-white border border-dashed rounded-2xl">建置中...</div></article>
-            <article id="ch2-2" class="content-section hidden"><header><h2 class="text-3xl font-black text-slate-800">2.2 牛頓第二定律</h2></header><div class="p-10 text-center text-slate-400 mt-4 bg-white border border-dashed rounded-2xl">建置中...</div></article>
+            <!-- 例題 3 (圓形軌跡) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        遙控車在半徑為 $10 \text{ m}$ 的圓形賽道上行駛。若它從 A 點出發，行駛了剛好「一圈半」後停在 B 點。求這段過程中遙控車的距離和位移大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>距離：</strong> 走了一圈半，即 $1.5$ 倍的圓周長。</p>
+                        $$d = 1.5 \times (2\pi r) = 1.5 \times (2 \times \pi \times 10) = 30\pi \approx 94.2 \text{ m}$$
+                        <p class="mt-4 mb-2"><strong>位移大小：</strong> 走一圈半後，終點 B 剛好位於起點 A 的對面。起點與終點的最短直線距離即為圓的「直徑」。</p>
+                        $$|s| = 2r = 2 \times 10 = 20 \text{ m}$$
+                        <p class="mt-2 font-bold text-green-700">答案：距離為 $30\pi \text{ m}$（約 $94.2 \text{ m}$），位移大小為 $20 \text{ m}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 下列關於「距離」與「位移」的敘述，哪一項是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q12-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 兩者皆為矢量</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 距離是矢量，位移是標量</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q12-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 距離是標量，位移是矢量</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 兩者皆為標量</button>
+                </div>
+                <div id="exp-q12-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 距離只有大小，沒有方向，所以是標量；位移由起點指向終點，具有大小和方向，所以是矢量。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 運動員在 $400 \text{ m}$ 的田徑跑道上完成了一次完整的起跑與衝線（即跑完剛好一圈回到起點）。下列何者正確描述了他的運動？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q12-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 距離為 $0 \text{ m}$，位移為 $400 \text{ m}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q12-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 距離為 $400 \text{ m}$，位移為 $0 \text{ m}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 距離與位移皆為 $400 \text{ m}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 距離與位移皆為 $0 \text{ m}$</button>
+                </div>
+                <div id="exp-q12-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 他跑過了 $400 \text{ m}$ 的實際軌跡，故距離為 $400 \text{ m}$。因為他回到了「原本的起點」，起點與終點重合，故位移（位置變化）為 $0 \text{ m}$。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 比較任何物體運動過程中的「距離 ($d$)」與「位移的大小 ($|s|$)」，下列哪一個數學關係絕對正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q12-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $d < |s|$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q12-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $d \ge |s|$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $d = |s|$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 兩者之間無法比較</button>
+                </div>
+                <div id="exp-q12-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 兩點之間以「直線」最短。位移量值代表起終點的最短距離，而實際行走距離可能因轉彎或折返而變長，因此距離永遠大於或等於位移的大小。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 螞蟻在桌面上先向東爬行了 $6 \text{ cm}$，再向北爬行了 $8 \text{ cm}$。牠的總位移大小為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q12-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $14 \text{ cm}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $2 \text{ cm}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q12-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $10 \text{ cm}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $48 \text{ cm}$</button>
+                </div>
+                <div id="exp-q12-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 東和北互相垂直，位移是由起點直指終點的斜邊。利用畢氏定理：$ \sqrt{6^2 + 8^2} = \sqrt{36 + 64} = \sqrt{100} = 10 \text{ cm} $。注意：$14 \text{ cm}$ 是總距離。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 在一維坐標軸上，物體從 $x = +2 \text{ m}$ 的位置移動到了 $x = -5 \text{ m}$ 的位置。該物體的位移為多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q12-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $+7 \text{ m}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q12-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $-7 \text{ m}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $-3 \text{ m}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $+3 \text{ m}$</button>
+                </div>
+                <div id="exp-q12-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 位移公式 $ \vec{s} = x_f - x_i $。代入數值：$ \vec{s} = (-5) - (+2) = -7 \text{ m} $。負號表示位移的方向指向坐標軸的負方向。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 1.3: 速率、速度和加速度 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch1-3" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.3</span>速率、速度和加速度</h2>
+        <p class="text-slate-500 mt-2">了解描述物體運動快慢與方向的物理量，並掌握加速度的真正物理意義。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在日常用語中，「速率」和「速度」常被混用，但在物理學中，它們有嚴格的區別：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">速率 (Speed, $v$)：</strong> 
+                    物體在單位時間內所行走的「距離」。它只描述運動的快慢，是一個 <strong class="text-blue-700">標量 (Scalar)</strong>。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">速度 (Velocity, $\vec{v}$)：</strong> 
+                    物體在單位時間內的「位移」。它不僅描述運動的快慢，還描述了運動的方向，是一個 <strong class="text-blue-700">矢量 (Vector)</strong>。
+                </li>
+            </ul>
+            <hr class="my-4 border-slate-100">
+            <p>當物體的速度發生改變（不論是變快、變慢，或是轉彎改變方向），我們說該物體具有：</p>
+            <ul class="list-disc list-inside ml-2">
+                <li>
+                    <strong class="text-blue-700 font-bold">加速度 (Acceleration, $\vec{a}$)：</strong> 
+                    物體「速度」在單位時間內的變化率。它也是一個 <strong class="text-blue-700">矢量 (Vector)</strong>。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">平均速率、平均速度與平均加速度的計算公式：</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 text-lg">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="text-sm text-slate-500 mb-1">平均速率</p>
+                    $$v = \frac{d}{t}$$
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="text-sm text-slate-500 mb-1">平均速度</p>
+                    $$\vec{v} = \frac{\vec{s}}{t}$$
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded border border-blue-100 text-center text-lg my-4">
+                <p class="text-sm text-slate-500 mb-1">平均加速度</p>
+                $$\vec{a} = \frac{\vec{v} - \vec{u}}{t}$$
+            </div>
+
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$d$：總距離；$\vec{s}$：總位移；$t$：經歷的時間</li>
+                <li>$\vec{v}$：最終速度 (Final velocity)；$\vec{u}$：初始速度 (Initial velocity)</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>SI 單位：</strong> 速率和速度的單位是 <strong class="text-blue-700">$\text{m s}^{-1}$</strong>；加速度的單位是 <strong class="text-blue-700">$\text{m s}^{-2}$</strong>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 速度與加速度的正負號關係</h3>
+        <p class="text-slate-700 mb-3">在一維直線運動中，正負號代表方向。加速度的作用是「改變速度」，透過比較 $\vec{v}$ 和 $\vec{a}$ 的方向，我們能判斷物體是在加速還是減速：</p>
+        
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">速度 ($\vec{v}$) 方向</th>
+                        <th class="p-3 font-semibold w-1/4">加速度 ($\vec{a}$) 方向</th>
+                        <th class="p-3 font-semibold w-1/4">兩者關係</th>
+                        <th class="p-3 font-semibold w-1/4">運動狀態結果</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 text-green-700 font-bold">$+$ (向正方)</td>
+                        <td class="p-3 text-green-700 font-bold">$+$ (向正方)</td>
+                        <td class="p-3">同向</td>
+                        <td class="p-3 font-bold text-blue-700">加速前進</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 text-green-700 font-bold">$+$ (向正方)</td>
+                        <td class="p-3 text-red-600 font-bold">$-$ (向負方)</td>
+                        <td class="p-3">反向</td>
+                        <td class="p-3 font-bold text-amber-600">減速前進 (煞車)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 text-red-600 font-bold">$-$ (向負方)</td>
+                        <td class="p-3 text-red-600 font-bold">$-$ (向負方)</td>
+                        <td class="p-3">同向</td>
+                        <td class="p-3 font-bold text-blue-700">加速後退</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 text-red-600 font-bold">$-$ (向負方)</td>
+                        <td class="p-3 text-green-700 font-bold">$+$ (向正方)</td>
+                        <td class="p-3">反向</td>
+                        <td class="p-3 font-bold text-amber-600">減速後退</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">同向 (相同符號)</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">$\vec{v}$ 與 $\vec{a}$ 皆為正：</span> 向前加速。</li>
+                    <li><span class="font-medium text-slate-800">$\vec{v}$ 與 $\vec{a}$ 皆為負：</span> 向後加速。</li>
+                    <li><span class="font-bold text-blue-600">結論：只要同向，物體就會變快。</span></li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-amber-600 border-b border-slate-100 pb-2 mb-2">反向 (符號相反)</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">$\vec{v}$ 正, $\vec{a}$ 負：</span> 向前減速 (煞車)。</li>
+                    <li><span class="font-medium text-slate-800">$\vec{v}$ 負, $\vec{a}$ 正：</span> 向後減速。</li>
+                    <li><span class="font-bold text-amber-600">結論：只要反向，物體就會變慢。</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「如果物體保持『勻速』(Constant speed) 運動，它的加速度必定為零。」</li>
+                    <li>「負的加速度 ($-a$) 永遠代表物體正在減速 (煞車)。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>若物體以勻速「轉彎」（例如圓周運動），速率雖然不變，但<strong>方向一直在改變</strong>。速度既是矢量，方向改變意味着速度改變了，所以<strong>加速度不為零</strong>！</li>
+                    <li>負加速度只代表加速度的「方向」。如果物體正在向後倒車 (負速度)，加上負加速度，兩者同向，物體其實是在<strong>加速倒車</strong>！</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (平均速率與平均速度) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        美明在直路上跑步，先向東跑了 $100 \text{ m}$，花了 $20 \text{ s}$；接着轉身向西走回 $40 \text{ m}$ 休息，花了 $40 \text{ s}$。求她整段旅程的 (a) 平均速率 和 (b) 平均速度。（取向東為正）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-1">總時間 $t = 20 + 40 = 60 \text{ s}$</p>
+                        <hr class="my-2 border-amber-200">
+                        <p class="mb-2"><strong>(a) 平均速率：</strong> 基於「總距離」。</p>
+                        $$d = 100 + 40 = 140 \text{ m}$$
+                        $$v = \frac{d}{t} = \frac{140}{60} = 2.33 \text{ m s}^{-1}$$
+                        <hr class="my-2 border-amber-200">
+                        <p class="mb-2"><strong>(b) 平均速度：</strong> 基於「總位移」。向東為 $+$，向西為 $-$。</p>
+                        $$\vec{s} = (+100) + (-40) = +60 \text{ m}$$
+                        $$\vec{v} = \frac{\vec{s}}{t} = \frac{+60}{60} = +1 \text{ m s}^{-1}$$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 平均速率為 $2.33 \text{ m s}^{-1}$；(b) 平均速度為 $1 \text{ m s}^{-1}$（向東）。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (加速度計算) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一輛汽車以 $15 \text{ m s}^{-1}$ 的速度向右行駛。司機踩下油門，汽車在 $4 \text{ s}$ 內均勻加速至 $27 \text{ m s}^{-1}$。求汽車的加速度。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">設定向右為正方向。</p>
+                        <ul class="list-disc list-inside mb-2">
+                            <li>初速度 $u = +15 \text{ m s}^{-1}$</li>
+                            <li>末速度 $v = +27 \text{ m s}^{-1}$</li>
+                            <li>時間 $t = 4 \text{ s}$</li>
+                        </ul>
+                        $$a = \frac{v - u}{t}$$
+                        $$a = \frac{27 - 15}{4} = \frac{12}{4} = 3 \text{ m s}^{-2}$$
+                        <p class="mt-2 font-bold text-green-700">答案：汽車的加速度為 $3 \text{ m s}^{-2}$ (正值代表方向向右)。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (減速與方向) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        接續上題，汽車以 $27 \text{ m s}^{-1}$ 向右行駛時，前方突然出現障礙物。司機緊急煞車，汽車在 $3 \text{ s}$ 後完全停下。求煞車期間汽車的加速度。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">設定向右為正方向。「完全停下」意味着末速度為 0。</p>
+                        <ul class="list-disc list-inside mb-2">
+                            <li>初速度 $u = +27 \text{ m s}^{-1}$</li>
+                            <li>末速度 $v = 0 \text{ m s}^{-1}$</li>
+                            <li>時間 $t = 3 \text{ s}$</li>
+                        </ul>
+                        $$a = \frac{v - u}{t}$$
+                        $$a = \frac{0 - 27}{3} = -9 \text{ m s}^{-2}$$
+                        <p class="mt-2 font-bold text-green-700">答案：加速度為 $-9 \text{ m s}^{-2}$。負號表示加速度方向向左（與向右的速度反向，故達成減速效果）。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 下列關於速率 (Speed) 和速度 (Velocity) 的敘述，哪一項是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q13-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 兩者皆為矢量，需要標明方向。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q13-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 速率是矢量，速度是標量。</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q13-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 速率是標量，速度是矢量。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q13-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 當汽車轉彎時，就算速率不變，速度也不會改變。</button>
+                </div>
+                <div id="exp-q13-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 速率（Distance/Time）只有大小，是標量。速度（Displacement/Time）具有方向性，是矢量。轉彎時方向改變，速度必定改變。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 賽車在環形賽道上繞了一圈，回到起點。在這完整的一圈中，賽車的平均速率和平均速度有何特徵？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q13-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 兩者皆為零。</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q13-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 平均速率大於零，平均速度為零。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q13-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 平均速率為零，平均速度大於零。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q13-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 兩者相等，且大於零。</button>
+                </div>
+                <div id="exp-q13-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 繞一圈回到起點，總距離不為零，故平均速率大於零。但回到起點代表「總位移 = 0」，因此平均速度 = 總位移/時間 = 0。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 假設我們設定向右為正方向。一輛汽車正在向左倒車，並且越來越快。這輛汽車的加速度符號為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q13-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 正號 ($+$)</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q13-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 負號 ($-$)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q13-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 零 ($0$)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q13-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 無法確定</button>
+                </div>
+                <div id="exp-q13-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 汽車向左運動，所以速度 $v$ 是負的。因為車子「越來越快（加速）」，代表加速度 $a$ 必須與速度 $v$ 同向才能幫忙加速。因此加速度 $a$ 也是向左，為負號。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 下列哪一種運動情況是不可能發生的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q13-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 速度為零，但加速度不為零。</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q13-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 物體的速率改變，但加速度為零。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q13-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 速率保持不變，但加速度不為零。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q13-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 速度和加速度方向相反。</button>
+                </div>
+                <div id="exp-q13-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> B 是不可能的。如果速率改變了，速度大小一定改變了，因此必定有加速度。A 是可能的（例如把球垂直向上拋到最高點的一瞬間）。C 也是可能的（例如勻速圓周運動轉彎）。D 就是煞車。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 電單車以 $5 \text{ m s}^{-1}$ 的初速度從紅綠燈處開出，並以 $2 \text{ m s}^{-2}$ 的固定加速度均勻加速。求 $6 \text{ s}$ 後電單車的速度。</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q13-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $12 \text{ m s}^{-1}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q13-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $15 \text{ m s}^{-1}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q13-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $17 \text{ m s}^{-1}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q13-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $30 \text{ m s}^{-1}$</button>
+                </div>
+                <div id="exp-q13-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據加速度公式 $ a = \frac{v - u}{t} $，可改寫為 $ v = u + at $。代入數據：$ v = 5 + (2 \times 6) = 5 + 12 = 17 \text{ m s}^{-1} $。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
 
             <!-- ========================================== -->
-            <!-- 區塊 3.1: 力 (新增內容) -->
+<!-- 區塊 2.1: 描述直線運動 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch2-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.1</span>描述直線運動</h2>
+        <p class="text-slate-500 mt-2">學習如何在一維空間中，利用正負號精確地表達位移、速度與加速度等矢量的方向。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>我們在第 1 章學會了位移、速度和加速度的意義。這些物理量都是 <strong class="text-blue-700 font-bold">矢量 (Vectors)</strong>，同時具備「量值」和「方向」。</p>
+            <p>當一個物體沿著一條 <strong>直路</strong>（一維空間）運動時，它的運動方向受到嚴格限制，不是向前就是向後，不是向左就是向右。也就是說，它 <strong>只可以指向兩個相反的方向</strong>。</p>
+            <hr class="my-4 border-slate-100">
+            <p><strong class="text-blue-700 font-bold">表達一維空間的矢量：</strong></p>
+            <p>遇上這種只有兩個相反方向的情況，我們在物理學中習慣選定其中一個方向為 <strong class="text-blue-700">正方向 (Positive direction)</strong>，並利用 <strong>正號 ($+$)</strong> 和 <strong>負號 ($-$)</strong> 來表示矢量的兩個方向。</p>
+            <ul class="list-disc list-inside ml-2 space-y-1">
+                <li>若矢量指向正方向，加上 <strong class="text-blue-700">$+$ 號</strong>（通常可省略不寫）。</li>
+                <li>若矢量指向反方向，加上 <strong class="text-red-600">$-$ 號</strong>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與符號約定 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 符號約定與表示法</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">我們可以任意指定正方向（例如取向北為正，向東為正，或向上為正）。一旦設定，整個題目的計算都必須嚴格遵守這個約定。</p>
+            
+            <div class="bg-white p-4 rounded border border-blue-100 my-4">
+                <p class="font-bold text-slate-800 mb-2">範例約定：取「向右」為正方向 ($+$)</p>
+                <div class="flex items-center justify-center space-x-8 text-center mt-4">
+                    <div>
+                        <i class="fa-solid fa-car-side text-3xl text-red-500 transform -scale-x-100"></i>
+                        <p class="mt-2 text-sm font-bold text-red-600">速度 $\vec{v} = -10 \text{ m s}^{-1}$</p>
+                        <p class="text-xs text-slate-500">代表向左移動 $10 \text{ m s}^{-1}$</p>
+                    </div>
+                    <div class="h-16 w-1 bg-slate-300 mx-4"></div>
+                    <div>
+                        <i class="fa-solid fa-car-side text-3xl text-blue-500"></i>
+                        <p class="mt-2 text-sm font-bold text-blue-700">速度 $\vec{v} = +15 \text{ m s}^{-1}$</p>
+                        <p class="text-xs text-slate-500">代表向右移動 $15 \text{ m s}^{-1}$</p>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>注意：</strong> 物理學中，矢量的負號純粹用來 <strong>指示方向</strong>，它絕對不代表數值上的「小於零」。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 數學「負號」在標量與矢量中的意義對照</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8">標量 (Scalar) 中的負號<br><span class="text-xs font-normal text-slate-500">(例：温度、銀行存款)</span></th>
+                        <th class="p-3 font-semibold w-3/8">矢量 (Vector) 中的負號<br><span class="text-xs font-normal text-slate-500">(例：位移、速度、加速度)</span></th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">負號的意義</td>
+                        <td class="p-3 font-bold text-slate-700">代表「數值大小小於零」或「欠缺」</td>
+                        <td class="p-3 font-bold text-blue-700">代表「方向與設定的正方向相反」</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">數值比較</td>
+                        <td class="p-3">$-10 < +5$ <br><span class="text-sm text-slate-500">($-10^\circ\text{C}$ 比 $5^\circ\text{C}$ 更冷)</span></td>
+                        <td class="p-3">看量值 (絕對值)！$|-10| > |+5|$ <br><span class="text-sm text-slate-500">(向反方向跑 $10 \text{ m s}^{-1}$ 比向前跑 $5 \text{ m s}^{-1}$ <strong>更快</strong>)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-slate-700 border-b border-slate-100 pb-2 mb-2">標量中的負號 (如温度)</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">意義：</span> 數值小於零（零下）。</li>
+                    <li><span class="font-medium text-slate-800">比較：</span> $-10$ 確實小於 $+5$。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">矢量中的負號 (如速度)</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">意義：</span> 僅代表方向相反。</li>
+                    <li><span class="font-medium text-slate-800">比較快慢：</span> 看絕對值！$-10 \text{ m s}^{-1}$ 的速率大於 $+5 \text{ m s}^{-1}$。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「如果甲車的速度是 $+5 \text{ m s}^{-1}$，乙車的速度是 $-15 \text{ m s}^{-1}$，這代表甲車開得比乙車快，因為 $+5$ 大於 $-15$。」</li>
+                    <li>「一個物體的位移是 $-20 \text{ m}$，代表它走過的距離是負數，這不合邏輯。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>判斷快慢要看「速率（即速度的量值）」。乙車的速率是 $|-15| = 15 \text{ m s}^{-1}$，大於甲車的 $5 \text{ m s}^{-1}$，所以<strong>乙車開得比較快</strong>，只是方向相反而已。</li>
+                    <li>位移的 $-20 \text{ m}$ 代表物體位於起點的<strong>反方向（負方向）</strong> $20 \text{ m}$ 處。距離永遠是正值，它實際走過的距離至少是 $20 \text{ m}$。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (簡單位移運算) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        以「向右」為正方向。機械人從原點 ($x = 0$) 出發，先向右移動了 $15 \text{ m}$，然後轉身向左移動了 $25 \text{ m}$。求機械人最終的位移。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 將每一段位移賦予正負號。向右為正，向左為負。</p>
+                        <ul class="list-disc list-inside mb-2">
+                            <li>第一段位移 $\vec{s}_1 = +15 \text{ m}$</li>
+                            <li>第二段位移 $\vec{s}_2 = -25 \text{ m}$</li>
+                        </ul>
+                        <p class="mb-2">2. 總位移等於各段位移的矢量和：</p>
+                        $$ \vec{s}_{\text{總}} = \vec{s}_1 + \vec{s}_2 $$
+                        $$ \vec{s}_{\text{總}} = (+15) + (-25) = -10 \text{ m} $$
+                        <p class="mt-2 font-bold text-green-700">答案：最終位移為 $-10 \text{ m}$。這表示機械人最終位於起點的左方 $10 \text{ m}$ 處。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (慢跑路徑與平均速度) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        慧翹沿著一條南北向的筆直單車徑慢跑。她從 O 點出發，用 $5 \text{ 分鐘}$ 向北跑了 $600 \text{ m}$ 到達 A 點。接着她轉身，用 $10 \text{ 分鐘}$ 向南跑了 $1200 \text{ m}$ 到達 B 點。若取 <strong>向北為正方向</strong>：<br>
+                        (a) 寫出她由 A 點跑到 B 點的位移。<br>
+                        (b) 計算她在整個旅程（由 O 經 A 到 B）中的平均速度，答案以 $\text{m s}^{-1}$ 表示。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) A 點到 B 點的位移：</strong> 由於她向南跑，方向與正方向相反，必須加上負號。</p>
+                        $$ \vec{s}_{AB} = -1200 \text{ m} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 整個旅程的平均速度：</strong></p>
+                        <p class="mb-2">1. 計算總位移。向北為 $+$，向南為 $-$：</p>
+                        $$ \vec{s}_{\text{總}} = (+600) + (-1200) = -600 \text{ m} $$
+                        <p class="mb-2">2. 計算總時間（轉換為秒）：</p>
+                        $$ t_{\text{總}} = 5 \text{ min} + 10 \text{ min} = 15 \text{ min} = 15 \times 60 \text{ s} = 900 \text{ s} $$
+                        <p class="mb-2">3. 計算平均速度：</p>
+                        $$ \vec{v}_{\text{平均}} = \frac{\vec{s}_{\text{總}}}{t_{\text{總}}} = \frac{-600}{900} = -0.67 \text{ m s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) $-1200 \text{ m}$；(b) $-0.67 \text{ m s}^{-1}$（負號表示平均速度方向向南）。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (負加速度的判斷) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        已知某條公路設定「向北為正方向 ($+$)」。一輛汽車正在向南倒車，且司機為了盡快退回原位，猛踩油門使汽車的速率越來越快。在這段期間，汽車的速度 ($\vec{v}$) 和加速度 ($\vec{a}$) 的符號分別為何？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. <strong>判斷速度 $\vec{v}$ 的符號：</strong> 汽車正在「向南」行駛。因為設定向北為正，所以向南的速度必須是 <strong>負號 ($-$)</strong>。</p>
+                        <p class="mb-2">2. <strong>判斷加速度 $\vec{a}$ 的符號：</strong> 題目指出汽車的速率「越來越快」（即正在加速）。我們在 1.3 節學過，要使物體變快，加速度的方向必須與速度的方向 <strong>相同</strong>。既然速度是負的，加速度也必須是 <strong>負號 ($-$)</strong>，才能幫忙「向南推動」。</p>
+                        <p class="mt-2 font-bold text-green-700">答案：速度為負 ($-$)，加速度為負 ($-$)。</p>
+                        <p class="text-sm text-slate-500 mt-1">（這再次證明了：負的加速度不一定代表在煞車減速！）</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在一維運動的物理計算中，我們通常用正負號來表示矢量的方向。如果我們設定「向上」為正方向，那麼重力加速度 ($g$) 的符號應該為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q21-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 正號 ($+$)，因為重力加速度的數值是大於零的 $9.81$。</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q21-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 負號 ($-$)，因為重力加速度的方向永遠指向下（地心）。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 如果物體正在上升為負號，正在下降為正號。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 不需要符號，因為加速度是標量。</button>
+                </div>
+                <div id="exp-q21-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 矢量前的正負號僅取決於「該矢量的方向」與「設定的正方向」是否一致。重力加速度永遠指向下，既然設定向上為正，重力加速度的方向相反，故為負號 ($-9.81 \text{ m s}^{-2}$)。這與物體正在上升或下降無關。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 甲物體的速度是 $\vec{v}_A = -25 \text{ m s}^{-1}$，乙物體的速度是 $\vec{v}_B = +10 \text{ m s}^{-1}$。下列敘述何者正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q21-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 乙物體移動得比甲物體快。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 甲物體的速度大於乙物體，因為 $-25$ 在數學上是大於 $+10$ 的。</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q21-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 甲物體移動得比乙物體快，只是它們的運動方向相反。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 因為甲物體的速度是負數，這代表它正在減速煞車。</button>
+                </div>
+                <div id="exp-q21-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 比較快慢要看速度的「量值（速率）」，即絕對值。$|-25| = 25 \text{ m s}^{-1}$，大於 $10 \text{ m s}^{-1}$，所以甲跑得較快。負號只表示它正向著我們設定的負方向移動。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 某物體在一維坐標軸上運動。它先位移了 $\vec{s}_1 = +8 \text{ m}$，接着位移了 $\vec{s}_2 = -12 \text{ m}$，最後位移了 $\vec{s}_3 = +4 \text{ m}$。該物體的總位移為多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q21-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $0 \text{ m}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $24 \text{ m}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $+20 \text{ m}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $-4 \text{ m}$</button>
+                </div>
+                <div id="exp-q21-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 在一維運動中，總位移可以直接將帶有正負號的各段位移代數相加。$\vec{s}_{\text{總}} = (+8) + (-12) + (+4) = 0 \text{ m}$。這表示物體最終回到了出發點。注意 $24 \text{ m}$ 是總距離。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 設向東為正方向 ($+$)。一輛巴士正向西行駛，並且快要到站，於是司機踩下煞車減速。此時巴士的速度 ($\vec{v}$) 和加速度 ($\vec{a}$) 的符號應該為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q21-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $\vec{v}$ 為負，$\vec{a}$ 為負</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $\vec{v}$ 為正，$\vec{a}$ 為負</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q21-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $\vec{v}$ 為負，$\vec{a}$ 為正</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $\vec{v}$ 為正，$\vec{a}$ 為正</button>
+                </div>
+                <div id="exp-q21-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 巴士「向西」行駛，與設定的正方向相反，故速度 $\vec{v}$ 為負。巴士正在「減速煞車」，表示加速度方向必須與速度方向<strong>相反</strong>，以產生阻礙。因為速度為負，加速度必須為正 ($+$) 才能達成減速。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 小美把一個球垂直向上拋出，球達到最高點後掉回她的手中。若設定「向上為正方向」，當球從最高點開始「往下掉」的過程中，其位移 ($\vec{s}$，相對於手中起點) 和速度 ($\vec{v}$) 的符號為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q21-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 位移為負，速度為正</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 位移為負，速度為負</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q21-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 位移為正，速度為負</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 位移為正，速度為正</button>
+                </div>
+                <div id="exp-q21-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 即使球正在往下掉，但只要它還沒落回起點下方，它所處的「位置」仍然在起點的「上方」，因此位移 $\vec{s}$ 仍為正 ($+$)。然而，因為它目前的運動方向是「向下」，與正方向相反，所以當下的速度 $\vec{v}$ 為負 ($-$)。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
             <!-- ========================================== -->
-            <article id="ch3-1" class="content-section hidden">
-                <header class="mb-8 border-b-2 border-slate-200 pb-4">
-                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.1</span>力</h2>
-                    <p class="text-slate-500 mt-2">了解力的基本概念、特性，以及力如何改變物體的運動與形狀。</p>
-                </header>
+<!-- 區塊 2.2: 運動線圖 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch2-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.2</span>運動線圖</h2>
+        <p class="text-slate-500 mt-2">學習如何解讀位移－時間圖與速度－時間圖，並透過圖線的斜率與面積計算物理量。</p>
+    </header>
 
-                <!-- 📌 1. 名詞定義 / 核心概念 -->
-                <section class="mb-10">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
-                    <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-                        <p>一般來說，<strong class="text-blue-700 font-bold">力 (Force)</strong> 是向某一方向的推或拉的作用。力具有以下三個主要特性（能產生的效果）：</p>
-                        <ul class="list-disc list-inside ml-2 space-y-2">
-                            <li><strong>改變運動速率：</strong> 能使物體加快（加速）或減慢（減速）。</li>
-                            <li><strong>改變運動方向：</strong> 能使正在移動的物體改變它的移動方向。</li>
-                            <li><strong>改變形狀：</strong> 能令物體發生形變（例如把彈簧拉長、把黏土壓扁）。</li>
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在物理學中，我們經常使用線圖 (Graphs) 來直觀地記錄和分析物體的運動過程。最常見的三種運動線圖為：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">位移－時間線圖 ($s-t$ 圖)：</strong> 
+                    顯示物體的位置 (位移 $s$) 隨時間 ($t$) 的變化。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">速度－時間線圖 ($v-t$ 圖)：</strong> 
+                    顯示物體的速度 ($v$) 隨時間 ($t$) 的變化。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">加速度－時間線圖 ($a-t$ 圖)：</strong> 
+                    顯示物體的加速度 ($a$) 隨時間 ($t$) 的變化。（在 DSE 中，通常只涉及恆定加速度的水平線圖）。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與幾何意義 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 線圖的幾何意義 (斜率與面積)</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">解讀運動線圖的兩把「萬能鑰匙」是 <strong>斜率 (Slope)</strong> 和 <strong>線圖下的面積 (Area under graph)</strong>：</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <!-- 斜率 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">1. 斜率 (Slope / Gradient)</p>
+                    <p class="text-sm text-slate-600 mb-2">斜率 $= \frac{y \text{ 軸的改變量}}{x \text{ 軸的改變量}} = \frac{\Delta y}{\Delta x}$</p>
+                    <ul class="text-sm space-y-2 mt-3">
+                        <li>👉 <strong class="text-slate-800">$s-t$ 圖的斜率 = 速度 ($v$)</strong><br><span class="text-xs text-slate-500">($v = \frac{\Delta s}{\Delta t}$)</span></li>
+                        <li>👉 <strong class="text-slate-800">$v-t$ 圖的斜率 = 加速度 ($a$)</strong><br><span class="text-xs text-slate-500">($a = \frac{\Delta v}{\Delta t}$)</span></li>
+                    </ul>
+                </div>
+                <!-- 面積 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">2. 線圖下的面積 (Area)</p>
+                    <p class="text-sm text-slate-600 mb-2">面積 $= y \text{ 軸數值} \times x \text{ 軸數值}$</p>
+                    <ul class="text-sm space-y-2 mt-3">
+                        <li>👉 <strong class="text-slate-800">$v-t$ 圖的面積 = 位移 ($\Delta s$)</strong><br><span class="text-xs text-slate-500">(注意：在 $x$ 軸下方的面積代表負位移)</span></li>
+                        <li>👉 <strong class="text-slate-800">$a-t$ 圖的面積 = 速度改變量 ($\Delta v$)</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 運動狀態線圖形狀對照表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">運動狀態</th>
+                        <th class="p-3 font-semibold w-1/4">加速度 ($a$)</th>
+                        <th class="p-3 font-semibold w-1/4">$v-t$ 圖的形狀</th>
+                        <th class="p-3 font-semibold w-1/4">$s-t$ 圖的形狀</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">靜止 (Rest)</td>
+                        <td class="p-3">$0$</td>
+                        <td class="p-3">貼在 $x$ 軸上的水平線 ($v=0$)</td>
+                        <td class="p-3">水平線 (斜率 $=0$)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-blue-700">勻速運動<br>(Uniform Velocity)</td>
+                        <td class="p-3">$0$</td>
+                        <td class="p-3">非零的 <strong>水平線</strong><br>(斜率 $=0$)</td>
+                        <td class="p-3">傾斜的 <strong>直線</strong><br>(恆定斜率)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-red-600">勻加速運動<br>(Uniform Acceleration)</td>
+                        <td class="p-3">常數 (不為 $0$)</td>
+                        <td class="p-3">傾斜的 <strong>直線</strong><br>(恆定斜率)</td>
+                        <td class="p-3">彎曲的 <strong>拋物線</strong><br>(斜率漸增/漸減)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-slate-800 border-b border-slate-100 pb-2 mb-2">靜止 ($v=0$)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">$v-t$ 圖：</span> $v=0$ 的水平線。</li>
+                    <li><span class="font-medium text-slate-800">$s-t$ 圖：</span> 某個位置上的水平線。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">勻速運動 ($v=$常數, $a=0$)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">$v-t$ 圖：</span> 非零的水平線。</li>
+                    <li><span class="font-medium text-slate-800">$s-t$ 圖：</span> 傾斜的直線。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-red-600 border-b border-slate-100 pb-2 mb-2">勻加速運動 ($a=$常數)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">$v-t$ 圖：</span> 傾斜的直線。</li>
+                    <li><span class="font-medium text-slate-800">$s-t$ 圖：</span> 彎曲的曲線 (拋物線)。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「在 $s-t$ 圖中，如果線是往右上斜上去的，代表物體正在爬上一個斜坡。」</li>
+                    <li>「在 $v-t$ 圖中，如果線往右下傾斜，代表物體正在『向後退』。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>運動線圖的形狀 <strong>絕對不等於</strong> 物體實際運動的軌跡！$s-t$ 圖斜向上，只代表物體在平路上「遠離起點 (向正方向移動)」。</li>
+                    <li>在 $v-t$ 圖中，判斷向前還是向後的唯一標準是 <strong>速度 $v$ 的正負號（是否在 $x$ 軸上方）</strong>。線往下斜只代表「加速度為負」，若此時 $v$ 仍是正數，物體依然在向前走，只是正在<strong>減速 (煞車)</strong>。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (s-t 圖分析) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <div class="w-full">
+                        <p class="text-slate-800 leading-relaxed font-medium mb-2">
+                            某物體的位移－時間 ($s-t$) 圖如右所述：<br>
+                            $t = 0 \text{ s}$ 到 $t = 4 \text{ s}$，圖線由 $(0,0)$ 呈直線上升至 $(4, 20)$。<br>
+                            $t = 4 \text{ s}$ 到 $t = 8 \text{ s}$，圖線呈水平狀態，維持在 $s = 20 \text{ m}$。<br>
+                            求該物體在 $0 \sim 4 \text{ s}$ 及 $4 \sim 8 \text{ s}$ 之間的速度。
+                        </p>
+                    </div>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">從 $s-t$ 圖求速度，就是求「斜率」。</p>
+                        <p class="mb-1">1. 在 $0 \sim 4 \text{ s}$ 期間：</p>
+                        $$ v_1 = \text{斜率} = \frac{\Delta s}{\Delta t} = \frac{20 - 0}{4 - 0} = \frac{20}{4} = 5 \text{ m s}^{-1} $$
+                        <p class="mb-1 mt-4">2. 在 $4 \sim 8 \text{ s}$ 期間：</p>
+                        $$ v_2 = \text{斜率} = \frac{20 - 20}{8 - 4} = 0 \text{ m s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：前 4 秒速度為 $5 \text{ m s}^{-1}$（勻速），後 4 秒速度為 $0 \text{ m s}^{-1}$（靜止）。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (v-t 圖求位移與加速度) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一輛汽車的速度－時間 ($v-t$) 圖為一個三角形：由原點 $(0,0)$ 加速到 $t = 5 \text{ s}$ 時的頂點 $v = 10 \text{ m s}^{-1}$，然後減速直到 $t = 10 \text{ s}$ 時速度降回 $0$。求：<br>
+                        (a) 汽車在前 5 秒的加速度。<br>
+                        (b) 汽車在整個 10 秒內的總位移。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 加速度 = $v-t$ 圖的斜率</strong></p>
+                        $$ a = \frac{\Delta v}{\Delta t} = \frac{10 - 0}{5 - 0} = 2 \text{ m s}^{-2} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 總位移 = $v-t$ 圖下的面積</strong></p>
+                        <p class="mb-2">整個圖形是一個底為 $10 \text{ s}$，高為 $10 \text{ m s}^{-1}$ 的三角形。</p>
+                        $$ s = \frac{1}{2} \times \text{底} \times \text{高} = \frac{1}{2} \times 10 \times 10 = 50 \text{ m} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) $2 \text{ m s}^{-2}$；(b) $50 \text{ m}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (折返與距離 vs 位移) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        在一個 $v-t$ 圖中，物體前 2 秒的圖線是一個高為 $4 \text{ m s}^{-1}$、底為 $2 \text{ s}$ 的三角形（位於 $x$ 軸上方）。隨後，圖線穿過 $x$ 軸，在第 2 到 4 秒形成一個深為 $-4 \text{ m s}^{-1}$、底為 $2 \text{ s}$ 的倒三角形（位於 $x$ 軸下方）。求該物體在 $4 \text{ s}$ 內的 (a) 總距離 與 (b) 總位移。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">首先計算上下兩個三角形的面積（代表位移）：</p>
+                        <ul class="list-disc list-inside mb-2">
+                            <li>上方三角形面積 $s_1 = \frac{1}{2} \times 2 \times 4 = +4 \text{ m}$ (向前位移)</li>
+                            <li>下方三角形面積 $s_2 = \frac{1}{2} \times 2 \times (-4) = -4 \text{ m}$ (向後位移)</li>
                         </ul>
-                        <hr class="my-4 border-slate-100">
-                        <p>力是 <strong class="text-blue-700 font-bold">成對出現的 (Forces appear in pairs)</strong>。當你對一個物體施力時，該物體也會同時對你施加一個力。例如：當你拉動行李箱時，行李箱也會向反方向拉你。</p>
+                        <p class="mb-2"><strong>(a) 總距離 $d$：</strong> 距離是標量，把所有移動路程的「絕對值」相加。</p>
+                        $$ d = |+4| + |-4| = 4 + 4 = 8 \text{ m} $$
+                        <p class="mb-2 mt-4"><strong>(b) 總位移 $s$：</strong> 位移是矢量，直接代數相加（面積互相抵消）。</p>
+                        $$ s = (+4) + (-4) = 0 \text{ m} $$
+                        <p class="mt-2 font-bold text-green-700">答案：總距離為 $8 \text{ m}$；總位移為 $0 \text{ m}$（物體折返了起點）。</p>
                     </div>
-                </section>
+                </details>
+            </div>
+        </div>
+    </section>
 
-                <!-- 📐 2. 核心公式與單位 -->
-                <section class="mb-10">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
-                        <p class="text-slate-700 mb-3">力是一個 <strong class="text-blue-700">矢量 (Vector)</strong>，因此它同時具有「大小」和「方向」。在繪圖時，我們常以箭頭表示：</p>
-                        <div class="text-center my-4 overflow-x-auto">
-                            <!-- MathJax Block Formula -->
-                            $$ \vec{F} $$
-                        </div>
-                        <ul class="text-sm text-slate-600 space-y-2">
-                            <li><strong>圖解表示：</strong> 箭頭的指向代表力的方向，線段的長度代表力的大小。</li>
-                            <li><i class="fa-solid fa-circle-info text-blue-400 mr-1"></i> <strong>SI 單位：</strong> 力的標準單位是 <strong class="text-blue-700">牛頓 (Newton)</strong>，簡寫為 $\text{N}$。</li>
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在「位移－時間 ($s-t$)」線圖中，圖線的「斜率 (Slope)」代表甚麼物理量？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 距離</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 速度</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 加速度</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 總位移</button>
+                </div>
+                <div id="exp-q22-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> $s-t$ 圖的斜率是 $y$ 軸變化量除以 $x$ 軸變化量，即 $\frac{\Delta s}{\Delta t}$，在物理學中定義為速度 ($v$)。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 在「速度－時間 ($v-t$)」線圖中，圖線下方的「面積 (Area)」代表甚麼物理量？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 加速度</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 位移</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 總時間</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 平均速度</button>
+                </div>
+                <div id="exp-q22-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> $v-t$ 圖的面積相當於 $v \times t$ 的累積總和，物理意義為位移 ($\Delta s$)。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 如果觀察到一個物體的 $s-t$ 圖是一條「水平的直線」，這代表該物體的運動狀態是？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q22-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 靜止不動</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 勻速直線運動</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 勻加速直線運動</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 正在進行折返</button>
+                </div>
+                <div id="exp-q22-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> $s-t$ 圖的 $y$ 軸是位置 ($s$)。水平線代表隨着時間增加，位置完全沒有改變，因此物體是「靜止」的。此時斜率為 $0$，故速度 $v=0$。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 如果觀察到一個物體的 $v-t$ 圖是一條「非零的水平直線」，這代表該物體具有甚麼特性？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 正在加速</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 靜止不動</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 處於勻速運動，加速度為零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 位移為零</button>
+                </div>
+                <div id="exp-q22-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> $v-t$ 圖的 $y$ 軸是速度 ($v$)。水平線代表速度是一個常數，沒有隨時間改變，即物體作「勻速運動」。因為速度不變，所以加速度 $a = 0$。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 在一個 $v-t$ 圖中，圖線原本在 $x$ 軸上方，後來穿過 $x$ 軸來到 $x$ 軸下方。這代表物體發生了甚麼事？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 物體的加速度由正變負</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 物體改變了運動的方向（發生折返）</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 物體進入了地底</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 物體的總位移變為零</button>
+                </div>
+                <div id="exp-q22-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> $v-t$ 圖在 $x$ 軸上方代表速度為正 ($v > 0$)，即向前走；在 $x$ 軸下方代表速度為負 ($v < 0$)，即向後走。因此穿過 $x$ 軸的那一瞬間（$v=0$），物體改變了運動方向。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+            <!-- ========================================== -->
+<!-- 區塊 2.3: 勻加速運動方程 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch2-3" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.3</span>勻加速運動方程</h2>
+        <p class="text-slate-500 mt-2">掌握四條經典的運動學方程 (suvat equations)，並學會如何有系統地解決直線加速問題。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 核心概念與符號定義 (suvat)</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>當物體進行 <strong class="text-blue-700 font-bold">勻加速直線運動 (Uniformly accelerated linear motion)</strong>，即其加速度 $a$ 保持恆定不變時，我們可以利用一組由五個物理量組成的方程式來計算它的運動狀態。這五個物理量通常簡稱為 <strong>suvat</strong>：</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                <div class="bg-slate-50 p-3 rounded border border-slate-200"><span class="font-bold text-blue-600 text-lg mr-2">$s$</span> 位移 (Displacement)</div>
+                <div class="bg-slate-50 p-3 rounded border border-slate-200"><span class="font-bold text-blue-600 text-lg mr-2">$u$</span> 初速度 (Initial velocity)</div>
+                <div class="bg-slate-50 p-3 rounded border border-slate-200"><span class="font-bold text-blue-600 text-lg mr-2">$v$</span> 末速度 (Final velocity)</div>
+                <div class="bg-slate-50 p-3 rounded border border-slate-200"><span class="font-bold text-blue-600 text-lg mr-2">$a$</span> 加速度 (Acceleration)</div>
+                <div class="bg-slate-50 p-3 rounded border border-slate-200"><span class="font-bold text-blue-600 text-lg mr-2">$t$</span> 時間 (Time)</div>
+            </div>
+            <p class="text-sm text-slate-500 mt-4"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> 注意：這五個物理量中，除了時間 $t$ 是標量外，其餘 $s, u, v, a$ 都是<strong>矢量</strong>，代入公式時必須嚴格標明正負號！</p>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 四大運動方程</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-4">透過 $v-t$ 圖的斜率與面積，我們可以推導出以下四條極為重要的方程式。每一條方程式都剛好缺少其中一個物理量：</p>
+            
+            <div class="space-y-4">
+                <!-- 方程 1 -->
+                <div class="flex flex-col md:flex-row items-center justify-between bg-white p-4 rounded border border-blue-100 shadow-sm">
+                    <div class="text-xl font-bold text-slate-800">$$ v = u + at $$</div>
+                    <div class="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-2 md:mt-0">不涉及位移 $s$</div>
+                </div>
+                <!-- 方程 2 -->
+                <div class="flex flex-col md:flex-row items-center justify-between bg-white p-4 rounded border border-blue-100 shadow-sm">
+                    <div class="text-xl font-bold text-slate-800">$$ s = \frac{1}{2}(u + v)t $$</div>
+                    <div class="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-2 md:mt-0">不涉及加速度 $a$</div>
+                </div>
+                <!-- 方程 3 -->
+                <div class="flex flex-col md:flex-row items-center justify-between bg-white p-4 rounded border border-blue-100 shadow-sm">
+                    <div class="text-xl font-bold text-slate-800">$$ s = ut + \frac{1}{2}at^2 $$</div>
+                    <div class="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-2 md:mt-0">不涉及末速度 $v$</div>
+                </div>
+                <!-- 方程 4 -->
+                <div class="flex flex-col md:flex-row items-center justify-between bg-white p-4 rounded border border-blue-100 shadow-sm">
+                    <div class="text-xl font-bold text-slate-800">$$ v^2 = u^2 + 2as $$</div>
+                    <div class="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-2 md:mt-0">不涉及時間 $t$</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 如何選擇合適的方程？</h3>
+        <p class="text-slate-700 mb-3">解題的訣竅是：列出題目中<strong>已知的三個量</strong>和<strong>想求的一個量</strong>，然後選擇「不包含第五個無關物理量」的那條公式。</p>
+        
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">題目中完全沒有提及，<br>也不需要求的物理量</th>
+                        <th class="p-3 font-semibold w-3/4">應選擇的方程式</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800 text-center text-lg">沒有 $s$</td>
+                        <td class="p-3 font-bold text-blue-700 text-lg">$$ v = u + at $$</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800 text-center text-lg">沒有 $a$</td>
+                        <td class="p-3 font-bold text-blue-700 text-lg">$$ s = \frac{1}{2}(u + v)t $$</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800 text-center text-lg">沒有 $v$</td>
+                        <td class="p-3 font-bold text-blue-700 text-lg">$$ s = ut + \frac{1}{2}at^2 $$</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800 text-center text-lg">沒有 $t$</td>
+                        <td class="p-3 font-bold text-blue-700 text-lg">$$ v^2 = u^2 + 2as $$</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                <span class="font-bold text-slate-600">無 $s$</span>
+                <span class="font-bold text-blue-700">$v = u + at$</span>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                <span class="font-bold text-slate-600">無 $a$</span>
+                <span class="font-bold text-blue-700">$s = \frac{1}{2}(u+v)t$</span>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                <span class="font-bold text-slate-600">無 $v$</span>
+                <span class="font-bold text-blue-700">$s = ut + \frac{1}{2}at^2$</span>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                <span class="font-bold text-slate-600">無 $t$</span>
+                <span class="font-bold text-blue-700">$v^2 = u^2 + 2as$</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「這四條公式適用於所有物體的運動。」</li>
+                    <li>「計算時直接把數字代入公式就好，不需要管正負號。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>大錯特錯！</strong> 這四條公式只有在物體的 <strong class="text-green-700">加速度 $a$ 是常數</strong> 時才成立。如果加速度會變（例如考慮真實空氣阻力下的落體），這些公式就不能用。</li>
+                    <li>必須先設定正方向！如果向右為正，向左的初速度或加速度就必須代入負數，否則算出的答案將完全錯誤。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (尋找缺少的物理量) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <div class="w-full">
+                        <p class="text-slate-800 leading-relaxed font-medium mb-2">
+                            一列火車由靜止開始，以 $1.5 \text{ m s}^{-2}$ 的均勻加速度直線行駛。求火車在 $8 \text{ s}$ 後的速度。
+                        </p>
+                    </div>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 寫下已知物理量：「由靜止開始」代表 $u = 0$；加速度 $a = 1.5 \text{ m s}^{-2}$；時間 $t = 8 \text{ s}$。</p>
+                        <p class="mb-2">2. 確認想求的物理量：末速度 $v = ?$</p>
+                        <p class="mb-2">3. 在這題中，完全沒有提及位移 $s$。因此選用無 $s$ 的公式：</p>
+                        $$ v = u + at $$
+                        $$ v = 0 + (1.5)(8) $$
+                        $$ v = 12 \text{ m s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：火車在 $8 \text{ s}$ 後的速度為 $12 \text{ m s}^{-1}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (煞車問題，注意負號與無時間 t) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        汽車在公路上以 $25 \text{ m s}^{-1}$ 的速度行駛。司機看見紅燈後煞車，汽車以 $5 \text{ m s}^{-2}$ 的均勻減速度減速至完全停下。求汽車在煞車期間滑行的距離。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">設定行駛方向為正。已知：初速度 $u = 25 \text{ m s}^{-1}$；「減速」代表加速度與速度反向，故 $a = -5 \text{ m s}^{-2}$；「完全停下」代表 $v = 0$。</p>
+                        <p class="mb-2">想求位移 $s$。題目完全沒有提及時間 $t$，所以選用無 $t$ 的公式：</p>
+                        $$ v^2 = u^2 + 2as $$
+                        $$ 0^2 = (25)^2 + 2(-5)s $$
+                        $$ 0 = 625 - 10s $$
+                        $$ 10s = 625 \implies s = 62.5 \text{ m} $$
+                        <p class="mt-2 font-bold text-green-700">答案：汽車煞車期間滑行的距離為 $62.5 \text{ m}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (求時間的二次方程) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一顆小石子從 $20 \text{ m}$ 高的橋上由靜止自由下落。（假設空氣阻力可忽略，重力加速度 $g = 9.81 \text{ m s}^{-2}$ 恆定向下）。求石子落到水面所需的時間。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">設定「向下」為正方向。已知：「由靜止下落」$u = 0$；加速度 $a = 9.81 \text{ m s}^{-2}$；位移 $s = 20 \text{ m}$。</p>
+                        <p class="mb-2">想求時間 $t$。題目未提及末速度 $v$，選用無 $v$ 的公式：</p>
+                        $$ s = ut + \frac{1}{2}at^2 $$
+                        $$ 20 = (0)t + \frac{1}{2}(9.81)t^2 $$
+                        $$ 20 = 4.905 t^2 $$
+                        $$ t^2 = \frac{20}{4.905} \approx 4.077 $$
+                        $$ t \approx 2.02 \text{ s} \quad (\text{因為時間不能為負，取正根}) $$
+                        <p class="mt-2 font-bold text-green-700">答案：石子落水需時約 $2.02 \text{ s}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 使用 $v = u + at$ 等四條運動方程的先決條件是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q23-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 物體必須由靜止開始運動</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q23-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 物體的加速度必須保持恆定不變</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 物體必須作水平直線運動</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 運動過程中不能有摩擦力</button>
+                </div>
+                <div id="exp-q23-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 這些方程是依據「固定的斜率（恆定加速度）」在 $v-t$ 圖上推導出來的。若加速度隨時間改變，公式將不適用。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 若題目已知初速度 $u$、時間 $t$ 以及加速度 $a$，要求計算位移 $s$，應該選擇哪一條公式最直接？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q23-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $v = u + at$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $s = \frac{1}{2}(u + v)t$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q23-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $s = ut + \frac{1}{2}at^2$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $v^2 = u^2 + 2as$</button>
+                </div>
+                <div id="exp-q23-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 題目完全沒有提及末速度 $v$，因此應選擇唯一不包含 $v$ 的方程式 $s = ut + \frac{1}{2}at^2$。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 一架飛機在跑道上由靜止起飛，均勻加速 $3 \text{ s}$ 後，達到 $12 \text{ m s}^{-1}$ 的速度。這段期間飛機行駛了多遠？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q23-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $36 \text{ m}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q23-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $18 \text{ m}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $4 \text{ m}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $24 \text{ m}$</button>
+                </div>
+                <div id="exp-q23-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 已知 $u=0$、$v=12$、$t=3$。求 $s$。無需計算加速度，直接代入無 $a$ 的公式：$s = \frac{1}{2}(u+v)t = \frac{1}{2}(0 + 12) \times 3 = 18 \text{ m}$。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 汽車在公路行駛時緊急煞車直至停下。假設煞車時的減速度大小固定。如果汽車原本的行駛速度變成兩倍，那麼它的煞車距離會變成原本的多少倍？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q23-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 1 倍 (不變)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 2 倍</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q23-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 4 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 8 倍</button>
+                </div>
+                <div id="exp-q23-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 末速 $v=0$，由 $v^2 = u^2 + 2as$ 得知 $0 = u^2 + 2as$，因此煞車距離 $s = \frac{-u^2}{2a}$。由於 $a$ 是常數，可以看出距離 $s$ 與初速 $u$ 的平方成正比 ($s \propto u^2$)。若 $u$ 變為 2 倍，$s$ 將變為 $2^2 = 4$ 倍！超速非常危險。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 將一顆球以 $15 \text{ m s}^{-1}$ 垂直向上拋出。若設定「向上為正方向」，我們利用公式計算球達到最高點的高度時，應代入甚麼數值？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q23-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $u = +15$ ; $v = 0$ ; $a = -9.81$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $u = +15$ ; $v = 15$ ; $a = +9.81$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $u = 0$ ; $v = +15$ ; $a = -9.81$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q23-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $u = +15$ ; $v = 0$ ; $a = +9.81$</button>
+                </div>
+                <div id="exp-q23-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 向上為正，因此初速度 $u = +15$。在最高點的一瞬間球會停下折返，故末速度 $v = 0$。重力加速度永遠向下，方向與設定的「正」相反，故代入 $a = -9.81$。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+            <!-- ========================================== -->
+<!-- 區塊 2.4: 重力下的垂直運動 (可直接插入主檔案) -->
+<!-- ========================================== -->
+<article id="ch2-4" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.4</span>重力下的垂直運動</h2>
+        <p class="text-slate-500 mt-2">將勻加速運動方程應用於自由下落與垂直上拋的物體，並掌握拋體運動的對稱性。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p><strong class="text-blue-700 font-bold">自由下落 (Free fall)：</strong> 當一個物體只在地球重力（引力）的作用下運動，而忽略空氣阻力時，這種運動稱為自由下落。</p>
+            <hr class="my-4 border-slate-100">
+            <p><strong class="text-blue-700 font-bold">重力加速度 (Acceleration due to gravity, $g$)：</strong></p>
+            <p>伽利略的著名實驗證明了：在忽略空氣阻力的情況下，<strong>所有物體（無論質量大小）自由下落時的加速度都是相同的</strong>。在地球表面附近，這個恆定的加速度稱為重力加速度，符號為 $g$。</p>
+            <div class="bg-slate-50 p-4 rounded text-center font-bold text-lg text-slate-800 border border-slate-200">
+                $$ g \approx 9.81 \text{ m s}^{-2} \quad (\text{方向永遠向下}) $$
+            </div>
+            <p class="text-sm text-slate-500 mt-2"><i class="fa-solid fa-circle-info text-blue-400 mr-1"></i> 註：垂直向上拋出的物體，在空中飛行的全過程（上升、最高點、下降）中，也只受重力作用，因此其加速度始終保持為 $g$（向下）。</p>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與符號約定 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 運動方程的應用與符號約定</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">由於重力加速度是恆定的（常數），我們可以完全套用上一節學過的四條 <strong>suvat</strong> 方程。解題的唯一關鍵在於：<strong>必須嚴格設定並遵守正方向的符號約定！</strong></p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
+                <!-- 約定 1 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">習慣用法 A：取「向上」為正 ($+$)</p>
+                    <p class="text-sm text-slate-600 mb-3">適用於：物體被「垂直上拋」的題目。</p>
+                    <ul class="text-sm space-y-2">
+                        <li>👉 <strong>加速度：</strong> $a = -9.81 \text{ m s}^{-2}$ (因為 $g$ 永遠向下)</li>
+                        <li>👉 <strong>初速度：</strong> $u$ 為正數 ($+$)</li>
+                        <li>👉 <strong>最高點：</strong> 速度 $v = 0 \text{ m s}^{-1}$</li>
+                    </ul>
+                </div>
+                <!-- 約定 2 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">習慣用法 B：取「向下」為正 ($+$)</p>
+                    <p class="text-sm text-slate-600 mb-3">適用於：物體從高處「由靜止落下」或「向下擲出」的題目。</p>
+                    <ul class="text-sm space-y-2">
+                        <li>👉 <strong>加速度：</strong> $a = +9.81 \text{ m s}^{-2}$ (因為與正方向同向)</li>
+                        <li>👉 <strong>初速度：</strong> 靜止落下則 $u = 0$</li>
+                        <li>👉 <strong>位移：</strong> 落下的距離 $s$ 為正數 ($+$)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 垂直上拋運動的「對稱性」</h3>
+        <p class="text-slate-700 mb-3">當一個物體從地面垂直向上拋出，然後落回同一高度時，它的運動軌跡在時間和速度上具有完美的對稱性（假設無空氣阻力）：</p>
+        
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/3">比較項目</th>
+                        <th class="p-3 font-semibold w-1/3">上升過程 (Upward)</th>
+                        <th class="p-3 font-semibold w-1/3">下降過程 (Downward)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">經歷時間</td>
+                        <td class="p-3">由拋出至最高點所需時間：$t_{\text{上}}$</td>
+                        <td class="p-3">由最高點落回原處所需時間：$t_{\text{下}} = t_{\text{上}}$</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">經過同一高度時的速度</td>
+                        <td class="p-3">向上速率 $v$</td>
+                        <td class="p-3">向下速率 $v$（大小相等，方向相反）</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">加速度 $a$</td>
+                        <td class="p-3 text-red-600 font-bold">$9.81 \text{ m s}^{-2}$ 向下</td>
+                        <td class="p-3 text-red-600 font-bold">$9.81 \text{ m s}^{-2}$ 向下</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">時間對稱</h4>
+                <p class="text-sm text-slate-600">上升至最高點的時間 <strong>等於</strong> 從最高點落回出發點的時間。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">速率對稱</h4>
+                <p class="text-sm text-slate-600">物體上升和下降時，經過「同一高度」的瞬間，其 <strong>速率完全相同</strong>（但速度方向相反）。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「物體被拋到最高點的一瞬間會停下來，所以它在最高點的加速度是零 ($a=0$)。」</li>
+                    <li>「把一顆保齡球和一顆網球從同一高度同時扔下，比較重的保齡球一定會先落地。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>最高點的加速度絕不為零！</strong> 物體在最高點雖然速度 $v=0$，但它仍然受到地球重力作用，因此加速度依然是 <strong>向下 $9.81 \text{ m s}^{-2}$</strong>。若 $a=0$，物體就會懸浮在最高點永遠不掉下來了。</li>
+                    <li>只要忽略空氣阻力，所有物體的重力加速度都是 $g$。它們會 <strong>同時落地</strong>（伽利略比薩斜塔實驗的原理）。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (自由落下) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <div class="w-full">
+                        <p class="text-slate-800 leading-relaxed font-medium mb-2">
+                            一塊石頭從 $45 \text{ m}$ 高的懸崖上由靜止自由落下。忽略空氣阻力，取 $g = 9.81 \text{ m s}^{-2}$。<br>
+                            (a) 求石頭落到水面所需的時間。<br>
+                            (b) 求石頭擊中水面瞬間的速度。
+                        </p>
+                    </div>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">這是一個純粹向下的運動。我們設定 <strong>「向下為正方向」</strong>。</p>
+                        <p class="mb-2">已知：$u = 0 \text{ m s}^{-1}$；$s = +45 \text{ m}$；$a = +9.81 \text{ m s}^{-2}$。</p>
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(a) 求時間 $t$ (無 $v$)：</strong></p>
+                        $$ s = ut + \frac{1}{2}at^2 $$
+                        $$ 45 = (0)t + \frac{1}{2}(9.81)t^2 $$
+                        $$ 45 = 4.905 t^2 \implies t = \sqrt{\frac{45}{4.905}} \approx 3.03 \text{ s} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 求擊中水面的速度 $v$ (無 $t$ 或直接用求得的 $t$)：</strong></p>
+                        $$ v^2 = u^2 + 2as \quad (\text{無 } t \text{ 公式最準確}) $$
+                        $$ v^2 = 0^2 + 2(9.81)(45) = 882.9 $$
+                        $$ v = \sqrt{882.9} \approx 29.7 \text{ m s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) $3.03 \text{ s}$；(b) $29.7 \text{ m s}^{-1}$ (向下)。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (垂直上拋 - 求最高點) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        小明將一個棒球以 $20 \text{ m s}^{-1}$ 的初速度從地面垂直向上拋出。取 $g = 9.81 \text{ m s}^{-2}$。<br>
+                        (a) 棒球能到達的最高點距離地面多高？<br>
+                        (b) 棒球從拋出到落回小明手中，總共在空中飛行了多長時間？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">這包含向上與向下的運動。我們設定 <strong>「向上為正方向」</strong>。</p>
+                        <p class="mb-2">已知：$u = +20 \text{ m s}^{-1}$；$a = -9.81 \text{ m s}^{-2}$（重力永遠向下）。</p>
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(a) 最高點的高度：</strong> 在最高點時，棒球會瞬間停下，即 $v = 0$。求 $s$。</p>
+                        $$ v^2 = u^2 + 2as $$
+                        $$ 0^2 = (20)^2 + 2(-9.81)s $$
+                        $$ 0 = 400 - 19.62s \implies 19.62s = 400 $$
+                        $$ s = \frac{400}{19.62} \approx 20.4 \text{ m} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 總飛行時間：</strong> 有兩種解法。最快的是利用「位移」概念。當球落回手中時，起點和終點都在手中，即<strong>總位移 $s = 0$</strong>。求 $t$。</p>
+                        $$ s = ut + \frac{1}{2}at^2 $$
+                        $$ 0 = 20t + \frac{1}{2}(-9.81)t^2 $$
+                        $$ 0 = t(20 - 4.905t) $$
+                        <p class="mb-2">由於 $t \neq 0$ (這是拋出瞬間)，解得 $20 = 4.905t \implies t \approx 4.08 \text{ s}$。</p>
+                        <p class="text-sm text-slate-500">(另一解法：算出上拋到最高點的時間 $t = \frac{v-u}{a} = \frac{0-20}{-9.81} \approx 2.04 \text{ s}$，根據時間對稱性，總時間 $= 2.04 \times 2 = 4.08 \text{ s}$)。</p>
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 最高達 $20.4 \text{ m}$；(b) 空中總時間為 $4.08 \text{ s}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (懸崖上拋問題) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        美明站在 $30 \text{ m}$ 高的大樓邊緣，將一枚硬幣以 $12 \text{ m s}^{-1}$ 的初速度垂直向上拋出。硬幣最後落到大樓底部的地面。求硬幣落地時的速度。（取 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">設定 <strong>「向上為正方向」</strong>。起點為樓頂。</p>
+                        <ul class="list-disc list-inside mb-2">
+                            <li>$u = +12 \text{ m s}^{-1}$ (向上拋出)</li>
+                            <li>$a = -9.81 \text{ m s}^{-2}$ (重力向下)</li>
+                            <li>$s = -30 \text{ m}$ (<strong>關鍵！</strong>落地位於起點下方 $30 \text{ m}$ 處，故位移為負)</li>
                         </ul>
+                        <p class="mb-2">求末速度 $v$，不涉及時間 $t$：</p>
+                        $$ v^2 = u^2 + 2as $$
+                        $$ v^2 = (12)^2 + 2(-9.81)(-30) $$
+                        $$ v^2 = 144 + 588.6 = 732.6 $$
+                        $$ v = \pm \sqrt{732.6} \approx \pm 27.1 \text{ m s}^{-1} $$
+                        <p class="mb-2">由於硬幣落地時是「向下」運動的，方向為負，因此我們取負根。</p>
+                        <p class="mt-2 font-bold text-green-700">答案：落地速度為 $-27.1 \text{ m s}^{-1}$（負號代表向下）。</p>
                     </div>
-                </section>
+                </details>
+            </div>
+        </div>
+    </section>
 
-                <!-- 📊 3. 重要性質 / 物理規律對照 -->
-                <section class="mb-10">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 接觸力與非接觸力分類表</h3>
-                    
-                    <!-- 桌機版 Table -->
-                    <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
-                        <table class="w-full text-left text-slate-700">
-                            <thead class="bg-blue-100 text-blue-900">
-                                <tr>
-                                    <th class="p-3 font-semibold w-1/4">力的種類</th>
-                                    <th class="p-3 font-semibold w-3/8">接觸力 (Contact Forces)</th>
-                                    <th class="p-3 font-semibold w-3/8">非接觸力 (Non-contact Forces)</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-200">
-                                <tr class="even:bg-slate-50">
-                                    <td class="p-3 font-medium">定義</td>
-                                    <td class="p-3">兩個物體必須互相接觸才能產生的力。</td>
-                                    <td class="p-3">物體之間不需要互相接觸就能相互作用的力。</td>
-                                </tr>
-                                <tr class="even:bg-slate-50">
-                                    <td class="p-3 font-medium">常見例子</td>
-                                    <td class="p-3">
-                                        <ul class="list-disc list-inside">
-                                            <li>摩擦力 (Friction)</li>
-                                            <li>拉力 (Tension)</li>
-                                            <li>法向反作用力 (Normal reaction)</li>
-                                        </ul>
-                                    </td>
-                                    <td class="p-3">
-                                        <ul class="list-disc list-inside">
-                                            <li>重力 / 重量 (Weight)</li>
-                                            <li>磁力 (Magnetic force)</li>
-                                            <li>靜電力 (Electrostatic force)</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在忽略空氣阻力的情況下，將一顆重 $5 \text{ kg}$ 的鉛球和一顆重 $0.1 \text{ kg}$ 的網球從同一高度同時釋放。下列敘述何者正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q24-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 鉛球受到的重力較大，因此它的加速度較大，會先落地。</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q24-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 兩者的加速度皆為 $g$，因此會同時落地。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 網球質量較小，慣性較小，所以它會先落地。</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 取決於釋放時的初速度。</button>
+                </div>
+                <div id="exp-q24-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 自由下落時，所有物體的加速度都是 $g$，與物體的質量無關，因此它們會同時落地。這正是伽利略的自由落體定律。
+                </div>
+            </div>
 
-                    <!-- 行動版卡片 -->
-                    <div class="grid md:hidden gap-4">
-                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                            <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">接觸力 (Contact Forces)</h4>
-                            <p class="text-sm text-slate-600 mb-2">必須互相接觸才能產生的力。</p>
-                            <ul class="text-sm space-y-1 text-slate-600 font-medium">
-                                <li>👉 摩擦力 (Friction)</li>
-                                <li>👉 拉力 (Tension)</li>
-                                <li>👉 法向反作用力 (Normal reaction)</li>
-                            </ul>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                            <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">非接觸力 (Non-contact Forces)</h4>
-                            <p class="text-sm text-slate-600 mb-2">不需要互相接觸就能產生的力。</p>
-                            <ul class="text-sm space-y-1 text-slate-600 font-medium">
-                                <li>👉 重力 (Gravity/Weight)</li>
-                                <li>👉 磁力 (Magnetic force)</li>
-                                <li>👉 靜電力 (Electrostatic force)</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 將一個物體垂直向上拋出。當物體到達最高點的瞬間，下列關於其速度 $v$ 與加速度 $a$ 的描述，何者正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q24-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $v = 0$ 且 $a = 0$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q24-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $v = 0$ 且 $a = 9.81 \text{ m s}^{-2}$ 向下</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $v \neq 0$ 且 $a = 0$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $v \neq 0$ 且 $a = 9.81 \text{ m s}^{-2}$ 向下</button>
+                </div>
+                <div id="exp-q24-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 在最高點時，物體正要改變運動方向，會瞬間停下，因此速度 $v = 0$。但地球對它的重力引力從未消失，故加速度 $a$ 始終保持向下 $9.81 \text{ m s}^{-2}$。
+                </div>
+            </div>
 
-                <!-- ⚠️ 4. 常見迷思與誤區 -->
-                <section class="mb-10">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- 錯誤觀念 -->
-                        <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
-                            <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
-                            <p class="text-sm">「物體必須受到力的作用，才能維持它向前運動。」或者「當推力消失時，物體就一定會立刻停下來。」</p>
-                        </div>
-                        <!-- 正確觀念 -->
-                        <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
-                            <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
-                            <p class="text-sm"><strong>力是「改變」運動狀態的原因，而不是「維持」運動的原因。</strong>如果沒有淨力，運動中的物體會一直保持等速直線運動（這在後面的牛頓第一定律會詳細說明）。現實中推力消失會停下，是因為有<strong>摩擦力</strong>的阻礙。</p>
-                        </div>
-                    </div>
-                </section>
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 一個球以 $10 \text{ m s}^{-1}$ 的速度被垂直向上拋出。若不計空氣阻力，當它落回拋出點（原來的高度）時，它的速度應該為何？（設定向上為正）</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q24-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $+10 \text{ m s}^{-1}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $0 \text{ m s}^{-1}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q24-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $-10 \text{ m s}^{-1}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 無法預測</button>
+                </div>
+                <div id="exp-q24-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據拋體運動的對稱性，落回同一高度時的速率（大小）等於拋出時的速率。但因為正在落下，方向向下，故在設定向上為正的情況下，速度為 $-10 \text{ m s}^{-1}$。
+                </div>
+            </div>
 
-                <!-- ✍️ 5. 典型例題解說 -->
-                <section class="mb-10">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
-                    <div class="space-y-6">
-                        
-                        <!-- 例題 1 -->
-                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
-                            <div class="flex items-start">
-                                <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
-                                <p class="text-slate-800 leading-relaxed font-medium">
-                                    下列哪些情況中，物體受到了力的作用？（可多選）<br>
-                                    (1) 一個被用力踢出並飛向空中的足球<br>
-                                    (2) 一塊正在被雙手壓扁的黏土<br>
-                                    (3) 一輛正在筆直公路上減速煞車的汽車
-                                </p>
-                            </div>
-                            <details class="mt-4 group">
-                                <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
-                                    <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
-                                    <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
-                                </summary>
-                                <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
-                                    <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                                    <p class="mb-2">回顧力的三大效果：改變速率、改變方向、改變形狀。</p>
-                                    <ul class="list-decimal list-inside space-y-1 mb-2">
-                                        <li>足球由靜止變為飛出，速率和方向改變，受力。</li>
-                                        <li>黏土被壓扁，形狀發生改變，受力。</li>
-                                        <li>汽車減速煞車，速率變慢，受力（摩擦力）。</li>
-                                    </ul>
-                                    <p class="mt-2 font-bold text-green-700">答案：(1), (2), (3) 全部皆受力。</p>
-                                </div>
-                            </details>
-                        </div>
-                        
-                        <!-- 例題 2 -->
-                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
-                            <div class="flex items-start">
-                                <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
-                                <p class="text-slate-800 leading-relaxed font-medium">
-                                    小華在水平地面上用 $10 \text{ N}$ 的力向右推一個木箱。由於力是一個矢量，請寫出這個推力的兩個核心組成部分。
-                                </p>
-                            </div>
-                            <details class="mt-4 group">
-                                <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
-                                    <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
-                                    <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
-                                </summary>
-                                <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
-                                    <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                                    <p class="mb-2">力作為一個矢量，必須同時具備「大小」與「方向」。</p>
-                                    <p class="mb-1">1. <strong>大小 (Magnitude)：</strong> $10 \text{ N}$</p>
-                                    <p class="mb-1">2. <strong>方向 (Direction)：</strong> 向右</p>
-                                    <p class="mt-2 text-sm text-slate-500">（註：在解題或作圖時，這兩個要素缺一不可。）</p>
-                                </div>
-                            </details>
-                        </div>
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 從高處自由落下一顆石頭。它在第 $1 \text{ s}$ 內下落的距離是 $s_1$，在第 $2 \text{ s}$ 內（由 $t=1$ 到 $t=2$）下落的距離是 $s_2$。兩者之間的關係為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q24-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $s_1 = s_2$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q24-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $s_1 < s_2$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $s_1 > s_2$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 資料不足</button>
+                </div>
+                <div id="exp-q24-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 由於石頭是「加速」下落的，它的速度越來越快。因此在相同的時間間隔（1秒）內，後面那段時間走過的距離一定比前面那段時間長。因此 $s_1 < s_2$。
+                </div>
+            </div>
 
-                        <!-- 例題 3 -->
-                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
-                            <div class="flex items-start">
-                                <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
-                                <p class="text-slate-800 leading-relaxed font-medium">
-                                    當足球員用力踢向靜止的足球時，足球會飛出去。在此過程中，是只有腳對球施力，還是球也會對腳施力？試說明原因。
-                                </p>
-                            </div>
-                            <details class="mt-4 group">
-                                <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
-                                    <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
-                                    <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
-                                </summary>
-                                <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
-                                    <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                                    <p class="mb-2">根據力的基本特性：「力是成對出現的」。</p>
-                                    <p class="mb-2">當腳對足球施加推力（作用力）時，足球也必定會同時對腳施加一個反方向的推力（反作用力）。這就是為什麼踢到硬物時，腳也會感到疼痛的原因。</p>
-                                    <p class="mt-2 font-bold text-green-700">答案：球也會同時對腳施加反方向的力。</p>
-                                </div>
-                            </details>
-                        </div>
-
-                    </div>
-                </section>
-
-                <!-- 🧠 6. 隨堂測驗 -->
-                <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗 (概念檢測)</h3>
-                    
-                    <div class="space-y-8">
-                        <!-- Q1 -->
-                        <div class="quiz-item">
-                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 力的國際單位制 (SI 單位) 是甚麼？</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                <button onclick="checkAnswer(this, false, 'exp-q3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 焦耳 (J)</button>
-                                <button onclick="checkAnswer(this, true, 'exp-q3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 牛頓 (N)</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 千克 (kg)</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 瓦特 (W)</button>
-                            </div>
-                            <div id="exp-q3-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                                <strong>解析：</strong> 力的 SI 單位是牛頓 ($\text{N}$)，為了紀念偉大物理學家牛頓。千克是質量單位，焦耳是能量單位。
-                            </div>
-                        </div>
-
-                        <!-- Q2 -->
-                        <div class="quiz-item">
-                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 關於力的性質，下列哪一項描述是正確的？</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                <button onclick="checkAnswer(this, false, 'exp-q3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 力只有大小，沒有方向</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 力是標量 (Scalar)</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 單一的力可以獨立存在於宇宙中</button>
-                                <button onclick="checkAnswer(this, true, 'exp-q3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 力是一個矢量，且總是成對出現的</button>
-                            </div>
-                            <div id="exp-q3-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                                <strong>解析：</strong> 力同時具有大小和方向，屬於矢量 (Vector)。並且力總是成對出現（作用力與反作用力），不可能單獨存在一個力。
-                            </div>
-                        </div>
-
-                        <!-- Q3 -->
-                        <div class="quiz-item">
-                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 下列哪一項 <strong>不是</strong> 力對物體可能產生的效果？</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                <button onclick="checkAnswer(this, true, 'exp-q3-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 改變物體的質量</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q3-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 改變物體的移動速率</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q3-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 改變物體的移動方向</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q3-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 改變物體的形狀</button>
-                            </div>
-                            <div id="exp-q3-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                                <strong>解析：</strong> 根據經典力學，物體的質量是物體本身含有的物質總量，不會因為受力而改變。力只能改變物體的運動狀態（速率、方向）或使其發生形變。
-                            </div>
-                        </div>
-
-                        <!-- Q4 -->
-                        <div class="quiz-item">
-                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 小明用力向後拉動一條彈簧，彈簧被拉長了。在此過程中，彈簧對小明的手...</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                <button onclick="checkAnswer(this, false, 'exp-q3-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 沒有施加任何力</button>
-                                <button onclick="checkAnswer(this, true, 'exp-q3-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 施加了一個向前的力</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q3-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 施加了一個向後的力</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q3-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 施加了一個向下的力</button>
-                            </div>
-                            <div id="exp-q3-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                                <strong>解析：</strong> 力是成對出現的。當小明向「後」拉彈簧，彈簧同時會產生一個反方向（即向「前」）的力作用在小明的手上。這就是彈簧的拉力（張力）。
-                            </div>
-                        </div>
-
-                        <!-- Q5 -->
-                        <div class="quiz-item">
-                            <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 樹上的蘋果掉落到地面上。導致蘋果掉落的力屬於哪一種力？</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                <button onclick="checkAnswer(this, false, 'exp-q3-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 接觸力：因為蘋果接觸到了空氣</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q3-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 接觸力：因為蘋果最終接觸到了地面</button>
-                                <button onclick="checkAnswer(this, true, 'exp-q3-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 非接觸力：因為地球重力不需要接觸就能作用</button>
-                                <button onclick="checkAnswer(this, false, 'exp-q3-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 非接觸力：因為蘋果沒有重量</button>
-                            </div>
-                            <div id="exp-q3-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                                <strong>解析：</strong> 蘋果掉落是因為受到地球的「重力 (Weight)」作用。重力是一種即使物體沒有與地球表面接觸，也能在一段距離外相互吸引的作用力，因此屬於非接觸力 (Non-contact force)。
-                            </div>
-                        </div>
-
-                    </div>
-                </section>
-            </article>
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 如果我們將向「下」設定為正方向。物體被垂直向「上」拋出。那麼它的初速度 ($u$) 與加速度 ($a$) 的符號分別為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q24-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $u$ 為正， $a$ 為正</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $u$ 為正， $a$ 為負</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q24-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $u$ 為負， $a$ 為正</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q24-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $u$ 為負， $a$ 為負</button>
+                </div>
+                <div id="exp-q24-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 既然設定向下為正 ($+$)，物體向「上」拋出，方向相反，故初速度 $u$ 為負 ($-$)。重力加速度永遠向「下」，與設定的正方向相同，故加速度 $a$ 為正 ($+$)。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
 
 <!-- ========================================== -->
 <!-- 區塊 3.2: 牛頓運動定律 (可直接插入主檔案) -->
