@@ -101,16 +101,16 @@
         <nav class="flex-1 overflow-y-auto p-4 space-y-6">
             <!-- 第 1 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 1 章：位置與運動</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 1 章：温度與温度計</h2>
                 <ul class="space-y-1">
                     <li>
-                     <button onclick="switchPage('ch1-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                               1.2 距離與位移
+                         <button onclick="switchPage('ch1-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            1.1 量度温度
                         </button>
                     </li>
                     <li>
-                        <button onclick="switchPage('ch1-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            1.3 速率、速度和加速度
+                        <button onclick="switchPage('ch1-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            1.2 攝氏温標
                         </button>
                     </li>
                 </ul>
@@ -370,7 +370,421 @@
 
 <!-- ========================================== -->
 
+<!-- ========================================== -->
+<!-- 區塊 1.1: 量度溫度 -->
+<!-- ========================================== -->
+<article id="ch1-1" class="content-section">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.1</span>量度溫度</h2>
+        <p class="text-slate-500 mt-2">理解溫度的物理定義，探討人類感官在判斷冷熱時的不可靠性，並學習溫度計的基本運作原理。</p>
+    </header>
 
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p><strong class="text-blue-700 font-bold">溫度 ($T$)：</strong> 溫度是物體「冷熱程度」的客觀標誌。在微觀物理學中，它反映了物體內部粒子無規則熱運動的劇烈程度。</p>
+            <p><strong class="text-blue-700 font-bold">感官的不可靠性：</strong></p>
+            <p>人類的皮膚只能感覺到熱量的「流失率」或「吸收率」，而無法準確測量物體的實際溫度。例如：</p>
+            <ul class="list-disc list-inside ml-2 space-y-2">
+                <li>將一隻手浸泡在熱水中，另一隻手浸泡在冷水中，再同時放入溫水中，兩隻手會產生完全相反的冷熱感覺。</li>
+                <li>在同一個房間內，觸摸金屬表面會比觸摸木頭表面感覺更冷，這是因為金屬導熱較快，使手部熱量流失得更快，而非金屬的溫度比木頭低。</li>
+            </ul>
+            <p class="mt-2 text-sm text-slate-500"><i class="fa-solid fa-circle-info text-blue-400 mr-1"></i> 因此，要客觀、準確地量度溫度，我們必須借助科學儀器——<strong class="text-blue-700 font-bold">溫度計</strong>。</p>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與溫度的測量屬性 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 溫度計的物理原理</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">溫度計必須利用物質某種隨溫度改變而呈現單調、可重複變化的物理性質來運作。這種性質稱為 <strong class="text-blue-700 font-bold">測溫屬性</strong>：</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">常見測溫性質一覽</p>
+                    <ul class="text-sm space-y-2 text-slate-600">
+                        <li>👉 <strong>液體的體積：</strong> 液體熱脹冷縮（如：水銀、酒精）。</li>
+                        <li>👉 <strong>金屬的電阻：</strong> 電阻隨溫度改變（如：電阻溫度計）。</li>
+                        <li>👉 <strong>熱敏電阻阻值：</strong> 阻值隨溫度改變。</li>
+                        <li>👉 <strong>氣體的壓強：</strong> 恆定體積下，氣壓隨溫度改變。</li>
+                        <li>👉 <strong>紅外線輻射強度：</strong> 測量物體發出的紅外線（如：耳溫槍）。</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 flex flex-col justify-center">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">測溫屬性的線性關係</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        在一定範圍內，測溫屬性 $X$ 與溫度 $T$ 之間通常呈線性關係：
+                    </p>
+                    <div class="text-center my-3 text-lg font-bold text-blue-900">
+                        $$ T \propto X \quad \implies \quad T = k X $$
+                    </div>
+                    <p class="text-xs text-slate-500">（其中 $k$ 為常數，取決於溫度計的校準）</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 常見溫度計之優缺點對照表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">溫度計種類</th>
+                        <th class="p-3 font-semibold w-1/4">測溫屬性</th>
+                        <th class="p-3 font-semibold w-1/4">主要優點</th>
+                        <th class="p-3 font-semibold w-1/4">主要缺點 / 限制</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">液體玻璃溫度計</td>
+                        <td class="p-3">液柱的長度（體積）</td>
+                        <td class="p-3 text-green-700 font-bold">結構簡單、讀數直觀、不需電源</td>
+                        <td class="p-3">反應較慢、測量範圍窄、無法連續自動記錄</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">電阻溫度計</td>
+                        <td class="p-3">金屬（如鉑）的電阻</td>
+                        <td class="p-3 text-green-700 font-bold">精確度極高、測量範圍極廣</td>
+                        <td class="p-3">體積較大、熱容量大、反應較慢</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">熱電偶溫度計</td>
+                        <td class="p-3">兩端接點的溫差電動勢</td>
+                        <td class="p-3 text-green-700 font-bold">熱容量極小、反應極迅速、適合測點溫度</td>
+                        <td class="p-3">需要電子儀器放大信號、精確度略遜於鉑電阻</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">紅外線溫度計</td>
+                        <td class="p-3">發出的紅外線強度</td>
+                        <td class="p-3 text-green-700 font-bold">非接觸式測量、安全迅速、適合移動目標</td>
+                        <td class="p-3">易受環境及物體表面發射率影響</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">液體玻璃溫度計</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">屬性：</span> 液柱長度</li>
+                    <li><span class="font-medium text-green-700 font-bold">優點：</span> 簡單、便宜、不需電池</li>
+                    <li><span class="font-medium text-red-600 font-bold">缺點：</span> 無法遠端讀取、範圍有限</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">熱電偶溫度計</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="font-medium text-slate-800">屬性：</span> 接點溫差電動勢</li>
+                    <li><span class="font-medium text-green-700 font-bold">優點：</span> 反應速度極快、可測極小點</li>
+                    <li><span class="font-medium text-red-600 font-bold">缺點：</span> 需搭配電子放大電路</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <p class="text-sm">「我們可以直接拿實驗室用的玻璃水銀溫度計去量度沸水的溫度，因為水銀不會沸騰。」</p>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <p class="text-sm">雖然水銀的沸點足夠高，但不同液體溫度計有其<strong>設計上限</strong>。如果溫度計的最大量程低於 $100\ ^\circ\text{C}$（例如某些酒精溫度計或體溫計），強行放入沸水中會導致液體膨脹並<strong>撐爆玻璃管</strong>，非常危險。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        小明設計了一個新式溫度計，利用某種特殊金屬線的電阻來測量溫度。他發現該金屬線的電阻 $R$ 與溫度 $T$ 呈線性關係。在冰點（$0\ ^\circ\text{C}$）時，電阻為 $20\ \Omega$；在沸點（$100\ ^\circ\text{C}$）時，電阻為 $120\ \Omega$。求：<br>
+                        (a) 該溫度計電阻隨溫度變化的線性方程式。<br>
+                        (b) 當電阻測得為 $70\ \Omega$ 時，對應的溫度是多少？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 建立線性方程式：</strong></p>
+                        <p class="mb-2">由於是線性關係，公式可寫為 $R = k T + R_0$。</p>
+                        <p class="mb-2">代入 $T = 0\ ^\circ\text{C}$ 時，$R_0 = 20\ \Omega$。</p>
+                        <p class="mb-2">代入 $T = 100\ ^\circ\text{C}$ 時：</p>
+                        $$ 120 = k(100) + 20 \quad \implies \quad 100k = 100 \quad \implies \quad k = 1\ \Omega/^\circ\text{C} $$
+                        <p class="mb-2">因此線性方程為：</p>
+                        $$ R = T + 20 \quad (\text{或 } T = R - 20) $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 計算 $R = 70\ \Omega$ 時的溫度：</strong></p>
+                        $$ T = 70 - 20 = 50\ ^\circ\text{C} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 方程式為 $R = T + 20$；(b) 溫度為 $50\ ^\circ\text{C}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz1-1-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 關於溫度的物理本質，下列哪一項描述是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q11-1', 'quiz1-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 溫度是物體所含熱量的總量</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q11-1', 'quiz1-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 溫度是物體內部分子無規則運動劇烈程度的標誌</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q11-1', 'quiz1-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 溫度可以用手觸摸來精確量度</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q11-1', 'quiz1-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 越重的物體，溫度必定越高</button>
+                </div>
+                <div id="exp-q11-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 溫度是熱運動的量度。微觀上，溫度反映了分子平均動能的大小，而不是總熱量。感官具有主觀性與不可靠性，無法用於精確量度。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz1-1-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 醫療上常用的「耳溫槍」是利用人體的哪一種性質來量度溫度的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q11-2', 'quiz1-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 鼓膜的水銀膨脹量</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q11-2', 'quiz1-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 耳道皮膚的電阻變化</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q11-2', 'quiz1-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 鼓膜發射出的紅外線強度</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q11-2', 'quiz1-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 兩端金屬線的電勢差</button>
+                </div>
+                <div id="exp-q11-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 耳溫槍是一種紅外線溫度計，透過測量鼓膜所發射的紅外線輻射強度來換算溫度，屬於非接觸式快速測量。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item" id="quiz1-1-3">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 下列關於「測溫屬性」的敘述，哪一項是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q11-3', 'quiz1-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 只有液體熱脹冷縮的體積變化才能用來做溫度計</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q11-3', 'quiz1-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 隨便一種性質，只要隨溫度變化，就能拿來測量任何範圍的溫度</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q11-3', 'quiz1-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 測溫屬性必須在所量度的溫度範圍內具有可重現的、穩定的單值對應關係</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q11-3', 'quiz1-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 測溫性質隨溫度變化的曲線必須是一條完美的二次曲線</button>
+                </div>
+                <div id="exp-q11-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 只要能隨溫度呈單調、穩定且可重複變化的屬性，都可以做為測溫性質。線性關係最便於刻度劃分。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 1.2: 攝氏溫標 -->
+<!-- ========================================== -->
+<article id="ch1-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.2</span>攝氏溫標</h2>
+        <p class="text-slate-500 mt-2">學習如何定義一個標準溫標，認識定點的物理意義，並學會校準未標定刻度的溫度計。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>要讓不同的溫度計讀數一致，我們必須建立一套共同的標準，這稱為 <strong class="text-blue-700 font-bold">溫標 (Temperature scale)</strong>。在香港及日常生活中，最常用的溫標是 <strong class="text-blue-700 font-bold">攝氏溫標 (Celsius scale)</strong>，單位為 <strong class="text-blue-700 font-bold">攝氏度 ($^\circ\text{C}$)</strong>。</p>
+            <p>建立攝氏溫標時，必須選定兩個在標準大氣壓下，物理狀態極其穩定、可隨時重現的溫度作為基準，這稱為 <strong class="text-blue-700 font-bold">定點 (Fixed points)</strong>：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">冰點 (Ice point)：</strong> 
+                    在標準大氣壓下，純冰和純水處於平衡狀態（共存）時的溫度。此定點被定義為 <strong class="text-blue-700">$0\ ^\circ\text{C}$</strong>。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">沸點 (Steam point)：</strong> 
+                    在標準大氣壓下，純水沸騰時，上方產生的飽和水蒸氣的溫度。此定點被定義為 <strong class="text-blue-700">$100\ ^\circ\text{C}$</strong>。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與溫度計校準 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 溫度計校準公式</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">若一根液體玻璃溫度計尚未標定刻度，我們可以測量其液柱高度在冰點的長度 $L_0$ 以及在沸點的長度 $L_{100}$。在任意未知溫度 $T$ 時，液柱長度為 $L_T$：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ T = \frac{L_T - L_0}{L_{100} - L_0} \times 100\ ^\circ\text{C} $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$L_T$：在未知溫度 $T$ 時的物理量數值（如液柱高度、電阻值等）。</li>
+                <li>$L_0$：在冰點（$0\ ^\circ\text{C}$）時的物理量數值。</li>
+                <li>$L_{100}$：在沸點（$100\ ^\circ\text{C}$）時的物理量數值。</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>注意：</strong> 此校準公式僅在測溫屬性與溫度呈<strong>線性關係</strong>時才成立。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 校準步驟對照</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">步驟</th>
+                        <th class="p-3 font-semibold w-1/4">實驗操作</th>
+                        <th class="p-3 font-semibold w-2/5">目的與記錄物理量</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">第一步：測量冰點</td>
+                        <td class="p-3">將溫度計完全浸入純淨的冰水混合物中</td>
+                        <td class="p-3">等讀數穩定後，標記此時的位置，記錄物理量 $L_0$。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">第二步：測量沸點</td>
+                        <td class="p-3">將溫度計懸掛於沸水上方緊密的蒸汽中（不可直接插入水中防止雜質誤差）</td>
+                        <td class="p-3">等讀數穩定後，標記此時的位置，記錄物理量 $L_{100}$。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">第三步：劃分刻度</td>
+                        <td class="p-3">在 $L_0$ 與 $L_{100}$ 的標記之間均勻劃分 100 等份</td>
+                        <td class="p-3">每一等份即代表 $1\ ^\circ\text{C}$ 的溫度變化。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">冰點量度</h4>
+                <p class="text-sm text-slate-600">浸入冰水混合物中，測量 $L_0$（代表 $0\ ^\circ\text{C}$）。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">沸點量度</h4>
+                <p class="text-sm text-slate-600">置於標準大氣壓的沸水蒸汽中，測量 $L_{100}$（代表 $100\ ^\circ\text{C}$）。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <p class="text-sm">「校準溫度計時，只要把溫度計直接插進沸水中量度，就能得到最準確的 $100\ ^\circ\text{C}$ 沸點標記。」</p>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <p class="text-sm"><strong>大錯特錯！</strong> 水的沸點會受到水中雜質的強烈影響。如果水不純，直接量度沸水溫度會偏離 $100\ ^\circ\text{C}$。因此，我們必須把溫度計放在<strong>沸水上方的「蒸汽」中</strong>，因為蒸汽冷凝成水的過程中是純淨的，其溫度最接近標準定點。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 (未標定高度計算) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        有一根未標定刻度的水銀溫度計。在冰點時，水銀柱的高度為 $4 \text{ cm}$；在沸點時，高度為 $24 \text{ cm}$。求：<br>
+                        (a) 當溫度計放入某溫水時，水銀柱的高度為 $14 \text{ cm}$，此溫水的溫度是多少？<br>
+                        (b) 當外界溫度為 $35\ ^\circ\text{C}$ 時，水銀柱的高度應該是多少？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">已知 $L_0 = 4 \text{ cm}$，$L_{100} = 24 \text{ cm}$。</p>
+                        <hr class="my-2 border-amber-200">
+                        <p class="mb-2"><strong>(a) 求 $L_T = 14 \text{ cm}$ 時的溫度：</strong></p>
+                        $$ T = \frac{L_T - L_0}{L_{100} - L_0} \times 100 $$
+                        $$ T = \frac{14 - 4}{24 - 4} \times 100 = \frac{10}{20} \times 100 = 50\ ^\circ\text{C} $$
+                        <hr class="my-2 border-amber-200">
+                        <p class="mb-2"><strong>(b) 求 $T = 35\ ^\circ\text{C}$ 時的長度 $L_{35}$：</strong></p>
+                        $$ 35 = \frac{L_{35} - 4}{24 - 4} \times 100 \quad \implies \quad 35 = \frac{L_{35} - 4}{20} \times 100 $$
+                        $$ 35 = 5 (L_{35} - 4) \quad \implies \quad 7 = L_{35} - 4 \quad \implies \quad L_{35} = 11 \text{ cm} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 溫度為 $50\ ^\circ\text{C}$；(b) 高度為 $11 \text{ cm}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item" id="quiz1-2-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在標準大氣壓下，攝氏溫標的「冰點（$0\ ^\circ\text{C}$）」定義為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q12-1', 'quiz1-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 純水結冰時的最高溫度</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q12-1', 'quiz1-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 純冰和純水在熱平衡狀態下共存的溫度</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-1', 'quiz1-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 家用冰箱冷凍庫的平均溫度</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-1', 'quiz1-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 鹽水混合物開始凝固的溫度</button>
+                </div>
+                <div id="exp-q12-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 冰點定義在標準大氣壓下，純冰和純水處於動態平衡（混合共存）時的穩定溫度。這是一套標準、可重現的定點。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item" id="quiz1-2-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 校準溫度計的「沸點」時，為甚麼要把溫度計懸掛在沸水上方的蒸汽中，而不是直接放入沸水中？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q12-2', 'quiz1-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 因為沸水的溫度高於 $100\ ^\circ\text{C}$，會損壞溫度計</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-2', 'quiz1-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 因為蒸汽的熱容量較大，校準速度較快</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q12-2', 'quiz1-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 因為水中的雜質會改變水的沸點，但蒸汽冷凝時是純淨的</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-2', 'quiz1-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 因為直接接觸熱水會使玻璃外殼破裂</button>
+                </div>
+                <div id="exp-q12-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 水的沸點極易受雜質干涉。沸水上方的蒸汽在凝結時代表了純淨水的相變溫度，因此蒸汽的溫度比容器中沸水的溫度更可靠、更精確。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item" id="quiz1-2-3">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 一個電阻溫度計在冰點時的電阻為 $50\ \Omega$，在沸點時的電阻為 $150\ \Omega$。若在未知溫度下測得電阻為 $80\ \Omega$，求此時的溫度：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q12-3', 'quiz1-2-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $30\ ^\circ\text{C}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-3', 'quiz1-2-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $40\ ^\circ\text{C}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-3', 'quiz1-2-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $50\ ^\circ\text{C}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q12-3', 'quiz1-2-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $80\ ^\circ\text{C}$</button>
+                </div>
+                <div id="exp-q12-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 代入校準公式：$$ T = \frac{80 - 50}{150 - 50} \times 100 = \frac{30}{100} \times 100 = 30\ ^\circ\text{C} $$。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
 
 
 
