@@ -260,6 +260,61 @@
                 </ul>
             </div>
 
+                        <!-- 第 8 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 8 章：拋體運動</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch8-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            8.1 認識拋體運動
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch8-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            8.2 分析拋體運動
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+                        <!-- 第 9 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 9 章：圓周運動</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch9-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            9.1 勻速圓周運動
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch9-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            9.2 向心力與向心加速度
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch9-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            9.3 勻速圓周運動
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+                        <!-- 第 10 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 10 章：引力</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch10-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            10.1 萬有引力
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch10-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            10.2 引力作用下的圓周運動
+                        </button>
+                    </li>
+                 </ul>
+            </div>
             
         </nav>
 
@@ -6953,7 +7008,1411 @@
 </article>
 
 
-                        
+<!-- ========================================== -->
+<!-- 區塊 8.1: 認識拋體運動 -->
+<!-- ========================================== -->
+<article id="ch8-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">8.1</span>認識拋體運動</h2>
+        <p class="text-slate-500 mt-2">理解拋體運動的本質，並學習將二維的曲線運動拆解為水平與垂直兩個獨立的一維運動。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>當我們把一個物體拋入空中，如果我們 <strong class="text-blue-700">忽略空氣阻力</strong>，該物體在飛行過程中將 <strong>只受到重力作用</strong>。這種物體被稱為 <strong class="text-blue-700 font-bold">拋體 (Projectile)</strong>，而它所進行的曲線運動就稱為 <strong class="text-blue-700 font-bold">拋體運動 (Projectile motion)</strong>。</p>
+            <hr class="my-4 border-slate-100">
+            <p><strong class="text-blue-700 font-bold">運動的獨立性 (Independence of motion)：</strong></p>
+            <p>拋體運動看似複雜的二維拋物線軌跡，其實可以被完美地拆解為兩個完全獨立的運動：</p>
+            <ul class="list-disc list-inside ml-2 space-y-2">
+                <li><strong class="text-slate-800">水平方向 ($x$ 軸)：</strong> 不受任何力（沒有空氣阻力），因此沒有加速度。物體在水平方向作 <strong class="text-blue-600">勻速直線運動 (Uniform velocity)</strong>。</li>
+                <li><strong class="text-slate-800">垂直方向 ($y$ 軸)：</strong> 只受恆定的重力作用，因此具有恆定向下的重力加速度 ($g$)。物體在垂直方向作 <strong class="text-blue-600">勻加速直線運動 (Uniform acceleration)</strong>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 水平與垂直分量的拆解</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">假設一個拋體以初速度 $u$，與水平面夾角 $\theta$ 發射，我們首先必須將初速度分解：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">水平初速度 ($u_x$)</p>
+                    <p class="text-xl font-bold">$$ u_x = u \cos\theta $$</p>
+                    <p class="text-sm text-slate-500 mt-2">（此數值在整個飛行過程中保持不變）</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">垂直初速度 ($u_y$)</p>
+                    <p class="text-xl font-bold">$$ u_y = u \sin\theta $$</p>
+                    <p class="text-sm text-slate-500 mt-2">（隨着重力影響，此數值會不斷改變）</p>
+                </div>
+            </div>
+            <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-link text-blue-500 mr-1"></i> <strong>聯繫兩者的橋樑：</strong> 水平運動和垂直運動是獨立的，但它們共用同一個 <strong class="text-blue-700">飛行時間 ($t$)</strong>！時間 $t$ 是解開拋體運動題目的關鍵鑰匙。</p>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 水平運動 vs 垂直運動 對照表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">運動維度</th>
+                        <th class="p-3 font-semibold w-1/4">受力情況</th>
+                        <th class="p-3 font-semibold w-1/4">加速度 ($a$)</th>
+                        <th class="p-3 font-semibold w-1/4">速度 ($v$) 的變化</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-bold text-blue-700">水平方向 ($x$)</td>
+                        <td class="p-3">不受力 (淨力 = 0)</td>
+                        <td class="p-3">$a_x = 0$</td>
+                        <td class="p-3">恆定不變 ($v_x = u_x$)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-bold text-red-600">垂直方向 ($y$)</td>
+                        <td class="p-3">只受重力 ($W = mg$)</td>
+                        <td class="p-3">$a_y = g$ (向下)</td>
+                        <td class="p-3">不斷改變 (先減速至最高點，再加速下落)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">水平方向 ($x$)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>受力：不受力</li>
+                    <li>加速度：$a_x = 0$</li>
+                    <li>速度特徵：<strong>永遠等於水平初速 $u_x$</strong></li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-red-600 border-b border-slate-100 pb-2 mb-2">垂直方向 ($y$)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>受力：只受重力</li>
+                    <li>加速度：$a_y = g$ (向下)</li>
+                    <li>速度特徵：<strong>像一般的垂直上拋/下落運動</strong></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「從同一高度，一顆子彈被水平射出，另一顆子彈直接自由落下。水平射出的子彈因為飛得比較遠，所以會在空中停留較長時間，比較晚落地。」</li>
+                    <li>「物體被拋到最高點時，它瞬間會停下來，所以它在最高點的速度是零。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>兩顆子彈會同時落地！</strong> 因為垂直方向和水平方向是獨立的。兩者在垂直方向的初速度都是 $0$，受到的加速度都是 $g$，下落距離一樣，因此所需時間完全相同。</li>
+                    <li>最高點時，物體的<strong>垂直速度 $v_y = 0$</strong>，但它仍然繼續向前飛，所以它的<strong>水平速度 $v_x$ 依然存在</strong>！因此最高點的總速度並不為零，而是等於 $u_x$。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (水平拋射概念) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一架救援直升機以 $50 \text{ m s}^{-1}$ 的速度水平勻速飛行。當直升機飛到遇險者正上方時，機員投下一個救援包裹。若不計空氣阻力，包裹會落在遇險者的正前方、正上方還是正後方？為甚麼？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 根據慣性，包裹在離開直升機的瞬間，已經具有與直升機相同的水平初速度 ($u_x = 50 \text{ m s}^{-1}$)。</p>
+                        <p class="mb-2">2. 由於水平方向不受外力（忽略空氣阻力），包裹在下落的整個過程中，水平速度將保持在 $50 \text{ m s}^{-1}$。</p>
+                        <p class="mb-2">3. 這表示包裹在下落的同時，會一直向前飛。如果直升機在正上方才投下，包裹一定會越過遇險者，掉在遇險者的前方。</p>
+                        <p class="mt-2 font-bold text-green-700">答案：會落在正前方。機員必須在抵達遇險者之前提早投下包裹。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (初速度分解計算) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一門大炮以仰角 $30^\circ$ 發射炮彈，炮彈的初速度為 $200 \text{ m s}^{-1}$。求炮彈剛發射時的水平初速度 $u_x$ 與垂直初速度 $u_y$。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">直接應用三角函數進行分解：</p>
+                        <p class="mb-2"><strong>水平初速度：</strong></p>
+                        $$ u_x = u \cos\theta = 200 \cos 30^\circ \approx 200 \times 0.866 = 173.2 \text{ m s}^{-1} $$
+                        <p class="mb-2 mt-4"><strong>垂直初速度：</strong></p>
+                        $$ u_y = u \sin\theta = 200 \sin 30^\circ = 200 \times 0.5 = 100 \text{ m s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：水平初速為 $173.2 \text{ m s}^{-1}$，垂直初速為 $100 \text{ m s}^{-1}$。</p>
+                        <p class="text-sm text-slate-500 mt-1">（這代表炮彈在空中飛行的時間，完全等同於一個以 $100 \text{ m s}^{-1}$ 被垂直上拋的物體！）</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (最高點的特性) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        承接上題，當該炮彈到達其飛行軌跡的最高點時，炮彈的：<br>
+                        (a) 垂直速度 $v_y$ 為何？<br>
+                        (b) 總速度 $v$ 為何？<br>
+                        (c) 加速度 $a$ 為何？（取向上的方向為正，$g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a)</strong> 在最高點，炮彈停止上升準備下落，因此垂直方向的速度瞬間為零。</p>
+                        $$ v_y = 0 \text{ m s}^{-1} $$
+                        <p class="mb-2 mt-4"><strong>(b)</strong> 拋體在水平方向的速度保持不變，因此最高點仍具有水平速度 $u_x$。總速度即為水平速度。</p>
+                        $$ v = u_x = 173.2 \text{ m s}^{-1} \text{ (方向為水平向前)} $$
+                        <p class="mb-2 mt-4"><strong>(c)</strong> 拋體在空中唯一受到的力就是向下的重力，因此其加速度永遠是重力加速度，不論在哪個位置。</p>
+                        $$ a = -9.81 \text{ m s}^{-2} \text{ (負號表示向下)} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) $0$；(b) $173.2 \text{ m s}^{-1}$；(c) $-9.81 \text{ m s}^{-2}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在研究拋體運動時，我們假設拋體在飛行過程中唯一受到的力是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q81-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 把它拋出去的推力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 空氣阻力</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q81-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 地球的重力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 慣性力</button>
+                </div>
+                <div id="exp-q81-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 拋體運動的定義中，物體離開拋射源後，便不再受到推力。若忽略空氣阻力，則空中唯一作用在它身上的力只有垂直向下的重力。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 小明同時從等高處釋放兩顆相同的鋼珠。A 鋼珠由靜止自由落下，B 鋼珠則被水平用力彈射出去。在沒有空氣阻力的情況下，哪一顆會先着地？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q81-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. A 先着地，因為它直線下落距離最短</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. B 先着地，因為它有初速度</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q81-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 兩者同時着地</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 取決於 B 被彈射出的速度大小</button>
+                </div>
+                <div id="exp-q81-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 決定落地時間的唯一因素是「垂直方向的運動」。兩者垂直方向的初速度都是 0，落下的垂直距離一樣，受到的向下加速度都是 $g$，因此必然同時着地。水平速度不影響垂直下落時間。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 關於拋體運動中的「水平方向」運動，下列敘述何者正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q81-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 受到恆定的向前推力作用</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 具有與重力相等的水平加速度</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q81-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 不受外力作用，保持勻速直線運動</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 速度會先減小，然後增加</button>
+                </div>
+                <div id="exp-q81-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 在忽略空氣阻力的前提下，水平方向沒有任何力作用。根據牛頓第一定律，物體在該方向將保持其水平初速度，作勻速直線運動。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 將一個球以與水平面成 $45^\circ$ 的角度斜向拋出。當球到達最高點時，它的總速度方向為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q81-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 速度為零，沒有方向</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 垂直向下</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q81-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 水平向前</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 與水平呈 $45^\circ$ 向下</button>
+                </div>
+                <div id="exp-q81-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 在最高點，垂直方向的速度 $v_y$ 剛好減少到 0，準備反向下落。但水平方向的速度 $v_x$ 從未改變。因此球在最高點時，只有水平向前的速度。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 如果一輛正在以勻速直線行駛的開篷跑車中，乘客垂直向上拋出一顆網球，在沒有空氣阻力的情況下，網球會落在哪裡？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q81-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 乘客的手中</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 跑車的後方</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 跑車的前方</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q81-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 取決於拋出的高度</button>
+                </div>
+                <div id="exp-q81-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 網球離開手時，具有與跑車完全相同的水平速度。因為水平方向沒有阻力，網球在空中飛行時，其水平移動的速度與跑車保持一致，因此當它落下時，跑車和乘客剛好也移動到了網球落下的位置，球會穩穩落回手中。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 8.2: 分析拋體運動 -->
+<!-- ========================================== -->
+<article id="ch8-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">8.2</span>分析拋體運動</h2>
+        <p class="text-slate-500 mt-2">將直線運動方程 (suvat) 應用於二維拋體，學會計算飛行時間、最大高度與水平射程。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 解題的核心策略：分而治之</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>既然拋體的 $x$ 和 $y$ 軸運動互不干涉，我們在計算時就必須列出 <strong>兩套完全獨立的方程式</strong>。絕對不能把水平的位移代入垂直的公式中！</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li><strong class="text-blue-700 font-bold">飛行時間 (Time of flight, $t$)：</strong> 這是唯一可以同時代入水平和垂直方程式的物理量。通常我們會先利用垂直方向的條件（例如落地時 $s_y = 0$ 或到達最高點時 $v_y = 0$）把 $t$ 找出來，再代入水平方程式計算距離。</li>
+                <li><strong class="text-blue-700 font-bold">水平射程 (Range, $R$)：</strong> 拋體落地點與發射點之間的水平距離。</li>
+                <li><strong class="text-blue-700 font-bold">最大高度 (Maximum height, $H$)：</strong> 拋體在其軌跡最高點時，距離發射水平面的垂直距離。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 分量方程式一覽 (取向上為正)</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">設定初速為 $u$，拋射角為 $\theta$，重力加速度為 $g$ (向下)。</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b pb-1">水平方向 ($x$-axis)</p>
+                    <p class="text-sm text-slate-600 mb-1">勻速直線運動 ($a_x = 0$)</p>
+                    <ul class="space-y-2 text-lg">
+                        <li>速度：$$v_x = u \cos\theta \text{ (常數)}$$</li>
+                        <li>位移：$$s_x = (u \cos\theta) t$$</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b pb-1">垂直方向 ($y$-axis)</p>
+                    <p class="text-sm text-slate-600 mb-1">勻加速直線運動 ($a_y = -g$)</p>
+                    <ul class="space-y-2 text-lg">
+                        <li>速度：$$v_y = u \sin\theta - gt$$</li>
+                        <li>位移：$$s_y = (u \sin\theta) t - \frac{1}{2}gt^2$$</li>
+                        <li>無時間公式：$$v_y^2 = (u \sin\theta)^2 - 2g s_y$$</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>總速度 $v$：</strong> 任何時刻的總速度大小為 $v = \sqrt{v_x^2 + v_y^2}$，方向為 $\tan\phi = \frac{v_y}{v_x}$。</p>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 發射角度 ($\theta$) 對射程與高度的影響</h3>
+        <p class="text-slate-700 mb-3">假設以相同的初速率 $u$ 從平地發射，不同的角度會有不同的結果：</p>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">特徵</th>
+                        <th class="p-3 font-semibold w-3/4">規律說明</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">最大射程角</td>
+                        <td class="p-3">當發射角為 <strong class="text-blue-700 font-bold">$45^\circ$</strong> 時，物體能達到最遠的水平射程（在忽略空氣阻力，且落地點與發射點等高的情況下）。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">互餘角對稱性</td>
+                        <td class="p-3">兩個互餘的發射角（即 $\theta_1 + \theta_2 = 90^\circ$，例如 $30^\circ$ 和 $60^\circ$）會產生 <strong class="text-blue-700 font-bold">完全相同的水平射程</strong>。（但高角度的飛行時間較長，飛得較高）。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">最大高度角</td>
+                        <td class="p-3">當發射角為 <strong class="text-blue-700 font-bold">$90^\circ$</strong>（垂直向上）時，物體能達到最大高度，但水平射程為零。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">最大射程</h4>
+                <p class="text-sm text-slate-600">在沒有空氣阻力的平地上，發射角為 <strong>$45^\circ$</strong> 時射程最遠。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">互餘角度</h4>
+                <p class="text-sm text-slate-600">如 $15^\circ$ 和 $75^\circ$。只要相加等於 $90^\circ$，它們的 <strong>水平射程一樣遠</strong>（但高度不同）。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「物體在空中飛得越遠（射程越大），代表它在空中飛行的時間一定越長。」</li>
+                    <li>「從懸崖水平拋出一顆石頭，因為它是水平拋出的，所以落地瞬間它的總速度就是水平方向的速度。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>飛行時間只取決於垂直運動！</strong> 一個 $60^\circ$ 高飛的球，在空中的時間比一個 $30^\circ$ 低飛的球長得多，即使它們的水平射程一模一樣。</li>
+                    <li>水平拋出只代表「初始」垂直速度為零。在下落過程中，重力會讓它產生巨大的垂直速度 $v_y$。落地時的總速度必須由 $v_x$ 和 $v_y$ 利用畢氏定理合併！</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (水平拋體) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        從 $20 \text{ m}$ 高的樓頂，以水平速度 $15 \text{ m s}^{-1}$ 擲出一個球。忽略空氣阻力，取 $g = 10 \text{ m s}^{-2}$。<br>
+                        (a) 球需要多少時間才會落到地面？<br>
+                        (b) 球落地的水平射程是多少？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 求飛行時間：看垂直方向 ($y$)。</strong><br>因為是「水平」拋出，所以垂直初速 $u_y = 0$。設向下為正。</p>
+                        $$ s_y = 20 \text{ m}, \quad a_y = 10 \text{ m s}^{-2}, \quad u_y = 0 $$
+                        $$ s_y = u_y t + \frac{1}{2} a_y t^2 $$
+                        $$ 20 = 0 + \frac{1}{2} (10) t^2 \implies 20 = 5 t^2 \implies t^2 = 4 \implies t = 2 \text{ s} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 求水平射程：看水平方向 ($x$)。</strong><br>水平方向不受力，以勻速 $u_x = 15 \text{ m s}^{-1}$ 飛行了 $2 \text{ s}$。</p>
+                        $$ s_x = u_x \times t = 15 \times 2 = 30 \text{ m} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) $2 \text{ s}$；(b) $30 \text{ m}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (斜拋 - 求最高點) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        高爾夫球被擊出時，初速度為 $40 \text{ m s}^{-1}$，與平地夾角為 $30^\circ$。求高爾夫球能達到的最大高度 $H$。（取向上的方向為正，$g = 10 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">計算「高度」只需看垂直方向 ($y$)。首先找出垂直初速：</p>
+                        $$ u_y = u \sin 30^\circ = 40 \times 0.5 = 20 \text{ m s}^{-1} $$
+                        <p class="mb-2 mt-4">在最高點時，垂直速度瞬間歸零 ($v_y = 0$)。使用無時間公式：</p>
+                        $$ v_y^2 = u_y^2 + 2 a_y s_y $$
+                        $$ 0^2 = 20^2 + 2(-10) H $$
+                        $$ 0 = 400 - 20 H \implies 20 H = 400 $$
+                        $$ H = 20 \text{ m} $$
+                        <p class="mt-2 font-bold text-green-700">答案：最大高度為 $20 \text{ m}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (總速度合成) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        承接例題 1 (從 $20 \text{ m}$ 高處以 $15 \text{ m s}^{-1}$ 水平拋出的球，在空中飛行了 $2 \text{ s}$)。求球落地瞬間的總速度大小和方向。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 找出落地瞬間的水平和垂直分速度：</p>
+                        <ul class="list-disc list-inside mb-2">
+                            <li>水平速度不變：$v_x = u_x = 15 \text{ m s}^{-1}$</li>
+                            <li>垂直速度：$v_y = u_y + at = 0 + (10)(2) = 20 \text{ m s}^{-1}$ (向下)</li>
+                        </ul>
+                        <p class="mb-2 mt-4">2. 使用畢氏定理求總速度大小 $v$：</p>
+                        $$ v = \sqrt{v_x^2 + v_y^2} = \sqrt{15^2 + 20^2} = \sqrt{225 + 400} = \sqrt{625} = 25 \text{ m s}^{-1} $$
+                        <p class="mb-2 mt-4">3. 求方向（與水平面的夾角 $\phi$）：</p>
+                        $$ \tan\phi = \frac{v_y}{v_x} = \frac{20}{15} \approx 1.333 \implies \phi \approx 53.1^\circ $$
+                        <p class="mt-2 font-bold text-green-700">答案：落地速度大小為 $25 \text{ m s}^{-1}$，方向為水平面下方 $53.1^\circ$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在沒有空氣阻力的平地上，想要讓砲彈射得最遠，發射角應設定為多少度？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q82-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $30^\circ$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q82-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $45^\circ$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $60^\circ$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $90^\circ$</button>
+                </div>
+                <div id="exp-q82-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據拋體運動的數學推導，射程 $R = \frac{u^2 \sin 2\theta}{g}$。當 $2\theta = 90^\circ$ 時（即 $\theta = 45^\circ$），$\sin 2\theta$ 達到最大值 1，從而獲得最大射程。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 若以相同的初速 $u$ 發射兩顆砲彈，一顆以 $20^\circ$ 角發射，另一顆以 $70^\circ$ 角發射。比較兩者的水平射程：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q82-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $20^\circ$ 的射得較遠</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $70^\circ$ 的射得較遠</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q82-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 兩者射程一樣遠</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 無法比較</button>
+                </div>
+                <div id="exp-q82-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 這是一組「互餘角」($20^\circ + 70^\circ = 90^\circ$)。在相同初速下，互餘角的拋射會產生完全相同的水平射程。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 一個被斜向拋出的物體，當它到達最高點時，下列敘述何者正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q82-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 速度為零，加速度也為零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 速度為零，加速度為 $g$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q82-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 速度不為零，加速度為 $g$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 速度不為零，加速度為零</button>
+                </div>
+                <div id="exp-q82-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 到達最高點時，僅「垂直」速度為零，但「水平」速度依然存在，所以總速度不為零。空中飛行時加速度永遠是向下的 $g$。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 棒球以 $30 \text{ m s}^{-1}$ 的初速、$60^\circ$ 的仰角被擊出。計算其垂直初速度 $u_y$ 的正確算式為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q82-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $30 \cos 60^\circ$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q82-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $30 \sin 60^\circ$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $30 \tan 60^\circ$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $30 \times 9.81$</button>
+                </div>
+                <div id="exp-q82-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 發射仰角通常是與「水平面」的夾角。垂直方向是與角度相對的邊，因此使用 $\sin$ 函數來分解：$u_y = u \sin\theta$。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 如果想要求出拋體在空中的「總飛行時間 $t$」，我們最常利用哪一個物理條件代入 suvat 運動方程？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q82-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 落地時水平速度為零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 最高點時垂直位移為零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q82-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 落地時總速度為零</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q82-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 落地時垂直位移 $s_y = 0$ (若在平地)，或 $s_y = -h$ (若從高處落下)</button>
+                </div>
+                <div id="exp-q82-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 水平速度永遠不為零，所以 A 錯；最高點時是垂直速度 $v_y=0$，不是位移，B 錯。最標準的做法是利用落地時的垂直位置（位移條件）代入 $s_y = u_y t + \frac{1}{2}a_y t^2$ 來求出時間 $t$。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>                 
+
+<!-- ========================================== -->
+<!-- 區塊 9.1: 勻速圓周運動 -->
+<!-- ========================================== -->
+<article id="ch9-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">9.1</span>勻速圓周運動</h2>
+        <p class="text-slate-500 mt-2">認識描述圓周運動快慢的基礎物理量，區分角速度與線速度，並建立兩者的幾何關係。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>當物體沿着圓形路徑以恆定的速率運動時，這種運動稱為 <strong class="text-blue-700 font-bold">勻速圓周運動 (Uniform Circular Motion)</strong>。</p>
+            <p>在圓周運動中，我們常用以下物理量來描述其狀態：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">角位移 (Angular Displacement, $\theta$)：</strong> 
+                    物體繞圓心轉過的角度，以 <strong class="text-blue-700">弧度 (radian, $\text{rad}$)</strong> 為標準單位。一整圈等於 $360^\circ = 2\pi \text{ rad}$。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">角速度 (Angular Velocity, $\omega$)：</strong> 
+                    物體在單位時間內轉過的角位移。它描述了物體轉動的快慢程度。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">線速度 (Linear Velocity, $v$)：</strong> 
+                    物體沿着圓周切線方向的瞬時速度。在勻速圓周運動中，線速度的 <strong>大小（速率）保持不變，但方向時刻在改變</strong>。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">週期 (Period, $T$) 與頻率 (Frequency, $f$)：</strong> 
+                    週期是物體轉完一整圈所需的時間（單位：$\text{s}$）；頻率是物體在每秒內轉過的圈數（單位：赫茲 $\text{Hz}$）。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">角速度、線速度與週期之間的關鍵數學關係：</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">角速度與週期關係</p>
+                    <p class="text-2xl font-bold">$$ \omega = \frac{2\pi}{T} = 2\pi f $$</p>
+                    <p class="text-sm text-slate-500 mt-2">單位：弧度每秒 ($\text{rad s}^{-1}$)</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">線速度與角速度關係</p>
+                    <p class="text-2xl font-bold">$$ v = r\omega = \frac{2\pi r}{T} $$</p>
+                    <p class="text-sm text-slate-500 mt-2">單位：米每秒 ($\text{m s}^{-1}$)</p>
+                </div>
+            </div>
+            <ul class="text-sm text-slate-600 space-y-1">
+                <li>$r$：圓周運動的半徑 (單位：$\text{m}$)。</li>
+                <li>$T$：週期 (單位：$\text{s}$)，$f$：頻率 (單位：$\text{Hz}$，即 $\text{s}^{-1}$)。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 同軸轉動與同線傳動對照</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較類型</th>
+                        <th class="p-3 font-semibold w-1/4">幾何特徵</th>
+                        <th class="p-3 font-semibold w-1/4">角速度 $\omega$ 關係</th>
+                        <th class="p-3 font-semibold w-1/4">線速度 $v$ 關係</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">同軸轉動<br><span class="text-sm text-slate-500">(如：旋轉光碟上不同半徑的兩點)</span></td>
+                        <td class="p-3">繞同一個轉軸轉動</td>
+                        <td class="p-3 font-bold text-blue-700">相同 ($\omega_1 = \omega_2$)</td>
+                        <td class="p-3">與半徑成正比 ($v \propto r$)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">皮帶/鏈條傳動<br><span class="text-sm text-slate-500">(如：單車前齒輪與後齒輪)</span></td>
+                        <td class="p-3">邊緣通過相同的皮帶連接</td>
+                        <td class="p-3">與半徑成反比 ($\omega \propto \frac{1}{r}$)</td>
+                        <td class="p-3 font-bold text-blue-700">相同 ($v_1 = v_2$)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">同軸轉動</h4>
+                <p class="text-sm text-slate-600 mb-1">各點 <strong>角速度 $\omega$ 相同</strong>。</p>
+                <p class="text-sm text-slate-600">半徑越大，線速度 $v$ 越快 ($v = r\omega$)。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">皮帶/鏈條傳動</h4>
+                <p class="text-sm text-slate-600 mb-1">接觸邊緣 <strong>線速度 $v$ 相同</strong>。</p>
+                <p class="text-sm text-slate-600">半徑越小，角速度 $\omega$ 轉得越快。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <p class="text-sm">「勻速圓周運動的速度是恆定不變的，因為它的速率沒有改變。」</p>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <p class="text-sm">速度是 <strong>矢量</strong>。雖然勻速圓周運動的「速率（大小）」不變，但物體運動的「方向」在圓周切線上时刻在改變。因此，<strong>速度時刻在改變，物體必定具有加速度</strong>。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個風力發電機的扇葉半徑為 $12 \text{ m}$，每分鐘勻速旋轉 $15$ 次。求：<br>
+                        (a) 扇葉旋轉的角速度 $\omega$。<br>
+                        (b) 扇葉最外端一點的線速度 $v$。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 求角速度 $\omega$：</strong></p>
+                        <p class="mb-2">每分鐘旋轉 15 次，即頻率 $f = \frac{15}{60 \text{ s}} = 0.25 \text{ Hz}$。</p>
+                        $$ \omega = 2\pi f = 2\pi \times 0.25 = 0.5\pi \approx 1.57 \text{ rad s}^{-1} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 求最外端的線速度 $v$：</strong></p>
+                        $$ v = r\omega = 12 \times 1.57 = 18.84 \text{ m s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 角速度為 $1.57 \text{ rad s}^{-1}$；(b) 最外端的線速度為 $18.84 \text{ m s}^{-1}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個圓盤在 $0.5 \text{ s}$ 內勻速轉過了 $120^\circ$ 的角度。求：<br>
+                        (a) 圓盤轉過的角位移（以弧度表示）。<br>
+                        (b) 圓盤轉動的角速度 $\omega$。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 將角度轉換為弧度：</strong></p>
+                        $$ \theta = 120^\circ \times \frac{\pi \text{ rad}}{180^\circ} = \frac{2}{3}\pi \text{ rad} \approx 2.09 \text{ rad} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 求角速度 $\omega$：</strong></p>
+                        $$ \omega = \frac{\theta}{t} = \frac{\frac{2}{3}\pi}{0.5} = \frac{4}{3}\pi \approx 4.19 \text{ rad s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 角位移為 $2.09 \text{ rad}$；(b) 角速度為 $4.19 \text{ rad s}^{-1}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        黑膠唱片機以每分鐘 $33$ 轉 ($33 \text{ rpm}$) 勻速旋轉。唱片上有兩點 A 和 B，分別距離圓心 $r_A = 3 \text{ cm}$ 和 $r_B = 9 \text{ cm}$。求 A 和 B 兩點的線速度之比 $v_A : v_B$。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 由於 A 和 B 都在同一張唱片上旋轉，它們屬於 <strong>同軸轉動</strong>，因此它們的角速度是相同的：</p>
+                        $$ \omega_A = \omega_B $$
+                        <p class="mb-2">2. 利用線速度與角速度公式 $v = r\omega$：</p>
+                        $$ \frac{v_A}{v_B} = \frac{r_A \omega_A}{r_B \omega_B} = \frac{r_A}{r_B} $$
+                        $$ \frac{v_A}{v_B} = \frac{3 \text{ cm}}{9 \text{ cm}} = \frac{1}{3} $$
+                        <p class="mt-2 font-bold text-green-700">答案：A 和 B 兩點的線速度之比為 $1:3$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 國際單位制 (SI 單位) 中，角速度的標準單位是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q91-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 轉每分鐘 (rpm)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q91-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 度每秒 ($^\circ\text{ s}^{-1}$)</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q91-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 弧度每秒 ($\text{rad s}^{-1}$)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q91-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 米每秒 ($\text{m s}^{-1}$)</button>
+                </div>
+                <div id="exp-q91-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 角速度定義為單位時間內轉過的弧度，因此其國際標準單位為弧度每秒 ($\text{rad s}^{-1}$)。米每秒為線速度的單位。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 當物體作勻速圓周運動時，下列哪一個物理量保持不變？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q91-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 速度</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q91-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 速率</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q91-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 位移</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q91-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 加速度</button>
+                </div>
+                <div id="exp-q91-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 速度、位移和加速度均為「矢量」。在圓周運動中，它們的方向时刻在發生改變，因此不是恆定的。只有「速率（速度的大小）」是標量且保持不變。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 一個質點在半徑 $r = 2 \text{ m}$ 的圓形軌道上作勻速圓周運動，其線速率 $v = 4 \text{ m s}^{-1}$。求該質點轉動一圈的週期 $T$ 是多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q91-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $0.5\pi \text{ s}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q91-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $\pi \text{ s}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q91-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $2\pi \text{ s}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q91-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $4\pi \text{ s}$</button>
+                </div>
+                <div id="exp-q91-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據公式 $v = \frac{2\pi r}{T}$，可得：$$ T = \frac{2\pi r}{v} = \frac{2\pi \times 2}{4} = \pi \text{ s} $$。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 兩個物體在同一個旋轉圓盤上。物體甲距離圓心 $r$，物體乙距離圓心 $2r$。若圓盤均勻轉動，則乙的線速度是甲的多少倍？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q91-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 0.5 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q91-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 1 倍（相同）</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q91-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 2 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q91-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 4 倍</button>
+                </div>
+                <div id="exp-q91-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 同軸轉動的物體角速度 $\omega$ 相同。根據 $v = r\omega$，線速度與半徑成正比。乙的半徑是甲的 2 倍，故線速度也是甲的 2 倍。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 一台摩天輪每 $10 \text{ 分鐘}$ 勻速旋轉一圈。這台摩天輪轉動的角速度是多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q91-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $\frac{\pi}{300} \text{ rad s}^{-1}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q91-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $\frac{\pi}{5} \text{ rad s}^{-1}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q91-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $\frac{\pi}{10} \text{ rad s}^{-1}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q91-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $0.2\pi \text{ rad s}^{-1}$</button>
+                </div>
+                <div id="exp-q91-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 週期 $T = 10 \text{ 分鐘} = 600 \text{ s}$。角速度公式：$$ \omega = \frac{2\pi}{T} = \frac{2\pi}{600} = \frac{\pi}{300} \text{ rad s}^{-1} $$。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 9.2: 向心力與向心加速度 -->
+<!-- ========================================== -->
+<article id="ch9-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">9.2</span>向心力與向心加速度</h2>
+        <p class="text-slate-500 mt-2">探索圓周運動的動力學源頭，理解為甚麼速率不變卻仍有加速度，並學會計算向心力。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>即使物體以勻速繞圓周運動，由於其速度方向時刻改變，它必定存在加速度。這個加速度有以下兩個重要特徵：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">向心加速度 (Centripetal Acceleration, $a_c$)：</strong> 
+                    方向 <strong>恆指向圓心</strong>，與瞬時速度方向垂直。它只負責改變速度的「方向」，而不改變速度的「大小」。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">向心力 (Centripetal Force, $F_c$)：</strong> 
+                    根據牛頓第二定律 ($F=ma$)，要產生指向圓心的加速度，必須有一個指向圓心的合外力，這個力稱為向心力。
+                </li>
+            </ul>
+            <hr class="my-4 border-slate-100">
+            <p class="text-sm font-semibold text-blue-800"><i class="fa-solid fa-lightbulb mr-1"></i> 重點提示：向心力不是一種全新種類的力，而是一個「淨外力」的角色！它必須由某個或多個實際存在的力（如：重力、摩擦力、拉力、法向力等）的合力來提供。</p>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">向心加速度與向心力的計算方程式：</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">向心加速度 ($a_c$)</p>
+                    <p class="text-2xl font-bold">$$ a_c = \frac{v^2}{r} = r\omega^2 $$</p>
+                    <p class="text-sm text-slate-500 mt-2">單位：米每二次方秒 ($\text{m s}^{-2}$)</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">向心力 ($F_c$)</p>
+                    <p class="text-2xl font-bold">$$ F_c = m a_c = \frac{mv^2}{r} = mr\omega^2 $$</p>
+                    <p class="text-sm text-slate-500 mt-2">單位：牛頓 ($\text{N}$)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 常見向心力的來源對照</h3>
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/3">圓周運動場景</th>
+                        <th class="p-3 font-semibold w-2/3">向心力 ($F_c$) 的真實力物理來源</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">用繩索拴着石頭在水平面旋轉</td>
+                        <td class="p-3 font-bold text-blue-700">繩子的拉力 / 張力 (Tension, $T$)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">月球圍繞地球作圓周軌道運行</td>
+                        <td class="p-3 font-bold text-blue-700">萬有引力 (Gravitational force, $F_g$)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">汽車在水平路面上轉彎</td>
+                        <td class="p-3 font-bold text-blue-700">輪胎與路面之間的靜摩擦力 (Static friction, $f_s$)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">繩栓旋轉</h4>
+                <p class="text-sm text-slate-600">向心力來源：<strong>繩子的張力</strong>。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">天體軌道</h4>
+                <p class="text-sm text-slate-600">向心力來源：<strong>萬有引力</strong>。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">汽車轉彎</h4>
+                <p class="text-sm text-slate-600">向心力來源：<strong>輪胎與地面的靜摩擦力</strong>。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <p class="text-sm">「旋轉物體除了受到向心力外，還受到一個向外甩的『離心力 (Centrifugal force)』將它往外推。」</p>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <p class="text-sm">在慣性參考系中，<strong>根本不存在離心力</strong>。物體「向外飛」是因為 <strong>慣性 (Inertia)</strong> 傾向讓它沿着切線方向保持直線運動。所謂離心感，只是物體抵抗向心力拉扯的慣性表現。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一輛質量為 $1200 \text{ kg}$ 的汽車，以 $20 \text{ m s}^{-1}$ 的恆定速率駛過一個半徑為 $80 \text{ m}$ 的平直圓形彎道。求：<br>
+                        (a) 汽車的向心加速度大小。<br>
+                        (b) 保持汽車在彎道運動所需的向心力大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 計算向心加速度：</strong></p>
+                        $$ a_c = \frac{v^2}{r} = \frac{20^2}{80} = \frac{400}{80} = 5 \text{ m s}^{-2} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 計算向心力：</strong></p>
+                        $$ F_c = m a_c = 1200 \times 5 = 6000 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 向心加速度為 $5 \text{ m s}^{-2}$；(b) 所需向心力為 $6000 \text{ N}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        小強用一條長 $0.8 \text{ m}$ 的輕繩拴着一粒質量為 $0.5 \text{ kg}$ 的石頭，在光滑水平桌面上作勻速圓周運動。已知輕繩能承受的最大張力為 $100 \text{ N}$。求：<br>
+                        (a) 石頭能達到的最大線速率。<br>
+                        (b) 此時石頭轉動的角速度。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">在光滑水平面上，提供石頭向心力的唯一來源就是繩子的張力 $T$，即 $F_c = T$。</p>
+                        <p class="mb-2"><strong>(a) 求最大速率 $v_{\text{max}}$：</strong></p>
+                        $$ T_{\text{max}} = \frac{m v_{\text{max}}^2}{r} \implies 100 = \frac{0.5 \times v_{\text{max}}^2}{0.8} $$
+                        $$ v_{\text{max}}^2 = \frac{100 \times 0.8}{0.5} = 160 \implies v_{\text{max}} = \sqrt{160} \approx 12.65 \text{ m s}^{-1} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 求對應的角速度 $\omega$：</strong></p>
+                        $$ v = r\omega \implies 12.65 = 0.8 \times \omega \implies \omega = \frac{12.65}{0.8} \approx 15.81 \text{ rad s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 最大線速率為 $12.65 \text{ m s}^{-1}$；(b) 角速度為 $15.81 \text{ rad s}^{-1}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        兩個完全相同的木塊甲和乙放置在旋轉圓盤上。甲距離圓心 $r$，乙距離圓心 $2r$。圓盤轉動的角速度逐漸增大，木塊與圓盤之間的摩擦力達到最大限制時會開始滑動。試推斷哪一個木塊會先開始滑動？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 兩木塊都在旋轉盤上，因此它們的角速度 $\omega$ 是完全相同的。</p>
+                        <p class="mb-2">2. 提供兩木塊所需的向心力來自圓盤對它們的靜摩擦力：</p>
+                        $$ F_c = f = m r \omega^2 $$
+                        <p class="mb-2">3. 由於兩木塊完全相同，質量 $m$ 和最大靜摩擦力限額 $f_{\text{max}}$ 皆相同。從公式中可以看出，所需的向心力與半徑 $r$ 成正比。</p>
+                        <p class="mb-2">4. 乙的半徑較大 ($2r$)，因此乙在任何角速度下，需要的向心力（摩擦力）都是甲的 2 倍。乙會先達到最大靜摩擦力上限。</p>
+                        <p class="mt-2 font-bold text-green-700">答案：木塊乙會先開始滑動（甩出去）。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 作勻速圓周運動的物體，其向心加速度的方向是指向哪裡？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q92-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 沿着切線運動方向</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q92-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 恆指向圓周的圓心</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q92-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 恆指向圓周的外側（背離圓心）</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q92-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 與速度方向夾角為 $45^\circ$</button>
+                </div>
+                <div id="exp-q92-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 向心加速度的英文 Centripetal 意即「尋求圓心」。它的方向必定恆與切線速度垂直，並指向圓周的圓心。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 若物體圓周運動的線速率增加為原來的 2 倍，而運動的半徑減為原來的一半。則其所需的向心加速度變為原來的多少倍？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q92-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 2 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q92-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 4 倍</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q92-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 8 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q92-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 16 倍</button>
+                </div>
+                <div id="exp-q92-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據公式 $a_c = \frac{v^2}{r}$。新加速度：$$ a_c' = \frac{(2v)^2}{0.5r} = \frac{4v^2}{0.5r} = 8 \frac{v^2}{r} = 8a_c $$。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 一粒質量為 $0.2 \text{ kg}$ 的小球拴在長 $0.5 \text{ m}$ 的輕繩上，以角速度 $\omega = 4 \text{ rad s}^{-1}$ 在光滑水平桌面上旋轉。繩子承受的張力是多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q92-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $0.4 \text{ N}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q92-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $0.8 \text{ N}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q92-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $1.6 \text{ N}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q92-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $3.2 \text{ N}$</button>
+                </div>
+                <div id="exp-q92-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 繩子張力提供全部向心力：$$ T = F_c = mr\omega^2 = 0.2 \times 0.5 \times (4)^2 = 0.1 \times 16 = 1.6 \text{ N} $$。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 下列關於「向心力」的敘述，哪一項是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q92-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 它是物體自然受到的一種全新種類的力</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q92-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 它是一個「合力」的角色，必須由摩擦力、重力等真實物理力來擔當</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q92-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 向心力對物體作功，改變了物體的動能大小</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q92-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 向心力與速度方向相同</button>
+                </div>
+                <div id="exp-q92-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 向心力不是一種獨立力，而是所有作用力的合力。由於向心力與瞬時速度始終垂直，功的公式 $W = Fs\cos 90^\circ = 0$，所以向心力對物體作零功，不改變動能。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 如果一個高速前進的物體，在某一瞬間受到的合外力突然變為零。那麼這個物體此後的運動狀態會如何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q92-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 立刻停下來</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q92-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 沿着切線方向作等速直線運動</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q92-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 繼續繞圓周運動，但速率減慢</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q92-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 沿着半徑方向朝外飛去</button>
+                </div>
+                <div id="exp-q92-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據牛頓第一定律，若沒有外力作用，物體將會保持當下的速度（大小和方向）。在圓周運動中，這意味着物體會從失去向心力的那一瞬間起，沿着切線方向飛出去。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 9.3: 勻速圓周運動的應用 -->
+<!-- ========================================== -->
+<article id="ch9-3" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">9.3</span>勻速圓周運動的應用</h2>
+        <p class="text-slate-500 mt-2">將向心力公式與牛頓定律應用於水平轉彎、圓錐擺、傾斜軌道與垂直圓周等經典物理模型中。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在 HKDSE 中，圓周運動的應用題主要考察以下幾大經典力學模型。分析時的關鍵在於：<strong>畫出正確的隔離體圖 (Free-body diagram)，找出哪一個力扮演了向心力的角色。</strong></p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">水平圓周（車輛轉彎）：</strong> 
+                    車輛在平地轉彎時，向心力由車胎與地面間的 <strong class="text-blue-700">靜摩擦力</strong> 提供。當車速太快時，所需向心力大於最大靜摩擦力，車就會打滑。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">圓錐擺 (Conical Pendulum)：</strong> 
+                    小球用繩子懸掛並在水平面作圓周旋轉。繩子張力的水平分力提供向心力，垂直分力平衡重力。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">傾斜路面 (Banked Curve)：</strong> 
+                    高速公路或賽車跑道在彎道處設計成傾斜。這使得 <strong class="text-blue-700">法向反作用力 (Normal force)</strong> 的水平分力提供部分向心力，大幅提高安全限速。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">垂直圓周與過山車：</strong> 
+                    物體在垂直平面轉圈。在最高點時，要成功過圈而不掉落，存在一個 <strong class="text-blue-700">臨界速率 (Critical speed)</strong>。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 經典模型力學方程式</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">四大應用的核心控制方程一覽：</p>
+            
+            <div class="space-y-4">
+                <!-- 1 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-1">1. 水平平地轉彎最大安全限速</p>
+                    $$ f_{\text{max}} = \mu_s mg = \frac{mv_{\text{max}}^2}{r} \implies v_{\text{max}} = \sqrt{\mu_s gr} $$
+                </div>
+                <!-- 2 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-1">2. 圓錐擺 (夾角 $\theta$ 與垂直方向)</p>
+                    $$ T \cos\theta = mg, \quad T \sin\theta = m r \omega^2 \implies \tan\theta = \frac{r\omega^2}{g} $$
+                </div>
+                <!-- 3 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-1">3. 傾斜路面（無摩擦情況下的最完美車速）</p>
+                    $$ N \cos\theta = mg, \quad N \sin\theta = \frac{mv^2}{r} \implies \tan\theta = \frac{v^2}{rg} \implies v = \sqrt{rg \tan\theta} $$
+                </div>
+                <!-- 4 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-1">4. 垂直圓周最高點臨界速度 (臨界狀態 $T = 0$)</p>
+                    $$ T + mg = \frac{mv^2}{r} \implies (\text{當 } T = 0) \quad v_{\text{min}} = \sqrt{rg} $$
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 凸橋與凹橋的法向力比較</h3>
+        <p class="text-slate-700 mb-3">當汽車駛過拱橋（凸橋）最高點或過山車經過凹槽（凹橋）最低點時，乘客感覺到的「重量（法向力）」大不相同：</p>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">地形模型</th>
+                        <th class="p-3 font-semibold w-1/3">向心力方程</th>
+                        <th class="p-3 font-semibold w-2/5">法向力 $N$ (乘客的重量感覺)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">駛過拱橋最高點 (凸)<br><span class="text-xs text-slate-500">(向心力朝下)</span></td>
+                        <td class="p-3">$$ mg - N = \frac{mv^2}{r} $$</td>
+                        <td class="p-3 font-bold text-blue-700">$$ N = mg - \frac{mv^2}{r} < mg $$<br><span class="text-sm font-normal text-slate-500">乘客會感到 <strong>變輕 (失重)</strong>。</span></td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">行駛凹橋最低點 (凹)<br><span class="text-xs text-slate-500">(向心力朝上)</span></td>
+                        <td class="p-3">$$ N - mg = \frac{mv^2}{r} $$</td>
+                        <td class="p-3 font-bold text-blue-700">$$ N = mg + \frac{mv^2}{r} > mg $$<br><span class="text-sm font-normal text-slate-500">乘客會感到 <strong>變重 (超重)</strong>。</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">拱橋（凸）最高點</h4>
+                <p class="text-sm text-slate-600 mb-1">運動方程：$mg - N = mv^2/r$。</p>
+                <p class="text-sm text-slate-600">結果：法向力 $N$ 減小。乘客感到 <strong>變輕 (失重)</strong>。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">凹谷（凹）最低點</h4>
+                <p class="text-sm text-slate-600 mb-1">運動方程：$N - mg = mv^2/r$。</p>
+                <p class="text-sm text-slate-600">結果：法向力 $N$ 變大。乘客感到 <strong>變重 (超重)</strong>。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「圓錐擺小球旋轉時，受到向下的重力、沿繩向上的張力，以及指向圓心的向心力。」</li>
+                    <li>「車在傾斜路面上轉彎時，就算路面很光滑，只要有重力，車就絕對不會往下滑落。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>向心力不是物體受到的具體力！</strong> 小球只受到「重力」和「張力」作用。這兩個力的 <strong>合力（也就是張力在水平方向的分量）扮演了向心力</strong>。不要在隔離體圖上多畫一個向心力！</li>
+                    <li>傾斜路面的無摩擦平衡，只在一個 <strong>特定設計速率 $v = \sqrt{rg\tan\theta}$</strong> 下才成立。如果車停下來 ($v=0$) 或太慢，由於無摩擦，重力的下滑分量會讓車往斜坡下方滑落。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一輛質量為 $1500 \text{ kg}$ 的汽車在平直路面上轉彎，轉彎半徑為 $50 \text{ m}$。已知輪胎與乾燥路面之間的靜摩擦係數 $\mu_s = 0.6$。求汽車在該彎道行駛而不發生側滑的最大安全速度。（取 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 汽車轉彎時，所需的向心力由路面對車輪的最大靜摩擦力 $f_{\text{max}}$ 提供：</p>
+                        $$ F_c \le f_{\text{max}} \implies \frac{mv^2}{r} \le \mu_s N $$
+                        <p class="mb-2">2. 在平地路面上，法向力 $N = mg$：</p>
+                        $$ \frac{mv^2}{r} \le \mu_s mg $$
+                        <p class="mb-2">3. 約去質量 $m$，重寫以求出最大速度 $v_{\text{max}}$：</p>
+                        $$ v^2 \le \mu_s g r \implies v_{\text{max}} = \sqrt{\mu_s g r} $$
+                        $$ v_{\text{max}} = \sqrt{0.6 \times 9.81 \times 50} = \sqrt{294.3} \approx 17.15 \text{ m s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：最大安全速度約為 $17.15 \text{ m s}^{-1}$（約時速 $61.7 \text{ km/h}$）。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個圓錐擺的小球質量為 $0.1 \text{ kg}$，用一條長 $1.0 \text{ m}$ 的輕質細繩懸掛。當小球在水平面上作勻速圓周運動時，細繩與垂直方向的夾角為 $30^\circ$。求細繩的張力 $T$。（取 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 對小球進行力學分析。在垂直方向上，小球沒有加速度（只在水平面運動）：</p>
+                        $$ T \cos 30^\circ = mg $$
+                        <p class="mb-2">2. 代入數據計算張力 $T$：</p>
+                        $$ T \times 0.866 = 0.1 \times 9.81 $$
+                        $$ 0.866 T = 0.981 \implies T = \frac{0.981}{0.866} \approx 1.13 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：細繩的張力大小為 $1.13 \text{ N}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一列過山車在半徑為 $10 \text{ m}$ 的圓形垂直軌道內側運行。若要過山車在到達軌道最高點時不會掉落，過山車在最高點的最低限制速率（臨界速率）是多少？（取 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 在垂直圓周最高點，物體受到向下的重力 $mg$，以及軌道向下的支持力（法向力 $N$）。兩力之和提供向心力：</p>
+                        $$ N + mg = \frac{mv^2}{r} $$
+                        <p class="mb-2">2. 剛好不掉落（臨界狀態）意味着支持力剛剛減小到零（$N = 0$）：</p>
+                        $$ 0 + mg = \frac{m v_{\text{min}}^2}{r} \implies g = \frac{v_{\text{min}}^2}{r} $$
+                        $$ v_{\text{min}}^2 = g \cdot r \implies v_{\text{min}} = \sqrt{g \cdot r} $$
+                        $$ v_{\text{min}} = \sqrt{9.81 \times 10} = \sqrt{98.1} \approx 9.9 \text{ m s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：最高點的臨界速率為 $9.9 \text{ m s}^{-1}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 汽車在平直路面上圓周轉彎時，主要依靠甚麼力來提供向心力？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q93-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 引擎的推進力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q93-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 地面提供的支持力（法向力）</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q93-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 輪胎與地面之間的靜摩擦力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q93-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 空氣阻力</button>
+                </div>
+                <div id="exp-q93-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 在水平路面上，支持力與重力在垂直方向抵消。使汽車改變前進方向（提供向心力）的唯一水平力是輪胎與地面接觸產生的靜摩擦力。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 高速公路的彎道處通常會設計成「內低外高」的傾斜路面。這樣設計的最主要物理原因是什麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q93-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 為了讓雨水更容易排走，防止積水</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q93-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 利用法向支持力的水平分量來提供向心力，減小對輪胎摩擦力的依賴</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q93-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 增加汽車的重量，使車抓地更穩</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q93-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 減小空氣阻力</button>
+                </div>
+                <div id="exp-q93-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 當彎道傾斜時，斜面對車垂直向上的支持力（法向力 $N$）也會傾斜。此時 $N$ 的水平分量 $N\sin\theta$ 恰好指向圓心，能夠提供一部分甚至全部的向心力，使車輛可以以更高的速度安全轉彎。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 當圓錐擺小球旋轉時，如果它的旋轉夾角 $\theta$（與垂直方向）因加速而增大，它的轉動週期 $T$ 會如何改變？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q93-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 變長（轉一圈時間變多）</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q93-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 變短（轉一圈時間變少）</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q93-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 保持不變</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q93-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 無法預測</button>
+                </div>
+                <div id="exp-q93-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 圓錐擺的週期公式為：$$ T = 2\pi \sqrt{\frac{L\cos\theta}{g}} $$。當夾角 $\theta$ 增大時，$\cos\theta$ 值會減小，因此根號內的數值變小，週期 $T$ 也隨之變短。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 汽車在駛過圓形「拱橋」的最高點時。乘客會有甚麼感覺？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q93-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 感到身體變重（超重）</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q93-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 感到身體變輕飄起（失重）</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q93-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 沒有任何特別的感覺</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q93-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 感到有一股巨大的水平推力</button>
+                </div>
+                <div id="exp-q93-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 駛過凸起拱橋最高點時，加速度方向指向圓心（向下）。根據運動方程：$mg - N = mv^2/r \implies N = mg - mv^2/r$。此時地面的支持法向力 $N$ 小於重力，乘客會有短暫的飄浮失重感。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 過山車在圓形垂直軌道內側作圓周運動。在最高點時，若車速 $v$ 剛好等於臨界速度 $\sqrt{gr}$。此時軌道對車輪的支持力（法向力 $N$）是多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q93-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 大於 $mg$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q93-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 等於 $mg$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q93-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q93-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 負數</button>
+                </div>
+                <div id="exp-q93-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 臨界速率的定義即為「恰好能通過最高點而不掉落的最低速度」。在此狀態下，向心力完全由物體自身的重力 $mg$ 提供，軌道不需要再對物體施加額外的支持力。因此，法向力 $N = 0$。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+                            
             <!-- ========================================== -->
             <!-- 區塊 3.4 ~ 3.6 (標準佔位符結構) -->
             <!-- ========================================== -->
