@@ -198,6 +198,54 @@
                     </li>
                 </ul>
             </div>
+
+                        <!-- 第 5 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 4 章：力與運動(2)</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch5-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            5.1 力的轉動效應與剛體平衡
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch5-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            5.2 剛體的平衡
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+                        <!-- 第 6 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 4 章：力與運動(2)</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch6-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            6.1 功
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch6-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            6.2 機械能
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch6-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            6.3 能量轉換和能量守恆
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch6-4', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            6.4 功率
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+
+
+            
         </nav>
 
         <!-- 側邊欄頁尾 -->
@@ -3395,7 +3443,7 @@
 <!-- ==========================================
      章節 3.6: 摩擦力
      ========================================== -->
-<article id="page-1" class="page-content block max-w-4xl mx-auto pb-20">
+<article id="ch3-6" class="page-content block max-w-4xl mx-auto pb-20">
     <header class="mb-8 border-b-2 border-blue-100 pb-4">
         <h2 class="text-3xl font-extrabold text-slate-800"><i class="fa-solid fa-cube text-blue-500 mr-3"></i>摩擦力的本質與規律</h2>
         <p class="text-slate-500 mt-2">了解摩擦力產生的原因、方向判斷，以及香港 DSE 課程中的簡化處理方式。</p>
@@ -3638,268 +3686,6 @@
             </div>
             <div id="exp1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
                 <strong>解析：</strong>為了簡化計算，中學課程通常把動摩擦力視為與最大靜摩擦力相同的定值。且固體接觸面的動摩擦力通常與滑動速度無關。
-            </div>
-        </div>
-
-    </section>
-</article>
-
-<!-- ==========================================
-     子章節 2: 斜面上的摩擦力分析
-     ========================================== -->
-<article id="page-2" class="page-content hidden max-w-4xl mx-auto pb-20">
-    <header class="mb-8 border-b-2 border-blue-100 pb-4">
-        <h2 class="text-3xl font-extrabold text-slate-800"><i class="fa-solid fa-play text-blue-500 mr-3"></i>斜面上的摩擦力分析</h2>
-        <p class="text-slate-500 mt-2">結合三角函數，分析物體在斜面上受到的重力分量、正向力與摩擦力之間的關係。</p>
-    </header>
-
-    <!-- 1. 名詞定義 / 核心概念 -->
-    <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念：斜面受力分解</h3>
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
-            <p class="mb-3">當物體放在傾角為 $\theta$ 的斜面上時，垂直向下的<span class="text-blue-700 font-bold">重量 (Weight) $W = mg$</span> 不再與斜面垂直。我們必須將重量分解為兩個互相垂直的分量：</p>
-            <ul class="list-disc list-inside space-y-2 ml-2">
-                <li><strong>平行於斜面的分量：</strong> 驅使物體下滑的力，大小為 $mg \sin \theta$。</li>
-                <li><strong>垂直於斜面的分量：</strong> 壓緊斜面的力，大小為 $mg \cos \theta$。</li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- 2. 核心公式與單位 -->
-    <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 核心公式</h3>
-        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
-            <p class="text-slate-700 mb-2">斜面上的重要力學公式：</p>
-            <div class="text-center py-2 overflow-x-auto">
-                <p class="mb-2"><strong>正向力 (Normal Reaction):</strong></p>
-                $$ R = mg \cos \theta $$
-            </div>
-            <div class="text-center py-2 overflow-x-auto">
-                <p class="mb-2"><strong>若物體靜止或勻速下滑 (淨力為 0):</strong></p>
-                $$ f = mg \sin \theta $$
-            </div>
-            <div class="text-center py-2 overflow-x-auto">
-                <p class="mb-2"><strong>若物體加速下滑:</strong></p>
-                $$ F_{\text{net}} = mg \sin \theta - f = ma $$
-            </div>
-            <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> $\theta$ 為斜面與水平面的夾角，$m$ 為質量，單位 $\text{kg}$，$g$ 為重力加速度約 $9.81 \text{ m s}^{-2}$。</p>
-        </div>
-    </section>
-
-    <!-- 3. 重要性質 / 物理規律對照 -->
-    <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 傾角 $\theta$ 變化對物理量的影響</h3>
-        
-        <!-- 桌面版 Table -->
-        <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
-            <table class="w-full text-left text-slate-700">
-                <thead class="bg-slate-100 border-b border-slate-200">
-                    <tr>
-                        <th class="p-4 font-bold w-1/4">當斜角 $\theta$ 逐漸增大</th>
-                        <th class="p-4 font-bold w-1/4">數學原理</th>
-                        <th class="p-4 font-bold w-1/2">物理意義與結果</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100">
-                        <td class="p-4"><span class="text-blue-700 font-bold">下滑力</span>增大</td>
-                        <td class="p-4">$\sin \theta$ 的值隨 $\theta$ 增大而增加</td>
-                        <td class="p-4">物體沿斜面下滑的趨勢變強。</td>
-                    </tr>
-                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100">
-                        <td class="p-4"><span class="text-blue-700 font-bold">正向力 $R$</span> 減小</td>
-                        <td class="p-4">$\cos \theta$ 的值隨 $\theta$ 增大而減小</td>
-                        <td class="p-4">物體對斜面的擠壓程度變小。</td>
-                    </tr>
-                    <tr class="even:bg-slate-50 hover:bg-slate-100">
-                        <td class="p-4"><span class="text-blue-700 font-bold">最大靜摩擦力</span>減小</td>
-                        <td class="p-4">因正向力 $R$ 減小導致</td>
-                        <td class="p-4">當傾角大到某個臨界點，下滑力會超過最大靜摩擦力，物體開始滑動。</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- 行動版 Cards -->
-        <div class="space-y-4 lg:hidden">
-            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
-                <h4 class="font-bold text-slate-800 mb-2">1. 下滑力 ($mg \sin \theta$)</h4>
-                <p class="text-sm text-slate-600">隨着 $\theta$ 增大，$\sin \theta$ 變大，下滑力<strong>增大</strong>，物體更容易滑下來。</p>
-            </div>
-            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
-                <h4 class="font-bold text-slate-800 mb-2">2. 正向力 $R$ ($mg \cos \theta$)</h4>
-                <p class="text-sm text-slate-600">隨着 $\theta$ 增大，$\cos \theta$ 變小，正向力<strong>減小</strong>，擠壓斜面的力變弱。</p>
-            </div>
-            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
-                <h4 class="font-bold text-slate-800 mb-2">3. 最大靜摩擦力</h4>
-                <p class="text-sm text-slate-600">因為正向力 $R$ 變小，最大靜摩擦力也跟著<strong>減小</strong>。</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 4. 常見迷思與誤區 -->
-    <section class="mb-10">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-blue-500 w-8"></i> 常見迷思與誤區</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
-                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
-                <p class="text-sm">任何情況下，物體受到的正向力 $R$ 都等於它的重量 $W = mg$。</p>
-            </div>
-            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
-                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
-                <p class="text-sm">只有在<strong>水平面</strong>上且沒有其他垂直外力時，$R$ 才等於 $mg$。在斜面上，$R$ 只抵抗垂直於斜面的重力分量，因此 $R = mg \cos \theta$，必定<strong>小於</strong>物體的重量。</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 5. 典型例題解說 -->
-    <section class="mb-12">
-        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
-        
-        <!-- 題 1 -->
-        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
-            <div class="flex items-start">
-                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
-                <p class="text-slate-800 font-medium pt-1">一個質量為 $2 \text{ kg}$ 的木塊放在傾角為 $30^\circ$ 的斜面上。木塊保持靜止。求木塊受到的摩擦力。（取 $g = 9.81 \text{ m s}^{-2}$）</p>
-            </div>
-            <details class="mt-4 group">
-                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
-                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
-                </summary>
-                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
-                    <p class="mb-2"><strong>第一步：分析受力與狀態</strong></p>
-                    <p class="mb-4">木塊保持<span class="text-blue-700 font-bold">靜止</span>，表示沿斜面方向的淨力為零。驅使物體下滑的力是重力的平行分量，阻礙它下滑的力是靜摩擦力。</p>
-                    <p class="mb-2"><strong>第二步：建立平衡方程式</strong></p>
-                    <div class="overflow-x-auto">$$ f = mg \sin \theta $$</div>
-                    <div class="overflow-x-auto">$$ f = 2 \times 9.81 \times \sin 30^\circ $$</div>
-                    <div class="overflow-x-auto">$$ f = 19.62 \times 0.5 = 9.81 \text{ N} $$</div>
-                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：摩擦力大小為 $9.81 \text{ N}$，方向沿斜面向上。</p>
-                </div>
-            </details>
-        </div>
-
-        <!-- 題 2 -->
-        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
-            <div class="flex items-start">
-                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
-                <p class="text-slate-800 font-medium pt-1">某木塊在一個粗糙斜面上以<strong>勻速</strong>下滑。已知木塊質量為 $m$，斜面傾角為 $\theta$。證明此時木塊受到的動摩擦力 $f$ 等於 $mg \sin \theta$。</p>
-            </div>
-            <details class="mt-4 group">
-                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
-                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
-                </summary>
-                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
-                    <p class="mb-2"><strong>第一步：解讀「勻速運動」</strong></p>
-                    <p class="mb-4">根據牛頓第一定律，<span class="text-blue-700 font-bold">勻速運動</span>意味着加速度 $a = 0$，即淨力 $F_{\text{net}} = 0$。</p>
-                    <p class="mb-2"><strong>第二步：列出沿斜面方向的受力</strong></p>
-                    <p class="mb-2">沿斜面向下的力：重力分量 $mg \sin \theta$</p>
-                    <p class="mb-2">沿斜面向上的力：動摩擦力 $f$</p>
-                    <div class="overflow-x-auto">$$ F_{\text{net}} = mg \sin \theta - f = 0 $$</div>
-                    <div class="overflow-x-auto">$$ \therefore f = mg \sin \theta $$</div>
-                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：證明完畢。勻速下滑時，摩擦力剛好抵消重力的下滑分量。</p>
-                </div>
-            </details>
-        </div>
-
-        <!-- 題 3 -->
-        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
-            <div class="flex items-start">
-                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
-                <p class="text-slate-800 font-medium pt-1">一個質量為 $10 \text{ kg}$ 的雪橇在傾角為 $20^\circ$ 的雪坡上向下滑動。若雪坡作用在雪橇上的動摩擦力為 $15 \text{ N}$，求雪橇下滑的加速度。（取 $g = 9.81 \text{ m s}^{-2}$，$\sin 20^\circ \approx 0.342$）</p>
-            </div>
-            <details class="mt-4 group">
-                <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
-                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
-                </summary>
-                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
-                    <p class="mb-2"><strong>第一步：計算下滑力</strong></p>
-                    <div class="overflow-x-auto">$$ \text{下滑力} = mg \sin \theta = 10 \times 9.81 \times \sin 20^\circ $$</div>
-                    <div class="overflow-x-auto">$$ \approx 98.1 \times 0.342 \approx 33.55 \text{ N} $$</div>
-                    <p class="mb-2 mt-4"><strong>第二步：計算淨力並求加速度</strong></p>
-                    <p class="mb-2">摩擦力阻礙運動，方向沿斜面向上：</p>
-                    <div class="overflow-x-auto">$$ F_{\text{net}} = mg \sin \theta - f = ma $$</div>
-                    <div class="overflow-x-auto">$$ 33.55 - 15 = 10 \times a $$</div>
-                    <div class="overflow-x-auto">$$ 18.55 = 10a \implies a \approx 1.86 \text{ m s}^{-2} $$</div>
-                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：加速度約為 $1.86 \text{ m s}^{-2}$，方向沿斜面向下。</p>
-                </div>
-            </details>
-        </div>
-    </section>
-
-    <!-- 6. 隨堂測驗 -->
-    <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
-        <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-blue-600 w-8"></i> 隨堂測驗 (Quiz)</h3>
-        
-        <!-- Q1 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1">
-            <p class="font-bold text-slate-800 mb-3">1. 質量為 $m$ 的物體放在傾角為 $\theta$ 的斜面上。物體對斜面的正向力 $R$ 等於多少？</p>
-            <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp2-1', 'quiz2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $mg$</button>
-                <button onclick="checkAnswer(this, false, 'exp2-1', 'quiz2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $mg \sin \theta$</button>
-                <button onclick="checkAnswer(this, true,  'exp2-1', 'quiz2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $mg \cos \theta$</button>
-                <button onclick="checkAnswer(this, false, 'exp2-1', 'quiz2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $mg \tan \theta$</button>
-            </div>
-            <div id="exp2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
-                <strong>解析：</strong>正向力 $R$ 是用來平衡垂直於斜面方向的重力分量，因此 $R = mg \cos \theta$。
-            </div>
-        </div>
-
-        <!-- Q2 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-2">
-            <p class="font-bold text-slate-800 mb-3">2. 當斜面的傾角 $\theta$ 逐漸增大時，放在上面的物體受到的最大靜摩擦力會怎樣改變？</p>
-            <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp2-2', 'quiz2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 變大</button>
-                <button onclick="checkAnswer(this, true,  'exp2-2', 'quiz2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 變小</button>
-                <button onclick="checkAnswer(this, false, 'exp2-2', 'quiz2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 保持不變</button>
-                <button onclick="checkAnswer(this, false, 'exp2-2', 'quiz2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 變為零</button>
-            </div>
-            <div id="exp2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
-                <strong>解析：</strong>傾角 $\theta$ 增大，導致 $\cos \theta$ 變小，所以正向力 $R = mg \cos \theta$ 變小。因為最大靜摩擦力取決於正向力的大小，所以最大靜摩擦力也會變小。
-            </div>
-        </div>
-
-        <!-- Q3 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-3">
-            <p class="font-bold text-slate-800 mb-3">3. 一木塊在斜面上靜止不動。此時木塊受到的靜摩擦力大小取決於：</p>
-            <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, true,  'exp2-3', 'quiz2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 重力沿斜面的分量 ($mg \sin \theta$)</button>
-                <button onclick="checkAnswer(this, false, 'exp2-3', 'quiz2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 重力垂直於斜面的分量 ($mg \cos \theta$)</button>
-                <button onclick="checkAnswer(this, false, 'exp2-3', 'quiz2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 物體的總重量 ($mg$)</button>
-                <button onclick="checkAnswer(this, false, 'exp2-3', 'quiz2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 零，因為沒有運動</button>
-            </div>
-            <div id="exp2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
-                <strong>解析：</strong>物體靜止，表示沿斜面淨力為零。向下的分量 $mg \sin \theta$ 完全被靜摩擦力 $f$ 抵消，因此 $f = mg \sin \theta$。
-            </div>
-        </div>
-
-        <!-- Q4 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-4">
-            <p class="font-bold text-slate-800 mb-3">4. 如果一個物體在斜面上正在以<span class="text-blue-700 font-bold">勻速</span>向下滑動，這表示甚麼？</p>
-            <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp2-4', 'quiz2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 沒有摩擦力作用於物體</button>
-                <button onclick="checkAnswer(this, true,  'exp2-4', 'quiz2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 摩擦力恰好等於重力沿斜面的分量</button>
-                <button onclick="checkAnswer(this, false, 'exp2-4', 'quiz2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 摩擦力大於重力沿斜面的分量</button>
-                <button onclick="checkAnswer(this, false, 'exp2-4', 'quiz2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 淨力等於物體的重量</button>
-            </div>
-            <div id="exp2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
-                <strong>解析：</strong>勻速運動代表加速度為零，即淨力為零。這意味著推動下滑的力 ($mg \sin \theta$) 完全等於阻礙下滑的動摩擦力 ($f$)。
-            </div>
-        </div>
-
-        <!-- Q5 -->
-        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz2-5">
-            <p class="font-bold text-slate-800 mb-3">5. 物體在斜面上加速下滑的方程式為何？ (設沿斜面向下為正方向)</p>
-            <div class="flex flex-col space-y-2">
-                <button onclick="checkAnswer(this, false, 'exp2-5', 'quiz2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $mg \cos \theta - f = ma$</button>
-                <button onclick="checkAnswer(this, false, 'exp2-5', 'quiz2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $f - mg \sin \theta = ma$</button>
-                <button onclick="checkAnswer(this, true,  'exp2-5', 'quiz2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $mg \sin \theta - f = ma$</button>
-                <button onclick="checkAnswer(this, false, 'exp2-5', 'quiz2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $mg - f = ma$</button>
-            </div>
-            <div id="exp2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700">
-                <strong>解析：</strong>沿斜面方向，驅動下滑的力是 $mg \sin \theta$，阻礙運動的力是摩擦力 $f$。根據牛頓第二定律：淨力 $F_{\text{net}} = mg \sin \theta - f = ma$。
             </div>
         </div>
 
@@ -4937,6 +4723,1649 @@
         </div>
     </section>
 </article>
+
+
+
+
+<!-- ========================================== -->
+<!-- 區塊 5.1: 力的轉動效應 -->
+<!-- ========================================== -->
+<article id="ch5-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">5.1</span>力的轉動效應</h2>
+        <p class="text-slate-500 mt-2">學習力矩的概念，了解力如何使物體繞着支點轉動，以及計算轉動效應的大小。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>力除了能改變物體的平移運動狀態外，還能使物體繞着某一點轉動。這種 <strong class="text-blue-700 font-bold">轉動效應 (Turning effect)</strong> 的量度，在物理學中稱為 <strong class="text-blue-700 font-bold">力矩 (Moment of a force)</strong>。</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">支點 (Pivot / Fulcrum)：</strong> 
+                    物體繞着轉動的固定點或轉軸（例如：門的鉸鏈、蹺蹺板的中間支撐點）。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">作用線 (Line of action)：</strong> 
+                    沿着力向量方向無限延伸的假想直線。
+                </li>
+            </ul>
+            <p>要產生較大的轉動效應（例如：更輕易地推開一扇沉重的門），我們可以增加施加的力，或者將施力的位置盡可能地 <strong>遠離支點</strong>。</p>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">力矩的大小取決於「力的大小」與「垂直距離」的乘積：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ \text{力矩 } M = F \times d $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-3 mt-4">
+                <li>$F$：施加的力 (單位：牛頓 $\text{N}$)</li>
+                <li>$d$：從支點到力的 <strong>作用線</strong> 的 <strong>垂直距離 (Perpendicular distance)</strong> (單位：米 $\text{m}$)</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>SI 單位：</strong> 力矩的單位是 <strong class="text-blue-700 font-bold">牛頓米 ($\text{N m}$)</strong>。</li>
+                <li><i class="fa-solid fa-rotate-right text-blue-500 mr-1"></i> <strong>方向性：</strong> 力矩是矢量，但在二維平面上，我們只區分為 <strong class="text-blue-700">順時針 (Clockwise)</strong> 與 <strong class="text-blue-700">逆時針 (Anti-clockwise)</strong> 兩個方向。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 不同施力角度的力矩比較</h3>
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">施力情形<br>(假設施力點與支點距離為 $L$)</th>
+                        <th class="p-3 font-semibold w-1/4">與支點連線的夾角 ($\theta$)</th>
+                        <th class="p-3 font-semibold w-1/4">垂直距離 ($d$) 的計算</th>
+                        <th class="p-3 font-semibold w-1/4">力矩大小 ($M$)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">力垂直於連線 (最有效)</td>
+                        <td class="p-3">$90^\circ$</td>
+                        <td class="p-3">$d = L$</td>
+                        <td class="p-3 text-blue-700 font-bold">$M = F \times L$ (最大)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">力呈一斜角 $\theta$</td>
+                        <td class="p-3">$0^\circ < \theta < 90^\circ$</td>
+                        <td class="p-3">$d = L \sin\theta$</td>
+                        <td class="p-3 text-blue-700 font-bold">$M = F \times L \sin\theta$</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">力的作用線穿過支點</td>
+                        <td class="p-3">$0^\circ$ 或 $180^\circ$</td>
+                        <td class="p-3 text-red-600 font-bold">$d = 0$</td>
+                        <td class="p-3 text-red-600 font-bold">$M = 0$ (無轉動效應)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">垂直施力 ($\theta = 90^\circ$)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>垂直距離最長 ($d = L$)</li>
+                    <li>力矩最大 ($M = F \times L$)</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">斜向施力 ($\theta$)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>需找垂直距離：$d = L \sin\theta$</li>
+                    <li>力矩：$M = F \times L \sin\theta$</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-red-600 border-b border-slate-100 pb-2 mb-2">作用線穿過支點</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>垂直距離為零 ($d = 0$)</li>
+                    <li><strong class="text-red-600">力矩為零，完全無法轉動</strong></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「公式 $M = F \times d$ 中的 $d$ 是指支點到『施力點』的直接距離。」</li>
+                    <li>「力矩的單位是 $\text{N m}$，而功 (Work) 的單位也是 $\text{N m}$ (即焦耳 $\text{J}$)，所以力矩就是能量。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>$d$ 是支點到 <strong>「力作用線」的垂直距離</strong>。如果斜斜地拉，垂直距離會小於支點到施力點的實際長度。</li>
+                    <li><strong>力矩絕對不能用焦耳 ($\text{J}$) 為單位！</strong> 功是力乘以「平行」方向的位移，力矩是力乘以「垂直」方向的距離。物理意義完全不同，力矩只能用 $\text{N m}$。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (簡單力矩) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        工人使用一把長 $0.25 \text{ m}$ 的扳手扭緊螺母。他在扳手的末端，以垂直於扳手柄的方向施加一個 $40 \text{ N}$ 的力。求這個力對螺母中心（支點）產生的力矩大小。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 找出施力 $F = 40 \text{ N}$。</p>
+                        <p class="mb-2">2. 因為力是「垂直」施加的，所以支點到施力點的長度就是垂直距離 $d = 0.25 \text{ m}$。</p>
+                        $$ M = F \times d = 40 \times 0.25 = 10 \text{ N m} $$
+                        <p class="mt-2 font-bold text-green-700">答案：力矩為 $10 \text{ N m}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (尋找垂直距離 d) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        承上題，如果工人同樣在扳手末端施加 $40 \text{ N}$ 的力，但這次力的方向與扳手柄的夾角為 $60^\circ$。求此時產生的力矩大小，並說明這會產生順時針還是逆時針的轉動。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>方法一：尋找垂直距離</strong></p>
+                        <p class="mb-2">力的作用線與支點的垂直距離 $d = L \sin 60^\circ = 0.25 \times \frac{\sqrt{3}}{2} \approx 0.2165 \text{ m}$。</p>
+                        $$ M = F \times d = 40 \times 0.2165 \approx 8.66 \text{ N m} $$
+                        <p class="mb-2 mt-4"><strong>方法二：分解力 (更常用)</strong></p>
+                        <p class="mb-2">將力分解為垂直於扳手的有效分力：$F_{\perp} = 40 \sin 60^\circ \approx 34.64 \text{ N}$。</p>
+                        <p class="mb-2">平行於扳手的分力（$40 \cos 60^\circ$）穿過支點，不產生力矩。</p>
+                        $$ M = F_{\perp} \times L = 34.64 \times 0.25 \approx 8.66 \text{ N m} $$
+                        <p class="mt-2 font-bold text-green-700">答案：力矩約為 $8.66 \text{ N m}$。方向需依據圖片（假設推力令扳手向右下壓，即為順時針方向）。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (合力矩計算) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個輕質均勻圓盤半徑為 $0.5 \text{ m}$，可繞着中心點 $O$ 自由轉動。在圓盤邊緣施加兩個切線方向的力：力 $F_1 = 15 \text{ N}$（產生順時針轉動），力 $F_2 = 25 \text{ N}$（產生逆時針轉動）。求圓盤受到的合力矩（淨力矩）大小和方向。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算 $F_1$ 的力矩。切線方向代表力與半徑垂直，因此 $d = 0.5 \text{ m}$。</p>
+                        $$ M_1 = 15 \times 0.5 = 7.5 \text{ N m (順時針)} $$
+                        <p class="mb-2 mt-4">2. 計算 $F_2$ 的力矩。同樣 $d = 0.5 \text{ m}$。</p>
+                        $$ M_2 = 25 \times 0.5 = 12.5 \text{ N m (逆時針)} $$
+                        <p class="mb-2 mt-4">3. 合力矩等於兩個力矩的代數和（設定逆時針為正）：</p>
+                        $$ M_{\text{net}} = (+12.5) + (-7.5) = +5.0 \text{ N m} $$
+                        <p class="mt-2 font-bold text-green-700">答案：合力矩為 $5 \text{ N m}$，方向為逆時針。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在物理學中，力矩的標準國際單位 (SI unit) 應該如何正確表示？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q51-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 焦耳 (J)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q51-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 牛頓每米 (N/m)</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q51-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 牛頓米 (N m)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q51-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 瓦特 (W)</button>
+                </div>
+                <div id="exp-q51-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 力矩的公式是 $F \times d$，即牛頓乘以米，因此單位為 $\text{N m}$。切記不可寫成焦耳 $\text{J}$，因為力矩並非能量或作功。
+                </div>
+            </div>
+            
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 推開一扇沉重的門時，把門柄安裝在遠離門鉸鏈（支點）的位置，其物理原理是？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q51-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 增加施加的力</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q51-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 增加力到支點的垂直距離，從而產生較大的力矩</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q51-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 減少門的重量</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q51-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 減少門鉸鏈處的摩擦力</button>
+                </div>
+                <div id="exp-q51-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 力矩 $M = F \times d$。在相同的施力 $F$ 下，增加垂直距離 $d$ 可以產生更大的轉動效應（力矩），讓推門變得更輕鬆。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 當一個力的「作用線」剛好穿過物體的支點時，該力產生的力矩為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q51-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 達到最大值</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q51-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 取決於力的大小，但必不為零</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q51-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q51-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 產生無限大的轉動效應</button>
+                </div>
+                <div id="exp-q51-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 力矩 $M = F \times d$。如果作用線穿過支點，代表支點到作用線的垂直距離 $d = 0$。因此 $M = F \times 0 = 0$，不會產生任何轉動效應。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 小華用 $50 \text{ N}$ 的力，沿着與門板呈 $30^\circ$ 的方向推門，施力點距離門軸 $0.8 \text{ m}$。門受到的力矩大小為？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q51-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $40 \text{ N m}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q51-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $34.6 \text{ N m}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q51-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $20 \text{ N m}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q51-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $0 \text{ N m}$</button>
+                </div>
+                <div id="exp-q51-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 只有垂直於門板的分力才產生力矩。垂直分力 $F_{\perp} = 50 \sin 30^\circ = 50 \times 0.5 = 25 \text{ N}$。力矩 $M = F_{\perp} \times d = 25 \times 0.8 = 20 \text{ N m}$。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 關於合力矩 (Net Moment)，以下哪項是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q51-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 它是所有順時針力矩與逆時針力矩的代數和</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q51-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 它是所有作用力先加總求合力後，再乘上距離</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q51-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 它與選擇的支點位置完全無關</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q51-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 合力矩永遠大於個別力矩</button>
+                </div>
+                <div id="exp-q51-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 由於力矩有方向（順時針與逆時針），計算合力矩時必須將同方向相加、反方向相減（代數和）。B 錯誤是因為不同的力作用在不同距離，不能先加力。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 5.2: 剛體的平衡 -->
+<!-- ========================================== -->
+<article id="ch5-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">5.2</span>剛體的平衡</h2>
+        <p class="text-slate-500 mt-2">結合牛頓定律與力矩原理，分析具有長度與形狀的物體在靜止狀態下的受力情況。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在前面的章節中，我們把物體當作一個沒有大小的「質點」來分析。但在現實中，物體具有形狀和大小。當物體受力時，即使形狀不變，我們稱之為 <strong class="text-blue-700 font-bold">剛體 (Rigid body)</strong>。</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">重心 (Centre of gravity, C.G.)：</strong> 
+                    物體的重量可以被視為集中作用於此的一點。對於均勻且規則的物體（如均勻木尺），重心位於其幾何中心。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">平衡狀態 (Equilibrium)：</strong> 
+                    當一個剛體保持完全靜止（或保持勻速平移且勻速轉動）時，我們說它處於平衡狀態。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 剛體平衡的兩大條件</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">要讓一個剛體完全平衡，必須同時滿足 <strong>兩個獨立的條件</strong>：</p>
+            <div class="space-y-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-1">條件一：平移平衡 (Translational equilibrium)</p>
+                    <p class="text-sm text-slate-600 mb-2">物體沒有平移加速度。所有作用在物體上的力互相抵消。</p>
+                    <div class="text-center font-bold text-lg text-slate-800">$$ \text{淨力 } \Sigma F = 0 $$</div>
+                    <p class="text-sm text-slate-500 text-center">(例如：向上的總力 = 向下的總力)</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-1">條件二：轉動平衡 (Rotational equilibrium)</p>
+                    <p class="text-sm text-slate-600 mb-2">物體沒有轉動加速度。這被稱為 <strong class="text-blue-600">力矩原理 (Principle of moments)</strong>。</p>
+                    <div class="text-center font-bold text-lg text-slate-800">$$ \text{淨力矩 } \Sigma M = 0 $$</div>
+                    <p class="text-sm text-slate-500 text-center">對於任何選定的支點：順時針總力矩 = 逆時針總力矩</p>
+                </div>
+            </div>
+            <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-star text-amber-500 mr-1"></i> <strong>考試神技：</strong> 計算力矩時，我們可以將支點選在 <strong>任何地方</strong>。如果將支點選在「未知力」的作用點上，該力的力矩便會變為零，從而簡化方程！</p>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 平衡與力偶的對照</h3>
+        <p class="text-slate-700 mb-3">如果只滿足其中一個條件會怎樣？我們來看看「力偶 (Couple)」這個經典特例：</p>
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">受力情況</th>
+                        <th class="p-3 font-semibold w-1/4">淨力 ($\Sigma F$)</th>
+                        <th class="p-3 font-semibold w-1/4">淨力矩 ($\Sigma M$)</th>
+                        <th class="p-3 font-semibold w-1/4">物體狀態</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">靜止的蹺蹺板</td>
+                        <td class="p-3 text-green-700 font-bold">$= 0$</td>
+                        <td class="p-3 text-green-700 font-bold">$= 0$</td>
+                        <td class="p-3">完全平衡 (靜止)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">自由落體的木尺</td>
+                        <td class="p-3 text-red-600 font-bold">$\neq 0$ (有重力)</td>
+                        <td class="p-3 text-green-700 font-bold">$= 0$</td>
+                        <td class="p-3">向下加速，但不轉動</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-blue-700">力偶 (Couple)<br><span class="text-xs text-slate-500">如雙手轉動方向盤：兩力大小相等、方向相反但作用線不同</span></td>
+                        <td class="p-3 text-green-700 font-bold">$= 0$</td>
+                        <td class="p-3 text-red-600 font-bold">$\neq 0$</td>
+                        <td class="p-3">原地加速旋轉，但不平移</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">完全平衡</h4>
+                <p class="text-sm text-slate-600">淨力 $= 0$，淨力矩 $= 0$。物體靜止不動。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">力偶 (Couple)</h4>
+                <p class="text-sm text-slate-600">兩力等大、反向且不共線。淨力 $= 0$ (不平移)，但 <strong>淨力矩 $\neq 0$</strong>，導致物體原地旋轉（如轉動方向盤）。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「一個物體的淨力為零，就代表它一定處於完全平衡狀態。」</li>
+                    <li>「應用力矩原理時，必須要把支點設置在物體真正會旋轉的鉸鏈或支撐點上。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>淨力為零只能保證物體「不會平移加速」。如果受到「力偶」作用，物體仍會原地旋轉。必須同時滿足 <strong>合力矩為零</strong> 才算完全平衡。</li>
+                    <li>對於一個已經平衡的物體，<strong>不管你選哪一點作為假想支點，合力矩都必定為零</strong>。我們可以靈活選擇支點位置來消去未知力，方便解題。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個質量不計的蹺蹺板長 $4 \text{ m}$，支點位於正中央。小華重 $400 \text{ N}$，坐在左端（距支點 $2 \text{ m}$）。爸爸重 $800 \text{ N}$，他應該坐在支點右方多遠處，才能讓蹺蹺板保持水平平衡？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">以中間支撐點為支點。系統處於平衡，根據力矩原理：</p>
+                        <p class="mb-2 text-center">順時針總力矩 = 逆時針總力矩</p>
+                        $$ M_{\text{爸爸}} = M_{\text{小華}} $$
+                        $$ 800 \times d = 400 \times 2 $$
+                        $$ 800d = 800 \implies d = 1 \text{ m} $$
+                        <p class="mt-2 font-bold text-green-700">答案：爸爸應該坐在距離支點右方 $1 \text{ m}$ 處。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一根均勻木尺長度為 $10 \text{ m}$，重量為 $150 \text{ N}$，水平放置於兩個橋墩 A 與 B 上。橋墩 A 位於木尺最左端，橋墩 B 位於距離左端 $8 \text{ m}$ 處。求橋墩 A 對木尺的向上支撐力 $R_A$。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 畫出所有力：「均勻木尺」的重量 $150 \text{ N}$ 作用在正中央（距離左端 $5 \text{ m}$）。兩個未知向上力為 $R_A$ 與 $R_B$。</p>
+                        <p class="mb-2">2. <strong>選取支點：</strong> 因為我們想求 $R_A$，最聰明的做法是把支點選在橋墩 B！這樣 $R_B$ 的距離為 $0$，力矩為 $0$，可以直接從方程中消去。</p>
+                        <p class="mb-2">3. 計算各力到橋墩 B 的距離：</p>
+                        <ul class="list-disc list-inside mb-2">
+                            <li>$R_A$ 到 B 的距離 $= 8 \text{ m}$ (產生順時針力矩)</li>
+                            <li>重量 $150 \text{ N}$ 到 B 的距離 $= 8 - 5 = 3 \text{ m}$ (產生逆時針力矩)</li>
+                        </ul>
+                        $$ \Sigma M_{\text{順}} = \Sigma M_{\text{逆}} $$
+                        $$ R_A \times 8 = 150 \times 3 $$
+                        $$ 8 R_A = 450 \implies R_A = 56.25 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：橋墩 A 的支撐力為 $56.25 \text{ N}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        承上題，求橋墩 B 的向上支撐力 $R_B$。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">這時可以利用 <strong>平移平衡條件</strong> ($\Sigma F = 0$) 來快速解題，不需要再算一次力矩。</p>
+                        <p class="mb-2 text-center">向上的總力 = 向下的總力</p>
+                        $$ R_A + R_B = W $$
+                        $$ 56.25 + R_B = 150 $$
+                        $$ R_B = 150 - 56.25 = 93.75 \text{ N} $$
+                        <p class="mt-2 font-bold text-green-700">答案：橋墩 B 的支撐力為 $93.75 \text{ N}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 一個剛體處於完全平衡狀態。這代表：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q52-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 淨力為零，但淨力矩不一定為零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q52-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 淨力矩為零，但淨力不一定為零</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q52-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 淨力與淨力矩必定同時為零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q52-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 作用在物體上的力必定少於三個</button>
+                </div>
+                <div id="exp-q52-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 完全平衡（靜止）要求物體既不平移加速，也不旋轉加速。因此平移條件（淨力=0）和轉動條件（淨力矩=0）必須同時成立。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 當我們應用「力矩原理」來計算一根靜止木尺上的未知力時，我們應該把支點選在哪裡最合適？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q52-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 必須選在木尺的重心上</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q52-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 必須選在木尺的左右兩端之一</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q52-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 可以選在任何位置，但選在某個「未知力」的作用點上可以簡化計算</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q52-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 必須選在物理上實際支撐木尺的物件上</button>
+                </div>
+                <div id="exp-q52-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 物體若平衡，對空間中「任何點」的合力矩皆為零。選取未知力作用點為支點，該力的力矩為 $F \times 0 = 0$，就能在方程式中消去一個未知數。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 關於「力偶 (Couple)」，下列哪項敘述是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q52-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 它由兩個大小相等、方向相反但不共線的平行力組成</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q52-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 它產生的淨力不為零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q52-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 它可以讓物體產生平移運動</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q52-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 它產生的淨力矩為零</button>
+                </div>
+                <div id="exp-q52-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 力偶的淨力為零（互相抵消），所以物體不會平移。但因為作用線不同（如轉方向盤的兩手），它們會共同產生一個純粹的轉動效應（合力矩不為零）。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 質量均勻的掃帚，其重心位置在哪裡？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q52-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 正中央位置</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q52-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 靠近輕的把手那一端</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q52-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 靠近重的刷毛那一端</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q52-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 掃帚沒有固定的重心</button>
+                </div>
+                <div id="exp-q52-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 掃帚不是形狀質量對稱的物體（即非均勻）。刷毛端質量較大，因此整體的重心會偏向較重的那一端。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 如果一根桿在水平位置保持平衡。若移走其中一個支撐物，桿立即產生角加速度開始旋轉。這是因為移走支撐物後：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q52-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 淨力矩不再為零</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q52-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 桿的重心位置改變了</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q52-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 桿的質量減輕了</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q52-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 剩餘支撐點的摩擦力增加</button>
+                </div>
+                <div id="exp-q52-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 平衡被打破。移走支撐物相當於移走了一個能產生抗衡力矩的力，導致重力相對於剩餘支點產生了不為零的淨力矩，從而引發轉動。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 6.1: 功 -->
+<!-- ========================================== -->
+<article id="ch6-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">6.1</span>功</h2>
+        <p class="text-slate-500 mt-2">理解物理學中「作功」的嚴格定義，並學習如何計算不同施力角度下的功。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在日常生活中，我們常說讀書或工作很「辛苦」，但在物理學中，<strong class="text-blue-700 font-bold">功 (Work)</strong> 有非常嚴格的定義：</p>
+            <p>當一個 <strong class="text-blue-700">力 (Force)</strong> 作用於物體，並且該物體在 <strong class="text-blue-700">力的方向上產生了位移 (Displacement)</strong> 時，我們才說這個力對物體「作了功 (Work done)」。</p>
+            <ul class="list-disc list-inside ml-2 space-y-2 mt-2">
+                <li>如果推一個沉重的牆壁但牆壁不動（位移 $= 0$），即使你滿頭大汗，物理學上的作功依然是 <strong>零</strong>。</li>
+                <li>功是一個 <strong class="text-blue-700 font-bold">標量 (Scalar)</strong>，只有大小，沒有方向（但可以有正負號，代表能量的輸入或消耗）。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">計算功的大小，必須找出「平行於位移方向」的有效分力：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ W = F s \cos\theta $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-3 mt-4">
+                <li>$W$：作功 (Work done)</li>
+                <li>$F$：施加的力 (單位：牛頓 $\text{N}$)</li>
+                <li>$s$：物體的位移 (單位：米 $\text{m}$)</li>
+                <li>$\theta$：力 $F$ 與位移 $s$ 之間的夾角</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>SI 單位：</strong> 功的單位是 <strong class="text-blue-700 font-bold">焦耳 (Joule, $\text{J}$)</strong>。$1 \text{ J} = 1 \text{ N m}$。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 正功、負功與零功的比較</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">情況</th>
+                        <th class="p-3 font-semibold w-1/4">夾角 $\theta$</th>
+                        <th class="p-3 font-semibold w-1/4">公式結果</th>
+                        <th class="p-3 font-semibold w-1/4">物理意義</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-blue-700">作正功 (Positive Work)</td>
+                        <td class="p-3">$0^\circ \le \theta < 90^\circ$</td>
+                        <td class="p-3">$W > 0$</td>
+                        <td class="p-3">力幫助物體前進，向物體<strong>輸入能量</strong>（如引擎推力）。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-amber-600">作零功 (Zero Work)</td>
+                        <td class="p-3">$\theta = 90^\circ$</td>
+                        <td class="p-3 text-amber-600 font-bold">$W = 0$</td>
+                        <td class="p-3">力與運動方向垂直，對前進<strong>沒有貢獻</strong>（如水平移動時的重力）。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-red-600">作負功 (Negative Work)</td>
+                        <td class="p-3">$90^\circ < \theta \le 180^\circ$</td>
+                        <td class="p-3">$W < 0$</td>
+                        <td class="p-3">力阻礙物體前進，從物體<strong>消耗能量</strong>（如摩擦力）。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">作正功 ($\theta < 90^\circ$)</h4>
+                <p class="text-sm text-slate-600">力幫助前進 ($W>0$)，向物體輸入能量。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-amber-600 border-b border-slate-100 pb-2 mb-2">作零功 ($\theta = 90^\circ$)</h4>
+                <p class="text-sm text-slate-600">力與位移垂直 ($\cos 90^\circ = 0$)，不作功。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-red-600 border-b border-slate-100 pb-2 mb-2">作負功 ($\theta > 90^\circ$)</h4>
+                <p class="text-sm text-slate-600">力阻礙前進 ($W<0$)，消耗物體能量（如摩擦力）。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「學生背着沉重的書包，在平地上水平向前走了 $10 \text{ m}$，所以學生對書包作了很多功。」</li>
+                    <li>「物體必須加速，推力才算有作功。如果物體勻速移動，作功就是零。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>學生對書包作的功是零！</strong> 背書包的力是向上的，而位移是水平向前的。兩者夾角 $\theta = 90^\circ$，$\cos 90^\circ = 0$，所以作功為零。</li>
+                    <li>只要有「推力」和「位移」，推力就有作功。物體勻速移動是因為推力作的正功剛好被摩擦力作的負功抵消了（淨作功為零），但單一推力依然有作功。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (簡單水平推力) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        小明以 $30 \text{ N}$ 的水平推力，推動一個木箱在水平地板上向前移動了 $5 \text{ m}$。過程中，地板對木箱的摩擦力為 $10 \text{ N}$。求：<br>
+                        (a) 小明的推力對木箱作的功。<br>
+                        (b) 摩擦力對木塊作的功。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2"><strong>(a) 推力作功：</strong> 推力方向與位移方向相同 ($\theta = 0^\circ$)</p>
+                        $$ W_{\text{推}} = F s \cos(0^\circ) = 30 \times 5 \times 1 = 150 \text{ J} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 摩擦力作功：</strong> 摩擦力方向與位移方向相反 ($\theta = 180^\circ$)</p>
+                        $$ W_{\text{摩}} = f s \cos(180^\circ) = 10 \times 5 \times (-1) = -50 \text{ J} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 推力作功 $150 \text{ J}$；(b) 摩擦力作功 $-50 \text{ J}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (施力有角度) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        小美用一條繩子拉動一個行李箱。繩子的拉力為 $80 \text{ N}$，且與水平地面呈 $60^\circ$ 的仰角。行李箱在水平地面上前進了 $10 \text{ m}$。求繩子拉力對行李箱作的功。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">只有平行於位移方向的分力（水平分力）才會作功。位移是水平的，拉力與水平夾角為 $60^\circ$。</p>
+                        $$ W = F s \cos\theta $$
+                        $$ W = 80 \times 10 \times \cos 60^\circ $$
+                        $$ W = 800 \times 0.5 = 400 \text{ J} $$
+                        <p class="mt-2 font-bold text-green-700">答案：拉力作功 $400 \text{ J}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (抵抗重力作功) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        起重機將一個質量為 $500 \text{ kg}$ 的貨物，垂直以勻速提升了 $20 \text{ m}$。求起重機對貨物作的功。（取 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 「勻速提升」代表起重機向上的拉力 $F$ 剛好等於向下的重力 $mg$。</p>
+                        $$ F = mg = 500 \times 9.81 = 4905 \text{ N} $$
+                        <p class="mb-2">2. 拉力向上，位移也向上，方向相同 ($\theta = 0^\circ$)：</p>
+                        $$ W = F s = 4905 \times 20 = 98100 \text{ J} $$
+                        <p class="mt-2 font-bold text-green-700">答案：起重機作功 $98100 \text{ J}$ (或 $98.1 \text{ kJ}$)。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在下列哪一種情況中，施加的力對物體作了「零功」？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q61-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 蘋果從樹上自由落下時，地球對它施加的重力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 汽車煞車時，地面對輪胎施加的摩擦力</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q61-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 人造衛星繞地球作圓周運動時，地球對衛星的引力</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 起重機將貨物垂直向上提升時的拉力</button>
+                </div>
+                <div id="exp-q61-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 圓周運動中，引力提供向心力，方向永遠指向圓心，而衛星的運動方向（位移）永遠在切線方向。兩者夾角為 $90^\circ$，$\cos 90^\circ = 0$，所以作功為零。
+                </div>
+            </div>
+            
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 功的單位是「焦耳 (J)」。1 焦耳相當於：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q61-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 1 千克米 ($\text{kg m}$)</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q61-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 1 牛頓米 ($\text{N m}$)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 1 牛頓每秒 ($\text{N/s}$)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 1 瓦特秒 ($\text{W/s}$)</button>
+                </div>
+                <div id="exp-q61-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據公式 $W = F \times s$，單位就是 力 (牛頓 $\text{N}$) 乘以 距離 (米 $\text{m}$)。因此 $1 \text{ J} = 1 \text{ N m}$。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 小華用 $40 \text{ N}$ 的水平力推牆壁，但牆壁紋風不動。小華維持推力 10 分鐘。這段期間小華對牆壁作了多少功？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q61-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $400 \text{ J}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q61-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $0 \text{ J}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $24000 \text{ J}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 條件不足，無法計算</button>
+                </div>
+                <div id="exp-q61-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 牆壁沒有移動，位移 $s = 0$。根據 $W = F s$，作功為 $0 \text{ J}$。小華消耗的化學能變成了他身體的熱能，但並沒有轉化為牆壁的機械能。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 物體沿直線運動，如果作用在物體上的力 $F$ 和位移 $s$ 方向相反，則該力對物體作功的性質是：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q61-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 作正功，增加物體的能量</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 作零功，不改變物體的能量</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q61-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 作負功，減少物體的能量</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 作負功，增加物體的能量</button>
+                </div>
+                <div id="exp-q61-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 力與位移方向相反（夾角 $180^\circ$），$\cos 180^\circ = -1$。這是一個阻力（如摩擦力或煞車力），會作負功，從物體身上奪走（消耗）動能。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 如果我們繪製出一幅「力—位移 ($F-s$)」的關係線圖，圖線與位移軸（$x$ 軸）所包圍的面積代表甚麼物理量？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q61-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 總作功</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 功率</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 速度</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q61-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 總時間</button>
+                </div>
+                <div id="exp-q61-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 面積 = $y$ 軸數值 $\times$ $x$ 軸數值 = 力 ($F$) $\times$ 位移 ($s$)。根據公式 $W = Fs$，這個面積即代表力所作的功。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 6.2: 機械能 -->
+<!-- ========================================== -->
+<article id="ch6-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">6.2</span>機械能</h2>
+        <p class="text-slate-500 mt-2">學習能量的基礎形式：動能與重力勢能，並掌握功能定理的應用。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>能量是物體「作功的能力」。在力學系統中，最常見的能量稱為 <strong class="text-blue-700 font-bold">機械能 (Mechanical Energy)</strong>，它包含兩種形式：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">動能 (Kinetic Energy, KE)：</strong> 
+                    物體由於「運動」而具有的能量。物體移動得越快、質量越大，動能就越大。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">重力勢能 (Gravitational Potential Energy, GPE 或 PE)：</strong> 
+                    物體由於其「高度（位置）」而儲存的能量。物體被抬得越高，它掉下來時能作的功就越多。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">動能 (KE)</p>
+                    <p class="text-2xl font-bold">$$ KE = \frac{1}{2}mv^2 $$</p>
+                    <p class="text-sm text-slate-500 mt-2">$m$: 質量 (kg)；$v$: 速率 (m/s)</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">重力勢能 (PE)</p>
+                    <p class="text-2xl font-bold">$$ PE = mgh $$</p>
+                    <p class="text-sm text-slate-500 mt-2">$h$: 距離基準面的垂直高度 (m)</p>
+                </div>
+            </div>
+            <p class="text-sm text-slate-600 mt-4"><i class="fa-solid fa-link text-blue-500 mr-1"></i> <strong>功能定理 (Work-Energy Theorem)：</strong> 當淨力對物體作功時，會等於物體動能的變化量。<br> $$ W_{\text{net}} = \Delta KE = \frac{1}{2}mv^2 - \frac{1}{2}mu^2 $$</p>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 動能與重力勢能的特性比較</h3>
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8">動能 (KE)</th>
+                        <th class="p-3 font-semibold w-3/8">重力勢能 (PE)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">決定因素</td>
+                        <td class="p-3">與速率的 <strong>平方</strong> 成正比 ($v^2$)</td>
+                        <td class="p-3">與垂直高度成正比 ($h$)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">數值特性</td>
+                        <td class="p-3">必定是 <strong>正值（或零）</strong>。因為 $v^2$ 恆正。</td>
+                        <td class="p-3">可正可負。取決於你將 <strong>參考水平面 (Reference level)</strong> 設定在哪裡。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">物理意義</td>
+                        <td class="p-3">物體正在擁有的「活動」能量。</td>
+                        <td class="p-3">物體「儲存」起來，隨時可釋放的潛在能量。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">動能 (KE)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>受速率平方 ($v^2$) 影響。</li>
+                    <li>永遠為正數（或零）。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">重力勢能 (PE)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>受垂直高度 ($h$) 影響。</li>
+                    <li>可以是負數（若位於基準面下方）。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「一輛車的速度增加為原來的 2 倍，它的動能也會變成原來的 2 倍。」</li>
+                    <li>「重力勢能的數值是絕對的，某個物體的 PE 是 $100 \text{ J}$，對所有人來說都是 $100 \text{ J}$。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>動能與速度的 <strong>平方 ($v^2$)</strong> 成正比。速度變 2 倍，動能會變成 $2^2 = \mathbf{4}$ <strong>倍</strong>！這就是為甚麼超速煞車極度危險。</li>
+                    <li>重力勢能是 <strong>相對的</strong>。取決於你把哪裡當作高度 $h=0$ 的基準面（例如桌面或地面）。但「高度的變化量 $\Delta h$」是絕對不變的。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一顆質量為 $0.4 \text{ kg}$ 的足球以 $20 \text{ m s}^{-1}$ 的速度飛行。求這顆足球的動能。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">直接代入動能公式：</p>
+                        $$ KE = \frac{1}{2}mv^2 $$
+                        $$ KE = \frac{1}{2}(0.4)(20)^2 = 0.2 \times 400 = 80 \text{ J} $$
+                        <p class="mt-2 font-bold text-green-700">答案：足球的動能為 $80 \text{ J}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        起重機將一個 $200 \text{ kg}$ 的鋼材，從距離地面 $5 \text{ m}$ 處，提升到距離地面 $25 \text{ m}$ 處。求這塊鋼材重力勢能的「變化量（增加量）」。取 $g = 9.81 \text{ m s}^{-2}$。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">勢能變化量 $\Delta PE = mg(h_2 - h_1)$</p>
+                        <p class="mb-2">高度變化 $\Delta h = 25 - 5 = 20 \text{ m}$</p>
+                        $$ \Delta PE = 200 \times 9.81 \times 20 = 39240 \text{ J} $$
+                        <p class="mt-2 font-bold text-green-700">答案：重力勢能增加了 $39240 \text{ J}$ (或 $39.24 \text{ kJ}$)。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (功能定理) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一輛質量為 $1000 \text{ kg}$ 的汽車原本靜止。引擎為它提供了 $150000 \text{ J}$ 的淨作功（已扣除摩擦力損耗）。利用「功能定理」，求汽車獲得的最終速度。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">根據功能定理，淨作功完全轉化為動能的增加：</p>
+                        $$ W_{\text{net}} = \Delta KE = \frac{1}{2}mv^2 - \frac{1}{2}mu^2 $$
+                        <p class="mb-2">因為汽車原本靜止，初動能為 $0$：</p>
+                        $$ 150000 = \frac{1}{2}(1000)v^2 $$
+                        $$ 150000 = 500v^2 $$
+                        $$ v^2 = \frac{150000}{500} = 300 $$
+                        $$ v = \sqrt{300} \approx 17.3 \text{ m s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：汽車的最終速度約為 $17.3 \text{ m s}^{-1}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 動能的公式為 $KE = \frac{1}{2}mv^2$。如果一輛汽車的速度增加了三倍（變為原來的 3 倍），它的動能會變成原來的多少倍？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q62-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 3 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 6 倍</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q62-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 9 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 1.5 倍</button>
+                </div>
+                <div id="exp-q62-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 動能與速度的平方成正比。速度變為 3 倍，動能會變為 $3^2 = 9$ 倍。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 重力勢能 (PE) 可以是一個負數嗎？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q62-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 不可以，因為質量和重力加速度永遠是正數</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q62-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 可以，如果物體位於我們設定的「基準面」下方</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 可以，但僅限於物體正在往下掉的時候</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 不可以，能量是標量所以必定為正</button>
+                </div>
+                <div id="exp-q62-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 勢能的值是相對的。如果我們把桌面設為 $h=0$ 的基準面，那麼掉到地板上（桌面下方）的物體，其高度 $h$ 為負，勢能就是負數。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 根據「功能定理」，作用於物體上的「淨力所作的功」等於：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q62-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 物體的重力勢能</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q62-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 物體動能的改變量</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 物體的動能與勢能總和</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 摩擦力消耗的能量</button>
+                </div>
+                <div id="exp-q62-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 功能定理 (Work-Energy Theorem) 指出：$W_{\text{net}} = \Delta KE$。淨作功完全用來改變物體的動能。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 質量 $2 \text{ kg}$ 的球從靜止開始自由下落了 $5 \text{ m}$，重力對它作了多少功？這個功轉化成了甚麼？（取 $g = 10 \text{ m s}^{-2}$）</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q62-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $10 \text{ J}$，轉化為勢能</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q62-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $100 \text{ J}$，轉化為動能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $50 \text{ J}$，轉化為動能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $100 \text{ J}$，轉化為勢能</button>
+                </div>
+                <div id="exp-q62-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 重力作功 $W = Fs = (mg) \times h = 2 \times 10 \times 5 = 100 \text{ J}$。根據功能定理，這 $100 \text{ J}$ 的正功會使球的動能增加 $100 \text{ J}$。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 小明推着一個重物在水平地板上以「均速」前進。推力作了 $500 \text{ J}$ 的功。物體的動能有增加嗎？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q62-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 有，增加了 $500 \text{ J}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 有，但小於 $500 \text{ J}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q62-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 沒有，動能不變</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q62-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 無法判斷</button>
+                </div>
+                <div id="exp-q62-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 「均速」前進代表淨力為零。推力作了 $+500 \text{ J}$ 的正功，但同時地板摩擦力作了 $-500 \text{ J}$ 的負功。淨作功為 $0$，因此物體的動能沒有改變。能量變成了對抗摩擦力產生的熱能（內能）。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 6.3: 能量轉換和能量守恆 -->
+<!-- ========================================== -->
+<article id="ch6-3" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">6.3</span>能量轉換和能量守恆</h2>
+        <p class="text-slate-500 mt-2">探索動能與勢能之間的互相轉換，並學習宇宙中最神聖的定律：能量守恆定律。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p><strong class="text-blue-700 font-bold">能量轉換 (Energy Conversion)：</strong> 能量可以從一種形式轉換為另一種形式。例如物體自由下落時，它的「重力勢能」會逐漸轉換為「動能」，使它越來越快。</p>
+            <hr class="my-4 border-slate-100">
+            <p><strong class="text-blue-700 font-bold">能量守恆定律 (Law of Conservation of Energy)：</strong></p>
+            <p>這是一個普適的物理定律：能量既不能被創造，也不能被消滅，它只能從一種形式轉換成另一種形式，或從一個物體轉移到另一個物體，而 <strong class="text-blue-700">系統的總能量永遠保持不變</strong>。</p>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與兩種守恆情境</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <div class="space-y-4 my-2">
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2">情境一：機械能守恆（無摩擦、無外力）</p>
+                    <p class="text-sm text-slate-600 mb-2">當只有重力在作功時，物體的動能和重力勢能的總和（機械能）保持不變。</p>
+                    $$ KE_1 + PE_1 = KE_2 + PE_2 $$
+                    $$ \frac{1}{2}mv_1^2 + mgh_1 = \frac{1}{2}mv_2^2 + mgh_2 $$
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-red-600 mb-2">情境二：一般能量守恆（有摩擦力）</p>
+                    <p class="text-sm text-slate-600 mb-2">當存在摩擦力或空氣阻力時，機械能不再守恆，部分能量會轉換為熱能（內能）。</p>
+                    $$ \text{初機械能} = \text{末機械能} + \text{克服摩擦力作的功} $$
+                    $$ ME_1 = ME_2 + W_{\text{摩擦}} $$
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 經典鐘擺運動的能量分析</h3>
+        <p class="text-slate-700 mb-3">鐘擺是展現能量轉換最完美的例子（假設忽略空氣阻力）：</p>
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">位置</th>
+                        <th class="p-3 font-semibold w-1/4">重力勢能 (PE)</th>
+                        <th class="p-3 font-semibold w-1/4">動能 (KE)</th>
+                        <th class="p-3 font-semibold w-1/4">總機械能</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">最高點 (放手處)</td>
+                        <td class="p-3 text-blue-700 font-bold">最大值 ($mgh$)</td>
+                        <td class="p-3 text-red-600 font-bold">$0$ (瞬間靜止)</td>
+                        <td class="p-3">等於最大 PE</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">最低點 (中間)</td>
+                        <td class="p-3 text-red-600 font-bold">$0$ (設為基準面)</td>
+                        <td class="p-3 text-blue-700 font-bold">最大值 ($\frac{1}{2}mv^2$)</td>
+                        <td class="p-3">等於最大 KE</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">任意中間點</td>
+                        <td class="p-3">部分</td>
+                        <td class="p-3">部分</td>
+                        <td class="p-3 font-bold text-green-700">保持不變 (常數)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-slate-800 border-b border-slate-100 pb-2 mb-2">最高點</h4>
+                <p class="text-sm text-slate-600">PE 最大，KE 為零 (瞬間停下)。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-slate-800 border-b border-slate-100 pb-2 mb-2">最低點</h4>
+                <p class="text-sm text-slate-600">PE 為零，KE 最大 (速度最快)。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-green-700 border-b border-slate-100 pb-2 mb-2">結論</h4>
+                <p class="text-sm text-slate-600">無論在哪一點，PE + KE 的總和始終保持不變。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「有摩擦力的時候，能量就憑空消失了，這違背了能量守恆定律。」</li>
+                    <li>「一個物體滑下斜坡時，不論斜坡是否粗糙，到達底部的速度都一樣，因為高度一樣。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>能量從未消失！</strong> 它只是從「機械能」轉換成了「熱能（內能）」。總能量依然是完美守恆的，只是我們無法再利用這些散失的熱能。</li>
+                    <li>如果有摩擦力，部分重力勢能會轉化為熱能，導致轉化為動能的份量減少。因此在粗糙斜坡上滑到底部時的<strong>速度會比較慢</strong>。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (無摩擦守恆) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        遊樂場的過山車從 $45 \text{ m}$ 高的軌道頂點由靜止滑下。假設軌道完全光滑，忽略空氣阻力。求過山車滑到距地面 $25 \text{ m}$ 處時的速度。（取 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">這是一個典型的機械能守恆問題。頂點的機械能 = $25 \text{ m}$ 處的機械能。</p>
+                        $$ mgh_1 + \frac{1}{2}mu^2 = mgh_2 + \frac{1}{2}mv^2 $$
+                        <p class="mb-2">可以發現質量 $m$ 每一項都有，可以直接約去！且初速 $u=0$。</p>
+                        $$ gh_1 = gh_2 + \frac{1}{2}v^2 $$
+                        $$ 9.81 \times 45 = 9.81 \times 25 + \frac{1}{2}v^2 $$
+                        $$ 441.45 = 245.25 + 0.5 v^2 $$
+                        $$ 196.2 = 0.5 v^2 \implies v^2 = 392.4 $$
+                        $$ v \approx 19.8 \text{ m s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：過山車的速度約為 $19.8 \text{ m s}^{-1}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (有摩擦的能量轉換) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個質量為 $2 \text{ kg}$ 的木塊，從高 $5 \text{ m}$ 的粗糙斜面頂端由靜止滑到底部。到達底部時，木塊的速度測得為 $7 \text{ m s}^{-1}$。求木塊在下滑過程中，克服摩擦力作了多少功？（取 $g = 10 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算頂端的初始機械能（全為勢能）：</p>
+                        $$ ME_1 = PE_1 = mgh = 2 \times 10 \times 5 = 100 \text{ J} $$
+                        <p class="mb-2 mt-4">2. 計算底部的末機械能（全為動能）：</p>
+                        $$ ME_2 = KE_2 = \frac{1}{2}mv^2 = \frac{1}{2}(2)(7)^2 = 49 \text{ J} $$
+                        <p class="mb-2 mt-4">3. 利用能量守恆，流失的機械能即為克服摩擦力所作的功：</p>
+                        $$ W_{\text{摩擦}} = ME_1 - ME_2 = 100 - 49 = 51 \text{ J} $$
+                        <p class="mt-2 font-bold text-green-700">答案：克服摩擦力作了 $51 \text{ J}$ 的功（轉化成了熱能）。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (鐘擺) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個鐘擺的擺錘質量為 $1 \text{ kg}$。將擺錘拉高，使其離最低點的垂直高度為 $0.2 \text{ m}$，然後由靜止釋放。忽略空氣阻力，求擺錘經過最低點時的動能和速度。（取 $g = 10 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">根據機械能守恆，最高點的勢能會完全轉化為最低點的動能。</p>
+                        $$ KE_{\text{最低點}} = PE_{\text{最高點}} = mgh $$
+                        $$ KE = 1 \times 10 \times 0.2 = 2 \text{ J} $$
+                        <p class="mb-2 mt-4">求速度 $v$：</p>
+                        $$ \frac{1}{2}mv^2 = 2 $$
+                        $$ \frac{1}{2}(1)v^2 = 2 \implies v^2 = 4 $$
+                        $$ v = 2 \text{ m s}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：動能為 $2 \text{ J}$，速度為 $2 \text{ m s}^{-1}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 根據能量守恆定律，當一個物體在粗糙的斜面上向下滑動時，下列敘述何者正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q63-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 它的機械能保持不變</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q63-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 它失去的勢能大於獲得的動能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q63-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 它失去的勢能等於獲得的動能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q63-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 系統的總能量會逐漸減少</button>
+                </div>
+                <div id="exp-q63-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 因為有摩擦力，部分勢能轉化為了熱能，所以能轉化成「動能」的份量變少了。因此失去的勢能必定大於獲得的動能。但系統（包含發熱）的「總能量」是守恆的。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 小孩在玩鞦韆。如果我們忽略空氣阻力和鉸鏈的摩擦，鞦韆在哪個位置的速度最快？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q63-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 擺到最高點時</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q63-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 經過最低點時</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q63-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 最高點和最低點之間的中間點</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q63-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 每個位置的速度都一樣</button>
+                </div>
+                <div id="exp-q63-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 最低點的重力勢能最小。根據機械能守恆，勢能最少的地方，動能必定最大，因此速度最快。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 把一顆球垂直向上拋出。不計空氣阻力，在球上升的過程中：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q63-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 動能增加，勢能減少</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q63-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 動能減少，勢能增加</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q63-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 動能與勢能同時增加</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q63-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 動能不變，勢能增加</button>
+                </div>
+                <div id="exp-q63-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 上升過程高度增加，因此勢能增加。根據能量守恆，這些勢能是由初動能轉換而來的，所以球會變慢，動能減少。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 質量為 $m$ 的物體從高 $h$ 的光滑軌道滑下。如果將物體質量改為 $2m$ 從同一高度滑下，它到達底部的速度會：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q63-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 變成兩倍</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q63-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 保持不變</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q63-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 變成四倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q63-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 變成一半</button>
+                </div>
+                <div id="exp-q63-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據 $mgh = \frac{1}{2}mv^2$，等式兩邊的質量 $m$ 可以消去，得到 $v = \sqrt{2gh}$。這證明了在無摩擦情況下，滑到底部的速度完全取決於高度 $h$，與質量無關。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 隕石進入地球大氣層時會發出耀眼的光芒並燃燒。在這個過程中，涉及了哪些能量轉換？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q63-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 只有勢能轉化為動能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q63-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 只有動能轉化為勢能</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q63-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 動能與勢能轉化為內能（熱能）與光能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q63-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 熱能轉化為動能</button>
+                </div>
+                <div id="exp-q63-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 隕石高速下落並與空氣劇烈摩擦。它巨大的動能和重力勢能被空氣阻力作負功消耗掉，這些機械能大量轉化成了熱能和光能，導致隕石燃燒。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 6.4: 功率 -->
+<!-- ========================================== -->
+<article id="ch6-4" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">6.4</span>功率</h2>
+        <p class="text-slate-500 mt-2">區分「作功的總量」與「作功的速度」，並學習機器與引擎的功率計算。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>假設有兩台起重機，都能把 $1000 \text{ kg}$ 的貨物吊到 $10 \text{ m}$ 高的地方。它們對貨物作的「功」是完全一樣的。但是，A 起重機花了 10 秒，B 起重機花了 50 秒。A 顯然更「強勁」。</p>
+            <p>為了描述這種 <strong>作功的快慢程度</strong>，物理學引入了 <strong class="text-blue-700 font-bold">功率 (Power)</strong> 的概念：</p>
+            <ul class="list-disc list-inside ml-2 space-y-2 mt-2">
+                <li><strong class="text-blue-700 font-bold">定義：</strong> 功率是單位時間內所作的功，或者是能量轉移的速率。</li>
+                <li><strong>區別：</strong> 功 (Work) 看的是能量總結算了多少；功率 (Power) 看的是能量轉移得有多快。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">功率的基本公式與推導公式：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">基本公式</p>
+                    <p class="text-2xl font-bold">$$ P = \frac{W}{t} \quad \text{或} \quad P = \frac{\Delta E}{t} $$</p>
+                    <p class="text-sm text-slate-500 mt-2">適用於任何能量轉換</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                    <p class="font-bold text-blue-800 mb-2">引擎推進公式</p>
+                    <p class="text-2xl font-bold">$$ P = F \times v $$</p>
+                    <p class="text-sm text-slate-500 mt-2">由 $P = \frac{F \cdot s}{t}$ 推導得出，適用於恆定拉力與勻速</p>
+                </div>
+            </div>
+            <ul class="text-sm text-slate-600 space-y-3 mt-4">
+                <li>$P$：功率 (Power)</li>
+                <li>$W$：作功；$\Delta E$：能量改變；$t$：時間</li>
+                <li>$F$：驅動力；$v$：物體的速率</li>
+                <hr class="border-blue-200 my-2">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>SI 單位：</strong> 功率的單位是 <strong class="text-blue-700 font-bold">瓦特 (Watt, $\text{W}$)</strong>。$1 \text{ W} = 1 \text{ J s}^{-1}$（每秒作功 1 焦耳）。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 「功」與「功率」的綜合對照</h3>
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8">功 (Work) / 能量 (Energy)</th>
+                        <th class="p-3 font-semibold w-3/8">功率 (Power)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">物理意義</td>
+                        <td class="p-3">完成任務所需的 <strong>總能量</strong>。</td>
+                        <td class="p-3">完成任務的 <strong>速度（快慢）</strong>。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">與時間的關係</td>
+                        <td class="p-3">與耗時長短 <strong>無關</strong>。</td>
+                        <td class="p-3">與時間成 <strong>反比</strong>（越快完成，功率越高）。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">單位</td>
+                        <td class="p-3">焦耳 ($\text{J}$)</td>
+                        <td class="p-3">瓦特 ($\text{W}$)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">功 (Work)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>衡量能量總和（焦耳 $\text{J}$）。</li>
+                    <li>不受花費時間的影響。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">功率 (Power)</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>衡量能量轉移速率（瓦特 $\text{W}$）。</li>
+                    <li>時間越短，功率越大。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「這台機器的功率很大，所以它作的功一定比那台小功率的機器多。」</li>
+                    <li>「汽車引擎的輸出功率是常數，所以在任何車速下，引擎能提供的推力都是一樣的。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>功率只代表作功的「速度」！</strong> 即使功率很大，如果只開機 1 秒，總作功可能還是比開了 1 小時的小功率機器少 ($W = P \times t$)。</li>
+                    <li>根據 $P = Fv$，如果引擎的功率 $P$ 達到上限，當車速 $v$ 越來越快時，引擎能提供的最大推力 $F$ 反而會 <strong>越來越小</strong>！這就是為甚麼汽車在高速時加速會變慢。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 (簡單功率) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一名舉重運動員在 $2 \text{ s}$ 內，將 $150 \text{ kg}$ 的槓鈴垂直舉高 $2 \text{ m}$。求這名運動員舉起槓鈴時的平均功率。（取 $g = 10 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 先計算運動員克服重力所作的功（或增加的重力勢能）：</p>
+                        $$ W = mgh = 150 \times 10 \times 2 = 3000 \text{ J} $$
+                        <p class="mb-2 mt-4">2. 計算平均功率：</p>
+                        $$ P = \frac{W}{t} = \frac{3000}{2} = 1500 \text{ W} $$
+                        <p class="mt-2 font-bold text-green-700">答案：運動員的平均功率為 $1500 \text{ W}$ (或 $1.5 \text{ kW}$)。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 (P=Fv 應用) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一輛汽車在公路上以 $25 \text{ m s}^{-1}$ 的恆定速率行駛。已知汽車受到的總空氣阻力與路面摩擦力為 $1200 \text{ N}$。求汽車引擎此時輸出的功率。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">「恆定速率」代表汽車處於平衡狀態，淨力為零。因此，引擎向前的驅動力 $F$ 必須剛好等於向後的總阻力 $1200 \text{ N}$。</p>
+                        <p class="mb-2">利用引擎推進功率公式：</p>
+                        $$ P = F \times v $$
+                        $$ P = 1200 \times 25 = 30000 \text{ W} $$
+                        <p class="mt-2 font-bold text-green-700">答案：引擎輸出功率為 $30000 \text{ W}$ (或 $30 \text{ kW}$)。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 (效率與功率) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個抽水泵的標稱功率（輸入電功率）為 $2 \text{ kW}$。它需要在 $1 \text{ 分鐘}$ 內，將 $500 \text{ kg}$ 的水抽到 $15 \text{ m}$ 高的水箱中。求這個抽水泵的能量轉換效率（Efficiency）。（取 $g = 10 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算泵在 $1 \text{ 分鐘}$ (即 $60 \text{ s}$) 內實際對水作的有用的功（輸出能量）：</p>
+                        $$ W_{\text{輸出}} = mgh = 500 \times 10 \times 15 = 75000 \text{ J} $$
+                        <p class="mb-2 mt-4">2. 計算泵在這段時間內消耗的總電能（輸入能量）：</p>
+                        $$ W_{\text{輸入}} = P_{\text{輸入}} \times t = 2000 \text{ W} \times 60 \text{ s} = 120000 \text{ J} $$
+                        <p class="mb-2 mt-4">3. 計算效率 (Efficiency = 輸出 / 輸入 $\times 100\%$):</p>
+                        $$ \text{效率} = \frac{75000}{120000} \times 100\% = 62.5\% $$
+                        <p class="mt-2 font-bold text-green-700">答案：抽水泵的效率為 $62.5\%$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在物理學中，功率的定義是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q64-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 轉化能量的總量</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q64-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 能量轉化的速率（快慢）</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q64-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 施加力的大小</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q64-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 物體擁有的總機械能</button>
+                </div>
+                <div id="exp-q64-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 功率是「單位時間內」作的功或轉化的能量，代表能量轉移的「速率」。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 功率的國際標準單位是「瓦特 (W)」。1 瓦特相當於：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q64-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 1 牛頓米 ($\text{N m}$)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q64-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 1 焦耳秒 ($\text{J s}$)</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q64-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 1 焦耳每秒 ($\text{J s}^{-1}$)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q64-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 1 千克米每秒 ($\text{kg m s}^{-1}$)</button>
+                </div>
+                <div id="exp-q64-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據公式 $P = W/t$，功率等於功（焦耳 $\text{J}$）除以時間（秒 $\text{s}$）。因此 $1 \text{ W} = 1 \text{ J s}^{-1}$。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 小明和小華重量相同，他們跑上同一段樓梯。小明花了 10 秒，小華花了 15 秒。下列敘述何者正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q64-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 小明作的功較多，功率也較大</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q64-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 小明作的功較少，但功率較大</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q64-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 兩人作的功一樣多，但小明的功率較大</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q64-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 兩人作的功和功率都一樣</button>
+                </div>
+                <div id="exp-q64-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 兩人重量和爬升高度一樣，所以克服重力作的功 ($W = mgh$) 完全一樣。但小明花的時間較短，根據 $P = W/t$，小明輸出的平均功率較大。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 汽車引擎輸出 $50 \text{ kW}$ 的功率，以 $20 \text{ m s}^{-1}$ 的恆定速率在平路上行駛。汽車受到的總阻力為多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q64-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $1000 \text{ N}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q64-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $2500 \text{ N}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q64-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $5000 \text{ N}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q64-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $10000 \text{ N}$</button>
+                </div>
+                <div id="exp-q64-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> $50 \text{ kW} = 50000 \text{ W}$。恆定速率行駛時驅動力等於阻力。由 $P = Fv$ 可得 $F = P / v = 50000 / 20 = 2500 \text{ N}$。這也是汽車克服的總阻力。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 如果一輛跑車的引擎達到了它的最大輸出功率，此時司機想讓車子繼續加速。根據物理定律，這輛車引擎能提供的驅動力會如何變化？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q64-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 驅動力會保持在最大值不變</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q64-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 驅動力會隨着速度增加而變得更大</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q64-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 隨着速度增加，能提供的驅動力會逐漸減少</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q64-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 驅動力會立刻變為零</button>
+                </div>
+                <div id="exp-q64-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據公式 $P = F \times v$。當功率 $P$ 已經達到極限（定值）時，速度 $v$ 若繼續增加，推力 $F$ 就必須按比例減小。這也是車輛高速時難以提供強烈推背感的原因。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+                            
+
+
+
+
                         
             <!-- ========================================== -->
             <!-- 區塊 3.4 ~ 3.6 (標準佔位符結構) -->
