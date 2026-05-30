@@ -806,7 +806,657 @@
 </article>
 
 
+       <!-- ========================================== -->
+            <!-- 區塊 5.1: 水波 -->
+            <!-- ========================================== -->
+            <article id="ch5-1" class="content-section block">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">5.1</span>水波</h2>
+                    <p class="text-slate-500 mt-2">認識水波槽的原理，學習利用波陣面來展示波的傳播，並理解水波波速與水深的關係。</p>
+                </header>
 
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">水波槽：</span> 利用光線由上方照射淺水槽，波峰像凸透鏡會聚光線形成亮紋，波谷像凹透鏡發散光線形成暗紋。</li>
+                            <li><span class="text-blue-700 font-bold">波陣面：</span> 將所有振動狀態相同（同相）的點連接起來形成的線。例如將所有波峰連起來。波陣面永遠與波的傳播方向垂直。</li>
+                            <li><span class="text-blue-700 font-bold">直線波與圓形波：</span> 用直尺振動產生直線波陣面；用點狀物振動產生圓形波陣面。相鄰兩條亮紋（波陣面）的距離等於一個波長 $\lambda$。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 水深與波速</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="mb-2 text-slate-700">水波的傳播速度受水深影響：</p>
+                        <ul class="list-disc list-inside space-y-2 text-slate-700 ml-2">
+                            <li><span class="font-bold text-blue-800">深水區：</span> 波速 ($v$) 較快。因為頻率 ($f$) 由震源決定不變，根據 $v=f\lambda$，波長 ($\lambda$) 較長。</li>
+                            <li><span class="font-bold text-blue-800">淺水區：</span> 波速 ($v$) 較慢，頻率 ($f$) 不變，波長 ($\lambda$) 較短。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                在水波槽實驗中，震盪器以 $10 \text{ Hz}$ 頻率振動。測得屏幕上相鄰5條亮紋的總距離為 $12 \text{ cm}$。求水波的波長與波速。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">5條亮紋之間有4個間隔，即4個波長。</p>
+                                <div class="overflow-x-auto">$$ 4\lambda = 12 \text{ cm} \implies \lambda = 3 \text{ cm} = 0.03 \text{ m} $$</div>
+                                <div class="overflow-x-auto">$$ v = f\lambda = 10 \times 0.03 = 0.3 \text{ m s}^{-1} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：波長 $0.03 \text{ m}$，波速 $0.3 \text{ m s}^{-1}$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                水波從深水區傳入淺水區，已知深水區波速為 $0.4 \text{ m s}^{-1}$，波長為 $0.08 \text{ m}$。若淺水區波速降為 $0.2 \text{ m s}^{-1}$，求淺水區的波長。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">跨越交界面時，頻率 $f$ 不變。</p>
+                                <div class="overflow-x-auto">$$ f = \frac{v_1}{\lambda_1} = \frac{0.4}{0.08} = 5 \text{ Hz} $$</div>
+                                <div class="overflow-x-auto">$$ \lambda_2 = \frac{v_2}{f} = \frac{0.2}{5} = 0.04 \text{ m} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：淺水區波長為 $0.04 \text{ m}$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                為何水波槽四邊通常會設計成斜邊或貼上海綿？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">這是為了吸收水波的能量，減少水波從邊緣反射回來，避免反射波與原來的波疊加干擾實驗觀察。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-1-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 水波槽圖像中的亮紋代表波的哪個部位？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp5-1-1', 'quiz5-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 波峰</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-1-1', 'quiz5-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 波谷</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-1-1', 'quiz5-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 平衡位置</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-1-1', 'quiz5-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 波源</button>
+                        </div>
+                        <div id="exp5-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 波峰像凸透鏡，會聚光線形成亮紋。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-1-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 關於波陣面與波傳播方向的關係，下列何者正確？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-1-2', 'quiz5-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 互相平行</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-1-2', 'quiz5-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 互相垂直</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-1-2', 'quiz5-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 夾 45 度角</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-1-2', 'quiz5-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 沒有固定關係</button>
+                        </div>
+                        <div id="exp5-1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 波陣面是由同相點組成的線，永遠垂直於能量傳播的方向。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-1-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 水波從深水區進入淺水區時，哪個物理量保持不變？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-1-3', 'quiz5-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 波長</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-1-3', 'quiz5-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 波速</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-1-3', 'quiz5-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 頻率</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-1-3', 'quiz5-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 振幅</button>
+                        </div>
+                        <div id="exp5-1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 頻率只由震源決定，與傳播介質的改變無關。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-1-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 在水波槽中，相鄰兩條亮紋之間的距離代表什麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-1-4', 'quiz5-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 半個波長</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-1-4', 'quiz5-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 一個波長</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-1-4', 'quiz5-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 振幅</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-1-4', 'quiz5-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 波速</button>
+                        </div>
+                        <div id="exp5-1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 亮紋對應波峰，相鄰兩波峰間的距離就是一個波長。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz5-1-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 若降低水波槽內的水深，圓形水波的亮紋間距會如何變化？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp5-1-5', 'quiz5-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 變窄</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-1-5', 'quiz5-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 變寬</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-1-5', 'quiz5-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 不變</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-1-5', 'quiz5-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 變為直線</button>
+                        </div>
+                        <div id="exp5-1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 水變淺，波速減慢，在頻率不變下波長變短，故亮紋間距變窄。
+                        </div>
+                    </div>
+
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 5.2: 反射與折射 -->
+            <!-- ========================================== -->
+            <article id="ch5-2" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">5.2</span>反射與折射</h2>
+                    <p class="text-slate-500 mt-2">學習水波遇障礙物時的反射規律，以及跨越不同水深時波速與方向改變的折射現象。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">反射：</span> 波遇到障礙物反彈的現象。遵守反射定律：入射角等於反射角。反射後波速、波長、頻率均<strong>不變</strong>。</li>
+                            <li><span class="text-blue-700 font-bold">折射：</span> 波從一種介質進入另一種介質（或水深改變）時，由於<strong>波速改變</strong>而導致傳播方向發生偏折的現象。</li>
+                            <li><span class="text-blue-700 font-bold">折射規律：</span> 深水進淺水，波速減慢，波長變短，傳播方向偏向法線。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 斯涅耳定律</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <div class="text-center py-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                            $$ \frac{\sin i}{\sin r} = \frac{v_1}{v_2} = \frac{\lambda_1}{\lambda_2} $$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                            <li>$i$：入射角（傳播方向與法線的夾角）</li>
+                            <li>$r$：折射角</li>
+                            <li>區區1為深水區，區區2為淺水區時，$v_1 > v_2$，$\lambda_1 > \lambda_2$，$i > r$。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一列水波以 $30^\circ$ 的入射角撞擊直障礙物。求反射角，並說明反射波的波長與原波長有何分別。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">根據反射定律，入射角等於反射角。故反射角為 $30^\circ$。</p>
+                                <p class="mb-2">反射只改變方向，不改變波速與頻率，故波長保持不變。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                水波從深水區以 $45^\circ$ 入射角進入淺水區。已知深水區波速為 $0.3 \text{ m s}^{-1}$，淺水區波速為 $0.2 \text{ m s}^{-1}$。求折射角。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <div class="overflow-x-auto">$$ \frac{\sin 45^\circ}{\sin r} = \frac{0.3}{0.2} $$</div>
+                                <div class="overflow-x-auto">$$ \sin r = \frac{0.707 \times 0.2}{0.3} \approx 0.471 $$</div>
+                                <div class="overflow-x-auto">$$ r \approx 28.1^\circ $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：折射角約為 $28.1^\circ$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                若水波垂直入射（入射角 $0^\circ$）進入淺水區，波的傳播方向會偏折嗎？波長會改變嗎？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">垂直入射時，$\sin 0^\circ = 0$，故 $\sin r = 0$，$r = 0^\circ$。傳播方向不偏折。</p>
+                                <p class="mb-2">但進入淺水區波速減慢，故波長依然會變短。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-2-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 水波發生反射時，哪一個物理量會發生改變？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-2-1', 'quiz5-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 波速</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-2-1', 'quiz5-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 頻率</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-2-1', 'quiz5-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 波長</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-2-1', 'quiz5-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 傳播方向</button>
+                        </div>
+                        <div id="exp5-2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 反射只改變行進方向，在同種介質中 $v, f, \lambda$ 均不變。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-2-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 產生波的折射現象的根本原因是什麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-2-2', 'quiz5-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 頻率的改變</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-2-2', 'quiz5-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 波速的改變</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-2-2', 'quiz5-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 溫度的改變</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-2-2', 'quiz5-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 能量的流失</button>
+                        </div>
+                        <div id="exp5-2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 波跨越介質邊界時因波速不同，導致波陣面彎曲而改變方向。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-2-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 水波由淺水區進入深水區時，傳播方向會如何偏折？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-2-3', 'quiz5-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 偏向法線</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-2-3', 'quiz5-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 偏離法線</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-2-3', 'quiz5-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 不偏折</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-2-3', 'quiz5-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 沿介質邊界傳播</button>
+                        </div>
+                        <div id="exp5-2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 淺水進深水，波速變快，折射角大於入射角，故偏離法線。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-2-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 斯涅耳定律中 $\frac{\sin i}{\sin r}$ 等於下列何者？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-2-4', 'quiz5-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $f_1 / f_2$</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-2-4', 'quiz5-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $v_1 / v_2$</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-2-4', 'quiz5-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $v_2 / v_1$</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-2-4', 'quiz5-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $\lambda_2 / \lambda_1$</button>
+                        </div>
+                        <div id="exp5-2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 正弦比等於波速比，也等於波長比 $\lambda_1 / \lambda_2$。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz5-2-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 若一波面平行的水波撞向一塊凹面反射面，反射後的波陣面形狀為何？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-2-5', 'quiz5-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 直線波陣面</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-2-5', 'quiz5-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 發散的圓形波陣面</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-2-5', 'quiz5-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 會聚的圓弧形波陣面</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-2-5', 'quiz5-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 不規則波陣面</button>
+                        </div>
+                        <div id="exp5-2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 凹面具有會聚波的作用，會將平行的直線波反射成向中心會聚的圓弧波。
+                        </div>
+                    </div>
+
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 5.3: 衍射與干涉 -->
+            <!-- ========================================== -->
+            <article id="ch5-3" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">5.3</span>衍射與干涉</h2>
+                    <p class="text-slate-500 mt-2">探索波繞過障礙物的衍射能力，並學習兩列波相遇時產生的干涉現象及條件。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">衍射：</span> 波遇到障礙物或穿過縫隙時，能夠彎曲並傳播到障礙物幾何陰影區的現象。<strong>當縫隙寬度越接近波長，衍射越明顯。</strong></li>
+                            <li><span class="text-blue-700 font-bold">疊加原理：</span> 兩列波相遇時，某點的合成位移等於各波在該點位移的向量和。</li>
+                            <li><span class="text-blue-700 font-bold">建設性干涉：</span> 兩列同相波相遇，波峰遇波峰，合成振幅變大。</li>
+                            <li><span class="text-blue-700 font-bold">破壞性干涉：</span> 兩列反相波相遇，波峰遇波谷，合成振幅減小（或為零）。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 行程差條件</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="mb-2 text-slate-700">兩個同相點波源產生的干涉圖樣，其干涉性質取決於到該點的距離差（行程差 $\Delta x$）：</p>
+                        <div class="space-y-3 mt-4 text-center">
+                            <p class="font-bold text-blue-900">建設性干涉： $\Delta x = n\lambda$</p>
+                            <p class="text-sm text-slate-600">($n = 0, 1, 2, \dots$)</p>
+                            <hr class="border-blue-200 w-1/2 mx-auto">
+                            <p class="font-bold text-blue-900">破壞性干涉： $\Delta x = (n + 0.5)\lambda$</p>
+                            <p class="text-sm text-slate-600">($n = 0, 1, 2, \dots$)</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                兩個同相點波源發出波長為 $2 \text{ cm}$ 的水波。某點 P 距離波源 $S_1$ 為 $10 \text{ cm}$，距離波源 $S_2$ 為 $13 \text{ cm}$。P 點發生甚麼干涉？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">計算行程差：$\Delta x = 13 - 10 = 3 \text{ cm}$。</p>
+                                <p class="mb-2">檢查行程差與波長的關係：$\frac{\Delta x}{\lambda} = \frac{3}{2} = 1.5$。</p>
+                                <p class="mb-2">因為是半整數倍，故為破壞性干涉。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                要讓水波通過防波堤的缺口時產生明顯的衍射（繞過障礙物散開），波長與缺口寬度的關係應該如何？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">波長必須與缺口寬度相若，或者波長大於缺口寬度，衍射效應才會最明顯。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                干涉圖樣中的「節線」代表甚麼？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">節線是所有發生完全破壞性干涉點的連線。在水波槽中，節線上的水面保持平靜，不產生位移。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-3-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 衍射現象在什麼條件下最明顯？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-3-1', 'quiz5-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 縫隙寬度遠大於波長</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-3-1', 'quiz5-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 縫隙寬度接近或小於波長</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-3-1', 'quiz5-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 波速非常快</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-3-1', 'quiz5-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 波長非常短</button>
+                        </div>
+                        <div id="exp5-3-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 波長與障礙物尺寸相若時繞射效應最強。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-3-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 建設性干涉發生時，兩波的合成位移大小如何？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-3-2', 'quiz5-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 為零</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-3-2', 'quiz5-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 小於任何一波的位移</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-3-2', 'quiz5-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 大於任何一波的位移</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-3-2', 'quiz5-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 保持不變</button>
+                        </div>
+                        <div id="exp5-3-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 兩波疊加互相加強，位移相加。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-3-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 兩個同相波源產生的干涉圖樣中，中央線（中垂線）上會發生什麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp5-3-3', 'quiz5-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 建設性干涉</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-3-3', 'quiz5-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 破壞性干涉</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-3-3', 'quiz5-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 沒有干涉</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-3-3', 'quiz5-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 時而建設，時而破壞</button>
+                        </div>
+                        <div id="exp5-3-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 中垂線上到兩波源距離相等，行程差為 0 ($0\lambda$)，必定為建設性干涉。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-3-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 形成穩定干涉圖樣的兩個波源必須：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp5-3-4', 'quiz5-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 具有相同的頻率和恆定的相位差</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-3-4', 'quiz5-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 具有不同的波速</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-3-4', 'quiz5-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 從不同介質發出</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-3-4', 'quiz5-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 具有不斷改變的波長</button>
+                        </div>
+                        <div id="exp5-3-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 相干波源 (coherent sources) 是形成穩定干涉的先決條件。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz5-3-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 若某點到兩波源的行程差為 $2.5\lambda$，該點發生：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-3-5', 'quiz5-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 建設性干涉</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-3-5', 'quiz5-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 破壞性干涉</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-3-5', 'quiz5-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 既非建設也非破壞</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-3-5', 'quiz5-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 無法判斷</button>
+                        </div>
+                        <div id="exp5-3-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 半整數倍波長的行程差導致波峰遇波谷，形成破壞性干涉。
+                        </div>
+                    </div>
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 5.4: 駐波 -->
+            <!-- ========================================== -->
+            <article id="ch5-4" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">5.4</span>駐波</h2>
+                    <p class="text-slate-500 mt-2">認識駐波的形成原理，學習識別波節與波腹，並掌握駐波波長與長度的數學關係。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">駐波的形成：</span> 由兩列頻率、波速、振幅相同但<strong>傳播方向相反</strong>的行波相遇疊加而成（通常是入射波與反射波疊加）。</li>
+                            <li><span class="text-blue-700 font-bold">特徵：</span> 波形看似停留在原地不前進，不傳遞能量。</li>
+                            <li><span class="text-blue-700 font-bold">波節：</span> 發生完全破壞性干涉的點，粒子始終靜止不動。</li>
+                            <li><span class="text-blue-700 font-bold">波腹：</span> 發生完全建設性干涉的點，粒子以最大振幅振動。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 駐波的幾何關係</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <div class="text-center py-4 overflow-x-auto text-xl font-bold text-blue-900">
+                            $$ \text{相鄰波節的距離} = \frac{\lambda}{2} $$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                            <li>一段固定兩端的弦線，兩端必定為波節。</li>
+                            <li>能在長度為 $L$ 的弦上形成的駐波，必須滿足 $L = n\frac{\lambda}{2}$ ($n=1,2,3\dots$)。這稱為諧波。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一條長 $1.5 \text{ m}$ 的弦線兩端固定，產生了包含 3 個「波肚（波環）」的駐波。求該駐波的波長。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">一個「波肚」的長度等於相鄰兩波節的距離，即 $\frac{\lambda}{2}$。</p>
+                                <p class="mb-2">3 個波肚總長為 $3 \times \frac{\lambda}{2}$。</p>
+                                <div class="overflow-x-auto">$$ 3 \frac{\lambda}{2} = 1.5 \implies \lambda = 1.0 \text{ m} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：波長為 $1.0 \text{ m}$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                相鄰波節與波腹之間的距離是多少？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">波腹位於兩個相鄰波節的正中央。因為相鄰波節距離為 $\lambda/2$，故波節到相鄰波腹的距離為其一半，即 $\lambda/4$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                在駐波中，同一個「波肚」內的各個粒子，它們的振動狀態（相位）有何關係？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">同一個波肚內的粒子會同時向上或向下運動，它們是同相的。只是它們的振幅不同（波腹處振幅最大，靠近波節處振幅趨近於零）。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-4-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 駐波中的「波節」是指什麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp5-4-1', 'quiz5-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 始終保持靜止不動的點</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-4-1', 'quiz5-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 以最大振幅振動的點</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-4-1', 'quiz5-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 波能量最強的點</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-4-1', 'quiz5-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 波傳播的最前端</button>
+                        </div>
+                        <div id="exp5-4-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 波節是完全破壞性干涉的點，位移永遠為零。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-4-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 產生駐波的條件是兩列波必須：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-4-2', 'quiz5-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 同向傳播且頻率相同</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-4-2', 'quiz5-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 反向傳播且頻率相同</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-4-2', 'quiz5-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 反向傳播但頻率不同</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-4-2', 'quiz5-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 垂直相交</button>
+                        </div>
+                        <div id="exp5-4-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 頻率相同、反向傳播的波疊加才會形成不前進的波形。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-4-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 駐波傳遞能量的特性是？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-4-3', 'quiz5-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 向兩端傳遞能量</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-4-3', 'quiz5-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 只向右傳遞</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-4-3', 'quiz5-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 能量被局限在各個波肚中，不向外傳遞</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-4-3', 'quiz5-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 能量會逐漸增大</button>
+                        </div>
+                        <div id="exp5-4-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 駐波是非傳播波，能量只在波節之間的波肚內作位能與動能的轉換。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz5-4-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 弦線駐波中，相鄰兩個波腹的距離為？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp5-4-4', 'quiz5-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $\lambda$</button>
+                            <button onclick="checkAnswer(this, true,  'exp5-4-4', 'quiz5-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $\lambda / 2$</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-4-4', 'quiz5-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $\lambda / 4$</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-4-4', 'quiz5-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $2\lambda$</button>
+                        </div>
+                        <div id="exp5-4-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 相鄰波節間距為半波長，相鄰波腹間距也為半波長。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz5-4-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 結他弦撥動時發出的聲音，其基音（最低頻率）的弦長 $L$ 與波長 $\lambda$ 的關係為？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp5-4-5', 'quiz5-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $L = \lambda / 2$</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-4-5', 'quiz5-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $L = \lambda$</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-4-5', 'quiz5-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $L = \lambda / 4$</button>
+                            <button onclick="checkAnswer(this, false, 'exp5-4-5', 'quiz5-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $L = 2\lambda$</button>
+                        </div>
+                        <div id="exp5-4-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 最簡單的駐波（基音）只有一個波肚，兩端是波節，長度剛好是半個波長。
+                        </div>
+                    </div>
+                </section>
+            </article>
 
         </div>
     </main>
