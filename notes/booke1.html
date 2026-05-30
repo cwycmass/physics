@@ -307,7 +307,7 @@
             <!-- ========================================== -->
             <!-- 區塊 1.1: 宇宙的層階組織 -->
             <!-- ========================================== -->
-            <article id="ch1-1" class="content-section block">
+            <article id="ch1-1" class="content-section block hidden">
                 <header class="mb-8 border-b-2 border-blue-100 pb-4">
                     <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.1</span>宇宙的層階組織</h2>
                     <p class="text-slate-500 mt-2">認識構成宇宙的各類天體，並了解它們從微觀到宏觀的層次與組織結構。</p>
@@ -728,7 +728,7 @@
                             </summary>
                             <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
                                 <p class="mb-2"><strong>位置關係：</strong> 太陽位於宇宙（或太陽系）的中心保持靜止，而地球只是其中一顆行星，繞著太陽運行。</p>
-                                <p class="mb-2"><strong>軌道形狀：</strong> 哥白尼最初的模型仍然保留了古希臘「天體必定作完美運動」的思想，因此他假設所有行星的公轉軌道都是完美的<strong>圓形</strong>。（後來克卜勒才修正為橢圓形）。</p>
+                                <p class="mb-2"><strong>軌道形狀：</strong> 哥白尼最初的模型仍然保留了古希臘「天體必定作完美運動」的思想，因此他假設所有行星的公轉軌道都是完美的<strong>圓形</strong>。（後來開普勒才修正為橢圓形）。</p>
                             </div>
                         </details>
                     </div>
@@ -817,7 +817,7 @@
                             <button onclick="checkAnswer(this, false, 'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 宇宙只有太陽系那麼大</button>
                         </div>
                         <div id="exp1-3-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
-                            <strong>解析：</strong> 受限於古希臘對於「完美幾何」的哲學信仰，他們都堅信天體必須作完美的圓周運動。直到後來克卜勒分析了精確的觀測數據，才確認行星軌道其實是橢圓形的。
+                            <strong>解析：</strong> 受限於古希臘對於「完美幾何」的哲學信仰，他們都堅信天體必須作完美的圓周運動。直到後來開普勒分析了精確的觀測數據，才確認行星軌道其實是橢圓形的。
                         </div>
                     </div>
 
@@ -1002,16 +1002,16 @@
             <!-- ========================================== -->
             <!-- 區塊 2.1: 行星運動定律 -->
             <!-- ========================================== -->
-            <article id="ch2-1" class="content-section block">
+            <article id="ch2-1" class="content-section block hidden">
                 <header class="mb-8 border-b-2 border-blue-100 pb-4">
                     <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.1</span>行星運動定律</h2>
-                    <p class="text-slate-500 mt-2">認識克卜勒的三大行星運動定律，探討行星軌道的幾何形狀與週期規律，並利用數學方程推導其物理本質。</p>
+                    <p class="text-slate-500 mt-2">認識開普勒的三大行星運動定律，探討行星軌道的幾何形狀與週期規律，並利用數學方程推導其物理本質。</p>
                 </header>
 
                 <section class="mb-10">
                     <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
-                        <p class="mb-3">十七世紀初，天文學家克卜勒透過分析大量精確的行星觀測數據，打破了古希臘「行星必須作完美圓周運動」的傳統觀念，提出了著名的<strong class="text-blue-700 font-bold">克卜勒三大定律</strong>：</p>
+                        <p class="mb-3">十七世紀初，天文學家開普勒透過分析大量精確的行星觀測數據，打破了古希臘「行星必須作完美圓周運動」的傳統觀念，提出了著名的<strong class="text-blue-700 font-bold">開普勒三大定律</strong>：</p>
                         <ul class="list-disc list-inside space-y-2 ml-2">
                             <li><strong class="text-blue-700 font-bold">第一定律（軌道定律）：</strong> 所有行星繞太陽運行的軌道都是<strong>橢圓形</strong>，而太陽位於橢圓的其中一個焦點上。</li>
                             <li><strong class="text-blue-700 font-bold">第二定律（等面積定律）：</strong> 連接太陽與行星的假想直線，在相同的時間間隔內，掃過的<strong>面積必然相等</strong>。這代表行星靠近太陽（近日點）時運行較快，遠離太陽（遠日點）時運行較慢。</li>
@@ -1023,7 +1023,7 @@
                 <section class="mb-10">
                     <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 週期定律方程</h3>
                     <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
-                        <p class="text-slate-700 mb-2">為了簡化高中物理的計算，我們通常將行星的橢圓軌道近似為圓形軌道。結合牛頓的萬有引力定律與向心力公式，我們可以精確推導出克卜勒第三定律的數學表達式：</p>
+                        <p class="text-slate-700 mb-2">為了簡化高中物理的計算，我們通常將行星的橢圓軌道近似為圓形軌道。結合牛頓的萬有引力定律與向心力公式，我們可以精確推導出開普勒第三定律的數學表達式：</p>
                         <div class="text-center py-4 overflow-x-auto text-2xl font-bold text-blue-900">
                             $$ T^2 = \left(\frac{4\pi^2}{GM}\right) r^3 \quad \implies \quad \frac{T^2}{r^3} = \text{常數} $$
                         </div>
@@ -1053,7 +1053,7 @@
                                 <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
                             </summary>
                             <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
-                                <p class="mb-2"><strong>第一步：運用克卜勒第三定律</strong></p>
+                                <p class="mb-2"><strong>第一步：運用開普勒第三定律</strong></p>
                                 <p class="mb-2">地球和小行星皆繞太陽運行，故它們的 $\frac{T^2}{r^3}$ 比值相等：</p>
                                 <div class="overflow-x-auto">$$ \frac{T_{\text{地}}^2}{r_{\text{地}}^3} = \frac{T_{\text{星}}^2}{r_{\text{星}}^3} $$</div>
                                 <p class="mb-2 mt-4"><strong>第二步：代入數據求解</strong></p>
@@ -1070,7 +1070,7 @@
                         <div class="flex items-start">
                             <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
                             <p class="text-slate-800 font-medium pt-1">
-                                根據克卜勒第二定律，當彗星沿著高度橢圓的軌道運行，從遠日點向近日點移動的過程中，它的運行速率會如何變化？請利用等面積定律解釋原因。
+                                根據開普勒第二定律，當彗星沿著高度橢圓的軌道運行，從遠日點向近日點移動的過程中，它的運行速率會如何變化？請利用等面積定律解釋原因。
                             </p>
                         </div>
                         <details class="mt-4 group">
@@ -1079,7 +1079,7 @@
                             </summary>
                             <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
                                 <p class="mb-2"><strong>現象：</strong> 運行速率會逐漸<strong>增加</strong>，在近日點達到最大值。</p>
-                                <p class="mb-2"><strong>解釋：</strong> 克卜勒第二定律指出，在相同的時間內，連接彗星與太陽的直線所掃過的面積必須相等。在遠日點時，彗星距離太陽遠（連線極長），為了掃過相同的面積，彗星只需移動很短的弧長，因此速率較慢；相反，在近日點時距離太陽近（連線極短），彗星必須快速移動掃過較長的弧長，才能維持面積相等，因此速率必須最快。</p>
+                                <p class="mb-2"><strong>解釋：</strong> 開普勒第二定律指出，在相同的時間內，連接彗星與太陽的直線所掃過的面積必須相等。在遠日點時，彗星距離太陽遠（連線極長），為了掃過相同的面積，彗星只需移動很短的弧長，因此速率較慢；相反，在近日點時距離太陽近（連線極短），彗星必須快速移動掃過較長的弧長，才能維持面積相等，因此速率必須最快。</p>
                             </div>
                         </details>
                     </div>
@@ -1089,7 +1089,7 @@
                         <div class="flex items-start">
                             <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
                             <p class="text-slate-800 font-medium pt-1">
-                                試利用萬有引力定律 $F_g = \frac{GMm}{r^2}$ 與圓周運動向心力公式 $F_c = m\frac{4\pi^2 r}{T^2}$，推導出克卜勒第三定律的數學關係。
+                                試利用萬有引力定律 $F_g = \frac{GMm}{r^2}$ 與圓周運動向心力公式 $F_c = m\frac{4\pi^2 r}{T^2}$，推導出開普勒第三定律的數學關係。
                             </p>
                         </div>
                         <details class="mt-4 group">
@@ -1114,7 +1114,7 @@
                     <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
                     
                     <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1-1">
-                        <p class="font-bold text-slate-800 mb-3">1. 根據克卜勒第一定律，所有行星繞太陽運行的軌道形狀是甚麼？</p>
+                        <p class="font-bold text-slate-800 mb-3">1. 根據開普勒第一定律，所有行星繞太陽運行的軌道形狀是甚麼？</p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <button onclick="checkAnswer(this, false, 'exp2-1-1', 'quiz2-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 完美的正圓形</button>
                             <button onclick="checkAnswer(this, true,  'exp2-1-1', 'quiz2-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 橢圓形，且太陽在其中一個焦點上</button>
@@ -1122,12 +1122,12 @@
                             <button onclick="checkAnswer(this, false, 'exp2-1-1', 'quiz2-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 橢圓形，且太陽在橢圓的正中心</button>
                         </div>
                         <div id="exp2-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
-                            <strong>解析：</strong> 克卜勒首度打破了古希臘行星軌道必定為正圓的迷思，證實軌道為橢圓，並指出太陽並不位於中心，而是位於兩個焦點的其中之一。
+                            <strong>解析：</strong> 開普勒首度打破了古希臘行星軌道必定為正圓的迷思，證實軌道為橢圓，並指出太陽並不位於中心，而是位於兩個焦點的其中之一。
                         </div>
                     </div>
 
                     <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1-2">
-                        <p class="font-bold text-slate-800 mb-3">2. 根據克卜勒第二定律，行星在其軌道上運行時，哪個位置的運行速率最快？</p>
+                        <p class="font-bold text-slate-800 mb-3">2. 根據開普勒第二定律，行星在其軌道上運行時，哪個位置的運行速率最快？</p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <button onclick="checkAnswer(this, false, 'exp2-1-2', 'quiz2-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 遠日點</button>
                             <button onclick="checkAnswer(this, true,  'exp2-1-2', 'quiz2-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 近日點</button>
@@ -1140,7 +1140,7 @@
                     </div>
 
                     <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1-3">
-                        <p class="font-bold text-slate-800 mb-3">3. 克卜勒第三定律指出，行星週期的平方與其軌道半長軸的甚麼次方成正比？</p>
+                        <p class="font-bold text-slate-800 mb-3">3. 開普勒第三定律指出，行星週期的平方與其軌道半長軸的甚麼次方成正比？</p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <button onclick="checkAnswer(this, false, 'exp2-1-3', 'quiz2-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 平方</button>
                             <button onclick="checkAnswer(this, true,  'exp2-1-3', 'quiz2-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 立方</button>
@@ -1161,7 +1161,7 @@
                             <button onclick="checkAnswer(this, false, 'exp2-1-4', 'quiz2-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $\frac{T^3}{r^2}$</button>
                         </div>
                         <div id="exp2-1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
-                            <strong>解析：</strong> 根據克卜勒第三定律，$\frac{T^2}{r^3} = \frac{4\pi^2}{GM}$。因為太陽系所有行星都是繞著同一個質量為 $M$ 的太陽公轉，所以這個比值對所有行星而言都是一個常數。
+                            <strong>解析：</strong> 根據開普勒第三定律，$\frac{T^2}{r^3} = \frac{4\pi^2}{GM}$。因為太陽系所有行星都是繞著同一個質量為 $M$ 的太陽公轉，所以這個比值對所有行星而言都是一個常數。
                         </div>
                     </div>
 
