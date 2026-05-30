@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物理讀本</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* 自訂滾動條樣式，讓畫面更精緻 */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        /* 隱藏原生 details 的箭頭 */
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased flex h-screen overflow-hidden">
+
+    <!-- 行動版頂部導覽列 -->
+    <header class="md:hidden fixed top-0 left-0 right-0 h-16 bg-white shadow-sm z-30 flex items-center justify-between px-4">
+        <div class="flex items-center gap-3">
+            <button onclick="toggleMobileMenu()" class="text-slate-600 hover:text-blue-600 focus:outline-none p-2">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            <div class="relative">
+                <h1 class="text-lg font-bold text-slate-800 leading-tight">物理讀本</h1>
+                <p class="text-xs text-slate-500 font-medium tracking-wide mt-1.5">極簡讀本．探尋根本．邁向本科</p>
+                <!-- 行動版：書本切換下拉選單 -->
+                <details class="group">
+                    <summary class="cursor-pointer text-xs text-blue-600 font-medium flex items-center mt-0.5">
+                       波動 (第3B冊) <i class="fa-solid fa-chevron-down ml-1 transition-transform group-open:rotate-180" style="font-size: 0.6rem;"></i>
+                    </summary>
+                    <!-- 下拉選單內容 -->
+                    <div class="absolute top-full left-0 mt-3 w-48 bg-white border border-slate-200 rounded-lg shadow-xl z-50 overflow-hidden">
+                        <a href="book1.html" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">熱和氣體 (第1冊)</a>
+                        <a href="book2.html" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">力和運動 (第2冊)</a>
+                        <a href="book3a.html" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">光學 (第3A冊)</a>
+                        <a href="book3b.html" class="block px-4 py-2.5 text-sm font-bold bg-blue-50 text-blue-700 flex justify-between items-center">波動 (第3B冊) <i class="fa-solid fa-check"></i></a>
+                        <a href="book4.html" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">電和磁 (第4冊)</a>
+                        <a href="book5.html" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">放射現象 (第5冊)</a>
+                        <a href="booke1.html" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">天文與航天科學 (第E1冊)</a>
+                        <a href="booke3.html" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">能量與能源的應用 (第E3冊)</a>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </header>
+
+    <!-- 行動版半透明遮罩 -->
+    <div id="mobile-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-slate-900/50 z-40 hidden md:hidden transition-opacity"></div>
+
+    <!-- 左側邊欄 (導覽目錄) -->
+    <aside id="sidebar" class="fixed md:static inset-y-0 left-0 w-72 bg-white shadow-xl md:shadow-sm border-r border-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
+        <!-- 側邊欄標頭 (僅桌機版顯示) -->
+        <div class="hidden md:block p-6 border-b border-slate-100 relative">
+            <h1 class="text-2xl font-black text-slate-800 tracking-tight">物理讀本</h1>
+            <p class="text-xs text-slate-500 font-medium tracking-wide mt-1.5">極簡讀本．探尋根本．邁向本科</p>
+            <!-- 電腦版：書本切換下拉選單 -->
+            <details class="mt-3 group relative">
+                <summary class="cursor-pointer flex items-center justify-between bg-slate-50 hover:bg-slate-100 text-sm font-semibold text-blue-700 py-2 px-3 rounded-lg border border-slate-200 transition-colors">
+                    <span><i class="fa-solid fa-book-open mr-2"></i>波動 (第3B冊)</span>
+                    <i class="fa-solid fa-chevron-down text-xs transition-transform group-open:rotate-180"></i>
+                </summary>
+                <!-- 下拉選單內容 -->
+                <div class="absolute left-0 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                    <a href="book1.html" class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">熱和氣體 (第1冊)</a>
+                    <a href="book2.html" class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">力和運動 (第2冊)</a>
+                    <a href="book3a.html" class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">光學 (第3A冊)</a>
+                    <a href="#" class="block px-4 py-2 text-sm font-bold bg-blue-50 text-blue-700">波動 (第3B冊)<i class="fa-solid fa-check float-right mt-1"></i></a>
+                    <a href="book4.html" class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">電和磁 (第4冊)</a>
+                    <a href="book5.html" class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">放射現象 (第5冊)</a>
+                    <a href="booke1.html" class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">天文與航天科學 (第E1冊)</a>
+                    <a href="booke3.html" class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">能量與能源的應用 (第E3冊)</a>
+                </div>
+            </details>
+        </div>
+        
+        <!-- 導覽選單 -->
+        <nav class="flex-1 overflow-y-auto p-4 space-y-6">
+            <!-- 第 4 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 4 章：波的本質</h2>
+                <ul class="space-y-1">
+                    <li>
+                     <button onclick="switchPage('ch4-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                               4.1 波的簡介，
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch4-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                           4.2 橫波的波動
+                        </button>
+                    </li>
+                                      <li>
+                        <button onclick="switchPage('ch4-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                           4.3 橫波的粒子振動。
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <!-- 第 2 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 2 章：直線運動</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch2-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                           2.1 描述直線運動
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch2-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                           2.2 運動線圖
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch2-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                           2.3 勻加速運動方程
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch2-4', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                           2.4 重力下的垂直運動
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <!-- 第 3 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 3 章：力與運動(1)</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch3-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.1 力
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.2 牛頓第一運動定律
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.3 牛頓第二運動定律
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-4', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.4 重量與對重量的感覺
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-5', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.5 流體阻力
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-6', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.6 摩擦力
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-7', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.7 牛頓第三運動定律
+                        </button>
+                    </li>
+                </ul>
+            </div>
+                        <!-- 第 4 章 -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 4 章：力與運動(2)</h2>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchPage('ch4-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            4.1 物體組成的系統
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch4-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            4.2 力的合成和分解
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch4-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            4.3 共面力與牛頓運動定律
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+
+            
+        </nav>
+
+        <!-- 側邊欄頁尾 -->
+        <div class="p-4 border-t border-slate-100 text-center">
+            <p class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-graduation-cap mr-1"></i> 廠商會中學．物理科</p>
+        </div>
+    </aside>
+
+    <!-- 右側主要內容區 -->
+    <main id="main-content" class="flex-1 h-screen overflow-y-auto pt-16 md:pt-0 scroll-smooth">
+        <div class="max-w-4xl mx-auto p-4 md:p-8 lg:p-12 pb-24">
+
+
+<article id="ch0" class="content-section block">            
+<div class="flex flex-col items-center justify-center text-center py-16 px-4 fade-in">
+                <div class="w-48 h-48 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shadow-inner border border-blue-100 mb-8 animate-pulse">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-24 h-24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.58 12h16.84M12 3.58v16.84" stroke-dasharray="2 2" />
+                    </svg>
+                </div>
+
+                <h2 class="text-3xl font-black text-slate-800 tracking-tight mb-3">歡迎來到物理讀本</h2>
+                <p class="text-base text-slate-500 font-medium max-w-md leading-relaxed mb-8">
+                    「極簡讀本．探尋根本．邁向本科」
+                </p>
+
+                <div class="inline-flex flex-col sm:flex-row items-center gap-4 bg-blue-50/70 border border-blue-200 rounded-2xl p-4 pr-6 shadow-sm max-w-lg">
+                    <div class="bg-blue-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md shrink-0">
+                        <i class="fa-solid fa-list-ul text-sm animate-bounce"></i>
+                    </div>
+                    <div class="text-left">
+                        <h4 class="text-sm font-bold text-slate-800">準備開始探索了嗎？</h4>
+                        <p class="text-xs text-slate-600 mt-0.5">
+                            請點選左側 <span class="font-bold text-blue-700">導覽目錄選單</span> 或是頂端章節，即可立刻開啟互動讀本瀏覽器。
+                        </p>
+                    </div>
+                </div>
+
+                <p class="mt-4 text-xs font-semibold text-blue-600 md:hidden animate-bounce">
+                    <i class="fa-solid fa-arrow-up mr-1"></i> 點擊上方三條線按鈕打開選單
+                </p>
+            </div>
+</article>
+
+
+<article id="ch4-1" class="content-section block">
+    <header class="mb-8 border-b-2 border-blue-100 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">4.1</span>波的簡介</h2>
+        <p class="text-slate-500 mt-2">認識波的產生方式，理解波傳遞能量但不傳遞物質的本質，並區分機械波與不同傳播方向的波型。</p>
+    </header>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+            <p class="mb-3">波是自然界中傳遞能量的重要方式。無論是水面的漣漪、空氣中的聲音，還是太陽的光線，都是以波的形式傳播。</p>
+            <ul class="list-disc list-inside space-y-2 ml-2">
+                <li><strong>波的產生：</strong> 所有的波都是由<span class="text-blue-700 font-bold">振動（或振盪）</span>所引起的。例如，上下抖動繩子的一端，就會在繩子上產生波。</li>
+                <li><strong>能量的傳遞：</strong> 波最核心的物理性質是<span class="text-blue-700 font-bold">傳遞能量，但不會傳遞物質</span>。當水波經過水面上的落葉時，落葉只會在原地上下振動，不會隨着波向外移動。</li>
+                <li><strong>機械波：</strong> 必須依靠<span class="text-blue-700 font-bold">介質</span>（如固體、液體或氣體）來傳播的波，例如水波、繩波和聲波。</li>
+                <li><strong>波的分類：</strong> 根據粒子振動方向與波傳播方向的關係，波主要可分為<span class="text-blue-700 font-bold">橫波</span>與<span class="text-blue-700 font-bold">縱波</span>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 橫波與縱波對照</h3>
+        
+        <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-slate-100 border-b border-slate-200">
+                    <tr>
+                        <th class="p-4 font-bold w-1/4">波的類型</th>
+                        <th class="p-4 font-bold w-3/8 text-blue-800">粒子振動方向</th>
+                        <th class="p-4 font-bold w-3/8 text-emerald-800">常見例子</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">橫波</td>
+                        <td class="p-4">與波的傳播方向<span class="font-bold text-blue-700">垂直</span>。</td>
+                        <td class="p-4">水波、繩波、電磁波（如光波）。</td>
+                    </tr>
+                    <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <td class="p-4 font-bold">縱波</td>
+                        <td class="p-4">與波的傳播方向<span class="font-bold text-emerald-700">平行</span>。</td>
+                        <td class="p-4">聲波、推拉彈簧產生的波。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="space-y-4 lg:hidden">
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h4 class="font-bold text-blue-800 mb-2">橫波</h4>
+                <p class="text-sm text-slate-600 mb-1"><strong>振動方向：</strong> 與波傳播方向垂直。</p>
+                <p class="text-sm text-slate-600"><strong>例子：</strong> 水波、光波。</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+                <h4 class="font-bold text-emerald-800 mb-2">縱波</h4>
+                <p class="text-sm text-slate-600 mb-1"><strong>振動方向：</strong> 與波傳播方向平行。</p>
+                <p class="text-sm text-slate-600"><strong>例子：</strong> 聲波。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-blue-500 w-8"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                <p class="text-sm">「當海浪向岸邊傳播時，海水也會跟着海浪一起流向岸邊。」</p>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                <p class="text-sm">波只傳遞<span class="font-bold">能量</span>，不傳遞<span class="font-bold">物質</span>。海水粒子只會在原處附近作上下（或圓周）振動，並不會隨着波的傳播方向整體向前移動。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-12">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+        
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                <p class="text-slate-800 font-medium pt-1">
+                    當我們在平靜的湖面投下一塊石頭，水面會產生向外擴散的漣漪。若湖面上有一片漂浮的樹葉，描述這片樹葉在漣漪經過時的運動情況。這說明了波的甚麼性質？
+                </p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>現象：</strong> 樹葉只會在原處附近上下振動，並不會隨着漣漪向外漂走。</p>
+                    <p class="mb-2"><strong>物理性質：</strong> 這現象說明了波動在傳播時，只會傳遞<span class="font-bold text-blue-700">能量</span>，而不會把介質（水）的物質沿傳播方向傳遞出去。</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                <p class="text-slate-800 font-medium pt-1">
+                    有一條長彈簧平放在桌面上。小明用手握住彈簧的一端，沿水平方向（即沿彈簧長度方向）快速地前後推拉。這會產生甚麼類型的波？請解釋原因。
+                </p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>類型：</strong> 會產生<span class="font-bold text-emerald-700">縱波</span>。</p>
+                    <p class="mb-2"><strong>解釋：</strong> 因為彈簧上的粒子（金屬環）是沿着水平方向來回振動，而波也是沿着彈簧的水平長度方向傳播。粒子的振動方向與波的傳播方向<strong>平行</strong>，這符合縱波的定義。</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+            <p class="text-slate-800 font-medium pt-1">
+                在外太空（真空環境）中，太空人無法直接聽到對方說話，但卻能看到遠處恆星發出的光。請利用波的分類知識來解釋這個現象。
+            </p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>解釋：</strong></p>
+                    <p class="mb-2">1. 聲音屬於<strong>聲波</strong>，是一種<strong>機械波</strong>，必須依靠介質（如空氣）才能傳播。真空中沒有介質，所以聲波無法傳遞。</p>
+                    <p class="mb-2">2. 光屬於<strong>電磁波</strong>，它不需要任何介質即可傳播。因此，星光可以穿過真空的太空到達我們的眼睛。</p>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+        <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+        
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-1-1">
+            <p class="font-bold text-slate-800 mb-3">1. 關於波的傳播，下列哪一項敘述是正確的？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-1-1', 'quiz4-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 波能同時傳遞能量和物質</button>
+                <button onclick="checkAnswer(this, true,  'exp4-1-1', 'quiz4-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 波只傳遞能量，不傳遞物質</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-1', 'quiz4-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 波只傳遞物質，不傳遞能量</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-1', 'quiz4-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 波既不傳遞能量，也不傳遞物質</button>
+            </div>
+            <div id="exp4-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 波動的本質是通過介質粒子的振動來傳遞能量，介質本身並不會隨着波的傳播而發生整體的宏觀位移。
+            </div>
+        </div>
+
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-1-2">
+            <p class="font-bold text-slate-800 mb-3">2. 橫波的定義是甚麼？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-1-2', 'quiz4-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 粒子的振動方向與波的傳播方向平行</button>
+                <button onclick="checkAnswer(this, true,  'exp4-1-2', 'quiz4-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 粒子的振動方向與波的傳播方向垂直</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-2', 'quiz4-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 波只能在固體中傳播</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-2', 'quiz4-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 波在傳播時不需要介質</button>
+            </div>
+            <div id="exp4-1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 橫波中，介質粒子的振動方向與波的行進方向互相垂直。
+            </div>
+        </div>
+
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-1-3">
+            <p class="font-bold text-slate-800 mb-3">3. 下列哪一種波屬於縱波？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-1-3', 'quiz4-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 水波</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-3', 'quiz4-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 繩波</button>
+                <button onclick="checkAnswer(this, true,  'exp4-1-3', 'quiz4-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 聲波</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-3', 'quiz4-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 光波</button>
+            </div>
+            <div id="exp4-1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 聲音在空氣中傳播時，空氣分子的振動方向與聲波的傳播方向平行，屬於縱波。水波、繩波和光波均具有橫波特性。
+            </div>
+        </div>
+
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-1-4">
+            <p class="font-bold text-slate-800 mb-3">4. 所有的機械波都必須具備甚麼條件才能傳播？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-1-4', 'quiz4-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 真空環境</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-4', 'quiz4-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 極高的溫度</button>
+                <button onclick="checkAnswer(this, true,  'exp4-1-4', 'quiz4-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 傳播的介質</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-4', 'quiz4-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 電磁場</button>
+            </div>
+            <div id="exp4-1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 機械波的傳播依賴介質粒子的互相作用來傳遞振動能量，因此沒有介質（如真空）就無法傳播。
+            </div>
+        </div>
+
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz4-1-5">
+            <p class="font-bold text-slate-800 mb-3">5. 當我們快速上下抖動一條繩子時，產生的波向外移動，這種向外傳播的波統稱為何？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, true,  'exp4-1-5', 'quiz4-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 行波</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-5', 'quiz4-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 駐波</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-5', 'quiz4-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 電磁波</button>
+                <button onclick="checkAnswer(this, false, 'exp4-1-5', 'quiz4-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 靜波</button>
+            </div>
+            <div id="exp4-1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 能夠由振動源不斷向外傳播能量的波稱為行波。
+            </div>
+        </div>
+
+    </section>
+</article>
+
+<article id="ch4-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-blue-100 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">4.2</span>橫波的波動</h2>
+        <p class="text-slate-500 mt-2">介紹描述波的空間特性的物理量，學習解讀位移-距離關係線圖，並掌握波速方程。</p>
+    </header>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+            <p class="mb-3">為了科學地描述波的形狀和空間分佈，我們通常會在某一瞬間「拍下」波的照片，這就是<span class="text-blue-700 font-bold">位移-距離關係線圖</span>。在圖中，我們定義了以下物理量：</p>
+            <ul class="list-disc list-inside space-y-2 ml-2">
+                <li><strong>平衡位置：</strong> 粒子未受振動時的靜止位置（圖上的水平軸）。</li>
+                <li><strong>波峰與波谷：</strong> 橫波中，粒子向上位移的最大位置稱為<span class="text-blue-700 font-bold">波峰</span>；向下位移的最大位置稱為<span class="text-blue-700 font-bold">波谷</span>。</li>
+                <li><strong>振幅 ($A$)：</strong> 粒子離開平衡位置的<span class="text-blue-700 font-bold">最大位移</span>。它反映了波攜帶能量的多寡。</li>
+                <li><strong>波長 ($\lambda$)：</strong> 一個完整波的長度。在圖形上，它可以是相鄰兩個波峰（或波谷）之間的距離。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 波動方程</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+            <p class="text-slate-700 mb-2">波在介質中傳播的速度稱為波速。波速 ($v$)、頻率 ($f$) 和波長 ($\lambda$) 之間有一個極為重要的關係式，稱為<span class="text-blue-700 font-bold">波動方程</span>：</p>
+            <div class="text-center py-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ v = f \lambda $$
+            </div>
+            
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$v$：波速（單位：$\text{m s}^{-1}$）</li>
+                <li>$f$：頻率（單位：$\text{Hz}$）</li>
+                <li>$\lambda$：波長（單位：$\text{m}$）</li>
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>注意：</strong> 波速通常由介質的性質決定。當波在同種介質中傳播時，$v$ 保持不變，此時 $f$ 與 $\lambda$ 成反比。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="mb-12">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+        
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                <p class="text-slate-800 font-medium pt-1">
+                    一列橫波在繩子中傳播。測得相鄰一個波峰與一個波谷之間的水平距離為 $0.4 \text{ m}$，且最高點與最低點的垂直距離為 $0.6 \text{ m}$。求此波的波長與振幅。
+                </p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：求波長 $\lambda$</strong></p>
+                    <p class="mb-2">相鄰波峰與波谷之間的距離剛好是半個波長（$0.5 \lambda$）。</p>
+                    <div class="overflow-x-auto">$$0.5 \lambda = 0.4 \text{ m} \implies \lambda = 0.8 \text{ m}$$</div>
+                    <p class="mb-2 mt-4"><strong>第二步：求振幅 $A$</strong></p>
+                    <p class="mb-2">最高點（波峰）與最低點（波谷）的垂直距離等於兩倍的振幅（$2A$）。</p>
+                    <div class="overflow-x-auto">$$2A = 0.6 \text{ m} \implies A = 0.3 \text{ m}$$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：波長為 $0.8 \text{ m}$，振幅為 $0.3 \text{ m}$。</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                <p class="text-slate-800 font-medium pt-1">
+                    一個產生水波的震盪器以 $10 \text{ Hz}$ 的頻率振動。若測得水波的波長為 $0.05 \text{ m}$，求水波在水面傳播的波速。
+                </p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2">利用波動方程 $v = f \lambda$ 直接計算：</p>
+                    <div class="overflow-x-auto">$$v = 10 \times 0.05 = 0.5 \text{ m s}^{-1}$$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：波速為 $0.5 \text{ m s}^{-1}$。</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                <p class="text-slate-800 font-medium pt-1">
+                    一列繩波的波速為 $2 \text{ m s}^{-1}$。若要使繩波的波長變成 $0.4 \text{ m}$，應將震盪器的頻率調整為多少？
+                </p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2">由於波在同一條繩子中傳播，波速 $v$ 保持 $2 \text{ m s}^{-1}$ 不變。</p>
+                    <p class="mb-2">利用公式 $v = f \lambda$ 重新排列求頻率 $f$：</p>
+                    <div class="overflow-x-auto">$$f = \frac{v}{\lambda} = \frac{2}{0.4} = 5 \text{ Hz}$$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：應調整頻率為 $5 \text{ Hz}$。</p>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+        <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+        
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-2-1">
+            <p class="font-bold text-slate-800 mb-3">1. 在位移-距離關係線圖中，橫波的「振幅」代表什麼物理意義？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-2-1', 'quiz4-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 波峰到波谷的垂直總距離</button>
+                <button onclick="checkAnswer(this, true,  'exp4-2-1', 'quiz4-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 粒子離開平衡位置的最大位移</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-1', 'quiz4-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 相鄰兩個波峰之間的水平距離</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-1', 'quiz4-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 波在一秒內傳播的距離</button>
+            </div>
+            <div id="exp4-2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 振幅是從平衡位置算起到波峰（或波谷）的距離，是最大位移量。
+            </div>
+        </div>
+
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-2-2">
+            <p class="font-bold text-slate-800 mb-3">2. 根據波動方程 $v = f \lambda$，若某介質中的波速恆定，當頻率增加為原來的 2 倍時，波長會如何變化？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-2-2', 'quiz4-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 變為原來的 2 倍</button>
+                <button onclick="checkAnswer(this, true,  'exp4-2-2', 'quiz4-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 變為原來的一半</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-2', 'quiz4-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 保持不變</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-2', 'quiz4-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 變為原來的 4 倍</button>
+            </div>
+            <div id="exp4-2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 當 $v$ 不變時，$f$ 與 $\lambda$ 成反比。頻率變為 2 倍，波長就必須減半。
+            </div>
+        </div>
+
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-2-3">
+            <p class="font-bold text-slate-800 mb-3">3. 某水波的頻率為 $5 \text{ Hz}$，波長為 $0.4 \text{ m}$，該水波的波速是多少？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-2-3', 'quiz4-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $12.5 \text{ m s}^{-1}$</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-3', 'quiz4-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $0.08 \text{ m s}^{-1}$</button>
+                <button onclick="checkAnswer(this, true,  'exp4-2-3', 'quiz4-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $2.0 \text{ m s}^{-1}$</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-3', 'quiz4-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $0.2 \text{ m s}^{-1}$</button>
+            </div>
+            <div id="exp4-2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> $v = f \lambda = 5 \times 0.4 = 2.0 \text{ m s}^{-1}$。
+            </div>
+        </div>
+
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-2-4">
+            <p class="font-bold text-slate-800 mb-3">4. 在一條長繩上，產生了一個包含 3 個完整波長的連續波。若測得首尾的總長度為 $6 \text{ m}$，則此波的波長為何？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-2-4', 'quiz4-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $6 \text{ m}$</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-4', 'quiz4-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $3 \text{ m}$</button>
+                <button onclick="checkAnswer(this, true,  'exp4-2-4', 'quiz4-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $2 \text{ m}$</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-4', 'quiz4-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $18 \text{ m}$</button>
+            </div>
+            <div id="exp4-2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 總長度包含 3 個波長，即 $3\lambda = 6 \text{ m}$，因此 $\lambda = 2 \text{ m}$。
+            </div>
+        </div>
+
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz4-2-5">
+            <p class="font-bold text-slate-800 mb-3">5. 位移-距離關係線圖相當於對波進行了甚麼操作？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-2-5', 'quiz4-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 記錄了單一個粒子隨時間的運動過程</button>
+                <button onclick="checkAnswer(this, true,  'exp4-2-5', 'quiz4-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 在某一瞬間為整個波拍下了一張「照片」</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-5', 'quiz4-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 測量了波傳播的總能量</button>
+                <button onclick="checkAnswer(this, false, 'exp4-2-5', 'quiz4-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 顯示了波速隨時間的變化</button>
+            </div>
+            <div id="exp4-2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 位移-距離線圖展示了在固定時間點下，空間中各個粒子的位移分佈，猶如一張瞬間定格的照片。
+            </div>
+        </div>
+    </section>
+</article>
+
+<article id="ch4-3" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-blue-100 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">4.3</span>橫波的粒子振動</h2>
+        <p class="text-slate-500 mt-2">從單一粒子的角度分析波的隨時間變化，學習解讀位移-時間關係線圖，並理解週期的概念。</p>
+    </header>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+            <p class="mb-3">如果我們把視線集中在介質中的某一個特定粒子上，觀察它隨時間推移的運動，就可以畫出<span class="text-blue-700 font-bold">位移-時間關係線圖</span>。這張圖能幫助我們定義波在時間上的特徵：</p>
+            <ul class="list-disc list-inside space-y-2 ml-2">
+                <li><strong>週期 ($T$)：</strong> 介質粒子完成一次完整振動所需要的時間（也是波傳播一個波長距離所需的時間）。</li>
+                <li><strong>頻率 ($f$)：</strong> 介質粒子在一秒內完成完整振動的次數。頻率越高，振動越快。</li>
+                <li><strong>同相與反相：</strong> 若介質中兩個粒子的運動狀態（位移與運動方向）在任何時刻都完全相同，稱它們為<span class="text-blue-700 font-bold">同相</span>；若剛好相反，則稱為<span class="text-blue-700 font-bold">反相</span>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 頻率與週期的關係</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+            <p class="text-slate-700 mb-2">頻率和週期在數學上互為倒數：</p>
+            <div class="text-center py-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ f = \frac{1}{T} \quad \implies \quad T = \frac{1}{f} $$
+            </div>
+            
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$f$：頻率（單位：赫茲 $\text{Hz}$）</li>
+                <li>$T$：週期（單位：秒 $\text{s}$）</li>
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>注意：</strong> 位移-時間線圖上的橫軸是「時間」，因此相鄰兩個波峰之間代表的是一個「週期 $T$」，而不是波長 $\lambda$。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="mb-12">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+        
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                <p class="text-slate-800 font-medium pt-1">
+                    觀察一個水波粒子的位移-時間線圖，發現粒子從最高點（波峰）下降到最低點（波谷）耗時 $0.2 \text{ s}$。求該水波的週期與頻率。
+                </p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2"><strong>第一步：求週期 $T$</strong></p>
+                    <p class="mb-2">從波峰到波谷代表粒子完成了半次振動，即半個週期（$0.5 T$）。</p>
+                    <div class="overflow-x-auto">$$0.5 T = 0.2 \text{ s} \implies T = 0.4 \text{ s}$$</div>
+                    <p class="mb-2 mt-4"><strong>第二步：求頻率 $f$</strong></p>
+                    <div class="overflow-x-auto">$$f = \frac{1}{T} = \frac{1}{0.4} = 2.5 \text{ Hz}$$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：週期為 $0.4 \text{ s}$，頻率為 $2.5 \text{ Hz}$。</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                <p class="text-slate-800 font-medium pt-1">
+                    某機械波的頻率為 $50 \text{ Hz}$。請問介質中的粒子在 $2 \text{ s}$ 內完成了多少次完整的振動？
+                </p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2">頻率定義為一秒內振動的次數。因此 $50 \text{ Hz}$ 代表每秒振動 $50$ 次。</p>
+                    <div class="overflow-x-auto">$$\text{總次數} = f \times t = 50 \times 2 = 100 \text{ 次}$$</div>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：完成了 $100$ 次振動。</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+            <div class="flex items-start">
+                <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                <p class="text-slate-800 font-medium pt-1">
+                    一列向右傳播的橫波，波長為 $\lambda$。在某一瞬間，粒子 P 處於波峰位置。距離粒子 P 右方 $\frac{\lambda}{2}$ 處的粒子 Q 處於什麼位置？它們是同相還是反相？
+                </p>
+            </div>
+            <details class="mt-4 group">
+                <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                    <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                </summary>
+                <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                    <p class="mb-2">在一個連續波中，相距半個波長（$\frac{\lambda}{2}$）的兩個粒子，其振動狀態剛好完全相反。</p>
+                    <p class="mb-2">由於 P 在波峰（最高點），Q 必然在波谷（最低點）。</p>
+                    <p class="mb-2">它們的運動狀態總是相反，這稱為<span class="font-bold text-blue-700">反相</span>。</p>
+                    <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：粒子 Q 處於波谷，兩者反相。</p>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+        <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+        
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-3-1">
+            <p class="font-bold text-slate-800 mb-3">1. 在單一粒子的位移-時間關係線圖中，相鄰兩個波峰之間的時間間距代表什麼物理量？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-3-1', 'quiz4-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 波長</button>
+                <button onclick="checkAnswer(this, false, 'exp4-3-1', 'quiz4-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 頻率</button>
+                <button onclick="checkAnswer(this, true,  'exp4-3-1', 'quiz4-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 週期</button>
+                <button onclick="checkAnswer(this, false, 'exp4-3-1', 'quiz4-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 波速</button>
+            </div>
+            <div id="exp4-3-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 因為橫軸是「時間」，所以經歷一個完整波動圖形所需的時間，即為週期。
+            </div>
+        </div>
+
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-3-2">
+            <p class="font-bold text-slate-800 mb-3">2. 某震盪器以 $4 \text{ Hz}$ 的頻率振動。求其產生波的週期。</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-3-2', 'quiz4-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $4 \text{ s}$</button>
+                <button onclick="checkAnswer(this, true,  'exp4-3-2', 'quiz4-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $0.25 \text{ s}$</button>
+                <button onclick="checkAnswer(this, false, 'exp4-3-2', 'quiz4-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $2.5 \text{ s}$</button>
+                <button onclick="checkAnswer(this, false, 'exp4-3-2', 'quiz4-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $0.4 \text{ s}$</button>
+            </div>
+            <div id="exp4-3-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> $T = 1 / f = 1 / 4 = 0.25 \text{ s}$。
+            </div>
+        </div>
+
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-3-3">
+            <p class="font-bold text-slate-800 mb-3">3. 若波上兩點的距離相差一個完整的波長 $\lambda$，它們的振動相位關係為何？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-3-3', 'quiz4-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 反相</button>
+                <button onclick="checkAnswer(this, true,  'exp4-3-3', 'quiz4-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 同相</button>
+                <button onclick="checkAnswer(this, false, 'exp4-3-3', 'quiz4-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 相位差 $90^\circ$</button>
+                <button onclick="checkAnswer(this, false, 'exp4-3-3', 'quiz4-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 毫無關係</button>
+            </div>
+            <div id="exp4-3-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 相距整數倍波長（如 $1\lambda, 2\lambda$）的粒子，它們在任何時刻的振動狀態都完全一樣，稱為同相。
+            </div>
+        </div>
+
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz4-3-4">
+            <p class="font-bold text-slate-800 mb-3">4. 橫波中粒子的振動速度何時達到最大？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, false, 'exp4-3-4', 'quiz4-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 處於波峰時</button>
+                <button onclick="checkAnswer(this, false, 'exp4-3-4', 'quiz4-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 處於波谷時</button>
+                <button onclick="checkAnswer(this, true,  'exp4-3-4', 'quiz4-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 穿過平衡位置時</button>
+                <button onclick="checkAnswer(this, false, 'exp4-3-4', 'quiz4-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 速度保持恆定不變</button>
+            </div>
+            <div id="exp4-3-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 粒子作來回振動，到達波峰或波谷時會瞬間靜止（速度為 0）以改變方向；經過平衡位置時，速度達到最大。
+            </div>
+        </div>
+
+        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz4-3-5">
+            <p class="font-bold text-slate-800 mb-3">5. 位移-時間線圖相當於對波進行了甚麼操作？</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkAnswer(this, true,  'exp4-3-5', 'quiz4-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 記錄了單一個粒子隨時間的運動過程（錄影）</button>
+                <button onclick="checkAnswer(this, false, 'exp4-3-5', 'quiz4-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 在某一瞬間為整個波拍下了一張「照片」</button>
+                <button onclick="checkAnswer(this, false, 'exp4-3-5', 'quiz4-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 測量了波速的分佈</button>
+                <button onclick="checkAnswer(this, false, 'exp4-3-5', 'quiz4-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 顯示了多個粒子的空間位置</button>
+            </div>
+            <div id="exp4-3-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                <strong>解析：</strong> 位移-時間線圖是追蹤「單一特定粒子」隨時間變化的歷程，類似對一個粒子進行持續錄影。
+            </div>
+        </div>
+    </section>
+</article>
+
+
+
+
+        </div>
+    </main>
+
+    <!-- 頁面互動邏輯 JavaScript -->
+    <script>
+        // 切換頁面 (零延遲切換 + 重新渲染 LaTeX)
+        function switchPage(pageId, btnElement) {
+            // 1. 隱藏所有章節內容
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+                section.classList.remove('block');
+            });
+
+            // 2. 顯示目標章節
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.remove('hidden');
+                target.classList.add('block');
+            }
+
+            // 3. 更新側邊欄選單樣式 (移除所有 active 樣式，並套用到點擊的目標)
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300";
+            });
+            if (btnElement) {
+                btnElement.className = "nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors bg-blue-50 text-blue-800 font-medium border-l-4 border-blue-500";
+            }
+
+            // 4. 行動版：點擊後自動收起側邊欄
+            if (window.innerWidth < 768) {
+                toggleMobileMenu();
+            }
+
+            // 5. 滾動回頂部
+            document.getElementById('main-content').scrollTo(0, 0);
+
+            // 6. 重新渲染 MathJax LaTeX 公式 (重要要求！)
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([target]).catch(function (err) {
+                    console.error('MathJax 渲染失敗: ', err.message);
+                });
+            }
+        }
+
+        // 開關行動版選單
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                // 打開
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                overlay.classList.add('block');
+            } else {
+                // 關閉
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('block');
+            }
+        }
+
+        // 測驗作答邏輯
+        function checkAnswer(btn, isCorrect, expId) {
+            const container = btn.parentElement;
+            const buttons = container.querySelectorAll('button');
+            
+            // 1. 停用該題所有按鈕，防止重複作答
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.classList.remove('hover:bg-slate-50');
+                b.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+
+            // 2. 標記使用者選中的按鈕顏色
+            btn.classList.remove('border-slate-200', 'opacity-50');
+            if (isCorrect) {
+                btn.classList.add('bg-green-100', 'border-green-400', 'text-green-800', 'font-bold', 'opacity-100');
+                btn.innerHTML = `<i class="fa-solid fa-check-circle mr-1"></i> ` + btn.innerHTML;
+            } else {
+                btn.classList.add('bg-red-100', 'border-red-400', 'text-red-800', 'font-bold', 'opacity-100');
+                btn.innerHTML = `<i class="fa-solid fa-times-circle mr-1"></i> ` + btn.innerHTML;
+            }
+
+            // 3. 顯示對應的解析區塊，並根據對錯顯示邊框顏色
+            const expDiv = document.getElementById(expId);
+            if (expDiv) {
+                expDiv.classList.remove('hidden');
+                if (isCorrect) {
+                    expDiv.classList.add('border-green-500');
+                } else {
+                    expDiv.classList.add('border-red-500');
+                }
+
+                // 4. 解析顯示後，即時渲染解析內的 LaTeX (重要要求！)
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise([expDiv]).catch(function (err) {
+                        console.error('MathJax 測驗解析渲染失敗: ', err.message);
+                    });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
