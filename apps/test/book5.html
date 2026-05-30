@@ -101,16 +101,21 @@
         <nav class="flex-1 overflow-y-auto p-4 space-y-6">
             <!-- 第 1 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 1 章：位置與運動</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 1 章：輻射與放射現象</h2>
                 <ul class="space-y-1">
                     <li>
-                     <button onclick="switchPage('ch1-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                               1.2 距離與位移
+                     <button onclick="switchPage('ch1-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                               1.1 致電離輻射與 X 射線
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch1-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            1.2 核輻射
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch1-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            1.3 速率、速度和加速度
+                            1.3 輻射安全
                         </button>
                     </li>
                 </ul>
@@ -269,7 +274,580 @@
             
 <!-- ========================================== -->
 
+      
+            <!-- ========================================== -->
+            <!-- 區塊 1.1: 致電離輻射與 X 射線 -->
+            <!-- ========================================== -->
+            <article id="ch1-1" class="content-section block hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.1</span>致電離輻射與 X 射線</h2>
+                    <p class="text-slate-500 mt-2">認識輻射的分類、致電離效應的原理，以及 X 射線的產生機制與應用。</p>
+                </header>
 
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">在物理學中，輻射是物體以波或粒子的形式放出的能量。我們根據輻射能量的高低，將其分為兩大類：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">致電離輻射：</span> 能量極高的輻射。當它穿過物質時，有足夠的能量把分子或原子內的電子擊出，使其變成帶電的離子。這種過程稱為<span class="font-bold text-blue-700">電離</span>。這類輻射對人體細胞有破壞性，例如 X 射線、伽馬射線。</li>
+                            <li><span class="text-blue-700 font-bold">非電離輻射：</span> 能量較低的輻射，不足以引起電離現象，例如可見光、微波、無綫電波。</li>
+                            <li><span class="text-blue-700 font-bold">X 射線：</span> 一種高能量的電磁波，屬於致電離輻射。它的波長極短，具有很強的穿透力。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> X 射線的產生與特性</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">X 射線是透過特定的裝置（X 射線管）產生的，過程涉及能量的轉換：</p>
+                        <ul class="list-disc list-inside space-y-2 text-slate-700 ml-2 mt-2">
+                            <li><strong>產生機制：</strong> 在高度真空的玻璃管內，燈絲受熱發射出電子。這些電子被極高的電壓加速，高速撞擊重金屬靶。</li>
+                            <li><strong>能量轉換：</strong> 高速電子撞擊靶時驟然減速，其巨大的<span class="font-bold text-blue-700">動能</span>瞬間轉換為<span class="font-bold text-blue-700">熱能</span>（佔 99% 以上）與<span class="font-bold text-blue-700">X 射線能量</span>（不到 1%）。</li>
+                            <li><strong>穿透力特性：</strong> X 射線能輕易穿透密度較低、原子序數較小的物質（如人體肌肉組織、衣物），但會被密度高、原子序數大的物質（如骨骼、鉛）大量吸收。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                簡述甚麼是「致電離」作用。為甚麼致電離輻射對人體健康構成威脅？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>致電離：</strong> 是指高能量的輻射在穿過物質時，將物質原子或分子內的電子擊出，產生正負離子的過程。</p>
+                                <p class="mb-2"><strong>健康威脅：</strong> 當致電離輻射穿過人體組織時，會引起細胞內部的電離作用，這可能會破壞細胞結構、改變 DNA，導致細胞死亡、突變甚至引發癌症。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                醫生為病人拍攝胸部 X 射線照片時，照片底片上會呈現深淺不同的影像。請解釋為何骨骼在底片上呈現白色（較淺色），而肺部組織呈現深色。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">X 射線底片在被 X 射線照射後會變黑。</p>
+                                <p class="mb-2">骨骼主要由鈣組成，密度和原子序數較高，會<span class="font-bold text-blue-700">大量吸收 X 射線</span>。較少 X 射線能穿透骨骼到達底片，所以該區域底片曝光少，呈現白色。</p>
+                                <p class="mb-2">相反，肺部充滿空氣，肌肉組織密度較低，X 射線容易穿透並照射到底片上，使得這些區域曝光充分，呈現深色。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                在 X 射線管的設計中，重金屬靶通常會鑲嵌在銅塊上，並配有散熱片或冷卻液循環系統。為甚麼需要這樣的冷卻設計？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">在產生 X 射線的過程中，高速電子撞擊金屬靶時，超過 99% 的巨大動能會轉化為<span class="font-bold text-blue-700">熱能</span>，只有極少部分轉化為 X 射線。</p>
+                                <p class="mb-2">如果沒有有效的散熱系統，金屬靶會迅速過熱甚至熔化，損壞 X 射線管。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 下列哪一種輻射不屬於「致電離輻射」？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. X 射線</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 伽馬射線</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 無綫電波</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 阿爾法粒子</button>
+                        </div>
+                        <div id="exp1-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 無綫電波能量極低，屬於非電離輻射，無法引發電離現象。X 射線、伽馬射線及核輻射（如阿爾法粒子）皆具致電離能力。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 關於「電離」現象，下列敘述何者正確？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 高能輻射將原子內的電子擊出，使其變成帶電的離子</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 輻射使物質發光發熱的過程</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 物體吸收輻射後改變質量的現象</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 輻射被物質完全反射的過程</button>
+                        </div>
+                        <div id="exp1-1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 電離是指中性原子或分子由於高能輻射撞擊，失去（或獲得）電子而變為帶電離子的過程。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 產生 X 射線時，高速電子的動能主要轉換為什麼形式的能量？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 100% 轉換為 X 射線</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 主要是光能</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 絕大部分轉換為熱能</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 轉換為化學能</button>
+                        </div>
+                        <div id="exp1-1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 電子撞擊金屬靶的能量轉換效率極低，超過 99% 的動能會轉換為熱能，只有不到 1% 會成為 X 射線。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 哪一種物質對 X 射線的吸收能力最強（穿透力最弱）？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 皮膚</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 木材</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 鉛板</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 肌肉組織</button>
+                        </div>
+                        <div id="exp1-1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 物質密度越大、原子序數越高，對 X 射線的吸收力越強。鉛的高密度使其成為極佳的 X 射線防護屏障。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-1-5">
+                        <p class="font-bold text-slate-800 mb-3">5. X 射線底片在被 X 射線照射並顯影後會呈現什麼顏色？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 白色</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 黑色</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 藍色</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 保持透明</button>
+                        </div>
+                        <div id="exp1-1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> X 射線底片含有感光化學物質，受 X 射線照射曝光後會變黑。照射到的輻射越多，顏色越深。
+                        </div>
+                    </div>
+
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 1.2: 核輻射 -->
+            <!-- ========================================== -->
+            <article id="ch1-2" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.2</span>核輻射</h2>
+                    <p class="text-slate-500 mt-2">深入了解放射性同位素、三種核輻射的本質特徵，以及如何探測輻射。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">某些原子的原子核處於不穩定的狀態，會自發地衰變並釋放出高能量的輻射以達致穩定。這種過程稱為<span class="font-bold text-blue-700">放射性衰變</span>，所放出的輻射統稱為<span class="font-bold text-blue-700">核輻射</span>。</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><strong>同位素：</strong> 具有相同質子數（同種元素）但中子數不同的原子。</li>
+                            <li><strong>放射性同位素：</strong> 原子核不穩定的同位素，會發生放射性衰變。</li>
+                            <li><strong>本底輻射：</strong> 我們日常生活中無時無刻都存在的微弱輻射，主要來自宇宙射線、地殼岩石（如氡氣）和食物。</li>
+                            <li><strong>探測儀器：</strong> 最常用的探測器是<span class="font-bold text-blue-700">蓋革—彌勒管 (GM管)</span>，它利用輻射進入管內引發氣體電離產生電流脈衝，以此記錄輻射的計數率。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 三種核輻射的比較</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-4">放射性物質主要會放出三種不同特性的核輻射：</p>
+                        
+                        <!-- 桌面版 Table (lg:block) -->
+                        <div class="hidden lg:block overflow-hidden rounded-lg border border-blue-200 shadow-sm bg-white">
+                            <table class="w-full text-left text-slate-700">
+                                <thead class="bg-blue-100 text-blue-900 border-b border-blue-200">
+                                    <tr>
+                                        <th class="p-3 font-bold">特性</th>
+                                        <th class="p-3 font-bold text-blue-800">$\alpha$ 輻射 (阿爾法)</th>
+                                        <th class="p-3 font-bold text-emerald-800">$\beta$ 輻射 (貝他)</th>
+                                        <th class="p-3 font-bold text-purple-800">$\gamma$ 輻射 (伽馬)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-blue-100">
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="p-3 font-medium">本質</td>
+                                        <td class="p-3">氦核 (2質子+2中子)</td>
+                                        <td class="p-3">高速電子</td>
+                                        <td class="p-3">高能電磁波</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="p-3 font-medium">電荷</td>
+                                        <td class="p-3 text-red-600 font-bold">$+2e$</td>
+                                        <td class="p-3 text-blue-600 font-bold">$-e$</td>
+                                        <td class="p-3 text-slate-500 font-bold">不帶電 ($0$)</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="p-3 font-medium">致電離本領</td>
+                                        <td class="p-3 font-bold">極強</td>
+                                        <td class="p-3">中等</td>
+                                        <td class="p-3">極弱</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="p-3 font-medium">穿透本領</td>
+                                        <td class="p-3 text-red-600">極弱 (一張紙即可阻擋)</td>
+                                        <td class="p-3 text-amber-600">中等 (數毫米鋁板可阻擋)</td>
+                                        <td class="p-3 text-green-600 font-bold">極強 (需厚鉛板或混凝土)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 w-8"></i> 常見迷思與誤區</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                            <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                            <p class="text-sm">「$\alpha$ 輻射的穿透力最弱，所以它是三種輻射中最安全的，不用特別防護。」</p>
+                        </div>
+                        <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                            <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                            <p class="text-sm">正因為 $\alpha$ 輻射的致電離本領極強，若放射源被<strong>吸入或吞食進入人體內</strong>，$\alpha$ 粒子會將其龐大能量全部釋放在極小範圍的內部組織，造成最嚴重的內輻射傷害。它只有在體外時才相對安全。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一個實驗室的本底輻射計數率為 $30 \text{ 單位/分鐘}$。把一個未知放射源置於 GM 管前，測得總計數率為 $530 \text{ 單位/分鐘}$。當在放射源和 GM 管之間放入一張紙後，計數率沒有改變。當放入一塊 $5 \text{ mm}$ 厚的鋁板後，計數率大幅下降至 $30 \text{ 單位/分鐘}$。判斷該放射源放出了甚麼輻射？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">1. 放入紙張後計數率不變，代表該輻射能穿透紙張。因此<strong>不含有 $\alpha$ 輻射</strong>。</p>
+                                <p class="mb-2">2. 放入鋁板後計數率降至 $30$，剛好等於本底輻射水平。這代表鋁板<strong>完全阻擋了</strong>該未知輻射。</p>
+                                <p class="mb-2">3. 能穿透紙張但被鋁板完全阻擋的，是 $\beta$ 輻射。由於沒有剩餘高於本底的計數率，故也不含 $\gamma$ 輻射。</p>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：該放射源只放出了 $\beta$ 輻射。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                為何 $\gamma$ 射線在電場或磁場中穿梭時，其路徑不會發生偏折？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">帶電粒子（如帶正電的 $\alpha$ 粒子和帶負電的 $\beta$ 粒子）在電場或磁場中會受到電力或磁力的作用而偏轉。</p>
+                                <p class="mb-2">但 $\gamma$ 射線本質上是高能電磁波，它<strong>不帶任何電荷</strong>。因此，電場和磁場無法對它施加作用力，它會保持直線傳播而不偏折。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                把放射源射出的射線引導入一個強度極高的均勻電場中（上極板帶正電，下極板帶負電）。射線分成了三束。請指出向上偏折、向下偏折以及不偏折的射線分別是什麼？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">根據異性相吸、同性相斥原理：</p>
+                                <ul class="list-disc list-inside space-y-2 mb-2">
+                                    <li>帶負電的 $\beta$ 粒子會被正極板吸引，因此<strong>向上偏折</strong>。</li>
+                                    <li>帶正電的 $\alpha$ 粒子會被負極板吸引，因此<strong>向下偏折</strong>。</li>
+                                    <li>不帶電的 $\gamma$ 射線不受電場影響，因此<strong>不偏折（直線前進）</strong>。</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2-1">
+                        <p class="font-bold text-slate-800 mb-3">1. $\alpha$ 粒子的物理本質是甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 高速電子</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 氦原子核</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 氫原子</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 高能電磁波</button>
+                        </div>
+                        <div id="exp1-2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> $\alpha$ 粒子由 2 個質子和 2 個中子組成，等同於一個失去電子的氦原子核。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 哪一種核輻射的「致電離本領」最強？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $\alpha$ 輻射</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $\beta$ 輻射</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $\gamma$ 輻射</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 三者一樣強</button>
+                        </div>
+                        <div id="exp1-2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> $\alpha$ 粒子質量大、攜帶 $+2e$ 電荷、移動較慢，因此在穿過物質時，有極大機率與物質原子發生作用，產生大量的離子。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 下列何者不屬於「本底輻射」的自然來源？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 宇宙射線</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 岩石中釋放的氡氣</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 食物中的微量放射性同位素</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 醫院的 X 射線機</button>
+                        </div>
+                        <div id="exp1-2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 本底輻射是指環境中自然存在且無可避免的輻射背景。X 射線機是人造醫療設備，不屬於自然本底輻射。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 要完全阻擋 $\beta$ 輻射，最適合使用下列哪一種材料？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 一張普通的白紙</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 人類皮膚的表皮層</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 幾毫米厚的鋁板</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 只需空氣即可，它傳播不到幾厘米</button>
+                        </div>
+                        <div id="exp1-2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> $\beta$ 輻射穿透力中等，可以穿透紙張，但會被數毫米厚的金屬（如鋁板）阻擋。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-2-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 蓋革—彌勒管 (GM管) 探測核輻射的原理是基於輻射的哪一種特性？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 致電離作用</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 穿透力</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 光學反射</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 磁場偏轉</button>
+                        </div>
+                        <div id="exp1-2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> GM 管內部充滿低壓氣體，當輻射進入管內時會使氣體電離，產生的離子和電子在強電場下移動形成瞬間電流，從而被計數器記錄。
+                        </div>
+                    </div>
+
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 1.3: 輻射安全 -->
+            <!-- ========================================== -->
+            <article id="ch1-3" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.3</span>輻射安全</h2>
+                    <p class="text-slate-500 mt-2">學習輻射劑量的單位，並掌握在實驗室或工業中處理放射源的安全原則與防護措施。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 輻射劑量與影響</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">致電離輻射的危險性取決於人體吸收的能量多寡及輻射種類。為了衡量輻射對生物組織造成的實際生物效應，物理學使用了<span class="font-bold text-blue-700">當量劑量 (Equivalent dose)</span>。</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">單位：</span> 當量劑量的單位是<span class="font-bold text-red-600">希沃特 ($\text{Sv}$)</span>。日常微量輻射常用毫希沃特 ($\text{mSv}$) 或微希沃特 ($\mu\text{Sv}$) 表示。</li>
+                            <li><span class="text-blue-700 font-bold">背景知識：</span> 照一次普通胸部 X 光的劑量約為 $0.1 \text{ mSv}$。普通人每年從自然環境接收的本底輻射約為數個 $\text{mSv}$。短時間內接受超過 $1 \text{ Sv}$ 的大劑量輻射會引發急性輻射病，甚至致命。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 輻射防護三大原則 (ALARA)</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-4">國際輻射防護委員會提出 ALARA (As Low As Reasonably Achievable) 原則，具體實踐為以下三大核心防護方法：</p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded border border-blue-100 flex items-start">
+                                <i class="fa-solid fa-stopwatch text-2xl text-blue-500 mr-4 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-blue-800 mb-1">1. 減少時間 (Time)</p>
+                                    <p class="text-sm text-slate-600">盡量縮短逗留在輻射源附近的時間。因為累積劑量 = 劑量率 $\times$ 時間。</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-blue-100 flex items-start">
+                                <i class="fa-solid fa-ruler text-2xl text-blue-500 mr-4 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-blue-800 mb-1">2. 增加距離 (Distance)</p>
+                                    <p class="text-sm text-slate-600">與輻射源保持盡可能遠的距離。對於點源，輻射強度隨距離的平方反比減弱（如距離增倍，輻射減為四分之一）。</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-blue-100 flex items-start">
+                                <i class="fa-solid fa-shield text-2xl text-blue-500 mr-4 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-blue-800 mb-1">3. 使用屏蔽 (Shielding)</p>
+                                    <p class="text-sm text-slate-600">在人和輻射源之間放置吸收材料。針對 $\gamma$ 射線，常使用鉛板或厚混凝土作屏蔽。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                在學校實驗室中處理微弱的放射性同位素樣本時，應該遵守哪些具體的安全操作守則？請列舉至少三點。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <ul class="list-decimal list-inside space-y-2">
+                                    <li>絕對不可用手直接觸碰放射源，必須使用<strong>長柄鉗子</strong>（增加距離）。</li>
+                                    <li>實驗期間<strong>嚴禁飲食</strong>，防止放射性粉塵被意外吞食而引發內輻射（特別防範 $\alpha$ 源）。</li>
+                                    <li>放射源不使用時，必須存放在貼有輻射警告標誌的<strong>特製鉛盒</strong>中，並上鎖保管（使用屏蔽）。</li>
+                                    <li>應佩戴劑量計徽章來監測累積的輻射劑量。</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                某輻射工作人員站在距離 $\gamma$ 放射源 $2 \text{ m}$ 處工作，測得輻射劑量率為 $40 \text{ mSv/h}$。為了符合安全規定，他需要把劑量率降低至 $10 \text{ mSv/h}$。如果不使用任何屏蔽，他應該退後到距離放射源多遠的地方？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">輻射強度遵循<strong>平方反比定律</strong>。設強度為 $I$，距離為 $d$：</p>
+                                <div class="overflow-x-auto">$$ I \propto \frac{1}{d^2} \implies I_1 d_1^2 = I_2 d_2^2 $$</div>
+                                <div class="overflow-x-auto">$$ 40 \times (2)^2 = 10 \times d_2^2 $$</div>
+                                <div class="overflow-x-auto">$$ 40 \times 4 = 10 \times d_2^2 \implies 160 = 10 \times d_2^2 $$</div>
+                                <div class="overflow-x-auto">$$ d_2^2 = 16 \implies d_2 = 4 \text{ m} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：他應該退後到距離放射源 $4 \text{ m}$ 處。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                醫院裏為甚麼孕婦通常被強烈建議避免進行 X 射線或 CT 掃描檢查？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">X 射線屬於致電離輻射。胎兒正處於細胞快速分裂和生長的關鍵階段，細胞在分裂時對輻射的致電離作用特別敏感。</p>
+                                <p class="mb-2">輻射可能會破壞胚胎細胞的遺傳物質 (DNA)，增加導致胎兒畸形、發育不良或未來患癌的風險。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 衡量輻射對人體健康影響的當量劑量，其國際標準單位是甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-3-1', 'quiz1-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 貝可 (Bq)</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-3-1', 'quiz1-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 希沃特 (Sv)</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-1', 'quiz1-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 焦耳 (J)</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-1', 'quiz1-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 瓦特 (W)</button>
+                        </div>
+                        <div id="exp1-3-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 貝可是活度的單位（每秒衰變次數）。希沃特（Sievert）才是用來表示生物組織吸收輻射後受損程度的當量劑量單位。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 處理強力 $\gamma$ 放射源時，為了保護工作人員，最有效的「屏蔽」材料是：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-3-2', 'quiz1-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 厚木板</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-2', 'quiz1-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 透明玻璃</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-3-2', 'quiz1-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 厚鉛板</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-2', 'quiz1-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 鋁箔</button>
+                        </div>
+                        <div id="exp1-3-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> $\gamma$ 射線穿透力極強，只有高密度和高原子序數的材料（如鉛、厚重的混凝土）才能有效吸收並屏蔽其能量。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 實驗室安全守則規定，轉移微弱放射性樣本時必須使用長柄鉗子。這符合輻射防護的哪一項核心原則？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-3-3', 'quiz1-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 減少暴露時間</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-3-3', 'quiz1-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 增加與射源的距離</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-3', 'quiz1-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 設置屏蔽物</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-3', 'quiz1-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 增強室內通風</button>
+                        </div>
+                        <div id="exp1-3-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 長柄鉗子增加了手與射源之間的空間距離。根據平方反比定律，只要距離稍微增加，人體接收到的輻射劑量率就會大幅下降。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 一名牙醫助理站在 X 光機旁，為了安全，她躲在了一道特製的屏風後面。這道屏風主要是實踐了哪個輻射防護原則？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-3-4', 'quiz1-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 減少暴露時間</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-4', 'quiz1-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 增加與射源的距離</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-3-4', 'quiz1-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 使用屏蔽物</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-4', 'quiz1-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 個人衛生與消毒</button>
+                        </div>
+                        <div id="exp1-3-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 屏風（通常內夾鉛板）放置在人與輻射源之間，吸收了有害射線，這是典型的「屏蔽」防護措施。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-3-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 輻射對細胞造成損傷的主要生物學機制是甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 透過電離作用破壞細胞內的化學鍵和 DNA</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 將細胞完全加熱至沸騰而死</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 把細胞轉變為具傳染性的病毒</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 抽乾細胞內的水分</button>
+                        </div>
+                        <div id="exp1-3-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 致電離輻射能量高，擊出電子產生的離子會打斷細胞內正常的化學分子鍵，尤其是 DNA，導致細胞無法正常分裂或突變。
+                        </div>
+                    </div>
+
+                </section>
+            </article>
+
+
+
+
+            
 
           
 <!-- ========================================== -->
