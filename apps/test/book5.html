@@ -1325,6 +1325,555 @@
             </article>
             
 
+            <!-- ========================================== -->
+            <!-- 區塊 3.1: 核裂變與核聚變 -->
+            <!-- ========================================== -->
+            <article id="ch3-1" class="content-section block hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.1</span>核裂變與核聚變</h2>
+                    <p class="text-slate-500 mt-2">認識兩種釋放巨大能量的核反應：原子核的分裂與結合，並探討連鎖反應的原理。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">除了放射衰變外，原子核還可以透過兩種劇烈的核反應來改變其結構並釋放驚人的能量：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">核裂變：</span> 一個質量較大的重原子核（如鈾-235）吸收一個低速中子後，分裂成兩個或多個較輕的原子核的過程。在此過程中，通常會釋放出額外的中子及巨大的能量。</li>
+                            <li><span class="text-blue-700 font-bold">連鎖反應：</span> 核裂變所釋放出的中子，可以進一步撞擊其他重原子核，引發更多核裂變，產生自我持續的反應。若有足夠的裂變物質（達到臨界質量），反應便能持續進行。</li>
+                            <li><span class="text-blue-700 font-bold">核聚變：</span> 兩個較輕的原子核（如氫的同位素）結合成為一個較重的原子核的過程。此反應同樣會釋放極巨大的能量，是太陽及恆星發光發熱的能量來源。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 核反應方程式</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">書寫或計算核反應方程式時，必須嚴格遵守<span class="text-blue-700 font-bold">質量數守恆</span>和<span class="text-blue-700 font-bold">原子序數守恆</span>（電荷守恆）。</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2">典型的核裂變反應</p>
+                                <p class="text-lg font-bold">$$ _{92}^{235}\text{U} + _{0}^{1}\text{n} \rightarrow _{56}^{144}\text{Ba} + _{36}^{89}\text{Kr} + 3 _{0}^{1}\text{n} $$</p>
+                                <p class="text-xs text-slate-500 mt-2">鈾-235 吸收中子後分裂，並釋放 3 個中子</p>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2">典型的核聚變反應</p>
+                                <p class="text-lg font-bold">$$ _{1}^{2}\text{H} + _{1}^{3}\text{H} \rightarrow _{2}^{4}\text{He} + _{0}^{1}\text{n} $$</p>
+                                <p class="text-xs text-slate-500 mt-2">氘與氚結合成氦，並釋放中子</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                已知鈾-235發生核裂變的一條反應方程式如下，求方程式中釋放出的中子數目 $x$。<br>
+                                $$ _{92}^{235}\text{U} + _{0}^{1}\text{n} \rightarrow _{38}^{90}\text{Sr} + _{54}^{143}\text{Xe} + x _{0}^{1}\text{n} $$
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">根據質量數（上方數字）守恆：</p>
+                                <div class="overflow-x-auto">$$ 235 + 1 = 90 + 143 + x(1) $$</div>
+                                <div class="overflow-x-auto">$$ 236 = 233 + x $$</div>
+                                <div class="overflow-x-auto">$$ x = 3 $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：該反應釋放出 3 個中子。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                為什麼核聚變反應必須在極端高溫（數千萬度）的環境下才能發生？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">核聚變是將兩個帶正電的原子核結合在一起。</p>
+                                <p class="mb-2">由於同性電荷會產生極強的靜電排斥力，只有在極高溫下，原子核才具有足夠巨大的動能，能夠克服這股強大的排斥力，彼此靠近到足以讓核力發揮作用並結合。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                在自然界中，鈾礦石內含有鈾-235。但為什麼鈾礦石在自然環境中不會自發性地發生大規模的核爆炸？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">要發生爆炸性的連鎖反應，鈾-235 的質量必須達到或超過「臨界質量」。</p>
+                                <p class="mb-2">天然鈾礦中，鈾-235 的濃度非常低（僅約 0.72%），絕大部分是無法發生連鎖裂變的鈾-238。因此裂變產生的中子大多會被雜質或鈾-238 吸收，或逃逸出礦石，無法觸發持續的連鎖反應。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <!-- Q1 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-1-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 核裂變的定義是甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-1-1', 'quiz3-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 兩個輕原子核結合成一個重原子核</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-1-1', 'quiz3-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 一個重原子核分裂成兩個或多個較輕的原子核</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-1', 'quiz3-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 原子核自發射出阿爾法粒子</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-1', 'quiz3-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 電子撞擊原子核產生 X 射線</button>
+                        </div>
+                        <div id="exp3-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 核裂變是重核（如鈾或鈈）吸收中子後，分裂成較輕碎片的過程。輕核結合則是核聚變。
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-1-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 太陽持續不斷地發光發熱，其能量主要來自於哪一種物理反應？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-1-2', 'quiz3-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 鈾的核裂變</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-1-2', 'quiz3-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 氫的核聚變</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-2', 'quiz3-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 碳的劇烈燃燒</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-2', 'quiz3-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 放射性同位素的衰變</button>
+                        </div>
+                        <div id="exp3-1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 恆星（如太陽）內部的極高溫高壓環境，使氫原子核能夠克服排斥力融合成氦，發生核聚變並釋放巨大能量。
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-1-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 在核方程式 $_1^2\text{H} + _1^3\text{H} \rightarrow _2^4\text{He} + X$ 中，粒子 $X$ 是甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-1-3', 'quiz3-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 質子 ( $_1^1\text{p}$ )</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-3', 'quiz3-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 電子 ( $_{-1}^0\text{e}$ )</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-1-3', 'quiz3-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 中子 ( $_0^1\text{n}$ )</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-3', 'quiz3-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 阿爾法粒子</button>
+                        </div>
+                        <div id="exp3-1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 根據守恆定律，質量數：$2 + 3 = 4 + A \implies A = 1$。原子序數：$1 + 1 = 2 + Z \implies Z = 0$。質量數為 1 且不帶電的粒子是中子。
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-1-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 引發鈾-235 發生核裂變的關鍵粒子通常是甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-1-4', 'quiz3-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 高速質子</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-1-4', 'quiz3-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 低速中子</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-4', 'quiz3-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 電子</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-4', 'quiz3-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 高能伽馬射線</button>
+                        </div>
+                        <div id="exp3-1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 鈾-235 容易捕獲「低速中子」（熱中子）而變得極不穩定，進而發生分裂。
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz3-1-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 為什麼核裂變反應能夠形成持續的「連鎖反應」？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-1-5', 'quiz3-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 因為裂變會產生極高的高溫，高溫會點燃其他的鈾原子</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-5', 'quiz3-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 因為裂變會放出電子，電子會繼續擊碎原子核</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-1-5', 'quiz3-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 因為每一次核裂變都會釋放出新的中子，這些中子可以引發更多鈾原子的裂變</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-5', 'quiz3-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 因為鈾原子具有極強的放射性</button>
+                        </div>
+                        <div id="exp3-1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 每一次鈾裂變都會放出 2 至 3 個新中子。如果鈾的濃度和質量足夠，這些中子會撞擊其他鈾核產生更多裂變，形成一傳十、十傳百的連鎖反應。
+                        </div>
+                    </div>
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 3.2: 質能關係 -->
+            <!-- ========================================== -->
+            <article id="ch3-2" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.2</span>質能關係</h2>
+                    <p class="text-slate-500 mt-2">揭開核反應巨大能量的秘密，學習愛因斯坦的質能等價原理與質量虧損的計算。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">在一般的化學反應中，我們假設質量是絕對守恆的。但在核反應（如核裂變、核聚變或衰變）中，科學家發現：<span class="text-blue-700 font-bold">反應後產物的總質量，總是微小地小於反應前反應物的總質量。</span></p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">質量虧損 ($\Delta m$)：</span> 反應前總質量與反應後總質量的差值。</li>
+                            <li><span class="text-blue-700 font-bold">質能等價：</span> 愛因斯坦提出，質量與能量其實是同一個實體的兩種表現形式。核反應中「消失」的質量，實際上是轉化成了巨大的能量釋放出來。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 愛因斯坦質能方程</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">計算釋放能量的核心公式：</p>
+                        <div class="text-center py-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                            $$ E = m c^2 \quad \text{或} \quad \Delta E = \Delta m c^2 $$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                            <li>$\Delta E$：釋放的能量 (單位：焦耳 $\text{J}$)</li>
+                            <li>$\Delta m$：質量虧損 (單位：千克 $\text{kg}$)</li>
+                            <li>$c$：真空中的光速 ($3.0 \times 10^8 \text{ m s}^{-1}$)</li>
+                        </ul>
+                        <div class="mt-4 p-3 bg-white border border-blue-200 rounded">
+                            <p class="font-bold text-blue-800 mb-1">原子質量單位 ($\text{u}$)</p>
+                            <p class="text-sm text-slate-600">在核物理中，原子質量極小，常用原子質量單位 $\text{u}$ 表示。$1 \text{ u} \approx 1.66 \times 10^{-27} \text{ kg}$。</p>
+                            <p class="text-sm text-slate-600 mt-1">根據 $E=mc^2$，$1 \text{ u}$ 的質量虧損相當於釋放約 <span class="font-bold text-blue-700">$931 \text{ MeV}$</span> 的能量。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                某次核裂變反應中，計算得知反應前核子總質量與反應後產物總質量之間，存在 $2.0 \times 10^{-28} \text{ kg}$ 的質量虧損。求該次核裂變釋放的能量（以焦耳為單位）。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">直接代入愛因斯坦質能方程，注意光速需平方：</p>
+                                <div class="overflow-x-auto">$$ \Delta E = \Delta m c^2 $$</div>
+                                <div class="overflow-x-auto">$$ \Delta E = (2.0 \times 10^{-28}) \times (3.0 \times 10^8)^2 $$</div>
+                                <div class="overflow-x-auto">$$ \Delta E = (2.0 \times 10^{-28}) \times (9.0 \times 10^{16}) $$</div>
+                                <div class="overflow-x-auto">$$ \Delta E = 18.0 \times 10^{-12} = 1.8 \times 10^{-11} \text{ J} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：釋放的能量為 $1.8 \times 10^{-11} \text{ J}$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                已知一個氘核 ($^2\text{H}$) 的質量為 $2.0141 \text{ u}$，一個氚核 ($^3\text{H}$) 的質量為 $3.0160 \text{ u}$。它們聚變成一個氦核 ($^4\text{He}$，質量 $4.0026 \text{ u}$) 和一個中子 (質量 $1.0087 \text{ u}$)。<br>
+                                求反應的質量虧損（以 $\text{u}$ 為單位），並估算釋放的能量（以 $\text{MeV}$ 為單位）。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>第一步：求反應物與生成物的總質量</strong></p>
+                                <p class="mb-2">反應物總質量 = $2.0141 + 3.0160 = 5.0301 \text{ u}$</p>
+                                <p class="mb-2">生成物總質量 = $4.0026 + 1.0087 = 5.0113 \text{ u}$</p>
+                                <p class="mb-2 mt-4"><strong>第二步：求質量虧損 $\Delta m$</strong></p>
+                                <div class="overflow-x-auto">$$ \Delta m = 5.0301 - 5.0113 = 0.0188 \text{ u} $$</div>
+                                <p class="mb-2 mt-4"><strong>第三步：轉換為能量</strong></p>
+                                <p class="mb-2">利用轉換系數 $1 \text{ u} = 931 \text{ MeV}$：</p>
+                                <div class="overflow-x-auto">$$ \Delta E = 0.0188 \times 931 \approx 17.5 \text{ MeV} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：質量虧損為 $0.0188 \text{ u}$，釋放能量約為 $17.5 \text{ MeV}$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                核電站中的核裂變雖然會造成質量虧損，但為甚麼一般化學燃燒（如燒煤）中，我們通常說質量是守恆的？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">事實上，根據質能等價原理，化學反應釋放能量時也會伴隨着極微小的質量虧損。</p>
+                                <p class="mb-2">然而，化學反應釋放的能量極低（通常每個原子僅幾電子伏特 $\text{eV}$），相比於核反應釋放的巨大能量（兆電子伏特 $\text{MeV}$ 級別），化學反應造成的質量虧損小得連最精密的現代天平都無法測量出來。</p>
+                                <p class="mb-2">因此，在日常宏觀的化學應用中，我們將質量視為絕對守恆。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <!-- Q1 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-2-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 核反應釋放大量能量的根本原因為何？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-2-1', 'quiz3-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 原子的化學鍵斷裂釋放熱能</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-2-1', 'quiz3-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 反應前後發生了質量虧損，減少的質量轉化為能量</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-1', 'quiz3-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 原子核吸收了外部的熱量</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-1', 'quiz3-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 電子從高能階躍遷至低能階</button>
+                        </div>
+                        <div id="exp3-2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 在核反應中，產物的總質量小於反應物的總質量。這微小的質量差距（質量虧損）根據 $E=mc^2$ 轉化為了巨大的能量釋放出來。
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-2-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 在公式 $E = mc^2$ 中，符號 $c$ 代表甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-2-2', 'quiz3-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 比熱容量</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-2', 'quiz3-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 空氣中的聲速</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-2-2', 'quiz3-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 真空中的光速</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-2', 'quiz3-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 普朗克常數</button>
+                        </div>
+                        <div id="exp3-2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 愛因斯坦質能方程中，$c$ 是一個常數，代表真空中的光速，數值約為 $3.0 \times 10^8 \text{ m s}^{-1}$。
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-2-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 如果一個物體的質量完全轉化為能量，根據 $E = mc^2$，這意味着：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-2-3', 'quiz3-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 轉化出來的能量非常小</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-2-3', 'quiz3-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 即使極少量的質量，也能轉化為極其巨大的能量</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-3', 'quiz3-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 只有重元素才能轉化為能量</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-3', 'quiz3-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 能量只能轉換為質量，質量不能轉換為能量</button>
+                        </div>
+                        <div id="exp3-2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 因為光速 $c$ 是一個非常大的數值 ($3 \times 10^8$)，將其平方後更是天文數字 ($9 \times 10^{16}$)。因此，只需損失微乎其微的質量 $\Delta m$，乘上這個巨大的常數，就能釋放驚人的能量。
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-2-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 要使用 $E = \Delta m c^2$ 計算出以焦耳 ($\text{J}$) 為單位的能量，質量虧損 $\Delta m$ 必須使用哪種單位？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-2-4', 'quiz3-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 克 (g)</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-4', 'quiz3-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 原子質量單位 (u)</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-2-4', 'quiz3-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 千克 (kg)</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-4', 'quiz3-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 毫克 (mg)</button>
+                        </div>
+                        <div id="exp3-2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 在國際單位制 (SI units) 中，要得出焦耳 ($\text{J}$)，質量必須以標準單位千克 ($\text{kg}$) 代入，速度必須以 $\text{m s}^{-1}$ 代入。
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz3-2-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 大約 $1 \text{ u}$ 的質量虧損，相對應會釋放出大約多少能量？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-2-5', 'quiz3-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $1 \text{ J}$</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-2-5', 'quiz3-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $931 \text{ MeV}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-5', 'quiz3-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $3 \times 10^8 \text{ MeV}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-5', 'quiz3-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $9.31 \text{ J}$</button>
+                        </div>
+                        <div id="exp3-2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> $1 \text{ u} \approx 1.66 \times 10^{-27} \text{ kg}$。將其代入 $E=mc^2$ 計算出焦耳，再轉換為電子伏特，得出著名的轉換常數：$1 \text{ u}$ 相當於 $931 \text{ MeV}$ 的能量。
+                        </div>
+                    </div>
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 3.3: 核能 -->
+            <!-- ========================================== -->
+            <article id="ch3-3" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.3</span>核 能</h2>
+                    <p class="text-slate-500 mt-2">了解核電站如何將核能轉化為電能，認識反應堆的關鍵部件，並評估核能發電的利與弊。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">核電站是利用受控的核裂變連鎖反應來發電的設施。其發電原理與火力發電廠相似：利用核反應釋放的熱能將水煮沸產生高壓蒸汽，蒸汽推動渦輪機，進而帶動發電機發電。</p>
+                        <p class="mb-2">核反應堆是核電站的心臟，包含以下三個維持與控制反應的關鍵組件：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">燃料棒：</span> 含有濃縮鈾（鈾-235 濃度約提升至 3%~5%）的組件，提供核裂變的原料。</li>
+                            <li><span class="text-blue-700 font-bold">慢化劑：</span> 通常是水或石墨。裂變剛釋放的中子速度太快，鈾-235 難以捕捉。慢化劑能令中子減速成為「低速中子」，從而更容易引發下一次裂變。</li>
+                            <li><span class="text-blue-700 font-bold">控制棒：</span> 由能強烈吸收中子的材料（如硼或鎘）製成。插入反應堆可以吸收多餘的中子，減慢反應速率；完全插入則能停止連鎖反應。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 功率與能量計算</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">核電站的輸出功率計算：</p>
+                        <div class="text-center py-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                            $$ P = \frac{E_{\text{總}}}{t} = \frac{N \times E_{\text{單次}}}{t} $$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                            <li>$P$：核電站的輸出功率 (單位：瓦特 $\text{W}$)</li>
+                            <li>$E_{\text{總}}$：產生或消耗的總能量 (單位：焦耳 $\text{J}$)</li>
+                            <li>$N$：發生核裂變的鈾核總數</li>
+                            <li>$E_{\text{單次}}$：每一次鈾核裂變所釋放的能量</li>
+                        </ul>
+                        <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> 注意實際核電站有能量轉換效率的問題，熱能並不能 100% 轉化為電能。</p>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                核反應堆中的「慢化劑」和「控制棒」功能經常被混淆。請簡述兩者在控制連鎖反應中的不同作用。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>慢化劑：</strong> 作用是「減慢中子的飛行速度」。因為鈾-235 只有在遇到低速中子時才容易發生裂變。所以慢化劑其實是為了<strong>促進和維持</strong>連鎖反應。</p>
+                                <p class="mb-2"><strong>控制棒：</strong> 作用是「吸收中子」。透過減少反應堆內可用中子的數量，來<strong>抑制和減慢</strong>連鎖反應的速度。若完全插入，反應會停止。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一座核電站的輸出功率為 $1000 \text{ MW}$ ($1 \times 10^9 \text{ W}$)。已知每一次鈾-235 裂變平均釋放 $3.2 \times 10^{-11} \text{ J}$ 的能量。假設核反應產生的熱能有 32% 轉化為電能。<br>
+                                求該核電站每秒鐘需要發生多少次鈾-235 的裂變？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>第一步：計算每秒所需的總核能</strong></p>
+                                <p class="mb-2">電功率為 $1 \times 10^9 \text{ J/s}$，效率為 32%。因此反應堆實際產生的總熱功率為：</p>
+                                <div class="overflow-x-auto">$$ P_{\text{核}} = \frac{1 \times 10^9}{0.32} = 3.125 \times 10^9 \text{ J/s} $$</div>
+                                <p class="mb-2 mt-4"><strong>第二步：計算裂變次數</strong></p>
+                                <p class="mb-2">總能量 = 裂變次數 $\times$ 單次裂變能量</p>
+                                <div class="overflow-x-auto">$$ N = \frac{3.125 \times 10^9}{3.2 \times 10^{-11}} \approx 9.77 \times 10^{19} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：每秒約需發生 $9.77 \times 10^{19}$ 次裂變。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                雖然核能發電能產生巨大能量，但社會對其安全性一直存在爭議。請列舉出核能發電的一個主要環境優點，以及一個主要的環境/安全缺點。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>主要優點：</strong> 核發電過程中不涉及燃燒化石燃料，因此不會排放二氧化碳等溫室氣體，有助於減緩全球暖化。</p>
+                                <p class="mb-2"><strong>主要缺點：</strong> 核反應會產生具有強烈放射性的核廢料。這些廢料的半衰期長達數萬年，處理和安全儲存極度困難。若發生嚴重核事故（如切爾諾貝爾、福島），放射性物質泄漏會對環境和人類造成長期且毀滅性的破壞。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <!-- Q1 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-3-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 關於核反應堆中的「慢化劑」，下列哪一項描述是正確的？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-3-1', 'quiz3-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 它能吸收中子，從而停止核反應</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-3-1', 'quiz3-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 它能減慢中子的速度，使鈾原子更容易捕捉到中子</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-1', 'quiz3-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 它用來冷卻反應堆，防止熔毀</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-1', 'quiz3-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 它是引發核聚變的燃料</button>
+                        </div>
+                        <div id="exp3-3-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 鈾-235 只能被低速中子有效引發裂變。裂變新產生的中子速度太快，必須由慢化劑（如水或石墨）減速，以維持連鎖反應。
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-3-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 如果核電站操作員希望減低反應堆的發電功率，他應該怎樣操作「控制棒」？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp3-3-2', 'quiz3-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 將控制棒更深入地插入反應堆堆芯中</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-2', 'quiz3-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 將控制棒從反應堆中抽出部分</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-2', 'quiz3-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 加熱控制棒</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-2', 'quiz3-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 換上較細的控制棒</button>
+                        </div>
+                        <div id="exp3-3-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 控制棒負責吸收中子。插入得越深，吸收的中子越多，能引發後續裂變的中子就越少，連鎖反應減慢，功率降低。
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-3-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 核電站目前依賴的核能來源主要是甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-3-3', 'quiz3-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 氫的核聚變</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-3', 'quiz3-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 碳-14 的放射性衰變</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-3-3', 'quiz3-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 鈾的核裂變</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-3', 'quiz3-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 氧的劇烈燃燒</button>
+                        </div>
+                        <div id="exp3-3-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 目前人類掌握並用於商業發電的技術僅限於核裂變（使用鈾或鈈）。可控核聚變技術仍在研發中，尚未能商業發電。
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-3-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 與傳統的燃煤發電相比，核能發電具有哪一項顯著的環保優勢？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-3-4', 'quiz3-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 不會產生任何危險廢物</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-3-4', 'quiz3-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 運作時不會排放二氧化碳，不加劇溫室效應</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-4', 'quiz3-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 燃料取之不盡，用之不竭</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-4', 'quiz3-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 即使發生意外，也不會對環境造成長期影響</button>
+                        </div>
+                        <div id="exp3-3-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 燃煤會釋放大量溫室氣體。核分裂是原子核反應，不是燃燒碳氧化合物的化學反應，因此不會產生溫室氣體。
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz3-3-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 核電站有沒有可能像原子彈那樣發生核爆炸？為什麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-3-5', 'quiz3-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 有可能，只要溫度過高就會引爆</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-5', 'quiz3-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 有可能，如果控制棒失效就會發生核爆</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-3-5', 'quiz3-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 不可能，因為核反應堆中鈾-235的濃度太低，無法產生武器級的爆炸</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-5', 'quiz3-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 不可能，因為核反應堆使用的是核聚變</button>
+                        </div>
+                        <div id="exp3-3-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 原子彈需要極高濃度（>90%）的鈾-235 才能在瞬間產生失控的指數級連鎖反應。核電站的燃料濃度通常只有 3%-5%，物理上絕對不可能發生核武器般的爆炸（但可能因過熱導致蒸汽爆炸或熔毀）。
+                        </div>
+                    </div>
+                </section>
+            </article>
           
 <!-- ========================================== -->
 
