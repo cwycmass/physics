@@ -117,32 +117,43 @@
             </div>
             <!-- 第 2 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 2 章：內能、熱與熱傳遞</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 2 章：光的折射</h2>
                 <ul class="space-y-1">
                     <li>
                         <button onclick="switchPage('ch2-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                           2.1 內能與能量轉移
+                           2.1 折射
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch2-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                           2.2 熱傳遞方式
+                           2.2 全內反射
                         </button>
                     </li>
                 </ul>
             </div>
             <!-- 第 3 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 3 章：温度變化與熱容量</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 3 章：透鏡</h2>
                 <ul class="space-y-1">
                     <li>
                         <button onclick="switchPage('ch3-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            3.1 功率與量度轉移的能量
+                            3.1 凸透鏡與凹透鏡
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch3-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            3.2 熱容量和比熱容量
+                            3.2 凸透鏡成像
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.3 凹透鏡成像
+                        </button>
+                    </li>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch3-4', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            3.4 凹透鏡成像物、像以及透鏡的關係
                         </button>
                     </li>
                 </ul>
@@ -767,6 +778,483 @@
                 </section>
             </article>
 
+
+                 <!-- ========================================== -->
+            <!-- 區塊 2.1: 折射 -->
+            <!-- ========================================== -->
+            <article id="ch2-1" class="content-section block hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.1</span>折射</h2>
+                    <p class="text-slate-500 mt-2">認識光從一種介質進入另一種介質時發生偏折的現象，並掌握斯涅耳定律與折射率的應用。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">當光線斜向越過兩種不同透明介質（例如空氣和水）的交界面時，光線的傳播方向會發生改變。這種光線偏折的現象稱為<span class="text-blue-700 font-bold">折射</span>。</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">折射的原因：</span> 光在不同介質中的傳播速度不同。光在真空中速度最快，進入其他介質時速度會減慢。</li>
+                            <li><span class="text-blue-700 font-bold">折射角 ($r$)：</span> 折射光線與法線之間的夾角。</li>
+                            <li><span class="text-blue-700 font-bold">光密介質與光疏介質：</span> 相比之下，光速較慢、折射率較大的介質稱為光密介質（如玻璃）；光速較快、折射率較小的介質稱為光疏介質（如空氣）。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 核心公式：斯涅耳定律與折射率</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">折射率 ($n$) 用來量度介質對光線偏折的能力。在真空中 $n=1$，在空氣中 $n \approx 1$。任何其他介質的折射率必定大於 1。</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2">折射率與光速</p>
+                                <p class="text-xl font-bold">$$ n = \frac{c}{v} $$</p>
+                                <p class="text-xs text-slate-500 mt-2">$c$ 是真空中的光速；$v$ 是介質中的光速</p>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2">斯涅耳定律</p>
+                                <p class="text-xl font-bold">$$ n_1 \sin\theta_1 = n_2 \sin\theta_2 $$</p>
+                                <p class="text-xs text-slate-500 mt-2">介質 1 與介質 2 之間的折射關係</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> 若光由空氣 ($n_1=1$) 進入另一介質，公式可簡化為：$n = \frac{\sin i}{\sin r}$，其中 $i$ 為入射角，$r$ 為折射角。</p>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 偏折方向對照</h3>
+                    
+                    <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+                        <table class="w-full text-left text-slate-700">
+                            <thead class="bg-slate-100 border-b border-slate-200">
+                                <tr>
+                                    <th class="p-4 font-bold w-1/4">光線行進方向</th>
+                                    <th class="p-4 font-bold w-1/4">光速變化</th>
+                                    <th class="p-4 font-bold w-1/4">偏折方向</th>
+                                    <th class="p-4 font-bold w-1/4">角度關係</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4">光疏介質 $\to$ 光密介質<br><span class="text-xs text-slate-500">(如：空氣 $\to$ 水)</span></td>
+                                    <td class="p-4 font-bold text-red-600">減慢</td>
+                                    <td class="p-4 font-bold text-blue-700">偏向法線</td>
+                                    <td class="p-4">$i > r$</td>
+                                </tr>
+                                <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4">光密介質 $\to$ 光疏介質<br><span class="text-xs text-slate-500">(如：水 $\to$ 空氣)</span></td>
+                                    <td class="p-4 font-bold text-green-700">變快</td>
+                                    <td class="p-4 font-bold text-amber-600">偏離法線</td>
+                                    <td class="p-4">$i < r$</td>
+                                </tr>
+                                <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4">沿法線垂直入射<br><span class="text-xs text-slate-500">(任何介質之間)</span></td>
+                                    <td class="p-4">改變</td>
+                                    <td class="p-4 font-bold text-slate-500">不偏折</td>
+                                    <td class="p-4">$i = 0^\circ, r = 0^\circ$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="space-y-4 lg:hidden">
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                            <h4 class="font-bold text-slate-800 mb-2">進入光密介質 (空氣$\to$水)</h4>
+                            <p class="text-sm text-slate-600">光速減慢，光線<span class="font-bold text-blue-700">偏向法線</span> ($i > r$)。</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
+                            <h4 class="font-bold text-slate-800 mb-2">進入光疏介質 (水$\to$空氣)</h4>
+                            <p class="text-sm text-slate-600">光速變快，光線<span class="font-bold text-amber-600">偏離法線</span> ($i < r$)。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 w-8"></i> 常見迷思與誤區</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                            <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                            <p class="text-sm">「光垂直射入玻璃時，因為沒有發生偏折（直穿過去），所以這不是折射，光速也沒有改變。」</p>
+                        </div>
+                        <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                            <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                            <p class="text-sm">垂直入射（$i = 0^\circ$）時，雖然傳播方向不變（$r = 0^\circ$），但因為進入了不同介質，<span class="font-bold">光速與波長仍然改變了</span>。因此這仍然屬於折射現象的範疇。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一束光線從空氣中斜射入一塊玻璃，入射角為 $45^\circ$。已知該玻璃的折射率為 $1.5$。求光線在玻璃中的折射角。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">因為光從空氣（$n_1 \approx 1$）進入玻璃，可使用簡化公式：</p>
+                                <div class="overflow-x-auto">$$ n = \frac{\sin i}{\sin r} $$</div>
+                                <div class="overflow-x-auto">$$ 1.5 = \frac{\sin 45^\circ}{\sin r} $$</div>
+                                <div class="overflow-x-auto">$$ \sin r = \frac{\sin 45^\circ}{1.5} \approx \frac{0.707}{1.5} \approx 0.471 $$</div>
+                                <div class="overflow-x-auto">$$ r = \sin^{-1}(0.471) \approx 28.1^\circ $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：折射角約為 $28.1^\circ$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                已知鑽石的折射率為 $2.42$。真空中光速為 $3.0 \times 10^8 \text{ m s}^{-1}$。求光在鑽石中傳播的速度。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">根據折射率定義公式：</p>
+                                <div class="overflow-x-auto">$$ n = \frac{c}{v} \implies v = \frac{c}{n} $$</div>
+                                <div class="overflow-x-auto">$$ v = \frac{3.0 \times 10^8}{2.42} \approx 1.24 \times 10^8 \text{ m s}^{-1} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：光在鑽石中的速度約為 $1.24 \times 10^8 \text{ m s}^{-1}$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一束光線從水中 ($n=1.33$) 射向空氣，光線與水面的夾角為 $50^\circ$。求折射角。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>第一步：找入射角</strong></p>
+                                <p class="mb-2">光線與水面夾角為 $50^\circ$，因此入射角（與法線夾角）為 $90^\circ - 50^\circ = 40^\circ$。</p>
+                                <p class="mb-2 mt-4"><strong>第二步：斯涅耳定律</strong></p>
+                                <div class="overflow-x-auto">$$ n_1 \sin\theta_1 = n_2 \sin\theta_2 $$</div>
+                                <div class="overflow-x-auto">$$ 1.33 \sin 40^\circ = 1.0 \times \sin\theta_2 $$</div>
+                                <div class="overflow-x-auto">$$ \sin\theta_2 = 1.33 \times 0.643 \approx 0.855 $$</div>
+                                <div class="overflow-x-auto">$$ \theta_2 = \sin^{-1}(0.855) \approx 58.8^\circ $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：折射角約為 $58.8^\circ$。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 當光由空氣斜射入水中時，它的傳播方向會如何偏折？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp2-1-1', 'quiz2-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 偏向法線</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-1', 'quiz2-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 偏離法線</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-1', 'quiz2-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 不偏折</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-1', 'quiz2-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 垂直於法線</button>
+                        </div>
+                        <div id="exp2-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 水的折射率大於空氣，光進入光密介質時速度減慢，光線會偏向法線 ($i > r$)。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 某介質的折射率為 2.0。光在該介質中的速度是真空光速的多少倍？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-1-2', 'quiz2-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 2.0 倍</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-1-2', 'quiz2-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 0.5 倍</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-2', 'quiz2-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 1.0 倍</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-2', 'quiz2-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 4.0 倍</button>
+                        </div>
+                        <div id="exp2-1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 根據公式 $n = c/v$，可得 $v = c/n$。折射率為 2.0，所以光速變為真空中的一半 ($0.5c$)。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 將一塊長方形的平行玻璃磚放在白紙上，光線斜向射入並穿過玻璃磚從另一側射出。比較射出光線與入射光線，會發現：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-1-3', 'quiz2-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 射出光線與入射光線重合</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-3', 'quiz2-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 射出光線與入射光線互相垂直</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-1-3', 'quiz2-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 射出光線與入射光線平行，但產生了側向位移</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-3', 'quiz2-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 光線會在玻璃內被完全吸收</button>
+                        </div>
+                        <div id="exp2-1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 光進入平行玻璃磚時偏向法線，出來時偏離法線的角度完全相同。兩次折射互相抵消了角度偏折，所以射出光線與入射光線平行，但會產生一段平移。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 游泳池的底部看起來總是比實際的深度要淺。這是由於什麼物理現象造成的？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp2-1-4', 'quiz2-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 光的折射</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-4', 'quiz2-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 光的反射</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-4', 'quiz2-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 全內反射</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-4', 'quiz2-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 光的直進</button>
+                        </div>
+                        <div id="exp2-1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 池底發出的光線從水（光密）進入空氣（光疏）時，發生折射偏離法線。進入人眼後，人腦將光線直線反向延長，形成的虛像位於實際池底的上方，這稱為視深現象。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz2-1-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 一束光從折射率為 1.5 的玻璃射入折射率為 1.33 的水中。下列敘述何者正確？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-1-5', 'quiz2-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 玻璃是光疏介質，水是光密介質</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-1-5', 'quiz2-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 光線進入水中後會偏離法線</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-5', 'quiz2-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 光在水中的速度比在玻璃中慢</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-5', 'quiz2-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 入射角必大於折射角</button>
+                        </div>
+                        <div id="exp2-1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 玻璃折射率較大為光密介質。光由玻璃進入水（光密入光疏），光速變快，因此光線會偏離法線，折射角大於入射角。
+                        </div>
+                    </div>
+
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 2.2: 全內反射 -->
+            <!-- ========================================== -->
+            <article id="ch2-2" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.2</span>全內反射</h2>
+                    <p class="text-slate-500 mt-2">探索光線被完全困在介質內部的奇妙現象，學習臨界角的計算及其在現代通訊中的應用。</p>
+                </header>
+
+                <!-- 1. 名詞定義 / 核心概念 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 名詞定義與核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">當光從光密介質（如玻璃）射向光疏介質（如空氣）時，折射角會大於入射角。當入射角不斷增大時，會發生特殊的現象：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">臨界角 ($C$)：</span> 是一個特定的入射角。當入射角恰好等於臨界角時，折射角剛好為 $90^\circ$，折射光線會沿着交界面掠過。</li>
+                            <li><span class="text-blue-700 font-bold">全內反射：</span> 若入射角<span class="font-bold">大於</span>臨界角，光線將無法穿透交界面，<span class="font-bold">所有</span>的光線都會像照鏡子一樣反射回原來的介質中。</li>
+                        </ul>
+                        <p class="mt-4 p-3 bg-blue-50 border-l-4 border-blue-500 rounded text-sm">
+                            <strong>發生全內反射的兩個必要條件：</strong><br>
+                            1. 光線必須從 <strong>光密介質射向光疏介質</strong>。<br>
+                            2. 入射角必須 <strong>大於臨界角 ($i > C$)</strong>。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 2. 核心公式 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 臨界角公式</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">利用斯涅耳定律代入臨界狀態（$i = C, r = 90^\circ$），若外部介質為空氣（$n \approx 1$），可推導出臨界角的公式：</p>
+                        <div class="text-center py-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                            $$ \sin C = \frac{1}{n} $$
+                        </div>
+                        <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> 這代表介質的折射率 $n$ 越大，其臨界角 $C$ 就越小，光線越容易發生全內反射（例如鑽石的折射率極大，臨界角很小，故極易發生全內反射而閃閃發光）。</p>
+                    </div>
+                </section>
+
+                <!-- 3. 重要性質 / 物理規律對照 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 入射角對光線行徑的影響</h3>
+                    
+                    <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+                        <table class="w-full text-left text-slate-700">
+                            <thead class="bg-slate-100 border-b border-slate-200">
+                                <tr>
+                                    <th class="p-4 font-bold w-1/4">入射條件 (光密$\to$光疏)</th>
+                                    <th class="p-4 font-bold w-1/4">折射光線</th>
+                                    <th class="p-4 font-bold w-1/4">反射光線</th>
+                                    <th class="p-4 font-bold w-1/4">現象總結</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4">$i < C$</td>
+                                    <td class="p-4">存在，偏離法線。</td>
+                                    <td class="p-4">存在（部分反射），較弱。</td>
+                                    <td class="p-4">普通折射（伴隨微弱反射）。</td>
+                                </tr>
+                                <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4">$i = C$</td>
+                                    <td class="p-4">折射角 $r = 90^\circ$，沿着交界面掠過。</td>
+                                    <td class="p-4">存在，較強。</td>
+                                    <td class="p-4 font-bold text-amber-600">臨界狀態。</td>
+                                </tr>
+                                <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4 font-bold text-red-600">$i > C$</td>
+                                    <td class="p-4 font-bold text-slate-400">不存在（無折射）。</td>
+                                    <td class="p-4 font-bold text-blue-700">極強（100% 能量反射）。</td>
+                                    <td class="p-4 font-bold text-blue-700">全內反射發生！</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 行動版 Cards -->
+                    <div class="space-y-4 lg:hidden">
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-slate-400"></div>
+                            <h4 class="font-bold text-slate-800 mb-2">$i < C$ (入射角小於臨界角)</h4>
+                            <p class="text-sm text-slate-600">光線主要折射進入空氣中，只有少部分被反射回介質。</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
+                            <h4 class="font-bold text-amber-800 mb-2">$i = C$ (臨界狀態)</h4>
+                            <p class="text-sm text-slate-600">折射光線沿介面掠過（折射角 $90^\circ$）。</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                            <h4 class="font-bold text-blue-800 mb-2">$i > C$ (全內反射)</h4>
+                            <p class="text-sm text-slate-600">折射光線消失，100% 的光線被反射回原介質。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. 典型例題解說 -->
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                已知水的折射率為 $1.33$。求水進入空氣的臨界角。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">代入臨界角公式：</p>
+                                <div class="overflow-x-auto">$$ \sin C = \frac{1}{n} = \frac{1}{1.33} \approx 0.7519 $$</div>
+                                <div class="overflow-x-auto">$$ C = \sin^{-1}(0.7519) \approx 48.8^\circ $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：水的臨界角約為 $48.8^\circ$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一束光線在玻璃（$n=1.5$）中行進，並以 $50^\circ$ 的入射角射向玻璃與空氣的交界面。判斷光線是否能穿透進入空氣中。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>第一步：求出玻璃的臨界角</strong></p>
+                                <div class="overflow-x-auto">$$ \sin C = \frac{1}{1.5} \approx 0.667 \implies C \approx 41.8^\circ $$</div>
+                                <p class="mb-2 mt-4"><strong>第二步：比較入射角與臨界角</strong></p>
+                                <p class="mb-2">現在的入射角 $i = 50^\circ$，大於臨界角 $41.8^\circ$。而且光是從光密（玻璃）射向光疏（空氣）。兩個條件皆滿足。</p>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：發生全內反射，光線無法穿透進入空氣。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                光導纖維（光纖）是現代寬頻網絡的骨幹。請解釋光纖如何利用本節學到的原理將光信號傳送幾百公里遠而不漏失。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">光纖內部由高折射率的核心（光密）被低折射率的包層（光疏）所包圍。</p>
+                                <p class="mb-2">當光信號以極大的入射角（大於臨界角）射入光纖核心的內壁時，會發生連續的<span class="font-bold text-blue-700">全內反射</span>。光線不斷在內壁彈射前進，無法穿透包層逃逸，因此信號能以極低的能量損耗長距離傳輸。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <!-- 5. 隨堂測驗 -->
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-2-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 發生全內反射的其中一個必要條件是：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-2-1', 'quiz2-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 光線必須由光疏介質射向光密介質</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-2-1', 'quiz2-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 光線必須由光密介質射向光疏介質</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-1', 'quiz2-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 入射角必須小於臨界角</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-1', 'quiz2-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 入射角必須等於零</button>
+                        </div>
+                        <div id="exp2-2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 全內反射只能發生在光線試圖從折射率大（光速慢）的介質進入折射率小（光速快）的介質時。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-2-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 介質的「臨界角」是指當折射角為多少度時，對應的入射角？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-2-2', 'quiz2-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $0^\circ$</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-2', 'quiz2-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $45^\circ$</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-2-2', 'quiz2-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $90^\circ$</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-2', 'quiz2-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $180^\circ$</button>
+                        </div>
+                        <div id="exp2-2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 臨界角定義為折射光線剛好沿介面掠過時（折射角 $r = 90^\circ$）的入射角。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-2-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 關於全內反射與普通平面鏡反射的比較，下列何者正確？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-2-3', 'quiz2-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 平面鏡反射的能量損失比全內反射少</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-2-3', 'quiz2-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 全內反射是 100% 的能量反射，比平面鏡更佳</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-3', 'quiz2-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 兩者皆只能在光密介質中發生</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-3', 'quiz2-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 全內反射不遵守反射定律</button>
+                        </div>
+                        <div id="exp2-2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 鍍銀的平面鏡總會吸收極少部分的能量，但全內反射可以做到幾乎完美的 100% 能量反射。這使得它在光學儀器（如潛望鏡中的稜鏡）中非常重要。全內反射同樣遵守反射定律（反射角＝入射角）。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-2-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 某種透明材料的折射率為 $n = 2.0$。它的臨界角是：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp2-2-4', 'quiz2-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $30^\circ$</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-4', 'quiz2-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $45^\circ$</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-4', 'quiz2-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $60^\circ$</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-4', 'quiz2-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $90^\circ$</button>
+                        </div>
+                        <div id="exp2-2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> $\sin C = \frac{1}{n} = \frac{1}{2.0} = 0.5$。因為 $\sin 30^\circ = 0.5$，所以 $C = 30^\circ$。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz2-2-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 夏天在炎熱的高速公路上，遠處的路面看起來像是一灘水，但靠近後卻消失了。這個「海市蜃樓」現像是基於甚麼物理原理？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-2-5', 'quiz2-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 漫反射</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-5', 'quiz2-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 光的直進</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-2-5', 'quiz2-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 全內反射</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-5', 'quiz2-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 光的衍射</button>
+                        </div>
+                        <div id="exp2-2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 貼近路面的空氣很熱，密度低（折射率小），而上方空氣較冷，密度高（折射率大）。天空的光線從上（光密）向下（光疏）傳播時發生不斷的折射，當入射角大於臨界角時發生全內反射向上進入人眼。人腦以為光直線傳播，就看到了天空在地面上的倒影（像水一樣）。
+                        </div>
+                    </div>
+
+                </section>
+            </article>
             
 <!-- ========================================== -->
           
