@@ -213,23 +213,6 @@
                     </li>
                 </ul>
             </div>
-
-                        <!-- 第 5 章 -->
-            <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 5 章：力矩</h2>
-                <ul class="space-y-1">
-                    <li>
-                        <button onclick="switchPage('ch5-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            5.1 力的轉動效應與剛體平衡
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="switchPage('ch5-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            5.2 剛體的平衡
-                        </button>
-                    </li>
-                </ul>
-            </div>
             
         </nav>
 
@@ -279,7 +262,700 @@
             
 <!-- ========================================== -->
 
+    
+            <!-- ========================================== -->
+            <!-- 區塊 1.1: 宇宙的層階組織 -->
+            <!-- ========================================== -->
+            <article id="ch1-1" class="content-section block">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.1</span>宇宙的層階組織</h2>
+                    <p class="text-slate-500 mt-2">認識構成宇宙的各類天體，並了解它們從微觀到宏觀的層次與組織結構。</p>
+                </header>
 
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">宇宙浩瀚無垠，包含了形形色色的天體。這些天體並非雜亂無章地散佈，而是透過萬有引力互相牽引，形成由小到大的層階組織：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">衞星：</span> 圍繞行星運行的天體。例如月球是地球的天然衞星。</li>
+                            <li><span class="text-blue-700 font-bold">行星：</span> 圍繞恆星運行的大型天體，本身不會發光，靠反射恆星的光發亮。例如地球、火星。</li>
+                            <li><span class="text-blue-700 font-bold">恆星：</span> 能夠透過內部核聚變產生能量並自行發光發熱的巨大氣體球。太陽是距離我們最近的恆星。</li>
+                            <li><span class="text-blue-700 font-bold">星系：</span> 由大量恆星、星團、星雲、氣體和塵埃組成，並被引力束縛在一起的龐大系統。我們的太陽系位於銀河系中。</li>
+                            <li><span class="text-blue-700 font-bold">星系團與超星系團：</span> 數十到數千個星系因引力結合形成的更大結構。宇宙就是由無數的超星系團交織而成。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 太陽系與其他小天體</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">我們的太陽系由中心的太陽，以及受其引力束縛的八大行星、矮行星、衞星和其他小天體組成。除了行星和衞星外，常見的小天體包括：</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2">小行星</p>
+                                <p class="text-sm text-slate-600 mt-2">主要由岩石和金屬組成的碎片。多數集中在火星和木星軌道之間的小行星帶。</p>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2">彗星</p>
+                                <p class="text-sm text-slate-600 mt-2">由冰、岩石和塵埃組成的「太空髒雪球」。接近太陽時冰會汽化，形成長長的彗尾。</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                從物理特性的角度，說明「恆星」與「行星」之間最根本的差別是什麼？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>恆星：</strong> 質量極大，其中心溫度和壓強足以引發穩定的核聚變反應，因此能夠自行發光發熱。</p>
+                                <p class="mb-2"><strong>行星：</strong> 質量較小，內部無法進行核聚變。本身不會發光，我們能看見行星是因為它們反射恆星的光線。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                根據宇宙的層階組織，將以下四個天體或系統由小到大進行排列：<br>太陽系、宇宙、地球、銀河系。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">地球是行星；太陽系是由太陽及行星等構成的系統；銀河系包含了千億顆像太陽一樣的恆星系統；宇宙則包含了所有的星系。</p>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：地球 $\rightarrow$ 太陽系 $\rightarrow$ 銀河系 $\rightarrow$ 宇宙。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                當我們用肉眼觀察夜空時，看到的滿天「星星」中，有一些光點的位置在不同夜晚之間會相對於其他星星發生明顯的移動。這些移動的光點通常屬於哪一類天體？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">恆星距離我們極其遙遠，因此它們在天空中的相對位置看起來幾乎是固定不變的。</p>
+                                <p class="mb-2">然而，太陽系內的行星距離我們較近，而且它們與地球一樣圍繞太陽公轉，因此在夜空中，它們相對於背景恆星的位置會不斷變化。</p>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：這些會移動的光點通常是太陽系內的行星（如金星、火星、木星）。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 能夠透過內部核反應自行發光發熱的天體被稱為：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 行星</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 恆星</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 衞星</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 彗星</button>
+                        </div>
+                        <div id="exp1-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 恆星擁有足夠的質量引發核反應發光。行星、衞星和彗星本身皆不發光，主要依靠反射恆星的光。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 我們的地球所屬的星系名稱是甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 仙女座星系</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 太陽系</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 銀河系</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 大麥哲倫星系</button>
+                        </div>
+                        <div id="exp1-1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 地球屬於太陽系，而太陽系只是銀河系邊緣的其中一個恆星系統。因此地球所屬的「星系」為銀河系。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 關於「星雲」的敘述，下列哪一項最為準確？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 它是太空中由大量氣體和塵埃組成的雲霧狀天體</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 它是多個星系組成的龐大集團</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 它是即將撞擊地球的小行星群</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 它是黑洞吞噬恆星後留下的殘骸</button>
+                        </div>
+                        <div id="exp1-1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 星雲（Nebula）是星際空間中由稀薄氣體（主要是氫和氦）與塵埃聚集而成的雲霧狀天體，通常是恆星誕生或死亡的地方。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 月球在宇宙層階組織中，屬於哪一種天體？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 矮行星</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 行星</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 小行星</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 衞星</button>
+                        </div>
+                        <div id="exp1-1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 月球繞着行星（地球）運行，因此被分類為地球的天然衞星。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-1-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 彗星在接近太陽時會形成長長的尾巴，這是因為：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 其內部的冰受熱汽化，釋放出氣體和塵埃</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 彗星表面的岩石正在劇烈燃燒</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 彗星撞擊太空垃圾產生的碎片</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 受到太陽引力撕裂所致</button>
+                        </div>
+                        <div id="exp1-1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 彗星被稱為「太空髒雪球」。當它接近太陽時，太陽的熱力使冰昇華（汽化），連同塵埃被太陽風吹向背向太陽的方向，形成發光的彗尾。
+                        </div>
+                    </div>
+
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 1.2: 描述空間標度 -->
+            <!-- ========================================== -->
+            <article id="ch1-2" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.2</span>描述空間標度</h2>
+                    <p class="text-slate-500 mt-2">介紹天文學中用來測量浩瀚宇宙距離的特殊長度單位，掌握其定義與換算。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">在宇宙中，天體之間的距離極度遙遠。如果使用日常的米或公里來描述，數字會大得難以書寫和理解。因此，天文學家定義了三個專用的長度單位：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">天文單位 ($\text{AU}$)：</span> 太陽到地球的平均距離。通常用來量度太陽系內部天體之間的距離。</li>
+                            <li><span class="text-blue-700 font-bold">光年 ($\text{ly}$)：</span> 光在真空中行走一年的距離。雖然名字裡有「年」，但它絕對是一個<span class="font-bold text-red-600">長度（距離）單位</span>。通常用來量度恆星之間的距離。</li>
+                            <li><span class="text-blue-700 font-bold">秒差距 ($\text{pc}$)：</span> 這是一個更大的距離單位，基於視差測量法定義。通常用來量度星系規模的遙遠距離。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 單位轉換與數值關係</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">這三個天文單位的近似數值及轉換關係如下：</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2">天文單位</p>
+                                <p class="text-xl font-bold">$$ 1 \text{ AU} \approx 1.50 \times 10^{11} \text{ m} $$</p>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2">光年</p>
+                                <p class="text-xl font-bold">$$ 1 \text{ ly} \approx 9.46 \times 10^{15} \text{ m} $$</p>
+                            </div>
+                        </div>
+                        <p class="text-center font-bold text-lg text-slate-800 my-4">$$ 1 \text{ pc} \approx 3.26 \text{ ly} \approx 3.09 \times 10^{16} \text{ m} $$</p>
+                        <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> <strong>大小比較：</strong> $1 \text{ pc} > 1 \text{ ly} \gg 1 \text{ AU}$。</p>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                木星距離太陽的平均距離約為 $7.78 \times 10^{11} \text{ m}$。試將此距離轉換為天文單位 ($\text{AU}$)。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">已知 $1 \text{ AU} = 1.50 \times 10^{11} \text{ m}$。</p>
+                                <p class="mb-2">要將公尺轉換為天文單位，需將距離除以 $1 \text{ AU}$ 的數值：</p>
+                                <div class="overflow-x-auto">$$ \text{距離 (AU)} = \frac{7.78 \times 10^{11}}{1.50 \times 10^{11}} \approx 5.19 \text{ AU} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：木星與太陽的距離約為 $5.19 \text{ AU}$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                距離太陽系最近的恆星「比鄰星」距離我們約 $4.24 \text{ ly}$。光從比鄰星出發，需要多少時間才能到達地球？請解釋光年這個單位的本質。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">光年 ($\text{ly}$) 定義為光在真空中行走 1 年的距離。因此，距離我們 $4.24$ 光年的天體，其發出的光必須經過 $4.24$ 年才能抵達地球。</p>
+                                <p class="mb-2"><strong>解釋：</strong> 雖然光年這個詞包含「年」，但它是一個用來量度空間<strong>長度（距離）</strong>的單位，而不是時間單位。</p>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：需要 $4.24$ 年。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                天文學家觀測到一個遙遠的星系，距離地球約為 $10 \text{ Mpc}$（百萬秒差距）。試將此距離轉換為光年 ($\text{ly}$)。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">1. 首先處理前綴「百萬 ($\text{M}$)」：</p>
+                                <div class="overflow-x-auto">$$ 10 \text{ Mpc} = 10 \times 10^6 \text{ pc} = 10^7 \text{ pc} $$</div>
+                                <p class="mb-2 mt-2">2. 利用換算關係 $1 \text{ pc} = 3.26 \text{ ly}$：</p>
+                                <div class="overflow-x-auto">$$ 10^7 \text{ pc} = 10^7 \times 3.26 \text{ ly} = 3.26 \times 10^7 \text{ ly} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：該星系距離地球約 $3260$ 萬光年。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 若要描述火星與太陽之間的距離，使用下列哪一個單位最為合適且直觀？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 光年 (ly)</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 米 (m)</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 秒差距 (pc)</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 天文單位 (AU)</button>
+                        </div>
+                        <div id="exp1-2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 天文單位是以地球到太陽的距離為基準，最適合用來表示太陽系內部行星尺度的距離。光年和秒差距太大，米又太小。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 物理學中，「光年」這個單位是用來測量什麼的？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 時間</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 距離</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 速度</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 光的亮度</button>
+                        </div>
+                        <div id="exp1-2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 光年定義為光在真空中直線傳播一年的路程，因此它是一個長度（距離）單位。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 下列哪一項正確列出了空間標度單位由小到大的排序？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $\text{AU} < \text{ly} < \text{pc}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $\text{ly} < \text{AU} < \text{pc}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $\text{pc} < \text{ly} < \text{AU}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $\text{AU} < \text{pc} < \text{ly}$</button>
+                        </div>
+                        <div id="exp1-2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> $1 \text{ AU}$ 約等於 8 光分，$1 \text{ ly}$ 等於 63241 $\text{AU}$，$1 \text{ pc}$ 約等於 $3.26 \text{ ly}$。故順序為 $\text{AU} < \text{ly} < \text{pc}$。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 地球與太陽的平均距離，約為多少天文單位？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $1.5 \times 10^{11} \text{ AU}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $8 \text{ AU}$</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $1 \text{ AU}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $3.26 \text{ AU}$</button>
+                        </div>
+                        <div id="exp1-2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 天文單位 ($\text{AU}$) 本身的定義就是太陽與地球之間的平均距離。所以這段距離剛好是 $1 \text{ AU}$。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-2-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 若要描述星系團或宇宙尺度的極遙遠距離，天文學家通常會選用哪一個單位的衍生形式？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 千米 (km)</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 百萬秒差距 (Mpc)</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 光年 (ly)</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 天文單位 (AU)</button>
+                        </div>
+                        <div id="exp1-2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 對於星系或星系團之間那動輒數千萬光年以上的距離，使用秒差距的百萬倍形式（$\text{Mpc}$，Megaparsec）最為簡潔方便。
+                        </div>
+                    </div>
+
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 1.3: 行星運動模型 -->
+            <!-- ========================================== -->
+            <article id="ch1-3" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.3</span>行星運動模型</h2>
+                    <p class="text-slate-500 mt-2">回顧人類對宇宙中心認知的歷史演變，比較地心模型與日心模型的差異，並解釋逆行運動。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">古人在觀察星空時，發現太陽、月亮和滿天繁星似乎都在繞着地球轉。為了解釋這些現象，歷史上出現了兩種主導的宇宙模型：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">地心模型：</span> 由古希臘天文學家托勒密完善。該模型認為<span class="font-bold text-blue-700">地球是宇宙的中心</span>且靜止不動，所有天體（包括太陽和行星）都繞着地球作完美的圓周運動。</li>
+                            <li><span class="text-blue-700 font-bold">日心模型：</span> 由波蘭天文學家哥白尼在16世紀提出。該模型認為<span class="font-bold text-blue-700">太陽才是宇宙的中心</span>（或太陽系的中心），地球和其他行星都以圓形軌道繞着太陽公轉。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 解釋逆行運動</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">當我們在地球上連續幾個月觀察火星時，會發現它通常在背景恆星中向東移動，但有時會突然「掉頭」向西移動一段時間，然後再恢復向東移動。這稱為<span class="text-blue-700 font-bold">逆行運動</span>。兩種模型對此有截然不同的解釋：</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                            <div class="bg-white p-4 rounded border border-blue-100">
+                                <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">托勒密的地心模型解釋</p>
+                                <p class="text-sm text-slate-600 mt-2">引入了複雜的幾何構造：行星在一個小圓（<span class="font-bold">本輪</span>）上轉動，而這個本輪的中心又沿着一個繞着地球的大圓（<span class="font-bold">均輪</span>）轉動。當行星在本輪上運行到靠近地球的內側時，就會產生倒退的視覺效果。</p>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-blue-100">
+                                <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">哥白尼的日心模型解釋</p>
+                                <p class="text-sm text-slate-600 mt-2">解釋非常自然：因為地球在內側軌道，公轉速度比外側的火星快。當地球在軌道上「超車」火星時，從地球上看過去，火星在背景星空中的投影就會顯得正在往後退。</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                托勒密為了讓地心模型能吻合行星觀測到的「逆行運動」，在模型中加入了什麼特殊的幾何軌道設定？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">為了解釋行星看似倒退的現象，托勒密引入了「本輪」與「均輪」的概念。</p>
+                                <p class="mb-2">他假設行星並非直接繞地球作單一的圓周運動，而是行星在一個較小的圓圈（本輪）上運行，同時這個本輪的中心沿着一個以地球為中心的大圓圈（均輪）運行。這種複雜的雙重旋轉製造出了逆行的視覺效果。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                在哥白尼的日心模型中，地球與太陽的位置關係是什麼？他最初假設行星的軌道形狀是什麼？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>位置關係：</strong> 太陽位於宇宙（或太陽系）的中心保持靜止，而地球只是其中一顆行星，繞著太陽運行。</p>
+                                <p class="mb-2"><strong>軌道形狀：</strong> 哥白尼最初的模型仍然保留了古希臘「天體必定作完美運動」的思想，因此他假設所有行星的公轉軌道都是完美的<strong>圓形</strong>。（後來克卜勒才修正為橢圓形）。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                簡述在日心模型中，為什麼我們會觀察到火星發生「逆行運動」。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">在日心模型中，地球的軌道比火星更靠近太陽，因此地球的公轉速度比火星快。</p>
+                                <p class="mb-2">當地球在軌道上運行並從內側「追過（超越）」火星時，由於相對運動的視覺效果，身處地球上的我們看火星，就會覺得火星相對於遙遠的背景恆星正在往後退。一旦超車完成，火星又會恢復向前移動。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 托勒密完善的宇宙模型中，位於中心位置的天體是甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-3-1', 'quiz1-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 太陽</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-3-1', 'quiz1-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 地球</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-1', 'quiz1-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 月球</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-1', 'quiz1-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 火星</button>
+                        </div>
+                        <div id="exp1-3-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 托勒密模型是典型的「地心說」，認為地球靜止地位於宇宙的中心。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 哥白尼提出的「日心模型」最大的突破在於：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-3-2', 'quiz1-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 證明了行星的軌道是橢圓形的</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-2', 'quiz1-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 發現了太陽黑子</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-3-2', 'quiz1-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 將太陽置於中心，地球和其他行星繞太陽運行</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-2', 'quiz1-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 引入了「本輪」來解釋行星運動</button>
+                        </div>
+                        <div id="exp1-3-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 哥白尼大膽顛覆了長達千年的地心觀念，提出太陽中心說。不過他當時依然認為軌道是完美的圓形。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 托勒密模型中引入「本輪」的直接目的是為了解決哪一個天文觀測現象？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp1-3-3', 'quiz1-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 行星的逆行運動</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-3', 'quiz1-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 太陽的升起與落下</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-3', 'quiz1-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 月球相位的變化</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-3', 'quiz1-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 季節的更替</button>
+                        </div>
+                        <div id="exp1-3-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 為了在「地球為中心」的框架下解釋行星為什麼有時候會「倒退走」，托勒密只能設計出大圓包小圓的複雜「本輪」系統來擬合觀測數據。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 根據日心模型的解釋，火星發生逆行運動是因為：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-3-4', 'quiz1-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 火星有時會反方向倒退飛行</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-4', 'quiz1-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 火星在自己的本輪上轉到了靠近地球的一側</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-3-4', 'quiz1-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 地球在內側軌道上運行較快，從內側超越了火星</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-4', 'quiz1-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 太陽的引力發生了改變</button>
+                        </div>
+                        <div id="exp1-3-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 這是一個純粹的相對運動視覺現象。當內圈跑得快的地球追過外圈的火星時，火星看起來就像在往後退。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-3-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 不論是早期的托勒密模型還是哥白尼模型，兩者都有一個共同的錯誤假設，這個假設是：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 太陽是靜止不動的</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 地球是平的</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 天體的運行軌道必須是完美的圓形或由圓形組合而成</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 宇宙只有太陽系那麼大</button>
+                        </div>
+                        <div id="exp1-3-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 受限於古希臘對於「完美幾何」的哲學信仰，他們都堅信天體必須作完美的圓周運動。直到後來克卜勒分析了精確的觀測數據，才確認行星軌道其實是橢圓形的。
+                        </div>
+                    </div>
+
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 1.4: 伽利略的天文發現 -->
+            <!-- ========================================== -->
+            <article id="ch1-4" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.4</span>伽利略的天文發現</h2>
+                    <p class="text-slate-500 mt-2">回顧伽利略如何利用望遠鏡獲取顛覆性的觀測證據，給予地心說致命一擊並奠定現代天文學基礎。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">1609 年，意大利科學家<span class="text-blue-700 font-bold">伽利略</span>將剛發明不久的望遠鏡指向天空。他的觀測結果徹底摧毀了古希臘「天體是完美無瑕」以及「所有天體都繞地球運行」的傳統信念，為哥白尼的日心說提供了強有力的實證支持。</p>
+                        <p>他有四項極為關鍵的天文發現：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2 mt-2">
+                            <li><strong class="text-blue-700 font-bold">月球表面：</strong> 佈滿了山脈和隕石坑，證明月球與地球一樣崎嶇不平，並非完美光滑的球體。</li>
+                            <li><strong class="text-blue-700 font-bold">太陽黑子：</strong> 太陽表面有暗斑且會移動，證明太陽本身也不完美，且正在自轉。</li>
+                            <li><strong class="text-blue-700 font-bold">木星的衞星：</strong> 發現了四顆圍繞木星運轉的衞星。</li>
+                            <li><strong class="text-blue-700 font-bold">金星的盈虧：</strong> 觀察到金星有像月亮一樣完整的盈虧相位變化。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 關鍵證據的推論</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">伽利略的發現是如何反駁地心說的？</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2">木星衞星的意義</p>
+                                <p class="text-sm text-slate-600 mt-2">這四顆衞星明顯是在繞着木星轉，而不是繞着地球轉。這直接打破了地心說中「地球是所有天體唯一旋轉中心」的鐵律。</p>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2">金星盈虧的意義</p>
+                                <p class="text-sm text-slate-600 mt-2">地心說預測金星永遠位於地球和太陽之間，只能看到「新月形」；但伽利略卻觀測到了金星的「滿相（全圓）」。這只有在金星能繞到太陽背後時（即日心說）才可能發生。</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                古希臘哲學家（如亞里士多德）認為天界與地界由完全不同的物質組成，天體是完美無瑕且永恆不變的球體。伽利略的哪些觀測結果直接反駁了這個觀點？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">伽利略利用望遠鏡作出了兩項關鍵觀測來反駁天體完美的觀念：</p>
+                                <p class="mb-2">1. <strong>月球表面：</strong> 他看到月球表面佈滿了高山和深谷（隕石坑），證明月球就像地球一樣崎嶇，不是完美的幾何球體。</p>
+                                <p class="mb-2">2. <strong>太陽黑子：</strong> 他發現太陽這個「最完美」的天體表面竟然有暗斑（黑子），而且這些斑點會改變和移動，證明太陽也是不完美的且會變化的。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                在托勒密的地心模型中，他認為金星永遠在地球與太陽之間的軌道上運行。根據這個模型，我們從地球上觀看金星，應該只能看到什麼形狀的相位？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">如果金星永遠在地球與太陽之間，那麼太陽照亮金星的那一面將絕大部分背對著地球。</p>
+                                <p class="mb-2">因此，從地球上看過去，金星永遠只能呈現出類似月亮初一前后的 <strong>「新月形」或「殘月形」</strong> 的相位，永遠不可能看到半滿甚至全滿的金星。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                承上題，伽利略實際觀測到了金星完整的盈虧變化（包括滿相）。這為何能成為支持哥白尼「日心說」的鐵證？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">要看到金星呈現「滿相（全圓）」，金星必須轉到太陽的另一側，讓它被照亮的那一面完全朝向地球。</p>
+                                <p class="mb-2">在哥白尼的日心說中，太陽在中心，金星在內側軌道繞日，地球在外側軌道繞日。當金星運行到太陽背後（遠離地球的那一側）時，我們就能看見金星的滿相。</p>
+                                <p class="mb-2">伽利略的觀測結果與日心說的預測完全吻合，從而徹底推翻了地心說對金星軌道的假設。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-4-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 伽利略是第一位將哪種儀器用於天文觀測，從而取得重大突破的科學家？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-4-1', 'quiz1-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 顯微鏡</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-4-1', 'quiz1-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 指南針</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-4-1', 'quiz1-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 望遠鏡</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-4-1', 'quiz1-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 星盤</button>
+                        </div>
+                        <div id="exp1-4-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 望遠鏡剛在荷蘭被發明後，伽利略親自製作了改良版的望遠鏡並將其指向星空，開啟了現代觀測天文學的時代。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-4-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 伽利略發現了四顆衞星圍繞著某一顆行星運行。這顆行星是：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-4-2', 'quiz1-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 火星</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-4-2', 'quiz1-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 木星</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-4-2', 'quiz1-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 金星</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-4-2', 'quiz1-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 土星</button>
+                        </div>
+                        <div id="exp1-4-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 他發現的這四顆衞星被稱為「伽利略衞星」（木衞一到木衞四）。這證明了並非所有天體都繞著地球轉。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-4-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 伽利略觀察到太陽表面有黑斑（太陽黑子）且位置會移動。這項發現證明了甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-4-3', 'quiz1-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 證明了太陽繞著地球轉</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-4-3', 'quiz1-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 證明了天體並非完美無瑕，且太陽正在自轉</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-4-3', 'quiz1-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 證明了日食的成因</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-4-3', 'quiz1-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 證明了太陽即將熄滅</button>
+                        </div>
+                        <div id="exp1-4-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 黑子的存在打破了古代「天體由完美物質構成，完美無瑕」的觀念。黑子位置的週期性移動則說明太陽本身具有自轉運動。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-4-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 下列哪一項伽利略的觀測結果，提供了最強而有力的證據來<strong>直接推翻</strong>托勒密的地心模型？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-4-4', 'quiz1-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 月球表面的隕石坑</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-4-4', 'quiz1-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 太陽黑子</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-4-4', 'quiz1-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 金星完整的盈虧變化（包括滿相）</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-4-4', 'quiz1-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 銀河由無數恆星組成</button>
+                        </div>
+                        <div id="exp1-4-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 月坑和黑子只推翻了「天體完美論」。但地心說在幾何上絕對不允許金星出現滿相。看見金星滿相，證明地心說在軌道結構的假設上是根本錯誤的。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-4-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 發現木星有四顆衞星後，人們的宇宙觀受到了甚麼衝擊？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp1-4-5', 'quiz1-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 意識到地球並非宇宙中唯一的天體旋轉中心</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-4-5', 'quiz1-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 證實了木星是太陽系的中心</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-4-5', 'quiz1-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 證明了引力是萬有的</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-4-5', 'quiz1-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 發現了木星上也有生命</button>
+                        </div>
+                        <div id="exp1-4-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 當時的地心說信徒認為所有天體都必須繞地球旋轉。木星衞星的發現，清楚展示了有天體是繞著「非地球」的中心旋轉的。
+                        </div>
+                    </div>
+
+                </section>
+            </article>
 
           
 <!-- ========================================== -->
