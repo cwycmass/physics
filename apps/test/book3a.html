@@ -231,6 +231,541 @@
 
 <!-- ========================================== -->
 
+            <!-- ========================================== -->
+            <!-- 區塊 1.1: 光線 -->
+            <!-- ========================================== -->
+            <article id="ch1-1" class="content-section block hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.1</span>光線</h2>
+                    <p class="text-slate-500 mt-2">理解光的傳播方式，認識光源與發光體，並掌握光沿直線傳播的物理證據與幾何表示法。</p>
+                </header>
+
+                <!-- 1. 名詞定義 / 核心概念 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 名詞定義與核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">我們之所以能看見世上的萬物，是因為有光進入我們的眼睛。物理學中，我們將物體與光的關係作如下定義：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><span class="text-blue-700 font-bold">發光體：</span> 自身能夠發射光的物體。例如：太陽、燃燒中的蠟燭、發光的二極管、螢火蟲。</li>
+                            <li><span class="text-blue-700 font-bold">非發光體：</span> 自身不能發光，必須反射其他光源的光才能被看見的物體。例如：月球、書本、桌子、鏡子。</li>
+                            <li><span class="text-blue-700 font-bold">光沿直線傳播：</span> 在均勻介質中，光是沿著直線行進的。古希臘和阿拉伯科學家阿爾哈曾透過小孔實驗證實了這點。</li>
+                            <li><span class="text-blue-700 font-bold">光線與光束：</span> 在幾何光學中，我們用一條帶有箭頭的直線來代表光的傳播路徑，稱為<span class="text-blue-700 font-bold">光線</span>，箭頭指向代表光的傳播方向。大量光線的集合則稱為<span class="text-blue-700 font-bold">光束</span>。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 2. 重要性質 / 物理規律對照 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 不同光束類型對照</h3>
+                    
+                    <!-- 桌面版 Table (lg:block) -->
+                    <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+                        <table class="w-full text-left text-slate-700">
+                            <thead class="bg-slate-100 border-b border-slate-200">
+                                <tr>
+                                    <th class="p-4 font-bold w-1/4">光束種類</th>
+                                    <th class="p-4 font-bold w-3/8 text-blue-800">物理特徵</th>
+                                    <th class="p-4 font-bold w-3/8 text-emerald-800">常見例子</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4 font-bold">平行光束</td>
+                                    <td class="p-4">所有光線互相平行，光束粗細不變。</td>
+                                    <td class="p-4">激光束、陽光（因距離極遠而近似平行）。</td>
+                                </tr>
+                                <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4 font-bold">發散光束</td>
+                                    <td class="p-4">光線自同一點向外散開，越傳播越寬。</td>
+                                    <td class="p-4">點光源（如小燈泡、點燃的蠟燭）發出的光。</td>
+                                </tr>
+                                <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4 font-bold">會聚光束</td>
+                                    <td class="p-4">所有光線朝著同一個交點靠攏。</td>
+                                    <td class="p-4">通過凸透鏡折射後的陽光、凹面鏡反射的光。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 行動版 Cards (lg:hidden) -->
+                    <div class="space-y-4 lg:hidden">
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                            <h4 class="font-bold text-blue-800 mb-2">平行光束</h4>
+                            <p class="text-sm text-slate-600">光線互不相交。例子：激光。</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+                            <h4 class="font-bold text-emerald-800 mb-2">發散光束</h4>
+                            <p class="text-sm text-slate-600">由一點向外發散。例子：電筒的光。</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-purple-500"></div>
+                            <h4 class="font-bold text-purple-800 mb-2">會聚光束</h4>
+                            <p class="text-sm text-slate-600">光線向同一點靠攏。例子：放大鏡聚焦的光。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. 常見迷思與誤區 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-blue-500 w-8"></i> 常見迷思與誤區</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                            <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                            <p class="text-sm">「我們之所以能在黑暗中看見一本書，是因為我們的眼睛發射了微弱的光去照亮它。」</p>
+                        </div>
+                        <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                            <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                            <p class="text-sm">眼睛本身不能發光，看見物體必須有外部發光體的光，照射到非發光體（書本）表面並發生<span class="font-bold">反射</span>，反射光進入我們的眼睛，我們才能看見。若完全沒有光源，眼睛在黑暗中甚麼也看不見。</p>
+                        </div>
+                        <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                            <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                            <p class="text-sm">「光線是真實存在於空間中的一條條極細的線。」</p>
+                        </div>
+                        <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                            <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                            <p class="text-sm">「光線」只是物理學家為了方便研究而引入的一種<span class="font-bold">假想幾何模型</span>，用以代表光的行進路線。空間中實際存在的是光波或光子，並非一條條實體的線。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. 典型例題解說 -->
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                判斷下列物體，哪些是發光體，哪些是非發光體：<br>
+                                (1) 發光中的螢火蟲；(2) 皎潔的月亮；(3) 貓的眼睛在黑暗中閃閃發光；(4) 電腦屏幕。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>(1) 螢火蟲：</strong> 自身體內化學反應能發光，是<strong>發光體</strong>。</p>
+                                <p class="mb-2"><strong>(2) 月亮：</strong> 月球自身不發光，只是反射太陽的光，是<strong>非發光體</strong>。</p>
+                                <p class="mb-2"><strong>(3) 貓的眼睛：</strong> 貓眼自身不發光，只是因為其視網膜後方有反射膜，能高效反射外界的微弱光線，是<strong>非發光體</strong>。</p>
+                                <p class="mb-2"><strong>(4) 電腦屏幕：</strong> 內部有背光源發光，是<strong>發光體</strong>。</p>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：發光體有 (1)、(4)；非發光體有 (2)、(3)。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                阿爾哈曾做了一個實驗：在暗室的牆壁上開一個小孔，外面的景物會透過小孔在對面牆壁上形成一個倒立的像。這就是小孔成像現象。試畫圖並解釋為甚麼小孔成像的像是倒立的？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">這現象是<span class="font-bold text-blue-700">光沿直線傳播</span>的直接證據。</p>
+                                <p class="mb-2">1. 設戶外有一棵樹。樹頂發出的光線，必須沿直線穿過小孔，因此這條光線必然射向內側牆壁的下方。</p>
+                                <p class="mb-2">2. 同理，樹底（根部）發出的光線，穿過小孔後，必然射向內側牆壁的上方。</p>
+                                <p class="mb-2">3. 左側發出的光線射向右側，右側發出的光線射向左側。</p>
+                                <p class="mb-2">因此，在牆壁上接收到的像是上下顛倒、左右相反的倒立實像。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                日食（如日全食、日偏食）是一種壯麗的天文奇觀。請用本節學到的物理學原理解釋日食是怎樣形成的？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">日食的形成是基於<span class="font-bold text-blue-700">光沿直線傳播</span>與<span class="font-bold text-blue-700">影子</span>的形成原理。</p>
+                                <p class="mb-2">當月球運行到太陽和地球之間，三者剛好排成一條直線時，太陽發出的光線被不透明的月球阻擋。由於光只能沿直線傳播，無法繞過月球，因此在月球後方會產生一塊陰影區域。當這塊陰影投影到地球表面時，身處影子區域內的人們就會看到太陽被部分或全部遮擋，這就是日食。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <!-- 5. 隨堂測驗 -->
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    <div class="space-y-6">
+                        
+                        <!-- Q1 -->
+                        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm" id="quiz1-1-1">
+                            <p class="font-bold text-slate-800 mb-3">1. 下列物體中，哪一個屬於發光體？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 亮麗的水晶吊燈球</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 滿月時的月球</button>
+                                <button onclick="checkAnswer(this, true,  'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 點亮的發光二極管</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 擦得乾淨的平面鏡</button>
+                            </div>
+                            <div id="exp1-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                                <strong>解析：</strong>發光體是指自身能夠發光的物體。發光二極管在通電後自身發光，是發光體。其餘選項均是靠反射其他光源的光而被看見，是非發光體。
+                            </div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm" id="quiz1-1-2">
+                            <p class="font-bold text-slate-800 mb-3">2. 小孔成像實驗中，若在屏幕上得到一個倒立的像。這個現象直接證明了：</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 光具有波動性</button>
+                                <button onclick="checkAnswer(this, true,  'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 光在均勻介質中沿直線傳播</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 光速是宇宙中最大的速度</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 光會發生折射</button>
+                            </div>
+                            <div id="exp1-1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                                <strong>解析：</strong>小孔成像是因為來自物體不同部分的光線在通過狹窄小孔時互不干涉，且各沿其直線方向投射到屏幕上，從而形成上下顛倒的像，這是光沿直線傳播的經典物理證據。
+                            </div>
+                        </div>
+
+                        <!-- Q3 -->
+                        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm" id="quiz1-1-3">
+                            <p class="font-bold text-slate-800 mb-3">3. 激光筆射出的一束紅色激光，在空氣中傳播時，所有的光線互相平行且光束粗細不變。這屬於哪種光束？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, true,  'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 平行光束</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 發散光束</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 會聚光束</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 折射光束</button>
+                            </div>
+                            <div id="exp1-1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                                <strong>解析：</strong>平行光束中的所有光線互相平行，在行進過程中光束截面積保持不變。激光是平行光束的典型代表。
+                            </div>
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm" id="quiz1-1-4">
+                            <p class="font-bold text-slate-800 mb-3">4. 觀察者在小孔成像實驗中，若想讓屏幕上的倒立像變得更明亮，最好的做法是：</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 將小孔做得非常小，接近針尖</button>
+                                <button onclick="checkAnswer(this, true,  'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 將小孔稍微做大一些（但像會變得模糊）</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 將屏幕移到極遠處</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 用一塊黑布把光源蓋住</button>
+                            </div>
+                            <div id="exp1-1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                                <strong>解析：</strong>小孔越大，允許進入並投射到屏幕上的光線就越多，像就會變得越明亮；但代價是光線會發生重疊，導致像變得模糊不清。這是一個亮度與清晰度的平衡問題。
+                            </div>
+                        </div>
+
+                        <!-- Q5 -->
+                        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm" id="quiz1-1-5">
+                            <p class="font-bold text-slate-800 mb-3">5. 發生「月食」時，地球運行到太陽和月球之間。這現象：</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 是因為月球自身的發光能力下降</button>
+                                <button onclick="checkAnswer(this, true,  'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 是因為不透明的地球擋住了照向月球的陽光</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 證明了月球是一個強發光體</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 是因為光彎曲繞過了地球</button>
+                            </div>
+                            <div id="exp1-1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                                <strong>解析：</strong>月球自身是不發光的非發光體，靠反射太陽光。當地球移動到太陽和月球中間時，地球擋住了陽光，月球進入了地球的陰影中，無法反射陽光，因此產生月食。
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 1.2: 反射與平面鏡 -->
+            <!-- ========================================== -->
+            <article id="ch1-2" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">1.2</span>反射與平面鏡</h2>
+                    <p class="text-slate-500 mt-2">掌握光的反射定律，深入研究平面鏡的成像規律、成像特點，以及如何作反射光路圖。</p>
+                </header>
+
+                <!-- 1. 名詞定義 / 核心概念 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 名詞定義與核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">當光線射向兩種不同介質的分界面時，部分光線會反彈回原本的介質，這種現象稱為<span class="text-blue-700 font-bold">光的反射</span>。為了定量描述反射，我們定義以下線與角：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2 mb-4">
+                            <li><span class="text-blue-700 font-bold">法線：</span> 垂直於反射界面的假想直線，在作圖中通常用虛線表示。</li>
+                            <li><span class="text-blue-700 font-bold">入射角 ($\theta_i$)：</span> 入射光線與<span class="font-bold text-blue-700">法線</span>之間的夾角。</li>
+                            <li><span class="text-blue-700 font-bold">反射角 ($\theta_r$)：</span> 反射光線與<span class="font-bold text-blue-700">法線</span>之間的夾角。</li>
+                        </ul>
+                        <p class="mb-3"><span class="text-blue-700 font-bold">平面鏡成像原理：</span> 平面鏡能形成與原物對稱的像。這是因為從物體發出的發散光線經平面鏡反射後，反射光線依然發散。如果人眼接收到這些反射光線，人腦會順著反射光線的直線反向延長，交會出一點，這就是我們看見的<span class="text-blue-700 font-bold">虛像</span>。</p>
+                    </div>
+                </section>
+
+                <!-- 2. 核心公式與反射定律 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 反射定律與成像公式</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-3"><strong>反射定律：</strong></p>
+                        <ul class="list-decimal list-inside space-y-2 text-slate-700 mb-4 ml-2">
+                            <li>入射光線、反射光線與法線都在同一個平面上。</li>
+                            <li>入射光線和反射光線分立於法線兩側。</li>
+                            <li><span class="font-bold text-blue-800">反射角等於入射角</span>：$$\theta_r = \theta_i$$</li>
+                        </ul>
+                        <hr class="border-blue-200 my-3">
+                        <p class="text-slate-700 mb-2"><strong>平面鏡成像幾何關係：</strong></p>
+                        <div class="text-center py-4 overflow-x-auto text-xl font-bold text-blue-900">
+                            $$ \text{物距 } v = \text{像距 } u $$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>$v$：物體到平面鏡的垂直距離（物距）</li>
+                            <li>$u$：像到平面鏡的垂直距離（像距）</li>
+                            <li>平面鏡成的像是<strong>虛像</strong>（不能在屏幕上接收到的像）、<strong>正立</strong>的、與物體<strong>等大</strong>，且<strong>左右相反</strong>。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 3. 重要性質 / 物理規律對照 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 鏡面反射與漫反射對照</h3>
+                    <p class="text-slate-700 mb-3">為什麼我們能從各個方向看見非發光體（如書本），但卻只能在特定的方向看到鏡子中的像？這與反射表面粗糙程度有關：</p>
+                    
+                    <!-- 桌面版 Table (lg:block) -->
+                    <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+                        <table class="w-full text-left text-slate-700">
+                            <thead class="bg-slate-100 border-b border-slate-200">
+                                <tr>
+                                    <th class="p-4 font-bold w-1/4">反射類型</th>
+                                    <th class="p-4 font-bold w-1/4 text-blue-800">反射表面</th>
+                                    <th class="p-4 font-bold w-1/4 text-emerald-800">反射光特性</th>
+                                    <th class="p-4 font-bold w-1/4">日常例子</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4 font-bold">鏡面反射</td>
+                                    <td class="p-4">極其平滑的表面</td>
+                                    <td class="p-4">平行光線射入後，反射光線依然平行的射出。</td>
+                                    <td class="p-4">平面鏡、靜止的水面、拋光的金屬板。</td>
+                                </tr>
+                                <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4 font-bold">漫反射</td>
+                                    <td class="p-4">微觀凹凸不平的粗糙表面</td>
+                                    <td class="p-4">雖然在每個點都遵循反射定律，但因各點法線方向不同，平行光射入後會向<span class="font-bold text-emerald-700">各個方向</span>散開。</td>
+                                    <td class="p-4">書頁、黑板、衣服、粗糙的牆面。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 行動版 Cards (lg:hidden) -->
+                    <div class="space-y-4 lg:hidden">
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                            <h4 class="font-bold text-blue-800 mb-2">鏡面反射</h4>
+                            <p class="text-sm text-slate-600 mb-1"><strong>表面：</strong> 平滑。反射光線往單一方向走。</p>
+                            <p class="text-sm text-slate-600"><strong>例子：</strong> 平面鏡。</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+                            <h4 class="font-bold text-emerald-800 mb-2">漫反射</h4>
+                            <p class="text-sm text-slate-600 mb-1"><strong>表面：</strong> 粗糙。反射光線向各方向四散。</p>
+                            <p class="text-sm text-slate-600"><strong>例子：</strong> 書本紙面。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. 常見迷思與誤區 -->
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-blue-500 w-8"></i> 常見迷思與誤區</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                            <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                            <p class="text-sm">「入射角是入射光線與鏡面（反射面）之間的夾角。」</p>
+                        </div>
+                        <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                            <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                            <p class="text-sm">在物理學中，所有的光學角度（入射角、反射角、折射角）都是指<strong>光線與「法線」之間的夾角</strong>，絕不是指與鏡面的夾角。若光線與鏡面夾角為 $30^\circ$，則入射角為 $90^\circ - 30^\circ = 60^\circ$。</p>
+                        </div>
+                        <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+                            <p class="font-bold mb-2"><i class="fa-solid fa-times-circle mr-1"></i> 錯誤觀念</p>
+                            <p class="text-sm">「我們向著平面鏡走近時，會覺得鏡中的像變大。這代表像的大小與我們和鏡子的距離有關。」</p>
+                        </div>
+                        <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r shadow-sm">
+                            <p class="font-bold mb-2"><i class="fa-solid fa-check-circle mr-1"></i> 正確觀念</p>
+                            <p class="text-sm">根據平面鏡成像特點，像與物體<strong>永遠是等大的</strong>。你覺得像變大，是因為像距離你的眼睛變近了，導致像對你眼睛產生的「視角」變大，這與你在路上看著遠處的火車開過來會「顯得」變大是同一個視覺原理。像的實際幾何尺寸沒有改變。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. 典型例題解說 -->
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一列光線射向水平放置的平面鏡，入射光線與鏡面的夾角為 $40^\circ$。求：<br>
+                                (a) 入射角的大小。<br>
+                                (b) 反射角的大小。<br>
+                                (c) 入射光線與反射光線之間的夾角。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>(a) 求入射角 $\theta_i$：</strong></p>
+                                <p class="mb-2">法線垂直於鏡面（即成 $90^\circ$）。已知入射光線與鏡面夾角為 $40^\circ$，故入射角（與法線夾角）為：</p>
+                                <div class="overflow-x-auto">$$ \theta_i = 90^\circ - 40^\circ = 50^\circ $$</div>
+                                <hr class="my-3 border-amber-200">
+                                <p class="mb-2"><strong>(b) 求反射角 $\theta_r$：</strong></p>
+                                <p class="mb-2">根據反射定律，反射角等於入射角：</p>
+                                <div class="overflow-x-auto">$$ \theta_r = \theta_i = 50^\circ $$</div>
+                                <hr class="my-3 border-amber-200">
+                                <p class="mb-2"><strong>(c) 求兩光線間的夾角：</strong></p>
+                                <p class="mb-2">入射光線和反射光線分立於法線兩側，它們之間的夾角即為：</p>
+                                <div class="overflow-x-auto">$$ \theta_{\text{夾}} = \theta_i + \theta_r = 50^\circ + 50^\circ = 100^\circ $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：(a) 入射角為 $50^\circ$；(b) 反射角為 $50^\circ$；(c) 兩者夾角為 $100^\circ$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                小明身高 $1.7 \text{ m}$，站在一個垂直懸掛在牆上的平面鏡前 $2 \text{ m}$ 處。求：<br>
+                                (a) 小明的像與小明之間的距離是多少？<br>
+                                (b) 鏡中小明的像的高度是多少？<br>
+                                (c) 如果小明向著平面鏡前進了 $0.5 \text{ m}$，此時像與小明之間的距離是多少？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">根據平面鏡成像特點：物距等於像距 ($v = u$)，像與物等大。</p>
+                                <p class="mb-2"><strong>(a) 計算像與小明的距離：</strong></p>
+                                <p class="mb-2">物距 $v = 2 \text{ m}$，像距 $u = 2 \text{ m}$。像與人距離：</p>
+                                <div class="overflow-x-auto">$$ \text{距離} = v + u = 2 + 2 = 4 \text{ m} $$</div>
+                                <hr class="my-3 border-amber-200">
+                                <p class="mb-2"><strong>(b) 像的高度：</strong></p>
+                                <p class="mb-2">像與物體等大，故像的高度為 $1.7 \text{ m}$。</p>
+                                <hr class="my-3 border-amber-200">
+                                <p class="mb-2"><strong>(c) 前進 $0.5 \text{ m}$ 後：</strong></p>
+                                <p class="mb-2">新物距 $v' = 2 - 0.5 = 1.5 \text{ m}$。新像距 $u' = 1.5 \text{ m}$。像與人距離：</p>
+                                <div class="overflow-x-auto">$$ \text{新距離} = v' + u' = 1.5 + 1.5 = 3 \text{ m} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：(a) 距離為 $4 \text{ m}$；(b) 像高為 $1.7 \text{ m}$；(c) 新距離為 $3 \text{ m}$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                平面鏡所成的像是「虛像」，這在物理上的嚴格定義是什麼？我們應如何通過實驗來證明它？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold hover:bg-amber-300 transition inline-block text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>虛像的定義：</strong></p>
+                                <p class="mb-4">虛像是反射光線（或折射光線）本身沒有真正交會，僅其反向延長線交會所形成的像。因此，虛像<strong>不能在屏幕（光屏）上呈現（接收）出來</strong>，它只能被人眼看見。</p>
+                                <p class="mb-2"><strong>實驗證明方法：</strong></p>
+                                <p class="mb-2">將一塊平面鏡垂直放好。在鏡前放一根點燃的蠟燭，可在鏡中看到蠟燭的像。此時，在鏡子後方、像的幾何位置上放一張白紙作為屏幕（光屏）。當我們直接看向這張白紙時，會發現紙上<strong>完全沒有蠟燭的像或光斑</strong>。這證明光線並未真正到達鏡後，平面鏡所成的像確實是虛像。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <!-- 6. 隨堂測驗 -->
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    <div class="space-y-6">
+                        
+                        <!-- Q1 -->
+                        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm" id="quiz1-2-1">
+                            <p class="font-bold text-slate-800 mb-3">1. 根據光的反射定律，當入射角為 $35^\circ$ 時，反射角的大小是多少？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $55^\circ$</button>
+                                <button onclick="checkAnswer(this, true,  'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $35^\circ$</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $70^\circ$</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $0^\circ$</button>
+                            </div>
+                            <div id="exp1-2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                                <strong>解析：</strong>根據反射定律，反射角永遠等於入射角 ($\theta_r = \theta_i$)。因此入射角為 $35^\circ$ 時，反射角必然也是 $35^\circ$。
+                            </div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm" id="quiz1-2-2">
+                            <p class="font-bold text-slate-800 mb-3">2. 光線垂直射向平面鏡表面（即與鏡面呈 $90^\circ$ 角）。請問此時的入射角和反射角分別是多少？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 入射角 $90^\circ$，反射角 $90^\circ$</button>
+                                <button onclick="checkAnswer(this, true,  'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 入射角 $0^\circ$，反射角 $0^\circ$</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 入射角 $45^\circ$，反射角 $45^\circ$</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 入射角 $90^\circ$，反射角 $0^\circ$</button>
+                            </div>
+                            <div id="exp1-2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                                <strong>解析：</strong>入射角定義為光線與「法線」的夾角。垂直入射時，光線與法線重合，因此入射角為 $0^\circ$。依反射定律，反射角也必為 $0^\circ$，光線會原路反射回去。
+                            </div>
+                        </div>
+
+                        <!-- Q3 -->
+                        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm" id="quiz1-2-3">
+                            <p class="font-bold text-slate-800 mb-3">3. 平面鏡所成的像具有多種物理特性，下列哪一項描述是<strong>錯誤</strong>的？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 像與物體等大</button>
+                                <button onclick="checkAnswer(this, true,  'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 像是可以呈現在光屏上的實像</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 像是左右相反的</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 像距等於物距</button>
+                            </div>
+                            <div id="exp1-2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                                <strong>解析：</strong>平面鏡所成的像是「虛像」，不能呈現在光屏上。其餘選項（等大、左右相反、等距）皆為平面鏡成像的正確特點。
+                            </div>
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm" id="quiz1-2-4">
+                            <p class="font-bold text-slate-800 mb-3">4. 為什麼我們能從各個方向看見非發光體（例如教室裡的黑板或課本）？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 因為黑板發生了鏡面反射</button>
+                                <button onclick="checkAnswer(this, true,  'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 因為黑板粗糙的表面產生了漫反射</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 因為黑板本身發出微弱的光</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 因為黑板完全吸收了光線</button>
+                            </div>
+                            <div id="exp1-2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                                <strong>解析：</strong>非發光體表面微觀上凹凸不平。當光照射在其上時，會向各個方向發生漫反射。因此，身處不同角落的人都能接收到反射光，從而看見它。
+                            </div>
+                        </div>
+
+                        <!-- Q5 -->
+                        <div class="quiz-container bg-white p-5 rounded-xl shadow-sm" id="quiz1-2-5">
+                            <p class="font-bold text-slate-800 mb-3">5. 平面鏡在日常生活中有多種應用，下列哪一項<strong>不屬於</strong>平面鏡的應用？</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAnswer(this, false, 'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 梳妝衣帽鏡</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 潛望鏡（利用雙鏡反射繞過障礙物）</button>
+                                <button onclick="checkAnswer(this, false, 'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 舞蹈室用於糾正動作的大鏡子</button>
+                                <button onclick="checkAnswer(this, true,  'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 放大鏡（放大書本文字）</button>
+                            </div>
+                            <div id="exp1-2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                                <strong>解析：</strong>放大鏡利用的是凸透鏡的「折射成像原理」來放大物體，並不屬於平面鏡的「反射應用」。其餘選項（梳妝鏡、潛望鏡、舞蹈鏡）都是平面鏡反射成像的經典應用。
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </article>
 
             
 <!-- ========================================== -->
