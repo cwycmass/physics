@@ -219,7 +219,7 @@
                                 <i class="fa-solid fa-fire text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">Book 1</h4>
+                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">1</h4>
                                 <p class="text-sm text-slate-500 mt-1">熱和氣體</p>
                             </div>
                         </a>
@@ -229,7 +229,7 @@
                                 <i class="fa-solid fa-person-running text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">Book 2</h4>
+                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">2</h4>
                                 <p class="text-sm text-slate-500 mt-1">力和運動</p>
                             </div>
                         </a>
@@ -239,7 +239,7 @@
                                 <i class="fa-solid fa-water text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">Book 3A</h4>
+                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">3A</h4>
                                 <p class="text-sm text-slate-500 mt-1">波動 (1)</p>
                             </div>
                         </a>
@@ -249,7 +249,7 @@
                                 <i class="fa-solid fa-lightbulb text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">Book 3B</h4>
+                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">3B</h4>
                                 <p class="text-sm text-slate-500 mt-1">波動 (2)</p>
                             </div>
                         </a>
@@ -259,7 +259,7 @@
                                 <i class="fa-solid fa-bolt text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-blue-700">Book 4 (當前)</h4>
+                                <h4 class="font-bold text-blue-700">4</h4>
                                 <p class="text-sm text-slate-500 mt-1">電和磁</p>
                             </div>
                         </a>
@@ -269,7 +269,7 @@
                                 <i class="fa-solid fa-radiation text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">Book 5</h4>
+                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">5</h4>
                                 <p class="text-sm text-slate-500 mt-1">放射現象與核能</p>
                             </div>
                         </a>
@@ -279,7 +279,7 @@
                                 <i class="fa-solid fa-star text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">Book E1</h4>
+                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">E1</h4>
                                 <p class="text-sm text-slate-500 mt-1">天文學與航天科學</p>
                             </div>
                         </a>
@@ -289,7 +289,7 @@
                                 <i class="fa-solid fa-plug text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">Book E3</h4>
+                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">E3</h4>
                                 <p class="text-sm text-slate-500 mt-1">能量與能源的使用</p>
                             </div>
                         </a>
@@ -983,7 +983,7 @@
                     </div>
 
                     <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-4-5">
-                        <p class="font-bold text-slate-800 mb-3">5. 發現木星有四顆衞星後，人們的宇宙觀受到了甚麼衝擊？</p>
+                        <p class="font-bold text-slate-800 mb-3">5. 發現木星有四顆衞星後，當時人們的宇宙觀受到了甚麼衝擊？</p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <button onclick="checkAnswer(this, true,  'exp1-4-5', 'quiz1-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 意識到地球並非宇宙中唯一的天體旋轉中心</button>
                             <button onclick="checkAnswer(this, false, 'exp1-4-5', 'quiz1-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 證實了木星是太陽系的中心</button>
@@ -998,7 +998,559 @@
                 </section>
             </article>
 
-          
+
+            <!-- ========================================== -->
+            <!-- 區塊 2.1: 行星運動定律 -->
+            <!-- ========================================== -->
+            <article id="ch2-1" class="content-section block">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.1</span>行星運動定律</h2>
+                    <p class="text-slate-500 mt-2">認識克卜勒的三大行星運動定律，探討行星軌道的幾何形狀與週期規律，並利用數學方程推導其物理本質。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">十七世紀初，天文學家克卜勒透過分析大量精確的行星觀測數據，打破了古希臘「行星必須作完美圓周運動」的傳統觀念，提出了著名的<strong class="text-blue-700 font-bold">克卜勒三大定律</strong>：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><strong class="text-blue-700 font-bold">第一定律（軌道定律）：</strong> 所有行星繞太陽運行的軌道都是<strong>橢圓形</strong>，而太陽位於橢圓的其中一個焦點上。</li>
+                            <li><strong class="text-blue-700 font-bold">第二定律（等面積定律）：</strong> 連接太陽與行星的假想直線，在相同的時間間隔內，掃過的<strong>面積必然相等</strong>。這代表行星靠近太陽（近日點）時運行較快，遠離太陽（遠日點）時運行較慢。</li>
+                            <li><strong class="text-blue-700 font-bold">第三定律（週期定律）：</strong> 所有行星公轉<strong>週期的平方</strong>，與其橢圓軌道<strong>半長軸的立方</strong>成正比。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 週期定律方程</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">為了簡化高中物理的計算，我們通常將行星的橢圓軌道近似為圓形軌道。結合牛頓的萬有引力定律與向心力公式，我們可以精確推導出克卜勒第三定律的數學表達式：</p>
+                        <div class="text-center py-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                            $$ T^2 = \left(\frac{4\pi^2}{GM}\right) r^3 \quad \implies \quad \frac{T^2}{r^3} = \text{常數} $$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                            <li>$T$：行星繞恆星公轉的週期</li>
+                            <li>$r$：行星軌道的平均半徑</li>
+                            <li>$G$：萬有引力常數</li>
+                            <li>$M$：中心星體（例如太陽）的質量</li>
+                        </ul>
+                        <p class="text-sm text-slate-600 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> <strong>物理意義：</strong> $\frac{T^2}{r^3}$ 的比值僅取決於中心星體的質量 $M$。因此，對於太陽系內的所有行星而言，這個比值都是完全相同的。</p>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                已知地球繞太陽的公轉半徑約為 $1 \text{ AU}$（天文單位），公轉週期為 $1 \text{ 年}$。如果觀測到某一顆小行星繞太陽的公轉半徑為 $4 \text{ AU}$，試求該小行星的公轉週期為多少年？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>第一步：運用克卜勒第三定律</strong></p>
+                                <p class="mb-2">地球和小行星皆繞太陽運行，故它們的 $\frac{T^2}{r^3}$ 比值相等：</p>
+                                <div class="overflow-x-auto">$$ \frac{T_{\text{地}}^2}{r_{\text{地}}^3} = \frac{T_{\text{星}}^2}{r_{\text{星}}^3} $$</div>
+                                <p class="mb-2 mt-4"><strong>第二步：代入數據求解</strong></p>
+                                <div class="overflow-x-auto">$$ \frac{1^2}{1^3} = \frac{T_{\text{星}}^2}{4^3} $$</div>
+                                <div class="overflow-x-auto">$$ 1 = \frac{T_{\text{星}}^2}{64} \implies T_{\text{星}}^2 = 64 $$</div>
+                                <div class="overflow-x-auto">$$ T_{\text{星}} = 8 \text{ 年} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：該小行星的公轉週期為 8 年。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                根據克卜勒第二定律，當彗星沿著高度橢圓的軌道運行，從遠日點向近日點移動的過程中，它的運行速率會如何變化？請利用等面積定律解釋原因。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>現象：</strong> 運行速率會逐漸<strong>增加</strong>，在近日點達到最大值。</p>
+                                <p class="mb-2"><strong>解釋：</strong> 克卜勒第二定律指出，在相同的時間內，連接彗星與太陽的直線所掃過的面積必須相等。在遠日點時，彗星距離太陽遠（連線極長），為了掃過相同的面積，彗星只需移動很短的弧長，因此速率較慢；相反，在近日點時距離太陽近（連線極短），彗星必須快速移動掃過較長的弧長，才能維持面積相等，因此速率必須最快。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                試利用萬有引力定律 $F_g = \frac{GMm}{r^2}$ 與圓周運動向心力公式 $F_c = m\frac{4\pi^2 r}{T^2}$，推導出克卜勒第三定律的數學關係。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">對於作勻速圓周軌道運行的行星，萬有引力提供了所需的向心力：</p>
+                                <div class="overflow-x-auto">$$ F_g = F_c $$</div>
+                                <div class="overflow-x-auto">$$ \frac{GMm}{r^2} = m\frac{4\pi^2 r}{T^2} $$</div>
+                                <p class="mb-2 mt-2">將方程式兩邊的 $m$ 約去，然後將公式重新排列：</p>
+                                <div class="overflow-x-auto">$$ \frac{GM}{r^2} = \frac{4\pi^2 r}{T^2} $$</div>
+                                <div class="overflow-x-auto">$$ T^2 \times GM = 4\pi^2 r^3 $$</div>
+                                <div class="overflow-x-auto">$$ T^2 = \left(\frac{4\pi^2}{GM}\right) r^3 $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 這證明了 $T^2$ 必定與 $r^3$ 成正比。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 根據克卜勒第一定律，所有行星繞太陽運行的軌道形狀是甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-1-1', 'quiz2-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 完美的正圓形</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-1-1', 'quiz2-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 橢圓形，且太陽在其中一個焦點上</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-1', 'quiz2-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 拋物線</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-1', 'quiz2-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 橢圓形，且太陽在橢圓的正中心</button>
+                        </div>
+                        <div id="exp2-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 克卜勒首度打破了古希臘行星軌道必定為正圓的迷思，證實軌道為橢圓，並指出太陽並不位於中心，而是位於兩個焦點的其中之一。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 根據克卜勒第二定律，行星在其軌道上運行時，哪個位置的運行速率最快？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-1-2', 'quiz2-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 遠日點</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-1-2', 'quiz2-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 近日點</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-2', 'quiz2-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 軌道的短軸端點</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-2', 'quiz2-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 各個位置速率均相同</button>
+                        </div>
+                        <div id="exp2-1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 為了在相同的時間內掃過相同的面積，距離太陽越近的地方（近日點），行星必須以更快的速度移動。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 克卜勒第三定律指出，行星週期的平方與其軌道半長軸的甚麼次方成正比？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-1-3', 'quiz2-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 平方</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-1-3', 'quiz2-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 立方</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-3', 'quiz2-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 一次方（成正比）</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-3', 'quiz2-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 四次方</button>
+                        </div>
+                        <div id="exp2-1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 第三定律數學式為 $T^2 \propto r^3$，因此是與半徑（半長軸）的立方成正比。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-1-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 對於太陽系內的所有八大行星，下列哪一個比值是完全相同的？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-1-4', 'quiz2-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $\frac{T}{r}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-4', 'quiz2-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $\frac{T^2}{r^2}$</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-1-4', 'quiz2-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $\frac{T^2}{r^3}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-4', 'quiz2-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $\frac{T^3}{r^2}$</button>
+                        </div>
+                        <div id="exp2-1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 根據克卜勒第三定律，$\frac{T^2}{r^3} = \frac{4\pi^2}{GM}$。因為太陽系所有行星都是繞著同一個質量為 $M$ 的太陽公轉，所以這個比值對所有行星而言都是一個常數。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz2-1-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 若某顆新發現的矮行星，其繞日公轉半徑是地球軌道半徑的 9 倍。則它的公轉週期應為多少年？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-1-5', 'quiz2-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 3 年</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-5', 'quiz2-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 9 年</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-1-5', 'quiz2-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 27 年</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-1-5', 'quiz2-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 81 年</button>
+                        </div>
+                        <div id="exp2-1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> $T^2 \propto r^3$。當半徑 $r$ 變為 9 倍時，$r^3$ 變為 $9^3 = 729$ 倍。因此 $T^2 = 729$，開平方後得到 $T = 27$。
+                        </div>
+                    </div>
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 2.2: 無重狀態 -->
+            <!-- ========================================== -->
+            <article id="ch2-2" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-slate-200 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.2</span>無重狀態</h2>
+                    <p class="text-slate-500 mt-2">辨析真實重量與視重，揭開太空人在太空站內「漂浮」的物理本質，理解自由下落軌道模型。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">當我們在看太空人於國際太空站內飄浮的畫面時，常常會聽到「失重」或「無重力」的說法。然而，從物理學的角度來看，這些詞語很容易引起誤解。</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><strong class="text-blue-700 font-bold">真實重量：</strong> 這是地球對物體施加的萬有引力 ($W = mg$)。即使在距離地表 $400 \text{ km}$ 的太空站，重力依然高達地表的 $90\%$，因此真實重量絕不為零。</li>
+                            <li><strong class="text-blue-700 font-bold">視重 (Apparent weight)：</strong> 我們對「重量」的感覺，其實來自於支撐面（如地板）對我們施加的向上<strong>法向反作用力 ($R$)</strong>。當 $R = 0$ 時，我們就會感到完全失去重量，稱為<strong>無重狀態</strong>。</li>
+                            <li><strong class="text-blue-700 font-bold">軌道運動即自由下落：</strong> 太空站及內部的太空人都在以極高的速率繞地球旋轉。這個向心力完全由萬有引力提供。這意味著他們正處於永無止境的<strong>自由下落</strong>狀態中，只是由於有極高的水平速度，使得他們永遠掉不到地面。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 力學方程式解析</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">利用牛頓第二定律來分析視重 $R$：</p>
+                        <p class="mb-2">設向下為正。物體受到向下的真實重量 $mg$ 與向上的支撐力 $R$，其加速度為 $a$。</p>
+                        <div class="text-center py-4 overflow-x-auto text-xl font-bold text-blue-900">
+                            $$ mg - R = ma \quad \implies \quad R = m(g - a) $$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                            <li><i class="fa-solid fa-caret-down text-blue-500 mr-1"></i> 當物體<strong>自由下落</strong>或處於<strong>軌道運動</strong>時，加速度 $a = g$。</li>
+                            <li><i class="fa-solid fa-arrow-right text-blue-500 mr-1"></i> 代入公式：$R = m(g - g) = 0$。</li>
+                            <li><i class="fa-solid fa-check text-green-500 mr-1"></i> 這證明了：在任何自由下落或軌道運動的參考系中，所有物體的視重必定為零。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一名質量為 $70 \text{ kg}$ 的太空人身處距離地表 $400 \text{ km}$ 的國際太空站內。已知該高度的重力加速度約為 $8.7 \text{ m s}^{-2}$。求該名太空人的真實重量，並解釋為何他會處於無重狀態。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>1. 求真實重量：</strong></p>
+                                <p class="mb-2">真實重量是地球對太空人的萬有引力：</p>
+                                <div class="overflow-x-auto">$$ W = m g' = 70 \times 8.7 = 609 \text{ N} $$</div>
+                                <p class="mb-2 mt-4"><strong>2. 解釋無重狀態：</strong></p>
+                                <p class="mb-2">雖然太空人受到 $609 \text{ N}$ 的引力，但因為太空站和太空人同時在引力作用下，以相同的向心加速度繞地球作自由下落運動。由於兩者加速度相同，太空站的地板不需要提供任何向上的支撐力來推動太空人。因為法向反作用力為零，太空人便會感覺不到自己的重量，呈現漂浮狀態。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                如果在一部升降機內放置一個體重計，一個人站在上面。突然，升降機的纜索斷裂，升降機開始自由下落（忽略空氣阻力）。此時體重計的讀數會是多少？試利用牛頓運動定律進行推導。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">設定向下為正。人受到向下的重力 $mg$ 以及向上的體重計支撐力 $R$。體重計讀數即為 $R$。</p>
+                                <p class="mb-2">根據牛頓第二定律：</p>
+                                <div class="overflow-x-auto">$$ mg - R = ma $$</div>
+                                <p class="mb-2">因為升降機自由下落，人的加速度 $a$ 等於重力加速度 $g$。代入方程式：</p>
+                                <div class="overflow-x-auto">$$ mg - R = mg $$</div>
+                                <div class="overflow-x-auto">$$ R = 0 $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：體重計的讀數會瞬間變為零。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                在國際太空站內，如果一名太空人輕輕放開手中拿着的一個蘋果，這個蘋果相對於太空站會如何運動？為甚麼？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">蘋果會<strong>靜止漂浮在原處</strong>（相對於太空人及太空站而言）。</p>
+                                <p class="mb-2"><strong>解釋：</strong> 因為蘋果、太空人及太空站，全部都在地球引力作用下，以相同的軌道速度和相同的向心加速度繞地球作自由下落。既然大家的運動軌跡與加速度完全一致，它們之間的相對加速度和相對速度皆為零。因此，蘋果看起來就像是失去重力般懸浮在空中。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-2-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 太空人在國際太空站中呈現「漂浮」狀態，這現象被稱為「無重狀態」。關於這種狀態，下列哪一個物理描述是最準確的？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-2-1', 'quiz2-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 太空中距離地球太遠，地球引力已經微弱到等於零</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-2-1', 'quiz2-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 太空人正處於連續的自由下落狀態中，缺乏支撐力</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-1', 'quiz2-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 太空站內注滿了能抵消重力的特殊氣體</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-1', 'quiz2-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 由於月球引力的作用，剛好抵消了地球引力</button>
+                        </div>
+                        <div id="exp2-2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 太空站高度的引力依然非常強大。漂浮感（視重為零）是因為人和船同以重力作為向心力，繞著地球作自由落體運動，沒有相對擠壓的法向反作用力。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-2-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 當一部升降機因為意外而呈自由下落狀態時，升降機內的乘客會感覺到甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-2-2', 'quiz2-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 身體變重了（超重）</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-2', 'quiz2-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 身體被重重壓向地板</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-2-2', 'quiz2-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 身體完全失去重量（無重）</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-2', 'quiz2-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 沒有任何特別的感覺</button>
+                        </div>
+                        <div id="exp2-2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 自由下落時加速度 $a=g$。根據視重公式 $R = m(g-a) = m(g-g) = 0$。此時完全沒有支撐力，即為無重狀態。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-2-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 在距離地表約 $400 \text{ km}$ 高度運行的國際太空站內，地球引力是否已經消失？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-2-3', 'quiz2-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 是的，引力已經衰減至零</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-2-3', 'quiz2-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 否，地球引力依然很強大，約有地表的 90% 左右</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-3', 'quiz2-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 是的，被外太空的真空吸力抵消了</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-3', 'quiz2-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 否，但在該高度引力會變成排斥力</button>
+                        </div>
+                        <div id="exp2-2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 地球半徑約為 $6400 \text{ km}$，$400 \text{ km}$ 相比之下並不算遠。根據平方反比定律，該處重力加速度約為 $8.7 \text{ m s}^{-2}$，依然相當強。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-2-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 物理學中嚴格定義的「視重 (Apparent weight)」，其實質上是代表哪一種力？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-2-4', 'quiz2-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 物體的質量</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-4', 'quiz2-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 地球對物體的萬有引力</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-2-4', 'quiz2-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 支撐面（如地板或磅秤）對物體施加的法向反作用力</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-4', 'quiz2-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 空氣阻力</button>
+                        </div>
+                        <div id="exp2-2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 我們感覺到自己多重，或者磅秤讀數顯示多重，本質上都是測量支撐物推托我們的力（法向反作用力 $R$）。這就是視重。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz2-2-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 某些特殊的飛機（如零重力飛行器）為了模擬太空中的無重狀態供太空人訓練，機師必須駕駛飛機進行哪一種飛行軌跡？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-2-5', 'quiz2-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 水平超音速飛行</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-2-5', 'quiz2-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 拋物線軌跡飛行，且向下加速度剛好等於 $g$</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-5', 'quiz2-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 垂直向上加速爬升</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-2-5', 'quiz2-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 在平流層上定點懸停</button>
+                        </div>
+                        <div id="exp2-2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 要創造無重狀態，飛機必須刻意關閉推力並順應重力作拋體運動。此時飛機內部所有物體的加速度皆為 $g$，互相之間沒有支撐力，從而模擬出大約 20 多秒的微重力環境。
+                        </div>
+                    </div>
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 2.3: 軌道運動中的能量守恆 -->
+            <!-- ========================================== -->
+            <article id="ch2-3" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-slate-200 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.3</span>軌道運動中的能量守恆</h2>
+                    <p class="text-slate-500 mt-2">將能量的概念擴展至宇宙尺度，學習引力勢能的特殊定義，並推導逃逸速度與衛星軌道轉移所需的能量。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">在處理宇宙尺度的運動時，我們不能再使用地表附近的簡單勢能公式 $mgh$。我們需要引入更嚴謹的宏觀能量定義：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><strong class="text-blue-700 font-bold">無窮遠處的參考點：</strong> 物理學約定，將引力完全失效的「無窮遠處」設定為引力勢能 ($PE$) 的零點。</li>
+                            <li><strong class="text-blue-700 font-bold">負的引力勢能：</strong> 因為物體從無窮遠處掉落到星體表面的過程中，引力作正功，勢能必然減少。既然最高處為 0，靠近星體的所有位置的勢能就必定是<strong>負值</strong>。</li>
+                            <li><strong class="text-blue-700 font-bold">逃逸速度：</strong> 使物體剛好能夠克服星球引力束縛，飛向無窮遠處且不再返回所需的最小初速度。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 軌道能量方程式</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-3">對於一個質量為 $m$、在距離星體（質量 $M$）中心 $r$ 處作圓形軌道運行的衛星，其能量特徵如下：</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">引力勢能 ($PE$)</p>
+                                <p class="text-xl font-bold text-blue-900 mt-2">$$ -\frac{GMm}{r} $$</p>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">動能 ($KE$)</p>
+                                <p class="text-xl font-bold text-blue-900 mt-2">$$ \frac{GMm}{2r} $$</p>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-blue-100 text-center">
+                                <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">總機械能 ($E$)</p>
+                                <p class="text-xl font-bold text-blue-900 mt-2">$$ -\frac{GMm}{2r} $$</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 mt-4"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> <strong>能量關係：</strong> 從上方公式可見，在圓形軌道上，總機械能 $E$ 剛好等於動能的負值，即 $E = -KE$。</p>
+                        <hr class="border-blue-200 my-4">
+                        <p class="font-bold text-blue-800 mb-2">逃逸速度公式推導</p>
+                        <p class="text-slate-700 mb-2">當物體逃逸到無窮遠時，$PE = 0$ 且若剛剛好逃逸則 $KE = 0$，總能量為 $0$。根據能量守恆：</p>
+                        <div class="text-center py-2 overflow-x-auto text-xl font-bold text-blue-900">
+                            $$ \frac{1}{2} m v_{\text{esc}}^2 - \frac{GMm}{R} = 0 \quad \implies \quad v_{\text{esc}} = \sqrt{\frac{2GM}{R}} $$
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                地球質量約為 $6.0 \times 10^{24} \text{ kg}$，半徑約為 $6.4 \times 10^6 \text{ m}$。利用逃逸速度公式，計算從地球表面發射探測器飛向深太空所需的最低初速度。（取 $G = 6.67 \times 10^{-11} \text{ N m}^2 \text{ kg}^{-2}$）
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">直接代入逃逸速度公式：</p>
+                                <div class="overflow-x-auto">$$ v = \sqrt{\frac{2GM}{R}} $$</div>
+                                <div class="overflow-x-auto">$$ v = \sqrt{\frac{2 \times (6.67 \times 10^{-11}) \times (6.0 \times 10^{24})}{6.4 \times 10^6}} $$</div>
+                                <div class="overflow-x-auto">$$ v = \sqrt{\frac{80.04 \times 10^{13}}{6.4 \times 10^6}} = \sqrt{1.25 \times 10^8} $$</div>
+                                <div class="overflow-x-auto">$$ v \approx 11180 \text{ m s}^{-1} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：地球的逃逸速度約為 $11.2 \text{ km s}^{-1}$。這就是著名的「第二宇宙速度」。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一顆質量為 $m$ 的人造衛星，原先在半徑為 $r_1$ 的較低圓形軌道上運行。現在需要啟動推進器，將它轉移到半徑為 $r_2$ 的較高軌道上 ($r_2 > r_1$)。請利用公式推導出在此過程中，推進器至少需要向衛星提供多少能量 $\Delta E$？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">1. 轉移軌道所需的能量，等於最終軌道總能量與初始軌道總能量的差值。</p>
+                                <p class="mb-2">初始軌道總能量：$E_1 = -\frac{GMm}{2r_1}$</p>
+                                <p class="mb-2">最終軌道總能量：$E_2 = -\frac{GMm}{2r_2}$</p>
+                                <p class="mb-2 mt-4">2. 計算能量變化 $\Delta E$：</p>
+                                <div class="overflow-x-auto">$$ \Delta E = E_2 - E_1 = \left(-\frac{GMm}{2r_2}\right) - \left(-\frac{GMm}{2r_1}\right) $$</div>
+                                <div class="overflow-x-auto">$$ \Delta E = \frac{GMm}{2r_1} - \frac{GMm}{2r_2} $$</div>
+                                <div class="overflow-x-auto">$$ \Delta E = \frac{GMm}{2} \left( \frac{1}{r_1} - \frac{1}{r_2} \right) $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：所需能量為 $\frac{GMm}{2} \left( \frac{1}{r_1} - \frac{1}{r_2} \right)$。由於 $r_2 > r_1$，括號內為正值，代表必須輸入能量。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                根據逃逸速度公式 $v_{\text{esc}} = \sqrt{\frac{2GM}{R}}$，若發射一顆 $1000 \text{ kg}$ 的重型探測器與一顆 $10 \text{ kg}$ 的微型衛星，兩者逃離地球所需的逃逸速度是否不同？請加以解釋。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>完全相同。</strong></p>
+                                <p class="mb-2">在推導逃逸速度的過程中，能量守恆方程式為 $\frac{1}{2} m v^2 = \frac{GMm}{R}$。我們可以看到，等式兩邊都有物體的質量 $m$，因此 $m$ 會被互相約去。</p>
+                                <p class="mb-2">逃逸速度只取決於中心星球的質量 $M$ 以及出發點的半徑 $R$。這意味著無論是一根羽毛還是一艘巨大的太空戰艦，只要想從地表逃脫地球引力，所需達到的初速度都是一樣的（約 $11.2 \text{ km s}^{-1}$）。</p>
+                                <p class="mt-2 text-sm text-slate-500">（註：當然，把 $1000 \text{ kg}$ 的物體加速到這個速度所需的總能量，會遠比 $10 \text{ kg}$ 的物體大得多。）</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-3-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 為什麼在天文物理中，星體周圍物體的引力勢能 ($PE$) 通常被設定為負值？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-3-1', 'quiz2-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 因為引力是一種負向的排斥力</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-3-1', 'quiz2-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 因為物理學約定無窮遠處的勢能為零，而物體靠近星體時勢能減少，故必為負值</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-3-1', 'quiz2-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 因為物體的質量在宇宙中會轉變為負數</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-3-1', 'quiz2-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 因為這樣計算出來的動能才會是正數</button>
+                        </div>
+                        <div id="exp2-3-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 勢能的絕對數值沒有物理意義，我們只關心「變化量」。將最遠的地方（無引力影響）定為最高點 0，那麼物體掉落進引力井時勢能下降，自然就低於零，成為負數了。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-3-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 對於在圓形軌道上繞行的衛星而言，其總機械能 ($E$) 與動能 ($KE$) 的數值關係為何？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp2-3-2', 'quiz2-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $E = -KE$</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-3-2', 'quiz2-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $E = KE$</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-3-2', 'quiz2-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $E = 2KE$</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-3-2', 'quiz2-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $E = -2KE$</button>
+                        </div>
+                        <div id="exp2-3-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 在圓形軌道上，$KE = \frac{GMm}{2r}$，而總能量 $E = -\frac{GMm}{2r}$。因此 $E$ 的大小剛好等於 $KE$ 的大小，加上負號即可。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-3-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 如果一個物體的總機械能為負值 ($E < 0$)，這在軌道力學中代表了甚麼意義？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-3-3', 'quiz2-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 物體正在遠離中心星體，即將飛向無窮遠處</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-3-3', 'quiz2-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 物體被引力束縛着，只能在有限範圍內運行（如圓或橢圓軌道）</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-3-3', 'quiz2-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 物體的速度一定大於逃逸速度</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-3-3', 'quiz2-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 這種狀態在物理上是不可能的</button>
+                        </div>
+                        <div id="exp2-3-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> $E=0$ 剛好足夠飛到無窮遠（逃逸狀態）。當總能量小於零（負值）時，代表動能不足以完全克服負的引力勢能，物體處於「束縛狀態」，這就是行星或衛星軌道運行的常態。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz2-3-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 若要將一顆人造衛星從低地球軌道，提升至距離較遠的高地球軌道。在此轉移過程中，衛星的總機械能會發生甚麼變化？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp2-3-4', 'quiz2-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 增加</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-3-4', 'quiz2-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 減少</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-3-4', 'quiz2-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 保持不變</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-3-4', 'quiz2-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 先減少再增加</button>
+                        </div>
+                        <div id="exp2-3-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 高軌道的半徑 $r$ 較大。因為總能量 $E = -\frac{GMm}{2r}$，當 $r$ 變大時，分式的數值變小，但因為前面有負號，負的數值變小其實代表整體數值「變大」了（更接近 0）。因此必須輸入能量（點燃火箭）才能把衛星推上高軌道。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz2-3-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 根據逃逸速度公式 $v = \sqrt{\frac{2GM}{R}}$，若有一顆神秘行星，它的質量是地球的 4 倍，但半徑與地球一樣。這顆行星的表面逃逸速度會是地球逃逸速度的幾倍？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp2-3-5', 'quiz2-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 4 倍</button>
+                            <button onclick="checkAnswer(this, true,  'exp2-3-5', 'quiz2-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 2 倍</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-3-5', 'quiz2-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $\frac{1}{2}$ 倍</button>
+                            <button onclick="checkAnswer(this, false, 'exp2-3-5', 'quiz2-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 16 倍</button>
+                        </div>
+                        <div id="exp2-3-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 逃逸速度與星體質量 $M$ 的平方根成正比（$v \propto \sqrt{M}$）。當質量變為 4 倍，逃逸速度會變為 $\sqrt{4} = 2$ 倍。
+                        </div>
+                    </div>
+                </section>
+            </article>
+
+
+
+                                
 <!-- ========================================== -->
 
           
