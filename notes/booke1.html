@@ -105,7 +105,7 @@
                 <ul class="space-y-1">
                     <li>
                      <button onclick="switchPage('ch1-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            1.1 宇宙的層階組織，，
+                            1.1 宇宙的層階組織
                         </button>
                     </li>
                     <li>
@@ -198,22 +198,10 @@
                     </svg>
                 </div>
 
-                <h2 class="text-3xl font-black text-slate-800 tracking-tight mb-3">歡迎來到物理讀本</h2>
-                <p class="text-base text-slate-500 font-medium max-w-md leading-relaxed mb-8">
-                    「極簡讀本．探尋根本．邁向本科」
-                </p>
+                <h2 class="text-3xl font-black text-slate-800 tracking-tight mb-3">廠商會中學．物理科</h2>
 
-                <div class="inline-flex flex-col sm:flex-row items-center gap-4 bg-blue-50/70 border border-blue-200 rounded-2xl p-4 pr-6 shadow-sm max-w-lg">
-                    <div class="bg-blue-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md shrink-0">
-                        <i class="fa-solid fa-list-ul text-sm animate-bounce"></i>
-                    </div>
-                    <div class="text-left">
-                        <h4 class="text-sm font-bold text-slate-800">準備開始探索了嗎？</h4>
-                    </div>
-                </div>
-         <section class="mb-10">
-                    <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-book-open text-blue-500 w-8"></i> 快速連結：所有書冊</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+             <section class="mb-10">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <a href="https://physics.cmass.edu.hk/book1" class="group bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all flex items-start space-x-4">
                             <div class="bg-red-50 text-red-500 p-3 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-colors">
                                 <i class="fa-solid fa-fire text-xl"></i>
@@ -259,7 +247,7 @@
                                 <i class="fa-solid fa-bolt text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-blue-700">4</h4>
+                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">4</h4>
                                 <p class="text-sm text-slate-500 mt-1">電和磁</p>
                             </div>
                         </a>
@@ -1549,7 +1537,788 @@
             </article>
 
 
+            <!-- ========================================== -->
+            <!-- 區塊 3.1: 測量恆星的距離 -->
+            <!-- ========================================== -->
+            <article id="ch3-1" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.1</span>測量恆星的距離</h2>
+                    <p class="text-slate-500 mt-2">介紹視差法，學習如何利用地球公轉軌道來測量鄰近恆星的距離，並認識秒差距的物理意義。</p>
+                </header>
 
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">天文學中，測量天體距離是一項極具挑戰的任務。對於距離我們較近的恆星，天文學家採用了一種類似我們雙眼產生立體感的幾何方法：<strong class="text-blue-700 font-bold">視差法 (Parallax Method)</strong>。</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><strong class="text-blue-700 font-bold">視差現象：</strong> 當我們從兩個不同的位置觀察同一個近處物體時，該物體相對於遙遠背景的位置會發生明顯的移動，這種表觀上的位移角度稱為視差。</li>
+                            <li><strong class="text-blue-700 font-bold">測量基線：</strong> 為了測量遙遠的恆星，我們需要一條極長的基線。天文學家利用地球繞日公轉的軌道直徑（$2 \text{ AU}$）作為基線。在相隔半年的時間點（例如 1 月和 7 月）分別觀測目標恆星，測量其在背景星空中的位移。</li>
+                            <li><strong class="text-blue-700 font-bold">視差角 ($p$)：</strong> 恆星相對於背景恆星產生的最大角位移的一半，稱為視差角。恆星距離越遠，視差角 $p$ 越小。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 秒差距與距離公式</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">基於視差法，天文學家定義了一個專用的長度單位：<strong class="text-blue-700 font-bold">秒差距 (Parsec, $\text{pc}$)</strong>。</p>
+                        <p class="text-sm text-slate-600 mb-4"><strong>定義：</strong> 當一顆恆星的視差角剛好為 $1$ 角秒 ($1''$) 時，它與地球的距離即為 $1$ 秒差距。</p>
+                        <div class="text-center py-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                            $$ d = \frac{1}{p} $$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                            <li>$d$：恆星的距離（必須使用 $\text{pc}$ 為單位）</li>
+                            <li>$p$：視差角（必須使用角秒 $''$ 為單位）</li>
+                        </ul>
+                        <p class="text-sm text-slate-600 mt-4"><i class="fa-solid fa-circle-info mr-1"></i> <strong>單位換算：</strong> $1$ 度 ($1^\circ$) $= 60$ 角分 ($60'$ ) $= 3600$ 角秒 ($3600''$)。$1 \text{ pc} \approx 3.26 \text{ ly}$。</p>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                距離我們最近的恆星（太陽除外）是比鄰星。天文學家測得它的視差角為 $0.768''$。求比鄰星與地球之間的距離（以 $\text{pc}$ 為單位）。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>第一步：確認單位</strong></p>
+                                <p class="mb-2">視差角 $p = 0.768''$，單位正確，可直接代入公式。</p>
+                                <p class="mb-2 mt-4"><strong>第二步：計算距離 $d$</strong></p>
+                                <div class="overflow-x-auto">$$ d = \frac{1}{p} = \frac{1}{0.768} \approx 1.30 \text{ pc} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：比鄰星距離地球約 $1.30 \text{ pc}$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                承接上題，請將比鄰星的距離 $1.30 \text{ pc}$ 轉換為光年 ($\text{ly}$)。已知 $1 \text{ pc} = 3.26 \text{ ly}$。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">利用單位換算關係：</p>
+                                <div class="overflow-x-auto">$$ d = 1.30 \text{ pc} \times 3.26 \text{ ly/pc} \approx 4.24 \text{ ly} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：比鄰星距離地球約 $4.24 \text{ ly}$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                為什麼使用地面天文望遠鏡進行視差法測量時，通常只能精確測量距離小於 $100 \text{ pc}$ 的恆星？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">根據公式 $d = \frac{1}{p}$，恆星距離越遠，其視差角 $p$ 就越小。</p>
+                                <p class="mb-2">對於距離大於 $100 \text{ pc}$ 的恆星，其視差角會小於 $0.01''$。由於地球大氣層的擾動會使星光變得模糊（產生視寧度極限），地面望遠鏡很難準確分辨如此微小的角度變化，因此會產生極大的測量誤差。（現代太空望遠鏡如 Gaia 則不受大氣干擾，可測量更遠距離。）</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-1-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 視差法用來測量恆星距離時，主要依賴地球軌道的哪一個幾何特徵作為測量基線？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-1-1', 'quiz3-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 地球的半徑</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-1-1', 'quiz3-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 地球公轉軌道的直徑</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-1', 'quiz3-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 地球到月球的距離</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-1', 'quiz3-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 太陽的半徑</button>
+                        </div>
+                        <div id="exp3-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 視差法透過在相隔半年的時間點進行兩次觀測，這時地球剛好位於公轉軌道兩端，兩觀測點之間的距離即為地球軌道直徑（約 $2 \text{ AU}$），提供了最長的可能測量基線。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-1-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 根據秒差距（$\text{pc}$）的定義，如果一顆恆星的視差角為 $1''$，它距離地球多遠？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-1-2', 'quiz3-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $1 \text{ AU}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-2', 'quiz3-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $1 \text{ ly}$</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-1-2', 'quiz3-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $1 \text{ pc}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-2', 'quiz3-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $1 \text{ km}$</button>
+                        </div>
+                        <div id="exp3-1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 秒差距的名稱 (parsec) 就是來自於 parallax (視差) 和 arcsecond (角秒) 的組合。視差角為 $1''$ 的距離即定義為 $1 \text{ pc}$。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-1-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 觀測到恆星 A 的視差角為 $0.05''$，求其距離為多少秒差距？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-1-3', 'quiz3-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $0.05 \text{ pc}$</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-1-3', 'quiz3-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $20 \text{ pc}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-3', 'quiz3-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $5 \text{ pc}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-3', 'quiz3-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $200 \text{ pc}$</button>
+                        </div>
+                        <div id="exp3-1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 代入公式 $d = \frac{1}{p} = \frac{1}{0.05} = 20 \text{ pc}$。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-1-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 恆星的視差角大小與其距離地球的遠近有何數學關係？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-1-4', 'quiz3-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 成正比</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-4', 'quiz3-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 與距離的平方成反比</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-1-4', 'quiz3-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 成反比</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-4', 'quiz3-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 毫無關係</button>
+                        </div>
+                        <div id="exp3-1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 從公式 $d = \frac{1}{p}$ 可以看出，距離 $d$ 與視差角 $p$ 呈簡單的反比關係。距離越遠，視差角越小。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz3-1-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 為什麼科學家要發射太空望遠鏡（如依巴谷衛星、蓋亞任務）來進行視差測量，而不是單靠地面望遠鏡？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-1-5', 'quiz3-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 太空望遠鏡可以飛得離恆星更近</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-1-5', 'quiz3-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 太空望遠鏡不受地球大氣層擾動的影響，測量角度更精確</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-5', 'quiz3-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 太空望遠鏡擁有較大的地球軌道基線</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-1-5', 'quiz3-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 宇宙中的恆星只能在真空中被觀測到</button>
+                        </div>
+                        <div id="exp3-1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 地球大氣層會使星光折射閃爍（視寧度），導致難以測量極微小的視差角。太空望遠鏡在真空環境中運作，能以極高精確度測量極小的視差角，從而測量更遙遠恆星的距離。
+                        </div>
+                    </div>
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 3.2: 恆星的亮度 -->
+            <!-- ========================================== -->
+            <article id="ch3-2" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.2</span>恆星的亮度</h2>
+                    <p class="text-slate-500 mt-2">區分恆星發出的實際功率與地球上觀測到的亮度，並學習使用星等系統。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">當我們在夜空中觀察恆星時，有些星星看起來非常明亮，有些則黯淡無光。這並不代表明亮的星星實際上釋放出較多能量，因為亮度還受到距離的嚴重影響。我們需要區分兩個核心物理量：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><strong class="text-blue-700 font-bold">光度 ($L$)：</strong> 恆星的實際發光能力，即恆星在每秒內向四面八方輻射的總能量（功率）。它是恆星固有的屬性，與觀察者的距離無關。</li>
+                            <li><strong class="text-blue-700 font-bold">視亮度 ($b$)：</strong> 地球上的觀測者每單位面積、每秒鐘所接收到的輻射能量。它取決於恆星的固有光度以及與地球之間的距離。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 距離平方反比定律與星等</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">由於恆星向外輻射能量是球形向外擴散的，視亮度遵守距離平方反比定律：</p>
+                        <div class="text-center py-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                            $$ b = \frac{L}{4\pi d^2} $$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                            <li>$b$：視亮度 (單位：$\text{W m}^{-2}$)</li>
+                            <li>$L$：光度 (單位：$\text{W}$)</li>
+                            <li>$d$：距離 (單位：$\text{m}$)</li>
+                        </ul>
+                        <hr class="border-blue-200 my-4">
+                        <p class="text-slate-700 font-bold mb-2">星等系統 (Magnitude Scale)</p>
+                        <p class="text-slate-700 mb-2 text-sm">天文學中習慣使用「星等」來表示亮度。這是一個反向對數標尺：<strong>星等的數值越小，星星越亮</strong>。甚至可以是負數。</p>
+                        <ul class="list-disc list-inside space-y-2 text-sm text-slate-600 ml-2">
+                            <li><strong class="text-blue-700 font-bold">視星等 ($m$)：</strong> 根據地球上觀測到的視亮度所定出的星等。</li>
+                            <li><strong class="text-blue-700 font-bold">絕對星等 ($M$)：</strong> 假設把恆星放在距離我們剛好 <strong class="text-red-600">$10 \text{ pc}$</strong> 的標準距離處，它所呈現的視星等。絕對星等反映了恆星真正的光度大小。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                恆星 A 和恆星 B 具有完全相同的光度 ($L$)。如果恆星 A 距離我們 $5 \text{ pc}$，而恆星 B 距離我們 $15 \text{ pc}$，求恆星 A 的視亮度是恆星 B 的多少倍？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">根據距離平方反比定律 $b = \frac{L}{4\pi d^2}$，視亮度與距離的平方成反比（$b \propto \frac{1}{d^2}$）。</p>
+                                <p class="mb-2">恆星 B 的距離是恆星 A 的 3 倍（$15 / 5 = 3$）。</p>
+                                <p class="mb-2">因此，恆星 B 的視亮度將是恆星 A 的 $(\frac{1}{3})^2 = \frac{1}{9}$。</p>
+                                <p class="mb-2">反過來說，恆星 A 的視亮度是恆星 B 的 9 倍。</p>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：恆星 A 的視亮度是恆星 B 的 9 倍。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一顆恆星的視星等 ($m$) 為 $2.5$，絕對星等 ($M$) 為 $0.5$。請根據視星等和絕對星等的定義，判斷這顆恆星距離地球是大於 $10 \text{ pc}$、等於 $10 \text{ pc}$ 還是小於 $10 \text{ pc}$？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">這是一題不需複雜計算的邏輯題。</p>
+                                <p class="mb-2">絕對星等 ($M = 0.5$) 是將恆星放在 $10 \text{ pc}$ 處的星等。星等越小越亮。</p>
+                                <p class="mb-2">現在它的視星等 ($m = 2.5$) 比絕對星等大，說明它現在看起來<strong>比放在 $10 \text{ pc}$ 時還要黯淡</strong>。</p>
+                                <p class="mb-2">既然看起來較黯淡，代表它實際的位置比 $10 \text{ pc}$ 的標準距離還要遠。</p>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：該恆星距離地球大於 $10 \text{ pc}$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                有兩顆恆星 C 和 D。恆星 C 的視星等為 $1$，恆星 D 的視星等為 $6$。哪一顆恆星在天空中看起來比較亮？根據星等尺度的定義，兩者的亮度相差多少倍？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>第一部分：</strong> 星等數值越小，代表越亮。因此視星等為 1 的恆星 C 比較亮。</p>
+                                <p class="mb-2"><strong>第二部分：</strong> 天文學規定，星等相差 $5$ 等，視亮度相差剛好 $100$ 倍。這意味着每相差 $1$ 等，亮度約相差 $2.512$ 倍 ($100^{1/5}$)。</p>
+                                <p class="mb-2">恆星 C (星等 1) 與恆星 D (星等 6) 剛好相差 $6 - 1 = 5$ 等。</p>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：恆星 C 較亮，其視亮度是恆星 D 的 100 倍。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-2-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 恆星的「光度 ($L$)」代表什麼物理意義？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp3-2-1', 'quiz3-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 恆星每秒鐘輻射出的總能量</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-1', 'quiz3-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 地球上每平方米接收到的恆星能量</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-1', 'quiz3-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 恆星表面的溫度</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-1', 'quiz3-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 恆星的顏色</button>
+                        </div>
+                        <div id="exp3-2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 光度 (Luminosity) 是恆星本身固有的發光功率，不隨觀測者的距離而改變，單位通常為瓦特 ($\text{W}$)。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-2-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 視亮度 ($b$) 計算公式 $b = \frac{L}{4\pi d^2}$ 中，分母的 $4\pi d^2$ 代表甚麼幾何意義？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-2-2', 'quiz3-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 恆星的表面積</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-2', 'quiz3-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 恆星的體積</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-2-2', 'quiz3-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 以恆星為中心，距離為 $d$ 的假想球體表面積</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-2', 'quiz3-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 地球的表面積</button>
+                        </div>
+                        <div id="exp3-2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 恆星的光度 $L$ 均勻地向四周的空間擴散。在距離 $d$ 處，這股能量已經散佈在一個半徑為 $d$ 的巨大球面上（面積為 $4\pi d^2$）。因此每單位面積分到的能量就是 $\frac{L}{4\pi d^2}$。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-2-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 關於星等系統，下列哪一項陳述是正確的？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-2-3', 'quiz3-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 星等數值越大，代表該恆星看起來越亮</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-2-3', 'quiz3-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 星等數值越小（甚至負數），代表該恆星看起來越亮</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-3', 'quiz3-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 絕對星等是根據恆星的體積大小來決定的</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-3', 'quiz3-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 星等系統不能出現負數</button>
+                        </div>
+                        <div id="exp3-2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 古希臘人將最亮的星定為一等星，較暗的定為二等星，以此類推。因此星等是反向指標，數值越小越亮（例如太陽的視星等為極小的負數 -26.7）。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-2-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 星等相差 $5$ 等，兩恆星的視亮度大約相差幾倍？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-2-4', 'quiz3-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 5 倍</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-4', 'quiz3-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 10 倍</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-4', 'quiz3-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 50 倍</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-2-4', 'quiz3-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 100 倍</button>
+                        </div>
+                        <div id="exp3-2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 這是現代星等系統的精確定義：每 5 個星等的差距，對應着 100 倍的光通量（視亮度）差距。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz3-2-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 如果某顆恆星的視星等 ($m$) 等於它的絕對星等 ($M$)，那麼這顆恆星距離地球有多遠？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-2-5', 'quiz3-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. $1 \text{ pc}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-5', 'quiz3-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. $10 \text{ ly}$</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-2-5', 'quiz3-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. $10 \text{ pc}$</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-2-5', 'quiz3-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. $100 \text{ pc}$</button>
+                        </div>
+                        <div id="exp3-2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 絕對星等的定義，就是把恆星假想放置在距離地球剛好 $10 \text{ pc}$ 時所測得的視星等。既然它現在的視星等就等於絕對星等，代表它現在就剛好在 $10 \text{ pc}$ 的位置上。
+                        </div>
+                    </div>
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 3.3: 恆星光譜與赫羅圖 -->
+            <!-- ========================================== -->
+            <article id="ch3-3" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.3</span>恆星光譜與赫羅圖</h2>
+                    <p class="text-slate-500 mt-2">解碼星光背後的物理訊息，學習透過溫度、光度對恆星進行分類，並理解恆星演化的生命週期。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 黑體輻射與兩大定律</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">恆星表面發出的光可以近似為理想的黑體輻射。藉由分析這些光譜，我們能精準推算出恆星的表面溫度與大小，依賴以下兩大定律：</p>
+                        
+                        <div class="space-y-4">
+                            <!-- 維恩位移定律 -->
+                            <div class="border-l-4 border-amber-500 bg-amber-50 p-4 rounded-r">
+                                <h4 class="font-bold text-amber-800 mb-1">維恩位移定律 (Wien's Displacement Law)</h4>
+                                <p class="text-sm mb-2">恆星發出最強輻射對應的峰值波長 ($\lambda_{\text{max}}$) 與其表面絕對溫度 ($T$) 成反比。這解釋了為什麼較冷的星呈紅色，較熱的星呈藍白色。</p>
+                                <div class="text-center font-bold text-lg text-amber-900">
+                                    $$ \lambda_{\text{max}} T = 2.898 \times 10^{-3} \text{ m K} $$
+                                </div>
+                            </div>
+                            
+                            <!-- 斯特凡-玻爾茲曼定律 -->
+                            <div class="border-l-4 border-emerald-500 bg-emerald-50 p-4 rounded-r">
+                                <h4 class="font-bold text-emerald-800 mb-1">斯特凡-玻爾茲曼定律 (Stefan-Boltzmann Law)</h4>
+                                <p class="text-sm mb-2">恆星的總光度 ($L$) 與其表面積 ($4\pi R^2$) 及表面絕對溫度 ($T$) 的四次方成正比。這代表恆星越巨大、越炙熱，發出的光度就越驚人。</p>
+                                <div class="text-center font-bold text-lg text-emerald-900">
+                                    $$ L = 4\pi R^2 \sigma T^4 $$
+                                </div>
+                                <p class="text-xs text-center text-emerald-700 mt-1">($\sigma$ 為斯特凡常數，約為 $5.67 \times 10^{-8} \text{ W m}^{-2} \text{ K}^{-4}$)</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 光譜型 (Spectral Classes)</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">天文學家根據恆星光譜中的吸收線特徵，將恆星按表面溫度從高到低分為七大光譜型。這也是最經典的恆星分類法：</p>
+                        <div class="flex justify-center items-center space-x-2 my-4 font-bold text-xl text-blue-900 overflow-x-auto">
+                            <span>O</span> <i class="fa-solid fa-arrow-right text-sm text-slate-400"></i>
+                            <span>B</span> <i class="fa-solid fa-arrow-right text-sm text-slate-400"></i>
+                            <span>A</span> <i class="fa-solid fa-arrow-right text-sm text-slate-400"></i>
+                            <span>F</span> <i class="fa-solid fa-arrow-right text-sm text-slate-400"></i>
+                            <span>G</span> <i class="fa-solid fa-arrow-right text-sm text-slate-400"></i>
+                            <span>K</span> <i class="fa-solid fa-arrow-right text-sm text-slate-400"></i>
+                            <span>M</span>
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2 mt-2">
+                            <li><strong class="text-blue-700">O 型星：</strong> 溫度極高（可達數萬 K），呈藍白色。</li>
+                            <li><strong class="text-blue-700">M 型星：</strong> 溫度較低（約三千 K），呈紅色。</li>
+                            <li><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> <strong>記憶口訣：</strong> "Oh Be A Fine Girl/Guy Kiss Me"。我們的太陽是一顆中等溫度的 <strong>G 型星</strong>（黃色）。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 w-8"></i> 赫羅圖 (H-R Diagram)</h3>
+                    <p class="text-slate-700 mb-3">赫羅圖是天文學中最重要的一張圖，它將恆星的光度（或絕對星等）對應表面溫度（或光譜型）繪製出來。恆星在圖上並非隨機分佈，而是聚集在特定的區域：</p>
+                    
+                    <div class="hidden lg:block overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+                        <table class="w-full text-left text-slate-700">
+                            <thead class="bg-slate-100 border-b border-slate-200">
+                                <tr>
+                                    <th class="p-4 font-bold w-1/4">區域名稱</th>
+                                    <th class="p-4 font-bold w-1/4">圖上位置</th>
+                                    <th class="p-4 font-bold w-1/2">物理特徵與演化階段</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4 font-bold text-blue-700">主序星<br>(Main Sequence)</td>
+                                    <td class="p-4">從左上（亮熱）延伸到右下（暗冷）的對角線帶。</td>
+                                    <td class="p-4">佔據了 90% 的恆星（包括太陽）。處於穩定的核心氫聚變階段，是一顆恆星的「壯年期」。</td>
+                                </tr>
+                                <tr class="border-b even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4 font-bold text-red-600">巨星 / 超巨星<br>(Giants / Supergiants)</td>
+                                    <td class="p-4">右上角（極亮但表面冷）。</td>
+                                    <td class="p-4">恆星晚年期。核心氫燃料耗盡，外層極度膨脹。因為體積巨大，儘管表面溫度低，光度依然驚人。</td>
+                                </tr>
+                                <tr class="even:bg-slate-50 hover:bg-slate-100 transition-colors">
+                                    <td class="p-4 font-bold text-slate-500">白矮星<br>(White Dwarfs)</td>
+                                    <td class="p-4">左下角（暗淡但極熱）。</td>
+                                    <td class="p-4">中低質量恆星死亡後的殘骸。體積縮至地球般大小，不再有核聚變，靠殘餘熱量發光。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="space-y-4 lg:hidden">
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                            <h4 class="font-bold text-blue-700 mb-1">主序星帶</h4>
+                            <p class="text-sm text-slate-600">對角線分佈。穩定進行氫核聚變，太陽正處於此階段。</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-red-500"></div>
+                            <h4 class="font-bold text-red-600 mb-1">紅巨星 (右上角)</h4>
+                            <p class="text-sm text-slate-600">極亮且冷。因體積極度膨脹而導致光度極高。</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-slate-400"></div>
+                            <h4 class="font-bold text-slate-500 mb-1">白矮星 (左下角)</h4>
+                            <p class="text-sm text-slate-600">暗淡但高溫。恆星死亡後留下的高密度核心殘骸。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                天文學家觀察到恆星 X 的光譜，發現其輻射強度的峰值對應的波長為 $\lambda_{\text{max}} = 500 \text{ nm}$。利用維恩位移定律估算恆星 X 表面的絕對溫度 $T$。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>第一步：單位轉換</strong></p>
+                                <p class="mb-2">$\lambda_{\text{max}} = 500 \text{ nm} = 500 \times 10^{-9} \text{ m} = 5.0 \times 10^{-7} \text{ m}$。</p>
+                                <p class="mb-2 mt-4"><strong>第二步：應用維恩位移定律</strong></p>
+                                <div class="overflow-x-auto">$$ \lambda_{\text{max}} T = 2.898 \times 10^{-3} $$</div>
+                                <div class="overflow-x-auto">$$ (5.0 \times 10^{-7}) \times T = 2.898 \times 10^{-3} $$</div>
+                                <div class="overflow-x-auto">$$ T = \frac{2.898 \times 10^{-3}}{5.0 \times 10^{-7}} \approx 5796 \text{ K} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：該恆星的表面溫度約為 $5796 \text{ K}$（非常接近太陽的表面溫度）。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                有兩顆主序星 A 和 B。恆星 A 的半徑是恆星 B 的 2 倍，表面絕對溫度也是恆星 B 的 2 倍。求恆星 A 的光度是恆星 B 的多少倍？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">根據斯特凡-玻爾茲曼定律：$L \propto R^2 T^4$。</p>
+                                <p class="mb-2">將恆星 A 的參數代入比例關係：</p>
+                                <div class="overflow-x-auto">$$ L_A \propto (2R_B)^2 \times (2T_B)^4 $$</div>
+                                <div class="overflow-x-auto">$$ L_A \propto (4R_B^2) \times (16T_B^4) $$</div>
+                                <div class="overflow-x-auto">$$ L_A \propto 64 \times (R_B^2 T_B^4) \implies L_A = 64 \times L_B $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：恆星 A 的光度是恆星 B 的 64 倍。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                在赫羅圖中，為什麼白矮星的表面溫度極高，但其整體的光度卻非常低？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">這可以用斯特凡-玻爾茲曼定律 $L = 4\pi R^2 \sigma T^4$ 來解釋。</p>
+                                <p class="mb-2">白矮星是由恆星耗盡燃料後坍縮形成的殘骸，雖然它保留了極高的核心熱量導致表面溫度 $T$ 非常高，但因為發生了劇烈坍縮，其半徑 $R$ 變得極其微小（大約只有地球般大小）。</p>
+                                <p class="mb-2">因為表面積 $4\pi R^2$ 縮小得太多了，遠遠抵消了高溫的影響，這使得白矮星對外輻射的總能量（光度 $L$）非常微弱。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-3-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 繪製赫羅圖 (H-R Diagram) 時，橫軸（X 軸）和縱軸（Y 軸）通常分別代表什麼物理量？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-3-1', 'quiz3-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 橫軸：距離；縱軸：視亮度</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-1', 'quiz3-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 橫軸：質量；縱軸：半徑</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-3-1', 'quiz3-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 橫軸：表面溫度（或光譜型）；縱軸：光度（或絕對星等）</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-1', 'quiz3-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 橫軸：光度；縱軸：質量</button>
+                        </div>
+                        <div id="exp3-3-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 赫羅圖最核心的功能就是展示恆星的「發光能力（縱軸的光度）」與其「表面特徵（橫軸的溫度）」之間的關係。注意橫軸溫度通常是向右遞減的。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-3-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 根據 OBAFGKM 光譜分類法，我們的太陽屬於哪一種光譜型？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-3-2', 'quiz3-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. O 型</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-2', 'quiz3-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. A 型</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-3-2', 'quiz3-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. G 型</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-2', 'quiz3-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. M 型</button>
+                        </div>
+                        <div id="exp3-3-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 太陽是一顆中等大小、中等溫度（約 5800 K）的黃色矮星，歸類為 G 型主序星。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-3-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 在赫羅圖中，位處於「主序星帶 (Main Sequence)」的恆星，它們內部主要進行着哪一種核反應以維持發光？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-3-3', 'quiz3-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 鈾核裂變</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-3-3', 'quiz3-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 氫融合成氦的核聚變</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-3', 'quiz3-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 氦融合成碳的核聚變</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-3', 'quiz3-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 逐漸冷卻，不再進行核反應</button>
+                        </div>
+                        <div id="exp3-3-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 恆星一生中最長且最穩定的階段就是主序星階段。這段時期，恆星完全依賴核心將氫燃燒（聚變）成氦來提供對抗重力坍縮的能量。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-3-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 觀察兩顆恆星，甲星呈現明顯的藍色，乙星呈現紅色。根據維恩位移定律，可以推斷出什麼結論？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp3-3-4', 'quiz3-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 甲星的表面溫度比乙星高</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-4', 'quiz3-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 甲星的表面溫度比乙星低</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-4', 'quiz3-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 甲星距離地球比較近</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-4', 'quiz3-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 乙星的光度一定比較大</button>
+                        </div>
+                        <div id="exp3-3-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 維恩定律指出峰值波長與溫度成反比。藍光的波長較短，代表發出藍光的恆星（甲星）其表面溫度必定高於發出紅長波的恆星（乙星）。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz3-3-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 某恆星位於赫羅圖的「右上角」區域。這代表該恆星具有什麼特徵？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-3-5', 'quiz3-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 高溫且低光度（如白矮星）</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-5', 'quiz3-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 高溫且高光度（藍色超巨星）</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-3-5', 'quiz3-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 低溫且高光度（紅巨星 / 超巨星）</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-3-5', 'quiz3-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 低溫且低光度（紅矮星）</button>
+                        </div>
+                        <div id="exp3-3-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 赫羅圖縱軸向上光度變大，橫軸向右溫度變低。因此「右上角」代表光度極高但表面溫度低。只有體積龐大膨脹的紅巨星或紅超巨星才能符合這個特徵。
+                        </div>
+                    </div>
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 3.4: 天文學中的多普勒效應 -->
+            <!-- ========================================== -->
+            <article id="ch3-4" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-blue-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.4</span>天文學中的多普勒效應</h2>
+                    <p class="text-slate-500 mt-2">學習如何透過光譜線的平移來測量遙遠天體的運動速度，並認識宇宙膨脹的證據。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 w-8"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">當有救護車響著警笛駛過你身邊時，你會聽到警笛聲的音調在靠近時變高，遠離時變低，這就是多普勒效應。光作為一種波，同樣會發生<strong class="text-blue-700 font-bold">多普勒效應 (Doppler Effect)</strong>：</p>
+                        <ul class="list-disc list-inside space-y-3 ml-2">
+                            <li><strong class="text-blue-700 font-bold">藍移 (Blueshift)：</strong> 當發光天體<strong>靠近</strong>觀察者時，光波被「壓縮」，觀測到的波長變短，頻率變高，光譜線向藍端移動。</li>
+                            <li><strong class="text-blue-700 font-bold">紅移 (Redshift)：</strong> 當發光天體<strong>遠離</strong>觀察者時，光波被「拉長」，觀測到的波長變長，頻率變低，光譜線向紅端移動。</li>
+                            <li><strong class="text-blue-700 font-bold">徑向速度 (Radial velocity)：</strong> 多普勒效應只能探測天體沿著視線方向（接近或遠離我們）的運動速度。如果天體只是橫向穿過我們的視線，不會產生多普勒頻移。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 w-8"></i> 多普勒頻移公式</h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-2">對於運動速度遠低於光速 ($v \ll c$) 的天體，其波長偏移量 ($\Delta\lambda$) 與徑向速度 ($v$) 成正比：</p>
+                        <div class="text-center py-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                            $$ \frac{\Delta \lambda}{\lambda_0} = \frac{v}{c} \quad \text{或} \quad \frac{\Delta f}{f_0} = \frac{v}{c} $$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                            <li>$\lambda_0, f_0$：天體靜止時發出的原波長與原頻率（實驗室基準）。</li>
+                            <li>$\Delta \lambda$：波長偏移量（觀測波長 $\lambda - \lambda_0$）。</li>
+                            <li>$v$：天體的徑向退行或接近速度（單位：$\text{m s}^{-1}$）。</li>
+                            <li>$c$：真空中的光速 ($3.0 \times 10^8 \text{ m s}^{-1}$)。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-blue-500 w-8"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                在實驗室中測得某元素的一條特徵光譜線波長為 $\lambda_0 = 656.3 \text{ nm}$。天文學家觀測到遙遠星系發出的同光譜線，其波長變為 $\lambda = 659.6 \text{ nm}$。<br>
+                                (a) 該星系是正在靠近還是遠離地球？<br>
+                                (b) 計算該星系的徑向運動速度。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>(a) 判斷運動方向：</strong></p>
+                                <p class="mb-2">觀測波長 ($659.6 \text{ nm}$) > 靜止波長 ($656.3 \text{ nm}$)。波長變長，這是一個<strong>紅移</strong>現象。</p>
+                                <p class="mb-2">這代表該星系正在<strong>遠離</strong>地球。</p>
+                                <hr class="my-3 border-amber-200">
+                                <p class="mb-2"><strong>(b) 計算退行速度 $v$：</strong></p>
+                                <p class="mb-2">偏移量 $\Delta \lambda = 659.6 - 656.3 = 3.3 \text{ nm}$。</p>
+                                <div class="overflow-x-auto">$$ \frac{\Delta \lambda}{\lambda_0} = \frac{v}{c} $$</div>
+                                <div class="overflow-x-auto">$$ \frac{3.3}{656.3} = \frac{v}{3.0 \times 10^8} $$</div>
+                                <div class="overflow-x-auto">$$ v = \left(\frac{3.3}{656.3}\right) \times 3.0 \times 10^8 \approx 1.51 \times 10^6 \text{ m s}^{-1} $$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：星系正以約 $1510 \text{ km s}^{-1}$ 的速度遠離我們。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                天文學家利用望遠鏡長期觀察某個包含兩顆恆星的聯星系統 (Binary star system)。他們發現光譜線呈現週期性的「一分為二」又「合而為一」的現象。試用多普勒效應解釋此現象。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">聯星系統中的兩顆恆星互相繞着共同質心旋轉。</p>
+                                <p class="mb-2">1. 當一顆恆星向著地球運行（產生藍移，波長變短），另一顆恆星必然背向地球運行（產生紅移，波長變長）。這會導致原本的同一條光譜線裂開，一條移向藍端，一條移向紅端（一分為二）。</p>
+                                <p class="mb-2">2. 半個週期後，當兩顆恆星都橫向穿過我們的視線時（沒有靠近也沒有遠離），徑向速度為零，不發生多普勒頻移。此時兩條光譜線會重新重合（合而為一）。這就是「光譜聯星」的特徵。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                宇宙學紅移 (Cosmological redshift) 與恆星自行運動產生的普通多普勒紅移在本質上有什麼區別？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">普通的多普勒紅移是由於天體在靜止的空間中「主動」向遠離我們的方向移動而產生的。</p>
+                                <p class="mb-2">而天文學家觀察到幾乎所有遙遠星系都存在紅移，這是<strong>宇宙學紅移</strong>。它的本質並非星系本身在移動，而是因為包含星系的<strong>「空間本身」正在膨脹</strong>。隨着空間被拉伸，在其中傳播的光波波長也跟着被拉長了（紅移），這是支持大爆炸宇宙論的重要證據。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-purple-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-4-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 當一個發光天體高速「靠近」地球時，我們在地球上觀測到的光譜會有什麼變化？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-4-1', 'quiz3-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 光譜線向紅端偏移（紅移），波長變長</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-4-1', 'quiz3-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 光譜線向藍端偏移（藍移），波長變短</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-4-1', 'quiz3-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 光譜線位置保持不變，但亮度大幅增加</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-4-1', 'quiz3-4-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 所有光譜線全部消失</button>
+                        </div>
+                        <div id="exp3-4-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 當波源向觀察者移動時，波鋒會被壓縮，導致觀測到的波長變短，頻率變高。在可見光譜中，短波長的一端是藍光，因此稱為「藍移」。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-4-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 根據多普勒公式 $\frac{\Delta \lambda}{\lambda_0} = \frac{v}{c}$，如果測得某恆星的光譜線發生了極大程度的頻移（$\Delta \lambda$ 很大），這代表該恆星具有什麼特徵？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-4-2', 'quiz3-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 該恆星的表面溫度極高</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-4-2', 'quiz3-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 該恆星的質量極大</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-4-2', 'quiz3-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 該恆星相對於地球的徑向運動速度 ($v$) 很大</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-4-2', 'quiz3-4-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 該恆星距離地球非常近</button>
+                        </div>
+                        <div id="exp3-4-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 波長偏移量 $\Delta \lambda$ 與天體的視線相對速度 $v$ 成正比。頻移越大，代表天體遠離或靠近我們的速度越快。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-4-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 假設一顆極快的恆星正「橫向」穿過我們的視線（即與我們的視線完全垂直運動，沒有任何靠近或遠離的運動）。我們能否利用多普勒效應測量到它的速度？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-4-3', 'quiz3-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 可以，會觀察到明顯的紅移</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-4-3', 'quiz3-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 可以，會觀察到明顯的藍移</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-4-3', 'quiz3-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 不可以，因為只有「徑向運動（視線方向）」才會產生多普勒頻移</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-4-3', 'quiz3-4-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 不可以，因為恆星速度無法超越光速</button>
+                        </div>
+                        <div id="exp3-4-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 多普勒效應只能反映波源沿著觀察者視線方向（接近或遠退）的速度分量，稱為徑向速度。純橫向運動（切向速度）不會壓縮或拉長光波，因此不會產生頻移。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz3-4-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 觀測光譜聯星 (Spectroscopic binaries) 時，最典型的證據是：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp3-4-4', 'quiz3-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 光譜線的整體顏色變成紫色</button>
+                            <button onclick="checkAnswer(this, true,  'exp3-4-4', 'quiz3-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 單一光譜線會週期性地分裂成兩條，然後又重新重合</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-4-4', 'quiz3-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 恆星的總光度會突然消失不見</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-4-4', 'quiz3-4-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 發現光譜線完全不受多普勒效應影響</button>
+                        </div>
+                        <div id="exp3-4-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 聯星系統中兩星互相繞轉。當其中一顆靠近地球（藍移）時，另一顆必遠離地球（紅移），導致同種元素的光譜線向兩邊裂開。這成為辨識肉眼無法分辨的聯星系統的最佳方法。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz3-4-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 現代天文學家觀測遙遠星系時，發現了被稱為「哈勃定律」的現象。這個現象顯示大部份星系的光譜都呈現了什麼特徵？這有什麼宇宙學意義？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp3-4-5', 'quiz3-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">A. 普遍呈現紅移，證明宇宙正在不斷膨脹</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-4-5', 'quiz3-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">B. 普遍呈現藍移，證明宇宙正在收縮</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-4-5', 'quiz3-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">C. 紅移和藍移各佔一半，證明宇宙是靜止的</button>
+                            <button onclick="checkAnswer(this, false, 'exp3-4-5', 'quiz3-4-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition">D. 沒有任何頻移，證明光速是可變的</button>
+                        </div>
+                        <div id="exp3-4-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 愛德文·哈勃觀察到除了極少數鄰近星系外，遙遠星系的光譜幾乎全部呈現紅移，且距離越遠紅移越嚴重。這成為了宇宙空間正在整體膨脹（大爆炸理論）的最強烈證據。
+                        </div>
+                    </div>
+                </section>
+            </article>
                                 
 <!-- ========================================== -->
 
