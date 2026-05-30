@@ -1,572 +1,655 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Play, Award, RotateCcw, Droplets, Wind, Sun, Lightbulb, Music, Ear, Star, Clock, Flame, CheckCircle, XCircle, Zap, Volume2, VolumeX } from 'lucide-react';
-
-// --- 音效系統 (Web Audio API) ---
-const AudioCtx = window.AudioContext || window.webkitAudioContext;
-let actx = null;
-
-const playTone = (freq, type, duration, vol) => {
-  if (!actx) return;
-  try {
-    if (actx.state === 'suspended') actx.resume();
-    const osc = actx.createOscillator();
-    const gain = actx.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, actx.currentTime);
-    gain.gain.setValueAtTime(vol, actx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + duration);
-    osc.connect(gain);
-    gain.connect(actx.destination);
-    osc.start();
-    osc.stop(actx.currentTime + duration);
-  } catch (e) {}
-};
-
-// --- 題目資料庫 ---
-const questionBank = {
-  7: {
-    title: "第7課：水和空氣",
-    icon: <Droplets className="w-8 h-8" />,
-    color: "from-blue-400 to-cyan-400",
-    questions: [
-      { q: "水有顏色嗎？", options: ["沒有顏色", "有紅色", "有藍色", "有黃色"], correct: 0 },
-      { q: "空氣有顏色嗎？", options: ["沒有顏色", "有白色", "有透明色", "有黑色"], correct: 0 },
-      { q: "我們可以用哪個器官聞水的氣味？", options: ["鼻子", "眼睛", "耳朵", "嘴巴"], correct: 0 },
-      { q: "乾淨的水有氣味嗎？", options: ["沒有氣味", "有甜味", "有香味", "有臭味"], correct: 0 },
-      { q: "空氣有氣味嗎？", options: ["沒有氣味", "有花香味", "有泥土味", "有甜味"], correct: 0 },
-      { q: "哪一種東西是「看得見」的？", options: ["水", "空氣", "聲音", "氣味"], correct: 0 },
-      { q: "哪一種東西是「看不見」的？", options: ["空氣", "水", "書本", "蘋果"], correct: 0 },
-      { q: "水會流動嗎？", options: ["會流動", "不會流動", "只會往上流", "有時會，有時不會"], correct: 0 },
-      { q: "空氣會流動嗎？", options: ["會流動", "不會流動", "只會往下流", "被關起來才會流動"], correct: 0 },
-      { q: "水有固定的形狀嗎？", options: ["沒有固定形狀", "都是圓形的", "都是方形的", "有固定形狀"], correct: 0 },
-      { q: "怎麼做可以讓我們感受到空氣的存在？", options: ["用扇子扇一扇", "用眼睛看一看", "用耳朵聽一聽", "用放大鏡看"], correct: 0 },
-      { q: "充滿空氣的氣球放幾天後變小了，是因為？", options: ["空氣流動跑出來了", "空氣被吃掉了", "氣球肚子餓了", "空氣有顏色"], correct: 0 },
-      { q: "把水倒進圓形的杯子裡，水會變成甚麼形狀？", options: ["圓形", "方形", "三角形", "星形"], correct: 0 },
-      { q: "游泳池裡面裝滿了甚麼？", options: ["水", "牛奶", "果汁", "泥沙"], correct: 0 },
-      { q: "我們呼吸的時候需要吸入甚麼？", options: ["空氣", "水", "陽光", "灰塵"], correct: 0 },
-      { q: "水和空氣有甚麼「相同」的地方？", options: ["都沒有顏色和氣味", "都可以用手抓住", "都有甜甜的味道", "都看不見"], correct: 0 },
-      { q: "水和空氣有甚麼「不同」的地方？", options: ["水看得見，空氣看不見", "空氣看得見，水看不見", "水會流動，空氣不會", "空氣會流動，水不會"], correct: 0 },
-      { q: "喝水時，我們能把杯子裡的水倒進嘴巴，因為水？", options: ["會流動", "很透明", "沒有氣味", "會變色"], correct: 0 },
-      { q: "哪一種東西「沒有」固定的形狀？", options: ["水和空氣", "只有水", "只有空氣", "書本和鉛筆"], correct: 0 },
-      { q: "吹泡泡的時候，泡泡裡面包著甚麼？", options: ["空氣", "水", "陽光", "泥土"], correct: 0 },
-    ]
-  },
-  11: {
-    title: "第11課：光和影",
-    icon: <Sun className="w-8 h-8" />,
-    color: "from-amber-400 to-orange-400",
-    questions: [
-      { q: "有光，我們才能看見甚麼？", options: ["看見東西", "聽見聲音", "聞到氣味", "感覺到熱"], correct: 0 },
-      { q: "以下哪一個是「自然光源」？", options: ["太陽", "電燈", "手電筒", "蠟燭"], correct: 0 },
-      { q: "以下哪一個是「人造光源」？", options: ["亮著的電筒", "螢火蟲", "星星", "太陽"], correct: 0 },
-      { q: "螢火蟲是甚麼光源？", options: ["自然光源", "人造光源", "不是光源", "外星光源"], correct: 0 },
-      { q: "能夠自己發出光的物體，我們稱為什麼？", options: ["光源", "反光鏡", "透明體", "黑洞"], correct: 0 },
-      { q: "玻璃幕牆是光源嗎？", options: ["不是，它只是反射光", "是，它會自己發光", "是自然光源", "是人造光源"], correct: 0 },
-      { q: "開啟了的電視機是甚麼光源？", options: ["人造光源", "自然光源", "不是光源", "吸收光源"], correct: 0 },
-      { q: "點燃的蠟燭是甚麼光源？", options: ["人造光源", "自然光源", "不是光源", "電力光源"], correct: 0 },
-      { q: "水母在海裡會發光，牠是？", options: ["自然光源", "人造光源", "植物光源", "不會發光"], correct: 0 },
-      { q: "光受到物體阻擋時，會產生甚麼？", options: ["影子", "彩虹", "聲音", "水分"], correct: 0 },
-      { q: "影子和光源的方向通常是怎樣的？", options: ["相反的", "相同的", "沒有關係的", "重疊的"], correct: 0 },
-      { q: "用電筒照在牆上，中間用手擋住，牆上會出現？", options: ["手的影子", "花的影子", "沒有東西", "彩虹"], correct: 0 },
-      { q: "透明的玻璃會產生很黑的影子嗎？", options: ["不會，光能穿透它", "會，非常黑", "會，產生彩色影子", "玻璃沒有影子"], correct: 0 },
-      { q: "如果世界上完全沒有光，會變成怎樣？", options: ["甚麼都看不見", "東西會變得更清楚", "只看得見白色的東西", "眼睛會變大"], correct: 0 },
-      { q: "我們能在課室裡看見黑板，是因為有？", options: ["光", "風", "水", "聲音"], correct: 0 },
-      { q: "太陽下山了，我們通常需要甚麼來照明？", options: ["人造光源（如電燈）", "自然光源", "戴上眼鏡", "閉上眼睛"], correct: 0 },
-      { q: "光可以穿透我們的手掌嗎？", options: ["不可以", "可以", "有時候可以", "只能穿透手指"], correct: 0 },
-      { q: "下列哪一個「不是」光源？", options: ["書本", "太陽", "亮著的街燈", "螢火蟲"], correct: 0 },
-      { q: "夜晚在戶外，哪一種昆蟲會發光？", options: ["螢火蟲", "蝴蝶", "蜜蜂", "螞蟻"], correct: 0 },
-      { q: "白天時，最大的自然光源是甚麼？", options: ["太陽", "月亮", "星星", "路燈"], correct: 0 },
-    ]
-  },
-  12: {
-    title: "第12課：奇妙的聲音",
-    icon: <Music className="w-8 h-8" />,
-    color: "from-purple-400 to-pink-400",
-    questions: [
-      { q: "我們用身體的哪個器官來聽聲音？", options: ["耳朵", "眼睛", "鼻子", "嘴巴"], correct: 0 },
-      { q: "聲音是因為物體怎樣而產生的？", options: ["震動", "發光", "變色", "融化"], correct: 0 },
-      { q: "哪種動物的叫聲通常是「汪汪」？", options: ["小狗", "小貓", "小雞", "青蛙"], correct: 0 },
-      { q: "學校的鐘聲響起，通常代表甚麼？", options: ["上課或小息", "有火災", "要吃飯了", "要睡覺了"], correct: 0 },
-      { q: "救護車的聲音聽起來是怎樣的？", options: ["很大聲且急促", "很小聲且溫柔", "像唱歌一樣", "沒有聲音"], correct: 0 },
-      { q: "甚麼工具可以幫助我們把聲音放大？", options: ["麥克風（擴音器）", "望遠鏡", "放大鏡", "溫度計"], correct: 0 },
-      { q: "在圖書館裡面，我們應該怎樣說話？", options: ["輕聲細語", "大聲喊叫", "用麥克風說話", "唱歌"], correct: 0 },
-      { q: "哪一種聲音會讓人覺得吵鬧、不舒服？", options: ["地盤鑽地聲（噪音）", "鳥兒唱歌聲", "輕柔的鋼琴聲", "小溪流水聲"], correct: 0 },
-      { q: "聽音樂時如果音量開得太大，會對我們有甚麼影響？", options: ["會傷害耳朵的聽力", "會讓眼睛變好", "會長得更高", "會變得更聰明"], correct: 0 },
-      { q: "閉上眼睛時，我們能知道旁邊有車開過嗎？", options: ["能，因為聽得到車的聲音", "不能，因為看不見", "能，因為聞得到", "不能，因為沒有光"], correct: 0 },
-      { q: "用力敲擊鼓面，會產生甚麼？", options: ["聲音", "光", "水", "彩虹"], correct: 0 },
-      { q: "下列哪一種樂器是用「吹」來發出聲音的？", options: ["直笛", "鋼琴", "結他", "木琴"], correct: 0 },
-      { q: "下列哪一種樂器是用「彈」來發出聲音的？", options: ["鋼琴", "小號", "鼓", "沙槌"], correct: 0 },
-      { q: "下雨的時候，我們可能會聽到甚麼聲音？", options: ["滴滴答答的聲音", "汪汪的聲音", "叮咚的聲音", "沒有聲音"], correct: 0 },
-      { q: "聲音可以隔著門傳遞嗎？", options: ["可以", "不可以", "只有好聽的聲音可以", "只有大人的聲音可以"], correct: 0 },
-      { q: "睡覺的時候，我們通常喜歡怎樣的環境？", options: ["安靜的", "吵鬧的", "有很多音樂的", "有機器聲的"], correct: 0 },
-      { q: "蜜蜂在花叢中飛舞時，會發出甚麼聲音？", options: ["嗡嗡聲", "喵喵聲", "嘎嘎聲", "嘶嘶聲"], correct: 0 },
-      { q: "在下列哪一個地方，我們需要保持安靜？", options: ["醫院和圖書館", "遊樂場", "體育館", "菜市場"], correct: 0 },
-      { q: "用力拍手會發生甚麼事？", options: ["會發出聲音", "手會發光", "手會變透明", "會產生水"], correct: 0 },
-      { q: "為甚麼我們說話時喉嚨會震動？", options: ["因為震動產生聲音", "因為肚子餓了", "因為在呼吸", "因為喝了水"], correct: 0 },
-    ]
-  }
-};
-
-// --- 洗牌函數 ---
-const shuffleArray = (array) => {
-  const newArr = [...array];
-  for (let i = newArr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-  }
-  return newArr;
-};
-
-// --- 動畫數字組件 ---
-const AnimatedNumber = ({ value }) => {
-  const [displayValue, setDisplayValue] = useState(0);
-
-  useEffect(() => {
-    let start = displayValue;
-    const end = value;
-    if (start === end) return;
-    
-    const duration = 1000;
-    const startTime = performance.now();
-    
-    const animate = (currentTime) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      
-      // easeOutExpo
-      const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      
-      setDisplayValue(Math.floor(start + (end - start) * easeProgress));
-      
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setDisplayValue(end);
-      }
-    };
-    
-    requestAnimationFrame(animate);
-  }, [value]);
-
-  return <span>{displayValue}</span>;
-};
-
-
-export default function App() {
-  const [gameState, setGameState] = useState('home'); // home, playing, result
-  const [mode, setMode] = useState(null);
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>科學超級大挑戰 - 小一科學</title>
   
-  // 遊戲狀態
-  const [questions, setQuestions] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [streak, setStreak] = useState(0);
-  const [maxStreak, setMaxStreak] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(15);
-  const [isAnswered, setIsAnswered] = useState(false);
-  const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
-  const [soundEnabled, setSoundEnabled] = useState(true); // 新增音效開關狀態
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
   
-  // 結算統計
-  const [stats, setStats] = useState({ correct: 0, timeBonus: 0, streakBonus: 0, baseScore: 0 });
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  // BGM Refs
-  const bgmInterval = useRef(null);
-  const noteIdx = useRef(0);
-  const bgmNotes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63]; // 輕快的背景音階
-
-  // 音效播放輔助函數
-  const playSFX = (type) => {
-    if (!soundEnabled) return;
-    if (!actx) actx = new AudioCtx();
-    if (actx.state === 'suspended') actx.resume();
-
-    if (type === 'click') playTone(600, 'sine', 0.05, 0.05);
-    if (type === 'correct') {
-      playTone(523.25, 'sine', 0.1, 0.1);
-      setTimeout(() => playTone(659.25, 'sine', 0.1, 0.1), 100);
-      setTimeout(() => playTone(783.99, 'sine', 0.3, 0.1), 200);
-    }
-    if (type === 'wrong') {
-      playTone(250, 'sawtooth', 0.3, 0.1);
-      setTimeout(() => playTone(200, 'sawtooth', 0.4, 0.1), 200);
-    }
-    if (type === 'result') {
-      [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => 
-        setTimeout(() => playTone(f, 'square', 0.2, 0.1), i * 150)
-      );
-    }
-  };
-
-  // BGM 播放邏輯
-  useEffect(() => {
-    if (soundEnabled && gameState === 'playing') {
-      if (!actx) actx = new AudioCtx();
-      if (actx.state === 'suspended') actx.resume();
-      
-      bgmInterval.current = setInterval(() => {
-        playTone(bgmNotes[noteIdx.current], 'triangle', 0.4, 0.02);
-        noteIdx.current = (noteIdx.current + 1) % bgmNotes.length;
-      }, 500);
-    } else {
-      clearInterval(bgmInterval.current);
-    }
-    return () => clearInterval(bgmInterval.current);
-  }, [soundEnabled, gameState]);
-
-  // 1. 選擇模式並開始遊戲
-  const startGame = (selectedMode) => {
-    playSFX('click');
-    setMode(selectedMode);
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
     
-    // 準備題目：打亂題目順序，並打亂每個題目的選項，同時記錄正確答案的新位置
-    const rawQuestions = questionBank[selectedMode].questions;
-    const shuffledQuestions = shuffleArray(rawQuestions).map(q => {
-      const correctText = q.options[q.correct];
-      const shuffledOptions = shuffleArray([...q.options]);
-      const newCorrectIndex = shuffledOptions.indexOf(correctText);
-      return { ...q, options: shuffledOptions, correct: newCorrectIndex };
-    });
-
-    setQuestions(shuffledQuestions);
-    setCurrentIndex(0);
-    setScore(0);
-    setStreak(0);
-    setMaxStreak(0);
-    setStats({ correct: 0, timeBonus: 0, streakBonus: 0, baseScore: 0 });
-    setTimeLeft(15);
-    setIsAnswered(false);
-    setSelectedOptionIndex(null);
-    setGameState('playing');
-  };
-
-  // 2. 倒數計時器 (時間到不鎖定作答)
-  useEffect(() => {
-    let timer;
-    if (gameState === 'playing' && !isAnswered && timeLeft > 0) {
-      timer = setTimeout(() => setTimeLeft(prev => prev - 1), 1000);
+    body {
+      font-family: 'Nunito', 'Microsoft JhengHei', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
     }
-    return () => clearTimeout(timer);
-  }, [timeLeft, gameState, isAnswered]);
 
-  // 3. 處理作答
-  const handleAnswer = (index) => {
-    if (isAnswered) return;
+    .linear-transition {
+      transition: width 1s linear, background-color 0.3s;
+    }
+
+    .btn-bounce:active {
+      transform: translateY(4px);
+    }
+
+    /* 隱藏滾動條 */
+    ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 text-slate-800">
+
+  <!-- 全局音量控制 -->
+  <button id="global-audio-toggle" onclick="toggleSound()" class="fixed top-4 right-4 z-50 p-3 bg-white/80 backdrop-blur rounded-full shadow-md text-slate-500 hover:text-indigo-500 transition-colors">
+    <i id="audio-icon" class="fa-solid fa-volume-high text-xl"></i>
+  </button>
+
+  <!-- ==================== 首頁畫面 (Home Screen) ==================== -->
+  <div id="home-screen" class="max-w-2xl w-full flex flex-col items-center justify-center min-h-screen">
+    <div class="text-center mb-10 animate-bounce">
+      <h1 class="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 mb-4 drop-shadow-sm pb-2">
+        科學超級大挑戰
+      </h1>
+      <p class="text-xl text-slate-600 font-bold">小朋友，你想挑戰哪一課呢？</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full" id="mode-buttons-container">
+      <!-- 模式按鈕由 JS 動態生成 -->
+    </div>
+  </div>
+
+  <!-- ==================== 遊玩畫面 (Playing Screen) ==================== -->
+  <div id="playing-screen" class="hidden w-full flex-col items-center justify-center min-h-screen max-w-4xl">
     
-    setIsAnswered(true);
-    setSelectedOptionIndex(index);
-    
-    const currentQ = questions[currentIndex];
-    const isCorrect = index === currentQ.correct;
-
-    if (isCorrect) {
-      playSFX('correct');
-      
-      // 基礎分數
-      const basePoints = 100;
-      
-      // 作答時間越短（剩餘時間 timeLeft 越多），給予的加分幅度越大！
-      let timeBonusPoints = 0;
-      if (timeLeft >= 12) {
-        // 3秒內神速作答：3倍時間加成！(每秒 30 分，最高 450 分)
-        timeBonusPoints = timeLeft * 30; 
-      } else if (timeLeft >= 7) {
-        // 8秒內快速作答：2倍時間加成！(每秒 20 分)
-        timeBonusPoints = timeLeft * 20; 
-      } else {
-        // 一般時間作答：(每秒 10 分)
-        timeBonusPoints = timeLeft * 10; 
-      }
-
-      const newStreak = streak + 1;
-      const streakBonusPoints = newStreak >= 3 ? newStreak * 20 : 0;
-      
-      const totalPoints = basePoints + timeBonusPoints + streakBonusPoints;
-      
-      setScore(prev => prev + totalPoints);
-      setStreak(newStreak);
-      setMaxStreak(prev => Math.max(prev, newStreak));
-      
-      setStats(prev => ({
-        ...prev,
-        correct: prev.correct + 1,
-        baseScore: prev.baseScore + basePoints,
-        timeBonus: prev.timeBonus + timeBonusPoints,
-        streakBonus: prev.streakBonus + streakBonusPoints
-      }));
-    } else {
-      playSFX('wrong');
-      setStreak(0);
-    }
-
-    // 2秒後進入下一題
-    setTimeout(nextQuestion, 2000);
-  };
-
-  // 4. 下一題或結算
-  const nextQuestion = () => {
-    playSFX('click');
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(prev => prev + 1);
-      setTimeLeft(15);
-      setIsAnswered(false);
-      setSelectedOptionIndex(null);
-    } else {
-      playSFX('result');
-      setGameState('result');
-    }
-  };
-
-  // --- 畫面渲染：首頁 ---
-  if (gameState === 'home') {
-    return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 font-sans">
-        <div className="max-w-2xl w-full">
-          <div className="text-center mb-10 animate-bounce relative">
-            <button 
-              onClick={() => {
-                if (!actx) actx = new AudioCtx();
-                if (actx.state === 'suspended') actx.resume();
-                setSoundEnabled(!soundEnabled);
-              }} 
-              className="absolute -top-4 right-0 md:-right-10 p-3 bg-white/80 backdrop-blur rounded-full shadow-md text-slate-500 hover:text-indigo-500 transition-colors z-10"
-            >
-              {soundEnabled ? <Volume2 className="w-6 h-6" /> : <VolumeX className="w-6 h-6" />}
-            </button>
-            <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 mb-4 drop-shadow-sm">
-              科學超級大挑戰
-            </h1>
-            <p className="text-xl text-slate-600 font-bold">小朋友，你想挑戰哪一課呢？</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {Object.entries(questionBank).map(([key, data]) => (
-              <button
-                key={key}
-                onClick={() => startGame(key)}
-                className={`group relative overflow-hidden rounded-3xl p-8 text-white shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 bg-gradient-to-br ${data.color}`}
-              >
-                <div className="absolute top-0 right-0 p-4 opacity-20 transform translate-x-4 -translate-y-4 group-hover:scale-150 transition-transform duration-500">
-                  {data.icon}
-                </div>
-                <div className="flex flex-col items-center text-center gap-4 relative z-10">
-                  <div className="bg-white/30 p-4 rounded-full backdrop-blur-sm">
-                    {data.icon}
-                  </div>
-                  <h2 className="text-2xl font-bold tracking-wide">{data.title}</h2>
-                  <div className="mt-4 bg-white/20 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2">
-                    <Play className="w-4 h-4" fill="currentColor" /> 開始挑戰
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
+    <!-- HUD 頂部資訊列 -->
+    <div class="w-full flex justify-between items-end mb-4 px-2">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <div id="hud-title" class="text-slate-400 font-bold text-sm"></div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="hud-progress" class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-black text-lg">
+            第 1/20 題
+          </span>
+          <span id="hud-streak" class="hidden bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-black flex items-center gap-1 animate-pulse">
+            <i class="fa-solid fa-fire"></i> <span id="streak-count"></span> 連擊!
+          </span>
         </div>
       </div>
-    );
-  }
+      <div class="text-right">
+        <div class="text-slate-400 font-bold text-sm mb-1">分數 SCORE</div>
+        <div id="hud-score" class="text-3xl sm:text-4xl font-black text-indigo-600 transition-all duration-300">0</div>
+      </div>
+    </div>
 
-  // --- 畫面渲染：結算畫面 ---
-  if (gameState === 'result') {
-    const accuracy = Math.round((stats.correct / questions.length) * 100);
-    let message = "";
-    let stars = 0;
-    
-    if (accuracy >= 90) { message = "太神啦！科學小天才！🏆"; stars = 3; }
-    else if (accuracy >= 70) { message = "表現很棒！繼續保持！🌟"; stars = 2; }
-    else { message = "再接再厲！你可以的！💪"; stars = 1; }
+    <!-- 主要答題區 -->
+    <div class="bg-white rounded-3xl shadow-xl w-full overflow-hidden border-4 border-white flex flex-col">
+      
+      <!-- 進度條 -->
+      <div class="w-full bg-slate-100 h-2">
+        <div id="progress-bar" class="bg-indigo-500 h-full transition-all duration-300" style="width: 0%"></div>
+      </div>
 
-    return (
-      <div className="min-h-screen bg-slate-800 flex items-center justify-center p-4 font-sans">
-        <div className="bg-white rounded-[2rem] shadow-2xl max-w-lg w-full p-8 text-center relative overflow-hidden border-8 border-indigo-100">
-          
-          <div className="flex justify-center gap-2 mb-4">
-             {[1,2,3].map(i => (
-                <Star key={i} className={`w-12 h-12 ${i <= stars ? 'text-yellow-400 fill-yellow-400 animate-bounce' : 'text-gray-200'} transition-all`} style={{ animationDelay: `${i * 0.1}s` }} />
-             ))}
-          </div>
-          
-          <h2 className="text-3xl font-black text-slate-800 mb-2">{message}</h2>
-          <p className="text-indigo-500 font-bold mb-8">完成了 {questionBank[mode].title}</p>
-          
-          <div className="bg-slate-50 rounded-2xl p-6 mb-8 shadow-inner border border-slate-100">
-            <div className="text-sm text-slate-500 font-bold mb-1">總得分</div>
-            <div className="text-6xl font-black text-indigo-600 mb-6 drop-shadow-md">
-              <AnimatedNumber value={score} />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4 text-left">
-              <div className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
-                 <CheckCircle className="text-green-500 w-8 h-8" />
-                 <div>
-                    <div className="text-xs text-slate-400 font-bold">答對題數</div>
-                    <div className="text-lg font-black text-slate-700">{stats.correct} / {questions.length}</div>
-                 </div>
-              </div>
-              <div className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
-                 <Flame className="text-orange-500 w-8 h-8" />
-                 <div>
-                    <div className="text-xs text-slate-400 font-bold">最高連擊</div>
-                    <div className="text-lg font-black text-slate-700">{maxStreak} 連對</div>
-                 </div>
-              </div>
-              <div className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
-                 <Clock className="text-blue-500 w-8 h-8" />
-                 <div>
-                    <div className="text-xs text-slate-400 font-bold">時間加分</div>
-                    <div className="text-lg font-black text-slate-700">+{stats.timeBonus}</div>
-                 </div>
-              </div>
-              <div className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
-                 <Zap className="text-yellow-500 w-8 h-8" />
-                 <div>
-                    <div className="text-xs text-slate-400 font-bold">連擊加分</div>
-                    <div className="text-lg font-black text-slate-700">+{stats.streakBonus}</div>
-                 </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex gap-4">
-             <button 
-                onClick={() => setGameState('home')}
-                className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-lg py-4 rounded-2xl transition-colors"
-              >
-                換個模式
-              </button>
-              <button 
-                onClick={() => startGame(mode)}
-                className="flex-[2] bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-bold text-lg py-4 rounded-2xl shadow-lg transform transition hover:scale-105 flex items-center justify-center gap-2"
-              >
-                <RotateCcw strokeWidth={3} /> 再挑戰一次！
-              </button>
-          </div>
+      <!-- 倒數計時條 -->
+      <div class="w-full bg-slate-100 h-3 relative">
+        <div id="timer-bar" class="h-full linear-transition bg-green-400" style="width: 100%"></div>
+        <div id="timer-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[10px] font-black text-white drop-shadow-md">
+          15s
         </div>
       </div>
-    );
-  }
 
-  // --- 畫面渲染：遊玩中 ---
-  const currentQ = questions[currentIndex];
-  const progressPercent = ((currentIndex) / questions.length) * 100;
+      <div class="p-6 sm:p-10 flex flex-col flex-1 min-h-[500px]">
+        <!-- 題目 -->
+        <div class="flex-1 flex items-center justify-center mb-8">
+          <h2 id="question-text" class="text-3xl sm:text-4xl font-black text-slate-800 text-center leading-snug">
+            載入中...
+          </h2>
+        </div>
 
-  return (
-    <div className="min-h-screen bg-slate-100 flex flex-col items-center justify-center p-2 sm:p-4 font-sans">
-      
-      {/* 頂部資訊列 HUD */}
-      <div className="max-w-4xl w-full flex justify-between items-end mb-4 px-2">
-         <div>
-            <div className="flex items-center gap-2 mb-1">
-               <div className="text-slate-400 font-bold text-sm">{questionBank[mode].title}</div>
-               <button 
-                 onClick={() => setSoundEnabled(!soundEnabled)} 
-                 className="text-slate-400 hover:text-indigo-500 transition-colors"
-               >
-                 {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-               </button>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-black text-lg">
-                第 {currentIndex + 1}/{questions.length} 題
-              </span>
-              {streak >= 3 && (
-                <span className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-black flex items-center gap-1 animate-pulse">
-                  <Flame className="w-4 h-4 fill-orange-500" /> {streak} 連擊!
-                </span>
-              )}
-            </div>
-         </div>
-         <div className="text-right">
-            <div className="text-slate-400 font-bold text-sm mb-1">分數 SCORE</div>
-            <div className="text-3xl sm:text-4xl font-black text-indigo-600">
-              <AnimatedNumber value={score} />
-            </div>
-         </div>
-      </div>
-
-      {/* 主要答題區 */}
-      <div className="bg-white rounded-3xl shadow-xl max-w-4xl w-full overflow-hidden border-4 border-white">
+        <!-- 選項網格 -->
+        <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 選項按鈕由 JS 動態生成 -->
+        </div>
         
-        {/* 進度條 */}
-        <div className="w-full bg-slate-100 h-2">
-          <div 
-            className="bg-indigo-500 h-full transition-all duration-300" 
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
-
-        {/* 倒數計時條 */}
-        <div className="w-full bg-slate-100 h-3 relative">
-          <div 
-            className={`h-full transition-all duration-1000 linear ${timeLeft > 5 ? 'bg-green-400' : 'bg-red-500'}`} 
-            style={{ width: `${(timeLeft / 15) * 100}%` }}
-          />
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-black text-white drop-shadow-md">
-             {timeLeft}s
-          </div>
-        </div>
-
-        <div className="p-6 sm:p-10 flex flex-col min-h-[500px]">
-          
-          {/* 題目 */}
-          <div className="flex-1 flex items-center justify-center mb-8">
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-800 text-center leading-snug">
-              {currentQ.q}
-            </h2>
-          </div>
-
-          {/* 選項網格 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {currentQ.options.map((option, index) => {
-              
-              const isCorrectOption = index === currentQ.correct;
-              let btnClass = "relative w-full text-left p-6 sm:p-8 rounded-2xl border-b-[6px] font-bold text-xl sm:text-2xl transition-all duration-200 flex items-center justify-between overflow-hidden ";
-              
-              if (isAnswered) {
-                if (isCorrectOption) {
-                  // 正確答案亮綠燈
-                  btnClass += "bg-green-100 border-green-500 text-green-800 scale-[1.02] shadow-lg z-10";
-                } else if (selectedOptionIndex === index) {
-                  // 選錯的答案亮紅燈
-                  btnClass += "bg-red-100 border-red-500 text-red-800 opacity-90";
-                } else {
-                  // 其他未選錯誤答案變灰
-                  btnClass += "bg-slate-50 border-slate-200 text-slate-400 opacity-50 scale-95";
-                }
-              } else {
-                // 一般狀態
-                btnClass += "bg-white border-indigo-200 text-slate-700 hover:bg-indigo-50 hover:border-indigo-400 hover:-translate-y-1 hover:shadow-md cursor-pointer active:border-b-0 active:translate-y-2";
-              }
-
-              return (
-                <button
-                  key={index}
-                  disabled={isAnswered}
-                  onClick={() => handleAnswer(index)}
-                  className={btnClass}
-                >
-                  <span className="relative z-10">{option}</span>
-                  
-                  {isAnswered && isCorrectOption && (
-                     <CheckCircle className="w-8 h-8 text-green-500 relative z-10 animate-bounce" />
-                  )}
-                  {isAnswered && selectedOptionIndex === index && !isCorrectOption && (
-                     <XCircle className="w-8 h-8 text-red-500 relative z-10" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-          
-          {/* 超時提示 (改為不鎖定答題) */}
-          {!isAnswered && timeLeft === 0 && (
-             <div className="mt-6 text-center text-orange-500 font-bold text-xl sm:text-2xl animate-pulse">
-                時間到！現在作答沒有時間加分囉 ⏳
-             </div>
-          )}
-          
+        <!-- 超時提示 -->
+        <div id="timeout-msg" class="hidden mt-6 text-center text-orange-500 font-bold text-xl sm:text-2xl animate-pulse">
+          時間到！現在作答沒有時間加分囉 ⏳
         </div>
       </div>
     </div>
-  );
-}
+  </div>
+
+  <!-- ==================== 結算畫面 (Result Screen) ==================== -->
+  <div id="result-screen" class="hidden max-w-lg w-full flex flex-col items-center justify-center min-h-screen">
+    <div class="bg-white rounded-[2rem] shadow-2xl w-full p-8 text-center relative overflow-hidden border-8 border-indigo-100">
+      
+      <div id="result-stars" class="flex justify-center gap-2 mb-4">
+        <!-- 星星由 JS 動態生成 -->
+      </div>
+      
+      <h2 id="result-message" class="text-3xl font-black text-slate-800 mb-2">太神啦！</h2>
+      <p id="result-subtitle" class="text-indigo-500 font-bold mb-8">完成了</p>
+      
+      <div class="bg-slate-50 rounded-2xl p-6 mb-8 shadow-inner border border-slate-100">
+        <div class="text-sm text-slate-500 font-bold mb-1">總得分</div>
+        <div id="final-score" class="text-6xl font-black text-indigo-600 mb-6 drop-shadow-md">0</div>
+        
+        <div class="grid grid-cols-2 gap-4 text-left">
+          <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+             <i class="fa-solid fa-circle-check text-green-500 text-3xl"></i>
+             <div>
+                <div class="text-xs text-slate-400 font-bold">答對題數</div>
+                <div id="stat-correct" class="text-lg font-black text-slate-700">0 / 20</div>
+             </div>
+          </div>
+          <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+             <i class="fa-solid fa-fire text-orange-500 text-3xl"></i>
+             <div>
+                <div class="text-xs text-slate-400 font-bold">最高連擊</div>
+                <div id="stat-streak" class="text-lg font-black text-slate-700">0 連對</div>
+             </div>
+          </div>
+          <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+             <i class="fa-solid fa-clock text-blue-500 text-3xl"></i>
+             <div>
+                <div class="text-xs text-slate-400 font-bold">時間加分</div>
+                <div id="stat-timebonus" class="text-lg font-black text-slate-700">+0</div>
+             </div>
+          </div>
+          <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+             <i class="fa-solid fa-bolt text-yellow-500 text-3xl"></i>
+             <div>
+                <div class="text-xs text-slate-400 font-bold">連擊加分</div>
+                <div id="stat-streakbonus" class="text-lg font-black text-slate-700">+0</div>
+             </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex gap-4">
+         <button onclick="showScreen('home')" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-lg py-4 rounded-2xl transition-colors btn-bounce">
+            換個模式
+          </button>
+          <button onclick="startGame(currentMode)" class="flex-[2] bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-bold text-lg py-4 rounded-2xl shadow-lg transform transition hover:scale-105 flex items-center justify-center gap-2 btn-bounce">
+            <i class="fa-solid fa-rotate-right"></i> 再挑戰一次！
+          </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JavaScript 遊戲邏輯 ==================== -->
+  <script>
+    // --- 題目資料庫 ---
+    const questionBank = {
+      7: {
+        title: "第7課：水和空氣",
+        icon: '<i class="fa-solid fa-droplet fa-2x"></i>',
+        color: "from-blue-400 to-cyan-400",
+        questions: [
+          { q: "水有顏色嗎？", options: ["沒有顏色", "有紅色", "有藍色", "有黃色"], correct: 0 },
+          { q: "空氣有顏色嗎？", options: ["沒有顏色", "有白色", "有透明色", "有黑色"], correct: 0 },
+          { q: "我們可以用哪個器官聞水的氣味？", options: ["鼻子", "眼睛", "耳朵", "嘴巴"], correct: 0 },
+          { q: "乾淨的水有氣味嗎？", options: ["沒有氣味", "有甜味", "有香味", "有臭味"], correct: 0 },
+          { q: "空氣有氣味嗎？", options: ["沒有氣味", "有花香味", "有泥土味", "有甜味"], correct: 0 },
+          { q: "哪一種東西是「看得見」的？", options: ["水", "空氣", "聲音", "氣味"], correct: 0 },
+          { q: "哪一種東西是「看不見」的？", options: ["空氣", "水", "書本", "蘋果"], correct: 0 },
+          { q: "水會流動嗎？", options: ["會流動", "不會流動", "只會往上流", "有時會，有時不會"], correct: 0 },
+          { q: "空氣會流動嗎？", options: ["會流動", "不會流動", "只會往下流", "被關起來才會流動"], correct: 0 },
+          { q: "水有固定的形狀嗎？", options: ["沒有固定形狀", "都是圓形的", "都是方形的", "有固定形狀"], correct: 0 },
+          { q: "怎麼做可以讓我們感受到空氣的存在？", options: ["用扇子扇一扇", "用眼睛看一看", "用耳朵聽一聽", "用放大鏡看"], correct: 0 },
+          { q: "充滿空氣的氣球放幾天後變小了，是因為？", options: ["空氣流動跑出來了", "空氣被吃掉了", "氣球肚子餓了", "空氣有顏色"], correct: 0 },
+          { q: "把水倒進圓形的杯子裡，水會變成甚麼形狀？", options: ["圓形", "方形", "三角形", "星形"], correct: 0 },
+          { q: "游泳池裡面裝滿了甚麼？", options: ["水", "牛奶", "果汁", "泥沙"], correct: 0 },
+          { q: "我們呼吸的時候需要吸入甚麼？", options: ["空氣", "水", "陽光", "灰塵"], correct: 0 },
+          { q: "水和空氣有甚麼「相同」的地方？", options: ["都沒有顏色和氣味", "都可以用手抓住", "都有甜甜的味道", "都看不見"], correct: 0 },
+          { q: "水和空氣有甚麼「不同」的地方？", options: ["水看得見，空氣看不見", "空氣看得見，水看不見", "水會流動，空氣不會", "空氣會流動，水不會"], correct: 0 },
+          { q: "喝水時，我們能把杯子裡的水倒進嘴巴，因為水？", options: ["會流動", "很透明", "沒有氣味", "會變色"], correct: 0 },
+          { q: "哪一種東西「沒有」固定的形狀？", options: ["水和空氣", "只有水", "只有空氣", "書本和鉛筆"], correct: 0 },
+          { q: "吹泡泡的時候，泡泡裡面包著甚麼？", options: ["空氣", "水", "陽光", "泥土"], correct: 0 },
+        ]
+      },
+      11: {
+        title: "第11課：光和影",
+        icon: '<i class="fa-solid fa-sun fa-2x"></i>',
+        color: "from-amber-400 to-orange-400",
+        questions: [
+          { q: "有光，我們才能看見甚麼？", options: ["看見東西", "聽見聲音", "聞到氣味", "感覺到熱"], correct: 0 },
+          { q: "以下哪一個是「自然光源」？", options: ["太陽", "電燈", "手電筒", "蠟燭"], correct: 0 },
+          { q: "以下哪一個是「人造光源」？", options: ["亮著的電筒", "螢火蟲", "星星", "太陽"], correct: 0 },
+          { q: "螢火蟲是甚麼光源？", options: ["自然光源", "人造光源", "不是光源", "外星光源"], correct: 0 },
+          { q: "能夠自己發出光的物體，我們稱為什麼？", options: ["光源", "反光鏡", "透明體", "黑洞"], correct: 0 },
+          { q: "玻璃幕牆是光源嗎？", options: ["不是，它只是反射光", "是，它會自己發光", "是自然光源", "是人造光源"], correct: 0 },
+          { q: "開啟了的電視機是甚麼光源？", options: ["人造光源", "自然光源", "不是光源", "吸收光源"], correct: 0 },
+          { q: "點燃的蠟燭是甚麼光源？", options: ["人造光源", "自然光源", "不是光源", "電力光源"], correct: 0 },
+          { q: "水母在海裡會發光，牠是？", options: ["自然光源", "人造光源", "植物光源", "不會發光"], correct: 0 },
+          { q: "光受到物體阻擋時，會產生甚麼？", options: ["影子", "彩虹", "聲音", "水分"], correct: 0 },
+          { q: "影子和光源的方向通常是怎樣的？", options: ["相反的", "相同的", "沒有關係的", "重疊的"], correct: 0 },
+          { q: "用電筒照在牆上，中間用手擋住，牆上會出現？", options: ["手的影子", "花的影子", "沒有東西", "彩虹"], correct: 0 },
+          { q: "透明的玻璃會產生很黑的影子嗎？", options: ["不會，光能穿透它", "會，非常黑", "會，產生彩色影子", "玻璃沒有影子"], correct: 0 },
+          { q: "如果世界上完全沒有光，會變成怎樣？", options: ["甚麼都看不見", "東西會變得更清楚", "只看得見白色的東西", "眼睛會變大"], correct: 0 },
+          { q: "我們能在課室裡看見黑板，是因為有？", options: ["光", "風", "水", "聲音"], correct: 0 },
+          { q: "太陽下山了，我們通常需要甚麼來照明？", options: ["人造光源（如電燈）", "自然光源", "戴上眼鏡", "閉上眼睛"], correct: 0 },
+          { q: "光可以穿透我們的手掌嗎？", options: ["不可以", "可以", "有時候可以", "只能穿透手指"], correct: 0 },
+          { q: "下列哪一個「不是」光源？", options: ["書本", "太陽", "亮著的街燈", "螢火蟲"], correct: 0 },
+          { q: "夜晚在戶外，哪一種昆蟲會發光？", options: ["螢火蟲", "蝴蝶", "蜜蜂", "螞蟻"], correct: 0 },
+          { q: "白天時，最大的自然光源是甚麼？", options: ["太陽", "月亮", "星星", "路燈"], correct: 0 },
+        ]
+      },
+      12: {
+        title: "第12課：奇妙的聲音",
+        icon: '<i class="fa-solid fa-music fa-2x"></i>',
+        color: "from-purple-400 to-pink-400",
+        questions: [
+          { q: "我們用身體的哪個器官來聽聲音？", options: ["耳朵", "眼睛", "鼻子", "嘴巴"], correct: 0 },
+          { q: "聲音是因為物體怎樣而產生的？", options: ["震動", "發光", "變色", "融化"], correct: 0 },
+          { q: "哪種動物的叫聲通常是「汪汪」？", options: ["小狗", "小貓", "小雞", "青蛙"], correct: 0 },
+          { q: "學校的鐘聲響起，通常代表甚麼？", options: ["上課或小息", "有火災", "要吃飯了", "要睡覺了"], correct: 0 },
+          { q: "救護車的聲音聽起來是怎樣的？", options: ["很大聲且急促", "很小聲且溫柔", "像唱歌一樣", "沒有聲音"], correct: 0 },
+          { q: "甚麼工具可以幫助我們把聲音放大？", options: ["麥克風（擴音器）", "望遠鏡", "放大鏡", "溫度計"], correct: 0 },
+          { q: "在圖書館裡面，我們應該怎樣說話？", options: ["輕聲細語", "大聲喊叫", "用麥克風說話", "唱歌"], correct: 0 },
+          { q: "哪一種聲音會讓人覺得吵鬧、不舒服？", options: ["地盤鑽地聲（噪音）", "鳥兒唱歌聲", "輕柔的鋼琴聲", "小溪流水聲"], correct: 0 },
+          { q: "聽音樂時如果音量開得太大，會對我們有甚麼影響？", options: ["會傷害耳朵的聽力", "會讓眼睛變好", "會長得更高", "會變得更聰明"], correct: 0 },
+          { q: "閉上眼睛時，我們能知道旁邊有車開過嗎？", options: ["能，因為聽得到車的聲音", "不能，因為看不見", "能，因為聞得到", "不能，因為沒有光"], correct: 0 },
+          { q: "用力敲擊鼓面，會產生甚麼？", options: ["聲音", "光", "水", "彩虹"], correct: 0 },
+          { q: "下列哪一種樂器是用「吹」來發出聲音的？", options: ["直笛", "鋼琴", "結他", "木琴"], correct: 0 },
+          { q: "下列哪一種樂器是用「彈」來發出聲音的？", options: ["鋼琴", "小號", "鼓", "沙槌"], correct: 0 },
+          { q: "下雨的時候，我們可能會聽到甚麼聲音？", options: ["滴滴答答的聲音", "汪汪的聲音", "叮咚的聲音", "沒有聲音"], correct: 0 },
+          { q: "聲音可以隔著門傳遞嗎？", options: ["可以", "不可以", "只有好聽的聲音可以", "只有大人的聲音可以"], correct: 0 },
+          { q: "睡覺的時候，我們通常喜歡怎樣的環境？", options: ["安靜的", "吵鬧的", "有很多音樂的", "有機器聲的"], correct: 0 },
+          { q: "蜜蜂在花叢中飛舞時，會發出甚麼聲音？", options: ["嗡嗡聲", "喵喵聲", "嘎嘎聲", "嘶嘶聲"], correct: 0 },
+          { q: "在下列哪一個地方，我們需要保持安靜？", options: ["醫院和圖書館", "遊樂場", "體育館", "菜市場"], correct: 0 },
+          { q: "用力拍手會發生甚麼事？", options: ["會發出聲音", "手會發光", "手會變透明", "會產生水"], correct: 0 },
+          { q: "為甚麼我們說話時喉嚨會震動？", options: ["因為震動產生聲音", "因為肚子餓了", "因為在呼吸", "因為喝了水"], correct: 0 },
+        ]
+      }
+    };
+
+    // --- 音效引擎 (Web Audio API) ---
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let actx = null;
+    let soundEnabled = true;
+    let bgmIntervalRef = null;
+    let noteIdx = 0;
+    const bgmNotes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63];
+
+    function initAudio() {
+      if (!actx) actx = new AudioCtx();
+      if (actx.state === 'suspended') actx.resume();
+    }
+
+    function playTone(freq, type, duration, vol) {
+      if (!actx || !soundEnabled) return;
+      try {
+        if (actx.state === 'suspended') actx.resume();
+        const osc = actx.createOscillator();
+        const gain = actx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, actx.currentTime);
+        gain.gain.setValueAtTime(vol, actx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(actx.destination);
+        osc.start();
+        osc.stop(actx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playSFX(type) {
+      if (!soundEnabled) return;
+      initAudio();
+      if (type === 'click') playTone(600, 'sine', 0.05, 0.05);
+      if (type === 'correct') {
+        playTone(523.25, 'sine', 0.1, 0.1);
+        setTimeout(() => playTone(659.25, 'sine', 0.1, 0.1), 100);
+        setTimeout(() => playTone(783.99, 'sine', 0.3, 0.1), 200);
+      }
+      if (type === 'wrong') {
+        playTone(250, 'sawtooth', 0.3, 0.1);
+        setTimeout(() => playTone(200, 'sawtooth', 0.4, 0.1), 200);
+      }
+      if (type === 'result') {
+        [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => 
+          setTimeout(() => playTone(f, 'square', 0.2, 0.1), i * 150)
+        );
+      }
+    }
+
+    function toggleSound() {
+      initAudio();
+      soundEnabled = !soundEnabled;
+      const icon = document.getElementById('audio-icon');
+      if (soundEnabled) {
+        icon.className = "fa-solid fa-volume-high text-xl";
+        if (currentMode && document.getElementById('playing-screen').classList.contains('flex')) {
+          startBGM();
+        }
+      } else {
+        icon.className = "fa-solid fa-volume-xmark text-xl";
+        stopBGM();
+      }
+    }
+
+    function startBGM() {
+      stopBGM();
+      if (!soundEnabled) return;
+      initAudio();
+      bgmIntervalRef = setInterval(() => {
+        playTone(bgmNotes[noteIdx], 'triangle', 0.4, 0.02);
+        noteIdx = (noteIdx + 1) % bgmNotes.length;
+      }, 500);
+    }
+
+    function stopBGM() {
+      if (bgmIntervalRef) clearInterval(bgmIntervalRef);
+    }
+
+    // --- 遊戲狀態 ---
+    let currentMode = null;
+    let questions = [];
+    let currentIndex = 0;
+    let score = 0;
+    let streak = 0;
+    let maxStreak = 0;
+    let timeLeft = 15;
+    let isAnswered = false;
+    let selectedOptionIndex = null;
+    let timerInterval = null;
+    let stats = { correct: 0, timeBonus: 0, streakBonus: 0, baseScore: 0 };
+
+    // --- 工具函數 ---
+    function shuffleArray(array) {
+      const newArr = [...array];
+      for (let i = newArr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+      }
+      return newArr;
+    }
+
+    function animateNumber(elementId, endValue, duration = 1000) {
+      const el = document.getElementById(elementId);
+      const startValue = parseInt(el.innerText) || 0;
+      if (startValue === endValue) {
+        el.innerText = endValue;
+        return;
+      }
+      const startTime = performance.now();
+      
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const currentVal = Math.floor(startValue + (endValue - startValue) * easeProgress);
+        el.innerText = currentVal;
+        
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          el.innerText = endValue;
+        }
+      }
+      requestAnimationFrame(update);
+    }
+
+    // --- 畫面控制 ---
+    function showScreen(screenId) {
+      document.getElementById('home-screen').classList.replace('flex', 'hidden');
+      document.getElementById('playing-screen').classList.replace('flex', 'hidden');
+      document.getElementById('result-screen').classList.replace('flex', 'hidden');
+      
+      document.getElementById(screenId).classList.replace('hidden', 'flex');
+      
+      if (screenId !== 'playing-screen') {
+        stopBGM();
+      }
+    }
+
+    // --- 初始化首頁 ---
+    function initHome() {
+      const container = document.getElementById('mode-buttons-container');
+      container.innerHTML = '';
+      
+      Object.entries(questionBank).forEach(([key, data]) => {
+        const btn = document.createElement('button');
+        btn.className = `group relative overflow-hidden rounded-3xl p-8 text-white shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 bg-gradient-to-br ${data.color} btn-bounce`;
+        btn.onclick = () => startGame(key);
+        btn.innerHTML = `
+          <div class="absolute top-0 right-0 p-4 opacity-20 transform translate-x-4 -translate-y-4 group-hover:scale-150 transition-transform duration-500">
+            ${data.icon}
+          </div>
+          <div class="flex flex-col items-center text-center gap-4 relative z-10">
+            <div class="bg-white/30 p-4 rounded-full backdrop-blur-sm text-white">
+              ${data.icon}
+            </div>
+            <h2 class="text-2xl font-bold tracking-wide">${data.title}</h2>
+            <div class="mt-4 bg-white/20 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2">
+              <i class="fa-solid fa-play"></i> 開始挑戰
+            </div>
+          </div>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    // --- 遊戲邏輯 ---
+    function startGame(mode) {
+      initAudio();
+      playSFX('click');
+      currentMode = mode;
+      
+      // 洗牌
+      const rawQuestions = questionBank[mode].questions;
+      questions = shuffleArray(rawQuestions).map(q => {
+        const correctText = q.options[q.correct];
+        const shuffledOptions = shuffleArray([...q.options]);
+        const newCorrectIndex = shuffledOptions.indexOf(correctText);
+        return { ...q, options: shuffledOptions, correct: newCorrectIndex };
+      });
+
+      // 重置狀態
+      currentIndex = 0;
+      score = 0;
+      streak = 0;
+      maxStreak = 0;
+      stats = { correct: 0, timeBonus: 0, streakBonus: 0, baseScore: 0 };
+      document.getElementById('hud-score').innerText = '0';
+      
+      showScreen('playing-screen');
+      document.getElementById('hud-title').innerText = questionBank[mode].title;
+      
+      startBGM();
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      isAnswered = false;
+      selectedOptionIndex = null;
+      timeLeft = 15;
+      
+      const currentQ = questions[currentIndex];
+      
+      // 更新 HUD
+      document.getElementById('hud-progress').innerText = `第 ${currentIndex + 1}/${questions.length} 題`;
+      document.getElementById('progress-bar').style.width = `${(currentIndex / questions.length) * 100}%`;
+      
+      const streakEl = document.getElementById('hud-streak');
+      if (streak >= 3) {
+        streakEl.classList.remove('hidden');
+        document.getElementById('streak-count').innerText = streak;
+      } else {
+        streakEl.classList.add('hidden');
+      }
+
+      document.getElementById('timeout-msg').classList.add('hidden');
+      document.getElementById('question-text').innerText = currentQ.q;
+      
+      // 繪製選項
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+      
+      currentQ.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `option-btn-${idx}`;
+        btn.className = "relative w-full text-left p-6 sm:p-8 rounded-2xl border-b-[6px] font-bold text-xl sm:text-2xl transition-all duration-200 flex items-center justify-between overflow-hidden bg-white border-indigo-200 text-slate-700 hover:bg-indigo-50 hover:border-indigo-400 hover:-translate-y-1 hover:shadow-md cursor-pointer active:border-b-0 active:translate-y-2";
+        btn.onclick = () => handleAnswer(idx);
+        
+        btn.innerHTML = `
+          <span class="relative z-10">${opt}</span>
+          <span id="option-icon-${idx}" class="relative z-10 hidden"></span>
+        `;
+        optionsContainer.appendChild(btn);
+      });
+
+      startTimer();
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      updateTimerUI();
+      
+      timerInterval = setInterval(() => {
+        if (!isAnswered && timeLeft > 0) {
+          timeLeft--;
+          updateTimerUI();
+        }
+        
+        if (timeLeft === 0 && !isAnswered) {
+          document.getElementById('timeout-msg').classList.remove('hidden');
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      const bar = document.getElementById('timer-bar');
+      const text = document.getElementById('timer-text');
+      bar.style.width = `${(timeLeft / 15) * 100}%`;
+      text.innerText = `${timeLeft}s`;
+      
+      if (timeLeft > 5) {
+        bar.classList.replace('bg-red-500', 'bg-green-400') || bar.classList.add('bg-green-400');
+      } else {
+        bar.classList.replace('bg-green-400', 'bg-red-500') || bar.classList.add('bg-red-500');
+      }
+    }
+
+    function handleAnswer(index) {
+      if (isAnswered) return;
+      isAnswered = true;
+      selectedOptionIndex = index;
+      
+      const currentQ = questions[currentIndex];
+      const isCorrect = index === currentQ.correct;
+
+      // 禁用所有按鈕並更新樣式
+      currentQ.options.forEach((_, idx) => {
+        const btn = document.getElementById(`option-btn-${idx}`);
+        const iconContainer = document.getElementById(`option-icon-${idx}`);
+        btn.disabled = true;
+        btn.className = "relative w-full text-left p-6 sm:p-8 rounded-2xl border-b-[6px] font-bold text-xl sm:text-2xl transition-all duration-200 flex items-center justify-between overflow-hidden ";
+        
+        if (idx === currentQ.correct) {
+          btn.className += "bg-green-100 border-green-500 text-green-800 scale-[1.02] shadow-lg z-10";
+          iconContainer.innerHTML = '<i class="fa-solid fa-circle-check text-green-500 text-3xl animate-bounce"></i>';
+          iconContainer.classList.remove('hidden');
+        } else if (idx === selectedOptionIndex) {
+          btn.className += "bg-red-100 border-red-500 text-red-800 opacity-90";
+          iconContainer.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-500 text-3xl"></i>';
+          iconContainer.classList.remove('hidden');
+        } else {
+          btn.className += "bg-slate-50 border-slate-200 text-slate-400 opacity-50 scale-95";
+        }
+      });
+
+      if (isCorrect) {
+        playSFX('correct');
+        const basePoints = 100;
+        let timeBonusPoints = 0;
+        
+        if (timeLeft >= 12) timeBonusPoints = timeLeft * 30;
+        else if (timeLeft >= 7) timeBonusPoints = timeLeft * 20;
+        else timeBonusPoints = timeLeft * 10;
+
+        const newStreak = streak + 1;
+        const streakBonusPoints = newStreak >= 3 ? newStreak * 20 : 0;
+        
+        const totalPoints = basePoints + timeBonusPoints + streakBonusPoints;
+        
+        score += totalPoints;
+        streak = newStreak;
+        maxStreak = Math.max(maxStreak, newStreak);
+        
+        stats.correct += 1;
+        stats.baseScore += basePoints;
+        stats.timeBonus += timeBonusPoints;
+        stats.streakBonus += streakBonusPoints;
+        
+        animateNumber('hud-score', score, 500);
+      } else {
+        playSFX('wrong');
+        streak = 0;
+      }
+
+      // 更新HUD（若剛好達成連擊）
+      if (streak >= 3) {
+        document.getElementById('hud-streak').classList.remove('hidden');
+        document.getElementById('streak-count').innerText = streak;
+      } else {
+        document.getElementById('hud-streak').classList.add('hidden');
+      }
+
+      setTimeout(nextQuestion, 2000);
+    }
+
+    function nextQuestion() {
+      if (currentIndex < questions.length - 1) {
+        playSFX('click');
+        currentIndex++;
+        loadQuestion();
+      } else {
+        playSFX('result');
+        showResult();
+      }
+    }
+
+    function showResult() {
+      stopBGM();
+      showScreen('result-screen');
+      
+      const accuracy = Math.round((stats.correct / questions.length) * 100);
+      let message = "";
+      let stars = 0;
+      
+      if (accuracy >= 90) { message = "太神啦！科學小天才！🏆"; stars = 3; }
+      else if (accuracy >= 70) { message = "表現很棒！繼續保持！🌟"; stars = 2; }
+      else { message = "再接再厲！你可以的！💪"; stars = 1; }
+
+      document.getElementById('result-message').innerText = message;
+      document.getElementById('result-subtitle').innerText = `完成了 ${questionBank[currentMode].title}`;
+      
+      // 生成星星
+      const starsContainer = document.getElementById('result-stars');
+      starsContainer.innerHTML = '';
+      for (let i = 1; i <= 3; i++) {
+        const delay = i * 0.1;
+        const colorClass = i <= stars ? 'text-yellow-400 animate-bounce' : 'text-gray-200';
+        starsContainer.innerHTML += `<i class="fa-solid fa-star text-5xl ${colorClass}" style="animation-delay: ${delay}s"></i>`;
+      }
+
+      // 填入統計數據
+      document.getElementById('stat-correct').innerText = `${stats.correct} / ${questions.length}`;
+      document.getElementById('stat-streak').innerText = `${maxStreak} 連對`;
+      document.getElementById('stat-timebonus').innerText = `+${stats.timeBonus}`;
+      document.getElementById('stat-streakbonus').innerText = `+${stats.streakBonus}`;
+      
+      // 數字動畫
+      document.getElementById('final-score').innerText = '0';
+      animateNumber('final-score', score, 1500);
+    }
+
+    // 啟動首頁
+    window.onload = () => {
+      initHome();
+      showScreen('home-screen');
+    };
+
+  </script>
+</body>
+</html>
