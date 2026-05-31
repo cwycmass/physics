@@ -1453,9 +1453,13 @@
             </div>
             <p class="text-sm text-slate-600 mt-4 mb-2">總熱傳送值 ($\text{OTTV}$) 則是考量了傳導與輻射的每平方米平均得熱率：</p>
             <div class="text-center my-2 overflow-x-auto text-lg font-bold text-blue-900">
-                $$ \text{OTTV} = \frac{\frac{Q_C}{t} + \text{太陽輻射熱}}{A_{\text{Total}}} $$
+                $$ \text{OTTV} = \frac{\frac{Q_C}{t} + \frac{Q_S}{t}}{A_{\text{Total}}} $$
             </div>
-            <p class="text-xs text-slate-500 text-center">($\text{OTTV}$ 的單位為 $\text{W m}^{-2}$)</p>
+            <p class="text-xs text-slate-500 text-center"></p>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$\frac{Q_S}{t}$：輻射所致熱傳遞率（單位：瓦特 $\text{W}$）</li>
+                <li>($\text{OTTV}$ 的單位為 $\text{W m}^{-2}$)</li>
+            </ul>
         </div>
     </section>
 
