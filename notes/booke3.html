@@ -821,7 +821,1136 @@
             </article>
 
 
+<!-- ========================================== -->
+<!-- 區塊 2.1: 電燈 -->
+<!-- ========================================== -->
+<article id="ch2-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.1</span>電燈</h2>
+        <p class="text-slate-500 mt-2">從微觀的電子躍遷出發，了解各種常見照明設備（白熾燈、熒光燈、發光二極管）的發光物理原理及其能源效益差異。</p>
+    </header>
 
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 發光的微觀機制</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>儘管市面上有各種不同類型的電燈，它們最終發出光線的微觀物理過程都是相同的，這被稱為 <strong class="text-blue-700 font-bold">電子躍遷</strong>。</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">能階：</strong> 原子內的電子只能處於特定的能量狀態，稱為能階。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">激發與躍遷：</strong> 當電子吸收了外部能量（如熱能或電能）後，會跳躍到較高的能階，處於不穩定的「激發態」。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">釋放光子：</strong> 不穩定的電子會迅速回落到較低的能階。在這個過程中，電子會將多餘的能量以<strong>電磁波（光子）</strong>的形式釋放出來，這就是我們看到的光。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 三大類電燈的運作原理 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-lightbulb text-blue-500 mr-2"></i> 常見電燈的發光原理</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <div class="space-y-6">
+                <!-- 白熾燈 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">1. 白熾燈</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        當電流流過極幼的鎢絲時，會產生大量的焦耳熱，使鎢絲溫度急升至超過 $2000\ ^\circ\text{C}$。在高溫下，鎢原子內的電子發生躍遷，發出光芒。但其釋放的能量大部分是不可見的紅外線（熱輻射），只有約 $5\%$ 是可見光，因此<strong>能源效益極低</strong>。
+                    </p>
+                </div>
+                <!-- 熒光燈 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">2. 熒光燈（及緊湊型熒光燈/慳電膽）</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        玻璃管內充滿低壓水銀蒸氣。通電後，高速移動的電子撞擊水銀原子，使水銀原子的電子激發。當這些電子回落時，會發出<strong>不可見的紫外線</strong>。玻璃管內壁塗有熒光粉，熒光粉吸收紫外線後，發生另一次電子躍遷，從而發出<strong>可見光</strong>。
+                    </p>
+                </div>
+                <!-- 發光二極管 -->
+                <div class="bg-white p-4 rounded border border-blue-100">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">3. 發光二極管</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        由半導體材料製成。當接通正向電流時，半導體內的自由電子與「空穴」結合。在這個結合（電子落入較低能階）的過程中，能量會直接以可見光的形式釋放。因為不依賴加熱，其<strong>能源效益最高，且壽命極長</strong>。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 照明技術性能對照表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-1/4">白熾燈</th>
+                        <th class="p-3 font-semibold w-1/4">熒光燈 / 慳電膽</th>
+                        <th class="p-3 font-semibold w-1/4">發光二極管</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">主要能量損耗</td>
+                        <td class="p-3 text-red-600 font-bold">極大量紅外線 (熱)</td>
+                        <td class="p-3">部分熱能及紫外能量損失</td>
+                        <td class="p-3 text-green-700 font-bold">極少</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">能源效益</td>
+                        <td class="p-3 text-red-600 font-bold">最低</td>
+                        <td class="p-3 text-amber-600 font-bold">中等</td>
+                        <td class="p-3 text-green-700 font-bold">最高</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">使用壽命</td>
+                        <td class="p-3 text-red-600">最短 (約 1000 小時)</td>
+                        <td class="p-3 text-amber-600">中等 (約 8000 小時)</td>
+                        <td class="p-3 text-green-700">最長 (可達 50000 小時)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">環保隱患</td>
+                        <td class="p-3">耗電量大引致高碳排</td>
+                        <td class="p-3 text-red-600">管內含劇毒水銀</td>
+                        <td class="p-3 text-green-700">無毒性重金屬</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-red-600 border-b border-slate-100 pb-2 mb-2">白熾燈</h4>
+                <p class="text-sm text-slate-600">效益最低，壽命極短，大部分電能變為熱能浪費掉。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-amber-600 border-b border-slate-100 pb-2 mb-2">熒光燈 / 慳電膽</h4>
+                <p class="text-sm text-slate-600">效益中等，壽命較長，但廢棄時需小心處理內含的水銀。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-green-700 border-b border-slate-100 pb-2 mb-2">發光二極管</h4>
+                <p class="text-sm text-slate-600">效益最高，壽命最長，環保且安全，是目前主流照明選擇。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「熒光燈發出的白光是水銀蒸氣直接產生的。」</li>
+                    <li>「因為發光二極管的效率最高，所以它將 100% 的電能都轉換成了光能。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>水銀蒸氣受激發後主要發出的是<strong>不可見的紫外線</strong>。是管壁上的<strong>熒光粉</strong>吸收了紫外線後，才二次躍遷發出我們看見的可見光。</li>
+                    <li>任何真實機器的效率都不可能達到 100%。發光二極管雖然效率高，但仍有部分電能會轉化為內能（熱），因此長時間運作時仍需散熱。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        簡述在熒光燈管內，從「輸入電能」到「輸出可見光」的完整能量轉換過程。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">1. <strong>電能</strong>提供能量給管內的自由電子，使其獲得動能。</p>
+                        <p class="mb-2">2. 高速電子撞擊水銀原子，水銀原子的電子被激發至高能階。</p>
+                        <p class="mb-2">3. 水銀原子內的電子躍遷回低能階，釋放出<strong>紫外線（電磁能）</strong>。</p>
+                        <p class="mb-2">4. 管壁的熒光粉吸收紫外線被激發，隨後躍遷回低能階，最終釋放出<strong>可見光（電磁能）</strong>。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        試從物理原理及環境保護兩個角度，解釋為什麼許多國家已立法禁止生產和銷售鎢絲白熾燈。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2"><strong>物理原理角度：</strong> 白熾燈靠高溫熱輻射發光，輸入的電能中有高達 $90\%$ 以上轉化為無用的內能（紅外線），只有極少部分轉化為可見光，能源效益極低，造成嚴重的電力浪費。</p>
+                        <p class="mb-2"><strong>環境保護角度：</strong> 為了供應這些被浪費的額外電力，發電廠（尤其是燃煤發電廠）必須燃燒更多化石燃料，這會排放大量的二氧化碳，加劇全球暖化及空氣污染。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        為什麼破裂的廢棄熒光燈管不能像普通玻璃垃圾一樣直接丟棄？它會帶來什麼特殊的潛在危險？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">熒光燈管的運作依賴管內的<strong>低壓水銀蒸氣</strong>。</p>
+                        <p class="mb-2">水銀（汞）是一種有毒的重金屬。當燈管破裂時，水銀蒸氣會散溢到空氣中。如果被人體吸入或隨着雨水滲入土壤和水源，會對神經系統造成嚴重損害，並造成長期的生態污染。因此必須經過專門的化學廢料回收處理。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 下列哪一種電燈的發光原理是直接透過「電流通過導體產生高溫，進而發出熱輻射」？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q21-1', 'quiz2-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 白熾燈</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-1', 'quiz2-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 熒光燈</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-1', 'quiz2-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 發光二極管</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-1', 'quiz2-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 慳電膽</button>
+                </div>
+                <div id="exp-q21-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 白熾燈依靠電流流過鎢絲產生巨大的焦耳熱，使鎢絲達到白熾狀態而發光。其他選項則是透過激發氣體或半導體內的電子躍遷發光，屬於冷光源。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 在原子尺度下，光子（光）是如何產生的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q21-2', 'quiz2-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 質子從原子核中逃逸出來</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q21-2', 'quiz2-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 電子從較高能階回落到較低能階</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-2', 'quiz2-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 電子從較低能階跳躍到較高能階</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-2', 'quiz2-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 原子核發生分裂</button>
+                </div>
+                <div id="exp-q21-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 當電子處於高能階的不穩定狀態時，會自發回落到低能階，並將兩個能階之間的能量差以電磁波（光子）的形式釋放出來。這稱為電子躍遷。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 熒光燈管內壁塗有一層白色的熒光粉，它的物理作用是什麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q21-3', 'quiz2-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 作為導電體引導電流</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-3', 'quiz2-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 反射管內產生的可見光使其更亮</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-3', 'quiz2-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 吸收紅外線並將其轉換為可見光</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q21-3', 'quiz2-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 吸收紫外線並將其轉換為可見光</button>
+                </div>
+                <div id="exp-q21-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 水銀原子受激發後產生的是肉眼看不見的紫外線。熒光粉的作用是吸收這些高能量的紫外線，然後透過電子躍遷重新發射出能量較低的可見光。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 下列哪一種照明設備的平均使用壽命最長且能源效益最高？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q21-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 白熾燈</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q21-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 發光二極管</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 傳統直管熒光燈</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 緊湊型熒光燈（慳電膽）</button>
+                </div>
+                <div id="exp-q21-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 發光二極管直接將電能轉化為光能，無須加熱燈絲或激發氣體，能量散失極少，壽命可達數萬小時，是目前最高效的照明技術。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 關於發光二極管的發光機制，下列何者描述正確？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q21-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 電子與半導體內的空穴結合時釋放能量發光</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 電流加熱半導體使其達到白熾狀態發光</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 半導體吸收環境中的熱量轉化為光能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q21-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 透過電壓激發管內氣體產生電弧發光</button>
+                </div>
+                <div id="exp-q21-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 發光二極管是由 P 型和 N 型半導體組成。通電時，處於高能階的自由電子會掉入低能階的空穴中結合，這個能階落差就直接以光子的形式釋放出來。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 2.2: 量度亮度 -->
+<!-- ========================================== -->
+<article id="ch2-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">2.2</span>量度亮度</h2>
+        <p class="text-slate-500 mt-2">介紹描述光強弱的科學指標，學習光通量、照度與光視效能的定義及計算方法。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在物理學中，我們不能僅用電燈的「耗電瓦數」來衡量它有多亮，因為不同電燈的發光效率差異巨大。為此，我們引入了專門測量「可見光」的物理量：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">光通量 ($\Phi$)：</strong> 
+                    代表光源每秒鐘所發出的<strong>可見光能量總和</strong>。這個數值已經考慮了人眼對不同顏色光線的敏感度差異。它代表了光源本身的發光能力。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">照度 ($E$)：</strong> 
+                    代表被照亮的物體表面上，<strong>每單位面積所接收到的光通量</strong>。它反映了某個表面被照得有多「光亮」。距離光源越遠，照度就越低。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">光視效能：</strong> 
+                    衡量一個光源將消耗的電能轉化為可見光的效率指標。數值越高代表越省電。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 text-lg">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center flex flex-col justify-center">
+                    <p class="text-sm font-bold text-blue-800 mb-2">照度定義公式</p>
+                    $$ E = \frac{\Phi}{A} $$
+                    <p class="text-xs text-slate-500 mt-2">$A$ 為被照射的總面積</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center flex flex-col justify-center">
+                    <p class="text-sm font-bold text-blue-800 mb-2">點光源的照度 (平方反比定律)</p>
+                    $$ E = \frac{\Phi}{4\pi d^2} $$
+                    <p class="text-xs text-slate-500 mt-2">$d$ 為距離光源的距離</p>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded border border-blue-100 text-center text-lg my-4">
+                <p class="text-sm font-bold text-blue-800 mb-2">光視效能公式</p>
+                $$ \text{光視效能} = \frac{\Phi}{P} $$
+                <p class="text-xs text-slate-500 mt-2">$P$ 為光源消耗的輸入電功率</p>
+            </div>
+
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> <strong>單位指南：</strong> 
+                    <br>光通量 ($\Phi$) 單位：<strong class="text-blue-700">流明 ($\text{lm}$)</strong>
+                    <br>照度 ($E$) 單位：<strong class="text-blue-700">勒克斯 ($\text{lx}$)</strong>，即 $\text{lm m}^{-2}$
+                    <br>光視效能單位：<strong class="text-blue-700">流明每瓦特 ($\text{lm W}^{-1}$)</strong>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 光通量與照度的物理意義對照</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">物理量</th>
+                        <th class="p-3 font-semibold w-3/8">光通量 ($\Phi$)</th>
+                        <th class="p-3 font-semibold w-3/8">照度 ($E$)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">描述對象</td>
+                        <td class="p-3 font-bold text-slate-700">發光的源頭 (燈泡)</td>
+                        <td class="p-3 font-bold text-blue-700">被照亮的表面 (桌面、書本)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">是否隨距離改變</td>
+                        <td class="p-3"><strong>不變</strong>。燈泡發出的總光量是固定的。</td>
+                        <td class="p-3"><strong>會改變</strong>。距離光源越遠，光線分散，照度隨距離平方反比急劇下降。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium">日常比喻</td>
+                        <td class="p-3">花灑噴出的總水流量</td>
+                        <td class="p-3">你皮膚上每平方厘米被水滴到的密度</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-slate-700 border-b border-slate-100 pb-2 mb-2">光通量 ($\Phi$, 流明 $\text{lm}$)</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">對象：</span> 光源本身。</li>
+                    <li><span class="font-medium text-slate-800">特性：</span> 不隨距離改變，代表燈泡的發光實力。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">照度 ($E$, 勒克斯 $\text{lx}$)</h4>
+                <ul class="text-sm space-y-2 text-slate-600">
+                    <li><span class="font-medium text-slate-800">對象：</span> 被照亮的表面。</li>
+                    <li><span class="font-medium text-slate-800">特性：</span> 離燈泡越遠，照度越低，遵循平方反比規律。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「去超市買燈泡，包裝上寫的瓦特數 ($\text{W}$) 越大，這個燈泡就一定越光亮。」</li>
+                    <li>「如果我把書本移到距離枱燈兩倍遠的地方，書本上的亮度（照度）會變成原來的一半。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>瓦特數代表的只是<strong>耗電量</strong>。燈泡有多亮取決於其<strong>光通量 (流明)</strong>。一個 $10\text{W}$ 的發光二極管可以比一個 $60\text{W}$ 的白熾燈還要亮，因為它的光視效能高得多。</li>
+                    <li>光在空間中是向三維的球形面積擴散的。根據平方反比定律 $E \propto \frac{1}{d^2}$，距離變成兩倍遠，照度會劇減為原來的<strong>四分之一</strong>，而不是一半。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個課室內安裝了一排發光二極管燈，這些燈向下方發出的總光通量為 $24000 \text{ lm}$。假設這些光線均勻地散佈並垂直照射在面積為 $60 \text{ m}^2$ 的課室地板上。求地板上的平均照度。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">這題給定了照射的總面積，因此直接使用照度定義公式 $E = \frac{\Phi}{A}$：</p>
+                        $$E = \frac{24000 \text{ lm}}{60 \text{ m}^2} = 400 \text{ lx}$$
+                        <p class="mt-2 font-bold text-green-700">答案：地板上的平均照度為 $400 \text{ lx}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一盞無燈罩的均勻點光源懸掛在天花板上，其光通量為 $1500 \text{ lm}$。小華將一本書平放在距離該燈泡正下方 $2 \text{ m}$ 的桌面上。求書本表面所接收到的照度。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">無燈罩的點光源會向四周的球體空間均勻發射光線。因此必須使用點光源的平方反比定律公式 $E = \frac{\Phi}{4\pi d^2}$：</p>
+                        $$ E = \frac{1500}{4 \times \pi \times (2)^2} $$
+                        $$ E = \frac{1500}{4 \times \pi \times 4} = \frac{1500}{16\pi} $$
+                        $$ E \approx \frac{1500}{50.27} \approx 29.8 \text{ lx} $$
+                        <p class="mt-2 font-bold text-green-700">答案：書本表面的照度約為 $29.8 \text{ lx}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        比較兩款燈泡：<br>
+                        燈泡 A（白熾燈）：額定功率 $60 \text{ W}$，光通量 $720 \text{ lm}$。<br>
+                        燈泡 B（發光二極管）：額定功率 $10 \text{ W}$，光通量 $900 \text{ lm}$。<br>
+                        分別計算它們的光視效能，並指出哪一款更節能。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                        <i class="fa-solid fa-chevron-down ml-2 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">使用公式：光視效能 $= \frac{\Phi}{P}$</p>
+                        <p class="mb-2"><strong>燈泡 A：</strong></p>
+                        $$ \text{效能}_A = \frac{720}{60} = 12 \text{ lm W}^{-1} $$
+                        <p class="mb-2 mt-4"><strong>燈泡 B：</strong></p>
+                        $$ \text{效能}_B = \frac{900}{10} = 90 \text{ lm W}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：燈泡 A 的光視效能為 $12 \text{ lm W}^{-1}$，燈泡 B 為 $90 \text{ lm W}^{-1}$。燈泡 B 消耗更少電力卻產生更多光線，因此極度節能。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 下列哪一個單位是用來量度「光通量」的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 瓦特 (W)</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 流明 (lm)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 勒克斯 (lx)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 焦耳 (J)</button>
+                </div>
+                <div id="exp-q22-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 光通量的單位是流明 ($\text{lm}$)，代表光源發出的總可見光量。勒克斯 ($\text{lx}$) 是照度的單位。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 若你想在書桌上獲得充足的亮度來閱讀，你應該關注這張桌面的哪一個物理量？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 枱燈的光視效能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 枱燈的光通量</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 桌面上的照度</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 枱燈的消耗功率</button>
+                </div>
+                <div id="exp-q22-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 雖然光源的光通量很重要，但最終決定你書本「夠不夠亮」的是實際落在書本表面每單位面積的光量，這個物理量就是「照度」。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 根據點光源的平方反比定律，如果你將書本與無燈罩燈泡的距離由 $1 \text{ m}$ 增加到 $3 \text{ m}$，書本上的照度會變成原來的多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 三分之一 (1/3)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 三倍 (3)</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 九分之一 (1/9)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 九倍 (9)</button>
+                </div>
+                <div id="exp-q22-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 照度與距離的平方成反比 ($E \propto \frac{1}{d^2}$)。距離變為 $3$ 倍，照度就會變為 $\frac{1}{3^2} = \frac{1}{9}$。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 某一空間的面積為 $10 \text{ m}^2$，若其表面均勻接收了 $500 \text{ lm}$ 的光通量，則該表面的照度為多少？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $5000 \text{ lx}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $50 \text{ lx}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $5 \text{ lx}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $0.02 \text{ lx}$</button>
+                </div>
+                <div id="exp-q22-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 照度 $E = \frac{\Phi}{A} = \frac{500 \text{ lm}}{10 \text{ m}^2} = 50 \text{ lx}$。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 購買燈泡時，如果想找到最「省電且夠亮」的燈泡，應該比較下列哪一個數值？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q22-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 瓦特數 ($\text{W}$) 越大的越好</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 流明數 ($\text{lm}$) 越大的越好</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q22-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 光視效能 ($\text{lm W}^{-1}$) 越大的越好</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q22-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 照度 ($\text{lx}$) 越大的越好</button>
+                </div>
+                <div id="exp-q22-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 光視效能代表每消耗 $1 \text{ W}$ 的電能可以產生多少 $\text{lm}$ 的光。這個數值越大，代表轉換光能的效率越高，即越省電且明亮。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+
+<!-- ========================================== -->
+<!-- 區塊 3.1: 樓宇的能源效益 -->
+<!-- ========================================== -->
+<article id="ch3-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.1</span>樓宇的能源效益</h2>
+        <p class="text-slate-500 mt-2">認識熱量如何通過樓宇外殼傳遞，掌握總熱傳送值與熱透射率的概念，並學習改善建築能源效益的方法。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在香港，商業及住宅樓宇消耗了大量的電能，其中佔比最大的是<strong>空氣調節系統（冷氣）</strong>。要減少空調的耗電量，關鍵在於減少室外熱量傳入室內。我們使用以下物理量來評估樓宇的隔熱能力：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">樓宇外殼：</strong> 
+                    包圍建築物內部空調空間的外圍結構，包括外牆、窗戶和屋頂。熱量主要透過<strong>傳導</strong>和<strong>輻射</strong>穿過樓宇外殼。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">總熱傳送值：</strong> 
+                    量度熱量通過樓宇外殼傳入室內的平均速率指標。總熱傳送值越<strong>低</strong>，代表外殼的隔熱性能越好，空調系統所需的冷卻能力就越小，從而更節省電能。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">熱透射率 ($U$)：</strong> 
+                    衡量特定建築材料（如玻璃或磚牆）傳熱能力的指標。它代表當材料兩側溫差為 $1 \text{ K}$ 時，每單位面積在每秒鐘內傳導的熱量。數值越小，隔熱效果越佳。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">熱量透過建築材料傳導的速率（功率）可以使用以下公式計算：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ P = U A (T_{\text{外}} - T_{\text{內}}) $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                <li>$P$：熱傳遞率（單位：瓦特 $\text{W}$）</li>
+                <li>$U$：材料的熱透射率（單位：$\text{W m}^{-2} \text{ K}^{-1}$）</li>
+                <li>$A$：材料的表面積（單位：$\text{m}^2$）</li>
+                <li>$(T_{\text{外}} - T_{\text{內}})$：室外與室內的溫度差（單位：$\text{K}$ 或 $^\circ\text{C}$）</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 改善樓宇能源效益的方法</h3>
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">改善方法</th>
+                        <th class="p-3 font-semibold w-3/4">物理學原理與效果</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">使用雙層玻璃窗</td>
+                        <td class="p-3">兩層玻璃之間夾有靜止的空氣層。由於空氣是極差的導熱體（熱透射率極低），能大幅減少熱量透過傳導進入室內。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">貼上太陽隔熱膜</td>
+                        <td class="p-3">隔熱膜能反射太陽光中的紅外線，顯著減少熱量透過<strong>輻射</strong>方式穿透窗戶進入室內，同時保留可見光提供照明。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">綠化屋頂與外牆</td>
+                        <td class="p-3">植物和泥土層提供了額外的隔熱層。泥土中的水分在蒸發時會吸收汽化潛熱，產生冷卻效應，進一步降低建築物表面的溫度。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">優化建築物座向</td>
+                        <td class="p-3">減少建築物最大窗戶面積面向正東或正西，避免在清晨或黃昏受到太陽低角度的直接猛烈照射，減少輻射吸熱。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">雙層玻璃與隔熱膜</h4>
+                <p class="text-sm text-slate-600">雙層玻璃利用靜止空氣阻絕<strong>傳導</strong>；隔熱膜則透過反射紅外線阻絕<strong>輻射</strong>。</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">綠化與座向</h4>
+                <p class="text-sm text-slate-600">泥土和植物增加隔熱並透過水分蒸發吸熱。避開東西向的大面積窗戶可大幅降低太陽輻射的得熱量。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「為了讓室內更明亮，採用整面牆的落地大玻璃窗是提升能源效益的好方法，因為可以省下開燈的電費。」</li>
+                    <li>「建築物的總熱傳送值越高，代表它傳散熱量越快，室內就會越涼爽。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li><strong>玻璃的熱透射率遠高於混凝土牆！</strong> 大面積玻璃雖然省下少量照明電費，但會讓大量太陽輻射熱長驅直入，導致空調耗電量暴增，總體而言會嚴重<strong>降低</strong>能源效益。</li>
+                    <li>總熱傳送值是指外界熱量<strong>傳入</strong>室內的速度。數值越「高」，代表外面熱量越容易跑進來，空調負擔越重。因此總熱傳送值應該越<strong>低</strong>越好。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一間辦公室有一面面積為 $15 \text{ m}^2$ 的玻璃窗，其熱透射率 $U$ 為 $5.6 \text{ W m}^{-2} \text{ K}^{-1}$。在炎熱的夏日，室外溫度為 $33\ ^\circ\text{C}$，室內維持在 $23\ ^\circ\text{C}$。求熱量透過傳導經這面玻璃窗進入室內的速率。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算室內外的溫度差：</p>
+                        $$ \Delta T = 33 - 23 = 10 \text{ K} $$
+                        <p class="mb-2 mt-2">2. 代入熱傳遞率公式：</p>
+                        $$ P = U A \Delta T $$
+                        $$ P = 5.6 \times 15 \times 10 $$
+                        $$ P = 840 \text{ W} $$
+                        <p class="mt-2 font-bold text-green-700">答案：熱量進入室內的速率為 $840 \text{ W}$。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        承接上題，業主決定將這面單層玻璃窗更換為雙層玻璃窗，使得熱透射率降至 $2.8 \text{ W m}^{-2} \text{ K}^{-1}$。如果空調機從室內抽走 $1 \text{ J}$ 的熱量需要消耗 $0.4 \text{ J}$ 的電能，求更換窗戶後，空調機每小時可節省多少電能（以焦耳為單位）？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算新的熱傳遞率：</p>
+                        $$ P_{\text{新}} = 2.8 \times 15 \times 10 = 420 \text{ W} $$
+                        <p class="mb-2 mt-2">2. 計算每秒減少傳入的熱量：</p>
+                        $$ \Delta P = 840 - 420 = 420 \text{ W} \quad \text{(即每秒減少 420 J 熱量傳入)} $$
+                        <p class="mb-2 mt-2">3. 計算每小時 ($3600 \text{ s}$) 減少傳入的總熱量：</p>
+                        $$ Q_{\text{節省熱量}} = 420 \times 3600 = 1,512,000 \text{ J} $$
+                        <p class="mb-2 mt-2">4. 計算空調機節省的電能（消耗電能是抽走熱量的 0.4 倍）：</p>
+                        $$ E_{\text{節省電能}} = 1,512,000 \times 0.4 = 604,800 \text{ J} $$
+                        <p class="mt-2 font-bold text-green-700">答案：每小時可節省 $604,800 \text{ J}$ 的電能。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        為了符合香港政府對商業樓宇的能源效益規定，建築師需要降低一座新建大樓的總熱傳送值。請提出三個從建築外殼設計上著手的有效方法。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">建築師可以採取以下方法：</p>
+                        <ul class="list-decimal list-inside space-y-2">
+                            <li><strong>減小窗牆比例：</strong> 減少玻璃窗的面積，增加混凝土牆的面積，因為牆壁的隔熱性能遠優於普通玻璃。</li>
+                            <li><strong>採用高效能玻璃：</strong> 使用雙層玻璃或加上太陽隔熱膜，以降低熱透射率並阻擋紅外線輻射進入。</li>
+                            <li><strong>加設遮陽設施：</strong> 在向東和向西的窗戶外部加裝遮陽篷或百葉簾，直接阻擋太陽直射。</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在香港的商業樓宇中，哪一個系統通常消耗最多的電能？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 照明系統</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 空氣調節系統</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 升降機及自動電梯系統</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 電腦及辦公室設備</button>
+                </div>
+                <div id="exp-q31-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 香港氣候炎熱潮濕，空氣調節系統（冷氣）是所有建築物中耗電量最大的部分，因此降低樓宇外殼的傳熱率對節能至關重要。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 關於建築材料的「熱透射率 ($U$ 值)」，下列哪一項敘述是正確的？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 數值越大，代表材料的隔熱性能越好</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 數值越小，代表熱量越難穿透該材料</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 單層玻璃的 $U$ 值通常低於厚磚牆的 $U$ 值</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $U$ 值只與材料的顏色有關，與厚度無關</button>
+                </div>
+                <div id="exp-q31-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> $U$ 值量度的是「熱量穿透的容易程度」。因此，$U$ 值越小，表示熱量越難傳導過去，隔熱效果越好。單層玻璃極易導熱，其 $U$ 值遠大於磚牆。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 哪一種建築設計方法最能有效減少因「輻射」而傳入室內的熱量？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 增加牆壁的厚度</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 使用雙層玻璃窗</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 在窗戶貼上反射紅外線的隔熱膜</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 關閉所有室內的電燈</button>
+                </div>
+                <div id="exp-q31-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 厚牆和雙層玻璃主要是阻絕「傳導」熱。而陽光帶來的熱量主要是紅外線「輻射」，貼上反射膜能直接將輻射反射出去，是阻絕輻射熱最有效的方法。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 綠化屋頂（在屋頂種植植物）除了美化環境外，在物理學上如何幫助樓宇節能？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 植物會吸收室內的冷氣</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 泥土的熱透射率極高，能快速散熱</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 泥土層提供額外隔熱，且水分蒸發時會吸收潛熱而產生冷卻作用</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 植物進行光合作用時會吸收大量電能</button>
+                </div>
+                <div id="exp-q31-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 泥土本身是熱的不良導體，能降低屋頂的 $U$ 值。更重要的是，泥土中水分的「蒸發」是一個吸熱過程（吸收汽化潛熱），這能像流汗一樣為屋頂表面降溫。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 如果一棟大樓的窗戶面積突然加倍，在沒有更換玻璃材質的情況下，這對該大樓的總熱傳送值會有什麼影響？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 顯著增加</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 顯著減少</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 保持不變</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 變為原來的一半</button>
+                </div>
+                <div id="exp-q31-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 玻璃的熱透射率 ($U$ 值) 遠高於一般的牆壁，且它會讓陽光輻射直接穿透。窗戶面積加倍，意味着大樓外殼有更大比例是低隔熱的玻璃，熱量傳入大增，總熱傳送值會顯著上升。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 3.2: 交通工具的能源效益 -->
+<!-- ========================================== -->
+<article id="ch3-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.2</span>交通工具的能源效益</h2>
+        <p class="text-slate-500 mt-2">比較傳統內燃機汽車與電動車的運作原理，並探討再生制動及混合動力技術如何提升能源效益。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>現代交通工具主要分為依賴化石燃料的傳統汽車與依賴電能的電動車。兩者在能量轉換的過程中存在巨大的效率差異：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">內燃機汽車：</strong> 
+                    燃燒汽油或柴油，將化學能轉化為內能，再轉化為推動汽車的動能。由於燃燒和機械摩擦，大部分能量以熱和聲音的形式浪費掉，整體能源效益通常只有 $20\% \sim 30\%$。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">電動車：</strong> 
+                    使用電池儲存化學能，並利用電動機將電能直接轉換為動能。電動機沒有複雜的燃燒過程和排氣系統，能量轉換效率極高，通常超過 $80\%$。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">混合動力車：</strong> 
+                    同時配備了內燃機和電動機。透過智能控制系統，在不同車速下靈活切換或同時使用兩種動力，結合了汽油車長續航和電動車高效率的優點。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 革命性技術：再生制動</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">傳統汽車在煞車時，剎車片的摩擦力會將汽車的動能完全轉化為無用的內能（熱能）散失在空氣中。電動車與混合動力車則配備了 <strong class="text-blue-700 font-bold">再生制動</strong> 技術，這是它們極度節能的關鍵原因之一：</p>
+            
+            <div class="bg-white p-4 rounded border border-blue-100 my-4 text-center">
+                <p class="font-bold text-blue-800 mb-2">再生制動的能量轉換過程</p>
+                <div class="flex items-center justify-center space-x-2 text-sm sm:text-base font-bold text-slate-700">
+                    <span class="bg-slate-100 px-3 py-2 rounded border border-slate-200">汽車動能</span>
+                    <i class="fa-solid fa-arrow-right text-blue-500"></i>
+                    <span class="bg-blue-50 px-3 py-2 rounded border border-blue-200 text-blue-700">電能 (發電機)</span>
+                    <i class="fa-solid fa-arrow-right text-green-500"></i>
+                    <span class="bg-green-50 px-3 py-2 rounded border border-green-200 text-green-700">化學能 (儲入電池)</span>
+                </div>
+                <p class="text-sm text-slate-500 mt-4 text-left">當司機踩下煞車時，電動機會反向運作，變成一台發電機。它利用汽車剩餘的動能來發電，產生電磁阻力令汽車減速，同時將發出的電能重新充入電池中，供下次加速時使用。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 內燃機汽車與電動車的綜合對照</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">比較項目</th>
+                        <th class="p-3 font-semibold w-3/8">內燃機汽車</th>
+                        <th class="p-3 font-semibold w-3/8">電動車</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">能量轉換效率</td>
+                        <td class="p-3 text-red-600 font-bold">低 (約 20-30%)</td>
+                        <td class="p-3 text-green-700 font-bold">極高 (>80%)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">怠速耗能<br><span class="text-xs text-slate-500">(如塞車時停步)</span></td>
+                        <td class="p-3">高。引擎必須持續空轉燃燒汽油以維持運作，嚴重浪費能源。</td>
+                        <td class="p-3">極低。電動機在車輛靜止時完全停止運轉，幾乎不消耗電能。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">路面廢氣排放</td>
+                        <td class="p-3 text-red-600">排放大量二氧化碳及廢氣，造成路面空氣污染。</td>
+                        <td class="p-3 text-green-700 font-bold">零排放 (路面無廢氣)。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-red-600 border-b border-slate-100 pb-2 mb-2">內燃機汽車</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>效益低，大部分能量化為熱能散失。</li>
+                    <li>塞車怠速時引擎仍需空轉，極度浪費。</li>
+                    <li>直接排放廢氣污染空氣。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-green-700 border-b border-slate-100 pb-2 mb-2">電動車</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li>電動機轉換效率極高。</li>
+                    <li>靜止時電動機停轉，不浪費能量。</li>
+                    <li>行駛時零廢氣排放。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 錯誤觀念 -->
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「因為電動車行駛時沒有排氣管排放廢氣，所以推廣電動車可以達到 100% 絕對零碳排放，對地球環境完全無害。」</li>
+                    <li>「混合動力車行駛時，它的電池只能像手機一樣，必須插上電線充電才能恢復電量。」</li>
+                </ul>
+            </div>
+            <!-- 正確觀念 -->
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>電動車本身雖零排放，但其消耗的電能若來自<strong>燃煤發電廠</strong>，發電過程中依然會產生大量碳排放。只有當電力來自可再生能源或核能時，電動車才是真正的環保。</li>
+                    <li>許多傳統的混合動力車不需要插電。它們的電池是透過<strong>內燃機的多餘動力</strong>以及<strong>再生制動系統</strong>在行駛和煞車過程中自動充電的。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一輛質量為 $1500 \text{ kg}$ 的汽車在市區行駛。它的內燃機燃燒汽油釋放了 $2.0 \times 10^7 \text{ J}$ 的化學能，但其中有 $1.5 \times 10^7 \text{ J}$ 的能量以引擎散熱及排氣的形式流失到環境中。求該內燃機汽車的能量轉換效率。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算有用的輸出能量：</p>
+                        $$ E_{\text{有用}} = \text{總輸入} - \text{流失量} = 2.0 \times 10^7 - 1.5 \times 10^7 = 0.5 \times 10^7 \text{ J} $$
+                        <p class="mb-2 mt-2">2. 計算效率：</p>
+                        $$ \text{效率} = \frac{E_{\text{有用}}}{E_{\text{總}}} \times 100\% $$
+                        $$ \text{效率} = \frac{0.5 \times 10^7}{2.0 \times 10^7} \times 100\% = 25\% $$
+                        <p class="mt-2 font-bold text-green-700">答案：該汽車的能量轉換效率為 $25\%$（這是典型燃油車的低效率表現）。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一輛質量為 $2000 \text{ kg}$ 的電動車以 $20 \text{ m s}^{-1}$ 的速度行駛。當遇到紅燈時，司機啟動再生制動系統令車輛停下。若再生制動系統能將減少的動能中 $60\%$ 轉化並儲存回電池，求這次煞車為電池充入了多少焦耳的能量？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算汽車煞車前擁有的初始動能：</p>
+                        $$ KE = \frac{1}{2}mv^2 = \frac{1}{2}(2000)(20)^2 = 1000 \times 400 = 400,000 \text{ J} $$
+                        <p class="mb-2 mt-2">2. 計算轉化入電池的能量：</p>
+                        $$ E_{\text{儲存}} = KE \times 60\% = 400,000 \times 0.6 = 240,000 \text{ J} $$
+                        <p class="mt-2 font-bold text-green-700">答案：為電池充入了 $240,000 \text{ J}$ ($240 \text{ kJ}$) 的能量。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">例題 3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        混合動力車在不同的駕駛情況下會由其控制系統智能切換動力來源。請問在「市區走走停停（低速且頻繁煞車）」的情況下，混合動力車會如何運作以最大化能源效益？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">在市區走走停停的情況下，內燃機的效率極低且會因為怠速浪費大量燃料。因此，混合動力車會：</p>
+                        <ul class="list-decimal list-inside space-y-2">
+                            <li><strong>低速起步與行駛：</strong> 關閉內燃機，僅使用<strong>電動機</strong>由電池供電驅動車輛，實現零油耗與高效率。</li>
+                            <li><strong>頻繁煞車：</strong> 啟動<strong>再生制動</strong>系統，將頻繁減速時的動能回收轉化為電能充入電池，供下次起步使用，極大地減少了能量的浪費。</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 傳統內燃機汽車的能量轉換效率通常只有約 25%。這表示其餘的 75% 能量主要發生了什麼事？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 轉化為推動汽車前進的動能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 轉化為電能儲存在汽車電池中</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 以熱能和聲音的形式散失到環境中</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 消失在真空中，違反了能量守恆定律</button>
+                </div>
+                <div id="exp-q32-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 內燃機透過燃燒爆炸產生動力，這個過程會產生極高的熱量（經由水箱與排氣管散去），加上引擎內部的機械摩擦，導致絕大部分化學能變成了無用的內能浪費掉。
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 在市區嚴重塞車，車輛走走停停且長時間停在原地時。為甚麼電動車的能源效益會大幅優於內燃機汽車？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 因為電動車在車輛靜止時，電動機完全停轉，不消耗能量</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 因為電動車的車身設計一定比較符合空氣動力學</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 因為電動車不需要煞車</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 因為內燃機汽車在靜止時會吸收外界熱量</button>
+                </div>
+                <div id="exp-q32-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 內燃機汽車即使停定，引擎也必須維持怠速運轉（持續燃燒汽油）以免熄火。而電動車在停車時馬達完全斷電，實現了零怠速耗能。
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 再生制動 (Regenerative braking) 系統的核心能量轉換過程是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q32-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 將熱能轉換為動能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 將電能轉換為動能</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q32-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 將動能轉換為電能，然後儲存為化學能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 將太陽能轉換為電能</button>
+                </div>
+                <div id="exp-q32-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 煞車時，電動車的馬達轉變為發電機，吸收車輛前進的動能來發電，產生電磁阻力令車減速，並把發出的電能充入電池（轉為化學能）。
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 混合動力車之所以被稱為「混合」，是因為它同時配備了哪兩種動力來源？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q32-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 內燃機與電動機</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 太陽能板與風力發電機</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 汽油引擎與柴油引擎</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 核反應堆與電動機</button>
+                </div>
+                <div id="exp-q32-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 混合動力車 (Hybrid Vehicle) 的設計理念就是結合傳統內燃機（負責高速巡航與發電）和電動機（負責低速行駛與起步）的優點，達到省油的效果。
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 從整個城市規劃的角度來看，要最大幅度提升整體的交通運輸能源效益，最有效的方法是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q32-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 規定所有市民只能騎單車</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 把所有馬路加寬，減少塞車</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q32-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 發展及鼓勵使用大眾集體運輸系統（如電氣化鐵路）</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 降低所有汽車的行駛速度上限</button>
+                </div>
+                <div id="exp-q32-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 電氣化鐵路（如港鐵）的電動機效率極高，加上它可以同時運載大量乘客。分攤下來，其「人均能源消耗」遠低於任何人駕駛私家車（即使是電動私家車），是提升城市能源效益的最有效方案。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
 
             
           
