@@ -607,8 +607,32 @@
             selectDollar(0);
             selectCent(0);
 
-            // 準備硬幣來散佈 (使用 Greedy，偶爾替換一些硬幣增加變化，但不宜過多以免放不下)
-            let solution = calculateGreedyCoins(currentTargetValue);
+            let solution = {};
+            // 60%機率在金額 >= 1元時，故意將其中 1 元拆成較小的「角」硬幣
+            // 這會使得畫面上「角」硬幣的總額超過 1 元（介於 100¢ ~ 190¢），但小於 2 元
+            if (currentTargetValue >= 100 && Math.random() < 0.6) {
+                // 先算出扣掉 100¢ 之後的貪婪解
+                solution = calculateGreedyCoins(currentTargetValue - 100);
+                
+                // 再手動將那 100¢ 拆解成以下的組合
+                const breakdownOptions = [
+                    [50, 50],
+                    [50, 20, 20, 10],
+                    [20, 20, 20, 20, 20],
+                    [50, 20, 10, 10, 10],
+                    [50, 10, 10, 10, 10, 10]
+                ];
+                let chosenBreakdown = breakdownOptions[Math.floor(Math.random() * breakdownOptions.length)];
+                
+                chosenBreakdown.forEach(val => {
+                    if (!solution[val]) solution[val] = 0;
+                    solution[val]++;
+                });
+            } else {
+                // 一般情況：直接使用最精簡的貪婪解
+                solution = calculateGreedyCoins(currentTargetValue);
+            }
+
             scatteredCoinsArray = [];
             for(let id in solution) {
                 let count = solution[id];
