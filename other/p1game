@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>學科超級大挑戰 - 小一科學與人文</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+    
+    body {
+      font-family: 'Nunito', 'Microsoft JhengHei', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .linear-transition {
+      transition: width 1s linear, background-color 0.3s;
+    }
+
+    .btn-bounce:active {
+      transform: translateY(4px);
+    }
+
+    /* 隱藏滾動條 */
+    ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 text-slate-800">
+
+  <!-- 全局音量控制 -->
+  <button id="global-audio-toggle" onclick="toggleSound()" class="fixed top-4 right-4 z-50 p-3 bg-white/80 backdrop-blur rounded-full shadow-md text-slate-500 hover:text-indigo-500 transition-colors">
+    <i id="audio-icon" class="fa-solid fa-volume-high text-xl"></i>
+  </button>
+
+  <!-- ==================== 首頁畫面 (Home Screen) ==================== -->
+  <div id="home-screen" class="max-w-6xl w-full flex flex-col items-center justify-center min-h-screen py-10">
+    <div class="text-center mb-10 animate-bounce">
+      <h1 class="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 mb-4 drop-shadow-sm pb-2">
+        學科超級大挑戰
+      </h1>
+      <p class="text-xl text-slate-600 font-bold">小朋友，你想挑戰哪一課呢？</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full" id="mode-buttons-container">
+      <!-- 模式按鈕由 JS 動態生成 -->
+    </div>
+  </div>
+
+  <!-- ==================== 遊玩畫面 (Playing Screen) ==================== -->
+  <div id="playing-screen" class="hidden w-full flex-col items-center justify-center min-h-screen max-w-4xl">
+    
+    <!-- HUD 頂部資訊列 -->
+    <div class="w-full flex justify-between items-end mb-4 px-2">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <div id="hud-title" class="text-slate-400 font-bold text-sm"></div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="hud-progress" class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-black text-lg">
+            第 1/20 題
+          </span>
+          <span id="hud-streak" class="hidden bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-black flex items-center gap-1 animate-pulse">
+            <i class="fa-solid fa-fire"></i> <span id="streak-count"></span> 連擊!
+          </span>
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="text-slate-400 font-bold text-sm mb-1">分數 SCORE</div>
+        <div id="hud-score" class="text-3xl sm:text-4xl font-black text-indigo-600 transition-all duration-300">0</div>
+      </div>
+    </div>
+
+    <!-- 主要答題區 -->
+    <div class="bg-white rounded-3xl shadow-xl w-full overflow-hidden border-4 border-white flex flex-col">
+      
+      <!-- 進度條 -->
+      <div class="w-full bg-slate-100 h-2">
+        <div id="progress-bar" class="bg-indigo-500 h-full transition-all duration-300" style="width: 0%"></div>
+      </div>
+
+      <!-- 倒數計時條 -->
+      <div class="w-full bg-slate-100 h-3 relative">
+        <div id="timer-bar" class="h-full linear-transition bg-green-400" style="width: 100%"></div>
+        <div id="timer-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[10px] font-black text-white drop-shadow-md">
+          15s
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-10 flex flex-col flex-1 min-h-[500px]">
+        <!-- 題目 -->
+        <div class="flex-1 flex items-center justify-center mb-8">
+          <h2 id="question-text" class="text-3xl sm:text-3xl font-black text-slate-800 text-center leading-snug">
+            載入中...
+          </h2>
+        </div>
+
+        <!-- 選項網格 -->
+        <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 選項按鈕由 JS 動態生成 -->
+        </div>
+        
+        <!-- 超時提示 -->
+        <div id="timeout-msg" class="hidden mt-6 text-center text-orange-500 font-bold text-xl sm:text-2xl animate-pulse">
+          時間到！現在作答沒有時間加分囉 ⏳
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 結算畫面 (Result Screen) ==================== -->
+  <div id="result-screen" class="hidden max-w-lg w-full flex flex-col items-center justify-center min-h-screen">
+    <div class="bg-white rounded-[2rem] shadow-2xl w-full p-8 text-center relative overflow-hidden border-8 border-indigo-100">
+      
+      <div id="result-stars" class="flex justify-center gap-2 mb-4">
+        <!-- 星星由 JS 動態生成 -->
+      </div>
+      
+      <h2 id="result-message" class="text-3xl font-black text-slate-800 mb-2">太神啦！</h2>
+      <p id="result-subtitle" class="text-indigo-500 font-bold mb-8">完成了</p>
+      
+      <div class="bg-slate-50 rounded-2xl p-6 mb-8 shadow-inner border border-slate-100">
+        <div class="text-sm text-slate-500 font-bold mb-1">總得分</div>
+        <div id="final-score" class="text-6xl font-black text-indigo-600 mb-6 drop-shadow-md">0</div>
+        
+        <div class="grid grid-cols-2 gap-4 text-left">
+          <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+             <i class="fa-solid fa-circle-check text-green-500 text-3xl"></i>
+             <div>
+                <div class="text-xs text-slate-400 font-bold">答對題數</div>
+                <div id="stat-correct" class="text-lg font-black text-slate-700">0 / 20</div>
+             </div>
+          </div>
+          <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+             <i class="fa-solid fa-fire text-orange-500 text-3xl"></i>
+             <div>
+                <div class="text-xs text-slate-400 font-bold">最高連擊</div>
+                <div id="stat-streak" class="text-lg font-black text-slate-700">0 連對</div>
+             </div>
+          </div>
+          <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+             <i class="fa-solid fa-clock text-blue-500 text-3xl"></i>
+             <div>
+                <div class="text-xs text-slate-400 font-bold">時間加分</div>
+                <div id="stat-timebonus" class="text-lg font-black text-slate-700">+0</div>
+             </div>
+          </div>
+          <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+             <i class="fa-solid fa-bolt text-yellow-500 text-3xl"></i>
+             <div>
+                <div class="text-xs text-slate-400 font-bold">連擊加分</div>
+                <div id="stat-streakbonus" class="text-lg font-black text-slate-700">+0</div>
+             </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex gap-4">
+         <button onclick="showScreen('home-screen')" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-lg py-4 rounded-2xl transition-colors btn-bounce">
+            換個模式
+          </button>
+          <button onclick="startGame(currentMode)" class="flex-[2] bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-bold text-lg py-4 rounded-2xl shadow-lg transform transition hover:scale-105 flex items-center justify-center gap-2 btn-bounce">
+            <i class="fa-solid fa-rotate-right"></i> 再挑戰一次！
+          </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JavaScript 遊戲邏輯 ==================== -->
+  <script>
+    // --- 題目資料庫 ---
+    // Expanded to 20 questions per mode based on the provided material and general elementary knowledge related to the topics.
+    const questionBank = {
+      7: {
+        title: "科學 第7課：水和空氣",
+        icon: '<i class="fa-solid fa-droplet fa-2x"></i>',
+        color: "from-blue-400 to-cyan-400",
+        questions: [
+          // Original 10
+          { q: "水有顏色嗎？", options: ["沒有顏色", "有紅色", "有藍色", "有黃色"], correct: 0 },
+          { q: "空氣有顏色嗎？", options: ["沒有顏色", "有白色", "有透明色", "有黑色"], correct: 0 },
+          { q: "我們可以用哪個器官聞水的氣味？", options: ["鼻子", "眼睛", "耳朵", "嘴巴"], correct: 0 },
+          { q: "乾淨的水有氣味嗎？", options: ["沒有氣味", "有甜味", "有香味", "有臭味"], correct: 0 },
+          { q: "空氣有氣味嗎？", options: ["沒有氣味", "有花香味", "有泥土味", "有甜味"], correct: 0 },
+          { q: "哪一種東西是「看得見」的？", options: ["水", "空氣", "聲音", "氣味"], correct: 0 },
+          { q: "哪一種東西是「看不見」的？", options: ["空氣", "水", "書本", "蘋果"], correct: 0 },
+          { q: "水會流動嗎？", options: ["會流動", "不會流動", "只會往上流", "有時會，有時不會"], correct: 0 },
+          { q: "空氣會流動嗎？", options: ["會流動", "不會流動", "只會往下流", "被關起來才會流動"], correct: 0 },
+          { q: "水有固定的形狀嗎？", options: ["沒有固定形狀", "都是圓形的", "都是方形的", "有固定形狀"], correct: 0 },
+          // New 10
+          { q: "把水倒進圓形的杯子裡，水會變成什麼形狀？", options: ["圓形", "方形", "三角形", "不會改變形狀"], correct: 0 },
+          { q: "用扇子搧風，我們感覺到涼涼的，是因為什麼在流動？", options: ["空氣", "水", "光", "聲音"], correct: 0 },
+          { q: "潛水員在水裡呼吸需要帶什麼？", options: ["氧氣筒(空氣)", "更多的水", "手電筒", "潛水鏡"], correct: 0 },
+          { q: "吹氣球時，氣球會變大，是因為裡面裝了什麼？", options: ["空氣", "水", "石頭", "沙子"], correct: 0 },
+          { q: "我們能抓住水嗎？", options: ["不能，水會流走", "能，就像抓石頭一樣", "能，如果力氣夠大", "有時候能"], correct: 0 },
+          { q: "沒有空氣，我們還能活下去嗎？", options: ["不能", "能", "只要有水就能", "只要有食物就能"], correct: 0 },
+          { q: "游泳圈能浮在水面上，裡面通常充滿了什麼？", options: ["空氣", "水", "鐵", "石頭"], correct: 0 },
+          { q: "植物需要什麼才能生長？", options: ["水和空氣都需要", "只需要水", "只需要空氣", "都不需要"], correct: 0 },
+          { q: "把空玻璃杯翻轉，再倒扣進水裡，水為什麼不能完全充滿杯子？", options: ["因為裡面有空氣", "因為杯子壞了", "因為水不夠多", "因為水不喜歡進去"], correct: 0 },
+          { q: "風是怎麼來的？", options: ["空氣的流動", "樹葉搖晃產生的", "雲跑得太快", "太陽曬的"], correct: 0 }
+        ]
+      },
+      11: {
+        title: "科學 第11課：光和影",
+        icon: '<i class="fa-solid fa-sun fa-2x"></i>',
+        color: "from-amber-400 to-orange-400",
+        questions: [
+          // Original 10
+          { q: "有光，我們才能看見甚麼？", options: ["看見東西", "聽見聲音", "聞到氣味", "感覺到熱"], correct: 0 },
+          { q: "以下哪一個是「自然光源」？", options: ["太陽", "電燈", "手電筒", "蠟燭"], correct: 0 },
+          { q: "以下哪一個是「人造光源」？", options: ["亮著的電筒", "螢火蟲", "星星", "太陽"], correct: 0 },
+          { q: "螢火蟲是甚麼光源？", options: ["自然光源", "人造光源", "不是光源", "外星光源"], correct: 0 },
+          { q: "能夠自己發出光的物體，我們稱為什麼？", options: ["光源", "反光鏡", "透明體", "黑洞"], correct: 0 },
+          { q: "玻璃幕牆是光源嗎？", options: ["不是，它只是反射光", "是，它會自己發光", "是自然光源", "是人造光源"], correct: 0 },
+          { q: "開啟了的電視機是甚麼光源？", options: ["人造光源", "自然光源", "不是光源", "吸收光源"], correct: 0 },
+          { q: "點燃的蠟燭是甚麼光源？", options: ["人造光源", "自然光源", "不是光源", "電力光源"], correct: 0 },
+          { q: "水母在海裡會發光，牠是？", options: ["自然光源", "人造光源", "植物光源", "不會發光"], correct: 0 },
+          { q: "光受到物體阻擋時，會產生甚麼？", options: ["影子", "彩虹", "聲音", "水分"], correct: 0 },
+          // New 10
+          { q: "月亮是光源嗎？", options: ["不是，它反射太陽的光", "是自然光源", "是人造光源", "是，它自己會發光"], correct: 0 },
+          { q: "在完全黑暗的房間裡，你能看見蘋果嗎？", options: ["不能，因為沒有光", "能，因為蘋果是紅色的", "適應一下就能看見", "如果蘋果夠大就能看見"], correct: 0 },
+          { q: "影子的顏色通常是？", options: ["黑色或深色", "和物體一樣顏色", "彩色的", "透明的"], correct: 0 },
+          { q: "當你靠近光源時，你的影子會？", options: ["變大", "變小", "不變", "消失"], correct: 0 },
+          { q: "哪種物體最容易產生清晰的影子？", options: ["不透明的書本", "透明的玻璃", "乾淨的水", "空氣"], correct: 0 },
+          { q: "太陽在我們頭頂正上方時，我們的影子會？", options: ["很短", "很長", "消失不見", "變成紅色"], correct: 0 },
+          { q: "皮影戲是利用什麼原理表演的？", options: ["光和影", "聲音的震動", "水的流動", "熱脹冷縮"], correct: 0 },
+          { q: "下面哪一個東西不發光，所以不是光源？", options: ["鏡子", "太陽", "亮著的街燈", "燃燒的火柴"], correct: 0 },
+          { q: "透明的玻璃杯在陽光下，它的影子和書本的影子相比？", options: ["比較淡", "比較深", "完全一樣", "沒有影子"], correct: 0 },
+          { q: "如果光源從左邊照過來，影子會在哪一邊？", options: ["右邊", "左邊", "上面", "下面"], correct: 0 }
+        ]
+      },
+      12: {
+        title: "科學 第12課：奇妙的聲音",
+        icon: '<i class="fa-solid fa-music fa-2x"></i>',
+        color: "from-purple-400 to-pink-400",
+        questions: [
+          // Original 10
+          { q: "我們用身體的哪個器官來聽聲音？", options: ["耳朵", "眼睛", "鼻子", "嘴巴"], correct: 0 },
+          { q: "聲音是因為物體怎樣而產生的？", options: ["震動", "發光", "變色", "融化"], correct: 0 },
+          { q: "哪種動物的叫聲通常是「汪汪」？", options: ["小狗", "小貓", "小雞", "青蛙"], correct: 0 },
+          { q: "學校的鐘聲響起，通常代表甚麼？", options: ["上課或小息", "有火災", "要吃飯了", "要睡覺了"], correct: 0 },
+          { q: "救護車的聲音聽起來是怎樣的？", options: ["很大聲且急促", "很小聲且溫柔", "像唱歌一樣", "沒有聲音"], correct: 0 },
+          { q: "甚麼工具可以幫助我們把聲音放大？", options: ["麥克風（擴音器）", "望遠鏡", "放大鏡", "溫度計"], correct: 0 },
+          { q: "在圖書館裡面，我們應該怎樣說話？", options: ["輕聲細語", "大聲喊叫", "用麥克風說話", "唱歌"], correct: 0 },
+          { q: "哪一種聲音會讓人覺得吵鬧、不舒服？", options: ["地盤鑽地聲（噪音）", "鳥兒唱歌聲", "輕柔的鋼琴聲", "小溪流水聲"], correct: 0 },
+          { q: "聽音樂時如果音量開得太大，會對我們有甚麼影響？", options: ["會傷害耳朵的聽力", "會讓眼睛變好", "會長得更高", "會變得更聰明"], correct: 0 },
+          { q: "閉上眼睛時，我們能知道旁邊有車開過嗎？", options: ["能，因為聽得到車的聲音", "不能，因為看不見", "能，因為聞得到", "不能，因為沒有光"], correct: 0 },
+          // New 10
+          { q: "敲擊大鼓和小鼓，哪一個發出的聲音通常比較低沉？", options: ["大鼓", "小鼓", "一樣", "不會發出聲音"], correct: 0 },
+          { q: "用力敲打桌面和輕輕敲打桌面，哪個聲音比較大？", options: ["用力敲打", "輕輕敲打", "一樣大", "都聽不見"], correct: 0 },
+          { q: "講話時摸摸喉嚨，會有什麼感覺？", options: ["感覺在震動", "感覺變冷了", "感覺變硬了", "沒有感覺"], correct: 0 },
+          { q: "哪一種樂器是透過吹氣讓空氣震動發聲的？", options: ["直笛", "鋼琴", "結他", "木琴"], correct: 0 },
+          { q: "雷聲通常聽起來是怎樣的？", options: ["轟隆隆很大聲", "嘰嘰喳喳", "滴滴答答", "安靜無聲"], correct: 0 },
+          { q: "如果想讓收音機的聲音變小，我們應該怎麼做？", options: ["調低音量", "關燈", "把收音機放高一點", "對著它吹氣"], correct: 0 },
+          { q: "聲音可以在空氣中傳播，那可以在水裡傳播嗎？", options: ["可以", "不可以", "只有熱水可以", "只有冰水可以"], correct: 0 },
+          { q: "上課時老師講話的聲音，主要功能是什麼？", options: ["傳達知識和訊息", "讓人想睡覺", "製造噪音", "為了好玩"], correct: 0 },
+          { q: "深夜時，我們在家裡聽音樂應該注意什麼？", options: ["音量不要太大，以免吵到鄰居", "把音量開到最大", "一定要唱歌", "打開窗戶聽"], correct: 0 },
+          { q: "什麼情況下我們會戴上耳塞？", options: ["環境太吵鬧時保護耳朵", "想聽清楚別人講話時", "聽音樂時", "看書時"], correct: 0 }
+        ]
+      },
+      h7: {
+        title: "人文 第7課：温暖的家",
+        icon: '<i class="fa-solid fa-house-chimney fa-2x"></i>',
+        color: "from-rose-400 to-red-400",
+        questions: [
+          // Original 10
+          { q: "誰是我的家人？", options: ["父母和兄弟姊妹", "鄰居", "同學", "老師"], correct: 0 },
+          { q: "家人之間應該怎樣相處？", options: ["互相體諒和相親相愛", "常常吵架", "不理睬對方", "互相搶玩具"], correct: 0 },
+          { q: "在家中，自己使用過的物品應該怎樣處理？", options: ["自己收拾", "叫媽媽收拾", "丟在地上", "藏在牀下"], correct: 0 },
+          { q: "參與家庭活動可以帶來甚麼好處？", options: ["享受與家人相處的時光", "可以不用做功課", "可以得到玩具", "可以自己一個人玩"], correct: 0 },
+          { q: "我們應該主動與父母分享甚麼？", options: ["校園生活和心事", "同學的秘密", "電視節目的密碼", "別人的壞話"], correct: 0 },
+          { q: "每個家庭的成員組合一定相同嗎？", options: ["不一定相同", "一定相同", "只有一種組合", "完全一樣"], correct: 0 },
+          { q: "哥哥告訴妹妹他要整天使用電腦，妹妹應該怎樣做？", options: ["與哥哥多溝通，互相體諒", "搶走電腦", "大哭大鬧", "打哥哥"], correct: 0 },
+          { q: "《孔融讓梨》的故事教導我們甚麼？", options: ["跟家人相親相愛的中華傳統美德", "怎樣吃梨子", "怎樣種樹", "怎樣吵架"], correct: 0 },
+          { q: "以下哪一項是好孩子在家裏的表現？", options: ["主動分擔家中的工作", "亂拋玩具", "不做功課", "常常發脾氣"], correct: 0 },
+          { q: "安安一家重視團結，他們能做到甚麼？", options: ["分工合作", "互相搶東西", "各自不理睬", "每天吵架"], correct: 0 },
+          // New 10
+          { q: "晚飯後，我們應該怎樣幫忙？", options: ["幫忙收拾碗筷", "馬上跑去看電視", "把飯菜倒掉", "在客廳奔跑"], correct: 0 },
+          { q: "爸爸下班回來覺得很累，你可以怎麼做？", options: ["幫他倒杯水", "大聲吵鬧要求他陪玩", "不理他", "把玩具丟給他"], correct: 0 },
+          { q: "家庭成員有不同的愛好，我們應該怎樣？", options: ["互相尊重", "強迫別人喜歡自己的愛好", "取笑別人的愛好", "不讓別人做喜歡的事"], correct: 0 },
+          { q: "當你做錯事被父母責備時，你應該？", options: ["承認錯誤並改過", "大發脾氣", "怪罪弟弟妹妹", "離家出走"], correct: 0 },
+          { q: "週末時，和家人一起去公園散步是一種？", options: ["良好的家庭活動", "浪費時間", "懲罰", "做功課"], correct: 0 },
+          { q: "看見媽媽正在忙著打掃，你應該？", options: ["主動詢問是否需要幫忙", "當作沒看到", "把房間弄得更亂", "要求媽媽先陪你玩"], correct: 0 },
+          { q: "甚麼是建立溫暖家庭的關鍵？", options: ["良好的溝通和關愛", "有很多錢", "房子很大", "每天吃大餐"], correct: 0 },
+          { q: "如果你想養寵物，你應該先怎樣？", options: ["與家人商量，得到同意", "偷偷買回家", "自己決定", "把同學的寵物帶回家"], correct: 0 },
+          { q: "為甚麼我們要感謝父母？", options: ["因為他們辛苦養育我們", "因為他們會買玩具", "因為他們會幫忙做功課", "因為他們力氣很大"], correct: 0 },
+          { q: "一家人一起吃飯時，氣氛應該是怎樣的？", options: ["溫馨愉快", "互相抱怨", "安靜得可怕", "充滿爭吵聲"], correct: 0 }
+        ]
+      },
+      h8: {
+        title: "人文 第8課：親戚常來往",
+        icon: '<i class="fa-solid fa-users fa-2x"></i>',
+        color: "from-teal-400 to-emerald-400",
+        questions: [
+          // Original 10
+          { q: "爸爸的弟弟我們稱呼他甚麼？", options: ["叔父(叔叔)", "伯父(伯伯)", "舅父(舅舅)", "姑丈"], correct: 0 },
+          { q: "媽媽的兄弟姊妹是我的甚麼親戚？", options: ["舅父(舅舅)和姨母(阿姨)", "叔父和姑母", "祖父和祖母", "表哥和表妹"], correct: 0 },
+          { q: "認識籍貫有甚麼意義？", options: ["知道祖先從哪裏來", "可以拿到紅包", "知道哪裏買玩具", "為了去旅行"], correct: 0 },
+          { q: "親戚到訪時，我們應該怎樣做？", options: ["熱情地招待，請用茶點", "躲在房間裏", "不理睬他們", "立刻趕他們走"], correct: 0 },
+          { q: "怎樣才是尊敬長輩的表現？", options: ["有禮貌地對待他們", "對他們發脾氣", "不回答他們的問題", "搶他們的食物"], correct: 0 },
+          { q: "祖父和祖母是誰的父母？", options: ["爸爸的父母", "媽媽的父母", "舅父的父母", "姨母的父母"], correct: 0 },
+          { q: "外祖父(公公)和外祖母(婆婆)是誰的父母？", options: ["媽媽的父母", "爸爸的父母", "叔父的父母", "姑母的父母"], correct: 0 },
+          { q: "媽媽的姐姐我們稱呼她甚麼？", options: ["姨母(阿姨)", "姑母(姑媽)", "嬸嬸", "舅母(舅母)"], correct: 0 },
+          { q: "中國人很重視籍貫，這讓我們知道甚麼？", options: ["根在哪兒", "喜歡吃甚麼", "甚麼時候生日", "衣服的尺寸"], correct: 0 },
+          { q: "當長輩關心你時，如果你發脾氣，長輩會有甚麼感受？", options: ["會感到傷心難過", "會非常開心", "會覺得很好玩", "會立刻給你錢"], correct: 0 },
+          // New 10
+          { q: "爸爸的哥哥我們稱呼他甚麼？", options: ["伯父(伯伯)", "叔父(叔叔)", "舅父(舅舅)", "姨丈"], correct: 0 },
+          { q: "爸爸的姐妹我們稱呼她甚麼？", options: ["姑母(姑媽/姑姐)", "姨母(阿姨)", "舅母", "嬸嬸"], correct: 0 },
+          { q: "農曆新年時，我們去親戚家拜年應該說甚麼？", options: ["恭喜發財，新年快樂", "給我紅包", "我要回家", "我不認識你"], correct: 0 },
+          { q: "親戚聚會時，如果大家在聊天，我們應該？", options: ["安靜地聽或有禮貌地參與", "大聲喧嘩打斷別人", "把電視開到最大聲", "到處亂跑"], correct: 0 },
+          { q: "叔叔的妻子，我們稱呼她甚麼？", options: ["嬸嬸", "伯娘", "舅母", "姨母"], correct: 0 },
+          { q: "舅舅的妻子，我們稱呼她甚麼？", options: ["舅母(舅媽)", "嬸嬸", "姑姐", "姨母"], correct: 0 },
+          { q: "收到長輩給的禮物時，我們應該說？", options: ["謝謝", "這太便宜了", "我不喜歡", "快給我下一個"], correct: 0 },
+          { q: "在長輩面前，我們的坐姿應該？", options: ["端正有禮", "躺在梳化上", "把腳放在桌子上", "背對著他們"], correct: 0 },
+          { q: "如果忘記了某個親戚怎麼稱呼，應該怎麼辦？", options: ["小聲問父母", "隨便亂叫", "直接不理他", "叫他「喂」"], correct: 0 },
+          { q: "和表哥表姐一起玩遊戲時，應該怎樣？", options: ["遵守規則，和平相處", "一定要贏", "輸了就發脾氣", "搶他們的玩具"], correct: 0 }
+        ]
+      },
+      h9: {
+        title: "人文 第9課：家居整潔和衛生",
+        icon: '<i class="fa-solid fa-broom fa-2x"></i>',
+        color: "from-sky-400 to-indigo-400",
+        questions: [
+          // Original 10
+          { q: "舒適的家居應該具備哪些條件？", options: ["整潔、衞生、空氣流通", "有很多玩具", "有很多零食", "非常黑暗"], correct: 0 },
+          { q: "為甚麼要保持家居整潔和衛生？", options: ["為了健康、安全和舒適地生活", "為了得到父母稱讚", "為了邀請同學來玩", "為了能看電視"], correct: 0 },
+          { q: "遇到難度高或危險的家務（例如抹窗），應該由誰來做？", options: ["成人", "自己", "弟弟", "寵物"], correct: 0 },
+          { q: "沒有收拾和清潔食物、碗碟會有甚麼後果？", options: ["容易滋生蚊蟲，傳播疾病", "家裏會變香", "食物會變多", "會有小精靈幫忙"], correct: 0 },
+          { q: "房間很潮濕時，可以使用甚麼電器幫助保持乾爽？", options: ["抽濕機", "電視機", "雪櫃", "微波爐"], correct: 0 },
+          { q: "保持家居整潔，我們每個人都是家中一分子，應該怎樣做？", options: ["合作保持家居整潔", "全部讓媽媽做", "全部讓爸爸做", "不用理會"], correct: 0 },
+          { q: "在公眾地方也應像在家一樣，不可以怎樣？", options: ["亂拋垃圾", "保持安靜", "排隊", "幫助別人"], correct: 0 },
+          { q: "食物、碗碟、衣物隨處亂放，會造成甚麼影響？", options: ["難以分清乾淨和骯髒的衣物", "家裏會變漂亮", "會有更多食物", "衣服會自動變乾淨"], correct: 0 },
+          { q: "如廁後，我們應該培養甚麼好習慣？", options: ["蓋上廁板和沖廁", "甚麼都不做", "把垃圾丟進馬桶", "在廁所裏吃東西"], correct: 0 },
+          { q: "房間很暗，常常絆倒，可以怎樣改善？", options: ["拉開窗簾，確保光線充足", "閉上眼睛走路", "在房間裏跑步", "戴上太陽眼鏡"], correct: 0 },
+          // New 10
+          { q: "吃完零食後的包裝袋應該放在哪裡？", options: ["垃圾桶", "梳化上", "牀底下", "書包裡"], correct: 0 },
+          { q: "打噴嚏時，我們應該怎麼做才能保持衛生？", options: ["用紙巾或手肘掩住口鼻", "對著別人打", "對著食物打", "不需要掩蓋"], correct: 0 },
+          { q: "家裡的垃圾桶滿了，應該怎麼辦？", options: ["幫忙把垃圾袋綁好拿去丟", "繼續把垃圾塞進去", "把垃圾丟在垃圾桶旁邊", "假裝沒看到"], correct: 0 },
+          { q: "剛從外面回到家，第一件事應該做什麼？", options: ["洗手", "吃東西", "躺在床上", "玩玩具"], correct: 0 },
+          { q: "為了讓空氣流通，天氣好時我們應該？", options: ["打開窗戶", "把所有門窗緊閉", "打開雪櫃門", "噴很多香水"], correct: 0 },
+          { q: "書桌上堆滿了雜物，會影響什麼？", options: ["做功課的效率和心情", "睡眠品質", "電視的畫面", "外面的天氣"], correct: 0 },
+          { q: "多久應該更換一次牀單和被套？", options: ["定期更換(如一到兩週)", "一年換一次", "買新的才換", "有味道才換"], correct: 0 },
+          { q: "洗完澡後，浴室地板濕濕的，應該？", options: ["開啟抽氣扇或用拖把拖乾", "在上面滑行", "不管它", "把水潑到牆上"], correct: 0 },
+          { q: "為什麼不要把濕衣服堆在一起很久？", options: ["會發臭並滋生細菌", "衣服會變色", "衣服會縮水", "衣服會自動變乾"], correct: 0 },
+          { q: "以下哪項是你自己可以做到的家務？", options: ["把自己的玩具收進玩具箱", "煮一頓大餐", "修理壞掉的電視", "清洗全家的衣服"], correct: 0 }
+        ]
+      },
+      h10: {
+        title: "人文 第10課：家居安全",
+        icon: '<i class="fa-solid fa-shield-halved fa-2x"></i>',
+        color: "from-yellow-400 to-amber-500",
+        questions: [
+          // Original 10
+          { q: "小朋友在家中常會發生甚麼意外？", options: ["跌傷、撞傷、夾傷、燙傷", "被恐龍咬傷", "飛上天空", "迷路"], correct: 0 },
+          { q: "遇到有陌生人按門鈴，我們應該怎樣反應？", options: ["保持冷靜，不要自行開門，請家中成人幫忙", "立刻開門", "和他聊天", "請他進來吃東西"], correct: 0 },
+          { q: "如果發現家中發生火警，應該怎樣做？", options: ["通知家中的成人並逃生", "自己用水滅火", "躲進衣櫃裏", "繼續看電視"], correct: 0 },
+          { q: "在家中使用能源時，要注意甚麼？", options: ["時刻注意安全，避免發生意外", "把能源全開", "用濕的手摸電掣", "把雜物放在爐火旁"], correct: 0 },
+          { q: "小朋友不應該接觸以下哪種物品？", options: ["利器、點火用具、化學品", "故事書", "毛絨玩具", "衣服"], correct: 0 },
+          { q: "為甚麼小朋友不應該自己使用爐具？", options: ["廚房是危險的地方，沒有成人許可不應使用", "因為會煮得太好吃", "因為浪費煤氣", "因為爐具太重"], correct: 0 },
+          { q: "用濕的手去按電掣會引致甚麼危險？", options: ["會觸電受傷", "會讓電燈更亮", "手會變乾", "電掣會變顏色"], correct: 0 },
+          { q: "以下哪一項是安全的行為？", options: ["把玩具收拾好，以免妹妹絆倒", "拿剪刀亂揮", "在梳化上跳躍", "把洗衣球當糖吃"], correct: 0 },
+          { q: "勤儉節約是中華傳統美德，我們在家中可以怎樣表現？", options: ["不浪費能源", "浪費食水", "把電視開足24小時", "不斷買新玩具"], correct: 0 },
+          { q: "當陌生人說「我是來送貨的」，你應該怎樣做？", options: ["如果父母不在，不讓他進來", "幫他開門", "請他進來喝水", "把家裏的東西送給他"], correct: 0 },
+          // New 10
+          { q: "藥箱裡的藥丸顏色很漂亮，可以拿來吃嗎？", options: ["不可以，吃錯藥會中毒", "可以，像糖果一樣", "只吃一顆沒關係", "可以給寵物吃"], correct: 0 },
+          { q: "爬到窗戶旁邊的椅子上往外看，這樣做？", options: ["非常危險，可能會跌出窗外", "很安全，可以看風景", "只要抓緊窗框就好", "很好玩"], correct: 0 },
+          { q: "剪刀、刀片等利器用完後應該放在哪裡？", options: ["收回抽屜或安全的地方", "隨便放在桌上", "放在地上", "藏在枕頭下"], correct: 0 },
+          { q: "在浴室洗澡時，要小心什麼？", options: ["地板濕滑容易滑倒", "水會變成冰塊", "花灑會飛走", "水會變成紅色"], correct: 0 },
+          { q: "如果家裡突然停電了，我們應該？", options: ["保持冷靜，等待成人處理", "大哭大鬧", "到處亂跑", "自己去修電箱"], correct: 0 },
+          { q: "熱水壺裡裝滿了剛燒開的水，你應該？", options: ["不要靠近，以免燙傷", "打開蓋子看看", "用手去摸水壺", "把水倒出來玩"], correct: 0 },
+          { q: "玩耍時，可以把膠袋套在頭上嗎？", options: ["絕對不可以，會窒息", "可以，很好玩", "可以，當作帽子", "只要袋子是透明的就可以"], correct: 0 },
+          { q: "發現插座冒煙或有怪味，應該立刻？", options: ["通知大人", "用水去澆", "用手去摸", "用布蓋住"], correct: 0 },
+          { q: "上下樓梯時，我們應該？", options: ["握緊扶手，慢慢走", "用跑的", "跳著下樓", "邊走邊看手機"], correct: 0 },
+          { q: "家裡的清潔劑(如漂白水)可以拿來玩嗎？", options: ["不可以，碰到眼睛或皮膚會受傷", "可以，能吹出大泡泡", "可以，用來洗手", "可以，倒在植物上"] }
+        ]
+      }
+    };
+
+    // --- 音效引擎 (Web Audio API) ---
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let actx = null;
+    let soundEnabled = true;
+    let bgmIntervalRef = null;
+    let noteIdx = 0;
+    const bgmNotes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63];
+
+    function initAudio() {
+      if (!actx) actx = new AudioCtx();
+      if (actx.state === 'suspended') actx.resume();
+    }
+
+    function playTone(freq, type, duration, vol) {
+      if (!actx || !soundEnabled) return;
+      try {
+        if (actx.state === 'suspended') actx.resume();
+        const osc = actx.createOscillator();
+        const gain = actx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, actx.currentTime);
+        gain.gain.setValueAtTime(vol, actx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(actx.destination);
+        osc.start();
+        osc.stop(actx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playSFX(type) {
+      if (!soundEnabled) return;
+      initAudio();
+      if (type === 'click') playTone(600, 'sine', 0.05, 0.05);
+      if (type === 'correct') {
+        playTone(523.25, 'sine', 0.1, 0.1);
+        setTimeout(() => playTone(659.25, 'sine', 0.1, 0.1), 100);
+        setTimeout(() => playTone(783.99, 'sine', 0.3, 0.1), 200);
+      }
+      if (type === 'wrong') {
+        playTone(250, 'sawtooth', 0.3, 0.1);
+        setTimeout(() => playTone(200, 'sawtooth', 0.4, 0.1), 200);
+      }
+      if (type === 'result') {
+        [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => 
+          setTimeout(() => playTone(f, 'square', 0.2, 0.1), i * 150)
+        );
+      }
+    }
+
+    function toggleSound() {
+      initAudio();
+      soundEnabled = !soundEnabled;
+      const icon = document.getElementById('audio-icon');
+      if (soundEnabled) {
+        icon.className = "fa-solid fa-volume-high text-xl";
+        if (currentMode && document.getElementById('playing-screen').classList.contains('flex')) {
+          startBGM();
+        }
+      } else {
+        icon.className = "fa-solid fa-volume-xmark text-xl";
+        stopBGM();
+      }
+    }
+
+    function startBGM() {
+      stopBGM();
+      if (!soundEnabled) return;
+      initAudio();
+      bgmIntervalRef = setInterval(() => {
+        playTone(bgmNotes[noteIdx], 'triangle', 0.4, 0.02);
+        noteIdx = (noteIdx + 1) % bgmNotes.length;
+      }, 500);
+    }
+
+    function stopBGM() {
+      if (bgmIntervalRef) clearInterval(bgmIntervalRef);
+    }
+
+    // --- 遊戲狀態 ---
+    let currentMode = null;
+    let questions = [];
+    let currentIndex = 0;
+    let score = 0;
+    let streak = 0;
+    let maxStreak = 0;
+    let timeLeft = 15;
+    let isAnswered = false;
+    let selectedOptionIndex = null;
+    let timerInterval = null;
+    let stats = { correct: 0, timeBonus: 0, streakBonus: 0, baseScore: 0 };
+
+    // --- 工具函數 ---
+    function shuffleArray(array) {
+      const newArr = [...array];
+      for (let i = newArr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+      }
+      return newArr;
+    }
+
+    function animateNumber(elementId, endValue, duration = 1000) {
+      const el = document.getElementById(elementId);
+      const startValue = parseInt(el.innerText) || 0;
+      if (startValue === endValue) {
+        el.innerText = endValue;
+        return;
+      }
+      const startTime = performance.now();
+      
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const currentVal = Math.floor(startValue + (endValue - startValue) * easeProgress);
+        el.innerText = currentVal;
+        
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          el.innerText = endValue;
+        }
+      }
+      requestAnimationFrame(update);
+    }
+
+    // --- 畫面控制 ---
+    function showScreen(screenId) {
+      document.getElementById('home-screen').classList.replace('flex', 'hidden');
+      document.getElementById('playing-screen').classList.replace('flex', 'hidden');
+      document.getElementById('result-screen').classList.replace('flex', 'hidden');
+      
+      document.getElementById(screenId).classList.replace('hidden', 'flex');
+      
+      if (screenId !== 'playing-screen') {
+        stopBGM();
+      }
+    }
+
+    // --- 初始化首頁 ---
+    function initHome() {
+      const container = document.getElementById('mode-buttons-container');
+      container.innerHTML = '';
+      
+      Object.entries(questionBank).forEach(([key, data]) => {
+        const btn = document.createElement('button');
+        btn.className = `group relative overflow-hidden rounded-3xl p-8 text-white shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 bg-gradient-to-br ${data.color} btn-bounce`;
+        btn.onclick = () => startGame(key);
+        btn.innerHTML = `
+          <div class="absolute top-0 right-0 p-4 opacity-20 transform translate-x-4 -translate-y-4 group-hover:scale-150 transition-transform duration-500">
+            ${data.icon}
+          </div>
+          <div class="flex flex-col items-center text-center gap-4 relative z-10">
+            <div class="bg-white/30 p-4 rounded-full backdrop-blur-sm text-white">
+              ${data.icon}
+            </div>
+            <h2 class="text-2xl font-bold tracking-wide">${data.title}</h2>
+            <div class="mt-4 bg-white/20 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2">
+              <i class="fa-solid fa-play"></i> 開始挑戰 (20題)
+            </div>
+          </div>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    // --- 遊戲邏輯 ---
+    function startGame(mode) {
+      initAudio();
+      playSFX('click');
+      currentMode = mode;
+      
+      // 洗牌
+      const rawQuestions = questionBank[mode].questions;
+      questions = shuffleArray(rawQuestions).map(q => {
+        const correctText = q.options[q.correct];
+        const shuffledOptions = shuffleArray([...q.options]);
+        const newCorrectIndex = shuffledOptions.indexOf(correctText);
+        return { ...q, options: shuffledOptions, correct: newCorrectIndex };
+      });
+
+      // 重置狀態
+      currentIndex = 0;
+      score = 0;
+      streak = 0;
+      maxStreak = 0;
+      stats = { correct: 0, timeBonus: 0, streakBonus: 0, baseScore: 0 };
+      document.getElementById('hud-score').innerText = '0';
+      
+      showScreen('playing-screen');
+      document.getElementById('hud-title').innerText = questionBank[mode].title;
+      
+      startBGM();
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      isAnswered = false;
+      selectedOptionIndex = null;
+      timeLeft = 15;
+      
+      const currentQ = questions[currentIndex];
+      
+      // 更新 HUD
+      document.getElementById('hud-progress').innerText = `第 ${currentIndex + 1}/${questions.length} 題`;
+      document.getElementById('progress-bar').style.width = `${(currentIndex / questions.length) * 100}%`;
+      
+      const streakEl = document.getElementById('hud-streak');
+      if (streak >= 3) {
+        streakEl.classList.remove('hidden');
+        document.getElementById('streak-count').innerText = streak;
+      } else {
+        streakEl.classList.add('hidden');
+      }
+
+      document.getElementById('timeout-msg').classList.add('hidden');
+      document.getElementById('question-text').innerText = currentQ.q;
+      
+      // 繪製選項
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+      
+      currentQ.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `option-btn-${idx}`;
+        btn.className = "relative w-full text-left p-6 sm:p-8 rounded-2xl border-b-[6px] font-bold text-xl sm:text-2xl transition-all duration-200 flex items-center justify-between overflow-hidden bg-white border-indigo-200 text-slate-700 hover:bg-indigo-50 hover:border-indigo-400 hover:-translate-y-1 hover:shadow-md cursor-pointer active:border-b-0 active:translate-y-2";
+        btn.onclick = () => handleAnswer(idx);
+        
+        btn.innerHTML = `
+          <span class="relative z-10">${opt}</span>
+          <span id="option-icon-${idx}" class="relative z-10 hidden"></span>
+        `;
+        optionsContainer.appendChild(btn);
+      });
+
+      startTimer();
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      updateTimerUI();
+      
+      timerInterval = setInterval(() => {
+        if (!isAnswered && timeLeft > 0) {
+          timeLeft--;
+          updateTimerUI();
+        }
+        
+        if (timeLeft === 0 && !isAnswered) {
+          document.getElementById('timeout-msg').classList.remove('hidden');
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      const bar = document.getElementById('timer-bar');
+      const text = document.getElementById('timer-text');
+      bar.style.width = `${(timeLeft / 15) * 100}%`;
+      text.innerText = `${timeLeft}s`;
+      
+      if (timeLeft > 5) {
+        bar.classList.replace('bg-red-500', 'bg-green-400') || bar.classList.add('bg-green-400');
+      } else {
+        bar.classList.replace('bg-green-400', 'bg-red-500') || bar.classList.add('bg-red-500');
+      }
+    }
+
+    function handleAnswer(index) {
+      if (isAnswered) return;
+      isAnswered = true;
+      selectedOptionIndex = index;
+      
+      const currentQ = questions[currentIndex];
+      const isCorrect = index === currentQ.correct;
+
+      // 禁用所有按鈕並更新樣式
+      currentQ.options.forEach((_, idx) => {
+        const btn = document.getElementById(`option-btn-${idx}`);
+        const iconContainer = document.getElementById(`option-icon-${idx}`);
+        btn.disabled = true;
+        btn.className = "relative w-full text-left p-6 sm:p-8 rounded-2xl border-b-[6px] font-bold text-xl sm:text-2xl transition-all duration-200 flex items-center justify-between overflow-hidden ";
+        
+        if (idx === currentQ.correct) {
+          btn.className += "bg-green-100 border-green-500 text-green-800 scale-[1.02] shadow-lg z-10";
+          iconContainer.innerHTML = '<i class="fa-solid fa-circle-check text-green-500 text-3xl animate-bounce"></i>';
+          iconContainer.classList.remove('hidden');
+        } else if (idx === selectedOptionIndex) {
+          btn.className += "bg-red-100 border-red-500 text-red-800 opacity-90";
+          iconContainer.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-500 text-3xl"></i>';
+          iconContainer.classList.remove('hidden');
+        } else {
+          btn.className += "bg-slate-50 border-slate-200 text-slate-400 opacity-50 scale-95";
+        }
+      });
+
+      if (isCorrect) {
+        playSFX('correct');
+        const basePoints = 100;
+        let timeBonusPoints = 0;
+        
+        if (timeLeft >= 12) timeBonusPoints = timeLeft * 30;
+        else if (timeLeft >= 7) timeBonusPoints = timeLeft * 20;
+        else timeBonusPoints = timeLeft * 10;
+
+        const newStreak = streak + 1;
+        const streakBonusPoints = newStreak >= 3 ? newStreak * 20 : 0;
+        
+        const totalPoints = basePoints + timeBonusPoints + streakBonusPoints;
+        
+        score += totalPoints;
+        streak = newStreak;
+        maxStreak = Math.max(maxStreak, newStreak);
+        
+        stats.correct += 1;
+        stats.baseScore += basePoints;
+        stats.timeBonus += timeBonusPoints;
+        stats.streakBonus += streakBonusPoints;
+        
+        animateNumber('hud-score', score, 500);
+      } else {
+        playSFX('wrong');
+        streak = 0;
+      }
+
+      // 更新HUD（若剛好達成連擊）
+      if (streak >= 3) {
+        document.getElementById('hud-streak').classList.remove('hidden');
+        document.getElementById('streak-count').innerText = streak;
+      } else {
+        document.getElementById('hud-streak').classList.add('hidden');
+      }
+
+      setTimeout(nextQuestion, 2000);
+    }
+
+    function nextQuestion() {
+      if (currentIndex < questions.length - 1) {
+        playSFX('click');
+        currentIndex++;
+        loadQuestion();
+      } else {
+        playSFX('result');
+        showResult();
+      }
+    }
+
+    function showResult() {
+      stopBGM();
+      showScreen('result-screen');
+      
+      const accuracy = Math.round((stats.correct / questions.length) * 100);
+      let message = "";
+      let stars = 0;
+      
+      if (accuracy >= 90) { message = "太神啦！學科小天才！🏆"; stars = 3; }
+      else if (accuracy >= 70) { message = "表現很棒！繼續保持！🌟"; stars = 2; }
+      else { message = "再接再厲！你可以的！💪"; stars = 1; }
+
+      document.getElementById('result-message').innerText = message;
+      document.getElementById('result-subtitle').innerText = `完成了 ${questionBank[currentMode].title}`;
+      
+      // 生成星星
+      const starsContainer = document.getElementById('result-stars');
+      starsContainer.innerHTML = '';
+      for (let i = 1; i <= 3; i++) {
+        const delay = i * 0.1;
+        const colorClass = i <= stars ? 'text-yellow-400 animate-bounce' : 'text-gray-200';
+        starsContainer.innerHTML += `<i class="fa-solid fa-star text-5xl ${colorClass}" style="animation-delay: ${delay}s"></i>`;
+      }
+
+      // 填入統計數據
+      document.getElementById('stat-correct').innerText = `${stats.correct} / ${questions.length}`;
+      document.getElementById('stat-streak').innerText = `${maxStreak} 連對`;
+      document.getElementById('stat-timebonus').innerText = `+${stats.timeBonus}`;
+      document.getElementById('stat-streakbonus').innerText = `+${stats.streakBonus}`;
+      
+      // 數字動畫
+      document.getElementById('final-score').innerText = '0';
+      animateNumber('final-score', score, 1500);
+    }
+
+    // 啟動首頁
+    window.onload = () => {
+      initHome();
+      showScreen('home-screen');
+    };
+
+  </script>
+</body>
+</html>
