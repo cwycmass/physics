@@ -1399,33 +1399,32 @@
     </section>
 </article>
 
-
 <!-- ========================================== -->
 <!-- 區塊 3.1: 樓宇的能源效益 -->
 <!-- ========================================== -->
-<article id="ch3-1" class="content-section hidden">
+<article id="ch3-1" class="content-section block">
     <header class="mb-8 border-b-2 border-slate-200 pb-4">
         <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.1</span>樓宇的能源效益</h2>
-        <p class="text-slate-500 mt-2">認識熱如何通過樓宇外殼傳遞，掌握總熱傳送值與熱透射率的概念，並學習改善建築能源效益的方法。</p>
+        <p class="text-slate-500 mt-2">認識熱量如何通過樓宇外殼傳遞，掌握總熱傳送值 (OTTV) 與平均熱透射率的概念，並學習改善建築能源效益的方法。</p>
     </header>
 
     <!-- 📌 1. 名詞定義 / 核心概念 -->
     <section class="mb-10">
         <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
         <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-            <p>在香港，商業及住宅樓宇消耗了大量的電能，其中佔比最大的是<strong>空氣調節系統（冷氣）</strong>。要減少空調的耗電量，關鍵在於減少室外熱傳入室內。我們使用以下物理量來評估樓宇的隔熱能力：</p>
+            <p>在香港，商業及住宅樓宇消耗了大量的電能，其中佔比最大的是<strong>空氣調節系統（冷氣）</strong>。要減少空調的耗電量，關鍵在於減少室外熱量傳入室內。我們使用以下物理量來評估樓宇的隔熱能力：</p>
             <ul class="list-disc list-inside ml-2 space-y-3">
                 <li>
                     <strong class="text-blue-700 font-bold">樓宇外殼：</strong> 
-                    包圍建築物內部空調空間的外圍結構，包括外牆、窗戶和屋頂。熱主要透過<strong>傳導</strong>和<strong>輻射</strong>穿過樓宇外殼。
-                </li>
-                <li>
-                    <strong class="text-blue-700 font-bold">總熱傳送值：</strong> 
-                    量度熱通過樓宇外殼傳入室內的平均速率指標。總熱傳送值越<strong>低</strong>，代表外殼的隔熱性能越好，空調系統所需的冷卻能力就越小，從而更節省電能。
+                    包圍建築物內部空調空間的外圍結構，包括外牆、窗戶和屋頂。熱量主要透過<strong>傳導</strong>和<strong>輻射</strong>穿過樓宇外殼。
                 </li>
                 <li>
                     <strong class="text-blue-700 font-bold">熱透射率 ($U$)：</strong> 
-                    衡量特定建築材料（如玻璃或磚牆）傳熱能力的指標。它代表當材料兩側溫差為 $1 \text{ K}$ 時，每單位面積在每秒鐘內傳導的熱。數值越小，隔熱效果越佳。
+                    衡量特定建築材料（如玻璃或磚牆）傳熱能力的指標。它代表當材料兩側溫差為 $1 \text{ K}$ 時，每單位面積在每秒鐘內傳導的熱量。數值越小，隔熱效果越佳。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">總熱傳送值 (OTTV)：</strong> 
+                    量度熱量通過樓宇外殼傳入室內的平均速率指標。OTTV 越<strong>低</strong>，代表外殼的隔熱性能越好，空調系統所需的冷卻能力就越小，從而更節省電能。
                 </li>
             </ul>
         </div>
@@ -1435,16 +1434,28 @@
     <section class="mb-10">
         <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
         <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
-            <p class="text-slate-700 mb-3">建築材料的熱傳導率 可以使用以下公式計算：</p>
+            <p class="text-slate-700 mb-3">熱量透過建築材料傳導的速率可以使用以下公式計算：</p>
             <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
-                $$\frac{Q_\text{C}}{t} = U A (T_{\text{H}} - T_{\text{C}}) $$
+                $$ \frac{Q_C}{t} = U A (T_H - T_C) $$
             </div>
             <ul class="text-sm text-slate-600 space-y-2 mt-4">
-                <li>$\frac{Q_\text{C}}{t}$：熱傳遞率（單位：瓦特 $\text{W}$）</li>
+                <li>$\frac{Q_C}{t}$：熱傳遞率（單位：瓦特 $\text{W}$）</li>
                 <li>$U$：材料的熱透射率（單位：$\text{W m}^{-2} \text{ K}^{-1}$）</li>
                 <li>$A$：材料的表面積（單位：$\text{m}^2$）</li>
-                <li>$(T_{\text{H}} - T_{\text{C}})$：室外與室內的溫度差（單位：$\text{K}$ 或 $^\circ\text{C}$）</li>
+                <li>$(T_H - T_C)$：室外高溫與室內低溫的溫度差（單位：$\text{K}$ 或 $^\circ\text{C}$）</li>
             </ul>
+
+            <hr class="border-blue-200 my-4">
+            <p class="text-slate-700 mb-2 font-bold">平均熱透射率 ($\bar{U}$) 與 總熱傳送值 ($\text{OTTV}$)</p>
+            <p class="text-sm text-slate-600 mb-2">由於外牆通常由不同材料（如磚牆和玻璃窗）組成，我們需要計算整個外殼的平均 $U$ 值：</p>
+            <div class="text-center my-2 overflow-x-auto text-lg font-bold text-blue-900">
+                $$ \bar{U} = \frac{U_1 A_1 + U_2 A_2 + \dots}{A_{\text{Total}}} $$
+            </div>
+            <p class="text-sm text-slate-600 mt-4 mb-2">總熱傳送值 ($\text{OTTV}$) 則是考量了傳導與輻射的每平方米平均得熱率：</p>
+            <div class="text-center my-2 overflow-x-auto text-lg font-bold text-blue-900">
+                $$ \text{OTTV} = \frac{\frac{Q_C}{t} + \text{太陽輻射熱}}{A_{\text{Total}}} $$
+            </div>
+            <p class="text-xs text-slate-500 text-center">($\text{OTTV}$ 的單位為 $\text{W m}^{-2}$)</p>
         </div>
     </section>
 
@@ -1462,11 +1473,11 @@
                 <tbody class="divide-y divide-slate-200">
                     <tr class="even:bg-slate-50">
                         <td class="p-3 font-medium text-slate-800">使用雙層玻璃窗</td>
-                        <td class="p-3">兩層玻璃之間夾有靜止的空氣層。由於空氣是極差的導熱體（熱透射率極低），能大幅減少熱透過傳導進入室內。</td>
+                        <td class="p-3">兩層玻璃之間夾有靜止的空氣層。由於空氣是極差的導熱體（熱透射率極低），能大幅減少熱量透過傳導進入室內。</td>
                     </tr>
                     <tr class="even:bg-slate-50">
                         <td class="p-3 font-medium text-slate-800">貼上太陽隔熱膜</td>
-                        <td class="p-3">隔熱膜能反射太陽光中的紅外線，顯著減少熱透過<strong>輻射</strong>方式穿透窗戶進入室內，同時保留可見光提供照明。</td>
+                        <td class="p-3">隔熱膜能反射太陽光中的紅外線，顯著減少熱量透過<strong>輻射</strong>方式穿透窗戶進入室內，同時保留可見光提供照明。</td>
                     </tr>
                     <tr class="even:bg-slate-50">
                         <td class="p-3 font-medium text-slate-800">綠化屋頂與外牆</td>
@@ -1487,7 +1498,7 @@
             </div>
             <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                 <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">綠化與座向</h4>
-                <p class="text-sm text-slate-600">泥土和植物增加隔熱並透過水分蒸發吸熱。避開東西向的大面積窗戶可大幅降低太陽輻射的得熱。</p>
+                <p class="text-sm text-slate-600">泥土和植物增加隔熱並透過水分蒸發吸熱。避開東西向的大面積窗戶可大幅降低太陽輻射的得熱量。</p>
             </div>
         </div>
     </section>
@@ -1500,14 +1511,14 @@
                 <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
                 <ul class="text-sm space-y-3 list-disc list-inside">
                     <li>「為了讓室內更明亮，採用整面牆的落地大玻璃窗是提升能源效益的好方法，因為可以省下開燈的電費。」</li>
-                    <li>「建築物的總熱傳送值越高，代表它傳散熱越快，室內就會越涼爽。」</li>
+                    <li>「建築物的 OTTV 越高，代表它散熱越快，室內就會越涼爽。」</li>
                 </ul>
             </div>
             <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
                 <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
                 <ul class="text-sm space-y-3 list-disc list-inside">
-                    <li><strong>玻璃的熱透射率遠高於混凝土牆！</strong> 大面積玻璃雖然省下少量照明電費，但會讓大量太陽輻射熱長驅直入，導致空調耗電量暴增，總體而言會嚴重<strong>降低</strong>能源效益。</li>
-                    <li>總熱傳送值是指外界熱<strong>傳入</strong>室內的速度。數值越「高」，代表外面熱越容易跑進來，空調負擔越重。因此總熱傳送值應該越<strong>低</strong>越好。</li>
+                    <li><strong>玻璃的熱透射率遠高於混凝土牆！</strong> 大面積玻璃雖然省下照明電費，但會讓大量太陽熱能傳入，導致空調耗電量暴增，總體而言會嚴重<strong>降低</strong>能源效益。</li>
+                    <li>OTTV (總熱傳送值) 是指外界熱量<strong>傳入</strong>室內的速度。數值越「高」，代表外面熱量越容易跑進來，空調負擔越重。因此 OTTV 應該越<strong>低</strong>越好。</li>
                 </ul>
             </div>
         </div>
@@ -1521,9 +1532,9 @@
             <!-- 例題 1 -->
             <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
                 <div class="flex items-start">
-                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q1</span>
                     <p class="text-slate-800 leading-relaxed font-medium">
-                        一間辦公室有一面面積為 $15 \text{ m}^2$ 的玻璃窗，其熱透射率 $U$ 為 $5.6 \text{ W m}^{-2} \text{ K}^{-1}$。在炎熱的夏日，室外溫度為 $33\ ^\circ\text{C}$，室內維持在 $23\ ^\circ\text{C}$。求熱透過傳導經這面玻璃窗進入室內的速率。
+                        一間辦公室有一面面積為 $15 \text{ m}^2$ 的玻璃窗，其熱透射率 $U$ 為 $5.6 \text{ W m}^{-2} \text{ K}^{-1}$。在炎熱的夏日，室外溫度 $T_H$ 為 $33\ ^\circ\text{C}$，室內溫度 $T_C$ 維持在 $23\ ^\circ\text{C}$。求熱量透過傳導經這面玻璃窗進入室內的速率 $\frac{Q_C}{t}$。
                     </p>
                 </div>
                 <details class="mt-4 group">
@@ -1533,12 +1544,12 @@
                     <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
                         <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
                         <p class="mb-2">1. 計算室內外的溫度差：</p>
-                        $$ \Delta T = 33 - 23 = 10 \text{ K} $$
+                        $$ (T_H - T_C) = 33 - 23 = 10 \text{ K} $$
                         <p class="mb-2 mt-2">2. 代入熱傳遞率公式：</p>
-                        $$ P = U A \Delta T $$
-                        $$ P = 5.6 \times 15 \times 10 $$
-                        $$ P = 840 \text{ W} $$
-                        <p class="mt-2 font-bold text-green-700">答案：熱進入室內的速率為 $840 \text{ W}$。</p>
+                        $$ \frac{Q_C}{t} = U A (T_H - T_C) $$
+                        $$ \frac{Q_C}{t} = 5.6 \times 15 \times 10 $$
+                        $$ \frac{Q_C}{t} = 840 \text{ W} $$
+                        <p class="mt-2 font-bold text-green-700">答案：熱量進入室內的速率為 $840 \text{ W}$。</p>
                     </div>
                 </details>
             </div>
@@ -1546,9 +1557,9 @@
             <!-- 例題 2 -->
             <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
                 <div class="flex items-start">
-                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q2</span>
                     <p class="text-slate-800 leading-relaxed font-medium">
-                        承接上題，業主決定將這面單層玻璃窗更換為雙層玻璃窗，使得熱透射率降至 $2.8 \text{ W m}^{-2} \text{ K}^{-1}$。如果空調機從室內抽走 $1 \text{ J}$ 的熱需要消耗 $0.4 \text{ J}$ 的電能，求更換窗戶後，空調機每小時可節省多少電能（以焦耳為單位）？
+                        某外牆總面積為 $50 \text{ m}^2$，其中包含了 $40 \text{ m}^2$ 的磚牆（$U_{\text{磚}} = 0.5 \text{ W m}^{-2} \text{ K}^{-1}$）以及 $10 \text{ m}^2$ 的單層玻璃窗（$U_{\text{玻}} = 5.0 \text{ W m}^{-2} \text{ K}^{-1}$）。求這面外牆的平均熱透射率 $\bar{U}$。
                     </p>
                 </div>
                 <details class="mt-4 group">
@@ -1557,15 +1568,11 @@
                     </summary>
                     <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
                         <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                        <p class="mb-2">1. 計算新的熱傳遞率：</p>
-                        $$ P_{\text{新}} = 2.8 \times 15 \times 10 = 420 \text{ W} $$
-                        <p class="mb-2 mt-2">2. 計算每秒減少傳入的熱：</p>
-                        $$ \Delta P = 840 - 420 = 420 \text{ W} \quad \text{(即每秒減少 420 J 熱傳入)} $$
-                        <p class="mb-2 mt-2">3. 計算每小時 ($3600 \text{ s}$) 減少傳入的總熱：</p>
-                        $$ Q_{\text{節省熱}} = 420 \times 3600 = 1,512,000 \text{ J} $$
-                        <p class="mb-2 mt-2">4. 計算空調機節省的電能（消耗電能是抽走熱的 0.4 倍）：</p>
-                        $$ E_{\text{節省電能}} = 1,512,000 \times 0.4 = 604,800 \text{ J} $$
-                        <p class="mt-2 font-bold text-green-700">答案：每小時可節省 $604,800 \text{ J}$ 的電能。</p>
+                        <p class="mb-2">代入平均 $U$ 值的公式：</p>
+                        $$ \bar{U} = \frac{U_{\text{磚}} A_{\text{磚}} + U_{\text{玻}} A_{\text{玻}}}{A_{\text{Total}}} $$
+                        $$ \bar{U} = \frac{(0.5 \times 40) + (5.0 \times 10)}{50} $$
+                        $$ \bar{U} = \frac{20 + 50}{50} = \frac{70}{50} = 1.4 \text{ W m}^{-2} \text{ K}^{-1} $$
+                        <p class="mt-2 font-bold text-green-700">答案：平均熱透射率為 $1.4 \text{ W m}^{-2} \text{ K}^{-1}$。</p>
                     </div>
                 </details>
             </div>
@@ -1573,9 +1580,9 @@
             <!-- 例題 3 -->
             <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
                 <div class="flex items-start">
-                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 3</span>
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q3</span>
                     <p class="text-slate-800 leading-relaxed font-medium">
-                        為了符合香港政府對商業樓宇的能源效益規定，建築師需要降低一座新建大樓的總熱傳送值。請提出三個從建築外殼設計上著手的有效方法。
+                        承上題，若該外牆兩側溫差為 $10 \text{ K}$，且透過玻璃窗射入的太陽輻射熱功率為 $500 \text{ W}$。求這面外牆的總熱傳送值 (OTTV)。
                     </p>
                 </div>
                 <details class="mt-4 group">
@@ -1583,12 +1590,13 @@
                         <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
                     </summary>
                     <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
-                        <p class="mb-2">建築師可以採取以下方法：</p>
-                        <ul class="list-decimal list-inside space-y-2">
-                            <li><strong>減小窗牆比例：</strong> 減少玻璃窗的面積，增加混凝土牆的面積，因為牆壁的隔熱性能遠優於普通玻璃。</li>
-                            <li><strong>採用高效能玻璃：</strong> 使用雙層玻璃或加上太陽隔熱膜，以降低熱透射率並阻擋紅外線輻射進入。</li>
-                            <li><strong>加設遮陽設施：</strong> 在向東和向西的窗戶外部加裝遮陽篷或百葉簾，直接阻擋太陽直射。</li>
-                        </ul>
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算整體傳導熱功率 $\frac{Q_C}{t}$：</p>
+                        $$ \frac{Q_C}{t} = \bar{U} A_{\text{Total}} \Delta T = 1.4 \times 50 \times 10 = 700 \text{ W} $$
+                        <p class="mb-2 mt-2">2. 計算總熱傳送值 OTTV：</p>
+                        $$ \text{OTTV} = \frac{\frac{Q_C}{t} + \text{輻射熱}}{A_{\text{Total}}} $$
+                        $$ \text{OTTV} = \frac{700 + 500}{50} = \frac{1200}{50} = 24 \text{ W m}^{-2} $$
+                        <p class="mt-2 font-bold text-green-700">答案：總熱傳送值為 $24 \text{ W m}^{-2}$。</p>
                     </div>
                 </details>
             </div>
@@ -1601,35 +1609,35 @@
         <div class="space-y-8">
             <!-- Q1 -->
             <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在香港的商業樓宇中，哪一個系統通常消耗最多的電能？</p>
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 關於建築材料的「熱透射率 ($U$ 值)」，下列哪一項敘述是正確的？</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 照明系統</button>
-                    <button onclick="checkAnswer(this, true, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 空氣調節系統</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 升降機及自動電梯系統</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 電腦及辦公室設備</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 數值越大，代表材料的隔熱性能越好</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 數值越小，代表熱量越難穿透該材料</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 單層玻璃的 $U$ 值通常低於厚磚牆的 $U$ 值</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $U$ 值只與材料的顏色有關，與厚度無關</button>
                 </div>
                 <div id="exp-q31-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 香港氣候炎熱潮濕，空氣調節系統（冷氣）是所有建築物中耗電量最大的部分，因此降低樓宇外殼的傳熱率對節能至關重要。
+                    <strong>解析：</strong> $U$ 值量度的是「熱量穿透的容易程度」。因此，$U$ 值越小，表示熱量越難傳導過去，隔熱效果越好。單層玻璃極易導熱，其 $U$ 值遠大於磚牆。
                 </div>
             </div>
 
             <!-- Q2 -->
             <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 關於建築材料的「熱透射率 ($U$ 值)」，下列哪一項敘述是正確的？</p>
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 總熱傳送值 (OTTV) 是衡量樓宇能源效益的重要指標。OTTV 的單位是什麼？</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 數值越大，代表材料的隔熱性能越好</button>
-                    <button onclick="checkAnswer(this, true, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 數值越小，代表熱越難穿透該材料</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 單層玻璃的 $U$ 值通常低於厚磚牆的 $U$ 值</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $U$ 值只與材料的顏色有關，與厚度無關</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $\text{W m}^{-2} \text{ K}^{-1}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $\text{W}$</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $\text{W m}^{-2}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $\text{J}$</button>
                 </div>
                 <div id="exp-q31-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> $U$ 值量度的是「熱穿透的容易程度」。因此，$U$ 值越小，表示熱越難傳導過去，隔熱效果越好。單層玻璃極易導熱，其 $U$ 值遠大於磚牆。
+                    <strong>解析：</strong> OTTV 代表外牆每單位面積傳入的平均熱功率，公式為總熱功率除以總面積，故單位為 $\text{W m}^{-2}$。
                 </div>
             </div>
 
             <!-- Q3 -->
             <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 哪一種建築設計方法最能有效減少因「輻射」而傳入室內的熱？</p>
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 哪一種建築設計方法最能有效減少因「輻射」而傳入室內的熱量？</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <button onclick="checkAnswer(this, false, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 增加牆壁的厚度</button>
                     <button onclick="checkAnswer(this, false, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 使用雙層玻璃窗</button>
@@ -1637,7 +1645,7 @@
                     <button onclick="checkAnswer(this, false, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 關閉所有室內的電燈</button>
                 </div>
                 <div id="exp-q31-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 厚牆和雙層玻璃主要是阻絕「傳導」熱。而陽光帶來的熱主要是紅外線「輻射」，貼上反射膜能直接將輻射反射出去，是阻絕輻射熱最有效的方法。
+                    <strong>解析：</strong> 厚牆和雙層玻璃主要是阻絕「傳導」熱。而陽光帶來的熱量主要是紅外線「輻射」，貼上反射膜能直接將輻射反射出去，是阻絕輻射熱最有效的方法。
                 </div>
             </div>
 
@@ -1657,15 +1665,15 @@
 
             <!-- Q5 -->
             <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 如果一棟大樓的窗戶面積突然加倍，在沒有更換玻璃材質的情況下，這對該大樓的總熱傳送值會有什麼影響？</p>
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 關於熱傳遞公式 $\frac{Q_C}{t} = U A (T_H - T_C)$，若外牆面積 $A$ 加倍而其他條件不變，對空調系統有何影響？</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, true, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 顯著增加</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 顯著減少</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 保持不變</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 變為原來的一半</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 傳入熱量速率加倍，空調耗電量增加</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 傳入熱量速率減半，空調耗電量減少</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 保持不變，因 $U$ 值固定</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 空調會停止運作</button>
                 </div>
                 <div id="exp-q31-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 玻璃的熱透射率 ($U$ 值) 遠高於一般的牆壁，且它會讓陽光輻射直接穿透。窗戶面積加倍，意味着大樓外殼有更大比例是低隔熱的玻璃，熱傳入大增，總熱傳送值會顯著上升。
+                    <strong>解析：</strong> 根據公式，熱傳遞率與面積 $A$ 成正比。面積加倍，傳入熱量速率加倍，空調必須消耗更多電能來把這些熱量抽走。
                 </div>
             </div>
         </div>
@@ -1807,13 +1815,13 @@
             <!-- 例題 1 -->
             <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
                 <div class="flex items-start">
-                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 1</span>
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q1</span>
                     <p class="text-slate-800 leading-relaxed font-medium">
                         一輛質量為 $1500 \text{ kg}$ 的汽車在市區行駛。它的內燃機燃燒汽油釋放了 $2.0 \times 10^7 \text{ J}$ 的化學能，但其中有 $1.5 \times 10^7 \text{ J}$ 的能量以引擎散熱及排氣的形式流失到環境中。求該內燃機汽車的能量轉換效率。
                     </p>
                 </div>
                 <details class="mt-4 group">
-                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
                         <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
                     </summary>
                     <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
@@ -1831,13 +1839,13 @@
             <!-- 例題 2 -->
             <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
                 <div class="flex items-start">
-                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">例題 2</span>
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q2</span>
                     <p class="text-slate-800 leading-relaxed font-medium">
                         一輛質量為 $2000 \text{ kg}$ 的電動車以 $20 \text{ m s}^{-1}$ 的速度行駛。當遇到紅燈時，司機啟動再生制動系統令車輛停下。若再生制動系統能將減少的動能中 $60\%$ 轉化並儲存回電池，求這次煞車為電池充入了多少焦耳的能量？
                     </p>
                 </div>
                 <details class="mt-4 group">
-                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
                         <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
                     </summary>
                     <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
@@ -1854,13 +1862,13 @@
             <!-- 例題 3 -->
             <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
                 <div class="flex items-start">
-                    <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">例題 3</span>
+                    <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
                     <p class="text-slate-800 leading-relaxed font-medium">
                         混合動力車在不同的駕駛情況下會由其控制系統智能切換動力來源。請問在「市區走走停停（低速且頻繁煞車）」的情況下，混合動力車會如何運作以最大化能源效益？
                     </p>
                 </div>
                 <details class="mt-4 group">
-                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
                         <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
                     </summary>
                     <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
@@ -1889,7 +1897,7 @@
                     <button onclick="checkAnswer(this, false, 'exp-q32-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 消失在真空中，違反了能量守恆定律</button>
                 </div>
                 <div id="exp-q32-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 內燃機透過燃燒爆炸產生動力，這個過程會產生極高的熱（經由水箱與排氣管散去），加上引擎內部的機械摩擦，導致絕大部分化學能變成了無用的內能浪費掉。
+                    <strong>解析：</strong> 內燃機透過燃燒爆炸產生動力，這個過程會產生極高的熱量（經由水箱與排氣管散去），加上引擎內部的機械摩擦，導致絕大部分化學能變成了無用的內能浪費掉。
                 </div>
             </div>
 
@@ -1900,7 +1908,7 @@
                     <button onclick="checkAnswer(this, true, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 因為電動車在車輛靜止時，電動機完全停轉，不消耗能量</button>
                     <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 因為電動車的車身設計一定比較符合空氣動力學</button>
                     <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 因為電動車不需要煞車</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 因為內燃機汽車在靜止時會吸收外界熱</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 因為內燃機汽車在靜止時會吸收外界熱量</button>
                 </div>
                 <div id="exp-q32-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
                     <strong>解析：</strong> 內燃機汽車即使停定，引擎也必須維持怠速運轉（持續燃燒汽油）以免熄火。而電動車在停車時馬達完全斷電，實現了零怠速耗能。
@@ -1946,6 +1954,465 @@
                 </div>
                 <div id="exp-q32-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
                     <strong>解析：</strong> 電氣化鐵路（如港鐵）的電動機效率極高，加上它可以同時運載大量乘客。分攤下來，其「人均能源消耗」遠低於任何人駕駛私家車（即使是電動私家車），是提升城市能源效益的最有效方案。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 4.1: 可再生能源與不可再生能源 -->
+<!-- ========================================== -->
+<article id="ch4-1" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">4.1</span>可再生能源與不可再生能源</h2>
+        <p class="text-slate-500 mt-2">認識全球能源的來源分類，並掌握風力與太陽能發電的基本物理計算。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>現代社會的運作高度依賴能源。根據能源是否能在短時間內自然補充，我們將能源分為兩大類：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">不可再生能源 (Non-renewable energy)：</strong> 
+                    消耗速度遠大於自然產生速度的能源。一旦耗盡，短時間內無法補充。主要包括<strong>化石燃料</strong>（煤、石油、天然氣）及<strong>核能</strong>（鈾礦）。目前全球大部分電力仍依賴此類能源。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">可再生能源 (Renewable energy)：</strong> 
+                    源於自然界，能夠持續不斷地產生且不會枯竭的能源。包括<strong>太陽能</strong>、<strong>風能</strong>、<strong>水力能</strong>、生物質能等。這類能源被視為未來減碳和可持續發展的關鍵。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 核心公式與單位 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與計算模型</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">評估可再生能源系統時，我們常使用以下公式來計算可提取的功率：</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-blue-100 text-center flex flex-col justify-center">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">太陽能板輸出功率</p>
+                    <div class="text-xl font-bold text-blue-900 mt-2">$$ P = I A \eta $$</div>
+                    <p class="text-xs text-slate-500 mt-2">$I$: 太陽輻射強度 ($\text{W m}^{-2}$)<br>$A$: 太陽能板面積<br>$\eta$: 轉換效率</p>
+                </div>
+                <div class="bg-white p-4 rounded border border-blue-100 text-center flex flex-col justify-center">
+                    <p class="font-bold text-blue-800 mb-2 border-b border-blue-50 pb-1">風力發電機最大可用功率</p>
+                    <div class="text-xl font-bold text-blue-900 mt-2">$$ P = \frac{1}{2} \rho A v^3 $$</div>
+                    <p class="text-xs text-slate-500 mt-2">$\rho$: 空氣密度 ($\text{kg m}^{-3}$)<br>$A$: 扇葉掃過的圓面積 ($\pi r^2$)<br>$v$: 風速 ($\text{m s}^{-1}$)</p>
+                </div>
+            </div>
+            <p class="text-sm text-slate-600 mt-4"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> <strong>注意：</strong> 風力發電的功率與風速的<strong>立方 ($v^3$)</strong> 成正比！風速只要稍微增加，發電量就會有極大的提升。</p>
+        </div>
+    </section>
+
+    <!-- 📊 3. 重要性質 / 物理規律對照 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-blue-500 mr-2"></i> 發電方式的優缺點對照表</h3>
+        <!-- 桌機版 Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-blue-100 text-blue-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">發電方式</th>
+                        <th class="p-3 font-semibold w-3/8 text-green-700">優點</th>
+                        <th class="p-3 font-semibold w-3/8 text-red-600">缺點與限制</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">化石燃料 (煤/天然氣)</td>
+                        <td class="p-3">技術成熟、成本低、可隨時穩定供電。</td>
+                        <td class="p-3">排放大量溫室氣體與空氣污染物、資源終將枯竭。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">太陽能</td>
+                        <td class="p-3">無盡、無污染、適合分散式發電（安裝於屋頂）。</td>
+                        <td class="p-3">受天氣和日照時間限制、能量密度低（需大面積）、轉換效率不高。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">風能</td>
+                        <td class="p-3">清潔無污染、運行成本低。</td>
+                        <td class="p-3">風力極不穩定、產生噪音干擾、選址困難。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 行動版卡片 -->
+        <div class="grid md:hidden gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-slate-700 border-b border-slate-100 pb-2 mb-2">化石燃料</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="text-green-600 font-bold">優：</span>穩定可靠。</li>
+                    <li><span class="text-red-600 font-bold">缺：</span>嚴重污染、不可再生。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">太陽能與風能</h4>
+                <ul class="text-sm space-y-1 text-slate-600">
+                    <li><span class="text-green-600 font-bold">優：</span>清潔環保、取之不盡。</li>
+                    <li><span class="text-red-600 font-bold">缺：</span>受天氣嚴重影響（不穩定）、需要極大土地面積。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚠️ 4. 常見迷思與誤區 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> 常見迷思與誤區</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-red-50 text-red-800 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>「因為風力發電的公式是 $P = \frac{1}{2} \rho A v^3$，所以我們可以把風的所有動能 100% 轉化為電能。」</li>
+                    <li>「核能發電不會排放二氧化碳，所以它被歸類為可再生能源。」</li>
+                </ul>
+            </div>
+            <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
+                <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
+                <ul class="text-sm space-y-3 list-disc list-inside">
+                    <li>風必須有剩餘速度才能離開渦輪機。根據貝茲極限 (Betz limit)，風力渦輪機<strong>最多只能提取約 59.3% 的風能</strong>。</li>
+                    <li>核能發電使用的原料（鈾）在地球上的儲量是有限的，用完即無，因此核能嚴格上屬於<strong>不可再生能源</strong>。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        某住宅屋頂安裝了面積為 $10 \text{ m}^2$ 的太陽能板。在正午時分，太陽輻射強度為 $800 \text{ W m}^{-2}$。已知該太陽能板的光電轉換效率為 $15\%$。求該太陽能系統此時的輸出電功率。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算射向太陽能板的總太陽輻射功率：</p>
+                        $$ P_{\text{輸入}} = I \times A = 800 \times 10 = 8000 \text{ W} $$
+                        <p class="mb-2 mt-2">2. 考慮轉換效率，計算實際輸出的電功率：</p>
+                        $$ P_{\text{輸出}} = P_{\text{輸入}} \times \eta = 8000 \times 0.15 = 1200 \text{ W} $$
+                        <p class="mt-2 font-bold text-green-700">答案：該系統的輸出電功率為 $1200 \text{ W}$ (或 $1.2 \text{ kW}$)。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一座風力發電機的扇葉長度（半徑）為 $20 \text{ m}$。若風速為 $10 \text{ m s}^{-1}$，空氣密度為 $1.2 \text{ kg m}^{-3}$。假設發電機的整體效率為 $40\%$，求該發電機輸出的電功率。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算扇葉掃過的圓面積 $A$：</p>
+                        $$ A = \pi r^2 = \pi \times (20)^2 \approx 1256.6 \text{ m}^2 $$
+                        <p class="mb-2 mt-2">2. 計算最大可用風力功率：</p>
+                        $$ P_{\text{風}} = \frac{1}{2} \rho A v^3 = 0.5 \times 1.2 \times 1256.6 \times (10)^3 $$
+                        $$ P_{\text{風}} \approx 753960 \text{ W} $$
+                        <p class="mb-2 mt-2">3. 計算實際輸出電功率：</p>
+                        $$ P_{\text{電}} = P_{\text{風}} \times 40\% = 753960 \times 0.4 \approx 301584 \text{ W} $$
+                        <p class="mt-2 font-bold text-green-700">答案：輸出的電功率約為 $301.6 \text{ kW}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一座水力發電廠的水庫高出水輪機 $50 \text{ m}$。若水流的質量流率為每秒 $2000 \text{ kg}$，且水輪機及發電機的總效率為 $85\%$。求該水力發電廠的輸出電功率。（取 $g = 9.81 \text{ m s}^{-2}$）
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算每秒鐘水流損失的重力勢能（輸入功率）：</p>
+                        $$ P_{\text{輸入}} = \frac{mgh}{t} = \left(\frac{m}{t}\right) gh = 2000 \times 9.81 \times 50 $$
+                        $$ P_{\text{輸入}} = 981,000 \text{ W} = 981 \text{ kW} $$
+                        <p class="mb-2 mt-2">2. 計算實際輸出電功率：</p>
+                        $$ P_{\text{電}} = 981 \text{ kW} \times 85\% = 981 \times 0.85 = 833.85 \text{ kW} $$
+                        <p class="mt-2 font-bold text-green-700">答案：水力發電廠的輸出電功率為 $833.85 \text{ kW}$。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 下列哪一種能源被歸類為「可再生能源」？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q41-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 天然氣</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q41-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 煤</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q41-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 核能</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q41-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 生物質能</button>
+                </div>
+                <div id="exp-q41-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 天然氣和煤是化石燃料，核能依賴有限的鈾礦，皆為不可再生。生物質能（如木柴、農業廢棄物）可以透過種植快速補充，屬於可再生能源。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 根據風力發電的功率公式 $P = \frac{1}{2} \rho A v^3$，若該地區的風速增加為原來的 2 倍，風力發電機的理論最大功率會變成原來的多少倍？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q41-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 2 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q41-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 4 倍</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q41-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 8 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q41-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 16 倍</button>
+                </div>
+                <div id="exp-q41-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 功率與風速的立方 ($v^3$) 成正比。因此當風速變為 2 倍時，功率會變為 $2^3 = 8$ 倍。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 水力發電廠發電時，其核心能量轉換的順序為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q41-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 重力勢能 $\rightarrow$ 動能 $\rightarrow$ 電能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q41-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 內能 $\rightarrow$ 動能 $\rightarrow$ 電能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q41-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 化學能 $\rightarrow$ 動能 $\rightarrow$ 電能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q41-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 電能 $\rightarrow$ 重力勢能 $\rightarrow$ 動能</button>
+                </div>
+                <div id="exp-q41-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 蓄在水庫高處的水擁有龐大的重力勢能。水落下時轉化為流水的動能，水流推動水輪發電機旋轉，最終轉化為電能。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 目前推廣太陽能和風能等可再生能源的最大限制或挑戰之一是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q41-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 發電過程會產生放射性廢料</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q41-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 能源供應極不穩定，受天氣影響很大</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q41-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 發電過程中排放大量的二氧化碳</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q41-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 燃料儲量即將耗盡</button>
+                </div>
+                <div id="exp-q41-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 太陽能需要日照，風能需要有風。它們的發電量難以預測和人為控制，無法作為穩定不間斷的基載電力，必須依賴昂貴的儲能系統或與其他發電方式配合使用。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 如果將一塊太陽能板的面積增加一倍，在相同的日照條件和相同的轉換效率下，其輸出電功率會：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q41-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 增加一倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q41-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 增加兩倍 (變成原來的三倍)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q41-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 減少一半</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q41-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 保持不變</button>
+                </div>
+                <div id="exp-q41-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據公式 $P = I A \eta$，輸出功率 $P$ 與太陽能板面積 $A$ 成正比。面積加倍，接收到的輻射能量加倍，輸出的電功率也就增加一倍。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<!-- ========================================== -->
+<!-- 區塊 4.2: 能源消耗對環境的衝擊 -->
+<!-- ========================================== -->
+<article id="ch4-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-slate-200 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">4.2</span>能源消耗對環境的衝擊</h2>
+        <p class="text-slate-500 mt-2">探討燃燒化石燃料帶來的環境問題，了解溫室效應的物理機制，並學習計算碳足跡。</p>
+    </header>
+
+    <!-- 📌 1. 名詞定義 / 核心概念 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>大規模消耗化石燃料是現代社會發展的代價，它對地球的生態系統和氣候造成了深遠的負面衝擊：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-blue-700 font-bold">溫室效應與全球暖化：</strong> 
+                    燃燒化石燃料會釋放大量的<strong>二氧化碳 ($\text{CO}_2$)</strong>。這是一種溫室氣體，會加劇地球的溫室效應，導致全球平均氣溫上升、冰川融化及極端氣候。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">空氣污染與酸雨：</strong> 
+                    燃料中的雜質燃燒後會產生<strong>二氧化硫 ($\text{SO}_2$)</strong> 和<strong>氮氧化物 ($\text{NO}_x$)</strong>。這些氣體溶於雨水中會形成酸雨，破壞植被和建築物。此外，不完全燃燒產生的懸浮粒子（PM2.5）會嚴重影響人類呼吸系統健康。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">碳足跡 (Carbon Footprint)：</strong> 
+                    用來量度一項活動或一件產品在其生命週期中，直接或間接排放的溫室氣體總量（通常換算為二氧化碳當量）。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 📐 2. 物理機制 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-earth-americas text-blue-500 mr-2"></i> 溫室效應的物理機制</h3>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">溫室效應本質上是一個熱輻射的物理過程。地球大氣層就像一個單向的「能量陷阱」：</p>
+            <ol class="list-decimal list-inside space-y-2 text-slate-700">
+                <li>太陽輻射主要以波長較短的<strong>可見光</strong>形式到達地球。大氣層對可見光幾乎是透明的，因此能量能順利到達並加熱地表。</li>
+                <li>受熱後的地表會向外太空散熱，但由於地表溫度較低，發出的是波長較長的<strong>紅外線（熱輻射）</strong>。</li>
+                <li>大氣中的<strong>溫室氣體</strong>（如二氧化碳、水蒸氣、甲烷）對紅外線不透明。它們會強烈<strong>吸收</strong>這些向外逃逸的紅外線輻射。</li>
+                <li>溫室氣體吸收能量後，會將部分紅外線輻射重新發射回地表，將熱能「困在」大氣層內，使得地表保持溫暖。這原本是維持地球生命運作的自然機制，但過量人為排放的 $\text{CO}_2$ 打破了平衡，引發全球暖化。</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- ✍️ 5. 典型例題解說 -->
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-blue-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <!-- 例題 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        試從物理學中電磁波波長特性的角度，解釋為何地球大氣層中的二氧化碳能造成「溫室效應」。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">太陽表面溫度極高，發出的電磁波波長較短（主要為可見光和紫外線）。二氧化碳對短波長輻射幾乎透明，能讓陽光順利穿透到達地表。</p>
+                        <p class="mb-2">地表吸收太陽能後升溫，並向外輻射能量。由於地表溫度遠低於太陽，根據維恩位移定律，它發出的輻射波長較長（主要是紅外線）。</p>
+                        <p class="mb-2">二氧化碳分子能強烈吸收這種長波長的紅外線輻射，並將其重新反射回地面，阻止熱量散失到太空中，從而造成溫室效應。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <!-- 例題 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        燃燒煤炭除了會產生二氧化碳外，還會引發「酸雨」問題。請指出導致酸雨的主要污染物，並簡述其對環境的一個負面影響。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2"><strong>主要污染物：</strong> 煤炭中常含有硫雜質，燃燒時會產生<strong>二氧化硫 ($\text{SO}_2$)</strong>。此外，高溫燃燒也會產生<strong>氮氧化物 ($\text{NO}_x$)</strong>。</p>
+                        <p class="mb-2"><strong>環境影響：</strong> 這些氣體溶於大氣中的水分後會形成亞硫酸或硝酸，隨雨水降下形成酸雨。酸雨會酸化土壤和湖泊（毒害植物和魚類），並加速腐蝕大理石建築物和金屬橋樑。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 例題 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        在香港，發電廠每生產 $1 \text{ kWh}$ 的電力，平均會排放大約 $0.7 \text{ kg}$ 的二氧化碳。如果一個家庭每天開啟一部額定功率為 $2 \text{ kW}$ 的冷氣機 $10$ 小時，求這部冷氣機在一個月（30 天）內造成的碳足跡（即二氧化碳排放量）。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算一個月的總用電量（能量 $E$）：</p>
+                        $$ E = Pt = 2 \text{ kW} \times (10 \text{ h/天} \times 30 \text{ 天}) = 600 \text{ kWh} $$
+                        <p class="mb-2 mt-2">2. 計算碳足跡：</p>
+                        $$ \text{碳足跡} = 600 \text{ kWh} \times 0.7 \text{ kg/kWh} = 420 \text{ kg} $$
+                        <p class="mt-2 font-bold text-green-700">答案：這部冷氣機一個月會間接造成 $420 \text{ kg}$ 的二氧化碳排放。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧠 6. 隨堂測驗 -->
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 在物理機制的層面上，導致地球產生溫室效應的最關鍵因素是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q42-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 大氣層阻擋了太陽的紫外線</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q42-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 太陽輻射增強了</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q42-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 大氣層吸收並反射了地表向外釋放的紅外線輻射</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q42-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 臭氧層出現了破洞</button>
+                </div>
+                <div id="exp-q42-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 溫室效應是因為溫室氣體對紅外線不透明，把地表原本要散失到外太空的紅外線熱輻射「困」在地球系統內部。臭氧層破洞與溫室效應是兩個不同的環境問題。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 下列哪一種氣體不屬於導致全球暖化的「溫室氣體」？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q42-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 二氧化碳 ($\text{CO}_2$)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q42-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 甲烷 ($\text{CH}_4$)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q42-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 水蒸氣 ($\text{H}_2\text{O}$)</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q42-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 氮氣 ($\text{N}_2$)</button>
+                </div>
+                <div id="exp-q42-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 大氣中的主要成分氮氣 ($\text{N}_2$) 和氧氣 ($\text{O}_2$) 對紅外線是透明的，不具備溫室效應的吸收特性。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 減少個人「碳足跡」的最佳方法是：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q42-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 多使用一次性塑膠產品</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q42-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 改乘公共交通工具代替駕駛私家車</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q42-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 將冷氣機溫度調至最低</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q42-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 增加肉類（特別是牛肉）在飲食中的比例</button>
+                </div>
+                <div id="exp-q42-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 公共交通系統的能源效益高，人均碳排放遠低於私家車。減少用電、減少肉類消耗（因為畜牧業會排放大量溫室氣體甲烷）也能降低碳足跡。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 汽車引擎的高溫會促使空氣中的哪兩種元素結合成引發酸雨的污染物？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true, 'exp-q42-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 氮和氧（產生氮氧化物 $\text{NO}_x$）</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q42-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 碳和氫</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q42-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 硫和碳</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q42-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 氧和氫</button>
+                </div>
+                <div id="exp-q42-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 雖然燃油經過提煉可以去硫，但在高溫和高壓的汽車引擎內，原本惰性的空氣中氮氣 ($\text{N}_2$) 會與氧氣 ($\text{O}_2$) 反應，生成氮氧化物 ($\text{NO}_x$)，這是城市酸雨的主要來源。
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 如果一個國家的發電網絡完全由燃煤發電廠組成，那麼在該國推廣使用電動車，從全球暖化的角度來看，會產生甚麼結果？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q42-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 能夠立即且完全消除碳排放</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q42-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 汽車會改為排放二氧化硫</button>
+                    <button onclick="checkAnswer(this, true, 'exp-q42-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 碳排放只是從汽車排氣管轉移到了發電廠的煙囪，整體減碳效果有限</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q42-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 燃煤發電廠的發電效率高達 90%，因此整體非常環保</button>
+                </div>
+                <div id="exp-q42-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 電動車的環保效益很大程度上取決於電力來源的清潔度。如果電網嚴重依賴高碳排放的煤炭發電，電動車消耗的電能仍然會間接導致大量溫室氣體的排放。
                 </div>
             </div>
         </div>
