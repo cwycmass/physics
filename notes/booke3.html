@@ -50,7 +50,7 @@
                 <!-- 行動版：書本切換下拉選單 -->
                 <details class="group">
                     <summary class="cursor-pointer text-xs text-blue-600 font-medium flex items-center mt-0.5">
-                        力和運動 (第2冊) <i class="fa-solid fa-chevron-down ml-1 transition-transform group-open:rotate-180" style="font-size: 0.6rem;"></i>
+                        能量與能源的應用 (第E3冊) <i class="fa-solid fa-chevron-down ml-1 transition-transform group-open:rotate-180" style="font-size: 0.6rem;"></i>
                     </summary>
                     <!-- 下拉選單內容 -->
                     <div class="absolute top-full left-0 mt-3 w-48 bg-white border border-slate-200 rounded-lg shadow-xl z-50 overflow-hidden">
@@ -80,7 +80,7 @@
             <!-- 電腦版：書本切換下拉選單 -->
             <details class="mt-3 group relative">
                 <summary class="cursor-pointer flex items-center justify-between bg-slate-50 hover:bg-slate-100 text-sm font-semibold text-blue-700 py-2 px-3 rounded-lg border border-slate-200 transition-colors">
-                    <span><i class="fa-solid fa-book-open mr-2"></i>力和運動 (第2冊)</span>
+                    <span><i class="fa-solid fa-book-open mr-2"></i>能量與能源的應用 (第E3冊)</span>
                     <i class="fa-solid fa-chevron-down text-xs transition-transform group-open:rotate-180"></i>
                 </summary>
                 <!-- 下拉選單內容 -->
@@ -101,16 +101,21 @@
         <nav class="flex-1 overflow-y-auto p-4 space-y-6">
             <!-- 第 1 章 -->
             <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 1 章：位置與運動</h2>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">第 1 章：家居用電</h2>
                 <ul class="space-y-1">
                     <li>
-                     <button onclick="switchPage('ch1-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                               1.2 距離與位移
+                     <button onclick="switchPage('ch1-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            1.1 家用耗能電器
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchPage('ch1-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
+                            1.2 無火烹調
                         </button>
                     </li>
                     <li>
                         <button onclick="switchPage('ch1-3', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            1.3 速率、速度和加速度
+                            1.3 抽熱
                         </button>
                     </li>
                 </ul>
@@ -345,6 +350,532 @@
 
 
 
+            <!-- ========================================== -->
+            <!-- 區塊 1.1: 家用耗能電器 -->
+            <!-- ========================================== -->
+            <article id="ch1-1" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-orange-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-orange-600 mr-2">1.1</span>家用耗能電器</h2>
+                    <p class="text-slate-500 mt-2">認識電能作為家居主要能源的應用，理解電器的能量轉換過程，並學習如何計算與比較能源效益。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-orange-500 mr-2"></i> 核心概念</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">在現代生活中，<strong class="text-orange-700 font-bold">電能</strong> 是維持家居運作的主要能源。大多數家用電器都是設計來將電能轉換為我們所需的其他能量形式：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><strong class="text-orange-700 font-bold">能量轉換：</strong> 任何電器運作時都會發生能量轉換。例如：電燈泡將電能轉換為光能（有用的能量）和內能（以熱的形式散失）；電水煲將電能轉換為內能以加熱水。</li>
+                            <li><strong class="text-orange-700 font-bold">能量損耗：</strong> 在所有的能量轉換過程中，總會有一部分能量轉換成我們不需要的形式（通常是內能/熱能）。這部分能量被視為損耗或浪費。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-orange-500 mr-2"></i> 能源效益公式與標籤</h3>
+                    <div class="bg-orange-50 border-l-4 border-orange-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-3">為了衡量一件電器將輸入能量轉化為有用能量的能力，我們定義了<strong class="text-orange-700 font-bold">能源效益</strong>：</p>
+                        <div class="text-center py-4 overflow-x-auto text-xl font-bold text-orange-900">
+                            $$\text{能源效益} = \frac{\text{有用輸出能量}}{\text{總輸入能量}} \times 100\%$$
+                            <p class="text-sm mt-2 text-slate-600">或者使用功率計算：</p>
+                            $$\text{能源效益} = \frac{\text{有用輸出功率}}{\text{總輸入功率}} \times 100\%$$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                            <li><i class="fa-solid fa-tag text-orange-500 mr-1"></i> <strong>能源標籤：</strong> 機電工程署推行的標籤計劃，將電器按能源效益分為 1 至 5 級。<strong>第 1 級表示能源效益最高</strong>（最省電），第 5 級則最低。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-orange-500 mr-2"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一個傳統鎢絲燈泡的輸入功率為 $100 \text{ W}$。在運作期間，它每秒鐘產生 $15 \text{ J}$ 的光能，其餘的能量皆轉化為熱能散失。求該鎢絲燈泡的能源效益。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>第一步：確立輸入與輸出的數值</strong></p>
+                                <p class="mb-2">輸入功率為 $100 \text{ W}$，代表每秒輸入 $100 \text{ J}$ 的總電能。</p>
+                                <p class="mb-2">燈泡的作用是照明，因此有用的輸出能量為光能，即每秒 $15 \text{ J}$（有用輸出功率為 $15 \text{ W}$）。</p>
+                                <p class="mb-2 mt-4"><strong>第二步：計算能源效益</strong></p>
+                                <div class="overflow-x-auto">$$\text{能源效益} = \frac{15}{100} \times 100\% = 15\%$$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：該鎢絲燈泡的能源效益為 $15\%$。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                顧客在電器店選購冷氣機，有兩款製冷能力相同的型號可供選擇：A 款標示為「一級能源標籤」，B 款標示為「三級能源標籤」。從物理學與經濟角度來看，顧客應選擇哪一款？為什麼？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">應選擇 <strong>A 款（一級能源標籤）</strong>。</p>
+                                <p class="mb-2"><strong>原因：</strong> 一級能源標籤代表該電器的能源效益最高。在產生相同冷卻效果（有用輸出相同）的情況下，A 款所消耗的總電能較少。長遠而言，不僅能節省大量的電費開支，還能減少發電廠的碳排放，對環境更友善。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一個額定功率為 $2 \text{ kW}$ 的電水煲，用來加熱一壺水。計算顯示把水煮沸理論上需要 $600 \text{ kJ}$ 的能量。若電水煲實際耗時 $350 \text{ s}$ 才把水煮沸，求此加熱過程的能源效益，並解釋為何能量會流失。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>第一步：計算總輸入能量</strong></p>
+                                <div class="overflow-x-auto">$$\text{輸入能量} = Pt = 2000 \text{ W} \times 350 \text{ s} = 700,000 \text{ J} = 700 \text{ kJ}$$</div>
+                                <p class="mb-2 mt-4"><strong>第二步：計算能源效益</strong></p>
+                                <div class="overflow-x-auto">$$\text{能源效益} = \frac{600}{700} \times 100\% \approx 85.7\%$$</div>
+                                <p class="mb-2 mt-4"><strong>解釋流失：</strong> 剩餘的 $100 \text{ kJ}$ 能量被轉化為加熱水煲外殼的內能，以及以傳導、對流或輻射的形式散失到周圍空氣中。</p>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：能源效益為 $85.7\%$。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-orange-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 現代家居中最依賴且使用最廣泛的主要能源是甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 煤氣</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 太陽能</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 電能</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-1', 'quiz1-1-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 核能</button>
+                        </div>
+                        <div id="exp1-1-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 絕大多數家用器具都是由電力驅動的，因此電能是維持家居運作最核心的主要能源。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 電風扇在運作時，主要將電能轉換為哪一種「有用」的能量形式？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 內能</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 光能</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 化學能</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-1-2', 'quiz1-1-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 動能</button>
+                        </div>
+                        <div id="exp1-1-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 電風扇的目的是使扇葉旋轉以帶動空氣流動，因此有用的能量輸出是機械上的動能。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 根據能源標籤計劃，下列哪一個級別代表電器的能源效益最高？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 第 1 級</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 第 3 級</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 第 5 級</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-3', 'quiz1-1-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. A 級</button>
+                        </div>
+                        <div id="exp1-1-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 在香港機電工程署的強制性能源效益標籤計劃中，級別 1 綠色標籤代表能源效益最高，最為省電。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-1-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 傳統鎢絲燈泡逐漸被 LED 燈取代，主要是因為鎢絲燈在運作時，將極大部分的電能轉換成了哪一種無用的能量而浪費掉？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 動能</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 內能（熱能）</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 聲能</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-4', 'quiz1-1-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 化學能</button>
+                        </div>
+                        <div id="exp1-1-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 鎢絲燈必須加熱到極高溫才會發光，因此輸入的電能中超過 85% 都變成了熱能散失，只有極少數變成可見光，導致能源效益極低。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-1-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 一台機器的輸入功率為 $500 \text{ W}$，而它能產生 $400 \text{ W}$ 的有用輸出功率。這台機器的能源效益是多少？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. $20\%$</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. $80\%$</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. $125\%$</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-1-5', 'quiz1-1-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. $100\%$</button>
+                        </div>
+                        <div id="exp1-1-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> $\text{能源效益} = \frac{\text{有用輸出}}{\text{總輸入}} \times 100\% = \frac{400}{500} \times 100\% = 80\%$。
+                        </div>
+                    </div>
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 1.2: 無火烹調 -->
+            <!-- ========================================== -->
+            <article id="ch1-2" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-orange-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-orange-600 mr-2">1.2</span>無火烹調</h2>
+                    <p class="text-slate-500 mt-2">揭開現代廚房中電磁爐與微波爐的神秘面紗，了解它們如何利用電磁學原理進行高效加熱。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-orange-500 mr-2"></i> 電磁爐 (Induction Cooker) 的原理</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">電磁爐表面是一塊絕緣的微晶玻璃面板，運作時面板本身不會發熱，熱量是直接在「鍋具內部」產生的。其物理機制如下：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><strong class="text-orange-700 font-bold">交變磁場：</strong> 電磁爐內部有線圈，當通入高頻交流電時，線圈會產生快速變化的磁場。</li>
+                            <li><strong class="text-orange-700 font-bold">渦電流 (Eddy currents)：</strong> 這個變化的磁場穿過鍋底，根據電磁感應定律，會在鍋底金屬內部感應出強大的漩渦狀電流。</li>
+                            <li><strong class="text-orange-700 font-bold">焦耳熱：</strong> 由於金屬鍋底存在電阻，渦電流流過時會產生巨大的熱能（焦耳熱），從而直接加熱鍋內的食物。</li>
+                            <li><i class="fa-solid fa-triangle-exclamation text-amber-500 mx-1"></i> <strong>限制：</strong> 必須使用<strong class="text-orange-700">鐵磁性材料</strong>（如鐵、不鏽鋼）製成的鍋具，以有效集中磁場並產生足夠的渦電流。純鋁、銅或陶瓷鍋無法使用。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-orange-500 mr-2"></i> 微波爐 (Microwave Oven) 的原理</h3>
+                    <div class="bg-orange-50 border-l-4 border-orange-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-3">微波爐則是利用電磁波來從食物內部進行加熱，其核心機制為：</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                            <div class="bg-white p-4 rounded border border-orange-100 text-center">
+                                <p class="font-bold text-orange-800 mb-2 border-b border-orange-50 pb-1">水分子旋轉摩擦</p>
+                                <p class="text-sm text-slate-600 mt-2 text-left">
+                                    食物中含有大量的水分。水分子具有極性（一端偏正，一端偏負）。當頻率極高（約 $2.45 \text{ GHz}$）的微波穿透食物時，水分子會隨着交變電場不斷急速翻轉。這種劇烈的摩擦和碰撞產生了大量內能，使食物迅速變熱。
+                                </p>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-orange-100 text-center">
+                                <p class="font-bold text-orange-800 mb-2 border-b border-orange-50 pb-1">金屬反射危險</p>
+                                <p class="text-sm text-slate-600 mt-2 text-left">
+                                    微波無法穿透金屬，反而會被金屬強烈反射。若在微波爐內放入金屬容器，除了無法加熱食物外，金屬尖端還可能因電荷累積而產生危險的電火花，損壞微波爐組件。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-orange-500 mr-2"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                小明把手放在正在運作的電磁爐的發熱區上方（沒有放鍋具），卻發現面板完全不會發熱。請用電磁爐的運作原理解釋這個現象。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">電磁爐是利用交變磁場在導體中感應出<strong>渦電流</strong>來生熱的。</p>
+                                <p class="mb-2">人手和電磁爐的玻璃面板都是<strong>絕緣體</strong>，內部沒有可自由移動的電子。因此，變化的磁場無法在其中感應出渦電流，也就不會產生焦耳熱。</p>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：因為人手是絕緣體，無法產生渦電流生熱。（警告：剛拿開熱鍋的面板仍會因鍋底傳導而非常燙手，切勿觸摸！）</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                試寫出電磁爐在烹調食物時的完整能量轉換過程。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">1. 來自電源的<strong>電能</strong>輸入電磁爐線圈。</p>
+                                <p class="mb-2">2. 線圈將電能轉換為變化的<strong>磁能</strong>（電磁能）。</p>
+                                <p class="mb-2">3. 磁能在鍋底感應出渦電流，重新轉換為<strong>電能</strong>，然後因電阻轉換為<strong>內能（熱能）</strong>。</p>
+                                <p class="mb-2">4. 鍋底的熱能經由傳導傳給食物，增加食物的<strong>內能</strong>。</p>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：電能 $\rightarrow$ 磁能 $\rightarrow$ 電能 $\rightarrow$ 內能 (鍋) $\rightarrow$ 內能 (食物)。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                小華把一塊完全乾燥的餅乾和一杯水同時放入微波爐中加熱。一分鐘後，水已經滾燙，但乾燥的餅乾卻只是微暖。請解釋原因。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2">微波爐加熱的主要機制是引起食物內部具有極性的<strong>水分子</strong>高速旋轉與碰撞。</p>
+                                <p class="mb-2">水杯中充滿了水分子，因此能大量吸收微波能量轉化為內能而變得滾燙。</p>
+                                <p class="mb-2">完全乾燥的餅乾內部缺乏水分，微波大部分直接穿透而未被吸收，因此幾乎無法被有效加熱，只能靠周圍極少量的熱傳導使其微暖。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-orange-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 電磁爐加熱鍋具的直接物理機制是甚麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 面板下方的紅外線燈管發熱</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 變化的磁場在金屬鍋底感應出渦電流生熱</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 發射微波使鍋具的水分子旋轉</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-1', 'quiz1-2-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 靜電感應使鍋底產生高壓電花</button>
+                        </div>
+                        <div id="exp1-2-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 電磁爐的核心在於「電磁感應」。高頻交變磁場穿過導體鍋底，產生渦電流，渦電流流過鍋底電阻產生焦耳熱。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 哪一種材質的鍋具<strong>最適合</strong>在電磁爐上使用？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 陶瓷</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 純鋁</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 鑄鐵或不鏽鋼</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-2', 'quiz1-2-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 耐熱玻璃</button>
+                        </div>
+                        <div id="exp1-2-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 電磁爐需要鐵磁性材料（如鐵、鋼）來有效集中磁場，並提供合適的電阻率以產生足夠的熱量。陶瓷和玻璃是絕緣體，鋁的磁導率太低且電阻太小，皆不適合。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 微波爐能夠快速加熱食物，主要是因為微波的能量被食物中的哪種成分強烈吸收？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 蛋白質</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 脂肪</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 纖維素</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-2-3', 'quiz1-2-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 水分子</button>
+                        </div>
+                        <div id="exp1-2-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 水分子是極性分子。微波產生的交變電場會驅使這些水分子以每秒數十億次的頻率來回翻轉，劇烈摩擦生熱，從而加熱食物。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-2-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 為什麼絕對不能將金屬碗盤放入微波爐中加熱？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 金屬會吸收微波變成劇毒</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 金屬會反射微波，尖端處易產生電荷累積引發火花</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 金屬會融化並流出有害物質</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-4', 'quiz1-2-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 微波爐的磁場會把金屬碗吸到頂部</button>
+                        </div>
+                        <div id="exp1-2-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 微波是電磁波，無法穿透金屬，會被金屬表面強烈反射。這不僅使得食物無法受熱，金屬的邊緣或尖端還會因電場作用積聚高壓電荷，產生放電火花，極易損壞磁控管甚至引發火災。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-2-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 使用玻璃盤子裝食物放進微波爐加熱，加熱完畢後食物很燙，但玻璃盤子邊緣卻不怎麼燙。原因是：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 玻璃的散熱速度極快</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 玻璃會反射所有的微波</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 玻璃內部缺乏水分子，微波直接穿透而不被吸收加熱</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-2-5', 'quiz1-2-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 玻璃具有特殊的隔熱塗層</button>
+                        </div>
+                        <div id="exp1-2-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 微波對玻璃、陶瓷、塑膠等絕緣物質幾乎是透明的（直接穿透）。這些器皿本身不會吸收微波能量發熱，它們變熱通常只是因為被接觸到的熱食物傳導加熱而已。
+                        </div>
+                    </div>
+                </section>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 區塊 1.3: 抽熱 -->
+            <!-- ========================================== -->
+            <article id="ch1-3" class="content-section hidden">
+                <header class="mb-8 border-b-2 border-orange-100 pb-4">
+                    <h2 class="text-3xl font-black text-slate-800"><span class="text-orange-600 mr-2">1.3</span>抽熱</h2>
+                    <p class="text-slate-500 mt-2">了解空調機與雪櫃的製冷循環原理，探討製冷劑在物態變化中如何轉移熱能，並學習冷卻能力的計算。</p>
+                </header>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-orange-500 mr-2"></i> 核心概念：製冷系統</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-slate-700 leading-relaxed">
+                        <p class="mb-3">熱量自然地會從高溫流向低溫。空調機（冷氣機）和雪櫃（冰箱）的作用則是「逆天而行」，利用電能把熱量從較冷的室內「抽」到較熱的室外。這依賴於封閉管路中循環流動的液體——<strong class="text-orange-700 font-bold">製冷劑 (Refrigerant)</strong>。</p>
+                        <p>製冷循環依賴四大關鍵部件來操控製冷劑的物態變化（吸熱與放熱）：</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2 mt-2">
+                            <li><strong class="text-orange-700 font-bold">蒸發器 (Evaporator)：</strong> 位於室內/雪櫃內。低壓液態製冷劑在此處蒸發為氣體，大量<strong>吸收潛熱</strong>，使周圍空氣變冷。</li>
+                            <li><strong class="text-orange-700 font-bold">壓縮機 (Compressor)：</strong> 系統的心臟，消耗電能。把氣態製冷劑壓縮，使其壓力與溫度急劇<strong>升高</strong>。</li>
+                            <li><strong class="text-orange-700 font-bold">冷凝器 (Condenser)：</strong> 位於室外/雪櫃背面。高溫高壓的氣態製冷劑在此處冷卻凝結成液體，向室外<strong>釋放潛熱</strong>。</li>
+                            <li><strong class="text-orange-700 font-bold">膨脹閥 (Expansion valve)：</strong> 讓高壓液體通過微小孔道，壓力瞬間下降，製冷劑溫度隨之<strong>大幅降低</strong>，準備再次進入蒸發器吸熱。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-orange-500 mr-2"></i> 冷卻能力與性能</h3>
+                    <div class="bg-orange-50 border-l-4 border-orange-500 p-5 rounded-r-lg shadow-sm">
+                        <p class="text-slate-700 mb-3">評估一台冷氣機或雪櫃的製冷性能，我們主要看它的<strong class="text-orange-700 font-bold">冷卻能力 (Cooling Capacity)</strong>：</p>
+                        <div class="text-center py-4 overflow-x-auto text-xl font-bold text-orange-900">
+                            $$\text{冷卻能力} = \frac{\text{從室內抽走的總熱量 } (Q)}{\text{時間 } (t)}$$
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-2 mt-4">
+                            <li>這其實就是「抽熱的功率」，其國際標準單位為<strong>千瓦 ($\text{kW}$)</strong> 或 瓦特 ($\text{W}$)。</li>
+                            <li><i class="fa-solid fa-circle-info text-orange-500 mr-1"></i> 冷氣機標籤上除了會標示輸入功率（耗電量）外，還會標示冷卻能力。冷卻能力越高的機器，能越快把房間降溫，但通常輸入的耗電功率也越大。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-to-square text-orange-500 mr-2"></i> 典型例題解說</h3>
+                    
+                    <!-- 例題 1 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q1</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                在空調機的製冷循環中，哪一個部件負責將室內的熱量吸走？製冷劑在該部件內發生了甚麼物態變化？
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>吸熱部件：</strong> 位於室內機的<strong>蒸發器</strong>負責吸收室內空氣的熱量。</p>
+                                <p class="mb-2"><strong>物態變化：</strong> 當低壓低溫的液態製冷劑流經蒸發器管路時，會吸收流過盤管的室內溫暖空氣的熱量，從而<strong>蒸發（氣化）變成氣態</strong>。這個吸熱過程帶走了空氣的內能，吹出來的風就變冷了。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 2 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl mb-4 shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q2</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                若一部雪櫃的壓縮機發生故障停止運作，雪櫃還能保持低溫嗎？請解釋壓縮機在循環中的關鍵作用。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>不能。</strong> 壓縮機是製冷系統的動力來源。</p>
+                                <p class="mb-2"><strong>作用解釋：</strong> 從蒸發器出來的氣態製冷劑雖然吸收了熱，但其溫度仍比室外環境低，無法自然向外散熱。</p>
+                                <p class="mb-2">壓縮機的作用是消耗電能對氣體作功（壓縮），強制<strong>提高製冷劑的壓力與溫度</strong>，使其溫度遠高於室外環境，這樣製冷劑才能在隨後的冷凝器中順利地把熱量釋放給外部空氣。沒有壓縮機，熱量轉移的循環就會中斷。</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 例題 3 -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-sm">
+                        <div class="flex items-start">
+                            <span class="bg-amber-500 text-white font-bold px-3 py-1 rounded-full text-sm mr-3 mt-1">Q3</span>
+                            <p class="text-slate-800 font-medium pt-1">
+                                一部冷氣機需要將房間內的溫度降低，經計算需要在 $1000 \text{ s}$ 內從房間的空氣中抽走 $5000 \text{ kJ}$ 的熱量。求這部冷氣機所需的冷卻能力（以 $\text{kW}$ 為單位）。
+                            </p>
+                        </div>
+                        <details class="mt-4 group">
+                            <summary class="cursor-pointer bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
+                                <i class="fa-solid fa-eye mr-1"></i> 顯示詳解
+                            </summary>
+                            <div class="mt-4 p-5 bg-white border border-amber-200 rounded-lg text-slate-700">
+                                <p class="mb-2"><strong>第一步：確認數值與單位</strong></p>
+                                <p class="mb-2">抽走的熱量 $Q = 5000 \text{ kJ} = 5,000,000 \text{ J}$</p>
+                                <p class="mb-2">時間 $t = 1000 \text{ s}$</p>
+                                <p class="mb-2 mt-4"><strong>第二步：計算冷卻能力 (功率)</strong></p>
+                                <div class="overflow-x-auto">$$\text{冷卻能力} = \frac{Q}{t} = \frac{5,000,000}{1000} = 5000 \text{ W} = 5 \text{ kW}$$</div>
+                                <p class="mt-2 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i> 答：所需的冷卻能力為 $5 \text{ kW}$。</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="bg-slate-100 p-6 rounded-2xl shadow-inner border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-brain text-orange-600 w-8"></i> 隨堂測驗</h3>
+                    
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3-1">
+                        <p class="font-bold text-slate-800 mb-3">1. 空調機製冷系統中，冷凝器通常安裝在機器的哪一個位置？它的主要功能是什麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-3-1', 'quiz1-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 位於室內；負責吸收室內的熱量</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-1', 'quiz1-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 位於室內；負責釋放冷氣</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-3-1', 'quiz1-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 位於室外；負責將熱量釋放到室外環境中</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-1', 'quiz1-3-1')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 位於室外；負責吸收室外的冷空氣</button>
+                        </div>
+                        <div id="exp1-3-1" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 冷凝器（Condenser）的作用是讓高溫氣態製冷劑冷卻液化，放出潛熱。為了把熱量排走，它必須置於室外（分體機的室外散熱機組）。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3-2">
+                        <p class="font-bold text-slate-800 mb-3">2. 製冷劑在「蒸發器」內流動時，發生的主要物態變化是什麼？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-3-2', 'quiz1-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 氣態變為液態（凝結）</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-3-2', 'quiz1-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 液態變為氣態（蒸發）</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-2', 'quiz1-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 固態變為液態（熔解）</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-2', 'quiz1-3-2')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 不發生物態變化，僅溫度改變</button>
+                        </div>
+                        <div id="exp1-3-2" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 名為蒸發器，顧名思義製冷劑在此吸收熱量並由液態變為氣態（蒸發），利用氣化潛熱大幅帶走室內空氣的熱能。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3-3">
+                        <p class="font-bold text-slate-800 mb-3">3. 為什麼雪櫃背面通常有一排黑色的散熱管（冷凝器）且摸起來會發熱？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-3-3', 'quiz1-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 因為它用來吸收廚房的熱量</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-3', 'quiz1-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 因為壓縮機摩擦產生了大量的熱</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-3-3', 'quiz1-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 因為它正在將從雪櫃內部抽出的熱量釋放到空氣中</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-3', 'quiz1-3-3')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 它是用來防止雪櫃結冰的加熱器</button>
+                        </div>
+                        <div id="exp1-3-3" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 雪櫃的任務是把內部的熱量搬運到外部。背面的冷凝器正是排熱的出口，製冷劑在管內液化放熱，所以摸起來是熱的。塗成黑色有助於增加熱輻射的散熱效率。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-4" id="quiz1-3-4">
+                        <p class="font-bold text-slate-800 mb-3">4. 膨脹閥 (Expansion valve) 在製冷循環中的核心物理作用是：</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, true,  'exp1-3-4', 'quiz1-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 迫使高壓液體通過細孔，使其壓強驟降，導致製冷劑溫度大幅下降變為低溫液體</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-4', 'quiz1-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 把製冷劑強烈壓縮，使其溫度升高</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-4', 'quiz1-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 把冷氣直接吹入房間</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-4', 'quiz1-3-4')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 過濾製冷劑中的雜質</button>
+                        </div>
+                        <div id="exp1-3-4" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 從冷凝器出來的液體雖然放了熱，但壓力依然很高，溫度與室溫相若。必須經過膨脹閥瞬間降壓膨脹，溫度才會驟降至低於室內溫度，以便再次進入蒸發器吸熱。
+                        </div>
+                    </div>
+
+                    <div class="quiz-container bg-white p-5 rounded-xl shadow-sm mb-0" id="quiz1-3-5">
+                        <p class="font-bold text-slate-800 mb-3">5. 冷氣機能源標籤上的「冷卻能力」數值的物理單位是？</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkAnswer(this, false, 'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">A. 焦耳 (J)</button>
+                            <button onclick="checkAnswer(this, true,  'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">B. 千瓦 (kW)</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">C. 攝氏度 ($^\circ\text{C}$)</button>
+                            <button onclick="checkAnswer(this, false, 'exp1-3-5', 'quiz1-3-5')" class="text-left p-3 rounded border border-slate-200 hover:bg-slate-50 transition-colors">D. 伏特 (V)</button>
+                        </div>
+                        <div id="exp1-3-5" class="hidden mt-4 p-4 border-l-4 bg-slate-50 rounded text-slate-700 text-sm">
+                            <strong>解析：</strong> 冷卻能力是指機器每秒鐘能從室內抽走多少焦耳的熱能。這本質上是一個能量轉移速率（功率）的概念，因此國際標準單位是瓦特或千瓦。
+                        </div>
+                    </div>
+                </section>
+            </article>
+            
           
 <!-- ========================================== -->
 
