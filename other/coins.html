@@ -2,7 +2,7 @@
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>香港硬幣買東西小遊戲 - 挑戰版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -19,6 +19,7 @@
             cursor: pointer;
             user-select: none;
             filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+            -webkit-tap-highlight-color: transparent;
         }
 
         .coin:active {
@@ -57,6 +58,7 @@
             background-color: #f00;
             opacity: 0;
             z-index: 100;
+            pointer-events: none;
         }
 
         /* 價格牌樣式 */
@@ -82,12 +84,10 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        /* 模態框背景模糊 */
         .modal-overlay {
             backdrop-filter: blur(5px);
         }
 
-        /* 評級印章動畫 */
         .stamp {
             transform: scale(3) rotate(-20deg);
             opacity: 0;
@@ -100,20 +100,24 @@
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen text-gray-800 overflow-x-hidden relative">
+<!-- 使用 h-[100dvh] 解決 iOS 高度問題，並限制 overflow -->
+<body class="flex flex-col h-[100dvh] overflow-hidden text-gray-800 relative">
 
     <!-- 頂部資訊欄 -->
-    <header class="bg-blue-500 text-white p-3 shadow-md z-10 relative">
+    <header class="flex-none bg-blue-500 text-white p-3 shadow-md z-10 relative pb-[calc(0.75rem+env(safe-area-inset-top))]">
         <div class="max-w-5xl mx-auto flex flex-wrap justify-between items-center gap-2">
             <h1 class="text-xl md:text-2xl font-black tracking-wider flex items-center gap-2">
                 🛒 <span class="hidden sm:inline">買東西小遊戲</span>
             </h1>
             
             <div class="flex items-center gap-2 md:gap-4 text-sm md:text-lg font-bold">
+                <button id="mute-btn" onclick="toggleMute()" class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-full border border-blue-400 text-xl transition-colors">
+                    🔊
+                </button>
                 <div class="bg-blue-700 px-3 py-1 rounded-lg border-2 border-blue-300">
                     第 <span id="q-count" class="text-yellow-300">1</span> / 30 題
                 </div>
-                <div class="bg-blue-700 px-3 py-1 rounded-lg border-2 border-blue-300 flex items-center gap-1">
+                <div class="bg-blue-700 px-3 py-1 rounded-lg border-2 border-blue-300 flex items-center gap-1 hidden md:flex">
                     連勝 <span id="streak-count" class="text-orange-300">0</span>🔥
                 </div>
                 <div class="bg-blue-700 px-3 py-1 rounded-lg border-2 border-blue-300">
@@ -127,12 +131,12 @@
         </div>
     </header>
 
-    <!-- 遊戲主要區域 -->
-    <main class="flex-1 max-w-5xl w-full mx-auto p-4 flex flex-col md:flex-row gap-6 blur-sm transition-all" id="main-game">
+    <!-- 遊戲主要區域 (設定可捲動以適應小螢幕) -->
+    <main class="flex-1 overflow-y-auto max-w-5xl w-full mx-auto p-3 flex flex-col md:flex-row gap-4 blur-sm transition-all" id="main-game">
         
         <!-- 左側：商店區域 -->
-        <section class="flex-1 bg-white rounded-3xl p-6 shadow-lg border-4 border-blue-100 flex flex-col items-center justify-center relative min-h-[250px]">
-            <h2 class="text-xl font-bold text-gray-500 mb-4 bg-gray-100 px-4 py-1 rounded-full">你要買的物品</h2>
+        <section class="flex-1 bg-white rounded-3xl p-4 md:p-6 shadow-lg border-4 border-blue-100 flex flex-col items-center justify-center relative min-h-[220px]">
+            <h2 class="text-lg font-bold text-gray-500 mb-2 bg-gray-100 px-4 py-1 rounded-full">你要買的物品</h2>
             
             <div id="item-display" class="flex flex-col items-center">
                 <!-- 商品 SVG 會動態插入這裡 -->
@@ -140,49 +144,49 @@
             
             <div id="feedback-message" class="absolute inset-0 bg-white/90 rounded-3xl flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 z-10">
                 <div id="feedback-icon" class="text-6xl mb-2"></div>
-                <div id="feedback-text" class="text-3xl font-black text-center px-4"></div>
+                <div id="feedback-text" class="text-2xl md:text-3xl font-black text-center px-4"></div>
                 <div id="feedback-bonus" class="text-xl font-bold text-yellow-500 mt-2"></div>
             </div>
         </section>
 
         <!-- 右側：付款區域 -->
-        <section class="flex-1 bg-green-50 rounded-3xl p-6 shadow-lg border-4 border-green-200 flex flex-col">
-            <h2 class="text-xl font-bold text-green-700 mb-2 flex justify-between items-center">
+        <section class="flex-1 bg-green-50 rounded-3xl p-4 md:p-6 shadow-lg border-4 border-green-200 flex flex-col">
+            <h2 class="text-lg font-bold text-green-700 mb-2 flex justify-between items-center">
                 <span>你的付款盤</span>
-                <span class="text-sm bg-green-200 text-green-800 px-2 py-1 rounded">點擊硬幣可拿走</span>
+                <span class="text-xs bg-green-200 text-green-800 px-2 py-1 rounded">點擊硬幣可拿走</span>
             </h2>
             
-            <div id="payment-area" class="flex-1 bg-white rounded-2xl border-2 border-dashed border-green-300 p-4 flex flex-wrap content-start gap-2 min-h-[150px] shadow-inner relative">
-                <!-- 玩家選擇的硬幣會出現在這裡 -->
-                <p id="empty-hint" class="text-gray-400 absolute inset-0 flex items-center justify-center font-bold text-lg pointer-events-none">請從下方選擇硬幣</p>
+            <div id="payment-area" class="flex-1 bg-white rounded-2xl border-2 border-dashed border-green-300 p-3 flex flex-wrap content-start gap-2 min-h-[120px] shadow-inner relative">
+                <p id="empty-hint" class="text-gray-400 absolute inset-0 flex items-center justify-center font-bold text-base md:text-lg pointer-events-none">請從下方選擇硬幣</p>
             </div>
 
-            <div class="mt-4 flex justify-between items-center bg-white p-4 rounded-xl shadow border-2 border-gray-100">
+            <div class="mt-3 flex justify-between items-center bg-white p-3 rounded-xl shadow border-2 border-gray-100">
                 <div class="w-full flex justify-between gap-2">
-                    <button onclick="clearCoins()" class="bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-xl shadow active:scale-95 transition-transform text-lg">全部清除</button>
-                    <button onclick="checkAnswer()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-xl shadow active:scale-95 transition-transform text-xl border-b-4 border-green-700">確認付款</button>
+                    <button onclick="clearCoins()" class="bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-3 md:px-4 rounded-xl shadow active:scale-95 transition-transform text-base md:text-lg">全部清除</button>
+                    <button onclick="checkAnswer()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-5 md:px-6 rounded-xl shadow active:scale-95 transition-transform text-lg md:text-xl border-b-4 border-green-700">確認付款</button>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- 底部：硬幣選擇區 -->
-    <footer class="bg-white border-t-4 border-gray-200 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] pb-8 blur-sm transition-all" id="bottom-bar">
-        <h3 class="text-center text-lg font-bold text-gray-600 mb-4">點擊下方硬幣付款 👇 (注意剩餘數量)</h3>
-        <div class="coin-tray flex flex-wrap justify-center items-end gap-3 md:gap-6 max-w-4xl mx-auto" id="coin-palette">
+    <!-- 底部：硬幣選擇區 (加入 safe-area-inset-bottom 保護 iOS 橫條) -->
+    <footer class="flex-none bg-white border-t-4 border-gray-200 p-3 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] blur-sm transition-all" id="bottom-bar">
+        <h3 class="text-center text-sm md:text-lg font-bold text-gray-600 mb-2 md:mb-4">點擊下方硬幣付款 👇 (注意剩餘數量)</h3>
+        <div class="coin-tray flex flex-wrap justify-center items-end gap-2 md:gap-4 max-w-4xl mx-auto" id="coin-palette">
             <!-- 硬幣按鈕會動態插入這裡 -->
         </div>
     </footer>
 
     <!-- 開始 Modal -->
     <div id="start-modal" class="fixed inset-0 bg-black/60 modal-overlay z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border-4 border-blue-400 text-center transform scale-100 transition-transform">
-            <h2 class="text-4xl font-black text-blue-600 mb-4">買東西大挑戰！</h2>
-            <ul class="text-left text-lg text-gray-600 space-y-3 mb-8 font-bold bg-blue-50 p-4 rounded-xl border border-blue-100">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border-4 border-blue-400 text-center transform scale-100 transition-transform">
+            <h2 class="text-3xl md:text-4xl font-black text-blue-600 mb-4">買東西大挑戰！</h2>
+            <ul class="text-left text-base md:text-lg text-gray-600 space-y-3 mb-8 font-bold bg-blue-50 p-4 rounded-xl border border-blue-100">
                 <li>🎯 總共 <span class="text-blue-500">30 題</span>挑戰</li>
                 <li>⏱️ <span class="text-green-500">15秒內</span>答對有最高獎勵</li>
                 <li>🔥 連續答對可獲<span class="text-orange-500">連勝加分</span></li>
-                <li>🧠 注意每關的硬幣數量是<span class="text-red-500">有限的</span>喔！</li>
+                <li>🧠 運用有限的硬幣組合出正確金額</li>
+                <li>🎵 <span class="text-purple-500">請記得開啟音量喔！</span></li>
             </ul>
             <button onclick="startGame()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-black py-4 px-6 rounded-2xl shadow-lg active:scale-95 transition-transform text-2xl border-b-4 border-blue-700">
                 開始遊戲 🚀
@@ -199,13 +203,11 @@
             <div class="text-7xl md:text-8xl font-black text-yellow-500 mb-4 drop-shadow-md" id="final-score">0</div>
             
             <div id="grade-stamp" class="absolute top-10 right-10 md:top-14 md:right-14 w-24 h-24 md:w-32 md:h-32 rounded-full border-8 border-red-500 text-red-500 font-black text-5xl md:text-7xl flex items-center justify-center stamp hidden">
-                <!-- 評級字母 -->
             </div>
 
             <div class="mt-8 text-left bg-gray-50 p-4 rounded-xl border border-gray-200">
                 <h3 class="text-xl font-bold text-gray-700 mb-3">錯誤回顧 📝</h3>
                 <div id="review-list" class="space-y-4 max-h-[40vh] overflow-y-auto pr-2">
-                    <!-- 錯題將插入這裡 -->
                 </div>
             </div>
 
@@ -216,27 +218,135 @@
     </div>
 
     <script>
-        // --- 資料設定 ---
-        const COINS = [
-            { id: 1000, value: 1000, size: 'w-16 h-16 md:w-20 md:h-20', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#d4af37"/><circle cx="50" cy="50" r="32" fill="#e2e8f0"/><text x="50" y="58" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#333">$10</text></svg>' },
-            { id: 500, value: 500, size: 'w-20 h-20 md:w-24 md:h-24', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="4"/><circle cx="50" cy="50" r="40" fill="none" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 4"/><text x="50" y="58" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#333">$5</text></svg>' },
-            { id: 200, value: 200, size: 'w-16 h-16 md:w-20 md:h-20', svg: '<svg viewBox="0 0 100 100"><path d="M50 2 C 60 2, 65 8, 75 10 C 85 12, 90 20, 92 30 C 94 40, 98 45, 98 50 C 98 55, 94 60, 92 70 C 90 80, 85 88, 75 90 C 65 92, 60 98, 50 98 C 40 98, 35 92, 25 90 C 15 88, 10 80, 8 70 C 6 60, 2 55, 2 50 C 2 45, 6 40, 8 30 C 10 20, 15 12, 25 10 C 35 8, 40 2, 50 2 Z" fill="#e2e8f0"/><text x="50" y="58" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#333">$2</text></svg>' },
-            { id: 100, value: 100, size: 'w-16 h-16 md:w-18 md:h-18', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#e2e8f0"/><text x="50" y="58" font-family="Arial" font-size="32" font-weight="bold" text-anchor="middle" fill="#333">$1</text></svg>' },
-            { id: 50, value: 50, size: 'w-16 h-16 md:w-18 md:h-18', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#cd7f32"/><text x="50" y="58" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#fff">50¢</text></svg>' },
-            { id: 20, value: 20, size: 'w-12 h-12 md:w-16 md:h-16', svg: '<svg viewBox="0 0 100 100"><path d="M50 2 C 60 2, 65 8, 75 10 C 85 12, 90 20, 92 30 C 94 40, 98 45, 98 50 C 98 55, 94 60, 92 70 C 90 80, 85 88, 75 90 C 65 92, 60 98, 50 98 C 40 98, 35 92, 25 90 C 15 88, 10 80, 8 70 C 6 60, 2 55, 2 50 C 2 45, 6 40, 8 30 C 10 20, 15 12, 25 10 C 35 8, 40 2, 50 2 Z" fill="#cd7f32"/><text x="50" y="56" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#fff">20¢</text></svg>' },
-            { id: 10, value: 10, size: 'w-10 h-10 md:w-14 md:h-14', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#cd7f32"/><text x="50" y="56" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#fff">10¢</text></svg>' }
+        // --- 音效系統 (使用 Web Audio API 合成，無外部檔案) ---
+        let audioCtx = null;
+        let isMuted = false;
+        let bgmInterval = null;
+        let bgmIndex = 0;
+        
+        // 輕快的 BGM 音符序列 (頻率, 持續時間) - 簡單的 C 大調和弦進行
+        const bgmNotes = [
+            [261.63, 0.4], [329.63, 0.4], [392.00, 0.4], [329.63, 0.4], // C E G E
+            [261.63, 0.4], [349.23, 0.4], [440.00, 0.4], [349.23, 0.4], // C F A F
+            [293.66, 0.4], [349.23, 0.4], [440.00, 0.4], [349.23, 0.4], // D F A F
+            [246.94, 0.4], [293.66, 0.4], [392.00, 0.4], [293.66, 0.4]  // B D G D
         ];
 
-        // 建立 ID 對應物件以便快速查找
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById('mute-btn').innerText = isMuted ? '🔇' : '🔊';
+            document.getElementById('mute-btn').classList.toggle('bg-red-600', isMuted);
+            document.getElementById('mute-btn').classList.toggle('bg-blue-600', !isMuted);
+        }
+
+        function playBGMStep() {
+            if (!audioCtx || isMuted) return;
+            const [freq, duration] = bgmNotes[bgmIndex];
+            const t = audioCtx.currentTime;
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.type = 'triangle'; // 柔和的波形
+            osc.frequency.value = freq;
+            
+            // 輕柔的音量包絡 (Envelope)
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.04, t + 0.05); // 音量設定為較低的 0.04 不會吵
+            gain.gain.exponentialRampToValueAtTime(0.001, t + duration - 0.05);
+            
+            osc.start(t);
+            osc.stop(t + duration);
+            
+            bgmIndex = (bgmIndex + 1) % bgmNotes.length;
+        }
+
+        function startBGM() {
+            initAudio();
+            if (bgmInterval) clearInterval(bgmInterval);
+            bgmIndex = 0;
+            bgmInterval = setInterval(playBGMStep, 400); // 每 400ms 播放一個音符
+        }
+
+        function stopBGM() {
+            if (bgmInterval) clearInterval(bgmInterval);
+        }
+
+        function playSuccessSound() {
+            if (!audioCtx || isMuted) return;
+            const t = audioCtx.currentTime;
+            // 答對時的音效：快速爬升的音階 C5, E5, G5, C6
+            const freqs = [523.25, 659.25, 783.99, 1046.50]; 
+            
+            freqs.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.type = 'sine'; // 清脆的波形
+                osc.frequency.value = freq;
+                
+                gain.gain.setValueAtTime(0, t + i * 0.1);
+                gain.gain.linearRampToValueAtTime(0.2, t + i * 0.1 + 0.02);
+                gain.gain.linearRampToValueAtTime(0, t + i * 0.1 + 0.1);
+                
+                osc.start(t + i * 0.1);
+                osc.stop(t + i * 0.1 + 0.15);
+            });
+        }
+
+        function playCoinSound() {
+            if (!audioCtx || isMuted) return;
+            const t = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.type = 'sine';
+            osc.frequency.value = 1200; // 短促高音
+            
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.1, t + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+            
+            osc.start(t);
+            osc.stop(t + 0.1);
+        }
+
+        // --- 資料設定 ---
+        const COINS = [
+            { id: 1000, value: 1000, size: 'w-14 h-14 md:w-20 md:h-20', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#d4af37"/><circle cx="50" cy="50" r="32" fill="#e2e8f0"/><text x="50" y="58" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#333">$10</text></svg>' },
+            { id: 500, value: 500, size: 'w-16 h-16 md:w-24 md:h-24', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="4"/><circle cx="50" cy="50" r="40" fill="none" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 4"/><text x="50" y="58" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#333">$5</text></svg>' },
+            { id: 200, value: 200, size: 'w-14 h-14 md:w-20 md:h-20', svg: '<svg viewBox="0 0 100 100"><path d="M50 2 C 60 2, 65 8, 75 10 C 85 12, 90 20, 92 30 C 94 40, 98 45, 98 50 C 98 55, 94 60, 92 70 C 90 80, 85 88, 75 90 C 65 92, 60 98, 50 98 C 40 98, 35 92, 25 90 C 15 88, 10 80, 8 70 C 6 60, 2 55, 2 50 C 2 45, 6 40, 8 30 C 10 20, 15 12, 25 10 C 35 8, 40 2, 50 2 Z" fill="#e2e8f0"/><text x="50" y="58" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#333">$2</text></svg>' },
+            { id: 100, value: 100, size: 'w-12 h-12 md:w-18 md:h-18', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#e2e8f0"/><text x="50" y="58" font-family="Arial" font-size="32" font-weight="bold" text-anchor="middle" fill="#333">$1</text></svg>' },
+            { id: 50, value: 50, size: 'w-12 h-12 md:w-18 md:h-18', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#cd7f32"/><text x="50" y="58" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#fff">50¢</text></svg>' },
+            { id: 20, value: 20, size: 'w-10 h-10 md:w-16 md:h-16', svg: '<svg viewBox="0 0 100 100"><path d="M50 2 C 60 2, 65 8, 75 10 C 85 12, 90 20, 92 30 C 94 40, 98 45, 98 50 C 98 55, 94 60, 92 70 C 90 80, 85 88, 75 90 C 65 92, 60 98, 50 98 C 40 98, 35 92, 25 90 C 15 88, 10 80, 8 70 C 6 60, 2 55, 2 50 C 2 45, 6 40, 8 30 C 10 20, 15 12, 25 10 C 35 8, 40 2, 50 2 Z" fill="#cd7f32"/><text x="50" y="56" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#fff">20¢</text></svg>' },
+            { id: 10, value: 10, size: 'w-8 h-8 md:w-14 md:h-14', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#cd7f32"/><text x="50" y="56" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#fff">10¢</text></svg>' }
+        ];
+
         const COIN_MAP = {};
         COINS.forEach(c => COIN_MAP[c.id] = c);
 
         const ITEMS = [
-            { name: '蘋果', svg: '<svg viewBox="0 0 100 100" class="w-24 h-24 md:w-32 md:h-32 drop-shadow-xl"><path d="M50 25 C30 10 10 30 15 55 C20 80 40 95 50 90 C60 95 80 80 85 55 C90 30 70 10 50 25" fill="#ef4444"/><path d="M50 25 Q55 10 65 5" fill="none" stroke="#78350f" stroke-width="4"/><path d="M60 15 Q75 5 80 15 Q75 25 60 15" fill="#22c55e"/></svg>' },
-            { name: '鉛筆', svg: '<svg viewBox="0 0 100 100" class="w-24 h-24 md:w-32 md:h-32 drop-shadow-xl" transform="rotate(45)"><polygon points="40,20 60,20 60,70 40,70" fill="#fbbf24"/><polygon points="40,70 60,70 50,90" fill="#fcd34d"/><polygon points="47,84 53,84 50,90" fill="#333"/><rect x="40" y="10" width="20" height="10" fill="#cbd5e1"/><path d="M40 10 C40 0 60 0 60 10 Z" fill="#f87171"/></svg>' },
-            { name: '糖果', svg: '<svg viewBox="0 0 100 100" class="w-24 h-24 md:w-32 md:h-32 drop-shadow-xl"><ellipse cx="50" cy="50" rx="25" ry="18" fill="#ec4899"/><polygon points="25,50 5,35 5,65" fill="#f472b6"/><polygon points="75,50 95,35 95,65" fill="#f472b6"/><path d="M35 40 Q50 30 65 40" fill="none" stroke="#fff" stroke-width="2" opacity="0.5"/></svg>' },
-            { name: '書本', svg: '<svg viewBox="0 0 100 100" class="w-24 h-24 md:w-32 md:h-32 drop-shadow-xl"><rect x="20" y="15" width="60" height="70" rx="3" fill="#3b82f6"/><rect x="25" y="15" width="50" height="70" fill="#60a5fa"/><path d="M30 20 L30 80 M40 20 L40 80" stroke="#fff" stroke-width="2" opacity="0.5"/><rect x="35" y="30" width="30" height="15" fill="#bfdbfe" rx="2"/></svg>' },
-            { name: '雪糕', svg: '<svg viewBox="0 0 100 100" class="w-24 h-24 md:w-32 md:h-32 drop-shadow-xl"><polygon points="35,50 65,50 50,95" fill="#d97706"/><polygon points="35,50 65,50 50,95" fill="none" stroke="#b45309" stroke-width="2"/><circle cx="50" cy="35" r="22" fill="#fbcfe8"/><circle cx="40" cy="45" r="10" fill="#fbcfe8"/><circle cx="60" cy="45" r="10" fill="#fbcfe8"/><circle cx="50" cy="15" r="8" fill="#ef4444"/></svg>' }
+            { name: '蘋果', svg: '<svg viewBox="0 0 100 100" class="w-20 h-20 md:w-32 md:h-32 drop-shadow-xl"><path d="M50 25 C30 10 10 30 15 55 C20 80 40 95 50 90 C60 95 80 80 85 55 C90 30 70 10 50 25" fill="#ef4444"/><path d="M50 25 Q55 10 65 5" fill="none" stroke="#78350f" stroke-width="4"/><path d="M60 15 Q75 5 80 15 Q75 25 60 15" fill="#22c55e"/></svg>' },
+            { name: '鉛筆', svg: '<svg viewBox="0 0 100 100" class="w-20 h-20 md:w-32 md:h-32 drop-shadow-xl" transform="rotate(45)"><polygon points="40,20 60,20 60,70 40,70" fill="#fbbf24"/><polygon points="40,70 60,70 50,90" fill="#fcd34d"/><polygon points="47,84 53,84 50,90" fill="#333"/><rect x="40" y="10" width="20" height="10" fill="#cbd5e1"/><path d="M40 10 C40 0 60 0 60 10 Z" fill="#f87171"/></svg>' },
+            { name: '糖果', svg: '<svg viewBox="0 0 100 100" class="w-20 h-20 md:w-32 md:h-32 drop-shadow-xl"><ellipse cx="50" cy="50" rx="25" ry="18" fill="#ec4899"/><polygon points="25,50 5,35 5,65" fill="#f472b6"/><polygon points="75,50 95,35 95,65" fill="#f472b6"/><path d="M35 40 Q50 30 65 40" fill="none" stroke="#fff" stroke-width="2" opacity="0.5"/></svg>' },
+            { name: '書本', svg: '<svg viewBox="0 0 100 100" class="w-20 h-20 md:w-32 md:h-32 drop-shadow-xl"><rect x="20" y="15" width="60" height="70" rx="3" fill="#3b82f6"/><rect x="25" y="15" width="50" height="70" fill="#60a5fa"/><path d="M30 20 L30 80 M40 20 L40 80" stroke="#fff" stroke-width="2" opacity="0.5"/><rect x="35" y="30" width="30" height="15" fill="#bfdbfe" rx="2"/></svg>' },
+            { name: '雪糕', svg: '<svg viewBox="0 0 100 100" class="w-20 h-20 md:w-32 md:h-32 drop-shadow-xl"><polygon points="35,50 65,50 50,95" fill="#d97706"/><polygon points="35,50 65,50 50,95" fill="none" stroke="#b45309" stroke-width="2"/><circle cx="50" cy="35" r="22" fill="#fbcfe8"/><circle cx="40" cy="45" r="10" fill="#fbcfe8"/><circle cx="60" cy="45" r="10" fill="#fbcfe8"/><circle cx="50" cy="15" r="8" fill="#ef4444"/></svg>' }
         ];
 
         // --- 遊戲狀態 ---
@@ -249,18 +359,16 @@
         let streak = 0;
         let isProcessing = false;   
         let madeMistakeOnCurrent = false;
-
-        let coinCounts = {}; // 動態庫存
-        
-        let wrongRecords = []; // 紀錄錯題 [{item, targetValue, wrongAmount, correctCountsObj}]
-
-        // 計時器變數
+        let coinCounts = {}; 
+        let wrongRecords = []; 
         let questionStartTime = 0;
         let timerInterval = null;
 
         // --- 核心邏輯 ---
-
         function startGame() {
+            // 初始化並開始播放音效
+            startBGM();
+
             document.getElementById('start-modal').classList.add('hidden');
             document.getElementById('main-game').classList.remove('blur-sm');
             document.getElementById('bottom-bar').classList.remove('blur-sm');
@@ -288,18 +396,15 @@
             return counts;
         }
 
-        // 動態生成帶有解法並混入隨機硬幣的庫存
         function generateDynamicCoinPool(targetCents) {
             let pool = {};
             COINS.forEach(c => pool[c.id] = 0);
             
-            // 保證有解：先放入貪婪演算法的硬幣
             let greedySolution = calculateGreedyCoins(targetCents);
             for (let id in greedySolution) {
                 pool[id] += greedySolution[id];
             }
             
-            // 加入 3 ~ 6 個隨機干擾硬幣來增加難度
             let extraCount = Math.floor(Math.random() * 4) + 3;
             for (let i = 0; i < extraCount; i++) {
                 let randomCoinId = COINS[Math.floor(Math.random() * COINS.length)].id;
@@ -320,7 +425,6 @@
             
             currentItem = ITEMS[Math.floor(Math.random() * ITEMS.length)];
             
-            // 產生隨機金額 (例如 100 到 1500 cents，即 $1 到 $15，尾數必須是10的倍數)
             const randomMultiplier = Math.floor(Math.random() * 141) + 10; 
             currentTargetValue = randomMultiplier * 10; 
             
@@ -333,7 +437,7 @@
             const display = document.getElementById('item-display');
             display.innerHTML = `
                 ${currentItem.svg}
-                <div class="price-tag mt-4 text-2xl md:text-3xl font-black text-gray-800 tracking-wide">
+                <div class="price-tag mt-2 md:mt-4 text-xl md:text-3xl font-black text-gray-800 tracking-wide">
                     ${formatMoney(currentTargetValue)}
                 </div>
             `;
@@ -401,7 +505,7 @@
                 coinEl.onclick = () => { if (!isDepleted) addCoin(coin); };
                 
                 const countEl = document.createElement('div');
-                countEl.className = `text-sm font-bold px-2 rounded-full ${isDepleted ? 'text-red-500 bg-red-100' : 'text-gray-600 bg-gray-200 shadow-sm'}`;
+                countEl.className = `text-xs md:text-sm font-bold px-2 rounded-full ${isDepleted ? 'text-red-500 bg-red-100' : 'text-gray-600 bg-gray-200 shadow-sm'}`;
                 countEl.innerText = `剩餘: ${coinCounts[coin.id]}`;
                 
                 wrapper.appendChild(coinEl);
@@ -412,6 +516,7 @@
 
         function addCoin(coin) {
             if (isProcessing || coinCounts[coin.id] <= 0) return;
+            playCoinSound();
             coinCounts[coin.id]--;
             paidCoins.push(coin);
             updatePaymentArea();
@@ -420,6 +525,7 @@
 
         function removeCoin(index) {
             if (isProcessing) return;
+            playCoinSound();
             const coin = paidCoins[index];
             coinCounts[coin.id]++;
             paidCoins.splice(index, 1);
@@ -451,8 +557,11 @@
                 
                 paidCoins.forEach((coin, index) => {
                     const coinEl = document.createElement('div');
+                    // 針對付款盤縮小尺寸以節省空間
                     const sizeClass = coin.size.replace('md:w-20', 'md:w-16').replace('md:h-20', 'md:h-16')
-                                               .replace('w-20', 'w-14').replace('h-20', 'h-14');
+                                               .replace('w-20', 'w-14').replace('h-20', 'h-14')
+                                               .replace('w-16', 'w-12').replace('h-16', 'h-12')
+                                               .replace('w-14', 'w-10').replace('h-14', 'h-10');
                     coinEl.className = `coin pop-in ${sizeClass}`;
                     coinEl.innerHTML = coin.svg;
                     coinEl.onclick = () => removeCoin(index);
@@ -472,7 +581,6 @@
                 streak = 0;
                 document.getElementById('streak-count').innerText = streak;
                 
-                // 如果是這題第一次答錯，記錄到錯題本
                 if (!madeMistakeOnCurrent) {
                     madeMistakeOnCurrent = true;
                     wrongRecords.push({
@@ -484,9 +592,9 @@
                 }
 
                 if (totalCents > currentTargetValue) {
-                    showFeedback('❌', '太多了！請點擊付款盤拿走一些', 'text-red-500');
+                    showFeedback('❌', '太多了！請拿走一些', 'text-red-500');
                 } else {
-                    showFeedback('⚠️', '不夠啊！請再加一點硬幣', 'text-orange-500');
+                    showFeedback('⚠️', '不夠啊！請再加一點', 'text-orange-500');
                 }
                 shakeArea();
             }
@@ -496,20 +604,19 @@
             isProcessing = true;
             clearInterval(timerInterval);
             
+            // 播放答對音效
+            playSuccessSound();
+            
             let elapsed = (Date.now() - questionStartTime) / 1000;
             let timeBonus = 0;
             
-            // 計算時間獎勵 (最高 200)
             if (elapsed <= 15) {
                 timeBonus = 200;
             } else if (elapsed <= 30) {
                 timeBonus = Math.floor(200 * (30 - elapsed) / 15);
             }
 
-            // 計算連勝獎勵 (最高 50)
             let streakBonus = Math.min(streak * 10, 50);
-            
-            // 基礎分 100
             let earned = 100 + timeBonus + streakBonus;
             
             score += earned;
@@ -522,14 +629,14 @@
             if (timeBonus === 200) bonusText += ' (閃電速度!⚡)';
             else if (timeBonus > 0) bonusText += ' (不錯喔!⏱️)';
             
-            showFeedback('✅', '答對了！好棒！', 'text-green-500', bonusText);
+            showFeedback('✅', '答對了！', 'text-green-500', bonusText);
             shootConfetti();
 
             setTimeout(() => {
                 hideFeedback();
                 isProcessing = false;
                 nextQuestion();
-            }, 2500);
+            }, 2000);
         }
 
         function shakeArea() {
@@ -547,7 +654,7 @@
             
             fbIcon.innerText = icon;
             fbText.innerText = text;
-            fbText.className = `text-3xl md:text-4xl font-black text-center px-4 ${textColorClass}`;
+            fbText.className = `text-2xl md:text-4xl font-black text-center px-4 ${textColorClass}`;
             
             if (bonusText) {
                 fbBonus.innerText = bonusText;
@@ -594,22 +701,18 @@
         }
 
         // --- 結束與結算邏輯 ---
-
         function endGame() {
             clearInterval(timerInterval);
+            stopBGM(); // 遊戲結束停止背景音
             document.getElementById('main-game').classList.add('hidden');
             document.getElementById('bottom-bar').classList.add('hidden');
             
             const endModal = document.getElementById('end-modal');
             endModal.classList.remove('hidden');
             
-            // 分數動畫
             animateValue("final-score", 0, score, 1500);
-            
-            // 評級
             setTimeout(() => showGrade(score), 1600);
             
-            // 渲染錯題本
             renderReviewList();
         }
 
@@ -657,23 +760,22 @@
                 const row = document.createElement('div');
                 row.className = 'bg-white p-3 rounded-lg shadow-sm border border-gray-200 flex flex-col sm:flex-row items-center gap-4';
                 
-                // 商品圖案 (縮小版)
-                const itemSvg = record.item.svg.replace('w-24', 'w-12').replace('h-24', 'h-12')
+                const itemSvg = record.item.svg.replace('w-20', 'w-12').replace('h-20', 'h-12')
                                                .replace('md:w-32', 'w-12').replace('md:h-32', 'h-12');
                 
-                // 正確解法硬幣 HTML
                 let solutionHtml = '';
                 for (let coinId in record.solution) {
                     let count = record.solution[coinId];
                     let coinObj = COIN_MAP[coinId];
                     if(coinObj) {
                         for(let i=0; i<count; i++) {
-                            // 使用較小的尺寸顯示
                             const miniSize = coinObj.size.replace('w-16', 'w-8').replace('h-16', 'h-8')
+                                                         .replace('w-14', 'w-7').replace('h-14', 'h-7')
                                                          .replace('md:w-20', 'w-8').replace('md:h-20', 'h-8')
-                                                         .replace('w-20', 'w-10').replace('h-20', 'h-10')
+                                                         .replace('md:w-24', 'w-10').replace('md:h-24', 'h-10')
                                                          .replace('w-12', 'w-6').replace('h-12', 'h-6')
-                                                         .replace('w-10', 'w-5').replace('h-10', 'h-5');
+                                                         .replace('w-10', 'w-5').replace('h-10', 'h-5')
+                                                         .replace('w-8', 'w-4').replace('h-8', 'h-4');
                             solutionHtml += `<div class="${miniSize} inline-block mx-0.5">${coinObj.svg}</div>`;
                         }
                     }
