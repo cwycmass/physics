@@ -1398,33 +1398,36 @@
         </div>
     </section>
 </article>
-
 <!-- ========================================== -->
 <!-- 區塊 3.1: 樓宇的能源效益 -->
 <!-- ========================================== -->
-<article id="ch3-1" class="content-section block hidden">
+<article id="ch3-1" class="content-section block">
     <header class="mb-8 border-b-2 border-slate-200 pb-4">
         <h2 class="text-3xl font-black text-slate-800"><span class="text-blue-600 mr-2">3.1</span>樓宇的能源效益</h2>
-        <p class="text-slate-500 mt-2">認識熱量如何通過樓宇外殼傳遞，掌握總熱傳送值 (OTTV) 與平均熱透射率的概念，並學習改善建築能源效益的方法。</p>
+        <p class="text-slate-500 mt-2">認識熱量如何通過樓宇外殼傳遞，掌握熱透射率、平均熱透射率與總熱傳送值 (OTTV) 的定量計算，並學習改善建築能源效益的物理方法。</p>
     </header>
 
     <!-- 📌 1. 名詞定義 / 核心概念 -->
     <section class="mb-10">
         <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-blue-500 mr-2"></i> 名詞定義與核心概念</h3>
         <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-            <p>在香港，商業及住宅樓宇消耗了大量的電能，其中佔比最大的是<strong>空氣調節系統（冷氣）</strong>。要減少空調的耗電量，關鍵在於減少室外熱量傳入室內。我們使用以下物理量來評估樓宇的隔熱能力：</p>
+            <p>在香港，商業及住宅樓宇消耗了大量的電能，其中佔比最大的是<strong>空氣調節系統（冷氣）</strong>。要減少空調的耗電量，關鍵在於減少室外熱量傳入室內。我們使用以下物理量來評估樓宇外殼的隔熱能力：</p>
             <ul class="list-disc list-inside ml-2 space-y-3">
                 <li>
                     <strong class="text-blue-700 font-bold">樓宇外殼：</strong> 
-                    包圍建築物內部空調空間的外圍結構，包括外牆、窗戶和屋頂。熱量主要透過<strong>傳導</strong>和<strong>輻射</strong>穿過樓宇外殼。
+                    包圍建築物內部空調空間的外圍結構，包括外牆、窗戶和屋頂。熱量主要透過<strong>傳導</strong>和<strong>太陽輻射</strong>穿過樓宇外殼進入室內。
                 </li>
                 <li>
                     <strong class="text-blue-700 font-bold">熱透射率 ($U$)：</strong> 
-                    衡量特定建築材料（如玻璃或磚牆）傳熱能力的指標。它代表當材料兩側溫差為 $1 \text{ K}$ 時，每單位面積在每秒鐘內傳導的熱量。數值越小，隔熱效果越佳。
+                    衡量特定建築結構（如單層或多層材料）傳熱能力的指標。它代表當材料兩側溫差為 $1 \text{ K}$ 時，每單位面積在每秒鐘內傳導的熱量。數值越小，隔熱效果越佳。
+                </li>
+                <li>
+                    <strong class="text-blue-700 font-bold">熱導率 ($\kappa$) 與厚度 ($d$)：</strong> 
+                    對於單一均勻材料，熱透射率 $U$ 取決於材料本身的熱導率 $\kappa$ 及其厚度 $d$。
                 </li>
                 <li>
                     <strong class="text-blue-700 font-bold">總熱傳送值 (OTTV)：</strong> 
-                    量度熱量通過樓宇外殼傳入室內的平均速率指標。OTTV 越<strong>低</strong>，代表外殼的隔熱性能越好，空調系統所需的冷卻能力就越小，從而更節省電能。
+                    綜合考量樓宇外殼在傳導與太陽輻射作用下，每單位面積傳入室內的平均熱功率。OTTV 越<strong>低</strong>，代表外殼的隔熱與阻擋太陽輻射性能越好，空調所需的製冷電力就越少。
                 </li>
             </ul>
         </div>
@@ -1434,31 +1437,40 @@
     <section class="mb-10">
         <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-blue-500 mr-2"></i> 核心公式與單位</h3>
         <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
-            <p class="text-slate-700 mb-3">熱量透過建築材料傳導的速率可以使用以下公式計算：</p>
+            <p class="text-slate-700 mb-3">熱量透過建築材料傳導的速率（熱流率）可以使用以下公式計算：</p>
             <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
                 $$ \frac{Q_C}{t} = U A (T_H - T_C) $$
             </div>
-            <ul class="text-sm text-slate-600 space-y-2 mt-4">
-                <li>$\frac{Q_C}{t}$：熱傳遞率（單位：瓦特 $\text{W}$）</li>
+            <p class="text-slate-700 my-3">其中，單一層材料的熱透射率 $U$ 的計算公式為：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ U = \frac{\kappa}{d} $$
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 mt-4 ml-2">
+                <li>$\frac{Q_C}{t}$：熱傳導率（單位：瓦特 $\text{W}$）</li>
                 <li>$U$：材料的熱透射率（單位：$\text{W m}^{-2} \text{ K}^{-1}$）</li>
+                <li>$\kappa$：材料的熱導率（單位：$\text{W m}^{-1} \text{ K}^{-1}$）</li>
+                <li>$d$：材料的厚度（單位：米 $\text{m}$）</li>
                 <li>$A$：材料的表面積（單位：$\text{m}^2$）</li>
                 <li>$(T_H - T_C)$：室外高溫與室內低溫的溫度差（單位：$\text{K}$ 或 $^\circ\text{C}$）</li>
             </ul>
 
             <hr class="border-blue-200 my-4">
-            <p class="text-slate-700 mb-2 font-bold">平均熱透射率 ($\bar{U}$) 與 總熱傳送值 ($\text{OTTV}$)</p>
-            <p class="text-sm text-slate-600 mb-2">由於外牆通常由不同材料（如磚牆和玻璃窗）組成，我們需要計算整個外殼的平均 $U$ 值：</p>
-            <div class="text-center my-2 overflow-x-auto text-lg font-bold text-blue-900">
-                $$ \bar{U} = \frac{U_1 A_1 + U_2 A_2 + \dots}{A_{\text{Total}}} $$
+            <p class="text-slate-700 mb-2 font-bold">平均熱透射率 ($\bar{U}$)</p>
+            <p class="text-sm text-slate-600 mb-2">由於外牆通常由不同部分（如混凝土牆和玻璃窗）複合組成，整個外殼的平均熱透射率為各部分熱透射率按面積加權的平均值：</p>
+            <div class="text-center my-3 overflow-x-auto text-xl font-bold text-blue-900">
+                $$ \bar{U} = \frac{U_1 A_1 + U_2 A_2 + \dots}{A_{\text{總}}} $$
             </div>
-            <p class="text-sm text-slate-600 mt-4 mb-2">總熱傳送值 ($\text{OTTV}$) 則是考量了傳導與輻射的每平方米平均得熱率：</p>
-            <div class="text-center my-2 overflow-x-auto text-lg font-bold text-blue-900">
-                $$ \text{OTTV} = \frac{\frac{Q_C}{t} + \frac{Q_S}{t}}{A_{\text{Total}}} $$
+            <p class="text-xs text-slate-500 text-center">（其中 $A_{\text{總}} = A_1 + A_2 + \dots$ ）。</p>
+
+            <hr class="border-blue-200 my-4">
+            <p class="text-slate-700 mb-2 font-bold">總熱傳送值 (OTTV)</p>
+            <p class="text-sm text-slate-600 mb-2">總熱傳送值考慮了通過建築物外殼的<strong>傳導熱量率</strong>與<strong>太陽輻射熱傳送率</strong>：</p>
+            <div class="text-center my-4 overflow-x-auto text-2xl font-bold text-blue-900">
+                $$ \text{OTTV} = \frac{\frac{Q_C}{t} + \frac{Q_S}{t}}{A_{\text{總}}} $$
             </div>
-            <p class="text-xs text-slate-500 text-center"></p>
-            <ul class="text-sm text-slate-600 space-y-2 mt-4">
-                <li>$\frac{Q_S}{t}$：輻射所致熱傳遞率（單位：瓦特 $\text{W}$）</li>
-                <li>($\text{OTTV}$ 的單位為 $\text{W m}^{-2}$)</li>
+            <ul class="text-sm text-slate-600 space-y-1 mt-2 ml-2">
+                <li>$\frac{Q_S}{t}$：太陽輻射熱傳送率（單位：瓦特 $\text{W}$）</li>
+                <li>$\text{OTTV}$ 的單位為：<strong class="text-blue-700">瓦特每平方米 ($\text{W m}^{-2}$)</strong></li>
             </ul>
         </div>
     </section>
@@ -1477,19 +1489,15 @@
                 <tbody class="divide-y divide-slate-200">
                     <tr class="even:bg-slate-50">
                         <td class="p-3 font-medium text-slate-800">使用雙層玻璃窗</td>
-                        <td class="p-3">兩層玻璃之間夾有靜止的空氣層。由於空氣是極差的導熱體（熱透射率極低），能大幅減少熱量透過傳導進入室內。</td>
+                        <td class="p-3">兩層玻璃之間夾有靜止的空氣層。由於空氣的熱導率 $\kappa$ 極低，能大幅減小整扇窗戶的熱透射率 $U$。</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-medium text-slate-800">增加外牆隔熱材料厚度 $d$</td>
+                        <td class="p-3">根據 $U = \kappa/d$，增加材料的厚度 $d$ 能有效減小外牆的熱透射率 $U$，減少通過傳導進入室內的熱量 $\frac{Q_C}{t}$。</td>
                     </tr>
                     <tr class="even:bg-slate-50">
                         <td class="p-3 font-medium text-slate-800">貼上太陽隔熱膜</td>
-                        <td class="p-3">隔熱膜能反射太陽光中的紅外線，顯著減少熱量透過<strong>輻射</strong>方式穿透窗戶進入室內，同時保留可見光提供照明。</td>
-                    </tr>
-                    <tr class="even:bg-slate-50">
-                        <td class="p-3 font-medium text-slate-800">綠化屋頂與外牆</td>
-                        <td class="p-3">植物和泥土層提供了額外的隔熱層。泥土中的水分在蒸發時會吸收汽化潛熱，產生冷卻效應，進一步降低建築物表面的溫度。</td>
-                    </tr>
-                    <tr class="even:bg-slate-50">
-                        <td class="p-3 font-medium text-slate-800">優化建築物座向</td>
-                        <td class="p-3">減少建築物最大窗戶面積面向正東或正西，避免在清晨或黃昏受到太陽低角度的直接猛烈照射，減少輻射吸熱。</td>
+                        <td class="p-3">隔熱膜能反射太陽光中的紅外線，顯著減小太陽輻射熱傳送率 $\frac{Q_S}{t}$，從而降低樓宇整體的總熱傳送值 (OTTV)。</td>
                     </tr>
                 </tbody>
             </table>
@@ -1497,12 +1505,12 @@
         <!-- 行動版卡片 -->
         <div class="grid md:hidden gap-4">
             <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">雙層玻璃與隔熱膜</h4>
-                <p class="text-sm text-slate-600">雙層玻璃利用靜止空氣阻絕<strong>傳導</strong>；隔熱膜則透過反射紅外線阻絕<strong>輻射</strong>。</p>
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">減小熱透射率</h4>
+                <p class="text-sm text-slate-600">使用雙層玻璃與增加牆體厚度 $d$（根據 $U = \kappa/d$）能減小 $U$ 值，進而減少熱傳導率 $\frac{Q_C}{t}$。</p>
             </div>
             <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">綠化與座向</h4>
-                <p class="text-sm text-slate-600">泥土和植物增加隔熱並透過水分蒸發吸熱。避開東西向的大面積窗戶可大幅降低太陽輻射的得熱量。</p>
+                <h4 class="font-bold text-blue-700 border-b border-slate-100 pb-2 mb-2">減少太陽輻射熱</h4>
+                <p class="text-sm text-slate-600">加貼反射紅外線的隔熱膜，直接降低太陽輻射熱傳送率 $\frac{Q_S}{t}$，藉此控制總熱傳送值 (OTTV)。</p>
             </div>
         </div>
     </section>
@@ -1515,14 +1523,14 @@
                 <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-xmark text-red-600 text-lg mr-2"></i> 錯誤觀念</div>
                 <ul class="text-sm space-y-3 list-disc list-inside">
                     <li>「為了讓室內更明亮，採用整面牆的落地大玻璃窗是提升能源效益的好方法，因為可以省下開燈的電費。」</li>
-                    <li>「建築物的 OTTV 越高，代表它散熱越快，室內就會越涼爽。」</li>
+                    <li>「建築物的總熱傳送值 (OTTV) 越高，代表它散熱越快，室內就會越涼爽。」</li>
                 </ul>
             </div>
             <div class="bg-green-50 text-green-800 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm">
                 <div class="font-bold mb-2 flex items-center"><i class="fa-solid fa-check text-green-600 text-lg mr-2"></i> 正確理解</div>
                 <ul class="text-sm space-y-3 list-disc list-inside">
-                    <li><strong>玻璃的熱透射率遠高於混凝土牆！</strong> 大面積玻璃雖然省下照明電費，但會讓大量太陽熱能傳入，導致空調耗電量暴增，總體而言會嚴重<strong>降低</strong>能源效益。</li>
-                    <li>OTTV (總熱傳送值) 是指外界熱量<strong>傳入</strong>室內的速度。數值越「高」，代表外面熱量越容易跑進來，空調負擔越重。因此 OTTV 應該越<strong>低</strong>越好。</li>
+                    <li><strong>玻璃的熱透射率遠高於混凝土牆！</strong> 大面積玻璃雖能省下少量照明電費，但會讓大量的太陽輻射熱傳送率 $\frac{Q_S}{t}$ 與傳導熱 $\frac{Q_C}{t}$ 長驅直入，造成冷氣耗電量大幅增加。</li>
+                    <li>OTTV (總熱傳送值) 指的是外界熱量<strong>傳入</strong>室內每平方米的平均速率。數值越「高」，代表室外熱量越容易進入室內，冷氣負擔就越重。因此 OTTV 應越<strong>低</strong>越好。</li>
                 </ul>
             </div>
         </div>
@@ -1537,23 +1545,26 @@
             <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
                 <div class="flex items-start">
                     <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q1</span>
-                    <p class="text-slate-800 leading-relaxed font-medium">
-                        一間辦公室有一面面積為 $15 \text{ m}^2$ 的玻璃窗，其熱透射率 $U$ 為 $5.6 \text{ W m}^{-2} \text{ K}^{-1}$。在炎熱的夏日，室外溫度 $T_H$ 為 $33\ ^\circ\text{C}$，室內溫度 $T_C$ 維持在 $23\ ^\circ\text{C}$。求熱量透過傳導經這面玻璃窗進入室內的速率 $\frac{Q_C}{t}$。
+                    <p class="text-slate-800 leading-relaxed font-medium mb-2">
+                        某建築物外牆由一種均勻磚塊砌成，其厚度 $d$ 為 $0.2 \text{ m}$，磚塊的熱導率 $\kappa$ 為 $0.24 \text{ W m}^{-1} \text{ K}^{-1}$。外牆的總面積為 $30 \text{ m}^2$。在某個夏天，室外溫度 $T_H$ 為 $32\ ^\circ\text{C}$，室內溫度 $T_C$ 為 $22\ ^\circ\text{C}$。求：<br>
+                        (a) 該磚牆的熱透射率 $U$。<br>
+                        (b) 熱量經由此磚牆傳導傳入室內的速率 $\frac{Q_C}{t}$。
                     </p>
                 </div>
                 <details class="mt-4 group">
-                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
                         <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
                     </summary>
                     <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
                         <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                        <p class="mb-2">1. 計算室內外的溫度差：</p>
-                        $$ (T_H - T_C) = 33 - 23 = 10 \text{ K} $$
-                        <p class="mb-2 mt-2">2. 代入熱傳遞率公式：</p>
+                        <p class="mb-2"><strong>(a) 計算熱透射率 $U$：</strong></p>
+                        $$ U = \frac{\kappa}{d} = \frac{0.24 \text{ W m}^{-1} \text{ K}^{-1}}{0.2 \text{ m}} = 1.2 \text{ W m}^{-2} \text{ K}^{-1} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 計算傳導傳熱率 $\frac{Q_C}{t}$：</strong></p>
+                        <p class="mb-2">溫度差 $(T_H - T_C) = 32 - 22 = 10 \text{ K}$ (即 $10\ ^\circ\text{C}$)。</p>
                         $$ \frac{Q_C}{t} = U A (T_H - T_C) $$
-                        $$ \frac{Q_C}{t} = 5.6 \times 15 \times 10 $$
-                        $$ \frac{Q_C}{t} = 840 \text{ W} $$
-                        <p class="mt-2 font-bold text-green-700">答案：熱量進入室內的速率為 $840 \text{ W}$。</p>
+                        $$ \frac{Q_C}{t} = 1.2 \times 30 \times 10 = 360 \text{ W} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 磚牆的熱透射率為 $1.2 \text{ W m}^{-2} \text{ K}^{-1}$；(b) 傳導傳熱率為 $360 \text{ W}$。</p>
                     </div>
                 </details>
             </div>
@@ -1563,20 +1574,25 @@
                 <div class="flex items-start">
                     <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q2</span>
                     <p class="text-slate-800 leading-relaxed font-medium">
-                        某外牆總面積為 $50 \text{ m}^2$，其中包含了 $40 \text{ m}^2$ 的磚牆（$U_{\text{磚}} = 0.5 \text{ W m}^{-2} \text{ K}^{-1}$）以及 $10 \text{ m}^2$ 的單層玻璃窗（$U_{\text{玻}} = 5.0 \text{ W m}^{-2} \text{ K}^{-1}$）。求這面外牆的平均熱透射率 $\bar{U}$。
+                        承接上題，該大樓外圍結構（總面積 $50 \text{ m}^2$）除了上述的磚牆（$30 \text{ m}^2$，$U = 1.2 \text{ W m}^{-2} \text{ K}^{-1}$）外，還包含了 $20 \text{ m}^2$ 的單層玻璃窗（$U_{\text{玻}} = 5.7 \text{ W m}^{-2} \text{ K}^{-1}$）。求：<br>
+                        (a) 該樓宇外殼的平均熱透射率 $\bar{U}$。<br>
+                        (b) 當兩側溫差同樣為 $10 \text{ K}$ 時，整個外圍結構的總傳導熱率 $\frac{Q_C}{t}$。
                     </p>
                 </div>
                 <details class="mt-4 group">
-                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
                         <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
                     </summary>
                     <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
                         <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                        <p class="mb-2">代入平均 $U$ 值的公式：</p>
-                        $$ \bar{U} = \frac{U_{\text{磚}} A_{\text{磚}} + U_{\text{玻}} A_{\text{玻}}}{A_{\text{Total}}} $$
-                        $$ \bar{U} = \frac{(0.5 \times 40) + (5.0 \times 10)}{50} $$
-                        $$ \bar{U} = \frac{20 + 50}{50} = \frac{70}{50} = 1.4 \text{ W m}^{-2} \text{ K}^{-1} $$
-                        <p class="mt-2 font-bold text-green-700">答案：平均熱透射率為 $1.4 \text{ W m}^{-2} \text{ K}^{-1}$。</p>
+                        <p class="mb-2"><strong>(a) 計算平均熱透射率 $\bar{U}$：</strong></p>
+                        $$ \bar{U} = \frac{U_{\text{磚}} A_{\text{磚}} + U_{\text{玻}} A_{\text{玻}}}{A_{\text{總}}} $$
+                        $$ \bar{U} = \frac{(1.2 \times 30) + (5.7 \times 20)}{50} $$
+                        $$ \bar{U} = \frac{36 + 114}{50} = \frac{150}{50} = 3.0 \text{ W m}^{-2} \text{ K}^{-1} $$
+                        <hr class="my-3 border-amber-200">
+                        <p class="mb-2"><strong>(b) 計算總傳導熱率 $\frac{Q_C}{t}$：</strong></p>
+                        $$ \frac{Q_C}{t} = \bar{U} A_{\text{總}} (T_H - T_C) = 3.0 \times 50 \times 10 = 1500 \text{ W} $$
+                        <p class="mt-2 font-bold text-green-700">答案：(a) 平均熱透射率為 $3.0 \text{ W m}^{-2} \text{ K}^{-1}$；(b) 總傳導熱率為 $1500 \text{ W}$。</p>
                     </div>
                 </details>
             </div>
@@ -1586,21 +1602,20 @@
                 <div class="flex items-start">
                     <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q3</span>
                     <p class="text-slate-800 leading-relaxed font-medium">
-                        承上題，若該外牆兩側溫差為 $10 \text{ K}$，且透過玻璃窗射入的太陽輻射熱功率為 $500 \text{ W}$。求這面外牆的總熱傳送值 (OTTV)。
+                        承接例題 2 的大樓，在炎熱夏日，除了 $1500 \text{ W}$ 的傳導熱率外，透過玻璃窗射入大樓內的太陽輻射熱傳送率 $\frac{Q_S}{t}$ 測得為 $900 \text{ W}$。求此大樓外殼的總熱傳送值 (OTTV)。
                     </p>
                 </div>
                 <details class="mt-4 group">
-                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors text-sm">
                         <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
                     </summary>
                     <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
                         <p class="font-bold text-blue-700 mb-2">解題步驟：</p>
-                        <p class="mb-2">1. 計算整體傳導熱功率 $\frac{Q_C}{t}$：</p>
-                        $$ \frac{Q_C}{t} = \bar{U} A_{\text{Total}} \Delta T = 1.4 \times 50 \times 10 = 700 \text{ W} $$
-                        <p class="mb-2 mt-2">2. 計算總熱傳送值 OTTV：</p>
-                        $$ \text{OTTV} = \frac{\frac{Q_C}{t} + \text{輻射熱}}{A_{\text{Total}}} $$
-                        $$ \text{OTTV} = \frac{700 + 500}{50} = \frac{1200}{50} = 24 \text{ W m}^{-2} $$
-                        <p class="mt-2 font-bold text-green-700">答案：總熱傳送值為 $24 \text{ W m}^{-2}$。</p>
+                        <p class="mb-2">已知總面積 $A_{\text{總}} = 50 \text{ m}^2$，總傳導熱率 $\frac{Q_C}{t} = 1500 \text{ W}$，太陽輻射熱傳送率 $\frac{Q_S}{t} = 900 \text{ W}$。</p>
+                        <p class="mb-2">代入 OTTV 的定義公式：</p>
+                        $$ \text{OTTV} = \frac{\frac{Q_C}{t} + \frac{Q_S}{t}}{A_{\text{總}}} $$
+                        $$ \text{OTTV} = \frac{1500 + 900}{50} = \frac{2400}{50} = 48 \text{ W m}^{-2} $$
+                        <p class="mt-2 font-bold text-green-700">答案：大樓外殼的總熱傳送值為 $48 \text{ W m}^{-2}$。</p>
                     </div>
                 </details>
             </div>
@@ -1612,78 +1627,77 @@
         <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
         <div class="space-y-8">
             <!-- Q1 -->
-            <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 關於建築材料的「熱透射率 ($U$ 值)」，下列哪一項敘述是正確的？</p>
+            <div class="quiz-item" id="quiz3-1-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 關於一塊厚度為 $d$、熱導率為 $\kappa$ 的均勻混凝土牆，它的熱透射率 $U$ 的物理公式是甚麼？</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 數值越大，代表材料的隔熱性能越好</button>
-                    <button onclick="checkAnswer(this, true, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 數值越小，代表熱量越難穿透該材料</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 單層玻璃的 $U$ 值通常低於厚磚牆的 $U$ 值</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $U$ 值只與材料的顏色有關，與厚度無關</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1', 'quiz3-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $U = \kappa \cdot d$</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q31-1', 'quiz3-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $U = \frac{\kappa}{d}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1', 'quiz3-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $U = \frac{d}{\kappa}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1', 'quiz3-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $U = \frac{1}{\kappa \cdot d}$</button>
                 </div>
                 <div id="exp-q31-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> $U$ 值量度的是「熱量穿透的容易程度」。因此，$U$ 值越小，表示熱量越難傳導過去，隔熱效果越好。單層玻璃極易導熱，其 $U$ 值遠大於磚牆。
+                    <strong>解析：</strong> 根據電路傳熱學比擬，熱透射率 $U$ 與材料厚度成反比，與熱導率成正比，即 $U = \frac{\kappa}{d}$。厚度越厚，U 值越小，隔熱能力越好。
                 </div>
             </div>
 
             <!-- Q2 -->
-            <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 總熱傳送值 (OTTV) 是衡量樓宇能源效益的重要指標。OTTV 的單位是什麼？</p>
+            <div class="quiz-item" id="quiz3-1-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 總熱傳送值 (OTTV) 的計量公式為下列哪一項？</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $\text{W m}^{-2} \text{ K}^{-1}$</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $\text{W}$</button>
-                    <button onclick="checkAnswer(this, true, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $\text{W m}^{-2}$</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $\text{J}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2', 'quiz3-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $\text{OTTV} = \frac{Q_C}{t} + \frac{Q_S}{t}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2', 'quiz3-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $\text{OTTV} = \bar{U} A_{\text{總}} (T_H - T_C)$</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q31-2', 'quiz3-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $\text{OTTV} = \frac{\frac{Q_C}{t} + \frac{Q_S}{t}}{A_{\text{總}}}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2', 'quiz3-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $\text{OTTV} = \frac{U_1 A_1 + U_2 A_2}{A_1 + A_2}$</button>
                 </div>
                 <div id="exp-q31-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> OTTV 代表外牆每單位面積傳入的平均熱功率，公式為總熱功率除以總面積，故單位為 $\text{W m}^{-2}$。
+                    <strong>解析：</strong> 根據香港建築物節能條例與 DSE 物理課程，總熱傳送值（OTTV）是傳導熱傳送率 $\frac{Q_C}{t}$ 與太陽輻射熱傳送率 $\frac{Q_S}{t}$ 的總和，再除以外殼總面積 $A_{\text{總}}$，反映每平方米的平均得熱率。
                 </div>
             </div>
 
             <!-- Q3 -->
-            <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 哪一種建築設計方法最能有效減少因「輻射」而傳入室內的熱量？</p>
+            <div class="quiz-item" id="quiz3-1-3">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 某雙層牆壁由 $15 \text{ m}^2$ 的木板（$U=1.0 \text{ W m}^{-2} \text{ K}^{-1}$）與 $15 \text{ m}^2$ 的保溫綿（$U=0.2 \text{ W m}^{-2} \text{ K}^{-1}$）並排組成。求該牆壁整體的平均熱透射率 $\bar{U}$：</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, false, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 增加牆壁的厚度</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 使用雙層玻璃窗</button>
-                    <button onclick="checkAnswer(this, true, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 在窗戶貼上反射紅外線的隔熱膜</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 關閉所有室內的電燈</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-3', 'quiz3-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $1.2 \text{ W m}^{-2} \text{ K}^{-1}$</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q31-3', 'quiz3-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $0.6 \text{ W m}^{-2} \text{ K}^{-1}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-3', 'quiz3-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $0.4 \text{ W m}^{-2} \text{ K}^{-1}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-3', 'quiz3-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $0.15 \text{ W m}^{-2} \text{ K}^{-1}$</button>
                 </div>
                 <div id="exp-q31-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 厚牆和雙層玻璃主要是阻絕「傳導」熱。而陽光帶來的熱量主要是紅外線「輻射」，貼上反射膜能直接將輻射反射出去，是阻絕輻射熱最有效的方法。
+                    <strong>解析：</strong> 代入平均熱透射率公式：$$ \bar{U} = \frac{U_1 A_1 + U_2 A_2}{A_1 + A_2} = \frac{(1.0 \times 15) + (0.2 \times 15)}{15 + 15} = \frac{15 + 3}{30} = \frac{18}{30} = 0.6 \text{ W m}^{-2} \text{ K}^{-1} $$。
                 </div>
             </div>
 
             <!-- Q4 -->
-            <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 綠化屋頂（在屋頂種植植物）除了美化環境外，在物理學上如何幫助樓宇節能？</p>
+            <div class="quiz-item" id="quiz3-1-4">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 假如某商業大樓在夏日正午時，外牆傳導熱率為 $12 \text{ kW}$，太陽輻射熱傳送率為 $8 \text{ kW}$，大樓外殼總面積為 $500 \text{ m}^2$。此大樓的 OTTV 是多少？</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, false, 'exp-q31-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 植物會吸收室內的冷氣</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 泥土的熱透射率極高，能快速散熱</button>
-                    <button onclick="checkAnswer(this, true, 'exp-q31-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 泥土層提供額外隔熱，且水分蒸發時會吸收潛熱而產生冷卻作用</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 植物進行光合作用時會吸收大量電能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-4', 'quiz3-1-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $40 \text{ W m}^{-2}$</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q31-4', 'quiz3-1-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $40 \text{ kW m}^{-2}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-4', 'quiz3-1-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $0.04 \text{ W m}^{-2}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-4', 'quiz3-1-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. $4 \text{ W m}^{-2}$</button>
                 </div>
                 <div id="exp-q31-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 泥土本身是熱的不良導體，能降低屋頂的 $U$ 值。更重要的是，泥土中水分的「蒸發」是一個吸熱過程（吸收汽化潛熱），這能像流汗一樣為屋頂表面降溫。
+                    <strong>解析：</strong> 注意單位的換算：$12 \text{ kW} = 12000 \text{ W}$，$8 \text{ kW} = 8000 \text{ W}$。$$ \text{OTTV} = \frac{12000 + 8000}{500} = \frac{20000}{500} = 40 \text{ W m}^{-2} $$。所以正確單位為 A 選項。
                 </div>
             </div>
 
             <!-- Q5 -->
-            <div class="quiz-item">
-                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 關於熱傳遞公式 $\frac{Q_C}{t} = U A (T_H - T_C)$，若外牆面積 $A$ 加倍而其他條件不變，對空調系統有何影響？</p>
+            <div class="quiz-item" id="quiz3-1-5">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 政府對新建商廈規定了「總熱傳送值 (OTTV)」的上限。這項規定的主要目的是：</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="checkAnswer(this, true, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 傳入熱量速率加倍，空調耗電量增加</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 傳入熱量速率減半，空調耗電量減少</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 保持不變，因 $U$ 值固定</button>
-                    <button onclick="checkAnswer(this, false, 'exp-q31-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 空調會停止運作</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5', 'quiz3-1-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 提高大樓的採光，以減少開燈電費</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q31-5', 'quiz3-1-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 限制室外熱量傳入大樓的速率，減小大樓空調系統的製冷負荷以達到省電</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5', 'quiz3-1-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 增加大樓吸收熱量的速率，使冬天天氣更溫暖</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5', 'quiz3-1-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 強制開發商使用太陽能板發電</button>
                 </div>
                 <div id="exp-q31-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
-                    <strong>解析：</strong> 根據公式，熱傳遞率與面積 $A$ 成正比。面積加倍，傳入熱量速率加倍，空調必須消耗更多電能來把這些熱量抽走。
+                    <strong>解析：</strong> OTTV 控制的是熱量由外向內傳導及輻射的速度。限制 OTTV 可以保證大樓具備良好的隔熱性，降低空調運作的耗電量。
                 </div>
             </div>
         </div>
     </section>
 </article>
-
 <!-- ========================================== -->
 <!-- 區塊 3.2: 交通工具的能源效益 -->
 <!-- ========================================== -->
