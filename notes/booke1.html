@@ -185,121 +185,123 @@
     <main id="main-content" class="flex-1 h-screen overflow-y-auto pt-16 md:pt-0 scroll-smooth">
         <div class="max-w-4xl mx-auto p-4 md:p-8 lg:p-12 pb-24">
 
+<!-- ... existing code ... -->
+        <div class="p-4 border-t border-slate-100 text-center">
+            <p class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-graduation-cap mr-1"></i> 廠商會中學．物理科</p>
+        </div>
+    </aside>
 
-<!-- 歡迎頁面 (僅用於示例) -->
-           
-<article id="ch0" class="content-section block">            
-                <h2 class="text-3xl font-black text-slate-800 tracking-tight mb-3">廠商會中學．物理科．物理讀本</h2>
-                <p class="text-base text-slate-500 font-medium max-w-md leading-relaxed mb-8">
-                    「極簡讀本．探尋根本．邁向本科」
-                </p>
+    <!-- 右側主要內容區 -->
+    <main id="main-content" class="flex-1 h-screen overflow-y-auto pt-16 md:pt-0 scroll-smooth">
+        <div class="max-w-4xl mx-auto p-4 md:p-8 lg:p-12 pb-24">
+            
+            <!-- ========================================== -->
+            <!-- 歡迎頁面 (預設顯示) -->
+            <!-- ========================================== -->
+            <article id="ch0" class="content-section block">
+                <div class="flex flex-col items-center justify-center text-center py-6 md:py-12">
+                    <h2 class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-cyan-500 tracking-tight mb-4">
+                        物理讀本
+                    </h2>
+<!--                    <p class="text-base md:text-lg text-slate-500 font-medium max-w-md leading-relaxed mb-10">
+                        「極簡讀本．探尋根本．邁向本科」
+                    </p>
+-->
+                    <div class="w-full max-w-4xl bg-white border border-slate-200 rounded-3xl p-6 md:p-10 shadow-sm">
+                        <div class="flex items-center justify-center gap-3 mb-8 border-b border-slate-100 pb-6">
+                            <i class="fa-solid fa-book-open-reader text-2xl text-blue-600"></i>
+                            <h3 class="text-2xl font-bold text-slate-800">所有書冊快速連結</h3>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                            <!-- Book 1 -->
+                            <a href="https://physics.cmass.edu.hk/book1" class="group flex flex-col items-center text-center p-5 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-red-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <div class="w-14 h-14 rounded-full bg-red-100 text-red-500 flex items-center justify-center mb-3 group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
+                                    <i class="fa-solid fa-fire text-xl"></i>
+                                </div>
+                                <h4 class="font-black text-slate-800 text-base group-hover:text-red-600 transition-colors">Book 1</h4>
+                                <p class="text-xs font-bold text-slate-500 mt-1">熱和氣體</p>
+                            </a>
 
-                <div class="inline-flex flex-col sm:flex-row items-center gap-4 bg-blue-50/70 border border-blue-200 rounded-2xl p-4 pr-6 shadow-sm max-w-lg">
-                    <div class="bg-blue-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md shrink-0">
-                        <i class="fa-solid fa-list-ul text-sm animate-bounce"></i>
-                    </div>
-                    <div class="text-left">
-                        <h4 class="text-sm font-bold text-slate-800">準備開始探索了嗎？</h4>
-                        <p class="text-xs text-slate-600 mt-0.5">
-                            請點選 <span class="font-bold text-blue-700">選單</span>，即可立刻開啟互動讀本瀏覽器。
-                        </p>
+                            <!-- Book 2 -->
+                            <a href="https://physics.cmass.edu.hk/book2" class="group flex flex-col items-center text-center p-5 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-blue-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <div class="w-14 h-14 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center mb-3 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
+                                    <i class="fa-solid fa-person-running text-xl"></i>
+                                </div>
+                                <h4 class="font-black text-slate-800 text-base group-hover:text-blue-600 transition-colors">Book 2</h4>
+                                <p class="text-xs font-bold text-slate-500 mt-1">力和運動</p>
+                            </a>
+
+                            <!-- Book 3A -->
+                            <a href="https://physics.cmass.edu.hk/book3a" class="group flex flex-col items-center text-center p-5 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-cyan-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <div class="w-14 h-14 rounded-full bg-cyan-100 text-cyan-500 flex items-center justify-center mb-3 group-hover:bg-cyan-500 group-hover:text-white transition-colors duration-300">
+                                    <i class="fa-solid fa-water text-xl"></i>
+                                </div>
+                                <h4 class="font-black text-slate-800 text-base group-hover:text-cyan-600 transition-colors">Book 3A</h4>
+                                <p class="text-xs font-bold text-slate-500 mt-1">波動 (1)</p>
+                            </a>
+
+                            <!-- Book 3B -->
+                            <a href="https://physics.cmass.edu.hk/book3b" class="group flex flex-col items-center text-center p-5 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-yellow-400 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <div class="w-14 h-14 rounded-full bg-yellow-100 text-yellow-500 flex items-center justify-center mb-3 group-hover:bg-yellow-500 group-hover:text-white transition-colors duration-300">
+                                    <i class="fa-solid fa-lightbulb text-xl"></i>
+                                </div>
+                                <h4 class="font-black text-slate-800 text-base group-hover:text-yellow-600 transition-colors">Book 3B</h4>
+                                <p class="text-xs font-bold text-slate-500 mt-1">光學</p>
+                            </a>
+
+                            <!-- Book 4 -->
+                            <a href="https://physics.cmass.edu.hk/book4" class="group flex flex-col items-center text-center p-5 rounded-2xl border border-indigo-300 bg-indigo-50/30 hover:bg-white hover:border-indigo-400 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ring-2 ring-indigo-100">
+                                <div class="w-14 h-14 rounded-full bg-indigo-100 text-indigo-500 flex items-center justify-center mb-3 group-hover:bg-indigo-500 group-hover:text-white transition-colors duration-300">
+                                    <i class="fa-solid fa-bolt text-xl"></i>
+                                </div>
+                                <h4 class="font-black text-indigo-700 text-base transition-colors">Book 4</h4>
+                                <p class="text-xs font-bold text-indigo-500 mt-1">電和磁 (當前)</p>
+                            </a>
+
+                            <!-- Book 5 -->
+                            <a href="https://physics.cmass.edu.hk/book5" class="group flex flex-col items-center text-center p-5 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-emerald-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-500 flex items-center justify-center mb-3 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
+                                    <i class="fa-solid fa-radiation text-xl"></i>
+                                </div>
+                                <h4 class="font-black text-slate-800 text-base group-hover:text-emerald-600 transition-colors">Book 5</h4>
+                                <p class="text-xs font-bold text-slate-500 mt-1">放射現象</p>
+                            </a>
+
+                            <!-- Book E1 -->
+                            <a href="https://physics.cmass.edu.hk/booke1" class="group flex flex-col items-center text-center p-5 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-purple-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <div class="w-14 h-14 rounded-full bg-purple-100 text-purple-500 flex items-center justify-center mb-3 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
+                                    <i class="fa-solid fa-star text-xl"></i>
+                                </div>
+                                <h4 class="font-black text-slate-800 text-base group-hover:text-purple-600 transition-colors">Book E1</h4>
+                                <p class="text-xs font-bold text-slate-500 mt-1">天文學</p>
+                            </a>
+
+                            <!-- Book E3 -->
+                            <a href="https://physics.cmass.edu.hk/booke3" class="group flex flex-col items-center text-center p-5 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-orange-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <div class="w-14 h-14 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center mb-3 group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300">
+                                    <i class="fa-solid fa-plug text-xl"></i>
+                                </div>
+                                <h4 class="font-black text-slate-800 text-base group-hover:text-orange-600 transition-colors">Book E3</h4>
+                                <p class="text-xs font-bold text-slate-500 mt-1">能量與使用</p>
+                            </a>
+                        </div>
+
+                        <div class="mt-10 inline-flex flex-col sm:flex-row items-center gap-4 bg-blue-50/70 border border-blue-200 rounded-2xl p-4 pr-6 shadow-sm">
+                            <div class="bg-blue-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md shrink-0">
+                                <i class="fa-solid fa-list-ul text-sm animate-bounce"></i>
+                            </div>
+                            <div class="text-left text-center sm:text-left">
+                                <h4 class="text-sm font-bold text-slate-800">準備開始探索了嗎？</h4>
+                                <p class="text-xs text-slate-600 mt-0.5">
+                                    請點擊 <span class="font-bold text-blue-700">左側選單</span> (手機版為上方三條線)，選擇章節開啟互動讀本。
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <p class="mt-4 text-xs font-semibold text-blue-600 md:hidden animate-bounce">
-                    <i class="fa-solid fa-arrow-up mr-1"></i> 點擊上方三條線按鈕打開選單
-                </p>
-            </div>
-
-    
-             <section class="mb-10">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <a href="https://physics.cmass.edu.hk/book1" class="group bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all flex items-start space-x-4">
-                            <div class="bg-red-50 text-red-500 p-3 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-fire text-xl"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">1</h4>
-                                <p class="text-sm text-slate-500 mt-1">熱和氣體</p>
-                            </div>
-                        </a>
-                        
-                        <a href="https://physics.cmass.edu.hk/book2" class="group bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all flex items-start space-x-4">
-                            <div class="bg-blue-50 text-blue-500 p-3 rounded-lg group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-person-running text-xl"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">2</h4>
-                                <p class="text-sm text-slate-500 mt-1">力和運動</p>
-                            </div>
-                        </a>
-
-                        <a href="https://physics.cmass.edu.hk/book3a" class="group bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all flex items-start space-x-4">
-                            <div class="bg-cyan-50 text-cyan-500 p-3 rounded-lg group-hover:bg-cyan-500 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-water text-xl"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">3A</h4>
-                                <p class="text-sm text-slate-500 mt-1">波動 (1)</p>
-                            </div>
-                        </a>
-
-                        <a href="https://physics.cmass.edu.hk/book3b" class="group bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all flex items-start space-x-4">
-                            <div class="bg-yellow-50 text-yellow-500 p-3 rounded-lg group-hover:bg-yellow-500 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-lightbulb text-xl"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">3B</h4>
-                                <p class="text-sm text-slate-500 mt-1">波動 (2)</p>
-                            </div>
-                        </a>
-
-                        <a href="https://physics.cmass.edu.hk/book4" class="group bg-white p-5 rounded-xl shadow-sm border border-blue-500 ring-2 ring-blue-200 hover:shadow-md transition-all flex items-start space-x-4">
-                            <div class="bg-indigo-50 text-indigo-500 p-3 rounded-lg group-hover:bg-indigo-500 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-bolt text-xl"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">4</h4>
-                                <p class="text-sm text-slate-500 mt-1">電和磁</p>
-                            </div>
-                        </a>
-
-                        <a href="https://physics.cmass.edu.hk/book5" class="group bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all flex items-start space-x-4">
-                            <div class="bg-emerald-50 text-emerald-500 p-3 rounded-lg group-hover:bg-emerald-500 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-radiation text-xl"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">5</h4>
-                                <p class="text-sm text-slate-500 mt-1">放射現象與核能</p>
-                            </div>
-                        </a>
-
-                        <a href="https://physics.cmass.edu.hk/booke1" class="group bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all flex items-start space-x-4">
-                            <div class="bg-purple-50 text-purple-500 p-3 rounded-lg group-hover:bg-purple-500 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-star text-xl"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">E1</h4>
-                                <p class="text-sm text-slate-500 mt-1">天文學與航天科學</p>
-                            </div>
-                        </a>
-
-                        <a href="https://physics.cmass.edu.hk/booke3" class="group bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all flex items-start space-x-4">
-                            <div class="bg-orange-50 text-orange-500 p-3 rounded-lg group-hover:bg-orange-500 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-plug text-xl"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">E3</h4>
-                                <p class="text-sm text-slate-500 mt-1">能量與能源的使用</p>
-                            </div>
-                        </a>
-                    </div>
-                </section>
-
-    
-            </div>
-</article>
-
+            </article>
+            
 
 <!-- ========================================== -->
 
