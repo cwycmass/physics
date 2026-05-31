@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>香港硬幣買東西小遊戲 - 挑戰版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+        
+        body {
+            font-family: 'Nunito', 'Microsoft JhengHei', sans-serif;
+            background-color: #f0f9ff;
+            touch-action: manipulation;
+        }
+
+        .coin {
+            transition: all 0.1s ease;
+            cursor: pointer;
+            user-select: none;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+        }
+
+        .coin:active {
+            transform: scale(0.9);
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .coin-tray .coin:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .pop-in {
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0;
+            z-index: 100;
+        }
+
+        /* 價格牌樣式 */
+        .price-tag {
+            position: relative;
+            background: #ffebb5;
+            border: 2px dashed #f59e0b;
+            border-radius: 8px;
+            padding: 8px 16px;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+        .price-tag::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* 模態框背景模糊 */
+        .modal-overlay {
+            backdrop-filter: blur(5px);
+        }
+
+        /* 評級印章動畫 */
+        .stamp {
+            transform: scale(3) rotate(-20deg);
+            opacity: 0;
+            animation: stampIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: 1s;
+        }
+
+        @keyframes stampIn {
+            100% { transform: scale(1) rotate(-10deg); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-gray-800 overflow-x-hidden relative">
+
+    <!-- 頂部資訊欄 -->
+    <header class="bg-blue-500 text-white p-3 shadow-md z-10 relative">
+        <div class="max-w-5xl mx-auto flex flex-wrap justify-between items-center gap-2">
+            <h1 class="text-xl md:text-2xl font-black tracking-wider flex items-center gap-2">
+                🛒 <span class="hidden sm:inline">買東西小遊戲</span>
+            </h1>
+            
+            <div class="flex items-center gap-2 md:gap-4 text-sm md:text-lg font-bold">
+                <div class="bg-blue-700 px-3 py-1 rounded-lg border-2 border-blue-300">
+                    第 <span id="q-count" class="text-yellow-300">1</span> / 30 題
+                </div>
+                <div class="bg-blue-700 px-3 py-1 rounded-lg border-2 border-blue-300 flex items-center gap-1">
+                    連勝 <span id="streak-count" class="text-orange-300">0</span>🔥
+                </div>
+                <div class="bg-blue-700 px-3 py-1 rounded-lg border-2 border-blue-300">
+                    總分：<span id="score" class="text-yellow-300">0</span>
+                </div>
+            </div>
+        </div>
+        <!-- 時間條 -->
+        <div class="max-w-5xl mx-auto mt-2 bg-blue-900 rounded-full h-3 overflow-hidden border border-blue-400 relative">
+            <div id="time-bar" class="h-full bg-green-400 w-full transition-all duration-100 ease-linear shadow-[inset_0_-2px_4px_rgba(0,0,0,0.2)]"></div>
+        </div>
+    </header>
+
+    <!-- 遊戲主要區域 -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 flex flex-col md:flex-row gap-6 blur-sm transition-all" id="main-game">
+        
+        <!-- 左側：商店區域 -->
+        <section class="flex-1 bg-white rounded-3xl p-6 shadow-lg border-4 border-blue-100 flex flex-col items-center justify-center relative min-h-[250px]">
+            <h2 class="text-xl font-bold text-gray-500 mb-4 bg-gray-100 px-4 py-1 rounded-full">你要買的物品</h2>
+            
+            <div id="item-display" class="flex flex-col items-center">
+                <!-- 商品 SVG 會動態插入這裡 -->
+            </div>
+            
+            <div id="feedback-message" class="absolute inset-0 bg-white/90 rounded-3xl flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 z-10">
+                <div id="feedback-icon" class="text-6xl mb-2"></div>
+                <div id="feedback-text" class="text-3xl font-black text-center px-4"></div>
+                <div id="feedback-bonus" class="text-xl font-bold text-yellow-500 mt-2"></div>
+            </div>
+        </section>
+
+        <!-- 右側：付款區域 -->
+        <section class="flex-1 bg-green-50 rounded-3xl p-6 shadow-lg border-4 border-green-200 flex flex-col">
+            <h2 class="text-xl font-bold text-green-700 mb-2 flex justify-between items-center">
+                <span>你的付款盤</span>
+                <span class="text-sm bg-green-200 text-green-800 px-2 py-1 rounded">點擊硬幣可拿走</span>
+            </h2>
+            
+            <div id="payment-area" class="flex-1 bg-white rounded-2xl border-2 border-dashed border-green-300 p-4 flex flex-wrap content-start gap-2 min-h-[150px] shadow-inner relative">
+                <!-- 玩家選擇的硬幣會出現在這裡 -->
+                <p id="empty-hint" class="text-gray-400 absolute inset-0 flex items-center justify-center font-bold text-lg pointer-events-none">請從下方選擇硬幣</p>
+            </div>
+
+            <div class="mt-4 flex justify-between items-center bg-white p-4 rounded-xl shadow border-2 border-gray-100">
+                <div class="w-full flex justify-between gap-2">
+                    <button onclick="clearCoins()" class="bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-xl shadow active:scale-95 transition-transform text-lg">全部清除</button>
+                    <button onclick="checkAnswer()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-xl shadow active:scale-95 transition-transform text-xl border-b-4 border-green-700">確認付款</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 底部：硬幣選擇區 -->
+    <footer class="bg-white border-t-4 border-gray-200 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] pb-8 blur-sm transition-all" id="bottom-bar">
+        <h3 class="text-center text-lg font-bold text-gray-600 mb-4">點擊下方硬幣付款 👇 (注意剩餘數量)</h3>
+        <div class="coin-tray flex flex-wrap justify-center items-end gap-3 md:gap-6 max-w-4xl mx-auto" id="coin-palette">
+            <!-- 硬幣按鈕會動態插入這裡 -->
+        </div>
+    </footer>
+
+    <!-- 開始 Modal -->
+    <div id="start-modal" class="fixed inset-0 bg-black/60 modal-overlay z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border-4 border-blue-400 text-center transform scale-100 transition-transform">
+            <h2 class="text-4xl font-black text-blue-600 mb-4">買東西大挑戰！</h2>
+            <ul class="text-left text-lg text-gray-600 space-y-3 mb-8 font-bold bg-blue-50 p-4 rounded-xl border border-blue-100">
+                <li>🎯 總共 <span class="text-blue-500">30 題</span>挑戰</li>
+                <li>⏱️ <span class="text-green-500">15秒內</span>答對有最高獎勵</li>
+                <li>🔥 連續答對可獲<span class="text-orange-500">連勝加分</span></li>
+                <li>🧠 注意每關的硬幣數量是<span class="text-red-500">有限的</span>喔！</li>
+            </ul>
+            <button onclick="startGame()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-black py-4 px-6 rounded-2xl shadow-lg active:scale-95 transition-transform text-2xl border-b-4 border-blue-700">
+                開始遊戲 🚀
+            </button>
+        </div>
+    </div>
+
+    <!-- 結算 Modal -->
+    <div id="end-modal" class="fixed inset-0 bg-blue-50 modal-overlay z-50 flex flex-col items-center justify-start p-4 md:p-8 overflow-y-auto hidden">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl border-4 border-yellow-400 text-center mb-8 relative mt-4">
+            <h2 class="text-3xl md:text-5xl font-black text-gray-800 mb-2">🎉 遊戲完成！ 🎉</h2>
+            <p class="text-gray-500 font-bold mb-6">來看看你的最終成績</p>
+            
+            <div class="text-7xl md:text-8xl font-black text-yellow-500 mb-4 drop-shadow-md" id="final-score">0</div>
+            
+            <div id="grade-stamp" class="absolute top-10 right-10 md:top-14 md:right-14 w-24 h-24 md:w-32 md:h-32 rounded-full border-8 border-red-500 text-red-500 font-black text-5xl md:text-7xl flex items-center justify-center stamp hidden">
+                <!-- 評級字母 -->
+            </div>
+
+            <div class="mt-8 text-left bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <h3 class="text-xl font-bold text-gray-700 mb-3">錯誤回顧 📝</h3>
+                <div id="review-list" class="space-y-4 max-h-[40vh] overflow-y-auto pr-2">
+                    <!-- 錯題將插入這裡 -->
+                </div>
+            </div>
+
+            <button onclick="location.reload()" class="mt-6 w-full md:w-auto bg-green-500 hover:bg-green-600 text-white font-black py-3 px-8 rounded-xl shadow active:scale-95 transition-transform text-xl border-b-4 border-green-700">
+                再玩一次 🔄
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- 資料設定 ---
+        const COINS = [
+            { id: 1000, value: 1000, size: 'w-16 h-16 md:w-20 md:h-20', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#d4af37"/><circle cx="50" cy="50" r="32" fill="#e2e8f0"/><text x="50" y="58" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#333">$10</text></svg>' },
+            { id: 500, value: 500, size: 'w-20 h-20 md:w-24 md:h-24', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="4"/><circle cx="50" cy="50" r="40" fill="none" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 4"/><text x="50" y="58" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#333">$5</text></svg>' },
+            { id: 200, value: 200, size: 'w-16 h-16 md:w-20 md:h-20', svg: '<svg viewBox="0 0 100 100"><path d="M50 2 C 60 2, 65 8, 75 10 C 85 12, 90 20, 92 30 C 94 40, 98 45, 98 50 C 98 55, 94 60, 92 70 C 90 80, 85 88, 75 90 C 65 92, 60 98, 50 98 C 40 98, 35 92, 25 90 C 15 88, 10 80, 8 70 C 6 60, 2 55, 2 50 C 2 45, 6 40, 8 30 C 10 20, 15 12, 25 10 C 35 8, 40 2, 50 2 Z" fill="#e2e8f0"/><text x="50" y="58" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#333">$2</text></svg>' },
+            { id: 100, value: 100, size: 'w-16 h-16 md:w-18 md:h-18', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#e2e8f0"/><text x="50" y="58" font-family="Arial" font-size="32" font-weight="bold" text-anchor="middle" fill="#333">$1</text></svg>' },
+            { id: 50, value: 50, size: 'w-16 h-16 md:w-18 md:h-18', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#cd7f32"/><text x="50" y="58" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#fff">50¢</text></svg>' },
+            { id: 20, value: 20, size: 'w-12 h-12 md:w-16 md:h-16', svg: '<svg viewBox="0 0 100 100"><path d="M50 2 C 60 2, 65 8, 75 10 C 85 12, 90 20, 92 30 C 94 40, 98 45, 98 50 C 98 55, 94 60, 92 70 C 90 80, 85 88, 75 90 C 65 92, 60 98, 50 98 C 40 98, 35 92, 25 90 C 15 88, 10 80, 8 70 C 6 60, 2 55, 2 50 C 2 45, 6 40, 8 30 C 10 20, 15 12, 25 10 C 35 8, 40 2, 50 2 Z" fill="#cd7f32"/><text x="50" y="56" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#fff">20¢</text></svg>' },
+            { id: 10, value: 10, size: 'w-10 h-10 md:w-14 md:h-14', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#cd7f32"/><text x="50" y="56" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#fff">10¢</text></svg>' }
+        ];
+
+        // 建立 ID 對應物件以便快速查找
+        const COIN_MAP = {};
+        COINS.forEach(c => COIN_MAP[c.id] = c);
+
+        const ITEMS = [
+            { name: '蘋果', svg: '<svg viewBox="0 0 100 100" class="w-24 h-24 md:w-32 md:h-32 drop-shadow-xl"><path d="M50 25 C30 10 10 30 15 55 C20 80 40 95 50 90 C60 95 80 80 85 55 C90 30 70 10 50 25" fill="#ef4444"/><path d="M50 25 Q55 10 65 5" fill="none" stroke="#78350f" stroke-width="4"/><path d="M60 15 Q75 5 80 15 Q75 25 60 15" fill="#22c55e"/></svg>' },
+            { name: '鉛筆', svg: '<svg viewBox="0 0 100 100" class="w-24 h-24 md:w-32 md:h-32 drop-shadow-xl" transform="rotate(45)"><polygon points="40,20 60,20 60,70 40,70" fill="#fbbf24"/><polygon points="40,70 60,70 50,90" fill="#fcd34d"/><polygon points="47,84 53,84 50,90" fill="#333"/><rect x="40" y="10" width="20" height="10" fill="#cbd5e1"/><path d="M40 10 C40 0 60 0 60 10 Z" fill="#f87171"/></svg>' },
+            { name: '糖果', svg: '<svg viewBox="0 0 100 100" class="w-24 h-24 md:w-32 md:h-32 drop-shadow-xl"><ellipse cx="50" cy="50" rx="25" ry="18" fill="#ec4899"/><polygon points="25,50 5,35 5,65" fill="#f472b6"/><polygon points="75,50 95,35 95,65" fill="#f472b6"/><path d="M35 40 Q50 30 65 40" fill="none" stroke="#fff" stroke-width="2" opacity="0.5"/></svg>' },
+            { name: '書本', svg: '<svg viewBox="0 0 100 100" class="w-24 h-24 md:w-32 md:h-32 drop-shadow-xl"><rect x="20" y="15" width="60" height="70" rx="3" fill="#3b82f6"/><rect x="25" y="15" width="50" height="70" fill="#60a5fa"/><path d="M30 20 L30 80 M40 20 L40 80" stroke="#fff" stroke-width="2" opacity="0.5"/><rect x="35" y="30" width="30" height="15" fill="#bfdbfe" rx="2"/></svg>' },
+            { name: '雪糕', svg: '<svg viewBox="0 0 100 100" class="w-24 h-24 md:w-32 md:h-32 drop-shadow-xl"><polygon points="35,50 65,50 50,95" fill="#d97706"/><polygon points="35,50 65,50 50,95" fill="none" stroke="#b45309" stroke-width="2"/><circle cx="50" cy="35" r="22" fill="#fbcfe8"/><circle cx="40" cy="45" r="10" fill="#fbcfe8"/><circle cx="60" cy="45" r="10" fill="#fbcfe8"/><circle cx="50" cy="15" r="8" fill="#ef4444"/></svg>' }
+        ];
+
+        // --- 遊戲狀態 ---
+        const MAX_QUESTIONS = 30;
+        let questionCount = 0;
+        let currentTargetValue = 0; 
+        let currentItem = null;
+        let paidCoins = [];         
+        let score = 0;
+        let streak = 0;
+        let isProcessing = false;   
+        let madeMistakeOnCurrent = false;
+
+        let coinCounts = {}; // 動態庫存
+        
+        let wrongRecords = []; // 紀錄錯題 [{item, targetValue, wrongAmount, correctCountsObj}]
+
+        // 計時器變數
+        let questionStartTime = 0;
+        let timerInterval = null;
+
+        // --- 核心邏輯 ---
+
+        function startGame() {
+            document.getElementById('start-modal').classList.add('hidden');
+            document.getElementById('main-game').classList.remove('blur-sm');
+            document.getElementById('bottom-bar').classList.remove('blur-sm');
+            
+            questionCount = 0;
+            score = 0;
+            streak = 0;
+            wrongRecords = [];
+            document.getElementById('score').innerText = score;
+            document.getElementById('streak-count').innerText = streak;
+            
+            nextQuestion();
+        }
+
+        function calculateGreedyCoins(targetCents) {
+            let remaining = targetCents;
+            let counts = {};
+            for (let c of COINS) {
+                let count = Math.floor(remaining / c.value);
+                if (count > 0) {
+                    counts[c.id] = count;
+                    remaining -= count * c.value;
+                }
+            }
+            return counts;
+        }
+
+        // 動態生成帶有解法並混入隨機硬幣的庫存
+        function generateDynamicCoinPool(targetCents) {
+            let pool = {};
+            COINS.forEach(c => pool[c.id] = 0);
+            
+            // 保證有解：先放入貪婪演算法的硬幣
+            let greedySolution = calculateGreedyCoins(targetCents);
+            for (let id in greedySolution) {
+                pool[id] += greedySolution[id];
+            }
+            
+            // 加入 3 ~ 6 個隨機干擾硬幣來增加難度
+            let extraCount = Math.floor(Math.random() * 4) + 3;
+            for (let i = 0; i < extraCount; i++) {
+                let randomCoinId = COINS[Math.floor(Math.random() * COINS.length)].id;
+                pool[randomCoinId]++;
+            }
+            return pool;
+        }
+
+        function nextQuestion() {
+            if (questionCount >= MAX_QUESTIONS) {
+                endGame();
+                return;
+            }
+
+            questionCount++;
+            madeMistakeOnCurrent = false;
+            document.getElementById('q-count').innerText = questionCount;
+            
+            currentItem = ITEMS[Math.floor(Math.random() * ITEMS.length)];
+            
+            // 產生隨機金額 (例如 100 到 1500 cents，即 $1 到 $15，尾數必須是10的倍數)
+            const randomMultiplier = Math.floor(Math.random() * 141) + 10; 
+            currentTargetValue = randomMultiplier * 10; 
+            
+            paidCoins = [];
+            coinCounts = generateDynamicCoinPool(currentTargetValue);
+            
+            updatePaymentArea();
+            renderCoinPalette();
+            
+            const display = document.getElementById('item-display');
+            display.innerHTML = `
+                ${currentItem.svg}
+                <div class="price-tag mt-4 text-2xl md:text-3xl font-black text-gray-800 tracking-wide">
+                    ${formatMoney(currentTargetValue)}
+                </div>
+            `;
+            
+            display.classList.remove('pop-in');
+            void display.offsetWidth;
+            display.classList.add('pop-in');
+
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            questionStartTime = Date.now();
+            updateTimerUI();
+            
+            timerInterval = setInterval(() => {
+                updateTimerUI();
+            }, 100);
+        }
+
+        function updateTimerUI() {
+            if (isProcessing) return;
+            
+            let elapsed = (Date.now() - questionStartTime) / 1000;
+            let bar = document.getElementById('time-bar');
+            
+            if (elapsed > 30) {
+                bar.style.width = '0%';
+                bar.className = 'h-full bg-red-500 w-full transition-all duration-100 ease-linear shadow-[inset_0_-2px_4px_rgba(0,0,0,0.2)]';
+            } else {
+                let percentage = Math.max(0, 100 - (elapsed / 30) * 100);
+                bar.style.width = `${percentage}%`;
+                
+                if (elapsed <= 15) {
+                    bar.className = 'h-full bg-green-400 w-full transition-all duration-100 ease-linear shadow-[inset_0_-2px_4px_rgba(0,0,0,0.2)]';
+                } else if (elapsed <= 25) {
+                    bar.className = 'h-full bg-yellow-400 w-full transition-all duration-100 ease-linear shadow-[inset_0_-2px_4px_rgba(0,0,0,0.2)]';
+                } else {
+                    bar.className = 'h-full bg-red-400 w-full transition-all duration-100 ease-linear shadow-[inset_0_-2px_4px_rgba(0,0,0,0.2)]';
+                }
+            }
+        }
+
+        function formatMoney(cents) {
+            const dollars = Math.floor(cents / 100);
+            const remainder = cents % 100;
+            if (remainder === 0) return `$${dollars}`;
+            if (remainder % 10 === 0) return `$${dollars}.${remainder / 10}0`;
+            return `$${dollars}.${remainder.toString().padStart(2, '0')}`;
+        }
+
+        function renderCoinPalette() {
+            const palette = document.getElementById('coin-palette');
+            palette.innerHTML = '';
+            
+            COINS.forEach(coin => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex flex-col items-center gap-1';
+
+                const coinEl = document.createElement('div');
+                const isDepleted = coinCounts[coin.id] <= 0;
+                coinEl.className = `coin ${coin.size} ${isDepleted ? 'opacity-40 cursor-not-allowed grayscale' : ''}`;
+                coinEl.innerHTML = coin.svg;
+                coinEl.onclick = () => { if (!isDepleted) addCoin(coin); };
+                
+                const countEl = document.createElement('div');
+                countEl.className = `text-sm font-bold px-2 rounded-full ${isDepleted ? 'text-red-500 bg-red-100' : 'text-gray-600 bg-gray-200 shadow-sm'}`;
+                countEl.innerText = `剩餘: ${coinCounts[coin.id]}`;
+                
+                wrapper.appendChild(coinEl);
+                wrapper.appendChild(countEl);
+                palette.appendChild(wrapper);
+            });
+        }
+
+        function addCoin(coin) {
+            if (isProcessing || coinCounts[coin.id] <= 0) return;
+            coinCounts[coin.id]--;
+            paidCoins.push(coin);
+            updatePaymentArea();
+            renderCoinPalette();
+        }
+
+        function removeCoin(index) {
+            if (isProcessing) return;
+            const coin = paidCoins[index];
+            coinCounts[coin.id]++;
+            paidCoins.splice(index, 1);
+            updatePaymentArea();
+            renderCoinPalette();
+        }
+
+        function clearCoins() {
+            if (isProcessing) return;
+            paidCoins.forEach(coin => {
+                coinCounts[coin.id]++;
+            });
+            paidCoins = [];
+            updatePaymentArea();
+            renderCoinPalette();
+        }
+
+        function updatePaymentArea() {
+            const area = document.getElementById('payment-area');
+            const hint = document.getElementById('empty-hint');
+            
+            area.innerHTML = '';
+            area.appendChild(hint);
+
+            if (paidCoins.length === 0) {
+                hint.style.display = 'flex';
+            } else {
+                hint.style.display = 'none';
+                
+                paidCoins.forEach((coin, index) => {
+                    const coinEl = document.createElement('div');
+                    const sizeClass = coin.size.replace('md:w-20', 'md:w-16').replace('md:h-20', 'md:h-16')
+                                               .replace('w-20', 'w-14').replace('h-20', 'h-14');
+                    coinEl.className = `coin pop-in ${sizeClass}`;
+                    coinEl.innerHTML = coin.svg;
+                    coinEl.onclick = () => removeCoin(index);
+                    area.appendChild(coinEl);
+                });
+            }
+        }
+
+        function checkAnswer() {
+            if (isProcessing || paidCoins.length === 0) return;
+            
+            const totalCents = paidCoins.reduce((sum, coin) => sum + coin.value, 0);
+            
+            if (totalCents === currentTargetValue) {
+                handleCorrectAnswer();
+            } else {
+                streak = 0;
+                document.getElementById('streak-count').innerText = streak;
+                
+                // 如果是這題第一次答錯，記錄到錯題本
+                if (!madeMistakeOnCurrent) {
+                    madeMistakeOnCurrent = true;
+                    wrongRecords.push({
+                        item: currentItem,
+                        target: currentTargetValue,
+                        wrongAmount: totalCents,
+                        solution: calculateGreedyCoins(currentTargetValue)
+                    });
+                }
+
+                if (totalCents > currentTargetValue) {
+                    showFeedback('❌', '太多了！請點擊付款盤拿走一些', 'text-red-500');
+                } else {
+                    showFeedback('⚠️', '不夠啊！請再加一點硬幣', 'text-orange-500');
+                }
+                shakeArea();
+            }
+        }
+
+        function handleCorrectAnswer() {
+            isProcessing = true;
+            clearInterval(timerInterval);
+            
+            let elapsed = (Date.now() - questionStartTime) / 1000;
+            let timeBonus = 0;
+            
+            // 計算時間獎勵 (最高 200)
+            if (elapsed <= 15) {
+                timeBonus = 200;
+            } else if (elapsed <= 30) {
+                timeBonus = Math.floor(200 * (30 - elapsed) / 15);
+            }
+
+            // 計算連勝獎勵 (最高 50)
+            let streakBonus = Math.min(streak * 10, 50);
+            
+            // 基礎分 100
+            let earned = 100 + timeBonus + streakBonus;
+            
+            score += earned;
+            streak++;
+            
+            document.getElementById('score').innerText = score;
+            document.getElementById('streak-count').innerText = streak;
+            
+            let bonusText = `+${earned} 分`;
+            if (timeBonus === 200) bonusText += ' (閃電速度!⚡)';
+            else if (timeBonus > 0) bonusText += ' (不錯喔!⏱️)';
+            
+            showFeedback('✅', '答對了！好棒！', 'text-green-500', bonusText);
+            shootConfetti();
+
+            setTimeout(() => {
+                hideFeedback();
+                isProcessing = false;
+                nextQuestion();
+            }, 2500);
+        }
+
+        function shakeArea() {
+            const area = document.getElementById('payment-area');
+            area.classList.remove('shake');
+            void area.offsetWidth;
+            area.classList.add('shake');
+        }
+
+        function showFeedback(icon, text, textColorClass, bonusText = "") {
+            const fbBox = document.getElementById('feedback-message');
+            const fbIcon = document.getElementById('feedback-icon');
+            const fbText = document.getElementById('feedback-text');
+            const fbBonus = document.getElementById('feedback-bonus');
+            
+            fbIcon.innerText = icon;
+            fbText.innerText = text;
+            fbText.className = `text-3xl md:text-4xl font-black text-center px-4 ${textColorClass}`;
+            
+            if (bonusText) {
+                fbBonus.innerText = bonusText;
+                fbBonus.style.display = 'block';
+            } else {
+                fbBonus.style.display = 'none';
+            }
+            
+            fbBox.style.opacity = '1';
+            
+            if (!isProcessing) {
+                setTimeout(hideFeedback, 1500);
+            }
+        }
+
+        function hideFeedback() {
+            document.getElementById('feedback-message').style.opacity = '0';
+        }
+
+        function shootConfetti() {
+            const colors = ['#ff0', '#f00', '#0f0', '#00f', '#f0f', '#0ff'];
+            for (let i = 0; i < 60; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                document.body.appendChild(confetti);
+                
+                const startY = window.scrollY - 10;
+                const endY = window.scrollY + window.innerHeight + Math.random() * 200;
+                const duration = 1000 + Math.random() * 2000;
+                
+                confetti.animate([
+                    { transform: `translateY(${startY}px) rotate(0deg)`, opacity: 1 },
+                    { transform: `translateY(${endY}px) rotate(${Math.random()*720}deg)`, opacity: 0 }
+                ], {
+                    duration: duration,
+                    easing: 'cubic-bezier(.37,0,.63,1)'
+                });
+
+                setTimeout(() => confetti.remove(), duration);
+            }
+        }
+
+        // --- 結束與結算邏輯 ---
+
+        function endGame() {
+            clearInterval(timerInterval);
+            document.getElementById('main-game').classList.add('hidden');
+            document.getElementById('bottom-bar').classList.add('hidden');
+            
+            const endModal = document.getElementById('end-modal');
+            endModal.classList.remove('hidden');
+            
+            // 分數動畫
+            animateValue("final-score", 0, score, 1500);
+            
+            // 評級
+            setTimeout(() => showGrade(score), 1600);
+            
+            // 渲染錯題本
+            renderReviewList();
+        }
+
+        function animateValue(id, start, end, duration) {
+            let obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function showGrade(finalScore) {
+            const stamp = document.getElementById('grade-stamp');
+            let grade = 'F';
+            let color = 'text-gray-500 border-gray-500';
+            
+            if (finalScore >= 9500) { grade = 'S'; color = 'text-yellow-500 border-yellow-500 bg-yellow-50'; }
+            else if (finalScore >= 8000) { grade = 'A'; color = 'text-green-500 border-green-500 bg-green-50'; }
+            else if (finalScore >= 6000) { grade = 'B'; color = 'text-blue-500 border-blue-500 bg-blue-50'; }
+            else if (finalScore >= 4000) { grade = 'C'; color = 'text-purple-500 border-purple-500 bg-purple-50'; }
+            else if (finalScore >= 2000) { grade = 'D'; color = 'text-orange-500 border-orange-500 bg-orange-50'; }
+            else if (finalScore >= 1500) { grade = 'E'; color = 'text-red-400 border-red-400 bg-red-50'; }
+            else { grade = 'F'; color = 'text-gray-500 border-gray-500 bg-gray-50'; }
+
+            stamp.innerText = grade;
+            stamp.className = `absolute top-6 right-6 md:top-10 md:right-10 w-20 h-20 md:w-32 md:h-32 rounded-full border-[6px] md:border-8 font-black text-5xl md:text-7xl flex items-center justify-center stamp ${color} bg-white`;
+            stamp.classList.remove('hidden');
+        }
+
+        function renderReviewList() {
+            const list = document.getElementById('review-list');
+            if (wrongRecords.length === 0) {
+                list.innerHTML = `<div class="text-center text-green-600 font-bold text-lg py-4">太厲害了！你全部都一次答對，沒有任何錯題！🎉</div>`;
+                return;
+            }
+
+            list.innerHTML = '';
+            wrongRecords.forEach((record, index) => {
+                const row = document.createElement('div');
+                row.className = 'bg-white p-3 rounded-lg shadow-sm border border-gray-200 flex flex-col sm:flex-row items-center gap-4';
+                
+                // 商品圖案 (縮小版)
+                const itemSvg = record.item.svg.replace('w-24', 'w-12').replace('h-24', 'h-12')
+                                               .replace('md:w-32', 'w-12').replace('md:h-32', 'h-12');
+                
+                // 正確解法硬幣 HTML
+                let solutionHtml = '';
+                for (let coinId in record.solution) {
+                    let count = record.solution[coinId];
+                    let coinObj = COIN_MAP[coinId];
+                    if(coinObj) {
+                        for(let i=0; i<count; i++) {
+                            // 使用較小的尺寸顯示
+                            const miniSize = coinObj.size.replace('w-16', 'w-8').replace('h-16', 'h-8')
+                                                         .replace('md:w-20', 'w-8').replace('md:h-20', 'h-8')
+                                                         .replace('w-20', 'w-10').replace('h-20', 'h-10')
+                                                         .replace('w-12', 'w-6').replace('h-12', 'h-6')
+                                                         .replace('w-10', 'w-5').replace('h-10', 'h-5');
+                            solutionHtml += `<div class="${miniSize} inline-block mx-0.5">${coinObj.svg}</div>`;
+                        }
+                    }
+                }
+
+                row.innerHTML = `
+                    <div class="flex-shrink-0 bg-blue-50 p-2 rounded-lg">
+                        ${itemSvg}
+                    </div>
+                    <div class="flex-1 w-full text-center sm:text-left">
+                        <div class="font-bold text-gray-700">目標：${formatMoney(record.target)}</div>
+                        <div class="text-sm text-red-500 mb-1">你第一次付了：${formatMoney(record.wrongAmount)}</div>
+                        <div class="bg-green-50 p-2 rounded border border-green-100 flex items-center justify-center sm:justify-start flex-wrap">
+                            <span class="text-sm text-green-700 font-bold mr-2">正確付法：</span>
+                            ${solutionHtml}
+                        </div>
+                    </div>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+    </script>
+</body>
+</html>
