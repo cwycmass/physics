@@ -158,40 +158,6 @@
                     </li>
                 </ul>
             </div>
-                        <!-- 第 4 章 -->
-            <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 4 章：物態的改變</h2>
-                <ul class="space-y-1">
-                    <li>
-                        <button onclick="switchPage('ch4-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            4.1 潛熱
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="switchPage('ch4-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            4.2 蒸發與凝結
-                        </button>
-                    </li>
-                </ul>
-            </div>
-
-                        <!-- 第 5 章 -->
-            <div>
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-6">第 5 章：氣體</h2>
-                <ul class="space-y-1">
-                    <li>
-                        <button onclick="switchPage('ch5-1', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            5.1 氣體定律
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="switchPage('ch5-2', this)" class="nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 border-l-4 border-transparent hover:border-slate-300">
-                            5.2 氣體分子運動論
-                        </button>
-                    </li>
-                </ul>
-            </div>
-
             
         </nav>
 
@@ -1328,7 +1294,767 @@
 
                 </section>
             </article>
+
+```html
+<article id="ch3-1" class="content-section block">
+    <header class="mb-8 border-b-2 border-cyan-100 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-cyan-600 mr-2">3.1</span>凸透鏡與凹透鏡</h2>
+        <p class="text-slate-500 mt-2">認識透鏡的基本形狀與折射作用，並掌握描述透鏡特性的核心物理術語。</p>
+    </header>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-cyan-500 mr-2"></i> 核心概念</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>透鏡是一塊透明的曲面玻璃或塑膠，它利用光的<strong>折射</strong>原理來改變光線的傳播方向。透鏡主要分為兩大類：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-cyan-700 font-bold">凸透鏡：</strong> 
+                    中心較厚，邊緣較薄。當平行光線穿過凸透鏡時，會向中心靠攏，因此凸透鏡具有<strong>會聚光線</strong>的作用。
+                </li>
+                <li>
+                    <strong class="text-cyan-700 font-bold">凹透鏡：</strong> 
+                    中心較薄，邊緣較厚。當平行光線穿過凹透鏡時，會向外散開，因此凹透鏡具有<strong>發散光線</strong>的作用。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-cyan-500 mr-2"></i> 透鏡的基本術語</h3>
+        <div class="bg-cyan-50 border-l-4 border-cyan-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">為了準確描述光線在透鏡中的路徑，我們必須認識以下幾個重要的幾何與物理名詞：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-cyan-100">
+                    <p class="font-bold text-cyan-800 mb-2 border-b border-cyan-50 pb-1">主軸與光心</p>
+                    <ul class="text-sm space-y-2 text-slate-600">
+                        <li><strong>主軸：</strong> 穿過透鏡兩個球面中心的假想直線。</li>
+                        <li><strong>光心 ($C$)：</strong> 位於透鏡中心的點。任何穿過光心的光線，其傳播方向都不會改變（不發生偏折）。</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-4 rounded border border-cyan-100">
+                    <p class="font-bold text-cyan-800 mb-2 border-b border-cyan-50 pb-1">主焦點與焦距</p>
+                    <ul class="text-sm space-y-2 text-slate-600">
+                        <li><strong>主焦點 ($F$)：</strong> 平行於主軸的光線折射後，會聚的點（凸透鏡），或發散光線反向延長線交會的點（凹透鏡）。</li>
+                        <li><strong>焦距 ($f$)：</strong> 從光心到主焦點的距離。焦距越短，透鏡的折射能力越強。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-cyan-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
             
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        在野外求生時，我們有時可以利用一塊透鏡將太陽光聚焦在乾草上以點燃生火。請問這必須使用哪一種透鏡？為甚麼？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2"><strong>必須使用凸透鏡。</strong></p>
+                        <p class="mb-2"><strong>原因：</strong> 來自太陽的光線可以視為平行光。凸透鏡對平行光具有<strong>會聚作用</strong>，能將廣大面積收集到的太陽光（以及熱能）集中折射到一個極小的點（主焦點）上，使得該點的溫度急劇升高，從而點燃乾草。凹透鏡只會發散光線，無法聚焦生熱。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        如何單憑觸摸透鏡的形狀，來快速分辨它是凸透鏡還是凹透鏡？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">透過觸摸透鏡的中心和邊緣的厚度差異即可分辨：</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>如果感覺到<strong>中心較厚，邊緣較薄</strong>，這是一塊凸透鏡。</li>
+                            <li>如果感覺到<strong>中心較薄，邊緣較厚</strong>，這是一塊凹透鏡。</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一束平行於主軸的光線射向一塊凹透鏡。試描述折射後光線的行進路徑。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">凹透鏡具有發散光線的作用。當平行於主軸的光線穿過凹透鏡後，會向外偏折散開。</p>
+                        <p class="mb-2">如果我們將這些發散的折射光線向後（光源方向）畫虛線延長，這些<strong>反向延長線</strong>會相交於主軸上的一個點，這個點就是凹透鏡的<strong>虛焦點</strong>。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item" id="quiz3-1-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 凸透鏡的幾何形狀特徵是甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1', 'quiz3-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 中心與邊緣一樣厚</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q31-1', 'quiz3-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 中心較厚，邊緣較薄</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1', 'quiz3-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 中心較薄，邊緣較厚</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-1', 'quiz3-1-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 表面完全平坦</button>
+                </div>
+                <div id="exp-q31-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 凸透鏡的外形特徵是中間部分凸起（較厚），向邊緣逐漸變薄。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-1-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 平行光線經過凹透鏡後會發生甚麼現象？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2', 'quiz3-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 會聚於一點</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q31-2', 'quiz3-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 向外發散</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2', 'quiz3-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 原路反射</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-2', 'quiz3-1-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 變成不同顏色的光</button>
+                </div>
+                <div id="exp-q31-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 凹透鏡是發散透鏡，能使穿過它的平行光線向外散開。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-1-3">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 穿過透鏡「光心」的光線會如何行進？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-3', 'quiz3-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 向上偏折 $90^\circ$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-3', 'quiz3-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 必定會聚於焦點</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-3', 'quiz3-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 被完全反射</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q31-3', 'quiz3-1-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 保持原本方向直線穿過，不發生偏折</button>
+                </div>
+                <div id="exp-q31-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 光心是透鏡幾何中心的一個特殊點，任何通過光心的光線都會沿著直線繼續前進，不會改變方向。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-1-4">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 透鏡的「焦距」是指哪兩點之間的距離？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-4', 'quiz3-1-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 透鏡頂端到焦點</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q31-4', 'quiz3-1-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 光心到主焦點</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-4', 'quiz3-1-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 物體到透鏡光心</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-4', 'quiz3-1-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 兩個主焦點之間</button>
+                </div>
+                <div id="exp-q31-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 焦距 $f$ 在物理上的嚴格定義，是從透鏡中心（光心）量度至主焦點的垂直直線距離。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-1-5">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 如果想判斷一塊透鏡的折射能力強弱，應該比較它們的哪一個物理量？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5', 'quiz3-1-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 透鏡的直徑</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5', 'quiz3-1-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 透鏡的重量</button>
+                    <button onclick="checkAnswer(this, true,  'exp3-q31-5', 'quiz3-1-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 焦距的長短</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q31-5', 'quiz3-1-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 光心的位置</button>
+                </div>
+                <div id="exp3-q31-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 透鏡的焦距越短，代表它能在更短的距離內將光線大幅度偏折會聚（或發散），這意味著它的折射能力越強。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<article id="ch3-2" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-cyan-100 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-cyan-600 mr-2">3.2</span>凸透鏡成像</h2>
+        <p class="text-slate-500 mt-2">學習透過三條特徵光線進行作圖，並掌握凸透鏡在不同物距下產生實像與虛像的規律及應用。</p>
+    </header>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-cyan-500 mr-2"></i> 實像與虛像的分別</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>在探討透鏡成像之前，必須先釐清兩種不同性質的像：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong class="text-cyan-700 font-bold">實像 (Real Image)：</strong> 
+                    由實際折射光線真實交會所形成的像。實像<strong>可以</strong>被投射在屏幕（光屏）上呈現。實像必定是<strong>倒立</strong>的。
+                </li>
+                <li>
+                    <strong class="text-cyan-700 font-bold">虛像 (Virtual Image)：</strong> 
+                    由折射光線的「反向延長線」交會所形成的像，光線實際上並沒有到達該處。虛像<strong>不能</strong>投射在屏幕上，只能透過眼睛直接觀察。虛像必定是<strong>正立</strong>的。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-cyan-500 mr-2"></i> 凸透鏡的三條特徵光線</h3>
+        <div class="bg-cyan-50 border-l-4 border-cyan-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">要找出凸透鏡成像的位置與大小，我們通常畫出從物體頂端發出的其中兩條特徵光線（作圖法）：</p>
+            <ul class="list-decimal list-inside space-y-2 text-slate-700 ml-2">
+                <li><strong>平行光線：</strong> 平行於主軸射入透鏡的光線，折射後必定穿過對側的<strong>主焦點 ($F$)</strong>。</li>
+                <li><strong>光心光線：</strong> 穿過透鏡<strong>光心 ($C$)</strong> 的光線，其行進方向保持不變。</li>
+                <li><strong>焦點光線：</strong> 穿過透鏡同側焦點射入透鏡的光線，折射後必定<strong>平行於主軸</strong>射出。</li>
+            </ul>
+            <p class="text-sm text-slate-600 mt-4"><i class="fa-solid fa-circle-info text-cyan-500 mr-1"></i> 這三條光線折射後的交點，就是物體頂端成像的位置。</p>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-chart-column text-cyan-500 mr-2"></i> 凸透鏡成像規律與應用</h3>
+        <div class="hidden md:block overflow-hidden rounded-xl shadow-sm border border-slate-200">
+            <table class="w-full text-left text-slate-700">
+                <thead class="bg-cyan-100 text-cyan-900">
+                    <tr>
+                        <th class="p-3 font-semibold w-1/4">物距 ($u$)</th>
+                        <th class="p-3 font-semibold w-1/4">像的性質</th>
+                        <th class="p-3 font-semibold w-1/4">像距 ($v$)</th>
+                        <th class="p-3 font-semibold w-1/4">常見應用</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-bold text-slate-800">$u > 2f$</td>
+                        <td class="p-3">倒立、縮小、實像</td>
+                        <td class="p-3">$f < v < 2f$ (對側)</td>
+                        <td class="p-3 text-cyan-700 font-bold">照相機、人眼</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-bold text-slate-800">$u = 2f$</td>
+                        <td class="p-3">倒立、等大、實像</td>
+                        <td class="p-3">$v = 2f$ (對側)</td>
+                        <td class="p-3 text-cyan-700 font-bold">影印機 (1:1翻拍)</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-bold text-slate-800">$f < u < 2f$</td>
+                        <td class="p-3">倒立、放大、實像</td>
+                        <td class="p-3">$v > 2f$ (對側)</td>
+                        <td class="p-3 text-cyan-700 font-bold">投影機、電影放映機</td>
+                    </tr>
+                    <tr class="even:bg-slate-50">
+                        <td class="p-3 font-bold text-slate-800">$u = f$</td>
+                        <td class="p-3 text-slate-400">不成像 (光線平行)</td>
+                        <td class="p-3 text-slate-400">無限遠處</td>
+                        <td class="p-3 text-cyan-700 font-bold">探照燈、燈塔</td>
+                    </tr>
+                    <tr class="even:bg-slate-50 border-t-2 border-red-200">
+                        <td class="p-3 font-bold text-red-600">$u < f$</td>
+                        <td class="p-3 font-bold text-red-600">正立、放大、虛像</td>
+                        <td class="p-3 font-bold">與物同側 ($v<0$)</td>
+                        <td class="p-3 text-red-600 font-bold">放大鏡</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </section>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-cyan-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        課堂上，老師用一台投影機將透明投影片上的文字放大投射到牆壁上。請問投影機內部的透鏡是凸透鏡還是凹透鏡？投影片應放置在距離透鏡多遠的位置（與焦距 $f$ 比較）？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2"><strong>透鏡類型：</strong> 投影機需要在牆壁（屏幕）上形成清晰的像，這意味著它必須產生<strong>實像</strong>。只有凸透鏡能產生實像，因此使用的是凸透鏡。</p>
+                        <p class="mb-2"><strong>放置位置：</strong> 為了讓牆上的像是被「放大」的實像，根據成像規律，物體（投影片）的物距 $u$ 必須介於一倍焦距與兩倍焦距之間，即 <strong>$f < u < 2f$</strong>。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        爺爺用一個放大鏡來看報紙上的細小文字。放大鏡是哪一種透鏡？為了看到放大的文字，報紙與放大鏡的距離必須滿足什麼條件？所成的像是實像還是虛像？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">放大鏡是一塊<strong>凸透鏡</strong>。</p>
+                        <p class="mb-2">要產生正立且放大的像（因為我們看報紙不希望字是顛倒的），物體必須放置在凸透鏡的焦點之內，即物距必須<strong>小於焦距 ($u < f$)</strong>。</p>
+                        <p class="mb-2">在這種情況下，折射後的光線是發散的，我們的大腦會將其反向延長，形成一個位於透鏡後方的<strong>虛像</strong>。</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        凸透鏡能不能產生「正立的實像」？試加以解釋。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2"><strong>不能。</strong></p>
+                        <p class="mb-2">根據單片薄透鏡的幾何光學作圖規律，由物體頂端發出穿過光心的光線會直線前進。當透鏡成實像時，光線必須在透鏡對側的下方會聚，這使得頂端的像跑到了主軸下方，因此<strong>實像必定是倒立的</strong>。</p>
+                        <p class="mb-2">如果像是正立的，那必然是因為光線在透鏡對側無法會聚，只能向後反向延長相交，形成位於同側主軸上方的像，這種像必然是<strong>虛像</strong>。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item" id="quiz3-2-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 將一個物體放置在凸透鏡的 $2f$（兩倍焦距）之外，所形成的像是甚麼性質？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q32-1', 'quiz3-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 倒立、放大、實像</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q32-1', 'quiz3-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 倒立、縮小、實像</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-1', 'quiz3-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 正立、放大、虛像</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-1', 'quiz3-2-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 倒立、等大、實像</button>
+                </div>
+                <div id="exp-q32-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 當物距 $u > 2f$ 時（如照相機），凸透鏡會在另一側的 $f$ 與 $2f$ 之間形成一個倒立、縮小的實像。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-2-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 當我們使用放大鏡時，是把物體放在凸透鏡的哪個位置？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2', 'quiz3-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 剛好在焦點 $f$ 上</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2', 'quiz3-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 在 $f$ 與 $2f$ 之間</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-2', 'quiz3-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 大於 $2f$ 的位置</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q32-2', 'quiz3-2-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 小於焦點 $f$ 的位置（透鏡與焦點之間）</button>
+                </div>
+                <div id="exp-q32-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 只有當物距 $u < f$ 時，凸透鏡才會產生正立且放大的虛像，這正是放大鏡的原理。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-2-3">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 投影機能在屏幕上投射出電影畫面，請問它投射出來的是甚麼性質的像？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q32-3', 'quiz3-2-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 正立、放大的虛像</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-3', 'quiz3-2-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 正立、縮小的實像</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q32-3', 'quiz3-2-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 倒立、放大的實像</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-3', 'quiz3-2-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 倒立、縮小的虛像</button>
+                </div>
+                <div id="exp-q32-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 只要能投射在屏幕上的必定是「實像」，且實像必定是「倒立」的。為了讓畫面變大，它是一個放大的實像（物體置於 $f$ 與 $2f$ 之間）。這就是為什麼投影機內的投影片必須倒著放。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-2-4">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 如果將一根蠟燭剛好放在凸透鏡的焦點 ($u = f$) 上，將會發生甚麼情況？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q32-4', 'quiz3-2-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 在透鏡後方 $f$ 處成等大實像</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-4', 'quiz3-2-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 成無限大的虛像</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q32-4', 'quiz3-2-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 不會成像，折射光線變成互相平行</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-4', 'quiz3-2-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 蠟燭會燃燒得更旺</button>
+                </div>
+                <div id="exp-q32-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 根據光線追跡規則，由焦點發出的光線經過凸透鏡折射後會平行於主軸射出。因為光線互不相交（不論正向或反向），所以不會形成任何實像或虛像（或說成像於無窮遠）。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-2-5">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 一個實像和一個虛像最根本的物理差別在於：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, true,  'exp-q32-5', 'quiz3-2-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 實像可以被光屏（屏幕）接收，虛像則不能</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-5', 'quiz3-2-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 實像必定是放大的，虛像必定是縮小的</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-5', 'quiz3-2-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 實像是由反射產生的，虛像是由折射產生的</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q32-5', 'quiz3-2-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 實像是彩色的，虛像是黑白的</button>
+                </div>
+                <div id="exp-q32-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 實像是由真實光線匯聚而成，放張白紙在該處就能看見影像；虛像只是大腦對發散光線反向延伸的錯覺，光線並未真正抵達該處，因此無法用屏幕接收。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<article id="ch3-3" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-cyan-100 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-cyan-600 mr-2">3.3</span>凹透鏡成像</h2>
+        <p class="text-slate-500 mt-2">探索發散透鏡的光線追跡方法，理解凹透鏡成像的恆定不變特性及其在生活中的應用。</p>
+    </header>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-cyan-500 mr-2"></i> 凹透鏡的成像特性</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>與凸透鏡多變的成像規律不同，凹透鏡（發散透鏡）的成像特性非常單一且穩定：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li>
+                    <strong>無論物體放在凹透鏡前的任何距離（物距 $u$ 為何），凹透鏡永遠只能產生一種像。</strong>
+                </li>
+                <li>
+                    該像的性質必定是：<strong class="text-red-600 font-bold">正立 (Erect)、縮小 (Diminished)、虛像 (Virtual Image)</strong>。
+                </li>
+                <li>
+                    像的位置永遠位於<strong>物體與透鏡之間</strong>，且像距的大小必定小於焦距 ($|v| < |f|$)。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-cyan-500 mr-2"></i> 凹透鏡的三條特徵光線</h3>
+        <div class="bg-cyan-50 border-l-4 border-cyan-500 p-5 rounded-r-xl shadow-sm">
+            <p class="text-slate-700 mb-3">透過作圖法尋找凹透鏡的像時，我們使用以下特徵光線（注意虛焦點的使用）：</p>
+            <ul class="list-decimal list-inside space-y-2 text-slate-700 ml-2">
+                <li><strong>平行光線：</strong> 平行於主軸射入透鏡的光線，折射後向外發散。其<strong>反向延長線</strong>（虛線）必定穿過同側的虛焦點。</li>
+                <li><strong>光心光線：</strong> 穿過透鏡<strong>光心 ($C$)</strong> 的光線，其行進方向保持不變（直穿過去）。</li>
+                <li><strong>焦點光線：</strong> 射向對側虛焦點的光線，折射後必定<strong>平行於主軸</strong>射出。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-cyan-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        凹透鏡能不能用來作為「放大鏡」使用？請解釋原因。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2"><strong>絕對不能。</strong></p>
+                        <p class="mb-2">放大鏡的目的是產生一個「正立且放大」的虛像。然而，根據光學幾何規律，凹透鏡無論物體放在哪裡，所產生的像永遠都是「正立且<strong>縮小</strong>」的虛像。因此，透過凹透鏡看東西只會覺得物體變小了，達不到放大的效果。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        近視患者佩戴的眼鏡是凹透鏡還是凸透鏡？它如何幫助患者看清遠處的物體？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">近視眼鏡使用的是<strong>凹透鏡</strong>。</p>
+                        <p class="mb-2">近視眼的問題在於眼球的晶狀體過厚或眼球過長，導致遠處物體的光線過早會聚在視網膜前方，形成模糊的影像。</p>
+                        <p class="mb-2">佩戴凹透鏡可以在光線進入眼球前，先將光線稍微<strong>發散</strong>，這樣就能延後光線在眼內的會聚點，使其準確地落在視網膜上，恢復清晰的視覺。</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        安裝在住宅大門上的「防盜眼（門眼）」通常包含一塊凹透鏡。為什麼使用凹透鏡而不是普通玻璃或凸透鏡？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="mb-2">防盜眼的目的在於讓屋內的人能看到門外廣闊的走廊範圍（擴大視野）。</p>
+                        <p class="mb-2">凹透鏡能將門外大範圍內的光線發散並縮小，形成一個正立、縮小的虛像。這樣可以把原本很大的場景「壓縮」進一個極小的觀察孔中，提供了極廣闊的觀測視野，這是普通玻璃或凸透鏡無法做到的。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item" id="quiz3-3-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 凹透鏡所成的像必定具備哪三種性質？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q33-1', 'quiz3-3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 倒立、放大、實像</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-1', 'quiz3-3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 正立、放大、虛像</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q33-1', 'quiz3-3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 正立、縮小、虛像</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-1', 'quiz3-3-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 倒立、縮小、虛像</button>
+                </div>
+                <div id="exp-q33-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 凹透鏡的成像極為規律，無論物距遠近，永遠只產生正立、縮小、且位於同側的虛像。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-3-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 凹透鏡能否在光屏（屏幕）上投射出清晰的影像？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q33-2', 'quiz3-3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 可以，只要物體放得夠遠</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q33-2', 'quiz3-3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 不能，因為它只成虛像</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-2', 'quiz3-3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 可以，但必須在暗室中</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-2', 'quiz3-3-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 不能，因為光線會被透鏡吸收</button>
+                </div>
+                <div id="exp-q33-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 虛像是由發散光線的反向延長線所形成，沒有真正的光線到達像的位置，因此絕對無法用光屏捕捉。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-3-3">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 根據凹透鏡的光線追跡規則，一條射向對側焦點的光線，在穿過透鏡折射後會如何前進？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q33-3', 'quiz3-3-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 折射後會反彈回原路</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q33-3', 'quiz3-3-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 折射後會平行於主軸射出</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-3', 'quiz3-3-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 折射後必定穿過光心</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-3', 'quiz3-3-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 折射後會垂直於主軸</button>
+                </div>
+                <div id="exp-q33-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 這是一條標準特徵光線（類似凸透鏡的過焦點光線）。射向對側虛焦點的光，發散折射後其方向會轉為平行於主軸。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-3-4">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 比較一個物體與其在凹透鏡中形成的像，它們與透鏡的距離（物距 $u$ 與像距數值 $|v|$）有何關係？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q33-4', 'quiz3-3-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 像距必定大於物距 ($|v| > u$)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-4', 'quiz3-3-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 像距等於物距 ($|v| = u$)</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q33-4', 'quiz3-3-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 像距必定小於物距 ($|v| < u$)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-4', 'quiz3-3-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 視物體大小而定</button>
+                </div>
+                <div id="exp-q33-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 因為凹透鏡產生的像是「縮小」的虛像，根據放大率公式 $m = \frac{|v|}{u} < 1$，可推導出像距必定小於物距。像永遠位於物體與透鏡之間。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-3-5">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 日常生活中，下列哪一項是凹透鏡最常見的應用？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q33-5', 'quiz3-3-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 幫助遠視患者看清近處的「老花眼鏡」</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q33-5', 'quiz3-3-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 幫助近視患者看清遠處的「近視眼鏡」</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-5', 'quiz3-3-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 觀察微小細菌的「顯微鏡物鏡」</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q33-5', 'quiz3-3-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 會聚太陽光點火的裝置</button>
+                </div>
+                <div id="exp-q33-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 老花眼鏡（遠視）和顯微鏡、點火裝置都需要會聚光線，使用凸透鏡。只有近視眼鏡需要發散光線來延後視網膜上的聚焦，使用的是凹透鏡。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+<article id="ch3-4" class="content-section hidden">
+    <header class="mb-8 border-b-2 border-cyan-100 pb-4">
+        <h2 class="text-3xl font-black text-slate-800"><span class="text-cyan-600 mr-2">3.4</span>凹透鏡成像物、像以及透鏡的關係</h2>
+        <p class="text-slate-500 mt-2">引入透鏡公式與線性放大率，透過「實正虛負」的嚴格數學法則，精確計算透鏡成像的位置與大小。</p>
+    </header>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-thumbtack text-cyan-500 mr-2"></i> 透鏡公式與實正虛負法則</h3>
+        <div class="space-y-4 text-slate-700 leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <p>光學作圖法雖然直觀，但缺乏精確度。為了準確計算，我們使用<strong>透鏡公式 (Lens formula)</strong> 來關聯物距、像距與焦距。為了讓同一條公式適用於所有類型的透鏡與像，香港中學文憑試約定了<strong class="text-cyan-700 font-bold">「實正虛負法則 (Real-is-positive convention)」</strong>：</p>
+            <ul class="list-disc list-inside ml-2 space-y-3">
+                <li><strong class="text-cyan-700 font-bold">物距 ($u$)：</strong> 物體到光心的距離。我們規定 $u$ 永遠為<strong>正數</strong>。</li>
+                <li><strong class="text-cyan-700 font-bold">像距 ($v$)：</strong> 像到光心的距離。若形成<strong>實像，則代入正數</strong>；若形成<strong>虛像，則必須代入負數</strong>。</li>
+                <li><strong class="text-cyan-700 font-bold">焦距 ($f$)：</strong> <strong>凸透鏡（會聚）代入正數</strong>；<strong>凹透鏡（發散）必須代入負數</strong>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-ruler-combined text-cyan-500 mr-2"></i> 核心計算公式</h3>
+        <div class="bg-cyan-50 border-l-4 border-cyan-500 p-5 rounded-r-xl shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white p-4 rounded border border-cyan-100 text-center flex flex-col justify-center">
+                    <p class="text-sm font-bold text-cyan-800 mb-2">透鏡公式</p>
+                    <div class="text-2xl font-bold text-cyan-900 my-2">
+                        $$ \frac{1}{u} + \frac{1}{v} = \frac{1}{f} $$
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded border border-cyan-100 text-center flex flex-col justify-center">
+                    <p class="text-sm font-bold text-cyan-800 mb-2">線性放大率 ($m$)</p>
+                    <div class="text-xl font-bold text-cyan-900 my-2">
+                        $$ m = \frac{h_i}{h_o} = \frac{|v|}{u} $$
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">$h_i$ 為像高，$h_o$ 為物高。<br>計算放大率的數值時取距離的絕對值比。</p>
+                </div>
+            </div>
+            <p class="text-sm text-slate-600 mt-4"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> <strong>解題提示：</strong> 對於凹透鏡題目，列式時務必第一時間在焦距數值前加上負號！算出 $v$ 為負數時，即代表求得虛像。</p>
+        </div>
+    </section>
+
+    <section class="mb-12">
+        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-pen-nib text-cyan-500 mr-2"></i> 典型例題解說</h3>
+        <div class="space-y-6">
+            
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q1</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        一個高 $5 \text{ cm}$ 的物件，放置於焦距為 $15 \text{ cm}$ 的<strong>凹透鏡</strong>前 $30 \text{ cm}$ 處。求像距 $v$ 的數值，並判斷像的性質。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-cyan-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 依據實正虛負法則設定符號：</p>
+                        <p class="mb-2">物距 $u = 30 \text{ cm}$。因為是凹透鏡，焦距必須代入負值，$f = -15 \text{ cm}$。</p>
+                        <p class="mb-2 mt-2">2. 代入透鏡公式：</p>
+                        $$ \frac{1}{u} + \frac{1}{v} = \frac{1}{f} $$
+                        $$ \frac{1}{30} + \frac{1}{v} = \frac{1}{-15} $$
+                        $$ \frac{1}{v} = -\frac{1}{15} - \frac{1}{30} = -\frac{2}{30} - \frac{1}{30} = -\frac{3}{30} = -\frac{1}{10} $$
+                        $$ v = -10 \text{ cm} $$
+                        <p class="mt-2 font-bold text-green-700">答案：像距為 $-10 \text{ cm}$。負號表示此為<strong>虛像</strong>（位於透鏡前方 $10 \text{ cm}$），性質為正立、縮小。</p>
+                    </div>
+                </details>
+            </div>
+            
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q2</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        承接上題，計算該像的線性放大率 $m$，以及該像的高度 $h_i$。
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-cyan-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">1. 計算線性放大率 $m$（取距離絕對值）：</p>
+                        $$ m = \frac{|v|}{u} = \frac{10}{30} = \frac{1}{3} \approx 0.33 $$
+                        <p class="mb-2 mt-2">2. 計算像高 $h_i$：</p>
+                        $$ m = \frac{h_i}{h_o} \implies h_i = m \times h_o $$
+                        $$ h_i = \frac{1}{3} \times 5 \text{ cm} \approx 1.67 \text{ cm} $$
+                        <p class="mt-2 font-bold text-green-700">答案：放大率為 $\frac{1}{3}$，像的高度為 $1.67 \text{ cm}$。</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div class="flex items-start">
+                    <span class="bg-amber-500 text-white font-bold px-2 py-1 rounded text-sm mr-3 mt-1">Q3</span>
+                    <p class="text-slate-800 leading-relaxed font-medium">
+                        某凹透鏡的焦距為 $20 \text{ cm}$，若要得到一個線性放大率為 $0.5$ 的像，物體應放在距離透鏡多遠的地方？
+                    </p>
+                </div>
+                <details class="mt-4 group">
+                    <summary class="cursor-pointer bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> 顯示詳解
+                    </summary>
+                    <div class="mt-4 p-4 bg-white border border-amber-100 rounded-lg text-slate-700">
+                        <p class="font-bold text-cyan-700 mb-2">解題步驟：</p>
+                        <p class="mb-2">凹透鏡必成虛像，因此像距 $v$ 為負。放大率 $m = \frac{|v|}{u} = 0.5 \implies |v| = 0.5u$。故代入公式時 $v = -0.5u$。</p>
+                        <p class="mb-2">已知 $f = -20 \text{ cm}$。代入透鏡公式：</p>
+                        $$ \frac{1}{u} + \frac{1}{-0.5u} = \frac{1}{-20} $$
+                        $$ \frac{1}{u} - \frac{2}{u} = -\frac{1}{20} $$
+                        $$ -\frac{1}{u} = -\frac{1}{20} $$
+                        $$ u = 20 \text{ cm} $$
+                        <p class="mt-2 font-bold text-green-700">答案：物體應放在透鏡前方 $20 \text{ cm}$ 處。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b pb-4"><i class="fa-solid fa-brain text-purple-500 mr-2"></i> 隨堂測驗</h3>
+        <div class="space-y-8">
+            <div class="quiz-item" id="quiz3-4-1">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q1.</span> 根據香港通用的「實正虛負法則」，當計算凹透鏡問題時，其焦距 $f$ 應該代入甚麼符號？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q34-1', 'quiz3-4-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 正號</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q34-1', 'quiz3-4-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 負號</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-1', 'quiz3-4-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 視乎物距而定</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-1', 'quiz3-4-1')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 視乎像距而定</button>
+                </div>
+                <div id="exp-q34-1" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 凹透鏡具發散性質，擁有一虛焦點，因此在實正虛負約定中，其焦距 $f$ 必須為負值。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-4-2">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q2.</span> 在透鏡公式 $\frac{1}{u} + \frac{1}{v} = \frac{1}{f}$ 中，符號 $u$ 代表甚麼？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q34-2', 'quiz3-4-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 像距</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-2', 'quiz3-4-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 焦距</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q34-2', 'quiz3-4-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 物距</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-2', 'quiz3-4-2')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 放大率</button>
+                </div>
+                <div id="exp-q34-2" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 公式標準符號為：$u$ 為物距（Object distance），$v$ 為像距（Image distance），$f$ 為焦距。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-4-3">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q3.</span> 一物件置於焦距為 $10 \text{ cm}$ 的凹透鏡前 $10 \text{ cm}$ 處。求像距 $v$ 的數值為何？</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q34-3', 'quiz3-4-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $5 \text{ cm}$</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q34-3', 'quiz3-4-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $-5 \text{ cm}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-3', 'quiz3-4-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $10 \text{ cm}$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-3', 'quiz3-4-3')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 趨近無限大（不成像）</button>
+                </div>
+                <div id="exp-q34-3" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> $f = -10$, $u = 10$。代入公式 $\frac{1}{10} + \frac{1}{v} = \frac{1}{-10} \implies \frac{1}{v} = -\frac{2}{10} \implies v = -5 \text{ cm}$。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-4-4">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q4.</span> 若一凹透鏡產生的像，其線性放大率 $m = 0.25$，這代表：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q34-4', 'quiz3-4-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. 像是物體的 4 倍大</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q34-4', 'quiz3-4-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. 像是物體的 0.25 倍大 (即四分之一)</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-4', 'quiz3-4-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. 像距是物距的 4 倍</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-4', 'quiz3-4-4')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 物距是像距的 0.25 倍</button>
+                </div>
+                <div id="exp-q34-4" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 線性放大率 $m$ 代表像高與物高的比例 ($m = h_i / h_o$)。$m = 0.25$ 意味着影像高度只有實物高度的 $25\%$。
+                </div>
+            </div>
+
+            <div class="quiz-item" id="quiz3-4-5">
+                <p class="font-medium text-slate-800 mb-3"><span class="text-purple-600 font-bold mr-1">Q5.</span> 凹透鏡所成的像，其像距數值 $|v|$ 與物距數值 $u$ 的關係，必定是：</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="checkAnswer(this, false, 'exp-q34-5', 'quiz3-4-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">A. $|v| > u$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-5', 'quiz3-4-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">B. $|v| = u$</button>
+                    <button onclick="checkAnswer(this, true,  'exp-q34-5', 'quiz3-4-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">C. $|v| < u$</button>
+                    <button onclick="checkAnswer(this, false, 'exp-q34-5', 'quiz3-4-5')" class="text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">D. 不一定，視乎物體放在焦點內還是外</button>
+                </div>
+                <div id="exp-q34-5" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border-l-4 text-sm text-slate-700">
+                    <strong>解析：</strong> 凹透鏡永遠成縮小的像。因為放大率 $m = \frac{|v|}{u} < 1$，可得 $|v| < u$。像總是落在物體與透鏡光心之間。
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+```
+
+
+
+                                
 <!-- ========================================== -->
           
 
