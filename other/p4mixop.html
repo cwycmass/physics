@@ -295,7 +295,6 @@
     function generateFractionSet(count) {
       let qs = [];
       const ops1 = ['+', '-'];
-      const ops2 = ['\\times', '\\div'];
       
       for(let i = 0; i < count; i++) {
         let pattern = randInt(1, 3);
@@ -305,44 +304,40 @@
         
         let op1, op2, qLatex, correct, d1, d2, d3;
 
-        // Pattern 1: (A +/- B) *|/ C
+        // Pattern 1: (A +/- B) * C
         if (pattern === 1) {
             op1 = ops1[randInt(0, 1)];
-            op2 = ops2[randInt(0, 1)];
+            op2 = '\\times';
             
             // Ensure A - B is positive for Grade 5 level
             if (op1 === '-' && fA.toDecimal() < fB.toDecimal()) [fA, fB] = [fB, fA];
             
             let part1 = evalFrac(fA, op1, fB);
-            // Prevent division by zero
-            if (op2 === '\\div' && fC.n === 0) fC = new Frac(1, 2); 
             
             correct = evalFrac(part1, op2, fC);
             qLatex = `\\left(${fA.toLatex()} ${op1} ${fB.toLatex()}\\right) ${op2} ${fC.toLatex()}`;
             
-            // Distractor 1: Ignored Brackets (Calculated B *|/ C first)
+            // Distractor 1: Ignored Brackets (Calculated B * C first)
             d1 = evalFrac(fA, op1, evalFrac(fB, op2, fC));
             // Distractor 2: Common additive denominator error on part 1
             let badPart1 = (op1 === '+') ? new Frac(fA.n + fB.n, fA.d + fB.d) : new Frac(Math.abs(fA.n - fB.n), fA.d + fB.d || 1);
             d2 = evalFrac(badPart1, op2, fC);
             // Distractor 3: Flipped the outer operator
-            let badOp2 = op2 === '\\times' ? '\\div' : '\\times';
-            d3 = evalFrac(part1, badOp2, fC);
+            d3 = evalFrac(part1, '+', fC);
             
-        // Pattern 2: A *|/ (B +/- C)
+        // Pattern 2: A * (B +/- C)
         } else if (pattern === 2) {
-            op1 = ops2[randInt(0, 1)];
+            op1 = '\\times';
             op2 = ops1[randInt(0, 1)];
             
             if (op2 === '-' && fB.toDecimal() < fC.toDecimal()) [fB, fC] = [fC, fB];
             
             let part2 = evalFrac(fB, op2, fC);
-            if (part2.n === 0 && op1 === '\\div') part2 = new Frac(1, 2); 
             
             correct = evalFrac(fA, op1, part2);
             qLatex = `${fA.toLatex()} ${op1} \\left(${fB.toLatex()} ${op2} ${fC.toLatex()}\\right)`;
             
-            // Distractor 1: Ignored Brackets (Calculated A *|/ B first)
+            // Distractor 1: Ignored Brackets (Calculated A * B first)
             d1 = evalFrac(evalFrac(fA, op1, fB), op2, fC);
             // Distractor 2: Additive denominator error on part 2
             let badPart2 = (op2 === '+') ? new Frac(fB.n + fC.n, fB.d + fC.d) : new Frac(Math.abs(fB.n - fC.n), fB.d + fC.d || 1);
@@ -351,12 +346,11 @@
             // Distractor 3: Minor calculation drift
             d3 = new Frac(correct.n + 1, correct.d);
             
-        // Pattern 3: A +/- B *|/ C (Testing standard PEMDAS without brackets)
+        // Pattern 3: A +/- B * C (Testing standard PEMDAS without brackets)
         } else {
             op1 = ops1[randInt(0, 1)];
-            op2 = ops2[randInt(0, 1)];
+            op2 = '\\times';
             
-            if (op2 === '\\div' && fC.n === 0) fC = new Frac(1, 2);
             let part2 = evalFrac(fB, op2, fC);
             
             // Ensure positive result if subtraction
@@ -370,8 +364,8 @@
             // Distractor 1: Ignored PEMDAS (Evaluated strict left-to-right)
             let badPart1 = evalFrac(fA, op1, fB);
             d1 = evalFrac(badPart1, op2, fC);
-            // Distractor 2: Evaluated the addition/subtraction, but flipped division/multiplication
-            d2 = evalFrac(evalFrac(fA, op2, fB), op1, fC);
+            // Distractor 2: Evaluated the addition/subtraction, but flipped multiplication
+            d2 = evalFrac(evalFrac(fA, '+', fB), op1, fC);
             // Distractor 3: Denominator drift
             d3 = new Frac(correct.n, correct.d + 1);
         }
@@ -424,37 +418,39 @@
             d2 = fmt(correct / 10); // Decimal shift error
             d3 = fmt(correct > 1 ? correct - 0.5 : correct + 0.5);
             
-        // Pattern 3: A +/- B / C (Clean division backward generation)
+        // Pattern 3: A * (B +/- C)
         } else if (pattern === 3) {
-            let C = [2, 4, 5, 8][randInt(0, 3)];
-            let part2 = randInt(1, 9) / 10; // Clean decimal target
-            let B = fmt(part2 * C);
-            let A = randInt(Math.ceil(part2) * 10 + 10, Math.ceil(part2) * 10 + 50) / 10;
+            let B = randInt(10, 50) / 10; 
+            let C = randInt(1, 40) / 10;
+            if (op1 === '-' && B < C) [B, C] = [C, B];
+            let A = randInt(2, 6);
             
-            correct = fmt(evalDec(A, op1, part2));
-            qLatex = `${A} ${op1} ${B} \\div ${C}`;
+            correct = fmt(evalDec(A, '\\times', evalDec(B, op1, C)));
+            qLatex = `${A} \\times \\left(${B} ${op1} ${C}\\right)`;
             
-            d1 = fmt(evalDec(evalDec(A, op1, B), '\\div', C)); // Ignored PEMDAS
-            d2 = fmt(evalDec(A, op1, fmt(B * C))); // Multiplied instead of dividing
-            d3 = fmt(correct + 0.2);
+            d1 = fmt(evalDec(evalDec(A, '\\times', B), op1, C)); // Ignored brackets
+            d2 = fmt(correct * 10); 
+            d3 = fmt(correct + 1.2); 
             
-        // Pattern 4: (A +/- B) / C
+        // Pattern 4: A * B +/- C
         } else {
-            let C = [2, 4, 5][randInt(0, 2)];
-            let targetResult = randInt(1, 15) / 10;
-            let sumVal = fmt(targetResult * C);
+            let A = randInt(2, 6);
+            let B = randInt(2, 9) / 10;
+            let part1 = A * B;
             
-            let B = randInt(1, Math.floor(sumVal * 5)) / 10;
-            let A = op1 === '+' ? fmt(sumVal - B) : fmt(sumVal + B);
+            let C;
+            if (op1 === '-') {
+                C = randInt(1, Math.max(1, Math.floor(part1 * 10) - 1)) / 10;
+            } else {
+                C = randInt(10, 50) / 10;
+            }
             
-            if (A < 0 || B < 0) { A = 5.5; B = 1.5; op1 = '-'; C = 2; targetResult = 2.0; } // Fallback
-
-            correct = fmt(targetResult);
-            qLatex = `\\left(${A} ${op1} ${B}\\right) \\div ${C}`;
+            correct = fmt(evalDec(part1, op1, C));
+            qLatex = `${A} \\times ${B} ${op1} ${C}`;
             
-            d1 = fmt(evalDec(A, op1, evalDec(B, '\\div', C))); // Ignored brackets
-            d2 = fmt(evalDec(evalDec(A, op1, B), '\\times', C)); // Multiplied outer
-            d3 = fmt(correct * 10);
+            d1 = fmt(evalDec(A, '\\times', evalDec(B, op1, C))); // Ignored PEMDAS (R->L)
+            d2 = fmt(correct / 10); 
+            d3 = fmt(correct > 1 ? correct - 0.5 : correct + 0.5);
         }
 
         // Ensure purely unique and non-negative distractors
@@ -589,6 +585,7 @@
     let selectedOptionIndex = null;
     let timerInterval = null;
     let stats = { correct: 0, timeBonus: 0, streakBonus: 0, baseScore: 0 };
+    let wrongAnswers = [];
 
     function animateNumber(elementId, endValue, duration = 1000) {
       const el = document.getElementById(elementId);
@@ -616,11 +613,19 @@
     }
 
     function showScreen(screenId) {
-      document.getElementById('home-screen').classList.replace('flex', 'hidden');
-      document.getElementById('playing-screen').classList.replace('flex', 'hidden');
-      document.getElementById('result-screen').classList.replace('flex', 'hidden');
-      
-      document.getElementById(screenId).classList.replace('hidden', 'flex');
+      const screens = ['home-screen', 'playing-screen', 'result-screen', 'review-screen'];
+      screens.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (id === screenId) {
+            el.classList.remove('hidden');
+            el.classList.add('flex');
+          } else {
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+          }
+        }
+      });
       
       if (screenId !== 'playing-screen') {
         stopBGM();
@@ -668,6 +673,7 @@
       streak = 0;
       maxStreak = 0;
       stats = { correct: 0, timeBonus: 0, streakBonus: 0, baseScore: 0 };
+      wrongAnswers = [];
       document.getElementById('hud-score').innerText = '0';
       
       showScreen('playing-screen');
@@ -810,6 +816,11 @@
       } else {
         playSFX('wrong');
         streak = 0;
+        wrongAnswers.push({
+          qLatex: currentQ.q,
+          selectedLatex: currentQ.options[index],
+          correctLatex: currentQ.options[currentQ.correct]
+        });
       }
 
       if (streak >= 3) {
@@ -863,6 +874,54 @@
       
       document.getElementById('final-score').innerText = '0';
       animateNumber('final-score', score, 1500);
+
+      const btnReview = document.getElementById('btn-review');
+      if (wrongAnswers.length > 0) {
+        btnReview.classList.remove('hidden');
+        btnReview.classList.add('flex');
+      } else {
+        btnReview.classList.add('hidden');
+        btnReview.classList.remove('flex');
+      }
+    }
+
+    function showReview() {
+      showScreen('review-screen');
+      const container = document.getElementById('review-list');
+      container.innerHTML = '';
+      
+      wrongAnswers.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = "bg-white rounded-3xl p-6 sm:p-8 shadow-lg border-4 border-white flex flex-col";
+        div.innerHTML = `
+          <!-- Question -->
+          <div class="flex-1 flex items-center justify-center mb-6 bg-slate-50 rounded-2xl py-6 px-4 shadow-inner border border-slate-100 overflow-x-auto">
+            <span id="review-q-${index}" class="text-2xl sm:text-3xl text-slate-800 whitespace-nowrap"></span>
+          </div>
+          
+          <!-- Answers Comparison -->
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1 bg-red-50 p-4 sm:p-6 rounded-2xl border-2 border-red-100 flex flex-col items-center justify-center relative overflow-hidden">
+              <div class="absolute top-2 left-3 text-xs font-black text-red-500 uppercase tracking-widest"><i class="fa-solid fa-xmark mr-1"></i> You Answered</div>
+              <div class="mt-4 overflow-x-auto w-full text-center py-2 text-xl sm:text-2xl text-red-700 flex justify-center">
+                <span id="review-wrong-${index}"></span>
+              </div>
+            </div>
+            
+            <div class="flex-1 bg-green-50 p-4 sm:p-6 rounded-2xl border-2 border-green-100 flex flex-col items-center justify-center relative overflow-hidden">
+              <div class="absolute top-2 left-3 text-xs font-black text-green-600 uppercase tracking-widest"><i class="fa-solid fa-check mr-1"></i> Correct Answer</div>
+              <div class="mt-4 overflow-x-auto w-full text-center py-2 text-xl sm:text-2xl text-green-800 flex justify-center">
+                <span id="review-correct-${index}"></span>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+
+        katex.render(item.qLatex + ' = ?', document.getElementById(`review-q-${index}`), { throwOnError: false, displayMode: true });
+        katex.render(item.selectedLatex, document.getElementById(`review-wrong-${index}`), { throwOnError: false, displayMode: false });
+        katex.render(item.correctLatex, document.getElementById(`review-correct-${index}`), { throwOnError: false, displayMode: false });
+      });
     }
 
     // Bootstrap
