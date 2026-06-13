@@ -663,7 +663,7 @@
         }
 
         function handleEnd(e) {
-            e.preventDefault();
+            // 移除 e.preventDefault()，避免阻擋全域的按鈕點擊事件
             if (isDragging && mode === 'draw') {
                 const posScreen = getEventPos(e);
                 const posWorld = screenToWorld(posScreen.x, posScreen.y);
