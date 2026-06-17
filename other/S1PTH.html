@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>拼音配對學習樂 - 中一普通話</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Animations */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+        
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        .shake-error {
+            animation: shake 0.4s ease-in-out;
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #b91c1c !important;
+            z-index: 30;
+        }
+
+        .pop-success {
+            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+            color: #166534 !important;
+            z-index: 30;
+        }
+
+        /* Smooth transitions for interactions */
+        .card {
+            transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            container-type: size;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Container queries dynamically scale text sizes based on the card's dimensions */
+        .text-pinyin { font-size: max(1.1rem, min(16cqmin, 2.2rem)); text-align: center; line-height: 1.15; padding: 0 4px; word-break: break-word; font-family: 'Arial', sans-serif; }
+        .text-zh { font-size: max(1.5rem, min(25cqmin, 3rem)); text-align: center; line-height: 1.15; padding: 0 2px; }
+
+        .card-left { border-color: #bae6fd; background-color: #f0f9ff; color: #0369a1; }
+        .card-left:hover { border-color: #38bdf8; background-color: #e0f2fe; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15); }
+        .card-left.selected { border-color: #0284c7 !important; background-color: #e0f2fe !important; box-shadow: 0 0 15px rgba(2, 132, 199, 0.4); transform: scale(1.05) rotate(0deg) !important; z-index: 20; }
+
+        .card-right { border-color: #ddd6fe; background-color: #f5f3ff; color: #6d28d9; }
+        .card-right:hover { border-color: #c084fc; background-color: #ede9fe; box-shadow: 0 4px 12px rgba(192, 132, 252, 0.15); }
+        .card-right.selected { border-color: #7c3aed !important; background-color: #ede9fe !important; box-shadow: 0 0 15px rgba(124, 58, 237, 0.4); transform: scale(1.05) rotate(0deg) !important; z-index: 20; }
+
+        .card.matched {
+            opacity: 0; 
+            transform: scale(0.8) !important;
+            pointer-events: none;
+            transition: all 0.4s ease-out;
+        }
+        
+        .match-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLine 0.4s ease-out forwards;
+        }
+
+        @keyframes drawLine { to { stroke-dashoffset: 0; } }
+        @keyframes float-up {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-45px) scale(1.25); }
+        }
+        .floating-score { animation: float-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; pointer-events: none; z-index: 50; }
+        @keyframes combo-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .combo-active { animation: combo-pulse 0.3s ease-in-out; font-weight: bold; }
+
+        /* End Game Animation Classes */
+        .fade-row {
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .anim-hidden {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        
+        @keyframes stamp {
+            0% { transform: scale(4) rotate(-35deg); opacity: 0; }
+            50% { transform: scale(0.8) rotate(-10deg); opacity: 1; }
+            70% { transform: scale(1.1) rotate(-14deg); opacity: 1; }
+            100% { transform: scale(1) rotate(-12deg); opacity: 1; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); }
+        }
+        .stamp-in {
+            animation: stamp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .app-container {
+            height: 100svh; 
+            overflow: hidden;
+        }
+        
+        #scramble-grid {
+            grid-auto-rows: 1fr;
+        }
+        
+        #mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #mobile-menu.open {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 flex flex-col app-container">
+
+    <header class="hidden md:flex bg-white shadow-sm py-3 px-4 z-10 relative flex-row justify-between items-center shrink-0">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-800 flex items-center gap-2">⚡ 拼音配對學習樂</h1>
+            <p class="text-slate-500 text-sm mt-0.5">請將 <span class="text-sky-600 font-bold">拼音</span> 與對應的 <span class="text-purple-600 font-bold">漢字</span> 配對。</p>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <div class="text-sm bg-slate-100 px-4 py-2 rounded-lg flex gap-4 shadow-inner">
+                <div><span class="text-slate-600">時間:</span> <span class="timer-display font-mono font-bold">0:00</span></div>
+                <div><span class="text-slate-600">分數:</span> <span class="score-display font-bold text-blue-600">0</span></div>
+                <div><span class="text-slate-600">連擊:</span> <span class="combo-display font-bold text-slate-400">x1</span></div>
+            </div>
+            <button class="reset-btn text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors">重新開始</button>
+        </div>
+    </header>
+
+    <header class="flex md:hidden bg-white shadow-sm py-2 px-3 z-10 relative justify-between items-center shrink-0 h-12">
+        <button id="menu-toggle-btn" class="p-1 text-slate-600 hover:bg-slate-100 rounded-md">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <div class="flex gap-4 text-sm font-bold items-center">
+            <div class="flex items-center text-slate-700"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> <span class="timer-display">0:00</span></div>
+            <div class="flex items-center text-blue-600"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg> <span class="score-display">0</span></div>
+            <div class="flex items-center text-slate-400 combo-display">x1</div>
+        </div>
+        <div class="text-xs font-semibold text-slate-400"><span id="page-indicator">1/3</span></div>
+    </header>
+
+    <div class="w-full bg-slate-200 h-1.5 relative shrink-0 z-10 shadow-inner">
+        <div id="combo-drain-bar" class="bg-orange-500 h-full w-0"></div>
+    </div>
+
+    <div id="mobile-menu" class="fixed inset-0 z-50 bg-white/95 backdrop-blur-sm flex flex-col p-6 shadow-2xl md:hidden">
+        <div class="flex justify-between items-center mb-8 border-b pb-4">
+            <h2 class="text-2xl font-bold text-slate-800">選單</h2>
+            <button id="close-menu-btn" class="p-2 text-slate-500 bg-slate-100 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        </div>
+        <button class="reset-btn w-full text-left font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 px-4 py-4 rounded-xl text-lg">🔄 重新開始遊戲</button>
+    </div>
+
+    <main class="flex-grow flex flex-col items-center p-2 sm:p-4 w-full max-w-6xl mx-auto relative min-h-0">
+        
+        <div id="start-modal" class="absolute inset-0 z-40 bg-slate-900/80 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
+            <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-slate-100">
+                <div class="text-5xl mb-4">🗣️</div>
+                <h2 class="text-3xl font-extrabold text-slate-800 mb-2">準備好了嗎？</h2>
+                <p class="text-slate-600 mb-6 text-sm text-center">
+                    請將 <span class="text-sky-600 font-bold">藍色的拼音卡</span> 與對應的 <span class="text-purple-600 font-bold">紫色漢字卡</span> 配對！
+                </p>
+                <button onclick="startGame()" class="w-full bg-blue-600 text-white font-bold py-4 px-8 rounded-2xl shadow-lg active:scale-95 transition-all text-lg">
+                    開始配對！🚀
+                </button>
+            </div>
+        </div>
+
+        <div id="page-transition" class="absolute inset-0 z-30 hidden bg-white/90 backdrop-blur-sm flex-col items-center justify-center text-center rounded-2xl">
+            <div class="text-6xl mb-4 pop-success bg-transparent">🚀</div>
+            <h2 class="text-3xl font-bold text-slate-800 mb-2">完成一組！</h2>
+            <p class="text-emerald-600 font-semibold text-lg">載入下一組詞彙...</p>
+        </div>
+
+        <div id="win-screen" class="absolute inset-0 z-40 hidden bg-white/95 backdrop-blur-md flex-col items-center justify-center p-6 text-center rounded-2xl">
+            <div class="text-5xl md:text-6xl mb-2">🎉</div>
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-6">詞彙庫挑戰完成！</h2>
+            
+            <div class="relative bg-white rounded-2xl p-6 mb-8 w-full max-w-md border border-slate-200 shadow-xl text-left overflow-hidden">
+                <div id="anim-rank" class="hidden absolute -right-4 top-4 md:right-4 md:top-6 text-8xl md:text-9xl font-black opacity-0"></div>
+
+                <div id="anim-base-row" class="fade-row anim-hidden flex justify-between items-center mb-3 pr-16">
+                    <span class="text-slate-600 font-medium">基礎分數：</span>
+                    <span id="win-base-score" class="font-bold text-slate-800 text-xl">0</span>
+                </div>
+
+                <div id="anim-bonus-row" class="fade-row anim-hidden flex justify-between items-center mb-4 pr-16">
+                    <span class="text-slate-600 font-medium">速度加分 <span id="win-time-taken-info" class="text-xs text-slate-400"></span>：</span>
+                    <span class="font-bold text-emerald-500 text-xl">+<span id="win-time-bonus">0</span></span>
+                </div>
+
+                <div id="anim-divider" class="fade-row anim-hidden w-full h-px bg-slate-200 my-4"></div>
+
+                <div id="anim-total-row" class="fade-row anim-hidden flex justify-between items-end pr-16">
+                    <span class="text-lg font-bold text-slate-800">最終得分：</span>
+                    <span id="win-total-score" class="text-4xl font-black text-blue-600">0</span>
+                </div>
+            </div>
+
+            <button id="win-replay-btn" class="fade-row anim-hidden reset-btn bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 px-10 rounded-full shadow-lg hover:shadow-indigo-500/30 active:scale-95 transition-all text-lg">
+                再玩一次
+            </button>
+        </div>
+
+        <div id="game-board" class="relative w-full h-full flex-grow flex flex-col p-1 md:p-2">
+            <div id="floating-scores" class="absolute inset-0 pointer-events-none z-50"></div>
+            <svg id="lines-container" class="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-0"></svg>
+            <div id="scramble-grid" class="grid gap-2 sm:gap-3 w-full h-full z-10"></div>
+        </div>
+    </main>
+
+    <script>
+        // Secondary One PTH Vocabulary Dictionary
+        const dictionary = [
+            { id: 1, pinyin: "péng you", chinese: "朋友"},
+            { id: 2, pinyin: "xué xiào", chinese: "學校"},
+            { id: 3, pinyin: "lǎo shī", chinese: "老師"},
+            { id: 4, pinyin: "xǐ huan", chinese: "喜歡"},
+            { id: 5, pinyin: "xué xí", chinese: "學習"},
+            { id: 6, pinyin: "kǎo shì", chinese: "考試"},
+            { id: 7, pinyin: "jiào shì", chinese: "教室"},   
+            { id: 8, pinyin: "tóng xué", chinese: "同學"},
+            { id: 9, pinyin: "gōng kè", chinese: "功課"},
+            { id: 10, pinyin: "nǔ lì", chinese: "努力"},
+            { id: 11, pinyin: "zhī dào", chinese: "知道"},
+            { id: 12, pinyin: "jué de", chinese: "覺得"},
+            { id: 13, pinyin: "cān jiā", chinese: "參加"},         
+            { id: 14, pinyin: "zhǔn bèi", chinese: "準備"},         
+            { id: 15, pinyin: "míng bai", chinese: "明白"},
+        ];
+
+        const CARDS_PER_PAGE = 6; 
+        const COMBO_WINDOW_MS = 4000; 
+        const PAR_TIME = 60; 
+
+        // Game State
+        let state = {
+            selectedCard: null,
+            pageMatches: [], 
+            isAnimating: false, 
+            score: 0,
+            combo: 1,
+            startTime: 0,
+            timerInterval: null,
+            comboTimeout: null,
+            gameStarted: false,
+            chunks: [],
+            currentChunkIndex: 0
+        };
+
+        // DOM Elements
+        const scrambleGrid = document.getElementById('scramble-grid');
+        const linesContainer = document.getElementById('lines-container');
+        const floatingScores = document.getElementById('floating-scores');
+        const gameBoard = document.getElementById('game-board');
+        
+        const timerDisplays = document.querySelectorAll('.timer-display');
+        const scoreDisplays = document.querySelectorAll('.score-display');
+        const comboDisplays = document.querySelectorAll('.combo-display');
+        const resetBtns = document.querySelectorAll('.reset-btn');
+        const pageIndicator = document.getElementById('page-indicator');
+        const comboDrainBar = document.getElementById('combo-drain-bar');
+
+        const startModal = document.getElementById('start-modal');
+        const winScreen = document.getElementById('win-screen');
+        const pageTransition = document.getElementById('page-transition');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuToggleBtn = document.getElementById('menu-toggle-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+
+        // Utils
+        const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
+        const formatTime = (seconds) => `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`;
+        const chunkArray = (arr, size) => Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size));
+
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                obj.innerHTML = Math.floor(easeOut * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        menuToggleBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+        closeMenuBtn.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        
+        resetBtns.forEach(btn => btn.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            initGame();
+        }));
+
+        function initGame() {
+            state.selectedCard = null;
+            state.pageMatches = [];
+            state.isAnimating = false;
+            state.score = 0;
+            state.combo = 1;
+            state.gameStarted = false;
+            state.currentChunkIndex = 0;
+            
+            linesContainer.innerHTML = '';
+            floatingScores.innerHTML = '';
+            winScreen.classList.add('hidden');
+            winScreen.classList.remove('flex');
+            pageTransition.classList.add('hidden');
+            pageTransition.classList.remove('flex');
+            
+            startModal.classList.remove('hidden');
+            startModal.classList.add('flex');
+            
+            document.getElementById('anim-base-row').classList.add('anim-hidden');
+            document.getElementById('anim-bonus-row').classList.add('anim-hidden');
+            document.getElementById('anim-divider').classList.add('anim-hidden');
+            document.getElementById('anim-total-row').classList.add('anim-hidden');
+            document.getElementById('win-replay-btn').classList.add('anim-hidden');
+            
+            const rankEl = document.getElementById('anim-rank');
+            rankEl.className = 'hidden absolute -right-4 top-4 md:right-4 md:top-6 text-8xl md:text-9xl font-black opacity-0';
+
+            updateScoreUI();
+            resetComboBar();
+            
+            clearInterval(state.timerInterval);
+            timerDisplays.forEach(el => el.textContent = "0:00");
+
+            const shuffledDict = shuffleArray(dictionary);
+            state.chunks = chunkArray(shuffledDict, CARDS_PER_PAGE);
+            
+            loadPage(0);
+        }
+
+        function loadPage(pageIndex) {
+            state.pageMatches = [];
+            state.selectedCard = null;
+            linesContainer.innerHTML = '';
+            
+            const currentItems = state.chunks[pageIndex];
+            pageIndicator.textContent = `${pageIndex + 1}/${state.chunks.length}`;
+
+            // Map left to Pinyin, right to Chinese Characters
+            const pinyinCards = currentItems.map(item => ({ ...item, side: 'left' }));
+            const chineseCards = currentItems.map(item => ({ ...item, side: 'right' }));
+            
+            let combinedDeck = shuffleArray([...pinyinCards, ...chineseCards]);
+            renderScrambledBoard(combinedDeck);
+            layoutGrid(combinedDeck.length);
+        }
+
+        function startGame() {
+            startModal.classList.add('hidden');
+            startModal.classList.remove('flex');
+            state.gameStarted = true;
+            state.startTime = Date.now();
+            
+            state.timerInterval = setInterval(() => {
+                if (!state.gameStarted) return;
+                const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+                timerDisplays.forEach(el => el.textContent = formatTime(elapsed));
+            }, 1000);
+        }
+
+        function layoutGrid(totalCells) {
+            const isPortrait = window.innerHeight > window.innerWidth;
+            const ratio = gameBoard.clientWidth / gameBoard.clientHeight;
+            
+            let cols, rows;
+            if (isPortrait) {
+                cols = 2; 
+                rows = Math.ceil(totalCells / 2);
+            } else {
+                cols = Math.ceil(Math.sqrt(totalCells * ratio));
+                rows = Math.ceil(totalCells / cols);
+                while (cols * rows < totalCells) { cols++; }
+            }
+            
+            scrambleGrid.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+            scrambleGrid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+        }
+
+        function renderScrambledBoard(deck) {
+            scrambleGrid.innerHTML = '';
+            deck.forEach(item => {
+                const card = document.createElement('div');
+                const sideClass = item.side === 'left' ? 'card-left' : 'card-right';
+
+                card.className = `card ${sideClass} relative flex flex-col justify-center items-center border-2 rounded-2xl cursor-pointer shadow-sm overflow-hidden p-2`;
+                card.dataset.id = item.id;
+                card.dataset.side = item.side;
+
+                const randomRotation = (Math.random() * 4 - 2).toFixed(1); 
+                const randomOffsetTranslateX = (Math.random() * 2 - 1).toFixed(1); 
+                const randomOffsetTranslateY = (Math.random() * 2 - 1).toFixed(1);
+                
+                card.style.transform = `rotate(${randomRotation}deg) translate(${randomOffsetTranslateX}px, ${randomOffsetTranslateY}px)`;
+                card.dataset.defaultTransform = card.style.transform;
+
+                if (item.side === 'left') {
+                    card.innerHTML = `<span class="text-pinyin font-extrabold">${item.pinyin}</span>`;
+                } else {
+                    card.innerHTML = `<span class="text-zh font-extrabold">${item.chinese}</span>`;
+                }
+
+                card.addEventListener('click', () => handleCardClick(card));
+                scrambleGrid.appendChild(card);
+            });
+        }
+
+        function triggerComboTimer() {
+            clearTimeout(state.comboTimeout);
+            comboDrainBar.style.transition = 'none';
+            comboDrainBar.style.width = '100%';
+            void comboDrainBar.offsetWidth; 
+            
+            comboDrainBar.style.transition = `width ${COMBO_WINDOW_MS}ms linear`;
+            comboDrainBar.style.width = '0%';
+
+            state.comboTimeout = setTimeout(() => {
+                state.combo = 1;
+                updateScoreUI();
+            }, COMBO_WINDOW_MS);
+        }
+
+        function resetComboBar() {
+            clearTimeout(state.comboTimeout);
+            comboDrainBar.style.transition = 'none';
+            comboDrainBar.style.width = '0%';
+        }
+
+        function handleCardClick(card) {
+            if (!state.gameStarted || state.isAnimating || card.classList.contains('matched')) return;
+            
+            if (state.selectedCard === card) {
+                card.classList.remove('selected');
+                card.style.transform = card.dataset.defaultTransform;
+                state.selectedCard = null;
+                return;
+            }
+
+            if (state.selectedCard && state.selectedCard.dataset.side === card.dataset.side) {
+                state.selectedCard.classList.remove('selected');
+                state.selectedCard.style.transform = state.selectedCard.dataset.defaultTransform;
+                card.classList.add('selected');
+                state.selectedCard = card;
+                return;
+            }
+
+            card.classList.add('selected');
+
+            if (!state.selectedCard) {
+                state.selectedCard = card;
+                return;
+            }
+
+            checkMatch(state.selectedCard, card);
+        }
+
+        function checkMatch(card1, card2) {
+            state.isAnimating = true;
+
+            if (card1.dataset.id === card2.dataset.id) {
+                state.pageMatches.push(card1.dataset.id);
+                
+                state.combo = (state.pageMatches.length > 1 || state.combo > 1) ? state.combo + 1 : 1;
+                triggerComboTimer();
+                
+                const points = 100 * state.combo;
+                state.score += points;
+                
+                updateScoreUI();
+                showFloatingScore(card2, points, state.combo);
+                
+                card1.classList.remove('selected');
+                card2.classList.remove('selected');
+                card1.classList.add('matched', 'pop-success');
+                card2.classList.add('matched', 'pop-success');
+
+                drawLineBetween(card1, card2);
+
+                setTimeout(() => {
+                    checkPageWin();
+                }, 400);
+
+            } else {
+                state.combo = 1; 
+                resetComboBar();
+                updateScoreUI();
+                
+                card1.classList.add('shake-error');
+                card2.classList.add('shake-error');
+                
+                setTimeout(() => {
+                    card1.classList.remove('selected', 'shake-error');
+                    card2.classList.remove('selected', 'shake-error');
+                    card1.style.transform = card1.dataset.defaultTransform;
+                    card2.style.transform = card2.dataset.defaultTransform;
+                    state.isAnimating = false;
+                }, 500);
+            }
+            state.selectedCard = null;
+        }
+
+        function updateScoreUI() {
+            scoreDisplays.forEach(el => el.textContent = state.score);
+            comboDisplays.forEach(el => {
+                el.textContent = `x${state.combo}`;
+                if (state.combo > 1) {
+                    el.classList.add('combo-active', 'text-orange-500');
+                    el.classList.remove('text-slate-400');
+                } else {
+                    el.classList.remove('text-orange-500', 'combo-active');
+                    el.classList.add('text-slate-400');
+                }
+            });
+        }
+        
+        function showFloatingScore(targetCard, points, combo) {
+            const rect = targetCard.getBoundingClientRect();
+            const boardRect = gameBoard.getBoundingClientRect();
+            
+            const floatEl = document.createElement('div');
+            floatEl.className = 'floating-score absolute font-black text-xl md:text-2xl drop-shadow-md text-center pointer-events-none';
+            floatEl.style.left = `${rect.left - boardRect.left + (rect.width / 2) - 40}px`;
+            floatEl.style.top = `${rect.top - boardRect.top}px`;
+            
+            floatEl.innerHTML = combo > 1 
+                ? `<span class="text-orange-500">Combo x${combo}!</span><br><span class="text-green-500">+${points}</span>`
+                : `<span class="text-green-500">+${points}</span>`;
+            
+            floatingScores.appendChild(floatEl);
+            setTimeout(() => floatEl.remove(), 1000);
+        }
+
+        function checkPageWin() {
+            const currentChunkSize = state.chunks[state.currentChunkIndex].length;
+            
+            if (state.pageMatches.length === currentChunkSize) {
+                state.currentChunkIndex++;
+                resetComboBar();
+
+                if (state.currentChunkIndex < state.chunks.length) {
+                    pageTransition.classList.remove('hidden');
+                    pageTransition.classList.add('flex');
+                    
+                    setTimeout(() => {
+                        pageTransition.classList.add('hidden');
+                        pageTransition.classList.remove('flex');
+                        loadPage(state.currentChunkIndex);
+                        state.isAnimating = false;
+                    }, 1200);
+                } else {
+                    triggerEndGameAnimation();
+                }
+            } else {
+                state.isAnimating = false;
+            }
+        }
+
+        function triggerEndGameAnimation() {
+            clearInterval(state.timerInterval); 
+            state.gameStarted = false;
+            
+            const elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
+            
+            const timeBonus = Math.max(0, (PAR_TIME - elapsedSeconds) * 50); 
+            const finalScore = state.score + timeBonus;
+            
+            let rank = 'C'; let rankColor = 'text-slate-400';
+            if (elapsedSeconds <= 25) { rank = 'S'; rankColor = 'text-yellow-500'; }
+            else if (elapsedSeconds <= 40) { rank = 'A'; rankColor = 'text-orange-500'; }
+            else if (elapsedSeconds <= 60) { rank = 'B'; rankColor = 'text-blue-500'; }
+
+            document.getElementById('win-base-score').textContent = "0";
+            document.getElementById('win-time-bonus').textContent = "0";
+            document.getElementById('win-total-score').textContent = "0";
+            document.getElementById('win-time-taken-info').textContent = `(${elapsedSeconds}秒)`;
+
+            setTimeout(() => {
+                winScreen.classList.remove('hidden');
+                winScreen.classList.add('flex');
+            }, 300);
+
+            setTimeout(() => {
+                document.getElementById('anim-base-row').classList.remove('anim-hidden');
+                animateValue(document.getElementById('win-base-score'), 0, state.score, 800);
+            }, 800);
+
+            setTimeout(() => {
+                document.getElementById('anim-bonus-row').classList.remove('anim-hidden');
+                animateValue(document.getElementById('win-time-bonus'), 0, timeBonus, 800);
+            }, 1800);
+
+            setTimeout(() => {
+                document.getElementById('anim-divider').classList.remove('anim-hidden');
+                document.getElementById('anim-total-row').classList.remove('anim-hidden');
+                animateValue(document.getElementById('win-total-score'), 0, finalScore, 1000);
+            }, 2800);
+
+            setTimeout(() => {
+                const rankEl = document.getElementById('anim-rank');
+                rankEl.textContent = rank;
+                rankEl.className = `absolute -right-4 top-4 md:right-4 md:top-6 text-8xl md:text-9xl font-black ${rankColor} stamp-in`;
+                
+                document.getElementById('win-replay-btn').classList.remove('anim-hidden');
+            }, 4000);
+        }
+
+        function drawLineBetween(card1, card2) {
+            const containerRect = gameBoard.getBoundingClientRect();
+            const rect1 = card1.getBoundingClientRect();
+            const rect2 = card2.getBoundingClientRect();
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', (rect1.left - containerRect.left) + (rect1.width / 2));
+            line.setAttribute('y1', (rect1.top - containerRect.top) + (rect1.height / 2));
+            line.setAttribute('x2', (rect2.left - containerRect.left) + (rect2.width / 2));
+            line.setAttribute('y2', (rect2.top - containerRect.top) + (rect2.height / 2));
+            line.setAttribute('stroke', '#22c55e');
+            line.setAttribute('stroke-width', '4');
+            line.setAttribute('stroke-linecap', 'round');
+            line.setAttribute('stroke-dasharray', '8, 8');
+            line.setAttribute('class', 'match-line');
+            linesContainer.appendChild(line);
+        }
+
+        window.addEventListener('resize', () => {
+            if (!state.gameStarted) return;
+            window.requestAnimationFrame(() => {
+                const totalCells = state.chunks[state.currentChunkIndex]?.length * 2 || 0;
+                layoutGrid(totalCells);
+                linesContainer.innerHTML = ''; 
+            });
+        });
+
+        initGame();
+    </script>
+</body>
+</html>
