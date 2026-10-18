@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>東南西北方向大冒險 🎈 - 小學二年級方向練習遊戲</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f0fdf4;
+            background-image: radial-gradient(#bbf7d0 2px, transparent 2px);
+            background-size: 24px 24px;
+            margin: 0;
+            padding: 12px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Float animation for answer balloons */
+        @keyframes balloonFloat {
+            0%, 100% { transform: translateY(0px) rotate(-1deg); }
+            50% { transform: translateY(-6px) rotate(1.5deg); }
+        }
+
+        .balloon-btn {
+            animation: balloonFloat 3s ease-in-out infinite;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+            cursor: pointer;
+        }
+        .balloon-btn:hover {
+            filter: brightness(1.08);
+            transform: scale(1.05) translateY(-3px);
+        }
+        .balloon-btn:active {
+            transform: scale(0.95) translateY(2px);
+        }
+
+        /* Pulse animations for Map Nodes */
+        @keyframes pulse-start {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            50% { shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+        }
+        @keyframes pulse-target {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+
+        .highlight-start {
+            animation: pulse-start 1.8s infinite ease-in-out;
+            border: 4px solid #2563eb !important;
+            background-color: #eff6ff !important;
+            z-index: 10;
+        }
+
+        .highlight-target {
+            animation: pulse-target 1.8s infinite ease-in-out;
+            border: 4px solid #dc2626 !important;
+            background-color: #fef2f2 !important;
+            z-index: 10;
+        }
+
+        .shadow-cute {
+            box-shadow: 0 6px 0px 0px rgba(0, 0, 0, 0.12), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Compass needle smooth transition */
+        #compass-needle-group {
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-between min-h-screen w-full max-w-4xl mx-auto">
+
+    <!-- Header Section -->
+    <header class="w-full bg-white rounded-3xl border-4 border-emerald-400 p-3 sm:p-4 mb-3 shadow-cute flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+            <span class="text-3xl sm:text-4xl">🧭</span>
+            <div>
+                <h1 class="text-xl sm:text-2xl font-black text-emerald-800 tracking-wide">東南西北方向大冒險</h1>
+                <p class="text-xs font-bold text-emerald-600">國小二年級 ‧ 換位與推導練習網頁</p>
+            </div>
+        </div>
+
+        <!-- Mode & Status Badges -->
+        <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+            <span id="mode-badge" class="px-3 py-1 bg-emerald-100 text-emerald-700 font-extrabold rounded-full text-xs sm:text-sm border-2 border-emerald-300">
+                🌱 練習模式
+            </span>
+
+            <div class="flex items-center gap-1 bg-amber-50 px-3 py-1 rounded-2xl border-2 border-amber-300">
+                <span class="text-lg">⭐</span>
+                <span id="score-text" class="text-lg font-black text-amber-600">0</span>
+            </div>
+
+            <div id="timer-container" class="hidden flex items-center gap-1 bg-rose-50 px-3 py-1 rounded-2xl border-2 border-rose-300">
+                <span class="text-lg">⏳</span>
+                <span id="timer-text" class="text-lg font-black text-rose-600">60s</span>
+            </div>
+
+            <button id="sound-btn" onclick="toggleSound()" class="w-9 h-9 bg-slate-100 hover:bg-slate-200 rounded-xl flex items-center justify-center text-slate-700 font-bold border-2 border-slate-300 transition-colors">
+                🔊
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Game Container -->
+    <main class="w-full bg-white rounded-3xl border-4 border-emerald-400 p-4 sm:p-6 shadow-cute flex-1 flex flex-col justify-between relative overflow-hidden min-h-[500px]">
+        
+        <!-- Start Screen -->
+        <div id="start-screen" class="flex flex-col items-center justify-center my-auto py-6 text-center space-y-6">
+            <div class="relative">
+                <div class="text-7xl sm:text-8xl animate-bounce">🎈</div>
+                <span class="absolute -top-2 -right-4 bg-amber-400 text-amber-950 font-black px-3 py-1 rounded-full text-xs border-2 border-white shadow-md">
+                    小二專屬
+                </span>
+            </div>
+            
+            <div class="max-w-md px-2">
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mb-2">歡迎來到方向大冒險！</h2>
+                <p class="text-slate-600 font-bold text-sm sm:text-base leading-relaxed">
+                    看指南針或地圖情報，把自己想像成站在【出發點📍】，推導出正確方向氣球吧！
+                </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md px-2">
+                <button onclick="startGame('practice')" class="flex-1 bg-emerald-400 hover:bg-emerald-500 text-white font-black py-3.5 px-5 rounded-2xl text-lg shadow-cute border-2 border-emerald-600 flex flex-col items-center transition-transform active:scale-95">
+                    <span class="text-xl">🌱 練習模式</span>
+                    <span class="text-xs font-bold opacity-90">無限時間 ‧ 輕鬆練習</span>
+                </button>
+                <button onclick="startGame('challenge')" class="flex-1 bg-rose-400 hover:bg-rose-500 text-white font-black py-3.5 px-5 rounded-2xl text-lg shadow-cute border-2 border-rose-600 flex flex-col items-center transition-transform active:scale-95">
+                    <span class="text-xl">🚀 闖關模式</span>
+                    <span class="text-xs font-bold opacity-90">60秒限時 ‧ 連擊挑戰</span>
+                </button>
+            </div>
+
+            <div class="bg-slate-50 p-3.5 rounded-2xl border-2 border-slate-200 flex flex-wrap items-center justify-center gap-4 text-sm font-bold text-slate-700">
+                <span>難度選擇：</span>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                    <input type="radio" name="difficulty" value="4" checked onchange="setDifficulty(4)" class="w-4 h-4 accent-emerald-500">
+                    <span>基礎 (只有 東/南/西/北 4個方向)</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                    <input type="radio" name="difficulty" value="8" onchange="setDifficulty(8)" class="w-4 h-4 accent-emerald-500">
+                    <span>進階 (包含斜向 8個方向)</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Active Gameplay Screen -->
+        <div id="game-screen" class="hidden flex-1 flex flex-col justify-between space-y-4">
+            
+            <!-- Question Box -->
+            <div id="question-box" class="bg-amber-50 border-3 border-amber-300 rounded-2xl p-3 sm:p-4 text-center shadow-inner relative">
+                <div id="combo-badge" class="hidden absolute -top-3 -right-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black text-xs sm:text-sm px-3 py-1 rounded-full shadow-lg border-2 border-white">
+                    🔥 Combo x<span id="combo-count">0</span>
+                </div>
+                <div id="qtype-tag" class="inline-block bg-amber-200 text-amber-900 font-black text-xs px-2.5 py-0.5 rounded-full mb-1 border border-amber-400">
+                    標題區域
+                </div>
+                <div id="question-text" class="text-base sm:text-xl font-black text-slate-800 leading-relaxed">
+                    <!-- Dynamic Question Text -->
+                </div>
+            </div>
+
+            <!-- Map & Dynamic Clue Display (Compass or Relative Info) -->
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 my-1">
+                
+                <!-- 3x3 Map Grid -->
+                <div class="relative bg-emerald-100/70 p-2.5 rounded-3xl border-4 border-emerald-300 shadow-md">
+                    <div id="map-grid" class="grid grid-cols-3 gap-2 sm:gap-3 w-[270px] h-[270px] sm:w-[320px] sm:h-[320px]">
+                        <!-- Dynamic Grid Cells -->
+                    </div>
+
+                    <!-- SVG Visual Arrow Line for Incorrect Answers -->
+                    <svg id="map-arrow-svg" class="absolute inset-0 w-full h-full pointer-events-none z-20">
+                        <defs>
+                            <marker id="arrowhead-guide" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
+                                <polygon points="0 0, 8 4, 0 8" fill="#3b82f6"/>
+                            </marker>
+                        </defs>
+                        <line id="guide-line" x1="0" y1="0" x2="0" y2="0" stroke="#3b82f6" stroke-width="4" stroke-dasharray="6,6" marker-end="url(#arrowhead-guide)" class="hidden" />
+                    </svg>
+                </div>
+
+                <!-- Right Hint Panel: Compass (Type A) OR Scroll Clue Box (Type B) -->
+                <div class="w-48 sm:w-52 h-44 sm:h-48 flex flex-col items-center justify-center bg-amber-50/90 p-3 rounded-3xl border-3 border-amber-300 shadow-sm relative overflow-hidden">
+                    
+                    <!-- Panel Content A: Rotated Compass -->
+                    <div id="panel-compass" class="flex flex-col items-center justify-center w-full h-full">
+                        <div class="text-xs font-black text-amber-900 mb-1 flex items-center gap-1">
+                            <span>🧭</span> 注意指南針：
+                        </div>
+                        
+                        <div class="relative w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-full border-4 border-amber-400 shadow-inner flex items-center justify-center overflow-hidden">
+                            <!-- Crosshairs -->
+                            <div class="absolute w-full h-[2px] bg-amber-100"></div>
+                            <div class="absolute h-full w-[2px] bg-amber-100"></div>
+
+                            <!-- Needle Group (Rotates dynamically) -->
+                            <div id="compass-needle-group" class="absolute inset-0 flex items-center justify-center">
+                                <svg class="w-full h-full absolute" viewBox="0 0 100 100">
+                                    <polygon points="50,50 16,45 10,50 16,55" fill="#cbd5e1" />
+                                    <polygon points="50,42 74,50 50,58" fill="#ef4444" />
+                                    <polygon points="50,42 74,50 50,50" fill="#f87171" />
+                                    <circle cx="50" cy="50" r="6" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+                                </svg>
+
+                                <div class="absolute right-1 w-8 h-8 rounded-full bg-rose-500 border-2 border-white text-white font-black text-sm flex items-center justify-center shadow-md z-10 transform translate-x-1">
+                                    <span id="compass-indicator-text">北</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-xs font-black text-amber-800 mt-1.5 text-center">
+                            箭頭指向 <span id="compass-dir-name" class="text-rose-600 font-black text-sm">北</span> 方！
+                        </div>
+                    </div>
+
+                    <!-- Panel Content B: Map Scroll Info Box (Relative Direction Clue) -->
+                    <div id="panel-relative" class="hidden flex flex-col items-center justify-between w-full h-full text-center py-1 px-1">
+                        <div class="text-xs font-black text-amber-900 flex items-center gap-1">
+                            <span>📜</span> 地圖情報框
+                        </div>
+                        
+                        <div class="bg-amber-100/80 border-2 border-amber-300 rounded-2xl p-2 w-full flex-1 flex flex-col items-center justify-center my-1 shadow-inner">
+                            <p class="text-[11px] font-bold text-amber-800 mb-1">根據調查得知：</p>
+                            <p id="clue-statement" class="text-xs sm:text-sm font-black text-slate-800 leading-snug">
+                                【圖書館】在<br>【學校】的<br>
+                                <span class="text-rose-600 text-base font-extrabold underline decoration-amber-400">南方</span>
+                            </p>
+                        </div>
+
+                        <span class="text-[10px] font-extrabold text-amber-700">💡 運用觀察推導地圖！</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Hint Box -->
+            <div id="hint-box" class="min-h-[40px] bg-blue-50 border-2 border-blue-200 rounded-xl p-2 text-center text-xs sm:text-sm font-bold text-blue-700 flex items-center justify-center gap-2">
+                💡 <span id="hint-text">點擊正確的方向氣球🎈！</span>
+            </div>
+
+            <!-- Shuffled Balloon Choices (NO arrow or compass icons) -->
+            <div id="balloon-buttons-container" class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 max-w-xl mx-auto w-full py-1">
+                <!-- Dynamic Balloon Buttons -->
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden flex flex-col items-center justify-center my-auto py-6 text-center space-y-5 z-20">
+            <div class="text-6xl animate-bounce">🏆</div>
+            <h2 class="text-3xl font-black text-slate-800">闖關完成！</h2>
+            
+            <div id="stars-container" class="flex gap-2 text-4xl sm:text-5xl my-2">
+                <!-- Stars rendered by JS -->
+            </div>
+
+            <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 w-full max-w-md space-y-2">
+                <p class="text-slate-500 font-bold text-xs">獲得榮譽頭銜</p>
+                <p id="rank-title" class="text-2xl font-black text-amber-600">🎈 方向小達人</p>
+                <div class="flex justify-around pt-2 border-t border-amber-200 text-slate-700 font-bold text-base">
+                    <div>總分：<span id="final-score" class="text-emerald-600 text-xl font-black">0</span></div>
+                    <div>答對題數：<span id="final-count" class="text-emerald-600 text-xl font-black">0</span></div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 w-full max-w-md px-2">
+                <button onclick="backToMenu()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-black py-3 px-4 rounded-2xl border-2 border-slate-400 shadow-cute active:scale-95">
+                    🏠 主選單
+                </button>
+                <button onclick="restartGame()" class="flex-1 bg-emerald-400 hover:bg-emerald-500 text-white font-black py-3 px-4 rounded-2xl border-2 border-emerald-600 shadow-cute active:scale-95">
+                    🔄 再玩一次
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="w-full text-center py-2 text-xs font-bold text-emerald-800/60">
+        專為國小二年級設計 ‧ 快樂學習東南西北 🎈
+    </footer>
+
+    <script>
+        /* ----------------------------------------------------
+           1. Game Data & Configuration
+        ---------------------------------------------------- */
+        
+        const MAP_ITEMS = [
+            { id: 'school', name: '學校', emoji: '🏫' },
+            { id: 'library', name: '圖書館', emoji: '📚' },
+            { id: 'park', name: '公園', emoji: '🛝' },
+            { id: 'soccer', name: '足球場', emoji: '⚽' },
+            { id: 'icecream', name: '冰淇淋店', emoji: '🍦' },
+            { id: 'amusement', name: '遊樂園', emoji: '🎡' },
+            { id: 'toy', name: '玩具店', emoji: '🧸' },
+            { id: 'zoo', name: '動物園', emoji: '🦁' },
+            { id: 'hospital', name: '醫院', emoji: '🏥' }
+        ];
+
+        const CARDINAL_NAMES = {
+            'N': '北', 'S': '南', 'W': '西', 'E': '東',
+            'NE': '東北', 'NW': '西北', 'SE': '東南', 'SW': '西南'
+        };
+
+        const BALLOON_COLOR_STYLES = [
+            'bg-rose-500 border-rose-700 shadow-[0_5px_0_#be123c]',
+            'bg-sky-500 border-sky-700 shadow-[0_5px_0_#0369a1]',
+            'bg-emerald-500 border-emerald-700 shadow-[0_5px_0_#047857]',
+            'bg-amber-500 border-amber-700 shadow-[0_5px_0_#b45309]',
+            'bg-purple-500 border-purple-700 shadow-[0_5px_0_#6b21a8]'
+        ];
+
+        const CHARACTERS = ['小熊 🐻', '小兔 🐰', '小狗 🐶', '貓咪 🐱', '小猴 🐒'];
+
+        let gameMode = 'practice';
+        let difficultyMode = 4; // 4 or 8
+        let score = 0;
+        let combo = 0;
+        let correctAnswersCount = 0;
+        let timer = 60;
+        let timerInterval = null;
+        let currentQuestion = null;
+        let mapLayout = [];
+        let soundEnabled = true;
+
+        /* ----------------------------------------------------
+           2. Web Audio API
+        ---------------------------------------------------- */
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new AudioCtx();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'correct') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.25);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'wrong') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(240, now);
+                    osc.frequency.setValueAtTime(180, now + 0.15);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(450, now);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'win') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.15);
+                    osc.frequency.setValueAtTime(880, now + 0.3);
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                    osc.start(now);
+                    osc.stop(now + 0.5);
+                }
+            } catch (e) {
+                // Ignore audio errors gracefully
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('sound-btn').innerText = soundEnabled ? '🔊' : '🔇';
+        }
+
+        /* ----------------------------------------------------
+           3. Game Flow Control
+        ---------------------------------------------------- */
+        
+        function setDifficulty(val) {
+            difficultyMode = parseInt(val);
+            playSound('click');
+        }
+
+        function startGame(mode) {
+            playSound('click');
+            gameMode = mode;
+            score = 0;
+            combo = 0;
+            correctAnswersCount = 0;
+
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+
+            document.getElementById('score-text').innerText = score;
+
+            if (gameMode === 'challenge') {
+                timer = 60;
+                document.getElementById('timer-container').classList.remove('hidden');
+                document.getElementById('timer-text').innerText = `${timer}s`;
+                document.getElementById('mode-badge').innerText = '🚀 闖關模式';
+                document.getElementById('mode-badge').className = "px-3 py-1 bg-rose-100 text-rose-700 font-extrabold rounded-full text-xs sm:text-sm border-2 border-rose-300";
+                
+                clearInterval(timerInterval);
+                timerInterval = setInterval(() => {
+                    timer--;
+                    document.getElementById('timer-text').innerText = `${timer}s`;
+                    if (timer <= 0) {
+                        endGame();
+                    }
+                }, 1000);
+            } else {
+                document.getElementById('timer-container').classList.add('hidden');
+                document.getElementById('mode-badge').innerText = '🌱 練習模式';
+                document.getElementById('mode-badge').className = "px-3 py-1 bg-emerald-100 text-emerald-700 font-extrabold rounded-full text-xs sm:text-sm border-2 border-emerald-300";
+            }
+
+            generateMap();
+            nextQuestion();
+        }
+
+        function backToMenu() {
+            playSound('click');
+            clearInterval(timerInterval);
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+
+        function restartGame() {
+            startGame(gameMode);
+        }
+
+        /* ----------------------------------------------------
+           4. Map Grid Generation
+        ---------------------------------------------------- */
+        
+        function generateMap() {
+            const shuffled = [...MAP_ITEMS].sort(() => Math.random() - 0.5);
+            mapLayout = [];
+            for (let r = 0; r < 3; r++) {
+                mapLayout[r] = [];
+                for (let c = 0; c < 3; c++) {
+                    mapLayout[r][c] = shuffled[r * 3 + c];
+                }
+            }
+            renderMap();
+        }
+
+        function renderMap() {
+            const gridEl = document.getElementById('map-grid');
+            gridEl.innerHTML = '';
+
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 3; c++) {
+                    const item = mapLayout[r][c];
+                    const cell = document.createElement('div');
+                    cell.id = `cell-${r}-${c}`;
+                    cell.className = `relative bg-white rounded-2xl border-2 border-emerald-200 flex flex-col items-center justify-center p-1 sm:p-2 shadow-sm transition-all duration-300`;
+                    cell.innerHTML = `
+                        <span class="text-3xl sm:text-4xl transform hover:scale-110 transition-transform">${item.emoji}</span>
+                        <span class="text-xs sm:text-sm font-extrabold text-slate-700 mt-1">${item.name}</span>
+                    `;
+                    gridEl.appendChild(cell);
+                }
+            }
+        }
+
+        /* ----------------------------------------------------
+           5. Question Generation (Type A & Type B)
+        ---------------------------------------------------- */
+
+        function nextQuestion() {
+            clearHighlights();
+
+            // Randomly choose question type: 'A' (Compass Hint) or 'B' (Relative Position Hint)
+            const questionType = Math.random() < 0.5 ? 'A' : 'B';
+
+            // Random rotation of North (0°, 90°, 180°, 270°)
+            const northAngleChoices = [0, 90, 180, 270];
+            const northAngle = northAngleChoices[Math.floor(Math.random() * northAngleChoices.length)];
+
+            // Select main Question Start (r1, c1) and Target (r2, c2)
+            let r1, c1, r2, c2;
+            let relativeDirKey = '';
+
+            do {
+                r1 = Math.floor(Math.random() * 3);
+                c1 = Math.floor(Math.random() * 3);
+                r2 = Math.floor(Math.random() * 3);
+                c2 = Math.floor(Math.random() * 3);
+
+                if (r1 === r2 && c1 === c2) continue;
+
+                const dx = c2 - c1; // + -> right
+                const dy = r2 - r1; // + -> down
+
+                // Strictly limit to 4 cardinal directions in Basic Mode
+                if (difficultyMode === 4 && (dx !== 0 && dy !== 0)) continue;
+
+                const screenDir = getScreenDirection(dx, dy);
+                relativeDirKey = calculateRelativeDir(screenDir, northAngle);
+
+                if (difficultyMode === 4 && !['N', 'S', 'E', 'W'].includes(relativeDirKey)) {
+                    continue;
+                }
+
+                break;
+            } while (true);
+
+            const startItem = mapLayout[r1][c1];
+            const targetItem = mapLayout[r2][c2];
+            const char = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+
+            // If Type B, pick a separate pair of points for the relative clue
+            let cluePair = null;
+            if (questionType === 'B') {
+                let cr1, cc1, cr2, cc2;
+                do {
+                    cr1 = Math.floor(Math.random() * 3);
+                    cc1 = Math.floor(Math.random() * 3);
+                    cr2 = Math.floor(Math.random() * 3);
+                    cc2 = Math.floor(Math.random() * 3);
+
+                    if (cr1 === cr2 && cc1 === cc2) continue;
+
+                    const cdx = cc2 - cc1;
+                    const cdy = cr2 - cr1;
+
+                    if (difficultyMode === 4 && (cdx !== 0 && cdy !== 0)) continue;
+
+                    const cScreenDir = getScreenDirection(cdx, cdy);
+                    const cRelDirKey = calculateRelativeDir(cScreenDir, northAngle);
+
+                    if (difficultyMode === 4 && !['N', 'S', 'E', 'W'].includes(cRelDirKey)) continue;
+
+                    cluePair = {
+                        item1: mapLayout[cr1][cc1],
+                        item2: mapLayout[cr2][cc2],
+                        dirKey: cRelDirKey,
+                        dirName: CARDINAL_NAMES[cRelDirKey]
+                    };
+                    break;
+                } while (true);
+            }
+
+            currentQuestion = {
+                type: questionType,
+                r1, c1, r2, c2,
+                startItem, targetItem,
+                correctDirKey: relativeDirKey,
+                correctDirName: CARDINAL_NAMES[relativeDirKey],
+                char,
+                cluePair,
+                northAngle
+            };
+
+            // Update UI Panels (Compass vs Relative Scroll)
+            if (questionType === 'A') {
+                document.getElementById('panel-compass').classList.remove('hidden');
+                document.getElementById('panel-relative').classList.add('hidden');
+
+                const mainDirs = ['N', 'E', 'S', 'W'];
+                const shownDirKey = mainDirs[Math.floor(Math.random() * mainDirs.length)];
+                updateCompassVisual(shownDirKey, CARDINAL_NAMES[shownDirKey], northAngle);
+
+                document.getElementById('qtype-tag').innerText = '🧭 題型 A：指南針方位題';
+                document.getElementById('qtype-tag').className = 'inline-block bg-amber-200 text-amber-900 font-black text-xs px-2.5 py-0.5 rounded-full mb-1 border border-amber-400';
+            } else {
+                document.getElementById('panel-compass').classList.add('hidden');
+                document.getElementById('panel-relative').classList.remove('hidden');
+
+                document.getElementById('clue-statement').innerHTML = `
+                    【${cluePair.item2.emoji}${cluePair.item2.name}】在<br>
+                    【${cluePair.item1.emoji}${cluePair.item1.name}】的<br>
+                    <span class="text-rose-600 text-base font-extrabold underline decoration-amber-400">${cluePair.dirName}方</span>
+                `;
+
+                document.getElementById('qtype-tag').innerText = '📜 題型 B：相對位置推導題';
+                document.getElementById('qtype-tag').className = 'inline-block bg-sky-200 text-sky-900 font-black text-xs px-2.5 py-0.5 rounded-full mb-1 border border-sky-400';
+            }
+
+            // Highlight Start & Target Cells
+            const startCell = document.getElementById(`cell-${r1}-${c1}`);
+            const targetCell = document.getElementById(`cell-${r2}-${c2}`);
+            startCell.classList.add('highlight-start');
+            targetCell.classList.add('highlight-target');
+
+            const charBadge = document.createElement('div');
+            charBadge.id = 'char-sticker';
+            charBadge.className = 'absolute -top-3 -left-2 bg-blue-500 text-white font-black text-xs px-2 py-0.5 rounded-full border-2 border-white shadow z-20';
+            charBadge.innerText = '站在這📍';
+            startCell.appendChild(charBadge);
+
+            // Render Question Text
+            document.getElementById('question-text').innerHTML = `
+                ${char} 站在【<span class="text-blue-600 font-extrabold border-b-2 border-blue-400">${startItem.emoji} ${startItem.name}</span>】，看向【<span class="text-rose-600 font-extrabold border-b-2 border-rose-400">${targetItem.emoji} ${targetItem.name}</span>】。<br>
+                請問【${targetItem.name}】在${startItem.name}的<span class="bg-yellow-200 px-2 py-0.5 rounded-lg border-b-4 border-yellow-400">哪個方向</span>？
+            `;
+
+            renderBalloonButtons();
+
+            document.getElementById('hint-text').innerText = questionType === 'A' ? 
+                '觀察地圖與右側指南針，點擊氣球選擇答案！' : 
+                '閱讀右側情報框，推導出地圖方向並點擊氣球！';
+            document.getElementById('hint-box').className = 'min-h-[40px] bg-blue-50 border-2 border-blue-200 rounded-xl p-2 text-center text-xs sm:text-sm font-bold text-blue-700 flex items-center justify-center gap-2';
+        }
+
+        function getScreenDirection(dx, dy) {
+            if (dx === 0 && dy < 0) return 'N';
+            if (dx === 0 && dy > 0) return 'S';
+            if (dx > 0 && dy === 0) return 'E';
+            if (dx < 0 && dy === 0) return 'W';
+            if (dx > 0 && dy < 0) return 'NE';
+            if (dx < 0 && dy < 0) return 'NW';
+            if (dx > 0 && dy > 0) return 'SE';
+            if (dx < 0 && dy > 0) return 'SW';
+            return 'N';
+        }
+
+        function calculateRelativeDir(screenDir, northAngle) {
+            const dirAngles = { 'N': 0, 'NE': 45, 'E': 90, 'SE': 135, 'S': 180, 'SW': 225, 'W': 270, 'NW': 315 };
+            const angleKeys = { 0: 'N', 45: 'NE', 90: 'E', 135: 'SE', 180: 'S', 225: 'SW', 270: 'W', 315: 'NW' };
+
+            const screenAngle = dirAngles[screenDir];
+            let actualAngle = (screenAngle - northAngle + 360) % 360;
+            return angleKeys[actualAngle];
+        }
+
+        function updateCompassVisual(shownDirKey, shownDirName, northAngle) {
+            const localOffset = { 'N': 270, 'E': 0, 'S': 90, 'W': 180 }[shownDirKey];
+            const totalRotation = (northAngle + localOffset) % 360;
+
+            const needleGroup = document.getElementById('compass-needle-group');
+            needleGroup.style.transform = `rotate(${totalRotation}deg)`;
+
+            const textEl = document.getElementById('compass-indicator-text');
+            textEl.innerText = shownDirName;
+            textEl.style.transform = `rotate(${-totalRotation}deg)`;
+
+            document.getElementById('compass-dir-name').innerText = shownDirName;
+        }
+
+        /* ----------------------------------------------------
+           6. Shuffled Balloon Choices
+        ---------------------------------------------------- */
+
+        function renderBalloonButtons() {
+            const btnContainer = document.getElementById('balloon-buttons-container');
+            btnContainer.innerHTML = '';
+
+            let choices = [];
+            if (difficultyMode === 4) {
+                choices = ['N', 'S', 'W', 'E'];
+            } else {
+                choices = ['N', 'S', 'W', 'E', 'NE', 'NW', 'SE', 'SW'];
+            }
+
+            // Shuffle balloon order
+            choices.sort(() => Math.random() - 0.5);
+
+            choices.forEach((dirKey, index) => {
+                const name = CARDINAL_NAMES[dirKey];
+                const styleClass = BALLOON_COLOR_STYLES[index % BALLOON_COLOR_STYLES.length];
+
+                const balloon = document.createElement('button');
+                balloon.onclick = () => checkAnswer(dirKey);
+                balloon.className = `balloon-btn px-4 sm:px-5 py-2.5 sm:py-3 rounded-full font-black text-base sm:text-lg text-white border-2 flex items-center justify-center gap-1.5 active:scale-95 transition-transform ${styleClass}`;
+                balloon.style.animationDelay = `${(index * 0.15).toFixed(2)}s`;
+                
+                balloon.innerHTML = `
+                    <span class="text-xl">🎈</span>
+                    <span>${name}方</span>
+                `;
+                btnContainer.appendChild(balloon);
+            });
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('#map-grid > div').forEach(cell => {
+                cell.classList.remove('highlight-start', 'highlight-target');
+            });
+            const sticker = document.getElementById('char-sticker');
+            if (sticker) sticker.remove();
+
+            const line = document.getElementById('guide-line');
+            if (line) line.classList.add('hidden');
+        }
+
+        /* ----------------------------------------------------
+           7. Answer Checking & Visual Guidance
+        ---------------------------------------------------- */
+
+        function checkAnswer(selectedKey) {
+            if (!currentQuestion) return;
+
+            const isCorrect = (selectedKey === currentQuestion.correctDirKey);
+
+            if (isCorrect) {
+                playSound('correct');
+                combo++;
+                correctAnswersCount++;
+                
+                const addedScore = 10 + (combo > 1 ? (combo - 1) * 5 : 0);
+                score += addedScore;
+                document.getElementById('score-text').innerText = score;
+
+                if (combo > 1) {
+                    const comboEl = document.getElementById('combo-badge');
+                    document.getElementById('combo-count').innerText = combo;
+                    comboEl.classList.remove('hidden');
+                }
+
+                fireConfetti();
+
+                document.getElementById('hint-box').className = 'min-h-[40px] bg-emerald-50 border-2 border-emerald-300 rounded-xl p-2 text-center text-xs sm:text-sm font-bold text-emerald-700 flex items-center justify-center gap-2';
+                document.getElementById('hint-text').innerText = `🎉 答對了！就是【${currentQuestion.correctDirName}方】！ (+${addedScore}分)`;
+
+                setTimeout(() => {
+                    nextQuestion();
+                }, 1200);
+
+            } else {
+                playSound('wrong');
+                combo = 0;
+                document.getElementById('combo-badge').classList.add('hidden');
+
+                document.getElementById('hint-box').className = 'min-h-[40px] bg-rose-50 border-2 border-rose-300 rounded-xl p-2 text-center text-xs sm:text-sm font-bold text-rose-700 flex items-center justify-center gap-2';
+                
+                const startName = currentQuestion.startItem.name;
+                const targetName = currentQuestion.targetItem.name;
+
+                document.getElementById('hint-text').innerText = `再試試看！從【${startName}】看向【${targetName}】，解答是【${currentQuestion.correctDirName}方】喔！`;
+
+                drawGuideLine();
+            }
+        }
+
+        function drawGuideLine() {
+            const startCell = document.getElementById(`cell-${currentQuestion.r1}-${currentQuestion.c1}`);
+            const targetCell = document.getElementById(`cell-${currentQuestion.r2}-${currentQuestion.c2}`);
+            const svg = document.getElementById('map-arrow-svg');
+            const line = document.getElementById('guide-line');
+
+            if (!startCell || !targetCell || !svg || !line) return;
+
+            const svgRect = svg.getBoundingClientRect();
+            const r1Rect = startCell.getBoundingClientRect();
+            const r2Rect = targetCell.getBoundingClientRect();
+
+            const x1 = r1Rect.left + r1Rect.width / 2 - svgRect.left;
+            const y1 = r1Rect.top + r1Rect.height / 2 - svgRect.top;
+            const x2 = r2Rect.left + r2Rect.width / 2 - svgRect.left;
+            const y2 = r2Rect.top + r2Rect.height / 2 - svgRect.top;
+
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+            line.classList.remove('hidden');
+        }
+
+        /* ----------------------------------------------------
+           8. Confetti Animation & End Game
+        ---------------------------------------------------- */
+
+        function fireConfetti() {
+            const canvas = document.createElement('canvas');
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = '999';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const colors = ['#f43f5e', '#10b981', '#0ea5e9', '#f59e0b', '#8b5cf6'];
+
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height * 0.7,
+                    vx: (Math.random() - 0.5) * 12,
+                    vy: (Math.random() - 0.8) * 12,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    radius: Math.random() * 6 + 4,
+                    alpha: 1
+                });
+            }
+
+            let frame = 0;
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.3;
+                    p.alpha -= 0.02;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = Math.max(0, p.alpha);
+                    ctx.fill();
+                });
+                frame++;
+                if (frame < 50) {
+                    requestAnimationFrame(animate);
+                } else {
+                    canvas.remove();
+                }
+            }
+            animate();
+        }
+
+        function endGame() {
+            clearInterval(timerInterval);
+            playSound('win');
+
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('final-count').innerText = correctAnswersCount;
+
+            let stars = '⭐⭐⭐';
+            let title = '👑 方向推導大導師';
+
+            if (score < 50) {
+                stars = '⭐';
+                title = '🌱 方向小新手';
+            } else if (score < 100) {
+                stars = '⭐⭐';
+                title = '⛵ 勇敢小探險家';
+            }
+
+            document.getElementById('stars-container').innerHTML = stars.split('').map(s => `<span>${s}</span>`).join('');
+            document.getElementById('rank-title').innerText = title;
+
+            fireConfetti();
+        }
+
+        window.onload = function() {
+            generateMap();
+        };
+
+        window.addEventListener('resize', () => {
+            const line = document.getElementById('guide-line');
+            if (line && !line.classList.contains('hidden') && currentQuestion) {
+                drawGuideLine();
+            }
+        });
+    </script>
+</body>
+</html>
