@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sparky's Preposition Express! 🚌 🚕 🚋</title>
+  <style>
+    :root {
+      --primary: #4A90E2;
+      --secondary: #FF9F43;
+      --accent: #9B59B6;
+      --success: #2ECC71;
+      --error: #FF5252;
+      --bg: #EBF5FB;
+      --card-bg: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Fredoka', 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #74ebe5 0%, #899fd4 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 15px;
+    }
+
+    .game-card {
+      background: var(--card-bg);
+      border-radius: 25px;
+      padding: 25px 30px;
+      max-width: 580px;
+      width: 100%;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      text-align: center;
+      border: 5px solid #3498DB;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #EBF5FB;
+      padding: 10px 20px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      color: #2C3E50;
+      font-size: 22px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mascot-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      background: #FFF9E6;
+      border: 2px dashed #F1C40F;
+      padding: 12px;
+      border-radius: 18px;
+      margin-bottom: 20px;
+    }
+
+    .mascot-avatar {
+      font-size: 50px;
+      animation: bounce 2s infinite ease-in-out;
+    }
+
+    .mascot-speech {
+      font-size: 15px;
+      color: #2C3E50;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: space-around;
+      font-size: 16px;
+      font-weight: bold;
+      color: #34495E;
+      margin-bottom: 15px;
+    }
+
+    .stat-badge {
+      background: #F4F6F7;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #D5D8DC;
+    }
+
+    .question-card {
+      background: #FDFEFE;
+      border: 3px solid #E5E8E8;
+      border-radius: 18px;
+      padding: 20px;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: #2C3E50;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .blank-target {
+      display: inline-block;
+      min-width: 80px;
+      border-bottom: 4px dashed var(--primary);
+      color: var(--secondary);
+      font-weight: bold;
+      padding: 0 8px;
+    }
+
+    .options-grid {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .btn-option {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 24px;
+      font-weight: bold;
+      border-radius: 16px;
+      cursor: pointer;
+      flex: 1;
+      box-shadow: 0 5px 0 #2980B9;
+      transition: all 0.1s ease;
+      font-family: inherit;
+    }
+
+    .btn-option:hover {
+      background-color: #357ABD;
+    }
+
+    .btn-option:active {
+      transform: translateY(5px);
+      box-shadow: none;
+    }
+
+    .feedback-box {
+      min-height: 50px;
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .feedback-box.correct {
+      background: #E8F8F5;
+      color: var(--success);
+    }
+
+    .feedback-box.incorrect {
+      background: #FDEDEC;
+      color: var(--error);
+    }
+
+    .action-btn {
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #D35400;
+      font-family: inherit;
+      display: none;
+    }
+
+    .action-btn:active {
+      transform: translateY(4px);
+      box-shadow: none;
+    }
+
+    .hint-btn {
+      background: #E67E22;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      margin-top: 5px;
+    }
+
+    /* Modal Hint */
+    .rule-modal {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      color: white;
+      padding: 25px;
+      border-radius: 20px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .rule-card {
+      background: white;
+      color: #2C3E50;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: left;
+      font-size: 14px;
+      max-width: 90%;
+    }
+
+    .rule-card h3 { margin-top: 0; color: var(--primary); }
+
+    .close-modal-btn {
+      margin-top: 15px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-card">
+    
+    <div class="header-banner">
+      <h1>🚕 Preposition Express 🚌</h1>
+      <button class="hint-btn" onclick="toggleHint(true)">💡 Rules Hint</button>
+    </div>
+
+    <!-- Mascot Section -->
+    <div class="mascot-box">
+      <div class="mascot-avatar" id="mascotAvatar">🦉</div>
+      <div class="mascot-speech" id="mascotText">Hoot! Ready to practice transport prepositions? Pick IN, ON, or AT!</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-badge" id="progressText">Question 1/10</div>
+      <div class="stat-badge" id="scoreText">⭐ Stars: 0</div>
+      <div class="stat-badge" id="streakText">🔥 Streak: 0</div>
+    </div>
+
+    <!-- Question Box -->
+    <div class="question-card" id="questionBox">
+      Loading game...
+    </div>
+
+    <!-- Interactive Choice Buttons -->
+    <div class="options-grid" id="optionsBox">
+      <button class="btn-option" onclick="handleChoice('in')">in</button>
+      <button class="btn-option" onclick="handleChoice('on')">on</button>
+      <button class="btn-option" onclick="handleChoice('at')">at</button>
+    </div>
+
+    <!-- Feedback Message -->
+    <div class="feedback-box" id="feedbackBox"></div>
+
+    <!-- Next / Play Again Button -->
+    <button class="action-btn" id="nextBtn" onclick="advanceGame()">Next Question ➡️</button>
+
+    <!-- Modal Rule Hint -->
+    <div class="rule-modal" id="ruleModal">
+      <div class="rule-card">
+        <h3>💡 Preposition Rules:</h3>
+        <p><strong>🚕 IN:</strong> Inside small cars or personal vehicles.<br><em>Example: in the taxi, in the car</em></p>
+        <p><strong>🚌 ON:</strong> Riding public transport, decks, or surfaces.<br><em>Example: on the bus, on the train, on the tram, on Platform 2</em></p>
+        <p><strong>🚏 AT:</strong> Specific stops, stations, or meeting points.<br><em>Example: at the bus stop, at the station, at the entrance</em></p>
+      </div>
+      <button class="close-modal-btn" onclick="toggleHint(false)">Got It! 👍</button>
+    </div>
+
+  </div>
+
+  <script>
+    // Audio Synthesizer for Game Sound Effects (No external files needed!)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'correct') {
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
+        osc.frequency.setValueAtTime(174.61, audioCtx.currentTime + 0.15); // F3
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } else if (type === 'win') {
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
+        osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.6);
+      }
+    }
+
+    // 50 Question Bank
+    const questionBank = [
+      { q: "Mom and Dad got ___ the taxi to go to the airport.", answer: "in", exp: "We use 'in' for small cars and taxis." },
+      { q: "The passengers are waiting for the express train ___ the platform.", answer: "on", exp: "Passengers stand on top of the platform surface." },
+      { q: "The driver stopped the red vehicle ___ the bus stop.", answer: "at", exp: "A bus stop is a specific location point." },
+      { q: "My brother loves to ride ___ the double-decker bus.", answer: "on", exp: "We use 'on' for buses." },
+      { q: "There are many people riding ___ the green minibus today.", answer: "on", exp: "We use 'on' for public transport minibuses." },
+      { q: "We heard a loud whistle as we arrived ___ the train station.", answer: "at", exp: "A train station is a specific venue/point." },
+      { q: "Look at the red streetcar gliding slowly ___ the tram tracks!", answer: "on", exp: "Trams run on top of tracks." },
+      { q: "I forgot my lunch box ___ the backseat of the taxi.", answer: "in", exp: "Inside a private or smaller vehicle like a taxi." },
+      { q: "The tourists are standing ___ line at the taxi stand.", answer: "in", exp: "We say 'in line'." },
+      { q: "Children must sit down safely while traveling ___ the train.", answer: "on", exp: "We use 'on' for train travel." },
+      { q: "We rang the bell to get off ___ the next bus stop.", answer: "at", exp: "'At' refers to a specific stop on a route." },
+      { q: "The conductor is checking ticket passes ___ the tram.", answer: "on", exp: "We say 'on the tram'." },
+      { q: "Dad put all our heavy luggage ___ the trunk of the taxi.", answer: "in", exp: "Luggage goes inside the trunk." },
+      { q: "The green train is arriving now ___ Platform 4.", answer: "on", exp: "Trains arrive on a designated platform." },
+      { q: "My aunt taps her transit card when getting ___ the minibus.", answer: "on", exp: "Boarding public transit uses 'on'." },
+      { q: "We met our school group ___ the cinema entrance.", answer: "at", exp: "The entrance is a precise meeting point." },
+      { q: "Please keep your hands inside the window while riding ___ the bus.", answer: "on", exp: "We say 'on the bus'." },
+      { q: "The children are sitting quietly ___ the classroom.", answer: "in", exp: "The classroom is an enclosed room." },
+      { q: "There is a long line of commuters waiting ___ the tram stop.", answer: "at", exp: "A tram stop is a location point." },
+      { q: "I saw my teacher reading a book ___ the train.", answer: "on", exp: "Travel on a train uses 'on'." },
+      { q: "The little puppy is sleeping soundly ___ the basket.", answer: "in", exp: "Inside an enclosed container." },
+      { q: "The yellow taxi is waiting for us ___ the hotel entrance.", answer: "at", exp: "The entrance is a location spot." },
+      { q: "Kids love riding on the top deck ___ the double-decker tram.", answer: "on", exp: "On the upper level/deck of a tram." },
+      { q: "There are soft cushions resting ___ the sofa.", answer: "on", exp: "On top of the sofa surface." },
+      { q: "The driver is sitting ___ the front seat of the taxi.", answer: "in", exp: "Sitting inside the taxi seat area." },
+      { q: "We saw colorful fishes swimming ___ the water.", answer: "in", exp: "Swimming inside the water." },
+      { q: "The family is waiting ___ the airport gate for their flight.", answer: "at", exp: "An airport gate is a specific point." },
+      { q: "Don't leave your school bag ___ the minibus floor!", answer: "on", exp: "Sitting on top of the floor surface." },
+      { q: "My friends and I play soccer ___ the park.", answer: "in", exp: "Inside the park grounds." },
+      { q: "The conductor blew his whistle ___ the train platform.", answer: "at", exp: "Standing at/on the platform spot." },
+      { q: "Grandma is sitting comfortably ___ the bus.", answer: "on", exp: "Riding on public transit." },
+      { q: "We bought sweet popcorn ___ the movie theater counter.", answer: "at", exp: "The counter is a specific spot." },
+      { q: "There is a painted route map ___ the wall of the station.", answer: "on", exp: "Attached to the wall surface." },
+      { q: "The passenger told the driver where to go ___ the taxi.", answer: "in", exp: "Speaking from inside the taxi." },
+      { q: "Look at the children playing happily ___ the playground.", answer: "on", exp: "Playing on top of the playground ground/structures." },
+      { q: "The speed limit sign is posted ___ the side of the road.", answer: "on", exp: "Attached to the surface/side of the road." },
+      { q: "We stepped onto the vehicle when it stopped ___ the minibus shelter.", answer: "at", exp: "The shelter is a specific stop location." },
+      { q: "It is very quiet inside when you study ___ the library.", answer: "in", exp: "Inside the library building." },
+      { q: "The tourists took photos while riding ___ the vintage tram.", answer: "on", exp: "We say 'on the tram'." },
+      { q: "The train ticket collector is standing ___ the turnstile.", answer: "at", exp: "The turnstile gate is a specific spot." },
+      { q: "Put your trash ___ the garbage bin, please.", answer: "in", exp: "Inside the bin container." },
+      { q: "There are many yellow taxis lined up ___ the airport terminal.", answer: "at", exp: "The terminal pickup point is a location spot." },
+      { q: "We saw a fast train zooming past ___ the railway tracks.", answer: "on", exp: "Moving on top of the tracks." },
+      { q: "The students line up neatly ___ the hallway.", answer: "in", exp: "Inside the corridor/hallway space." },
+      { q: "My brother dropped his coin ___ the minibus payment box.", answer: "in", exp: "Dropped inside the coin box container." },
+      { q: "There is a large digital clock ___ the top of the tower.", answer: "at", exp: "'At the top' specifies a point." },
+      { q: "We build big sandcastles when we are ___ the beach.", answer: "on", exp: "On top of the beach sand surface." },
+      { q: "Mom bought fresh vegetables ___ the local market.", answer: "at", exp: "The market as a general venue/point." },
+      { q: "We waited patiently for our turn ___ the taxi queue.", answer: "in", exp: "We say 'in a queue' or 'in line'." },
+      { q: "The conductor greeted every child boarding ___ the school bus.", answer: "on", exp: "Boarding on top of / on a bus." }
+    ];
+
+    let currentSet = [];
+    let currentIndex = 0;
+    let score = 0;
+    let streak = 0;
+    let answered = false;
+
+    function initGame() {
+      // Shuffle and pick 10 questions per round
+      const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
+      currentSet = shuffled.slice(0, 10);
+      currentIndex = 0;
+      score = 0;
+      streak = 0;
+      
+      updateStats();
+      document.getElementById("optionsBox").style.display = "flex";
+      document.getElementById("nextBtn").innerText = "Next Question ➡️";
+      document.getElementById("nextBtn").onclick = advanceGame;
+      
+      loadQuestion();
+    }
+
+    function updateStats() {
+      document.getElementById("progressText").innerText = `Question ${currentIndex + 1}/10`;
+      document.getElementById("scoreText").innerText = `⭐ Stars: ${score}`;
+      document.getElementById("streakText").innerText = `🔥 Streak: ${streak}`;
+    }
+
+    function loadQuestion() {
+      answered = false;
+      const current = currentSet[currentIndex];
+      const formattedQ = current.q.replace("___", "<span class='blank-target'>?</span>");
+      
+      document.getElementById("questionBox").innerHTML = formattedQ;
+      document.getElementById("feedbackBox").innerText = "";
+      document.getElementById("feedbackBox").className = "feedback-box";
+      document.getElementById("nextBtn").style.display = "none";
+      
+      // Update Mascot
+      document.getElementById("mascotAvatar").innerText = "🦉";
+      document.getElementById("mascotText").innerText = "Which preposition fits best here?";
+
+      const buttons = document.querySelectorAll(".btn-option");
+      buttons.forEach(btn => btn.disabled = false);
+      updateStats();
+    }
+
+    function handleChoice(selected) {
+      if (answered) return;
+      answered = true;
+
+      const current = currentSet[currentIndex];
+      const feedbackEl = document.getElementById("feedbackBox");
+      const buttons = document.querySelectorAll(".btn-option");
+
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selected === current.answer) {
+        playSound('correct');
+        score += 10;
+        streak += 1;
+        
+        document.getElementById("mascotAvatar").innerText = "🥳";
+        document.getElementById("mascotText").innerText = "Hooray! Outstanding choice!";
+        
+        feedbackEl.innerHTML = `🎉 Super! That's correct!<br><small style='font-size:14px; font-weight:normal; color:#444;'>${current.exp}</small>`;
+        feedbackEl.className = "feedback-box correct";
+      } else {
+        playSound('wrong');
+        streak = 0;
+        
+        document.getElementById("mascotAvatar").innerText = "🧐";
+        document.getElementById("mascotText").innerText = "Nice try! Let's check the rule.";
+
+        feedbackEl.innerHTML = `❌ The correct word is <strong>'${current.answer}'</strong>.<br><small style='font-size:14px; font-weight:normal; color:#444;'>${current.exp}</small>`;
+        feedbackEl.className = "feedback-box incorrect";
+      }
+
+      updateStats();
+
+      const completedQ = current.q.replace("___", `<span class='blank-target' style='color:#2ECC71'>${current.answer}</span>`);
+      document.getElementById("questionBox").innerHTML = completedQ;
+
+      document.getElementById("nextBtn").innerText = (currentIndex < currentSet.length - 1) ? "Next Question ➡️" : "See Final Badge 🏆";
+      document.getElementById("nextBtn").style.display = "inline-block";
+    }
+
+    function advanceGame() {
+      if (currentIndex < currentSet.length - 1) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        finishGame();
+      }
+    }
+
+    function finishGame() {
+      playSound('win');
+      
+      let badge = "🥈 Silver Star";
+      let mascotSpeech = "Great effort! Keep practicing to get a perfect score!";
+      if (score >= 90) {
+        badge = "🏆 Preposition Master!";
+        mascotSpeech = "WOW! Perfect Score! You are a genius!";
+      } else if (score >= 70) {
+        badge = "🥇 Gold Champion!";
+        mascotSpeech = "Awesome job! You really know your transport rules!";
+      }
+
+      document.getElementById("mascotAvatar").innerText = "🎓";
+      document.getElementById("mascotText").innerText = mascotSpeech;
+
+      document.getElementById("questionBox").innerHTML = `
+        <div style="text-align:center;">
+          <h2>${badge}</h2>
+          <p>You earned <strong>${score} Stars</strong> out of 100!</p>
+        </div>
+      `;
+      
+      document.getElementById("optionsBox").style.display = "none";
+      document.getElementById("feedbackBox").style.display = "none";
+      document.getElementById("nextBtn").innerText = "Play Again 🔄";
+      document.getElementById("nextBtn").onclick = () => {
+        document.getElementById("feedbackBox").style.display = "block";
+        initGame();
+      };
+    }
+
+    function toggleHint(show) {
+      document.getElementById("ruleModal").style.display = show ? "flex" : "none";
+    }
+
+    // Start game on load
+    initGame();
+  </script>
+
+</body>
+</html>
