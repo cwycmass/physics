@@ -172,21 +172,21 @@
 
             <!-- Question Card Area (No answers/feedback during test) -->
             <div id="qbqCardArea" class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 min-h-[360px] flex flex-col justify-between relative">
+            <!-- Question Card Area (No answers/feedback/audio hints during test) -->
+            <div id="qbqCardArea" class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 min-h-[360px] flex flex-col justify-between relative">
                 
                 <!-- Inner Content Container -->
                 <div id="qbqQuestionBody" class="space-y-6">
                     <!-- Dynamic Question Rendered Here -->
                 </div>
 
-                <!-- Navigation Control Bar -->
+                <!-- Navigation Control Bar (No audio playback allowed during test) -->
                 <div class="flex justify-between items-center mt-8 pt-6 border-t border-slate-100">
                     <button id="qbqPrevBtn" onclick="prevQbq()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition flex items-center gap-2">
                         <i class="fa-solid fa-arrow-left"></i> 上一題
                     </button>
 
-                    <button id="qbqAudioBtn" onclick="speakCurrentQbq()" class="p-3 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-full transition shadow-sm border border-teal-200" title="朗讀目標詞語">
-                        <i class="fa-solid fa-volume-high text-lg"></i>
-                    </button>
+                    <span class="text-xs text-slate-400 font-medium hidden sm:inline"><i class="fa-solid fa-lock mr-1"></i>測驗中禁用發音提示</span>
 
                     <button id="qbqNextBtn" onclick="nextQbq()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition flex items-center gap-2 shadow-sm">
                         下一題 <i class="fa-solid fa-arrow-right"></i>
@@ -318,31 +318,31 @@
 
     <!-- JavaScript Engine -->
     <script>
-        // Exact 20 Worksheet Questions Data
+        // Exact 20 Worksheet Questions Data (Strict Zero-Spoiler Pinyin Hints during Test)
         const quizData = [
-            // PART 1: MCQs (1-10)
-            { id: 1, type: 'mc', section: 1, num: 1, text: '在「坐」字中，正確的聲調是什麼？', char: '坐', word: '坐', pinyin: 'zuò', correct: 'C', options: [{key:'A', label:'第二聲', val:'2'}, {key:'B', label:'第三聲', val:'3'}, {key:'C', label:'第四聲', val:'4'}], exp: '「坐」讀作 zuò，為第四聲。' },
-            { id: 2, type: 'mc', section: 1, num: 2, text: '在「電車」這個詞語中，「電」字是第幾聲？', char: '電', word: '電車', pinyin: 'diàn chē', correct: 'C', options: [{key:'A', label:'第二聲', val:'2'}, {key:'B', label:'第三聲', val:'3'}, {key:'C', label:'第四聲', val:'4'}], exp: '「電車」讀作 diàn chē，其中「電」字為第四聲。' },
-            { id: 3, type: 'mc', section: 1, num: 3, text: '在「小巴」這個詞語中，「巴」字是第幾聲？', char: '巴', word: '小巴', pinyin: 'xiǎo bā', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「小巴」讀作 xiǎo bā，其中「巴」字為第一聲。' },
-            { id: 4, type: 'mc', section: 1, num: 4, text: '「輕鐵」中的「輕」字是第幾聲？', char: '輕', word: '輕鐵', pinyin: 'qīng tiě', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第四聲', val:'4'}], exp: '「輕鐵」讀作 qīng tiě，其中「輕」字為第一聲。' },
-            { id: 5, type: 'mc', section: 1, num: 5, text: '「出租車」中的「租」字是第幾聲？', char: '租', word: '出租車', pinyin: 'chū zū chē', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「出租車」讀作 chū zū chē，其中「租」字為第一聲。' },
-            { id: 6, type: 'mc', section: 1, num: 6, text: '「機器人」中的「人」字是第幾聲？', char: '人', word: '機器人', pinyin: 'jī qì rén', correct: 'B', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「機器人」讀作 jī qì rén，其中「人」字為第二聲。' },
-            { id: 7, type: 'mc', section: 1, num: 7, text: '「動腦筋」中的「筋」字是第幾聲？', char: '筋', word: '動腦筋', pinyin: 'dòng nǎo jīn', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「動腦筋」讀作 dòng nǎo jīn，其中「筋」字為第一聲。' },
-            { id: 8, type: 'mc', section: 1, num: 8, text: '請選出「拼」字的正確聲調。', char: '拼', word: '拼', pinyin: 'pīn', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第三聲', val:'3'}, {key:'C', label:'第四聲', val:'4'}], exp: '「拼」讀作 pīn，為第一聲。' },
-            { id: 9, type: 'mc', section: 1, num: 9, text: '「樹熊玩偶」中的「偶」字是第幾聲？', char: '偶', word: '樹熊玩偶', pinyin: 'shù xióng wán ǒu', correct: 'C', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「樹熊玩偶」讀作 shù xióng wán ǒu，其中「偶」字為第三聲。' },
-            { id: 10, type: 'mc', section: 1, num: 10, text: '在「幾點」這個詞語中，「幾」字是第幾聲？', char: '幾', word: '幾點', pinyin: 'jǐ diǎn', correct: 'C', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '在「幾點」這個詞語中，「幾」字為第三聲。' },
+            // PART 1: MCQs (1-10) - NO pinyin hints during quiz!
+            { id: 1, type: 'mc', section: 1, num: 1, text: '在「坐」字中，正確的聲調是什麼？', char: '坐', word: '坐', pinyinFull: 'zuò', correct: 'C', options: [{key:'A', label:'第二聲', val:'2'}, {key:'B', label:'第三聲', val:'3'}, {key:'C', label:'第四聲', val:'4'}], exp: '「坐」讀作 zuò，為第四聲。' },
+            { id: 2, type: 'mc', section: 1, num: 2, text: '在「電車」這個詞語中，「電」字是第幾聲？', char: '電', word: '電車', pinyinFull: 'diàn chē', correct: 'C', options: [{key:'A', label:'第二聲', val:'2'}, {key:'B', label:'第三聲', val:'3'}, {key:'C', label:'第四聲', val:'4'}], exp: '「電車」讀作 diàn chē，其中「電」字為第四聲。' },
+            { id: 3, type: 'mc', section: 1, num: 3, text: '在「小巴」這個詞語中，「巴」字是第幾聲？', char: '巴', word: '小巴', pinyinFull: 'xiǎo bā', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「小巴」讀作 xiǎo bā，其中「巴」字為第一聲。' },
+            { id: 4, type: 'mc', section: 1, num: 4, text: '「輕鐵」中的「輕」字是第幾聲？', char: '輕', word: '輕鐵', pinyinFull: 'qīng tiě', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第四聲', val:'4'}], exp: '「輕鐵」讀作 qīng tiě，其中「輕」字為第一聲。' },
+            { id: 5, type: 'mc', section: 1, num: 5, text: '「出租車」中的「租」字是第幾聲？', char: '租', word: '出租車', pinyinFull: 'chū zū chē', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「出租車」讀作 chū zū chē，其中「租」字為第一聲。' },
+            { id: 6, type: 'mc', section: 1, num: 6, text: '「機器人」中的「人」字是第幾聲？', char: '人', word: '機器人', pinyinFull: 'jī qì rén', correct: 'B', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「機器人」讀作 jī qì rén，其中「人」字為第二聲。' },
+            { id: 7, type: 'mc', section: 1, num: 7, text: '「動腦筋」中的「筋」字是第幾聲？', char: '筋', word: '動腦筋', pinyinFull: 'dòng nǎo jīn', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「動腦筋」讀作 dòng nǎo jīn，其中「筋」字為第一聲。' },
+            { id: 8, type: 'mc', section: 1, num: 8, text: '請選出「拼」字的正確聲調。', char: '拼', word: '拼', pinyinFull: 'pīn', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第三聲', val:'3'}, {key:'C', label:'第四聲', val:'4'}], exp: '「拼」讀作 pīn，為第一聲。' },
+            { id: 9, type: 'mc', section: 1, num: 9, text: '「樹熊玩偶」中的「偶」字是第幾聲？', char: '偶', word: '樹熊玩偶', pinyinFull: 'shù xióng wán ǒu', correct: 'C', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「樹熊玩偶」讀作 shù xióng wán ǒu，其中「偶」字為第三聲。' },
+            { id: 10, type: 'mc', section: 1, num: 10, text: '在「幾點」這個詞語中，「幾」字是第幾聲？', char: '幾', word: '幾點', pinyinFull: 'jǐ diǎn', correct: 'C', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '在「幾點」這個詞語中，「幾」字為第三聲。' },
 
-            // PART 2: Fill Tone Numbers (11-20)
-            { id: 11, type: 'fill', section: 2, num: 1, targetChar: '公', word: '公共汽車', prefix: '', suffix: '共汽車', pinyin: 'gōng gòng qì chē', pinyinHint: 'gong gòng qì chē', correct: '1', exp: '公共汽車：gōng gòng qì chē，其中「公」為第一聲（1）。' },
-            { id: 12, type: 'fill', section: 2, num: 2, targetChar: '的', word: '的士', prefix: '', suffix: '士', pinyin: 'dī shì', pinyinHint: 'di shì', correct: '1', exp: '的士：dī shì，其中「的」為第一聲（1）。' },
-            { id: 13, type: 'fill', section: 2, num: 3, targetChar: '機', word: '機鐵', prefix: '', suffix: '鐵', pinyin: 'jī tiě', pinyinHint: 'ji tiě', correct: '1', exp: '機鐵：jī tiě，其中「機」為第一聲（1）。' },
-            { id: 14, type: 'fill', section: 2, num: 4, targetChar: '渡', word: '渡輪', prefix: '', suffix: '輪', pinyin: 'dù lún', pinyinHint: 'du lún', correct: '4', exp: '渡輪：dù lún，其中「渡」為第四聲（4）。' },
-            { id: 15, type: 'fill', section: 2, num: 5, targetChar: '器', word: '機器人', prefix: '機', suffix: '人', pinyin: 'jī qì rén', pinyinHint: 'ji qì rén', correct: '4', exp: '機器人：jī qì rén，其中「器」為第四聲（4）。' },
-            { id: 16, type: 'fill', section: 2, num: 6, targetChar: '動', word: '動腦筋', prefix: '', suffix: '腦筋', pinyin: 'dòng nǎo jīn', pinyinHint: 'dong nǎo jīn', correct: '4', exp: '動腦筋：dòng nǎo jīn，其中「動」為第四聲（4）。' },
-            { id: 17, type: 'fill', section: 2, num: 7, targetChar: '樹', word: '樹熊玩偶', prefix: '', suffix: '熊玩偶', pinyin: 'shù xióng wán ǒu', pinyinHint: 'shu xióng wán ǒu', correct: '4', exp: '樹熊玩偶：shù xióng wán ǒu，其中「樹」為第四聲（4）。' },
-            { id: 18, type: 'fill', section: 2, num: 8, targetChar: '一', word: '一點鐘', prefix: '', suffix: '點鐘', pinyin: 'yī diǎn zhōng', pinyinHint: 'yi diǎn zhōng', correct: '1', exp: '一點鐘：yī diǎn zhōng，其中「一」為第一聲（1）。' },
-            { id: 19, type: 'fill', section: 2, num: 9, targetChar: '八', word: '八點一刻', prefix: '', suffix: '點一刻', pinyin: 'bā diǎn yí kè', pinyinHint: 'ba diǎn yí kè', correct: '1', exp: '八點一刻：bā diǎn yí kè，其中「八」為第一聲（1）。' },
-            { id: 20, type: 'fill', section: 2, num: 10, targetChar: '十', word: '十點二十分', prefix: '', suffix: '點二十分', pinyin: 'shí diǎn èr shí fēn', pinyinHint: 'shi diǎn èr shí fēn', correct: '2', exp: '十點二十分：shí diǎn èr shí fēn，其中「十」為第二聲（2）。' }
+            // PART 2: Fill Tone Numbers (11-20) - Target character's tone mark is STRICTLY STRIPPED in pinyinHint!
+            { id: 11, type: 'fill', section: 2, num: 1, targetChar: '公', word: '公共汽車', prefix: '', suffix: '共汽車', pinyinHint: 'gong gòng qì chē', pinyinFull: 'gōng gòng qì chē', correct: '1', exp: '公共汽車：gōng gòng qì chē，其中「公」為第一聲（1）。' },
+            { id: 12, type: 'fill', section: 2, num: 2, targetChar: '的', word: '的士', prefix: '', suffix: '士', pinyinHint: 'di shì', pinyinFull: 'dī shì', correct: '1', exp: '的士：dī shì，其中「的」為第一聲（1）。' },
+            { id: 13, type: 'fill', section: 2, num: 3, targetChar: '機', word: '機鐵', prefix: '', suffix: '鐵', pinyinHint: 'ji tiě', pinyinFull: 'jī tiě', correct: '1', exp: '機鐵：jī tiě，其中「機」為第一聲（1）。' },
+            { id: 14, type: 'fill', section: 2, num: 4, targetChar: '渡', word: '渡輪', prefix: '', suffix: '輪', pinyinHint: 'du lún', pinyinFull: 'dù lún', correct: '4', exp: '渡輪：dù lún，其中「渡」為第四聲（4）。' },
+            { id: 15, type: 'fill', section: 2, num: 5, targetChar: '器', word: '機器人', prefix: '機', suffix: '人', pinyinHint: 'ji qi rén', pinyinFull: 'jī qì rén', correct: '4', exp: '機器人：jī qì rén，其中「器」為第四聲（4）。' },
+            { id: 16, type: 'fill', section: 2, num: 6, targetChar: '動', word: '動腦筋', prefix: '', suffix: '腦筋', pinyinHint: 'dong nǎo jīn', pinyinFull: 'dòng nǎo jīn', correct: '4', exp: '動腦筋：dòng nǎo jīn，其中「動」為第四聲（4）。' },
+            { id: 17, type: 'fill', section: 2, num: 7, targetChar: '樹', word: '樹熊玩偶', prefix: '', suffix: '熊玩偶', pinyinHint: 'shu xióng wán ǒu', pinyinFull: 'shù xióng wán ǒu', correct: '4', exp: '樹熊玩偶：shù xióng wán ǒu，其中「樹」為第四聲（4）。' },
+            { id: 18, type: 'fill', section: 2, num: 8, targetChar: '一', word: '一點鐘', prefix: '', suffix: '點鐘', pinyinHint: 'yi diǎn zhōng', pinyinFull: 'yī diǎn zhōng', correct: '1', exp: '一點鐘：yī diǎn zhōng，其中「一」為第一聲（1）。' },
+            { id: 19, type: 'fill', section: 2, num: 9, targetChar: '八', word: '八點一刻', prefix: '', suffix: '點一刻', pinyinHint: 'ba diǎn yí kè', pinyinFull: 'bā diǎn yí kè', correct: '1', exp: '八點一刻：bā diǎn yí kè，其中「八」為第一聲（1）。' },
+            { id: 20, type: 'fill', section: 2, num: 10, targetChar: '十', word: '十點二十分', prefix: '', suffix: '點二十分', pinyinHint: 'shi diǎn èr shí fēn', pinyinFull: 'shí diǎn èr shí fēn', correct: '2', exp: '十點二十分：shí diǎn èr shí fēn，其中「十」為第二聲（2）。' }
         ];
 
         // Global State
@@ -455,7 +455,7 @@
             // Question Dots Navigation
             renderQuestionDots();
 
-            // Render Card Content (SILENT - NO right/wrong indicators)
+            // Render Card Content (SILENT & NO TONE HINTS DURING QUIZ)
             const body = document.getElementById('qbqQuestionBody');
             const savedAns = userAnswers[q.id] || '';
 
@@ -464,12 +464,9 @@
                     <div class="space-y-3">
                         <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">題號 ${q.id} / 20</div>
                         <h3 class="text-xl md:text-2xl font-bold text-slate-800 leading-snug">${q.text}</h3>
-                        <p class="text-xs text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg inline-block font-mono">
-                            <i class="fa-solid fa-spell-check text-amber-500 mr-1.5"></i>拼音提示：<b>${q.pinyin}</b>
-                        </p>
                     </div>
 
-                    <div class="space-y-3 pt-2">
+                    <div class="space-y-3 pt-4">
                         ${q.options.map(opt => {
                             const isSelected = (savedAns === opt.key);
                             return `
@@ -485,7 +482,7 @@
                     </div>
                 `;
             } else {
-                // Fill tone type
+                // Fill tone type (shows ONLY stripped pinyin hint where target tone mark is omitted)
                 body.innerHTML = `
                     <div class="space-y-3">
                         <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">題號 ${q.id} / 20</div>
@@ -493,7 +490,7 @@
                             ${q.prefix}<span class="text-teal-600 underline decoration-teal-400 decoration-4">${q.targetChar}</span>${q.suffix}
                         </div>
                         <p class="text-xs text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg inline-block font-mono">
-                            <i class="fa-solid fa-spell-check text-amber-500 mr-1.5"></i>拼音提示：<b>${q.pinyinHint}</b>
+                            <i class="fa-solid fa-spell-check text-amber-500 mr-1.5"></i>拼音參考：<b>${q.pinyinHint}</b>
                         </p>
                         <p class="text-sm font-medium text-slate-700 pt-1">
                             請選出「<span class="font-bold text-teal-700">${q.targetChar}</span>」字在詞語中的聲調數字（1 代表第一聲 ... 4 代表第四聲）：
@@ -588,17 +585,11 @@
             mcContainer.innerHTML = quizData.filter(q => q.section === 1).map(q => `
                 <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
                     <div>
-                        <div class="flex justify-between items-start gap-2 mb-2">
+                        <div class="mb-3">
                             <h3 class="font-bold text-slate-800 text-sm md:text-base">
                                 <span class="text-emerald-600 font-extrabold mr-1">${q.num}.</span>${q.text}
                             </h3>
-                            <button onclick="speakText('${q.word}')" class="text-emerald-600 hover:text-emerald-800 p-1 rounded-full bg-emerald-50 transition shrink-0" title="點擊收聽發音">
-                                <i class="fa-solid fa-volume-high text-xs"></i>
-                            </button>
                         </div>
-                        <p class="text-xs text-slate-500 mb-3 bg-white px-2 py-1 rounded border border-slate-100 inline-block font-mono">
-                            拼音：<b>${q.pinyin}</b>
-                        </p>
                         <div class="space-y-2">
                             ${q.options.map(opt => `
                                 <label class="flex items-center p-2 rounded-lg border border-slate-200 bg-white hover:bg-emerald-50/50 cursor-pointer text-xs md:text-sm">
@@ -618,17 +609,14 @@
             fillContainer.innerHTML = quizData.filter(q => q.section === 2).map(q => `
                 <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
                     <div>
-                        <div class="flex justify-between items-start gap-2 mb-2">
+                        <div class="mb-2">
                             <h3 class="font-bold text-slate-800 text-sm md:text-base">
                                 <span class="text-teal-600 font-extrabold mr-1">${q.num}.</span>
                                 ${q.prefix}<span class="text-teal-700 font-extrabold underline decoration-teal-400 decoration-2">${q.targetChar}</span>${q.suffix}
                             </h3>
-                            <button onclick="speakText('${q.word}')" class="text-teal-600 hover:text-teal-800 p-1 rounded-full bg-teal-50 transition shrink-0" title="點擊收聽發音">
-                                <i class="fa-solid fa-volume-high text-xs"></i>
-                            </button>
                         </div>
                         <p class="text-xs text-slate-500 mb-3 bg-white px-2 py-1 rounded border border-slate-100 inline-block font-mono">
-                            提示拼音：<b>${q.pinyinHint}</b>
+                            拼音參考：<b>${q.pinyinHint}</b>
                         </p>
                         <div class="flex items-center gap-2 mt-1">
                             <label class="text-xs md:text-sm font-medium text-slate-600">${q.targetChar} (</label>
@@ -760,15 +748,15 @@
                                     ${q.type === 'mc' ? q.text : `${q.prefix}<span class="text-teal-700 underline">${q.targetChar}</span>${q.suffix}`}
                                 </span>
                             </div>
-                            <button onclick="speakText('${q.word}')" class="text-teal-600 hover:text-teal-800 bg-white border border-slate-200 shadow-sm px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1">
-                                <i class="fa-solid fa-volume-high text-teal-600"></i> 發音
+                            <button onclick="speakText('${q.word}')" class="text-teal-600 hover:text-teal-800 bg-white border border-slate-200 shadow-sm px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer">
+                                <i class="fa-solid fa-volume-high text-teal-600"></i> 聽發音
                             </button>
                         </div>
 
-                        <!-- Answer Comparison Tag -->
+                        <!-- Answer Comparison Tag with FULL Pinyin containing tone marks -->
                         <div class="flex flex-wrap items-center gap-3 text-xs mb-3">
                             <div class="bg-white px-3 py-1.5 rounded-lg border border-slate-200">
-                                拼音標註：<b class="font-mono text-slate-800">${q.pinyin || q.pinyinHint}</b>
+                                正確拼音：<b class="font-mono text-teal-700">${q.pinyinFull}</b>
                             </div>
                             <div class="px-3 py-1.5 rounded-lg border font-bold ${isCorrect ? 'bg-emerald-100 border-emerald-300 text-emerald-800' : 'bg-rose-100 border-rose-300 text-rose-800'}">
                                 您的回答：${uVal || '未作答'}
