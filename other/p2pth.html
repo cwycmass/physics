@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>普通話聲調互動練習網頁</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Fredoka', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; color: black; }
+            .card-shadow { box-shadow: none !important; border: 1px solid #ccc !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col bg-slate-50">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 text-white shadow-md no-print sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('qbq')">
+                <div class="bg-white/20 p-2 rounded-xl text-xl shadow-inner flex items-center justify-center w-10 h-10">
+                    <i class="fa-solid fa-volume-high"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold tracking-wide">普通話聲調小達人 🎯</h1>
+                    <p class="text-xs text-teal-100 hidden sm:block">小學普通話聲調專項測驗與測後檢討網頁</p>
+                </div>
+            </div>
+            
+            <!-- Action buttons in Header -->
+            <div class="flex items-center space-x-2">
+                <button onclick="toggleToneGuide()" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold px-3 py-1.5 rounded-xl text-xs md:text-sm transition shadow-sm flex items-center gap-1.5">
+                    <i class="fa-solid fa-lightbulb text-amber-900"></i> 聲調小秘笈
+                </button>
+                <button onclick="window.print()" class="bg-white/20 hover:bg-white/30 text-white font-medium px-3 py-1.5 rounded-xl text-xs md:text-sm transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-print"></i> 列印
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto w-full px-4 py-6 flex-grow">
+
+        <!-- Tone Guide Modal / Card -->
+        <div id="toneGuideCard" class="hidden mb-6 bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 shadow-lg relative transition-all duration-300 no-print">
+            <button onclick="toggleToneGuide()" class="absolute top-3 right-3 text-amber-700 hover:text-amber-900 text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-amber-200/50">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-lg font-bold text-amber-900 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-music"></i> 漢語拼音四聲調口訣與符號
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                <div class="bg-white p-3 rounded-xl border border-amber-200 shadow-sm">
+                    <span class="text-xs bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded-full">第一聲 (陰平)</span>
+                    <div class="text-2xl font-bold text-blue-600 my-1">ˉ <span class="text-base font-normal text-slate-500">(如：ā)</span></div>
+                    <p class="text-xs text-slate-600">高高平平一條線</p>
+                </div>
+                <div class="bg-white p-3 rounded-xl border border-amber-200 shadow-sm">
+                    <span class="text-xs bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full">第二聲 (陽平)</span>
+                    <div class="text-2xl font-bold text-emerald-600 my-1">ˊ <span class="text-base font-normal text-slate-500">(如：á)</span></div>
+                    <p class="text-xs text-slate-600">就像上坡往上爬</p>
+                </div>
+                <div class="bg-white p-3 rounded-xl border border-amber-200 shadow-sm">
+                    <span class="text-xs bg-amber-100 text-amber-700 font-bold px-2 py-0.5 rounded-full">第三聲 (上聲)</span>
+                    <div class="text-2xl font-bold text-amber-600 my-1">ˇ <span class="text-base font-normal text-slate-500">(如：ǎ)</span></div>
+                    <p class="text-xs text-slate-600">先下後上拐個彎</p>
+                </div>
+                <div class="bg-white p-3 rounded-xl border border-amber-200 shadow-sm">
+                    <span class="text-xs bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-full">第四聲 (去聲)</span>
+                    <div class="text-2xl font-bold text-rose-600 my-1">ˋ <span class="text-base font-normal text-slate-500">(如：à)</span></div>
+                    <p class="text-xs text-slate-600">就像下坡往下滑</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mode Navigation Bar -->
+        <div class="flex flex-wrap justify-between items-center gap-3 mb-6 no-print bg-white p-2.5 rounded-2xl shadow-sm border border-slate-200">
+            <div class="flex space-x-1 bg-slate-100 p-1 rounded-xl w-full sm:w-auto">
+                <button id="navQbq" onclick="switchView('qbq')" class="flex-1 sm:flex-none px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 bg-emerald-600 text-white shadow-sm">
+                    <i class="fa-solid fa-circle-question mr-1.5"></i> 逐題作答模式
+                </button>
+                <button id="navFull" onclick="switchView('full')" class="flex-1 sm:flex-none px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 text-slate-600 hover:text-emerald-700">
+                    <i class="fa-solid fa-file-lines mr-1.5"></i> 完整工作紙頁面
+                </button>
+            </div>
+
+            <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-end">
+                <div class="flex items-center space-x-1.5 text-xs text-slate-600 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200">
+                    <i class="fa-solid fa-gauge-high text-teal-600"></i>
+                    <span>朗讀語速:</span>
+                    <select id="speechRate" class="bg-transparent font-medium text-slate-800 focus:outline-none cursor-pointer">
+                        <option value="0.7">慢速 🐢</option>
+                        <option value="0.9" selected>標準 🚶</option>
+                        <option value="1.1">快速 🐇</option>
+                    </select>
+                </div>
+                <button onclick="resetFullQuiz()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1 border border-slate-200">
+                    <i class="fa-solid fa-rotate-right"></i> 重新開始
+                </button>
+            </div>
+        </div>
+
+
+        <!-- ================= VIEW 1: QUESTION-BY-QUESTION QUIZ MODE ================= -->
+        <div id="viewQbq" class="space-y-6">
+            
+            <!-- Progress & Navigation Grid Bar -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex flex-wrap justify-between items-center text-xs font-bold text-slate-600 gap-2">
+                    <div class="flex items-center space-x-2">
+                        <span id="qbqBadge" class="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-md">第一部分：選擇題</span>
+                        <span id="qbqTrackerText" class="text-slate-700 text-sm">題目 <span id="qbqCurrentNum">1</span> / <span id="qbqTotalNum">20</span></span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="text-slate-500 font-medium"><i class="fa-regular fa-clock mr-1 text-teal-600"></i>已用時間: <span id="quizTimer" class="font-mono text-slate-700">00:00</span></span>
+                        <button onclick="submitQuiz()" class="bg-teal-600 hover:bg-teal-700 text-white px-3 py-1 rounded-lg font-bold transition text-xs flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-paper-plane"></i> 提交交卷
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                    <div id="qbqProgressBar" class="bg-gradient-to-r from-emerald-500 to-teal-600 h-full transition-all duration-300" style="width: 5%;"></div>
+                </div>
+
+                <!-- Question Dots Navigator -->
+                <div class="pt-1">
+                    <div class="text-[11px] text-slate-400 mb-1.5 flex justify-between">
+                        <span>快速跳題導覽（點擊號碼可切換）：</span>
+                        <span class="flex items-center gap-2">
+                            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>已作答</span>
+                            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-slate-200"></span>未作答</span>
+                        </span>
+                    </div>
+                    <div id="questionDotsContainer" class="flex flex-wrap gap-1.5">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Card Area (No answers/feedback during test) -->
+            <div id="qbqCardArea" class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 min-h-[360px] flex flex-col justify-between relative">
+                
+                <!-- Inner Content Container -->
+                <div id="qbqQuestionBody" class="space-y-6">
+                    <!-- Dynamic Question Rendered Here -->
+                </div>
+
+                <!-- Navigation Control Bar -->
+                <div class="flex justify-between items-center mt-8 pt-6 border-t border-slate-100">
+                    <button id="qbqPrevBtn" onclick="prevQbq()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> 上一題
+                    </button>
+
+                    <button id="qbqAudioBtn" onclick="speakCurrentQbq()" class="p-3 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-full transition shadow-sm border border-teal-200" title="朗讀目標詞語">
+                        <i class="fa-solid fa-volume-high text-lg"></i>
+                    </button>
+
+                    <button id="qbqNextBtn" onclick="nextQbq()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition flex items-center gap-2 shadow-sm">
+                        下一題 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= VIEW 2: FULL WORKSHEET MODE ================= -->
+        <div id="viewFull" class="hidden space-y-8">
+            <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl text-xs text-emerald-900 flex items-center justify-between">
+                <div>
+                    <i class="fa-solid fa-circle-info text-emerald-600 mr-1 text-sm"></i>
+                    <b>完整工作紙模式：</b>可在一頁內完成所有 20 題練習，適合列印或一次性作答。答題過程中不顯示對錯提示。
+                </div>
+                <button onclick="window.print()" class="bg-white hover:bg-emerald-100 text-emerald-800 font-bold px-3 py-1.5 rounded-lg border border-emerald-300 transition">
+                    <i class="fa-solid fa-print"></i> 列印工作紙
+                </button>
+            </div>
+
+            <!-- SECTION 1 -->
+            <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 pb-4 mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-lg font-bold text-emerald-800 flex items-center gap-2">
+                            <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-lg">第一部分</span>
+                            選擇題（共10題，每題1分）
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">選出指定字詞中正確的聲調。</p>
+                    </div>
+                </div>
+                <div id="fullMcContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- MC items dynamically rendered -->
+                </div>
+            </section>
+
+            <!-- SECTION 2 -->
+            <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 pb-4 mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-lg font-bold text-teal-800 flex items-center gap-2">
+                            <span class="bg-teal-100 text-teal-800 text-xs px-2.5 py-1 rounded-lg">第二部分</span>
+                            填寫聲調題（共10題，每題1分）
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">請參考拼音，在括號內填寫指定生字的聲調數字（1、2、3 或 4）。</p>
+                    </div>
+                </div>
+                <div id="fullFillContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Fill items dynamically rendered -->
+                </div>
+            </section>
+
+            <!-- Submit Button -->
+            <div class="text-center py-4 no-print">
+                <button onclick="submitQuiz()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-lg px-8 py-3.5 rounded-2xl shadow-lg hover:shadow-xl transition transform active:scale-95 flex items-center gap-2 mx-auto">
+                    <i class="fa-solid fa-paper-plane"></i> 提交整卷並查看詳細解析
+                </button>
+            </div>
+        </div>
+
+
+        <!-- ================= VIEW 3: RESULTS & ERROR REVIEW DASHBOARD ================= -->
+        <div id="viewResults" class="hidden space-y-8">
+            
+            <!-- Result Summary Card -->
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-slate-200 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-100 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+                
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                    <div class="text-center md:text-left space-y-2">
+                        <span id="scoreBadge" class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">測驗完成</span>
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-800" id="resultsScoreText">得分：20 / 20</h2>
+                        <p id="resultsFeedbackText" class="text-slate-600 text-sm">表現極佳！你已經精準掌握所有詞語的普通話聲調！</p>
+                        <div class="text-xs text-slate-500 flex items-center gap-4 justify-center md:justify-start pt-1">
+                            <span><i class="fa-regular fa-clock mr-1"></i>完成時間：<b id="resultTimeText" class="text-slate-700">01:45</b></span>
+                            <span><i class="fa-solid fa-bullseye mr-1"></i>正確率：<b id="resultAccuracyText" class="text-slate-700">100%</b></span>
+                        </div>
+                    </div>
+
+                    <!-- Action buttons on Result Screen -->
+                    <div class="flex flex-col sm:flex-row md:flex-col gap-2.5 w-full md:w-auto">
+                        <button id="retryErrorsBtn" onclick="startRetryErrorsMode()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-5 py-3 rounded-xl text-sm transition shadow flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-filter"></i> 僅重測錯題 (<span id="retryErrorCount">0</span> 題)
+                        </button>
+                        <button onclick="resetFullQuiz()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl text-sm transition shadow flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-rotate-right"></i> 重新測試全卷
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wrong Answer Review Section -->
+            <section class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="flex flex-wrap justify-between items-center gap-3 border-b border-slate-100 pb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-square-check text-emerald-600"></i>
+                            答卷詳細檢討與音律解析
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-1">點擊喇叭按鈕可再次聆聽標準普通話發音，協助鞏固聲調記憶。</p>
+                    </div>
+
+                    <!-- Filter tabs -->
+                    <div class="flex bg-slate-100 p-1 rounded-xl text-xs font-bold">
+                        <button id="filterWrongOnlyBtn" onclick="toggleReviewFilter('wrong')" class="px-3 py-1.5 rounded-lg transition bg-white text-slate-800 shadow-sm">
+                            僅看錯題 (<span id="wrongOnlyCount">0</span>)
+                        </button>
+                        <button id="filterAllBtn" onclick="toggleReviewFilter('all')" class="px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900">
+                            顯示全部 (20)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Review list container -->
+                <div id="reviewItemsContainer" class="space-y-4">
+                    <!-- Dynamic review items generated by JS -->
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 no-print mt-auto">
+        <p>普通話聲調練習網頁 • 支援標準漢語拼音與語音發音朗讀</p>
+    </footer>
+
+
+    <!-- JavaScript Engine -->
+    <script>
+        // Exact 20 Worksheet Questions Data
+        const quizData = [
+            // PART 1: MCQs (1-10)
+            { id: 1, type: 'mc', section: 1, num: 1, text: '在「坐」字中，正確的聲調是什麼？', char: '坐', word: '坐', pinyin: 'zuò', correct: 'C', options: [{key:'A', label:'第二聲', val:'2'}, {key:'B', label:'第三聲', val:'3'}, {key:'C', label:'第四聲', val:'4'}], exp: '「坐」讀作 zuò，為第四聲。' },
+            { id: 2, type: 'mc', section: 1, num: 2, text: '在「電車」這個詞語中，「電」字是第幾聲？', char: '電', word: '電車', pinyin: 'diàn chē', correct: 'C', options: [{key:'A', label:'第二聲', val:'2'}, {key:'B', label:'第三聲', val:'3'}, {key:'C', label:'第四聲', val:'4'}], exp: '「電車」讀作 diàn chē，其中「電」字為第四聲。' },
+            { id: 3, type: 'mc', section: 1, num: 3, text: '在「小巴」這個詞語中，「巴」字是第幾聲？', char: '巴', word: '小巴', pinyin: 'xiǎo bā', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「小巴」讀作 xiǎo bā，其中「巴」字為第一聲。' },
+            { id: 4, type: 'mc', section: 1, num: 4, text: '「輕鐵」中的「輕」字是第幾聲？', char: '輕', word: '輕鐵', pinyin: 'qīng tiě', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第四聲', val:'4'}], exp: '「輕鐵」讀作 qīng tiě，其中「輕」字為第一聲。' },
+            { id: 5, type: 'mc', section: 1, num: 5, text: '「出租車」中的「租」字是第幾聲？', char: '租', word: '出租車', pinyin: 'chū zū chē', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「出租車」讀作 chū zū chē，其中「租」字為第一聲。' },
+            { id: 6, type: 'mc', section: 1, num: 6, text: '「機器人」中的「人」字是第幾聲？', char: '人', word: '機器人', pinyin: 'jī qì rén', correct: 'B', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「機器人」讀作 jī qì rén，其中「人」字為第二聲。' },
+            { id: 7, type: 'mc', section: 1, num: 7, text: '「動腦筋」中的「筋」字是第幾聲？', char: '筋', word: '動腦筋', pinyin: 'dòng nǎo jīn', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「動腦筋」讀作 dòng nǎo jīn，其中「筋」字為第一聲。' },
+            { id: 8, type: 'mc', section: 1, num: 8, text: '請選出「拼」字的正確聲調。', char: '拼', word: '拼', pinyin: 'pīn', correct: 'A', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第三聲', val:'3'}, {key:'C', label:'第四聲', val:'4'}], exp: '「拼」讀作 pīn，為第一聲。' },
+            { id: 9, type: 'mc', section: 1, num: 9, text: '「樹熊玩偶」中的「偶」字是第幾聲？', char: '偶', word: '樹熊玩偶', pinyin: 'shù xióng wán ǒu', correct: 'C', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '「樹熊玩偶」讀作 shù xióng wán ǒu，其中「偶」字為第三聲。' },
+            { id: 10, type: 'mc', section: 1, num: 10, text: '在「幾點」這個詞語中，「幾」字是第幾聲？', char: '幾', word: '幾點', pinyin: 'jǐ diǎn', correct: 'C', options: [{key:'A', label:'第一聲', val:'1'}, {key:'B', label:'第二聲', val:'2'}, {key:'C', label:'第三聲', val:'3'}], exp: '在「幾點」這個詞語中，「幾」字為第三聲。' },
+
+            // PART 2: Fill Tone Numbers (11-20)
+            { id: 11, type: 'fill', section: 2, num: 1, targetChar: '公', word: '公共汽車', prefix: '', suffix: '共汽車', pinyin: 'gōng gòng qì chē', pinyinHint: 'gong gòng qì chē', correct: '1', exp: '公共汽車：gōng gòng qì chē，其中「公」為第一聲（1）。' },
+            { id: 12, type: 'fill', section: 2, num: 2, targetChar: '的', word: '的士', prefix: '', suffix: '士', pinyin: 'dī shì', pinyinHint: 'di shì', correct: '1', exp: '的士：dī shì，其中「的」為第一聲（1）。' },
+            { id: 13, type: 'fill', section: 2, num: 3, targetChar: '機', word: '機鐵', prefix: '', suffix: '鐵', pinyin: 'jī tiě', pinyinHint: 'ji tiě', correct: '1', exp: '機鐵：jī tiě，其中「機」為第一聲（1）。' },
+            { id: 14, type: 'fill', section: 2, num: 4, targetChar: '渡', word: '渡輪', prefix: '', suffix: '輪', pinyin: 'dù lún', pinyinHint: 'du lún', correct: '4', exp: '渡輪：dù lún，其中「渡」為第四聲（4）。' },
+            { id: 15, type: 'fill', section: 2, num: 5, targetChar: '器', word: '機器人', prefix: '機', suffix: '人', pinyin: 'jī qì rén', pinyinHint: 'ji qì rén', correct: '4', exp: '機器人：jī qì rén，其中「器」為第四聲（4）。' },
+            { id: 16, type: 'fill', section: 2, num: 6, targetChar: '動', word: '動腦筋', prefix: '', suffix: '腦筋', pinyin: 'dòng nǎo jīn', pinyinHint: 'dong nǎo jīn', correct: '4', exp: '動腦筋：dòng nǎo jīn，其中「動」為第四聲（4）。' },
+            { id: 17, type: 'fill', section: 2, num: 7, targetChar: '樹', word: '樹熊玩偶', prefix: '', suffix: '熊玩偶', pinyin: 'shù xióng wán ǒu', pinyinHint: 'shu xióng wán ǒu', correct: '4', exp: '樹熊玩偶：shù xióng wán ǒu，其中「樹」為第四聲（4）。' },
+            { id: 18, type: 'fill', section: 2, num: 8, targetChar: '一', word: '一點鐘', prefix: '', suffix: '點鐘', pinyin: 'yī diǎn zhōng', pinyinHint: 'yi diǎn zhōng', correct: '1', exp: '一點鐘：yī diǎn zhōng，其中「一」為第一聲（1）。' },
+            { id: 19, type: 'fill', section: 2, num: 9, targetChar: '八', word: '八點一刻', prefix: '', suffix: '點一刻', pinyin: 'bā diǎn yí kè', pinyinHint: 'ba diǎn yí kè', correct: '1', exp: '八點一刻：bā diǎn yí kè，其中「八」為第一聲（1）。' },
+            { id: 20, type: 'fill', section: 2, num: 10, targetChar: '十', word: '十點二十分', prefix: '', suffix: '點二十分', pinyin: 'shí diǎn èr shí fēn', pinyinHint: 'shi diǎn èr shí fēn', correct: '2', exp: '十點二十分：shí diǎn èr shí fēn，其中「十」為第二聲（2）。' }
+        ];
+
+        // Global State
+        let activeQuestions = [...quizData]; // Current question set (20 or subset for retry)
+        let currentQbqIndex = 0;             // Index in activeQuestions
+        let userAnswers = {};                // { qId: selectedValue }
+        let currentView = 'qbq';             // 'qbq', 'full', 'results'
+        let reviewFilter = 'wrong';          // 'wrong' or 'all'
+        
+        // Timer State
+        let timerSeconds = 0;
+        let timerInterval = null;
+
+        // Speech Engine
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN';
+            const rate = parseFloat(document.getElementById('speechRate').value) || 0.9;
+            utterance.rate = rate;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Toggle Tone Helper Guide
+        function toggleToneGuide() {
+            document.getElementById('toneGuideCard').classList.toggle('hidden');
+        }
+
+        // Timer Functions
+        function startTimer() {
+            stopTimer();
+            timerSeconds = 0;
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+            const secs = (timerSeconds % 60).toString().padStart(2, '0');
+            const timerEl = document.getElementById('quizTimer');
+            if (timerEl) timerEl.innerText = `${mins}:${secs}`;
+        }
+
+        function formatTime(totalSecs) {
+            const mins = Math.floor(totalSecs / 60).toString().padStart(2, '0');
+            const secs = (totalSecs % 60).toString().padStart(2, '0');
+            return `${mins}:${secs}`;
+        }
+
+        // View Switching
+        function switchView(viewName) {
+            currentView = viewName;
+
+            const navQbq = document.getElementById('navQbq');
+            const navFull = document.getElementById('navFull');
+            const viewQbq = document.getElementById('viewQbq');
+            const viewFull = document.getElementById('viewFull');
+            const viewResults = document.getElementById('viewResults');
+
+            viewQbq.classList.add('hidden');
+            viewFull.classList.add('hidden');
+            viewResults.classList.add('hidden');
+
+            navQbq.className = 'flex-1 sm:flex-none px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 text-slate-600 hover:text-emerald-700';
+            navFull.className = 'flex-1 sm:flex-none px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 text-slate-600 hover:text-emerald-700';
+
+            if (viewName === 'qbq') {
+                navQbq.className = 'flex-1 sm:flex-none px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 bg-emerald-600 text-white shadow-sm';
+                viewQbq.classList.remove('hidden');
+                renderQbqQuestion();
+            } else if (viewName === 'full') {
+                navFull.className = 'flex-1 sm:flex-none px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 bg-emerald-600 text-white shadow-sm';
+                viewFull.classList.remove('hidden');
+                renderFullWorksheet();
+            } else if (viewName === 'results') {
+                viewResults.classList.remove('hidden');
+            }
+        }
+
+        // ================= QUESTION-BY-QUESTION MODE LOGIC =================
+        function renderQbqQuestion() {
+            const q = activeQuestions[currentQbqIndex];
+            if (!q) return;
+
+            // Header info
+            document.getElementById('qbqCurrentNum').innerText = currentQbqIndex + 1;
+            document.getElementById('qbqTotalNum').innerText = activeQuestions.length;
+
+            const badge = document.getElementById('qbqBadge');
+            if (q.section === 1) {
+                badge.className = "bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-md font-bold text-xs";
+                badge.innerText = `第一部分：選擇題 (第 ${q.num} 題)`;
+            } else {
+                badge.className = "bg-teal-100 text-teal-800 px-2.5 py-0.5 rounded-md font-bold text-xs";
+                badge.innerText = `第二部分：填寫聲調題 (第 ${q.num} 題)`;
+            }
+
+            // Progress bar width
+            const pct = Math.round(((currentQbqIndex + 1) / activeQuestions.length) * 100);
+            document.getElementById('qbqProgressBar').style.width = `${pct}%`;
+
+            // Question Dots Navigation
+            renderQuestionDots();
+
+            // Render Card Content (SILENT - NO right/wrong indicators)
+            const body = document.getElementById('qbqQuestionBody');
+            const savedAns = userAnswers[q.id] || '';
+
+            if (q.type === 'mc') {
+                body.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">題號 ${q.id} / 20</div>
+                        <h3 class="text-xl md:text-2xl font-bold text-slate-800 leading-snug">${q.text}</h3>
+                        <p class="text-xs text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg inline-block font-mono">
+                            <i class="fa-solid fa-spell-check text-amber-500 mr-1.5"></i>拼音提示：<b>${q.pinyin}</b>
+                        </p>
+                    </div>
+
+                    <div class="space-y-3 pt-2">
+                        ${q.options.map(opt => {
+                            const isSelected = (savedAns === opt.key);
+                            return `
+                                <button onclick="selectQbqOption(${q.id}, '${opt.key}')" 
+                                    class="w-full text-left p-4 rounded-xl border-2 transition-all flex items-center justify-between font-medium text-base ${isSelected ? 'border-emerald-500 bg-emerald-50/70 text-emerald-900 shadow-sm font-bold' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700'}">
+                                    <span>${opt.key}. ${opt.label}</span>
+                                    <span class="w-5 h-5 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300'}">
+                                        ${isSelected ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+                                    </span>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            } else {
+                // Fill tone type
+                body.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">題號 ${q.id} / 20</div>
+                        <div class="text-3xl md:text-4xl font-extrabold text-slate-800">
+                            ${q.prefix}<span class="text-teal-600 underline decoration-teal-400 decoration-4">${q.targetChar}</span>${q.suffix}
+                        </div>
+                        <p class="text-xs text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg inline-block font-mono">
+                            <i class="fa-solid fa-spell-check text-amber-500 mr-1.5"></i>拼音提示：<b>${q.pinyinHint}</b>
+                        </p>
+                        <p class="text-sm font-medium text-slate-700 pt-1">
+                            請選出「<span class="font-bold text-teal-700">${q.targetChar}</span>」字在詞語中的聲調數字（1 代表第一聲 ... 4 代表第四聲）：
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+                        ${['1', '2', '3', '4'].map(toneNum => {
+                            const isSelected = (savedAns === toneNum);
+                            return `
+                                <button onclick="selectQbqOption(${q.id}, '${toneNum}')"
+                                    class="p-4 rounded-xl border-2 font-bold text-center transition-all flex flex-col items-center justify-center gap-1 ${isSelected ? 'border-teal-500 bg-teal-50 text-teal-900 shadow-sm ring-2 ring-teal-300' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700'}">
+                                    <span class="text-2xl">${toneNum}</span>
+                                    <span class="text-xs font-normal text-slate-500">第 ${toneNum} 聲</span>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+
+            // Button state
+            const prevBtn = document.getElementById('qbqPrevBtn');
+            prevBtn.disabled = (currentQbqIndex === 0);
+            prevBtn.style.opacity = (currentQbqIndex === 0) ? '0.4' : '1';
+
+            const nextBtn = document.getElementById('qbqNextBtn');
+            if (currentQbqIndex === activeQuestions.length - 1) {
+                nextBtn.innerHTML = '完成並交卷 <i class="fa-solid fa-paper-plane ml-1"></i>';
+                nextBtn.className = "px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl text-sm transition flex items-center gap-2 shadow-sm";
+            } else {
+                nextBtn.innerHTML = '下一題 <i class="fa-solid fa-arrow-right"></i>';
+                nextBtn.className = "px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition flex items-center gap-2 shadow-sm";
+            }
+        }
+
+        function renderQuestionDots() {
+            const container = document.getElementById('questionDotsContainer');
+            container.innerHTML = activeQuestions.map((q, idx) => {
+                const isCurrent = (idx === currentQbqIndex);
+                const isAnswered = !!userAnswers[q.id];
+
+                let classes = "w-7 h-7 rounded-lg text-xs font-bold transition flex items-center justify-center cursor-pointer ";
+                if (isCurrent) {
+                    classes += "bg-emerald-600 text-white ring-2 ring-emerald-400 ring-offset-1 ";
+                } else if (isAnswered) {
+                    classes += "bg-emerald-100 text-emerald-800 border border-emerald-300 ";
+                } else {
+                    classes += "bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200 ";
+                }
+
+                return `<button onclick="jumpToQbq(${idx})" class="${classes}">${q.id}</button>`;
+            }).join('');
+        }
+
+        // Silent Option Selection (NO feedback given)
+        function selectQbqOption(qId, val) {
+            userAnswers[qId] = val;
+            renderQbqQuestion(); // re-render to highlight selected state silently
+        }
+
+        function jumpToQbq(idx) {
+            currentQbqIndex = idx;
+            renderQbqQuestion();
+        }
+
+        function nextQbq() {
+            if (currentQbqIndex < activeQuestions.length - 1) {
+                currentQbqIndex++;
+                renderQbqQuestion();
+            } else {
+                // Submit quiz if on last question
+                submitQuiz();
+            }
+        }
+
+        function prevQbq() {
+            if (currentQbqIndex > 0) {
+                currentQbqIndex--;
+                renderQbqQuestion();
+            }
+        }
+
+        function speakCurrentQbq() {
+            const q = activeQuestions[currentQbqIndex];
+            if (q) speakText(q.word || q.char || q.text);
+        }
+
+        // ================= FULL WORKSHEET VIEW LOGIC =================
+        function renderFullWorksheet() {
+            const mcContainer = document.getElementById('fullMcContainer');
+            mcContainer.innerHTML = quizData.filter(q => q.section === 1).map(q => `
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start gap-2 mb-2">
+                            <h3 class="font-bold text-slate-800 text-sm md:text-base">
+                                <span class="text-emerald-600 font-extrabold mr-1">${q.num}.</span>${q.text}
+                            </h3>
+                            <button onclick="speakText('${q.word}')" class="text-emerald-600 hover:text-emerald-800 p-1 rounded-full bg-emerald-50 transition shrink-0" title="點擊收聽發音">
+                                <i class="fa-solid fa-volume-high text-xs"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-3 bg-white px-2 py-1 rounded border border-slate-100 inline-block font-mono">
+                            拼音：<b>${q.pinyin}</b>
+                        </p>
+                        <div class="space-y-2">
+                            ${q.options.map(opt => `
+                                <label class="flex items-center p-2 rounded-lg border border-slate-200 bg-white hover:bg-emerald-50/50 cursor-pointer text-xs md:text-sm">
+                                    <input type="radio" name="full-${q.id}" value="${opt.key}" 
+                                        ${userAnswers[q.id] === opt.key ? 'checked' : ''} 
+                                        onchange="userAnswers[${q.id}] = '${opt.key}'"
+                                        class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300">
+                                    <span class="ml-2 font-medium text-slate-700">${opt.key}. ${opt.label}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            const fillContainer = document.getElementById('fullFillContainer');
+            fillContainer.innerHTML = quizData.filter(q => q.section === 2).map(q => `
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start gap-2 mb-2">
+                            <h3 class="font-bold text-slate-800 text-sm md:text-base">
+                                <span class="text-teal-600 font-extrabold mr-1">${q.num}.</span>
+                                ${q.prefix}<span class="text-teal-700 font-extrabold underline decoration-teal-400 decoration-2">${q.targetChar}</span>${q.suffix}
+                            </h3>
+                            <button onclick="speakText('${q.word}')" class="text-teal-600 hover:text-teal-800 p-1 rounded-full bg-teal-50 transition shrink-0" title="點擊收聽發音">
+                                <i class="fa-solid fa-volume-high text-xs"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-3 bg-white px-2 py-1 rounded border border-slate-100 inline-block font-mono">
+                            提示拼音：<b>${q.pinyinHint}</b>
+                        </p>
+                        <div class="flex items-center gap-2 mt-1">
+                            <label class="text-xs md:text-sm font-medium text-slate-600">${q.targetChar} (</label>
+                            <input type="number" min="1" max="4" placeholder="1-4" 
+                                value="${userAnswers[q.id] || ''}"
+                                oninput="userAnswers[${q.id}] = this.value.trim()"
+                                class="w-16 px-2 py-1 border border-slate-300 rounded-lg text-center font-bold text-slate-800 focus:ring-2 focus:ring-teal-500 bg-white text-sm">
+                            <label class="text-xs md:text-sm font-medium text-slate-600">) 聲</label>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+        // ================= SUBMISSION & RESULTS REVIEW LOGIC =================
+        function submitQuiz() {
+            stopTimer();
+
+            // Calculate Score
+            let correctCount = 0;
+            const wrongList = [];
+
+            quizData.forEach(q => {
+                const userVal = (userAnswers[q.id] || '').trim().toUpperCase();
+                if (userVal === q.correct) {
+                    correctCount++;
+                } else {
+                    wrongList.push({
+                        ...q,
+                        userVal: userVal || '未作答'
+                    });
+                }
+            });
+
+            // Populate Results Dashboard
+            const scoreText = document.getElementById('resultsScoreText');
+            const feedbackText = document.getElementById('resultsFeedbackText');
+            const timeText = document.getElementById('resultTimeText');
+            const accuracyText = document.getElementById('resultAccuracyText');
+            const retryBtn = document.getElementById('retryErrorsBtn');
+            const retryCountSpan = document.getElementById('retryErrorCount');
+            const wrongOnlyCountSpan = document.getElementById('wrongOnlyCount');
+
+            scoreText.innerText = `得分：${correctCount} / 20`;
+            timeText.innerText = formatTime(timerSeconds);
+            
+            const accuracyPct = Math.round((correctCount / 20) * 100);
+            accuracyText.innerText = `${accuracyPct}%`;
+
+            if (correctCount === 20) {
+                feedbackText.innerText = "太優秀了！全對滿分，你是聲調小大師！🌟";
+                retryBtn.classList.add('hidden');
+                confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+            } else if (correctCount >= 16) {
+                feedbackText.innerText = "表現非常好！僅有少數錯題，仔細檢討就能拿到滿分！👍";
+                retryBtn.classList.remove('hidden');
+            } else if (correctCount >= 10) {
+                feedbackText.innerText = "基本掌握聲調概念！請針對錯題多收聽正確讀音練習。💪";
+                retryBtn.classList.remove('hidden');
+            } else {
+                feedbackText.innerText = "聲調還需要再加油喔！參閱右上角「聲調小秘笈」並重複練習。📚";
+                retryBtn.classList.remove('hidden');
+            }
+
+            retryCountSpan.innerText = wrongList.length;
+            wrongOnlyCountSpan.innerText = wrongList.length;
+
+            // Default filter to 'wrong' if there are wrong questions, else 'all'
+            reviewFilter = (wrongList.length > 0) ? 'wrong' : 'all';
+            updateReviewFilterButtons();
+            renderReviewItems();
+
+            switchView('results');
+        }
+
+        function toggleReviewFilter(filterType) {
+            reviewFilter = filterType;
+            updateReviewFilterButtons();
+            renderReviewItems();
+        }
+
+        function updateReviewFilterButtons() {
+            const wrongBtn = document.getElementById('filterWrongOnlyBtn');
+            const allBtn = document.getElementById('filterAllBtn');
+
+            if (reviewFilter === 'wrong') {
+                wrongBtn.className = "px-3 py-1.5 rounded-lg transition bg-white text-slate-800 shadow-sm font-bold";
+                allBtn.className = "px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900";
+            } else {
+                allBtn.className = "px-3 py-1.5 rounded-lg transition bg-white text-slate-800 shadow-sm font-bold";
+                wrongBtn.className = "px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900";
+            }
+        }
+
+        function renderReviewItems() {
+            const container = document.getElementById('reviewItemsContainer');
+
+            let itemsToDisplay = quizData;
+            if (reviewFilter === 'wrong') {
+                itemsToDisplay = quizData.filter(q => {
+                    const uVal = (userAnswers[q.id] || '').trim().toUpperCase();
+                    return uVal !== q.correct;
+                });
+            }
+
+            if (itemsToDisplay.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+                        <i class="fa-solid fa-circle-check text-4xl text-emerald-500 mb-2"></i>
+                        <p class="text-base font-bold text-slate-700">太棒了，完全沒有錯題！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = itemsToDisplay.map(q => {
+                const uVal = (userAnswers[q.id] || '').trim().toUpperCase();
+                const isCorrect = (uVal === q.correct);
+
+                return `
+                    <div class="p-5 rounded-2xl border-2 transition-all ${isCorrect ? 'bg-emerald-50/40 border-emerald-200' : 'bg-rose-50/40 border-rose-200'}">
+                        <div class="flex flex-wrap justify-between items-start gap-2 mb-3">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs px-2.5 py-0.5 rounded-md font-bold ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                                    第 ${q.id} 題
+                                </span>
+                                <span class="font-extrabold text-slate-800 text-base">
+                                    ${q.type === 'mc' ? q.text : `${q.prefix}<span class="text-teal-700 underline">${q.targetChar}</span>${q.suffix}`}
+                                </span>
+                            </div>
+                            <button onclick="speakText('${q.word}')" class="text-teal-600 hover:text-teal-800 bg-white border border-slate-200 shadow-sm px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1">
+                                <i class="fa-solid fa-volume-high text-teal-600"></i> 發音
+                            </button>
+                        </div>
+
+                        <!-- Answer Comparison Tag -->
+                        <div class="flex flex-wrap items-center gap-3 text-xs mb-3">
+                            <div class="bg-white px-3 py-1.5 rounded-lg border border-slate-200">
+                                拼音標註：<b class="font-mono text-slate-800">${q.pinyin || q.pinyinHint}</b>
+                            </div>
+                            <div class="px-3 py-1.5 rounded-lg border font-bold ${isCorrect ? 'bg-emerald-100 border-emerald-300 text-emerald-800' : 'bg-rose-100 border-rose-300 text-rose-800'}">
+                                您的回答：${uVal || '未作答'}
+                            </div>
+                            <div class="bg-emerald-100 border border-emerald-300 text-emerald-900 px-3 py-1.5 rounded-lg font-bold">
+                                正確答案：${q.correct} ${q.type === 'fill' ? '聲' : ''}
+                            </div>
+                        </div>
+
+                        <!-- Official Explanation -->
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 text-xs text-slate-600 leading-relaxed">
+                            <i class="fa-solid fa-circle-info text-amber-500 mr-1"></i><b>解析：</b> ${q.exp}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Mode: Retry Incorrect Questions Only
+        function startRetryErrorsMode() {
+            const missedQuestions = quizData.filter(q => {
+                const uVal = (userAnswers[q.id] || '').trim().toUpperCase();
+                return uVal !== q.correct;
+            });
+
+            if (missedQuestions.length === 0) {
+                alert('沒有錯題可以重測！');
+                return;
+            }
+
+            // Set active dataset to missed questions only
+            activeQuestions = missedQuestions;
+            currentQbqIndex = 0;
+            
+            // Clear saved answers for these missed questions
+            missedQuestions.forEach(q => {
+                delete userAnswers[q.id];
+            });
+
+            startTimer();
+            switchView('qbq');
+        }
+
+        // Full Quiz Reset
+        function resetFullQuiz() {
+            activeQuestions = [...quizData];
+            currentQbqIndex = 0;
+            userAnswers = {};
+            startTimer();
+            switchView('qbq');
+        }
+
+        // App Initialization
+        window.onload = function() {
+            startTimer();
+            renderQbqQuestion();
+        };
+    </script>
+</body>
+</html>
